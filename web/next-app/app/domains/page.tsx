@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Header from '../../components/Header'
@@ -8,7 +8,8 @@ import BottomTabs from '../../components/BottomTabs'
 import SectionHeader from '../../components/SectionHeader'
 import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
-import PrerequisitePanel from '../../components/PrerequisitePanel'
+import PrerequisitePathDialog, { type PrereqDialogStatus } from '../../components/PrerequisitePathDialog'
+import { pushReturn, studyConceptPath } from '../../lib/learnReturn'
 import { useTheme } from '../../hooks/useTheme'
 import {
   getCurriculumDomains,
@@ -62,8 +63,16 @@ export default function DomainsPage() {
   const [detail, setDetail] = useState<DomainDetail | null>(null)
   const [detailLoading, setDetailLoading] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
-  const [blocked, setBlocked] = useState<{ title: string; prerequisites: EligibilityPrereq[] } | null>(null)
+  const [dialog, setDialog] = useState<{ conceptId: string; title: string } | null>(null)
+  const [prereqs, setPrereqs] = useState<EligibilityPrereq[]>([])
+  const [dlgStatus, setDlgStatus] = useState<PrereqDialogStatus>('loading')
+  const [dlgError, setDlgError] = useState('')
   const [error, setError] = useState('')
+  // Monotonic request id: a late response for concept A must never overwrite
+  // the dialog now showing concept B.
+  const seqRef = useRef(0)
+  // Element to return focus to when the dialog closes.
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     if (!mounted) return
@@ -91,7 +100,7 @@ export default function DomainsPage() {
 
   const openDomain = useCallback(async (id: string) => {
     setSelected(id)
-    setBlocked(null)
+    setDialog(null)
     setDetail(null)
     setDetailLoading(true)
     try {
@@ -109,7 +118,7 @@ export default function DomainsPage() {
 
   async function chooseTopic(topic: TopicSummary) {
     setError('')
-    setBlocked(null)
+    setDialog(null)
     if (topic.state === 'mastered' || topic.state === 'due_for_review') {
       router.push('/review')
       return
@@ -120,7 +129,11 @@ export default function DomainsPage() {
       if (result === true) {
         router.push(`/learn?concept=${encodeURIComponent(topic.conceptId)}`)
       } else if (Array.isArray(result)) {
-        setBlocked({ title: topic.title, prerequisites: result })
+        seqRef.current++
+        setDialog({ conceptId: topic.conceptId, title: topic.title })
+        setPrereqs(result)
+        setDlgStatus(result.length === 0 ? 'empty' : 'ready')
+        setDlgError('')
       }
     } catch {
       setError("Couldn't start this topic.")
@@ -130,18 +143,48 @@ export default function DomainsPage() {
   }
 
   // Selecting a locked topic explains the prerequisite path instead of starting.
-  async function explainTopic(topic: TopicSummary) {
+  // The dialog opens immediately in a loading state so the action is visible
+  // regardless of where the row sits in a long list; the fetch then fills it.
+  // Only the latest request may write, so rapid clicks on different rows can
+  // never leave stale prerequisites on screen.
+  async function explainTopic(topic: TopicSummary, trigger?: HTMLButtonElement | null) {
     setError('')
-    setBlocked(null)
+    setDlgError('')
+    triggerRef.current = trigger ?? null
+    const seq = ++seqRef.current
+    setDialog({ conceptId: topic.conceptId, title: topic.title })
+    setPrereqs([])
+    setDlgStatus('loading')
     setBusy(topic.conceptId)
     try {
       const el = await getLessonEligibility(topic.conceptId)
-      setBlocked({ title: topic.title, prerequisites: el.prerequisites ?? [] })
+      if (seqRef.current !== seq) return
+      const list = el.prerequisites ?? []
+      setPrereqs(list)
+      setDlgStatus(list.length === 0 ? 'empty' : 'ready')
     } catch {
-      setError("Couldn't load this topic's prerequisites.")
+      if (seqRef.current !== seq) return
+      setDlgStatus('error')
+      setDlgError("Couldn't load this topic's prerequisites.")
     } finally {
-      setBusy(null)
+      if (seqRef.current === seq) setBusy(null)
     }
+  }
+
+  function retryDialog() {
+    if (!dialog) return
+    void explainTopic(
+      { conceptId: dialog.conceptId, title: dialog.title, state: 'locked', depth: 0 },
+      triggerRef.current,
+    )
+  }
+
+  function closeDialog() {
+    seqRef.current++
+    setDialog(null)
+    setBusy(null)
+    triggerRef.current?.focus()
+    triggerRef.current = null
   }
 
   if (!mounted || domains === null) return <Loading label="Loading curriculum" full />
@@ -191,7 +234,7 @@ export default function DomainsPage() {
           <>
             <button
               type="button"
-              onClick={() => { setSelected(null); setDetail(null); setBlocked(null) }}
+              onClick={() => { setSelected(null); setDetail(null); setDialog(null) }}
               className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue"
             >
               ← Domains
@@ -266,9 +309,8 @@ export default function DomainsPage() {
                         {!learnable && !review && (
                           <button
                             type="button"
-                            disabled={busy === topic.conceptId}
-                            onClick={() => void explainTopic(topic)}
-                            className="w-full sm:w-auto shrink-0 border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center justify-center disabled:opacity-60"
+                            onClick={(e) => void explainTopic(topic, e.currentTarget)}
+                            className="w-full sm:w-auto shrink-0 border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center justify-center"
                           >
                             View prerequisite path
                           </button>
@@ -281,13 +323,16 @@ export default function DomainsPage() {
               </>
             )}
 
-            {blocked && (
-              <PrerequisitePanel
-                topicTitle={blocked.title}
-                prerequisites={blocked.prerequisites}
-                onDismiss={() => setBlocked(null)}
-              />
-            )}
+            <PrerequisitePathDialog
+              open={dialog !== null}
+              targetTitle={dialog?.title ?? ''}
+              prerequisites={prereqs}
+              status={dlgStatus}
+              error={dlgError}
+              returnStack={dialog ? pushReturn([], studyConceptPath(dialog.conceptId)) : []}
+              onClose={closeDialog}
+              onRetry={retryDialog}
+            />
 
             {error && (
               <p role="alert" className="mt-4 font-mono text-[11px] text-mathua-secondary">
