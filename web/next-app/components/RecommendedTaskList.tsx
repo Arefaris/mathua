@@ -117,34 +117,41 @@ export default function RecommendedTaskList({
       )}
 
       {!loading && items.length > 0 && (
-        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-0">
+        <ul className="border-[0.5px] border-mathua-border min-w-0">
           {items.map((item, i) => {
             const conceptId = hrefConceptId(item.href)
             const isBusy = conceptId !== null && busy === conceptId
             return (
-              <li key={`${item.kind}:${item.href}:${i}`} className="min-w-0">
+              <li
+                key={`${item.kind}:${item.href}:${i}`}
+                className={i < items.length - 1 ? 'border-b-[0.5px] border-mathua-border' : ''}
+              >
+                {/* A row, not a box: two tight lines carry the same information a four-line card
+                    did, so a handful of tasks does not push the report down the page. */}
                 <button
                   type="button"
                   onClick={() => void choose(item)}
                   disabled={isBusy}
-                  className="w-full h-full text-left border border-mathua-border bg-mathua-surface p-4 hover:border-mathua-blue transition-colors min-w-0 disabled:opacity-60"
+                  className="w-full text-left px-3 py-2.5 min-w-0 hover:bg-mathua-surface-highlight transition-colors disabled:opacity-60"
                 >
-                  <span className="flex items-center justify-between gap-2 min-w-0">
+                  <span className="flex items-center gap-2 min-w-0">
                     <span className="shrink-0 bg-mathua-blue-faint text-mathua-blue px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider">
                       {item.badge}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate font-mono text-xs text-mathua-primary">
+                      {item.title}
                     </span>
                     {xpLabel(item.xp) && (
                       <span className="shrink-0 font-mono text-[10px] text-yellow-400">{xpLabel(item.xp)}</span>
                     )}
                   </span>
-                  <span className="mt-2 block font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere] leading-snug">
-                    {item.title}
-                  </span>
-                  <span className="mt-1 block font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]">
-                    {item.detail}
-                  </span>
-                  <span className="mt-2 block font-mono text-[11px] text-mathua-blue">
-                    {isBusy ? 'Starting…' : item.cta}
+                  <span className="mt-1 flex items-center justify-between gap-2 min-w-0">
+                    <span className="min-w-0 truncate font-mono text-[10px] text-mathua-muted">
+                      {item.detail}
+                    </span>
+                    <span className="shrink-0 font-mono text-[11px] text-mathua-blue whitespace-nowrap">
+                      {isBusy ? 'Starting…' : item.cta}
+                    </span>
                   </span>
                 </button>
               </li>

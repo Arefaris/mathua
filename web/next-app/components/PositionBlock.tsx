@@ -9,6 +9,8 @@ interface Props {
   progress: Record<string, ConceptProgress>
   /** Label of the concept the scheduler would serve next, if known. */
   frontierLabel?: string | null
+  /** Rendered inside a parent card: drop the outer border/background and use a compact heading. */
+  embedded?: boolean
 }
 
 // "Where am I" — the question the rest of the report hangs off, and the one
@@ -19,7 +21,7 @@ interface Props {
 // abstract algebra, so "7% of all of math" tells a learner nothing they can
 // act on. Mastered against unlocked is the pair that means something: one is
 // what you have, the other is what you can currently reach.
-export default function PositionBlock({ catalogue, progress, frontierLabel }: Props) {
+export default function PositionBlock({ catalogue, progress, frontierLabel, embedded }: Props) {
   const counts = countOverall(catalogue, progress)
   if (counts.total === 0) return null
 
@@ -31,11 +33,13 @@ export default function PositionBlock({ catalogue, progress, frontierLabel }: Pr
 
   return (
     <section id="position" aria-label="Where you are" className="min-w-0">
-      <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-3">
+      <h2 className={embedded
+        ? 'font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-2'
+        : 'font-serif text-[1.05rem] font-normal text-mathua-primary mb-3'}>
         Where you are
       </h2>
 
-      <div className="border border-mathua-border bg-mathua-surface p-4 min-w-0">
+      <div className={embedded ? 'min-w-0' : 'border border-mathua-border bg-mathua-surface p-4 min-w-0'}>
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className="font-mono text-3xl text-mathua-blue leading-none">{counts.mastered}</span>
           <span className="font-mono text-sm text-mathua-muted">

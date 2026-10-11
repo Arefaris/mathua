@@ -7,7 +7,7 @@ import { getUserInfo, ensureGuestId, ensureGuestToken, getGuestId, isLoggedIn, i
 import { ensureDicebearAvatar, resolveAvatar } from '../../lib/dicebear'
 import { getActivity, getProgress, getWeaknesses, getDueReviews, getEfficacy, getScores, getSettings, getMe } from '../../lib/api'
 import type { DailyActivity, Scores, WeaknessRes, ConceptProgress, EfficacyReport } from '../../lib/api'
-import ProfileStats from '../../components/ProfileStats'
+import ProfileHeader from '../../components/ProfileHeader'
 import ActivityHeatmap from '../../components/ActivityHeatmap'
 import StrugglesSection from '../../components/StrugglesSection'
 import ProfileSkeleton from '../../components/skeletons/ProfileSkeleton'
@@ -16,7 +16,6 @@ import { ChevronsRight } from '../../components/icons'
 import BottomTabs from '../../components/BottomTabs'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '../../components/ui/sidebar'
 import RecommendedTaskList from '../../components/RecommendedTaskList'
-import PositionBlock from '../../components/PositionBlock'
 import DailyGoalControl, { getGuestGoal } from '../../components/DailyGoalControl'
 import { isNewUser, recentlyUnlocked, hrefConceptId, RECENT_UNLOCK_DAYS, type Shelf } from '../../lib/nextUp'
 import { fetchShelf } from '../../lib/recommendations'
@@ -386,16 +385,13 @@ export default function ProfilePage() {
         </a>
         <div id="profile-main" className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
           <div className="min-w-0">
-        {/* Profile stats — mobile-first */}
-        <ProfileStats
+        {/* One header: identity and XP, then where you are, in a single card. */}
+        <ProfileHeader
           name={user.name}
           scores={effScores ?? scores}
           avatarSeed={user.student_id}
           avatarUrl={avatarPreset !== null ? undefined : avatarUrl}
           avatarPreset={avatarPreset}
-        />
-
-        <PositionBlock
           catalogue={conceptCatalog}
           progress={progress}
           frontierLabel={frontierLabel}

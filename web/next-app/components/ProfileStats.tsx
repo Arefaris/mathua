@@ -9,6 +9,10 @@ interface Props {
   avatarSeed?: string
   avatarUrl?: string
   avatarPreset?: number | null
+  /** Drop the outer border and padding, when a parent already draws the card. */
+  bare?: boolean
+  /** Skip the MASTERED tile, when the parent's position block already reports it. */
+  hideMastered?: boolean
 }
 
 const LEVEL_NAMES = {
@@ -23,14 +27,14 @@ const LEVEL_NAMES = {
   'Math Architect': '09',
 } satisfies Record<string, string>
 
-export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avatarPreset }: Props) {
+export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avatarPreset, bare, hideMastered }: Props) {
   const xpPct = scores.daily_xp_goal > 0
     ? Math.min(100, Math.round((scores.xp_today / scores.daily_xp_goal) * 100))
     : 0
   const levelNum = LEVEL_NAMES[scores.level] ?? '·'
 
   return (
-    <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-5 items-start border-[0.5px] border-mathua-border p-4 sm:p-5 sm:px-6 w-full max-w-full min-w-0 overflow-hidden">
+    <div className={`flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-5 items-start w-full max-w-full min-w-0 overflow-hidden ${bare ? '' : 'border-[0.5px] border-mathua-border p-4 sm:p-5 sm:px-6'}`}>
       <div className="flex flex-row gap-4 sm:contents w-full sm:w-auto">
         <div className="shrink-0 self-start">
           <Avatar seed={avatarSeed ?? name} name={name} size={72} url={avatarUrl} preset={avatarPreset ?? undefined} />
@@ -82,12 +86,14 @@ export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avat
             </div>
           </div>
 
-          <div className="min-w-0">
-            <div className="font-mono text-[11px] text-mathua-muted">MASTERED</div>
-            <div className="font-mono text-[16px] text-mathua-primary">
-              {scores.concepts_mastered}
+          {!hideMastered && (
+            <div className="min-w-0">
+              <div className="font-mono text-[11px] text-mathua-muted">MASTERED</div>
+              <div className="font-mono text-[16px] text-mathua-primary">
+                {scores.concepts_mastered}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="min-w-0">
             <a href="/leaderboard" className="font-mono text-[11px] text-mathua-muted hover:text-mathua-blue no-underline inline-flex items-center min-h-[20px]">
