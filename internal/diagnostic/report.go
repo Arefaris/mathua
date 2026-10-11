@@ -24,8 +24,15 @@ type DiagnosticReport struct {
 	MasteryLevels          map[string]float64 `json:"mastery_levels"`
 	Confidence             map[string]float64 `json:"confidence"`
 	AvgConfidence          float64            `json:"avg_confidence"`
-	CompletionEstimates    map[int]string     `json:"completion_estimates"`
-	TotalQuestions         int                `json:"total_questions"`
+	// CompletionEstimates maps an example daily XP pace to the estimated time to
+	// finish. It is empty here on purpose: the CAT knows nothing about a
+	// destination, so there is no honest denominator for "complete" at this
+	// layer. It used to carry a hardcoded {50: "≈5 days", 100: "≈10 days",
+	// 300: "≈30 days"} that no code computed and that no learner's pace
+	// matched. The handler fills it from the planner when the learner has a
+	// saved destination, and leaves it null otherwise.
+	CompletionEstimates map[int]string `json:"completion_estimates"`
+	TotalQuestions      int            `json:"total_questions"`
 }
 
 // Report builds the done-branch summary for a session.
@@ -34,12 +41,11 @@ func (e *Engine) Report(s *Session) *DiagnosticReport {
 	defer s.Unlock()
 
 	rep := &DiagnosticReport{
-		FrontierIdx:         -1,
-		GapsByDomain:        map[string][]string{},
-		MasteryLevels:       map[string]float64{},
-		Confidence:          map[string]float64{},
-		CompletionEstimates: map[int]string{50: "≈5 days", 100: "≈10 days", 300: "≈30 days"},
-		TotalQuestions:      s.totalAsked,
+		FrontierIdx:    -1,
+		GapsByDomain:   map[string][]string{},
+		MasteryLevels:  map[string]float64{},
+		Confidence:     map[string]float64{},
+		TotalQuestions: s.totalAsked,
 	}
 
 	var confSum float64

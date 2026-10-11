@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -1127,6 +1128,11 @@ func (s *Server) handleGoalPlan(w http.ResponseWriter, r *http.Request) {
 	// MA-parity report fields: placement + completion estimates from the
 	// adaptive session (frontier, course recommendation, dates).
 	report := s.eng.DiagnosticReport(session)
+	// The dates need a destination to be an estimate of anything. Fill them from
+	// the planner when the learner has saved one; otherwise the field stays null
+	// and the results card omits the line, which is better than a number that
+	// describes no one.
+	report.CompletionEstimates = s.completionEstimates(studentID)
 
 	// Persist diagnostic results
 	if err := s.eng.ApplyGoalResults(studentID, session); err != nil {
@@ -1191,6 +1197,56 @@ func (s *Server) handleGoalPlan(w http.ResponseWriter, r *http.Request) {
 		"placement_course_id":     report.PlacementCourseID,
 		"completion_estimates":    report.CompletionEstimates,
 	})
+}
+
+// completionEstimates prices the learner's saved destination at a few example
+// daily XP paces, which is the shape Math Academy's report uses: "several
+// estimated course completion dates based on example XP daily-pace goals".
+//
+// The key is the pace and the value is the duration, because that is what the key
+// means. It used to be the other way round -- keyed on an XP total, with a
+// duration nothing had computed -- so a learner reading "50 XP → ≈5 days" was
+// reading a constant.
+//
+// Returns nil when there is no destination, no remaining work, or the planner is
+// unavailable. The client already omits the line for an empty map, so a diagnostic
+// taken before a plan exists simply shows no dates.
+func (s *Server) completionEstimates(studentID string) map[int]string {
+	if studentID == "" {
+		return nil
+	}
+	prefs, ok := s.eng.GetPlanPrefs(studentID)
+	if !ok || prefs.Destination == "" {
+		return nil
+	}
+	// The paces Math Academy recommends sit between these: "20 to 40 XP per day,
+	// 3 to 5 days per week". Span the app's own policy bounds so a learner whose
+	// goal is at either end still finds their own pace in the list.
+	paces := []int{xp.MinDailyGoal, 20, xp.DefaultDailyGoal, 40, xp.MaxDailyGoal}
+	out := make(map[int]string, len(paces))
+	for _, pace := range paces {
+		if pace <= 0 {
+			continue
+		}
+		resp, err := s.eng.DestinationEstimate(studentID, prefs.Destination, pace, 0, prefs.RestDays, 0)
+		if err != nil || resp == nil || resp.Estimate == nil {
+			// One unusable pace means we cannot speak for any of them; a partial
+			// set of dates would read as though the others were known.
+			return nil
+		}
+		if resp.Estimate.XPRemaining <= 0 {
+			return nil // Nothing left to finish; a date would be meaningless.
+		}
+		days := resp.Estimate.Days
+		if days <= 0 {
+			days = resp.Estimate.XPRemaining / float64(pace)
+		}
+		out[pace] = fmt.Sprintf("≈%d days", int(math.Round(days)))
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
 }
 
 // GET /api/weaknesses

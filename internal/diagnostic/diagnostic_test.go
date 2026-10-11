@@ -203,8 +203,12 @@ func TestEngine_Report_Fields(t *testing.T) {
 	if rep.Confidence[s.LastConceptID] < 0.5 {
 		t.Errorf("expected confidence >= 0.5 after probing, got %f", rep.Confidence[s.LastConceptID])
 	}
-	if rep.CompletionEstimates[50] == "" {
-		t.Error("expected completion estimate for 50 XP")
+	// The CAT cannot estimate completion: it has no destination, so there is no
+	// honest denominator. The handler fills these in from the planner when the
+	// learner has saved a plan. What matters here is that nothing is asserted
+	// rather than computed.
+	if len(rep.CompletionEstimates) != 0 {
+		t.Errorf("expected no estimates without a destination, got %v", rep.CompletionEstimates)
 	}
 }
 
@@ -286,15 +290,17 @@ func TestEngine_Timed_SlowCorrectDiminished(t *testing.T) {
 	}
 }
 
-func TestEngine_Report_CompletionEstimates(t *testing.T) {
+// The report must not carry dates that nothing computed. This test previously
+// asserted the hardcoded {50, 100, 300} literal, which is how a fabricated
+// number survived a report rewrite. The replacement asserts the opposite: the CAT
+// layer stays empty and the server decides what can honestly be said.
+func TestEngine_Report_CompletionEstimatesAreNotFabricated(t *testing.T) {
 	e := NewEngine(testDAG(t), mustRegistry(t))
 	s := e.Start()
 	answer(t, e, s, true, true)
 	rep := e.Report(s)
-	for _, xp := range []int{50, 100, 300} {
-		if rep.CompletionEstimates[xp] == "" {
-			t.Errorf("expected completion estimate for %d XP", xp)
-		}
+	if rep.CompletionEstimates != nil {
+		t.Errorf("report invented completion estimates: %v", rep.CompletionEstimates)
 	}
 }
 
