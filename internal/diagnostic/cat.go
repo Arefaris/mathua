@@ -19,8 +19,17 @@ const (
 )
 
 const (
-	// minTotalQuestions is the floor before the diagnostic considers
-	// convergence (spec + docs/architecture: 25-45 adaptive questions).
+	// minTotalQuestions is the point at which convergence is *considered*, not a
+	// floor it must reach. shouldStop below requires the cover to be finished AND
+	// this count, but NextQuestion ends the session outright when the covering set
+	// runs out, and that path does not consult this constant. Every cover concept
+	// needs two probes and no concept is asked twice, so a scope whose closure is
+	// smaller than 13 concepts simply cannot reach 25 — and nothing pads the gap,
+	// because repeating settled concepts would invent evidence.
+	//
+	// It was described as "the floor" here and in docs/architecture.md until a
+	// five-concept scope was found asking ten questions while reporting
+	// min_total: 25. Both now say what the code does.
 	minTotalQuestions = 25
 	// maxTotalQuestions hard caps an adaptive session (supplemental included).
 	maxTotalQuestions = 45

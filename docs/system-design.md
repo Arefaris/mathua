@@ -496,7 +496,7 @@ Total latency target: under 100ms for numeric grading, under 500ms for SymPy-bas
 
 ## 10. Computerized Adaptive Testing (CAT)
 
-Mathua implements a compressed-covering + info-gain CAT to locate a student's knowledge frontier quickly. Instead of testing all 657 concepts, the diagnostic requires approximately 25–45 adaptive questions.
+Mathua implements a compressed-covering + info-gain CAT to locate a student's knowledge frontier quickly. Instead of testing all 657 concepts, the diagnostic asks two probes per concept in the covering set, bounded above by `maxTotalQuestions=45`. A wide scope reaches `minTotalQuestions=25`; a narrow one runs out of cover first and ends below it.
 
 ![CAT Diagnostic](diagrams/system-design-cat-diagnostic-dark.svg)
 
@@ -513,7 +513,7 @@ Mathua implements a compressed-covering + info-gain CAT to locate a student's kn
 
 ### Key Properties
 
-- **Covering-set + info-gain efficiency**: `25–45` probes vs `657` exhaustive; `80%` difficulty targeting via `engine.computeDifficulty` `engine.go:157`
+- **Covering-set + info-gain efficiency**: `2 × |cover|` probes, `≤ 45` total, vs `657` exhaustive; `80%` difficulty targeting via `engine.computeDifficulty` `engine.go:157`
 - **Evidence propagation**: correct boosts prereqs, wrong penalizes postrequisites — finds frontier even with conflicting evidence
 - **Mastery + automaticity**: `fast` (`elapsed < timeThreshold`) distinguishes `PRACTICING` vs `LEARNING` placement
 - **Optimistic merge**: Retaking does not delete progress; `ApplyGoalResults` `engine.go:1364` merges with `Practicing/Learning` vs `Unseen`
