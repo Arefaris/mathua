@@ -12,6 +12,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/engine"
 	"github.com/chuma-beep/mathua/internal/generator"
+	"github.com/chuma-beep/mathua/internal/lessons"
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
@@ -242,5 +243,94 @@ func TestCurriculumDomain_TopicsCarryState(t *testing.T) {
 	}
 	if states["a"] != "unlocked" || states["b"] != "locked" {
 		t.Errorf("states = %v, want a unlocked and b locked", states)
+	}
+}
+
+// Reference access is not eligibility-gated. A locked topic's knowledge-point shards are the
+// material a prerequisite link opens, so they must be readable even while the practice endpoint
+// refuses the topic. ADR-054 keeps the two separate: mastery gates practice, never reading.
+func TestLessonKP_LockedTopicIsReadable(t *testing.T) {
+	lib, err := lessons.Load("../../data/lessons")
+	if err != nil {
+		t.Skipf("dataset not present: %v", err)
+	}
+	d, _ := concepts.Build([]concepts.Concept{
+		{ID: "a", Label: "A", Domain: "d", GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60}},
+		{ID: "b", Label: "B", Domain: "d", GradingType: "numeric", Prerequisites: []string{"a"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60}},
+	})
+	store, _ := storage.NewSQLiteStore(":memory:")
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &testGen{})
+	reg.Register("b", &testGen{})
+	s := New(engine.New(store, d, reg, lib, nil), store, auth.New(store))
+	mux := http.NewServeMux()
+	s.Register(mux)
+	token, _ := guestTokenAndID(t, mux)
+
+	// The shard route answers — it is not behind the eligibility gate — even though this
+	// concept is locked.
+	rec := authedGet(t, mux, "/api/lessons/b/kp", token)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("locked topic kp = %d, want 200: %s", rec.Code, rec.Body.String())
+	}
+	if strings.Contains(rec.Body.String(), "TOPIC_LOCKED") {
+		t.Errorf("kp returned the eligibility gate: %s", rec.Body.String())
+	}
+	// The gate that must stay: the same topic cannot be started.
+	if rec := authedGet(t, mux, "/api/lessons/b/practice", token); rec.Code != http.StatusForbidden {
+		t.Fatalf("locked topic practice = %d, want 403", rec.Code)
+	}
+}
+
+// The readiness payload names the DAG prerequisites with the server's own verdict, across
+// domains, so the prerequisite UI never hardcodes or invents a relationship.
+func TestReadiness_ListsDAGPrerequisitesAcrossDomains(t *testing.T) {
+	d, _ := concepts.Build([]concepts.Concept{
+		{ID: "a", Label: "A", Domain: "one", GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60}},
+		{ID: "b", Label: "B", Domain: "two", GradingType: "numeric", Prerequisites: []string{"a"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60}},
+	})
+	store, _ := storage.NewSQLiteStore(":memory:")
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &testGen{})
+	reg.Register("b", &testGen{})
+	s := New(engine.New(store, d, reg, nil, nil), store, auth.New(store))
+	mux := http.NewServeMux()
+	s.Register(mux)
+	token, _ := guestTokenAndID(t, mux)
+
+	rec := authedGet(t, mux, "/api/lessons/b/readiness", token)
+	if rec.Code != 200 {
+		t.Fatalf("/readiness = %d: %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Eligible      bool `json:"eligible"`
+		Prerequisites []struct {
+			ConceptID string `json:"conceptId"`
+			Title     string `json:"title"`
+			State     string `json:"state"`
+			Met       bool   `json:"met"`
+		} `json:"prerequisites"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if body.Eligible {
+		t.Error("b should be ineligible for a fresh learner")
+	}
+	if len(body.Prerequisites) != 1 {
+		t.Fatalf("prerequisites = %+v, want exactly a", body.Prerequisites)
+	}
+	p := body.Prerequisites[0]
+	if p.ConceptID != "a" || p.Title != "A" || p.Met {
+		t.Errorf("prerequisite = %+v, want a/A/not met", p)
+	}
+	if p.State != "unlocked" {
+		t.Errorf("prerequisite state = %q, want unlocked", p.State)
 	}
 }
