@@ -49,6 +49,17 @@ export default function ProfileHeader({
   return (
     <div className="border-[0.5px] border-mathua-border p-4 sm:px-5 w-full max-w-full min-w-0 overflow-hidden">
       <div className="flex items-start gap-4 min-w-0">
+        {/* The profile picture, square and boxed, at the left of the header. */}
+        <div className="shrink-0 border-[0.5px] border-mathua-border p-1">
+          <Avatar
+            seed={avatarSeed ?? name}
+            name={name}
+            size={72}
+            url={avatarUrl}
+            preset={avatarPreset ?? undefined}
+            className="!rounded-none"
+          />
+        </div>
         <section id="position" aria-label="Where you are" className="min-w-0 flex-1">
           <p className="font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere]">
             {name} · LV {levelNum} {scores.level}
@@ -69,17 +80,6 @@ export default function ProfileHeader({
             </p>
           )}
         </section>
-        {/* The profile picture, square and boxed, at the right of the header. */}
-        <div className="shrink-0 border-[0.5px] border-mathua-border p-1">
-          <Avatar
-            seed={avatarSeed ?? name}
-            name={name}
-            size={72}
-            url={avatarUrl}
-            preset={avatarPreset ?? undefined}
-            className="!rounded-none"
-          />
-        </div>
       </div>
       {footer && (
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px]">
