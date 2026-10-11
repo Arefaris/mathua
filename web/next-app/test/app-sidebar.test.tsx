@@ -85,14 +85,14 @@ describe('AppSidebar', () => {
     expect(learn).toBeLessThan(graph)
   })
 
-  it('renders Resources group with Docs, Contribute, and Creator note links', () => {
+  it('renders Resources group with Docs, Glossary, Contribute, and Creator note links', () => {
     renderSidebar()
     expect(screen.getByText('Resources')).toBeInTheDocument()
-    for (const label of ['Docs', 'Contribute', "Creator's note"]) {
+    for (const label of ['Docs', 'Glossary', 'Contribute', "Creator's note"]) {
       expect(screen.getByText(label)).toBeInTheDocument()
     }
     const sidebar = screen.getByTestId('profile-sidebar')
-    for (const href of ['/docs', '/docs/contributing', '/note']) {
+    for (const href of ['/docs', '/glossary', '/docs/contributing', '/note']) {
       const link = sidebar.querySelector(`a[href="${href}"]`)!
       expect(link).not.toBeNull()
       expectFixedBox(link)

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useRef } from 'react'
 import {
+  BookOpen,
   ChartNoAxesColumn,
   ChevronsLeft,
   ChevronsRight,
@@ -64,10 +65,13 @@ const NAV_ITEMS: SidebarNavItem[] = [
   { label: 'Settings', href: '/settings', icon: Settings },
 ]
 
-// Resources group: docs, contributing, creator's note. Informational pages
-// only — never Diagnostic / Quiz / Review (no CTA duplication).
+// Resources group: docs, glossary, contributing, creator's note.
+// Informational pages only — never Diagnostic / Quiz / Review (no CTA
+// duplication). The glossary is a standalone reference with no progress,
+// XP or gating, so it sits here rather than beside Learn.
 const RESOURCE_ITEMS: SidebarNavItem[] = [
   { label: 'Docs', href: '/docs', icon: FileText },
+  { label: 'Glossary', href: '/glossary', icon: BookOpen },
   { label: 'Contribute', href: '/docs/contributing', icon: Handshake },
   { label: "Creator's note", href: '/note', icon: Pencil },
 ]
