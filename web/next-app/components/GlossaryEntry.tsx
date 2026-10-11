@@ -47,7 +47,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
 
       <div className="mt-3 space-y-2">
         {entry.examples.map((ex, i) => (
-          <div key={i} className="border-l-2 border-mathua-blue pl-3">
+          <div key={i} className="bg-mathua-code px-3 py-2">
             <KatexContent>{`$${ex.tex}$`}</KatexContent>
             <p className="mt-1 font-mono text-[11px] text-mathua-secondary">
               {ex.explanation}
