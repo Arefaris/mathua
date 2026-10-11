@@ -1507,7 +1507,21 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		weak := []engine.PrereqInfo{}
 		missing := []engine.PrereqInfo{}
 		for _, p := range prereqs {
-			if p.Status == string(mastery.StatusMastered) {
+			// Satisfied means the same thing here as in the canonical gate
+			// below (EligibilityFor): MASTERED, or DECAYING — a stale
+			// mastery is still a met prerequisite, and the banner must not
+			// contradict the verdict it shares a response with. Stored rows
+			// never carry DECAYING, so apply the same read-time decay the
+			// gate uses rather than comparing raw statuses.
+			status := p.Status
+			if rp, ok := rawProgress[p.ID]; ok && rp != nil {
+				days := 999.0
+				if rp.LastReviewed != nil {
+					days = time.Since(*rp.LastReviewed).Hours() / 24
+				}
+				status = string(mastery.EffectiveStatus(mastery.Status(rp.Status), days, mastery.DecayDays))
+			}
+			if status == string(mastery.StatusMastered) || status == "DECAYING" {
 				continue
 			}
 			if p.Status == string(mastery.StatusUnseen) || p.Status == "" {
@@ -2654,6 +2668,12 @@ func (s *Server) handleStudyAnswer(w http.ResponseWriter, r *http.Request) {
 			// moved. 409 tells the client to re-serve, which is the only way
 			// this becomes gradeable again.
 			writeError(w, "no server-side record of this question; re-serve it", 409)
+			return
+		}
+		if errors.Is(err, engine.ErrNoActiveQuestion) {
+			// The question predates an account wipe: nothing was recorded.
+			// Re-serve like an expired anchor rather than a server fault.
+			writeError(w, "no active question; re-serve it", 409)
 			return
 		}
 		writeError(w, "failed to submit study answer", 500)

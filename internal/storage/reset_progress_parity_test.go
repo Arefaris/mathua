@@ -41,6 +41,10 @@ func TestResetProgress_RoundTrip_Parity(t *testing.T) {
 		run("seed speed", store.UpsertTopicSpeed(&TopicSpeed{StudentID: st.ID, ConceptID: "a", EFactor: 2.5, Interval: 1, Repetitions: 1, LearningSpeed: 1.0}))
 		run("seed quiz", store.RecordQuizCompletion(st.ID, 60))
 		run("seed xp", store.AddXP(st.ID, 42))
+		run("seed diagnostic", store.SetDiagnosticCompleted(st.ID))
+		if _, found, err := store.DiagnosticCompletedAt(st.ID); err != nil || !found {
+			t.Fatalf("[%s] diagnostic timestamp missing before reset: found=%v err=%v", tag, found, err)
+		}
 		run("seed anchor", store.UpsertServerSession("study_expected", st.ID+"|a", `{"q":"1"}`, time.Now().UTC().Add(time.Hour).Format(time.RFC3339)))
 		run("seed plan", store.UpsertServerSession("study_plan", st.ID, `{"destination":"d"}`, time.Now().UTC().Add(time.Hour).Format(time.RFC3339)))
 		run("seed prefs", store.UpsertServerSession("study_plan_prefs", st.ID, `{"pace":"steady"}`, time.Now().UTC().Add(time.Hour).Format(time.RFC3339)))
@@ -79,6 +83,12 @@ func TestResetProgress_RoundTrip_Parity(t *testing.T) {
 		}
 		if got.XPTotal != 0 || got.XPToday != 0 || got.DiagnosticCompleted || got.Name != sid {
 			t.Errorf("[%s] student row wrong after reset: %+v", tag, got)
+		}
+		// The completion timestamp is learning state, not identity: a reset
+		// that clears the flag but keeps the date would report a fresh
+		// learner as diagnosed on some past date.
+		if _, found, err := store.DiagnosticCompletedAt(st.ID); err != nil || found {
+			t.Errorf("[%s] diagnostic timestamp survives reset: found=%v err=%v", tag, found, err)
 		}
 		// Idempotent: a second reset is a no-op success.
 		if err := store.ResetProgress(st.ID); err != nil {

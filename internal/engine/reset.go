@@ -60,6 +60,16 @@ func (e *Engine) ResetAccountProgress(studentID, phrase string) error {
 	delete(e.studySessions, studentID)
 	delete(e.quizRemedial, studentID)
 	delete(e.activePath, studentID)
+	// A wipe retires the student's write generation and evicts their
+	// in-flight practice questions: a submit snapshotted before this point
+	// must be refused rather than resurrecting wiped rows, whether it
+	// arrives after the wipe or was being graded across it.
+	e.resetGen[studentID]++
+	for sid, as := range e.sessions {
+		if as != nil && as.studentID == studentID {
+			delete(e.sessions, sid)
+		}
+	}
 	prefix := studentID + "|"
 	for k := range e.studyMisses {
 		if strings.HasPrefix(k, prefix) {
@@ -102,6 +112,14 @@ func (e *Engine) DeleteAccount(studentID, phrase string) error {
 	delete(e.studySessions, studentID)
 	delete(e.quizRemedial, studentID)
 	delete(e.activePath, studentID)
+	// Same retirement as the reset path: in-flight practice questions must
+	// not outlive the account they belong to.
+	e.resetGen[studentID]++
+	for sid, as := range e.sessions {
+		if as != nil && as.studentID == studentID {
+			delete(e.sessions, sid)
+		}
+	}
 	prefix := studentID + "|"
 	for k := range e.studyMisses {
 		if strings.HasPrefix(k, prefix) {
@@ -116,4 +134,23 @@ func (e *Engine) DeleteAccount(studentID, phrase string) error {
 	}
 	e.mu.Unlock()
 	return nil
+}
+
+// writeGeneration returns the student's current wipe generation. A submit
+// snapshots it with the served question and refuses the write when
+// writeGenerationOK reports movement, so an answer graded across a reset or
+// delete cannot resurrect wiped rows.
+func (e *Engine) writeGeneration(studentID string) uint64 {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.resetGen[studentID]
+}
+
+// writeGenerationOK reports whether no wipe has landed since gen was
+// snapshotted. On mismatch the caller must refuse the answer with
+// ErrNoActiveQuestion and record nothing.
+func (e *Engine) writeGenerationOK(studentID string, gen uint64) bool {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.resetGen[studentID] == gen
 }

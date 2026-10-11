@@ -5,6 +5,7 @@ import (
 
 	"github.com/chuma-beep/mathua/internal/diagnostic"
 	"github.com/chuma-beep/mathua/internal/scheduler"
+	"github.com/chuma-beep/mathua/internal/storage"
 )
 
 func TestEligibilityFor_FreshLearner(t *testing.T) {
@@ -34,6 +35,29 @@ func TestEligibilityFor_FreshLearner(t *testing.T) {
 	}
 	if len(child.Prerequisites) != 1 || child.Prerequisites[0].Met {
 		t.Errorf("b.prerequisites = %+v, want a marked unmet", child.Prerequisites)
+	}
+}
+
+// A MASTERED row with no review timestamp (legacy or freshly seeded) reads
+// as DECAYING, never as fresh mastery: GetProgress applies decay on read,
+// and a missing date is the stalest possible signal.
+func TestGetProgress_NilLastReviewedReadsDecaying(t *testing.T) {
+	e := testEngine(t)
+	st, err := e.CreateStudent("legacy-mastered")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+	if err := e.repo.UpsertProgress(&storage.ConceptProgress{
+		StudentID: st.ID, ConceptID: "a", Status: "MASTERED", Streak: 5,
+	}); err != nil {
+		t.Fatalf("seed mastery: %v", err)
+	}
+	got, err := e.GetProgress(st.ID)
+	if err != nil {
+		t.Fatalf("get progress: %v", err)
+	}
+	if got["a"].Status != "DECAYING" {
+		t.Errorf("status = %q, want DECAYING", got["a"].Status)
 	}
 }
 

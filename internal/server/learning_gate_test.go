@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/chuma-beep/mathua/internal/auth"
 	"github.com/chuma-beep/mathua/internal/concepts"
@@ -147,6 +148,48 @@ func TestPractice_PlacementUnlocksSuccessor(t *testing.T) {
 
 	if rec := authedGet(t, mux, "/api/lessons/b/practice", token); rec.Code != 200 {
 		t.Fatalf("placement-unlocked practice = %d, want 200: %s", rec.Code, rec.Body.String())
+	}
+}
+
+// A decayed prerequisite satisfies the gate, so the soft banner must agree:
+// ready with no weak entries, eligible, and practice serving. Before the
+// Phase 0 alignment the same response said weak:[a] alongside eligible:true.
+func TestReadiness_DecayedPrereqAgreesWithGate(t *testing.T) {
+	mux, store := gatedServer(t)
+	token, sid := guestTokenAndID(t, mux)
+
+	stale := time.Now().UTC().Add(-15 * 24 * time.Hour)
+	if err := store.UpsertProgress(&storage.ConceptProgress{
+		StudentID: sid, ConceptID: "a", Status: "MASTERED",
+		Streak: 3, LastReviewed: &stale,
+	}); err != nil {
+		t.Fatalf("seed decayed mastery: %v", err)
+	}
+
+	rec := authedGet(t, mux, "/api/lessons/b/readiness", token)
+	if rec.Code != 200 {
+		t.Fatalf("readiness = %d: %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Ready    bool   `json:"ready"`
+		Weak     []any  `json:"weak"`
+		Missing  []any  `json:"missing"`
+		Eligible bool   `json:"eligible"`
+		State    string `json:"state"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if !body.Ready || len(body.Weak) != 0 || len(body.Missing) != 0 {
+		t.Errorf("banner = ready:%v weak:%d missing:%d, want ready with none",
+			body.Ready, len(body.Weak), len(body.Missing))
+	}
+	if !body.Eligible {
+		t.Errorf("gate = eligible:%v state:%q, want eligible", body.Eligible, body.State)
+	}
+
+	if rec := authedGet(t, mux, "/api/lessons/b/practice", token); rec.Code != 200 {
+		t.Fatalf("decayed-prereq practice = %d, want 200: %s", rec.Code, rec.Body.String())
 	}
 }
 

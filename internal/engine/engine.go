@@ -27,6 +27,15 @@ import (
 )
 
 type activeSession struct {
+	// Owner of the in-flight question. Sessions are keyed by client-supplied
+	// sessionID, so without this a wipe cannot evict one learner's stale
+	// questions without touching everyone else's (see ResetAccountProgress).
+	studentID string
+	// Wipe generation at serve time. SubmitAnswer refuses the write when the
+	// counter has moved since, so an answer graded across a reset cannot
+	// resurrect wiped rows. Stamped wherever a question is (re)served, never
+	// at submit time — snapshotting at submit would bless a stale question.
+	writeGen       uint64
 	conceptID      string
 	conceptName    string
 	expectedAnswer string
@@ -181,6 +190,11 @@ type Engine struct {
 	// In-memory by design, same as diag/quiz sessions: a restart just means
 	// a retake; weakness propagation (+0.2/miss) is the durable signal.
 	quizRemedial map[string][]string
+	// resetGen counts account wipes per student. A submit snapshots the
+	// counter with the served question and re-checks it after grading, so an
+	// answer graded across a reset is refused instead of resurrecting wiped
+	// progress (the write-time half of the ADR-026 guarantee).
+	resetGen map[string]uint64
 }
 
 // QuizGateXP is the mastery-check interval. It delegates so there is one definition: the
@@ -211,6 +225,7 @@ func New(repo storage.Repository, dag *concepts.DAG, reg *generator.Registry, ll
 		studySessions: make(map[string]string),
 		studyAnchor:   make(map[string]string),
 		quizRemedial:  make(map[string][]string),
+		resetGen:      make(map[string]uint64),
 	}
 }
 
@@ -532,7 +547,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 
 	as := e.sessions[sessionID]
 	if as == nil {
-		as = &activeSession{}
+		as = &activeSession{studentID: studentID}
 	}
 
 	// PR 1.5 halt: after 2 consecutive misses, serve the remedial queue first
@@ -567,6 +582,8 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		as.isReview = false
 		as.questionText = prob.Question
 		as.questionDifficulty = diff
+		as.studentID = studentID
+		as.writeGen = e.resetGen[studentID]
 		e.sessions[sessionID] = as
 		e.persistActiveSession(sessionID, studentID, as, as.questionText)
 		var lesson *lessons.Lesson
@@ -631,6 +648,8 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 	if len(as.recentConcepts) > 3 {
 		as.recentConcepts = as.recentConcepts[len(as.recentConcepts)-3:]
 	}
+	as.studentID = studentID
+	as.writeGen = e.resetGen[studentID]
 	e.sessions[sessionID] = as
 	e.persistActiveSession(sessionID, studentID, as, as.questionText)
 
@@ -666,7 +685,7 @@ func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, err
 
 	as := e.sessions[sessionID]
 	if as == nil {
-		as = &activeSession{}
+		as = &activeSession{studentID: studentID}
 	}
 	next := e.sched.NextReview(snapshots, as.lastConceptID)
 	if next == nil {
@@ -698,6 +717,8 @@ func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, err
 	as.attemptID = attemptID
 	as.questionText = prob.Question
 	as.questionDifficulty = difficulty
+	as.studentID = studentID
+	as.writeGen = e.resetGen[studentID]
 	e.sessions[sessionID] = as
 	e.persistActiveSession(sessionID, studentID, as, as.questionText)
 
@@ -1016,6 +1037,8 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	if as == nil {
 		if persisted := e.rehydrateActiveSession(sessionID, studentID); persisted != nil {
 			as = persisted
+			as.studentID = studentID
+			as.writeGen = e.resetGen[studentID]
 			e.sessions[sessionID] = as
 		}
 	}
@@ -1023,6 +1046,10 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		e.mu.Unlock()
 		return nil, fmt.Errorf("%w for session %q", ErrNoActiveQuestion, sessionID)
 	}
+	// The generation travels with the served question, not with this call: a
+	// reset landing during grading must refuse the write below instead of
+	// resurrecting wiped rows.
+	gen := as.writeGen
 	sessionFields := struct {
 		conceptID          string
 		expectedAnswer     string
@@ -1062,6 +1089,12 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	progress, err := e.repo.GetProgress(studentID, sessionFields.conceptID)
 	if err != nil {
 		return nil, fmt.Errorf("get progress: %w", err)
+	}
+	if !e.writeGenerationOK(studentID, gen) {
+		// A wipe landed while this answer was being graded. The snapshot
+		// above predates it, so recording would resurrect wiped progress,
+		// attempts and XP. Refuse like a stale session instead.
+		return nil, fmt.Errorf("question served before account wipe: %w", ErrNoActiveQuestion)
 	}
 	if progress == nil {
 		progress = &storage.ConceptProgress{
@@ -1303,6 +1336,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	}
 	// Grade using concept's grading type via registry/router — skipped for
 	// admitted unknowns, which are forced misses (no XP, no rushing penalty).
+	gen := e.writeGeneration(studentID)
 	gr := e.gradeAnswer(conceptID, expected, answer)
 	if dontKnow {
 		gr = grader.Result{Correct: false}
@@ -1310,6 +1344,12 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	if gr.Unavailable {
 		// Grader infrastructure fault — never a student miss; record nothing.
 		return &AnswerResult{Ungraded: true, Feedback: gr.Feedback}, nil
+	}
+	if !e.writeGenerationOK(studentID, gen) {
+		// Same wipe-during-grading refusal as the practice path: the anchor
+		// read above predates a reset or delete, so none of the writes below
+		// may land.
+		return nil, fmt.Errorf("question served before account wipe: %w", ErrNoActiveQuestion)
 	}
 
 	progress, err := e.repo.GetProgress(studentID, conceptID)
@@ -1931,95 +1971,6 @@ func (e *Engine) weaknessMapFromProgress(progress map[string]*storage.ConceptPro
 	return result
 }
 
-func (e *Engine) PracticeConcept(sessionID, studentID, conceptID string) (*Question, error) {
-	progress, err := e.repo.GetAllProgress(studentID)
-	if err != nil {
-		return nil, fmt.Errorf("load progress: %w", err)
-	}
-
-	c := e.dag.Concept(conceptID)
-	if c == nil {
-		return nil, fmt.Errorf("concept %q not found", conceptID)
-	}
-
-	// Check prerequisites are met
-	for _, pid := range c.Prerequisites {
-		p, ok := progress[pid]
-		if !ok || p.Status != string(mastery.StatusMastered) {
-			return nil, fmt.Errorf("prerequisite %q not mastered", pid)
-		}
-	}
-
-	difficulty := difficultyFromWeakness(e.weaknessMapFromProgress(progress), conceptID)
-	attemptID := newAttemptID()
-	seedBase := hashSeed(studentID + "|" + conceptID + "|" + attemptID)
-	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase}
-	prob, err := e.registry.GenerateContext(conceptID, ctx)
-	if err != nil {
-		return nil, fmt.Errorf("generate problem: %w", err)
-	}
-
-	e.mu.Lock()
-	defer e.mu.Unlock()
-
-	as := e.sessions[sessionID]
-	if as == nil {
-		as = &activeSession{}
-	}
-	prevQuestion := as.questionText
-	for i := 0; i < 3 && prevQuestion != "" && prob.Question == prevQuestion; i++ {
-		ctx.Seed = seedBase + int64(i+1)
-		if p2, err2 := e.registry.GenerateContext(conceptID, ctx); err2 == nil {
-			prob = p2
-		}
-	}
-	as.conceptID = conceptID
-	as.conceptName = c.Label
-	as.expectedAnswer = prob.Answer
-	as.explanation = prob.Explanation
-	as.requiredStreak = c.MasteryThreshold.Streak
-	as.timeThreshold = e.accommodatedThreshold(studentID, c.MasteryThreshold.AvgTimeSeconds)
-	as.answered = false
-	as.attemptID = attemptID
-	as.questionText = prob.Question
-	as.questionDifficulty = difficulty
-	e.sessions[sessionID] = as
-	e.persistActiveSession(sessionID, studentID, as, as.questionText)
-
-	var lesson *lessons.Lesson
-	if e.ll != nil {
-		lesson = e.ll.Lesson(conceptID)
-	}
-
-	return &Question{
-		ConceptID:   conceptID,
-		ConceptName: c.Label,
-		Question:    prob.Question,
-		GradingType: e.gradingTypeFor(conceptID),
-		AttemptID:   as.attemptID,
-		Lesson:      lesson,
-	}, nil
-}
-
-type ConceptTreeNode struct {
-	ID         string  `json:"id"`
-	Label      string  `json:"label"`
-	Unlocked   bool    `json:"unlocked"`
-	MasteryPct float64 `json:"mastery_pct"`
-	Streak     int     `json:"streak"`
-	Status     string  `json:"status"`
-}
-
-type SubdomainNode struct {
-	Name     string            `json:"name"`
-	Concepts []ConceptTreeNode `json:"concepts"`
-}
-
-type DomainNode struct {
-	Name       string          `json:"name"`
-	Subdomains []SubdomainNode `json:"subdomains"`
-}
-
 // CorpusSize reports how many concepts and domains this engine was loaded with.
 //
 // The corpus is the definition of what Mathua teaches, so any surface counting it should read
@@ -2031,71 +1982,6 @@ func (e *Engine) CorpusSize() (concepts int, domains int) {
 		return 0, 0
 	}
 	return e.dag.Count(), len(e.dag.Domains())
-}
-
-func (e *Engine) ConceptTree(studentID string) []DomainNode {
-	progress, _ := e.repo.GetAllProgress(studentID)
-	domains := make(map[string]map[string][]ConceptTreeNode)
-	domainOrder := make([]string, 0)
-	domainSeen := make(map[string]bool)
-
-	for _, c := range e.dag.Order() {
-		if !domainSeen[c.Domain] {
-			domainSeen[c.Domain] = true
-			domainOrder = append(domainOrder, c.Domain)
-		}
-		if domains[c.Domain] == nil {
-			domains[c.Domain] = make(map[string][]ConceptTreeNode)
-		}
-
-		unlocked := true
-		for _, pid := range c.Prerequisites {
-			p, ok := progress[pid]
-			if !ok || p.Status != string(mastery.StatusMastered) {
-				unlocked = false
-				break
-			}
-		}
-
-		masteryPct := 0.0
-		streak := 0
-		status := "UNSEEN"
-		if p, ok := progress[c.ID]; ok {
-			streak = p.Streak
-			status = p.Status
-			if c.MasteryThreshold.Streak > 0 {
-				masteryPct = float64(streak) / float64(c.MasteryThreshold.Streak)
-				if masteryPct > 1 {
-					masteryPct = 1
-				}
-			}
-		}
-
-		domains[c.Domain][c.Subdomain] = append(domains[c.Domain][c.Subdomain], ConceptTreeNode{
-			ID:         c.ID,
-			Label:      c.Label,
-			Unlocked:   unlocked,
-			MasteryPct: masteryPct,
-			Streak:     streak,
-			Status:     status,
-		})
-	}
-
-	var result []DomainNode
-	for _, name := range domainOrder {
-		d := domains[name]
-		var subs []SubdomainNode
-		subKeys := make([]string, 0, len(d))
-		for k := range d {
-			subKeys = append(subKeys, k)
-		}
-		sort.Strings(subKeys)
-		for _, sk := range subKeys {
-			subs = append(subs, SubdomainNode{Name: sk, Concepts: d[sk]})
-		}
-		result = append(result, DomainNode{Name: name, Subdomains: subs})
-	}
-	return result
 }
 
 func (e *Engine) PropagateWeakness(studentID string) {
@@ -2249,6 +2135,7 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 			return nil
 		}
 		return &activeSession{
+			studentID:     studentID,
 			lastConceptID: rec.LastConceptID,
 			sessionReview: rec.SessionReview,
 			sessionNew:    rec.SessionNew,
@@ -2263,6 +2150,7 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 		reqStreak = c.MasteryThreshold.Streak
 	}
 	return &activeSession{
+		studentID:      studentID,
 		conceptID:      rec.ConceptID,
 		conceptName:    rec.ConceptName,
 		expectedAnswer: rec.ExpectedAnswer,
@@ -2288,6 +2176,8 @@ func (e *Engine) GetCurrentQuestion(sessionID, studentID string) (*Question, err
 	if as == nil {
 		if persisted := e.rehydrateActiveSession(sessionID, studentID); persisted != nil {
 			as = persisted
+			as.studentID = studentID
+			as.writeGen = e.resetGen[studentID]
 			e.sessions[sessionID] = as
 		}
 	}

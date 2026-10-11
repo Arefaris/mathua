@@ -1111,7 +1111,7 @@ func (s *SQLiteStore) ResetProgress(studentID string) error {
 		{"DELETE FROM student_topic_speed WHERE student_id = ?", []interface{}{studentID}},
 		{"DELETE FROM quiz_completions WHERE student_id = ?", []interface{}{studentID}},
 		{"DELETE FROM server_sessions WHERE kind IN ('study_expected','study_plan') AND (key = ? OR key LIKE ? || '|%')", []interface{}{studentID, studentID}},
-		{`UPDATE students SET xp_total = 0, xp_today = 0, diagnostic_completed = 0,
+		{`UPDATE students SET xp_total = 0, xp_today = 0, diagnostic_completed = 0, diagnostic_completed_at = '',
 			league = 'bronze', league_week = '', league_moved = 0 WHERE id = ?`, []interface{}{studentID}},
 	}
 	for _, st := range stmts {

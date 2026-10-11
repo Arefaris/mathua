@@ -1,5 +1,12 @@
 # Barrage load profile: guest study loop vs SQLite on one clock.
 #
+# STALE SCENARIO (not retargeted): the study-loop below drives POST
+# /api/session + POST /api/answer, both removed — the live flow is
+# GET /api/lessons/{id}/practice + POST /api/study/answer (see ADR-042 and
+# the Phase 0 audit). Do not trust numbers from this file until the steps
+# are rewritten against the current seams; the DB runner shapes below the
+# `db:` key are still valid.
+#
 # Scenario runner drives the real HTTP flow (session -> chained answers ->
 # scores) while the db runner issues the app's heaviest read shapes directly
 # against the same SQLite file. Correlated buckets show whether answer-submit
