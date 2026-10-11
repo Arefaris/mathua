@@ -25,9 +25,11 @@ import { resolve } from 'node:path'
  * Per ADR-029, `npx playwright` serves the prebuilt `out/`, so `next build` must run first or
  * this exercises the previous build and passes regardless of the change under test.
  *
- * It used to drive `/study`, which rendered every lesson body in full. That route is closed, and
- * with it the renderer that resolves a figure reference out of markdown — which is why this spec
- * had to move rather than be deleted. See `stubLesson` for the configuration it measures now.
+ * It used to drive `/study`, which rendered every lesson body in full. ADR-047 closed that
+ * route and ADR-054 restored it as a context-bound reference page; either way this spec drives
+ * `/learn`, whose reference panel is the renderer that resolves a figure reference out of
+ * markdown — which is why the spec moved rather than being deleted. See `stubLesson` for the
+ * configuration it measures now.
  */
 
 const ROOT = resolve(__dirname, '../../..')

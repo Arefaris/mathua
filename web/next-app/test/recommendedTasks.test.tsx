@@ -89,9 +89,10 @@ describe('RecommendedTaskList', () => {
     fireEvent.click(screen.getByText('Single-digit addition').closest('button')!)
     await screen.findByRole('note', { name: /prerequisite/i })
     expect(screen.getByText('Counting')).toBeTruthy()
-    // The prerequisite routes into the learning system, never into reference.
-    expect(screen.getByRole('link', { name: /Learn prerequisite/ }).getAttribute('href'))
-      .toBe('/learn?concept=arith.count')
+    // The prerequisite opens its reference material; mastery is not a navigation lock, and the
+    // gated practice step lives on that concept's own page (ADR-054).
+    expect(screen.getByRole('link', { name: /Study prerequisite/ }).getAttribute('href'))
+      .toBe('/study?concept=arith.count')
     expect(push).not.toHaveBeenCalled()
   })
 

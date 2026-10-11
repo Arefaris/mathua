@@ -10,6 +10,7 @@ import LearnStepper from '../../components/LearnStepper'
 import NextUpCard from '../../components/NextUpCard'
 import type { Shelf } from '../../lib/nextUp'
 import { fetchShelf } from '../../lib/recommendations'
+import { parseReturnStack } from '../../lib/learnReturn'
 
 /**
  * The learner's entry point: whatever the engine recommends, rendered as one card plus the
@@ -48,7 +49,7 @@ function LearnEntry() {
 function LearnContent() {
   const searchParams = useSearchParams()
   const concept = searchParams.get('concept') || ''
-  const returnTo = searchParams.get('return') || undefined
+  const returnStack = parseReturnStack(searchParams)
 
   if (!concept) {
     return <LearnEntry />
@@ -59,7 +60,7 @@ function LearnContent() {
       <div className="max-w-2xl mx-auto mb-4">
         <Link href="/profile" className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue">← Profile</Link>
       </div>
-      <LearnStepper conceptId={concept} returnTo={returnTo} />
+      <LearnStepper conceptId={concept} returnStack={returnStack} />
     </div>
   )
 }

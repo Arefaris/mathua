@@ -127,16 +127,18 @@ describe('/learn chrome', () => {
     expect(await screen.findByText('Steps (2)')).toBeTruthy()
   })
 
-  // The split is right — a prerequisite never learned goes to /learn, one already demonstrated
-  // goes to /review, which is problems-first. The verb was wrong: labelling an unseen concept
-  // "Review" offered a tutorial under the name of a check.
-  it('labels an unlearned prerequisite Learn, and a due one Check', async () => {
+  // Every prerequisite is openable, and it opens reference, not a tutorial. Mastering it is a
+  // separate, eligibility-gated step on the study page. Labelling an unseen concept "Review"
+  // offered a tutorial under the name of a check; the link is now "Study".
+  it('offers an unlearned prerequisite as study material, never as a review', async () => {
     setup({ missing: [{ id: 'arith.mul.single', label: 'Multiplication' }] })
     render(<LearnStepper conceptId={CID} />)
-    const banner = await screen.findByRole('note', { name: 'Prerequisite suggestion' })
-    expect(within_(banner, /Learn: Multiplication/)).toBeTruthy()
-    expect(banner.textContent).not.toMatch(/Review: Multiplication/)
-    expect(banner.textContent).not.toMatch(/Check: Multiplication/)
+    const panel = await screen.findByRole('note', { name: 'Prerequisites' })
+    expect(panel.textContent).toMatch(/Multiplication/)
+    const link = within_(panel, /Study prerequisite/)
+    expect(link?.getAttribute('href')).toContain('/study?concept=arith.mul.single')
+    expect(panel.textContent).not.toMatch(/Review: Multiplication/)
+    expect(panel.textContent).not.toMatch(/Check: Multiplication/)
   })
 })
 

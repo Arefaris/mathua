@@ -99,23 +99,20 @@ test('the reference material is on the learn page, and holds no way out of it', 
   await expect(page.getByText(/only the questions below move this concept/)).toBeVisible()
 })
 
-test('/study forwards a concept deep link into the loop', async ({ page }) => {
-  // Old bookmarks and inbound links exist, and a 404 would lose the one thing the old URL
-  // still carried: which concept. Static export cannot use next.config redirects, so this is a
-  // client forwarder and the URL changes in the browser rather than over the wire.
+test('/study renders a concept reference without losing the way into practice', async ({ page }) => {
+  // ADR-054: `/study` is the reference and exploration surface. It renders the material for the
+  // concept in the URL — reachable even when that concept is locked — and offers a *separate*
+  // control into the normal learning loop. It is not the old catalogue, and it awards nothing.
   await stubLearn(page)
   await page.goto('/study?concept=arith.add.single')
-  await expect(page).toHaveURL(/\/learn\?concept=arith\.add\.single/, { timeout: 30_000 })
-  // Not a page-wide `.first()`. The reference panel repeats the same knowledge-point labels
-  // inside a collapsed `<details>`, and Playwright treats a `<summary>` in a closed `<details>`
-  // as hidden — so a page-wide `.first()` can resolve to the panel's copy and fail for a reason
-  // that has nothing to do with the forwarder. Scoped to the intro's own label, which is what
-  // "the concept reached the teaching loop" actually looks like.
-  const kpLabel = page.locator('p.font-mono.uppercase', { hasText: 'Use addition notation' })
-  await expect(kpLabel.first()).toBeVisible()
+  await expect(page.getByText('Use addition notation').first()).toBeVisible({ timeout: 30_000 })
+  const practise = page.getByRole('link', { name: /Practise this concept/ })
+  await expect(practise).toBeVisible()
+  await expect(practise).toHaveAttribute('href', /\/learn\?concept=arith\.add\.single/)
 })
 
 test('/study with no concept forwards to the learn entry', async ({ page }) => {
+  // Without a concept there is nothing to show, so it forwards rather than presenting an index.
   await stubLearn(page)
   await page.route('**/api/next', route =>
     route.fulfill({
@@ -135,10 +132,11 @@ test('/study with no concept forwards to the learn entry', async ({ page }) => {
   await expect(page).toHaveURL(/\/learn(\?|$)/, { timeout: 30_000 })
 })
 
-test('no learner navigation offers a way into the closed library', async ({ page }) => {
-  // Enumerated over every surface the library used to appear in, rather than one of them. Each
-  // was a separate place to reintroduce it, and a single-page assertion would pass while four
-  // of the other six still linked there.
+test('no learner navigation offers a way into the reference as a catalogue', async ({ page }) => {
+  // The reference is reached from the learning flow, never from the global chrome. Each surface
+  // below was a separate place the old library appeared, and a single-page assertion would pass
+  // while the others still linked there. `/study` itself is not in this list: it is a real route
+  // now, but it must stay out of the header, tab bar, sidebar and footer.
   await page.route('**/api/**', route => route.fulfill({ status: 404, json: {} }))
   const surfaces: [string, string][] = [
     ['/', 'landing'],

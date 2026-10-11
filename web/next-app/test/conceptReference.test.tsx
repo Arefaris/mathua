@@ -157,39 +157,14 @@ describe('reference blocks', () => {
 
 describe('reference is not a progression surface', () => {
   it('offers no way to another concept', async () => {
-    // The single most important property of the new reference layer. `/study` failed it by
-    // design: it had concept chips, a domain index, a search box and a lesson list, so a
-    // learner could pick whatever they liked next. Here the only destination is `/learn`,
-    // and it carries no concept at all.
+    // The single most important property of the panel. `/study` failed it by design: it had
+    // concept chips, a domain index, a search box and a lesson list, so a learner could pick
+    // whatever they liked next. The panel renders one concept and links nowhere; the DAG
+    // neighbourhood that ADR-054 added lives on the `/study` page around it, not in here.
     kpOverride.value = { c1: { kps: [{ label: 'KP one', section: 'S1', subgoals: [], worked_example: 'b' }] } }
-    render(<ConceptReference conceptId="c1" prerequisites={[{ id: 'p1', label: 'Addition', status: 'UNSEEN' }]} />)
+    render(<ConceptReference conceptId="c1" />)
     await screen.findByText(/KP one/)
-    // Not "no link off to another concept" but "no link at all": the panel is reached from
-    // inside the learning loop, so a way back to it is redundant, and a way onward to
-    // something else is the thing being closed.
     expect(screen.queryAllByRole('link')).toHaveLength(0)
-  })
-
-  it('lists prerequisites as words, and says they are not progress', async () => {
-    // §8 of the closure: prerequisites stay visible, but they are not a link farm. The
-    // actionable subset already sits in `/learn`'s own banner with links, so this list is
-    // the complete set without duplicating it — and a prerequisite that needs work is sent
-    // into the learning flow rather than to a library.
-    render(
-      <ConceptReference
-        conceptId="c1"
-        prerequisites={[
-          { id: 'p1', label: 'Addition', status: 'UNSEEN' },
-          { id: 'p2', label: 'Counting', status: 'MASTERED' },
-          { id: 'p3', label: 'Fractions', status: 'DECAYING' },
-        ]}
-      />,
-    )
-    await screen.findByText(/KP two/)
-    expect(screen.getByText(/Addition/)).toBeTruthy()
-    expect(screen.getByText(/not started/)).toBeTruthy()
-    expect(screen.getByText(/learned, due a check/)).toBeTruthy()
-    expect(screen.getByText(/offered above, in the learning flow/)).toBeTruthy()
   })
 
   it('states that reading is not evidence, and names no completion control', async () => {
@@ -208,10 +183,43 @@ describe('reference is not a progression surface', () => {
   it('renders no mastery percentage or progress quantity', async () => {
     // The rule ADR-021 held for `/study`, and it still holds here: the panel explains, so it
     // must not invite an action against a number. Status words are the part that helps.
-    render(<ConceptReference conceptId="c1" prerequisites={[{ id: 'p1', label: 'Addition', status: 'MASTERED' }]} />)
+    render(<ConceptReference conceptId="c1" />)
     await screen.findByText(/KP two/)
     expect(visibleText()).not.toMatch(/\d+\s*%/)
-    expect(screen.getByText(/learned/)).toBeTruthy()
+    expect(screen.getByText(/Reference explains/)).toBeTruthy()
+  })
+})
+
+describe('reference page variant', () => {
+  it('shows the full lesson even when worked-example blocks exist', async () => {
+    // The panel shows the article only when there are no blocks, so it never duplicates the
+    // learning loop. The `/study` page wants the whole reference, so its variant fetches and
+    // renders the article alongside the examples.
+    getLessonsMock.mockResolvedValue({ lessons: { arith: [{ title: 'Adding up', concepts: ['c1'] }] } })
+    render(<ConceptReference conceptId="c1" variant="page" />)
+    await screen.findByText(/KP two/)
+    expect(await screen.findByText(/the whole article/)).toBeTruthy()
+    expect(screen.getByTestId('reference-blocks')).toBeTruthy()
+  })
+
+  it('says so honestly when a concept has no material at all', async () => {
+    // No blocks and no article must read as "not available yet", never as a titled empty panel
+    // that looks like a finished lesson.
+    kpOverride.value = { c1: { kps: [] } }
+    render(<ConceptReference conceptId="c1" variant="page" />)
+    expect(await screen.findByText(/Detailed study material is not available/)).toBeTruthy()
+  })
+
+  it('drops a placeholder step rather than repeating it beside the article', async () => {
+    // A step with no written explanation is an honest placeholder inside the learning loop; the
+    // reference page supersedes it with the article, so it must not show both.
+    kpOverride.value = {
+      c1: { kps: [{ label: 'Drill', section: '', subgoals: [], worked_example: "There isn't a written explanation for this step yet. Work the questions below." }] },
+    }
+    getLessonsMock.mockResolvedValue({ lessons: { arith: [{ title: 'Adding up', concepts: ['c1'] }] } })
+    render(<ConceptReference conceptId="c1" variant="page" />)
+    expect(await screen.findByText(/the whole article/)).toBeTruthy()
+    expect(screen.queryByText(/There isn't a written explanation/)).toBeNull()
   })
 })
 

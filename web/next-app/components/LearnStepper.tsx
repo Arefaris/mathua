@@ -8,9 +8,10 @@ import LessonAssets from './LessonAssets'
 import ChoiceOptions from './ChoiceOptions'
 import ConceptReference from './ConceptReference'
 import PrerequisitePanel from './PrerequisitePanel'
-import { getLessonKPs, getLessonPractice, getLessonReadiness, submitStudyAnswer, getProgress, getErrorStatus, type KpInfo, type PracticeQuestion, type ReadinessRes, type ConceptProgress } from '../lib/api'
+import { getLessonKPs, getLessonPractice, getLessonReadiness, submitStudyAnswer, getProgress, getErrorStatus, type EligibilityPrereq, type KpInfo, type PracticeQuestion, type ReadinessRes, type ConceptProgress } from '../lib/api'
 import { getUserInfo } from '../lib/auth'
 import { upcomingLocked, hrefConceptId, type Shelf, type LockedSuccessor } from '../lib/nextUp'
+import { backTarget, learnConceptPath, pushReturn, studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/learnReturn'
 import { fetchShelf } from '../lib/recommendations'
 import { REQUIRED_IN_A_ROW } from '../lib/progression'
 import { formatForGradingType } from '../lib/answerFormat'
@@ -42,11 +43,33 @@ type Entry =
 
 interface Props {
   conceptId: string
-  returnTo?: string
+  /**
+   * The chain of pages the learner came through, most-recent-first (`/learn?concept=X`,
+   * `/study?concept=Y`). Carried in the URL so a navigation does not strand it.
+   */
+  returnStack?: ReturnEntry[]
 }
 
 let keySeq = 1
 const nextKey = () => keySeq++
+
+// The scheduler's state word for a stored status, used only by the legacy fallback below. An
+// unrecognised or missing status becomes '', which `PrerequisitePanel` renders as "Not started".
+function prereqStateFromStatus(status: string | undefined): string {
+  switch ((status ?? '').toUpperCase()) {
+    case 'UNSEEN':
+      return 'unlocked'
+    case 'LEARNING':
+    case 'PRACTICING':
+      return 'in_progress'
+    case 'MASTERED':
+      return 'mastered'
+    case 'DECAYING':
+      return 'due_for_review'
+    default:
+      return ''
+  }
+}
 
 // Shelf re-fetch budget on the done card: past this the failure branch
 // (Practice again + Back to Profile) renders instead of a stale spinner.
@@ -62,7 +85,7 @@ function catalogEntries() {
 // Profile dedupe via lib/nextUp; re-exported under the guard's name for tests.
 export { hrefConceptId as headConceptId }
 
-export default function LearnStepper({ conceptId, returnTo }: Props) {
+export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   const [entries, setEntries] = useState<Entry[]>([])
   const [kps, setKps] = useState<KpInfo[]>([])
   // The concept's own diagram. The KP endpoint has always returned it and the client has
@@ -105,8 +128,15 @@ export default function LearnStepper({ conceptId, returnTo }: Props) {
   const reduceMotion = useRef(false)
   const conceptGradingType = concepts.find(c => c.id === conceptId)?.grading_type
   const format = formatForGradingType(conceptGradingType)
+  // Where "back" goes, and the label a learner reads. The label is resolved from the concept the
+  // return path names, never printed as the raw id a storage key would show.
+  const back = backTarget(returnStack)
+  const returnTo = returnStack.length > 0 ? hrefConceptId(returnStack[0]) : null
   // A learner reading "← Back to frac.add.diff" is reading a storage key.
-  const returnToLabel = concepts.find(c => c.id === returnTo)?.label ?? returnTo
+  const returnToLabel = returnTo ? (concepts.find(c => c.id === returnTo)?.label ?? returnTo) : null
+  // The stack to put on any link that leaves this page, so this page is reachable again.
+  const currentPath = learnConceptPath(conceptId)
+  const prereqStack = pushReturn(returnStack, currentPath)
 
   useEffect(() => {
     reduceMotion.current = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -475,24 +505,33 @@ export default function LearnStepper({ conceptId, returnTo }: Props) {
     )
   }
 
-  const prereqs = [...(readiness?.missing ?? []), ...(readiness?.weak ?? [])]
-  // A prerequisite the learner has already demonstrated is a *retrieval* question, not a
-  // teaching one, and the two must not be collapsed.
-  //
-  // The server already draws the distinction — `ready` buckets a prerequisite into
-  // `missing` only when UNSEEN and into `weak` otherwise, so a decayed one arrives in
-  // `weak` (`server.go` handleReadiness) — and then the client concatenated the buckets
-  // identically and gave every entry the same `/learn` link. That turned "you have
-  // mastered this and it is due a check" into "here is the tutorial again", which is the
-  // purgatory arriving through the back door after `buildCandidates` was fixed.
-  //
-  // So the split is kept and each half gets the destination that matches it: still being
-  // learned goes to `/learn`, already demonstrated goes to `/review`, which is
-  // problems-first and fetches no lesson.
-  const toLearn = prereqs.filter(p => !countsAsMastered({ status: p.status }))
-  const toReview = prereqs.filter(p => countsAsMastered({ status: p.status }))
-  const onlyReview = toLearn.length === 0 && toReview.length > 0
-  const showBanner = readiness && !readiness.ready && !bannerDismissed && prereqs.length > 0
+  // The server's authoritative prerequisite list, with a fallback to the older `missing`/`weak`
+  // buckets for a payload that predates `prerequisites`. Every entry is openable: a prerequisite's
+  // mastery never gates access to its reference material (ADR-054). Review routing for a mastered
+  // concept happens on the study page's Practise control, not by withholding a link here.
+  const prerequisites: EligibilityPrereq[] = (() => {
+    if (!readiness) return []
+    if (readiness.prerequisites && readiness.prerequisites.length > 0) return readiness.prerequisites
+    return [...(readiness.missing ?? []), ...(readiness.weak ?? [])].map(p => ({
+      conceptId: p.id,
+      title: p.label,
+      state: prereqStateFromStatus(p.status),
+      met: countsAsMastered({ status: p.status }),
+    }))
+  })()
+  const unmetPrereqs = prerequisites.filter(p => !p.met)
+  const dueReviewPrereqs = prerequisites.filter(p => p.met && p.state === 'due_for_review')
+  const prereqIntro = (() => {
+    const names = (unmetPrereqs.length > 0 ? unmetPrereqs : dueReviewPrereqs)
+      .slice(0, 3).map(p => p.title).join(', ')
+    if (unmetPrereqs.length === 0 && dueReviewPrereqs.length > 0) {
+      return `You have already learned ${names} — a short check is due, or continue anyway.`
+    }
+    if (unmetPrereqs.length === 0) {
+      return 'You have already learned what this builds on. You can revisit it any time.'
+    }
+    return `This builds on ${names}. A quick study helps — or continue anyway.`
+  })()
   const totalAnswered = answeredCount
   const totalCorrect = correctCount
   const totalXP = entries.reduce((s, e) => s + (e.kind === 'q' && e.feedback?.correct ? e.feedback.xp : 0), 0)
@@ -510,34 +549,14 @@ export default function LearnStepper({ conceptId, returnTo }: Props) {
         )}
       </div>
 
-      {showBanner && (
-        <div className="mb-4 border border-mathua-blue bg-mathua-surface p-4" role="note" aria-label="Prerequisite suggestion">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-blue">
-                {onlyReview ? 'Due a retrieval check' : `Before you start (${prereqs.length})`}
-              </p>
-              <p className="mt-1 font-mono text-xs text-mathua-secondary">
-                {onlyReview
-                  ? `You have already learned ${toReview.slice(0, 3).map(p => p.label).join(', ')} — a short check is due, or continue anyway.`
-                  : `This builds on ${toLearn.slice(0, 3).map(p => p.label).join(', ')}. A quick review helps — or continue anyway.`}
-              </p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {toLearn.slice(0, 3).map(p => (
-                  <Link key={p.id} href={`/learn?concept=${encodeURIComponent(p.id)}&return=${encodeURIComponent(conceptId)}`} className="border border-mathua-border px-2.5 py-1.5 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue">
-                    Learn: {p.label}
-                  </Link>
-                ))}
-                {toReview.slice(0, 3).map(p => (
-                  <Link key={p.id} href="/review" className="border border-mathua-border px-2.5 py-1.5 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue">
-                    Check: {p.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <button type="button" onClick={() => setBannerDismissed(true)} className="font-mono text-[11px] text-mathua-muted hover:text-mathua-primary shrink-0" aria-label="Dismiss prerequisite suggestion">Continue anyway ✕</button>
-          </div>
-        </div>
+      {prerequisites.length > 0 && !bannerDismissed && (
+        <PrerequisitePanel
+          prerequisites={prerequisites}
+          returnStack={prereqStack}
+          heading={`Prerequisites (${prerequisites.length})`}
+          intro={prereqIntro}
+          onDismiss={() => setBannerDismissed(true)}
+        />
       )}
 
       {error && <p className="mb-4 font-mono text-xs text-red-400">{error}</p>}
@@ -549,7 +568,7 @@ export default function LearnStepper({ conceptId, returnTo }: Props) {
           a learner and the first question; the worked example above it is the intended first
           read. It renders no mastery state and awards nothing, which is the point: reading
           explains, and only an answer moves the concept. */}
-      <ConceptReference conceptId={conceptId} prerequisites={prereqs} />
+      <ConceptReference conceptId={conceptId} />
 
       <div className="space-y-4">
         {entries.map(e => {
@@ -609,13 +628,11 @@ export default function LearnStepper({ conceptId, returnTo }: Props) {
               <div key={e.key} className="border border-mathua-red-faint bg-mathua-surface p-5">
                 <p className="font-mono text-xs text-red-400">Stepping down a level — easier question below.</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {/* Same split as the readiness banner: a decayed prerequisite is owed
-                      a retrieval check, not another tutorial. */}
-                  {toLearn.slice(0, 2).map(p => (
-                    <Link key={p.id} href={`/learn?concept=${encodeURIComponent(p.id)}&return=${encodeURIComponent(conceptId)}`} className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">Review {p.label}</Link>
-                  ))}
-                  {toReview.slice(0, 2).map(p => (
-                    <Link key={p.id} href="/review" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">Check {p.label}</Link>
+                  {/* A prerequisite is reference here too: study the material rather than being
+                      sent to a tutorial under the name of a check. Practising it is a separate,
+                      eligibility-gated step on that concept's own page. */}
+                  {prerequisites.slice(0, 2).map(p => (
+                    <Link key={p.conceptId} href={withReturnStack(studyConceptPath(p.conceptId), prereqStack)} className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">Study {p.title}</Link>
                   ))}
                   <Link href="/profile" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">Other task →</Link>
                 </div>
@@ -636,7 +653,7 @@ export default function LearnStepper({ conceptId, returnTo }: Props) {
                 {e.note && <p role="status" className="mt-2 font-mono text-[11px] text-mathua-secondary">{e.note}</p>}
                 <p className="mt-2 font-mono text-[11px] text-mathua-secondary">Scroll up to review anything. Reviews are scheduled automatically.</p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {returnTo && <Link href={`/learn?concept=${encodeURIComponent(returnTo)}`} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 py-2 font-mono text-xs inline-flex items-center min-h-[40px]">← Back to {returnToLabel}</Link>}
+                  {back && <Link href={back.href} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 py-2 font-mono text-xs inline-flex items-center min-h-[40px]">← Back to {returnToLabel}</Link>}
                   {nextLoading && <span className="font-mono text-xs text-mathua-muted inline-flex items-center min-h-[40px]">Finding what&apos;s next…</span>}
                   {canContinue && nextShelf && (
                     <Link href={nextShelf.next.href} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 py-2 font-mono text-xs inline-flex items-center min-h-[40px]">{nextShelf.next.badge}: {nextShelf.next.title} →</Link>

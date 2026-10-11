@@ -304,33 +304,16 @@ describe('LearnStepper explanation after submission', () => {
   }, 15000)
 })
 
-// The readiness banner is the second route by which decay could become teaching.
-// `buildCandidates` was fixed so a decayed concept leaves the shelf, but the banner
-// builds its own links from the readiness payload — and the server's distinction
-// between `missing` (never started) and `weak` (started, includes decayed) was being
-// discarded by concatenating the two and giving every entry the same `/learn` href.
-// So a concept the learner had mastered and not reviewed for a fortnight was re-taught
-// with the tutorial, via a link labelled "Review", every time they opened anything that
-// depended on it.
-describe('readiness banner and decay', () => {
+// The Prerequisites section is the one place a learner can reach a prerequisite, and it must
+// never be a dead end: mastery is not a navigation lock (ADR-054). A locked prerequisite opens
+// its reference page; only its *practice* is gated, and that gate lives on the study page.
+describe('Prerequisites section and decay', () => {
   const prereq = (id: string, status: string) => ({ id, label: `Concept ${id}`, status, mastery_pct: 1 })
-
-  it('routes a decayed prerequisite to /review, never to /learn', async () => {
-    vi.mocked(getLessonReadiness).mockResolvedValue({
-      concept_id: CID,
-      ready: false,
-      weak: [prereq('frac.add.word', 'DECAYING')],
-      missing: [],
-    })
-    render(<LearnStepper conceptId={CID} />)
-    await waitFor(() => expect(screen.getByRole('note', { name: /prerequisite/i })).toBeTruthy())
-
-    const hrefs = screen.getAllByRole('link').map(l => l.getAttribute('href') ?? '')
-    expect(hrefs.some(h => h.includes('concept=frac.add.word'))).toBe(false)
-    expect(hrefs).toContain('/review')
+  const elig = (conceptId: string, state: string, met: boolean) => ({
+    conceptId, title: `Concept ${conceptId}`, state, met,
   })
 
-  it('still routes a prerequisite that is genuinely being learned to /learn', async () => {
+  it('opens a never-started prerequisite as study material, never as a dead end', async () => {
     vi.mocked(getLessonReadiness).mockResolvedValue({
       concept_id: CID,
       ready: false,
@@ -338,13 +321,12 @@ describe('readiness banner and decay', () => {
       missing: [prereq('frac.add.word', 'UNSEEN')],
     })
     render(<LearnStepper conceptId={CID} />)
-    await waitFor(() => expect(screen.getByRole('note', { name: /prerequisite/i })).toBeTruthy())
-
-    const hrefs = screen.getAllByRole('link').map(l => l.getAttribute('href') ?? '')
-    expect(hrefs.some(h => h.includes('concept=frac.add.word'))).toBe(true)
+    const panel = await screen.findByRole('note', { name: 'Prerequisites' })
+    const link = within(panel).getByRole('link', { name: /Study prerequisite/ })
+    expect(link.getAttribute('href')).toContain('/study?concept=frac.add.word')
   })
 
-  it('says "already learned" when every prerequisite only needs a check', async () => {
+  it('shows an already-learned prerequisite as a check due, still openable', async () => {
     vi.mocked(getLessonReadiness).mockResolvedValue({
       concept_id: CID,
       ready: false,
@@ -352,11 +334,34 @@ describe('readiness banner and decay', () => {
       missing: [],
     })
     render(<LearnStepper conceptId={CID} />)
-    await waitFor(() => expect(screen.getByRole('note', { name: /prerequisite/i })).toBeTruthy())
+    const panel = await screen.findByRole('note', { name: 'Prerequisites' })
     // "Before you start" would be false here: the learner did start, and finished.
-    expect(screen.getByText(/Due a retrieval check/i)).toBeTruthy()
-    expect(screen.getByText(/already learned/i)).toBeTruthy()
-    expect(screen.queryByText(/Before you start/i)).toBeNull()
+    expect(panel.textContent).toMatch(/already learned/i)
+    expect(panel.textContent).toMatch(/short check is due/i)
+    const link = within(panel).getByRole('link', { name: /Study prerequisite/ })
+    expect(link.getAttribute('href')).toContain('/study?concept=frac.add.word')
+  })
+
+  it('renders the server verdict and keeps a locked prerequisite openable', async () => {
+    // The reported bug: `alg.factor.trinomial` depends on two locked prerequisites, and both
+    // were rendered as unclickable "Locked" spans. The panel's own copy is not the test — the
+    // working link is.
+    vi.mocked(getLessonReadiness).mockResolvedValue({
+      concept_id: CID,
+      ready: false,
+      weak: [],
+      missing: [],
+      eligible: false,
+      state: 'locked',
+      prerequisites: [elig('alg.factor.gcf', 'locked', false), elig('alg.poly.foil', 'locked', false)],
+    })
+    render(<LearnStepper conceptId={CID} />)
+    const panel = await screen.findByRole('note', { name: 'Prerequisites' })
+    const links = within(panel).getAllByRole('link', { name: /Study prerequisite/ })
+    expect(links).toHaveLength(2)
+    expect(links[0].getAttribute('href')).toContain('/study?concept=alg.factor.gcf')
+    expect(links[1].getAttribute('href')).toContain('/study?concept=alg.poly.foil')
+    expect(panel.textContent).toMatch(/Locked/)
   })
 })
 
