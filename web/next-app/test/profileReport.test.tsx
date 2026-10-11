@@ -110,6 +110,15 @@ describe('/profile shows the report', () => {
     const regions = screen.getAllByRole('region').map(r => r.getAttribute('aria-label') ?? '')
     expect(regions.indexOf('Where you are')).toBeLessThan(regions.indexOf('Your learning'))
   })
+  it('shows Activity second, immediately after Where you are', async () => {
+    // Activity is the second thing on the page. It moved up from below the tasks and the
+    // alerts so the learner's own rhythm is the first thing after the header.
+    render(<ProfilePage />)
+    await screen.findByRole('region', { name: 'Activity' })
+    const regions = screen.getAllByRole('region').map(r => r.getAttribute('aria-label') ?? '')
+    expect(regions.indexOf('Activity')).toBe(regions.indexOf('Where you are') + 1)
+    expect(regions.indexOf('Activity')).toBeLessThan(regions.indexOf('Your learning'))
+  })
   it('orders Activity ahead of the rest of the report', async () => {
     render(<ProfilePage />)
     const order = (await screen.findAllByRole('region'))

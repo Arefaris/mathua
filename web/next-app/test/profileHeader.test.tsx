@@ -43,4 +43,17 @@ describe('ProfileHeader', () => {
     expect(screen.getAllByText(/^mastered$/i)).toHaveLength(1)
     expect(screen.queryByText('MASTERED')).toBeNull()
   })
+
+  it('renders folded actions when provided', () => {
+    render(
+      <ProfileHeader
+        name="Tester"
+        scores={scores}
+        catalogue={catalogue}
+        progress={progress}
+        footer={<a href="/plan">Plan your learning →</a>}
+      />,
+    )
+    expect(screen.getByRole('link', { name: /Plan your learning/ }).getAttribute('href')).toBe('/plan')
+  })
 })

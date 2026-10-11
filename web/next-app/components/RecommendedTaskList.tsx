@@ -86,11 +86,11 @@ export default function RecommendedTaskList({
   const items = taskItems(shelf)
 
   return (
-    <section aria-label="Your learning" className="mt-8 min-w-0">
-      <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-1">
+    <section aria-label="Your learning" className="mt-6 min-w-0">
+      <h2 className="mb-1 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
         Your learning
       </h2>
-      <p className="font-mono text-[11px] text-mathua-muted mb-4">Recommended tasks</p>
+      <p className="font-mono text-[11px] text-mathua-muted mb-3">Recommended tasks</p>
 
       {loading && (
         <div

@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import type { ConceptProgress, Scores } from '../lib/api'
 import type { CatalogueConcept } from '../lib/progress'
 import ProfileStats from './ProfileStats'
@@ -26,6 +27,7 @@ export default function ProfileHeader({
   catalogue,
   progress,
   frontierLabel,
+  footer,
 }: {
   name: string
   scores: Scores
@@ -35,6 +37,8 @@ export default function ProfileHeader({
   catalogue: CatalogueConcept[]
   progress: Record<string, ConceptProgress>
   frontierLabel?: string | null
+  /** Small actions that belong on the header line rather than as their own blocks. */
+  footer?: ReactNode
 }) {
   return (
     <div className="border-[0.5px] border-mathua-border p-4 sm:p-5 sm:px-6 w-full max-w-full min-w-0 overflow-hidden">
@@ -55,6 +59,11 @@ export default function ProfileHeader({
           frontierLabel={frontierLabel}
         />
       </div>
+      {footer && (
+        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px]">
+          {footer}
+        </div>
+      )}
     </div>
   )
 }

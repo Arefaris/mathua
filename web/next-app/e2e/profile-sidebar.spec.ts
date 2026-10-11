@@ -57,7 +57,7 @@ async function loginAsIncomplete(page: Page, mastered: number) {
 test('profile shows diagnostic CTA to brand-new users', async ({ page }) => {
   await loginAsIncomplete(page, 0)
   await page.goto('/profile')
-  await expect(page.getByRole('link', { name: 'Start diagnostic test →' }).first()).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByRole('link', { name: 'Take the diagnostic →' }).first()).toBeVisible({ timeout: 30_000 })
 })
 
 test('profile hides diagnostic CTA from non-new users who skipped it', async ({ page }) => {

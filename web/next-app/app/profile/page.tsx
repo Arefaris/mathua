@@ -17,7 +17,7 @@ import BottomTabs from '../../components/BottomTabs'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '../../components/ui/sidebar'
 import RecommendedTaskList from '../../components/RecommendedTaskList'
 import DailyGoalControl, { getGuestGoal } from '../../components/DailyGoalControl'
-import { isNewUser, recentlyUnlocked, hrefConceptId, RECENT_UNLOCK_DAYS, type Shelf } from '../../lib/nextUp'
+import { isNewUser, type Shelf } from '../../lib/nextUp'
 import { fetchShelf } from '../../lib/recommendations'
 import { concepts as conceptCatalog } from '../../lib/conceptData'
 import { HourglassIcon, PauseIcon } from '@animateicons/react/lucide'
@@ -131,33 +131,6 @@ export default function ProfilePage() {
   // keeps the label even though it no longer offers a button: the engine owns both the name
   // and the destination, so a learner is never shown one concept's name and sent to another.
   const frontierLabel = head?.next.title ?? null
-
-  // Recently unlocked: successors unlocked by recently-active concepts
-  // (recency derived client-side from activity — no endpoint needed). Head
-  // and queue destinations are filtered so no two items share an href and
-  // nothing re-links the head concept.
-  const unlockRows = useMemo(() => {
-    // head is null until the recommendation arrives. Deriving rows from it unconditionally
-    // would throw on the first render — the memo ran before with a synchronously computed head,
-    // which is exactly what moving the decision to the engine changed.
-    if (!head) return []
-    const rows = recentlyUnlocked({
-      catalog: conceptCatalog.map(c => ({ id: c.id, label: c.label, prerequisites: c.prerequisites ?? [] })),
-      progress,
-      activity,
-      recentDays: RECENT_UNLOCK_DAYS,
-    })
-    const headCid = hrefConceptId(head.next.href)
-    const seen = new Set([head.next.href, ...head.alternatives.map(a => a.href)])
-    return rows.filter(r => {
-      const href = `/learn?concept=${encodeURIComponent(r.id)}`
-      if (seen.has(href)) return false
-      const cid = hrefConceptId(href)
-      if (cid !== null && cid === headCid) return false
-      seen.add(href)
-      return true
-    }).slice(0, 5)
-  }, [head, progress, activity])
 
 
   useEffect(() => {
@@ -286,51 +259,17 @@ export default function ProfilePage() {
             <p className="font-mono text-xs text-mathua-secondary mb-4">Sign in to track XP, streaks and mastery. Your activity heatmap will appear here once you start practicing.</p>
             <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
               <Link href="/login" className="w-full sm:w-auto border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Sign in</Link>
+              <Link href="/onboard" className="w-full sm:w-auto border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Start diagnostic test →</Link>
               <Link href="/learn" className="w-full sm:w-auto border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Try as guest →</Link>
             </div>
           </div>
-          {(Object.keys(progress).length === 0 && !activity.some(d => d.questions > 0)) && (
-            <section className="mt-6 border border-mathua-border bg-mathua-surface p-4">
-              <h3 className="font-mono text-[11px] text-mathua-muted uppercase tracking-wider mb-3">What to do first</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="border border-mathua-border p-3 bg-mathua-surface-elevated">
-                  <div className="font-mono text-xs text-mathua-blue mb-1">1. Take diagnostic test</div>
-                  <p className="font-mono text-[11px] text-mathua-secondary">Finds your starting point</p>
-                  <Link href="/onboard" className="font-mono text-[10px] text-mathua-blue hover:text-mathua-blue-hover mt-2 inline-block">Start diagnostic test →</Link>
-                </div>
-                <div className="border border-mathua-border p-3 bg-mathua-surface-elevated">
-                  <div className="font-mono text-xs text-mathua-blue mb-1">2. Start answering in Learn</div>
-                  <p className="font-mono text-[11px] text-mathua-secondary">Questions are generated; nothing to memorise</p>
-                  <Link href="/learn" className="font-mono text-[10px] text-mathua-blue hover:text-mathua-blue-hover mt-2 inline-block">Go to Learn →</Link>
-                </div>
-                <div className="border border-mathua-border p-3 bg-mathua-surface-elevated">
-                  <div className="font-mono text-xs text-mathua-blue mb-1">3. Practice → see XP</div>
-                  <p className="font-mono text-[11px] text-mathua-secondary">Answer questions · XP shows on Profile</p>
-                  <Link href="/learn" className="font-mono text-[10px] text-mathua-blue hover:text-mathua-blue-hover mt-2 inline-block">Continue learning →</Link>
-                </div>
-              </div>
-            </section>
-          )}
-          {/* Diagnostic CTA — guest */}
-          <section className="mt-6 w-full max-w-full min-w-0 overflow-hidden border border-mathua-blue bg-mathua-surface p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div className="w-full sm:flex-1 min-w-0 overflow-hidden">
-              <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:items-center sm:gap-2 min-w-0">
-                <span className="shrink-0 bg-mathua-blue text-white px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider">Recommended</span>
-                <span className="min-w-0 break-words [overflow-wrap:anywhere] leading-snug font-mono text-[11px] sm:text-xs text-mathua-primary">Take a diagnostic to get a recommendation on where to start</span>
-              </div>
-              <p className="font-mono text-xs text-mathua-secondary mt-1 break-words [overflow-wrap:anywhere]">Diagnostic test · finds your starting point</p>
-            </div>
-            <Link href="/onboard" className="w-full sm:w-auto sm:shrink-0 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Start diagnostic test →</Link>
-          </section>
 
-          <section id="activity" aria-label="Activity" className="mt-10 flex min-w-0 flex-col items-stretch scroll-mt-28">
-            <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-4 w-full">
+          <section id="activity" aria-label="Activity" className="mt-6 min-w-0 scroll-mt-28">
+            <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
               Activity
             </h2>
-            <div className="w-full max-w-full min-w-0 flex justify-center overflow-hidden">
-              <div className="w-full max-w-full min-w-0">
-                <ActivityHeatmap data={activity} />
-              </div>
+            <div className="w-full max-w-full min-w-0 overflow-hidden">
+              <ActivityHeatmap data={activity} />
             </div>
           </section>
 
@@ -385,7 +324,8 @@ export default function ProfilePage() {
         </a>
         <div id="profile-main" className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
           <div className="min-w-0">
-        {/* One header: identity and XP, then where you are, in a single card. */}
+        {/* One header: identity, XP, where you are, and the small actions folded onto it so they
+            do not each become their own block. */}
         <ProfileHeader
           name={user.name}
           scores={effScores ?? scores}
@@ -395,50 +335,41 @@ export default function ProfilePage() {
           catalogue={conceptCatalog}
           progress={progress}
           frontierLabel={frontierLabel}
+          footer={
+            <>
+              {(isNew && placementCompleted === false) && (
+                <Link href="/onboard" className="text-mathua-blue hover:text-mathua-blue-hover">
+                  New here? Take the diagnostic →
+                </Link>
+              )}
+              <Link href="/plan" className="text-mathua-blue hover:text-mathua-blue-hover">
+                Plan your learning →
+              </Link>
+              {effScores && !isLoggedIn() && (
+                <DailyGoalControl
+                  current={effScores.daily_xp_goal}
+                  onSaved={g => {
+                    setGoalOverride(g)
+                    const sid = user.student_id || getGuestId() || ''
+                    if (sid) {
+                      getScores(sid).then(setScores).catch(() => {})
+                    }
+                  }}
+                />
+              )}
+            </>
+          }
         />
 
-        {effScores && !isLoggedIn() && (
-          <DailyGoalControl
-            current={effScores.daily_xp_goal}
-            onSaved={g => {
-              setGoalOverride(g)
-              const sid = user.student_id || getGuestId() || ''
-              if (sid) {
-                getScores(sid).then(setScores).catch(() => {})
-              }
-            }}
-          />
-        )}
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs">
-          <Link href="/plan" className="text-mathua-blue hover:text-mathua-blue-hover">
-            Plan your learning → finish-date estimates
-          </Link>
-        </div>
-
-        <RecommendedTaskList shelf={head} loading={shelf === null} />
-
-        {(isNew && placementCompleted === false) && (
-          <section className="mt-6 border border-mathua-border bg-mathua-surface p-4">
-            <h3 className="font-mono text-[11px] text-mathua-muted uppercase tracking-wider mb-3">What to do first</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="border border-mathua-border p-3 bg-mathua-surface-elevated">
-                <div className="font-mono text-xs text-mathua-blue mb-1">1. Take diagnostic test</div>
-                <p className="font-mono text-[11px] text-mathua-secondary">Finds your starting point</p>
-                <Link href="/onboard" className="font-mono text-[10px] text-mathua-blue hover:text-mathua-blue-hover mt-2 inline-block">Start diagnostic test →</Link>
-              </div>
-              <div className="border border-mathua-border p-3 bg-mathua-surface-elevated">
-                <div className="font-mono text-xs text-mathua-blue mb-1">2. Start answering in Learn</div>
-                <p className="font-mono text-[11px] text-mathua-secondary">Questions are generated; nothing to memorise</p>
-                <Link href="/learn" className="font-mono text-[10px] text-mathua-blue hover:text-mathua-blue-hover mt-2 inline-block">Go to Learn →</Link>
-              </div>
-              <div className="border border-mathua-border p-3 bg-mathua-surface-elevated">
-                <div className="font-mono text-xs text-mathua-blue mb-1">3. Practice → see XP</div>
-                <p className="font-mono text-[11px] text-mathua-secondary">Answer questions · XP shows below</p>
-                <Link href="/learn" className="font-mono text-[10px] text-mathua-blue hover:text-mathua-blue-hover mt-2 inline-block">Continue learning →</Link>
-              </div>
-            </div>
-          </section>
-        )}
+        {/* Activity is the second thing on the page. */}
+        <section id="activity" aria-label="Activity" className="mt-6 min-w-0 scroll-mt-28">
+          <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
+            Activity
+          </h2>
+          <div className="w-full max-w-full min-w-0 overflow-hidden">
+            <ActivityHeatmap data={activity} />
+          </div>
+        </section>
 
         {scores.paused_until && (
           <div className="mt-6 w-full max-w-full min-w-0 overflow-hidden border border-mathua-border bg-mathua-surface p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -508,76 +439,38 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* ── The report ────────────────────────────────────────────────
-            Restored to the hub: a learner expects the whole picture on their
-            own page, not behind a separate destination. Needs attention leads
-            the report — it is the actionable part — then Activity, then the
-            durable picture. Cohort figures stay on /docs/efficacy; these are
-            the learner's own numbers. */}
-        <section id="struggles" aria-label="Struggles" className="mt-10 min-w-0 scroll-mt-28">
-          <StrugglesSection weaknesses={weaknesses} />
-          <div className="mt-3 text-center">
-            <Link href="/history" className="font-mono text-xs text-mathua-blue hover:text-mathua-blue-hover">
-              Every question you&apos;ve answered →
-            </Link>
-          </div>
-        </section>
-
-        <section id="activity" aria-label="Activity" className="mt-8 flex min-w-0 flex-col items-stretch scroll-mt-28">
-          <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-4 w-full">
-            Activity
-          </h2>
-          <div className="w-full max-w-full min-w-0 flex justify-center overflow-hidden">
-            <div className="w-full max-w-full min-w-0">
-              <ActivityHeatmap data={activity} />
-            </div>
-          </div>
-        </section>
-
+        <RecommendedTaskList shelf={head} loading={shelf === null} />
 
         {efficacy && efficacy.concepts_touched > 0 && (
-          <section id="how-doing" aria-label="How you are doing" className="mt-8 min-w-0 scroll-mt-28">
-            <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-4">
+          <section id="how-doing" aria-label="How you are doing" className="mt-6 min-w-0 scroll-mt-28">
+            <h2 className="mb-2 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
               How you&apos;re doing
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 min-w-0">
+            <div className="flex flex-wrap gap-x-6 gap-y-3 min-w-0">
               {[
                 { label: 'First-pass', value: `${Math.round(efficacy.first_pass_rate * 100)}%`, hint: 'correct on attempt 1' },
                 { label: 'Second-pass', value: `${Math.round(efficacy.second_pass_rate * 100)}%`, hint: 'correct within 2 tries' },
                 { label: 'Avg attempts', value: efficacy.avg_attempts_per_concept.toFixed(2), hint: 'per concept' },
                 { label: 'Concepts', value: String(efficacy.concepts_touched), hint: `${efficacy.total_attempts} attempts` },
               ].map(m => (
-                <div key={m.label} className="border border-mathua-border bg-mathua-surface p-3 min-w-0">
-                  <div className="font-mono text-[10px] uppercase text-mathua-muted">{m.label}</div>
-                  <div className="font-mono text-xl text-mathua-blue mt-1 truncate">{m.value}</div>
-                  <div className="font-mono text-[10px] text-mathua-secondary mt-0.5 truncate">{m.hint}</div>
+                <div key={m.label} className="min-w-0">
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted">{m.label}</div>
+                  <div className="font-mono text-lg leading-tight text-mathua-blue">{m.value}</div>
+                  <div className="font-mono text-[10px] text-mathua-secondary">{m.hint}</div>
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {unlockRows.length > 0 && (
-          <section aria-label="Recently unlocked" className="mt-8 w-full max-w-full min-w-0 overflow-hidden border border-mathua-border bg-mathua-surface p-4">
-            <h3 className="font-mono text-[11px] text-mathua-muted uppercase tracking-wider mb-3">
-              Recently unlocked
-            </h3>
-            <ul className="space-y-1.5">
-              {unlockRows.map(r => (
-                <li key={r.id}>
-                  <Link
-                    href={`/learn?concept=${encodeURIComponent(r.id)}`}
-                    className="flex items-baseline gap-2 font-mono text-[11px] text-mathua-secondary hover:text-mathua-blue min-w-0"
-                  >
-                    <span className="shrink-0 uppercase tracking-wider text-mathua-muted">Unlocked</span>
-                    <span className="truncate">{r.label}</span>
-                    <span className="ml-auto shrink-0 text-mathua-muted">via {r.via}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <section id="struggles" aria-label="Struggles" className="mt-6 min-w-0 scroll-mt-28">
+          <StrugglesSection weaknesses={weaknesses} />
+          <div className="mt-2">
+            <Link href="/history" className="font-mono text-[11px] text-mathua-blue hover:text-mathua-blue-hover">
+              Every question you&apos;ve answered →
+            </Link>
+          </div>
+        </section>
           </div>
         </div>
     </ProfileShell>
