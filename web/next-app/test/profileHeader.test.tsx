@@ -70,4 +70,21 @@ describe('ProfileHeader', () => {
     )
     expect(screen.getByRole('link', { name: /Plan your learning/ }).getAttribute('href')).toBe('/plan')
   })
+
+  it('shows the profile picture square and boxed on the right', () => {
+    render(
+      <ProfileHeader
+        name="Tester"
+        scores={scores}
+        catalogue={catalogue}
+        progress={progress}
+        avatarSeed="s1"
+      />,
+    )
+    const pic = screen.getByLabelText('Tester avatar')
+    // Square, not the round default: the override flattens the border radius.
+    expect(pic.className).toMatch(/rounded-none/)
+    // And it sits in its own bordered box, not floating bare.
+    expect(pic.parentElement?.className).toMatch(/border-mathua-border/)
+  })
 })

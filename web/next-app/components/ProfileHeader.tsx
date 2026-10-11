@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { ConceptProgress, Scores } from '../lib/api'
 import { countOverall, type CatalogueConcept } from '../lib/progress'
 import { LEVEL_NAMES } from './ProfileStats'
+import Avatar from './Avatar'
 
 /**
  * The learner header as a few short sentences, not a wall of tiles.
@@ -22,6 +23,9 @@ import { LEVEL_NAMES } from './ProfileStats'
 export default function ProfileHeader({
   name,
   scores,
+  avatarSeed,
+  avatarUrl,
+  avatarPreset,
   catalogue,
   progress,
   frontierLabel,
@@ -29,6 +33,9 @@ export default function ProfileHeader({
 }: {
   name: string
   scores: Scores
+  avatarSeed?: string
+  avatarUrl?: string
+  avatarPreset?: number | null
   catalogue: CatalogueConcept[]
   progress: Record<string, ConceptProgress>
   frontierLabel?: string | null
@@ -41,26 +48,39 @@ export default function ProfileHeader({
 
   return (
     <div className="border-[0.5px] border-mathua-border p-4 sm:px-5 w-full max-w-full min-w-0 overflow-hidden">
-      <section id="position" aria-label="Where you are" className="min-w-0">
-        <p className="font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere]">
-          {name} · LV {levelNum} {scores.level}
-        </p>
-        <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]">
-          {counts.mastered} of {counts.unlocked} you can reach · {scores.xp_today}/{scores.daily_xp_goal} XP today · {scores.current_streak} day{scores.current_streak !== 1 ? 's' : ''} streak
-        </p>
-        <p className="mt-1.5 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
-          Mastered {counts.mastered} · Unlocked {counts.unlocked} · In progress {counts.learning + counts.completed}
-          {frontierLabel ? ` · ${counts.mastered > 0 ? 'Currently working towards' : 'Start here'}: ${frontierLabel}` : ''}
-        </p>
-        {counts.dueForReview > 0 && (
-          <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary">
-            {counts.dueForReview} due for review — still learned, worth a retrieval check.{' '}
-            <Link href="/review" className="text-mathua-blue hover:underline">
-              Review →
-            </Link>
+      <div className="flex items-start gap-4 min-w-0">
+        <section id="position" aria-label="Where you are" className="min-w-0 flex-1">
+          <p className="font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere]">
+            {name} · LV {levelNum} {scores.level}
           </p>
-        )}
-      </section>
+          <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]">
+            {counts.mastered} of {counts.unlocked} you can reach · {scores.xp_today}/{scores.daily_xp_goal} XP today · {scores.current_streak} day{scores.current_streak !== 1 ? 's' : ''} streak
+          </p>
+          <p className="mt-1.5 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
+            Mastered {counts.mastered} · Unlocked {counts.unlocked} · In progress {counts.learning + counts.completed}
+            {frontierLabel ? ` · ${counts.mastered > 0 ? 'Currently working towards' : 'Start here'}: ${frontierLabel}` : ''}
+          </p>
+          {counts.dueForReview > 0 && (
+            <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary">
+              {counts.dueForReview} due for review — still learned, worth a retrieval check.{' '}
+              <Link href="/review" className="text-mathua-blue hover:underline">
+                Review →
+              </Link>
+            </p>
+          )}
+        </section>
+        {/* The profile picture, square and boxed, at the right of the header. */}
+        <div className="shrink-0 border-[0.5px] border-mathua-border p-1">
+          <Avatar
+            seed={avatarSeed ?? name}
+            name={name}
+            size={72}
+            url={avatarUrl}
+            preset={avatarPreset ?? undefined}
+            className="!rounded-none"
+          />
+        </div>
+      </div>
       {footer && (
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px]">
           {footer}

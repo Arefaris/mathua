@@ -329,6 +329,9 @@ export default function ProfilePage() {
         <ProfileHeader
           name={user.name}
           scores={effScores ?? scores}
+          avatarSeed={user.student_id}
+          avatarUrl={avatarPreset !== null ? undefined : avatarUrl}
+          avatarPreset={avatarPreset}
           catalogue={conceptCatalog}
           progress={progress}
           frontierLabel={frontierLabel}

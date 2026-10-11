@@ -13,11 +13,16 @@ export default function ProfileSkeleton() {
       aria-label="Loading profile"
       className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden"
     >
-      {/* ProfileHeader: a few short sentences, not the old tile wall. */}
+      {/* ProfileHeader: short sentences with the square avatar box on the right. */}
       <div className="border-[0.5px] border-mathua-border p-4 sm:px-5 w-full min-w-0">
-        <Skeleton className="h-4 w-48" />
-        <Skeleton className="mt-2 h-3.5 w-3/4" />
-        <Skeleton className="mt-2 h-3.5 w-2/3" />
+        <div className="flex items-start gap-4 min-w-0">
+          <div className="min-w-0 flex-1">
+            <Skeleton className="h-4 w-48" />
+            <Skeleton className="mt-2 h-3.5 w-3/4" />
+            <Skeleton className="mt-2 h-3.5 w-2/3" />
+          </div>
+          <Skeleton className="size-[80px] shrink-0 rounded-none" />
+        </div>
       </div>
 
       {/* Recommended task rows */}
