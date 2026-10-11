@@ -91,7 +91,7 @@ describe('RecommendedTaskList', () => {
     expect(screen.getByText('Counting')).toBeTruthy()
     // The prerequisite opens its reference material; mastery is not a navigation lock, and the
     // gated practice step lives on that concept's own page (ADR-054).
-    expect(screen.getByRole('link', { name: /Study prerequisite/ }).getAttribute('href'))
+    expect(screen.getByRole('link', { name: /Study →/ }).getAttribute('href'))
       .toBe('/study?concept=arith.count')
     expect(push).not.toHaveBeenCalled()
   })

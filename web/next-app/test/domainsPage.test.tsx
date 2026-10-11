@@ -104,7 +104,7 @@ describe('/domains curriculum picker', () => {
     fireEvent.click(screen.getByText(domainLabel('arithmetic')))
     fireEvent.click(await screen.findByRole('button', { name: /View prerequisite path/ }))
     await screen.findByRole('note', { name: /prerequisite/i })
-    expect(screen.getByRole('link', { name: /Study prerequisite/ }).getAttribute('href'))
+    expect(screen.getByRole('link', { name: /Study →/ }).getAttribute('href'))
       .toBe('/study?concept=arith.add')
     expect(push).not.toHaveBeenCalled()
   })

@@ -26,7 +26,7 @@ export function prereqHref(p: EligibilityPrereq, returnStack: ReturnEntry[] = []
 }
 
 export function prereqCta(_p: EligibilityPrereq): string {
-  return 'Study prerequisite →'
+  return 'Study →'
 }
 
 /** The learner-facing words for a prerequisite's state, from the server's verdict. */
@@ -64,6 +64,10 @@ export default function PrerequisitePanel({
   onDismiss?: () => void
 }) {
   const title = heading ?? `Prerequisites (${prerequisites.length})`
+  // The default copy is the "not ready yet" case: the panel is shown when a target is locked, or
+  // as an advisory on an eligible one (which passes its own `intro`). Either way it must say that
+  // the learner can *study* a prerequisite they cannot yet practise.
+  const body = intro ?? "You're not ready to practise this topic yet. Study the prerequisites below, then return to check your readiness."
   return (
     <section
       aria-label="Prerequisites"
@@ -78,9 +82,9 @@ export default function PrerequisitePanel({
           {topicTitle}
         </p>
       )}
-      {intro && (
+      {body && (
         <p className="mt-2 font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]">
-          {intro}
+          {body}
         </p>
       )}
       <ul className="mt-3 space-y-2">

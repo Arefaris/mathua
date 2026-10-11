@@ -135,7 +135,7 @@ describe('/learn chrome', () => {
     render(<LearnStepper conceptId={CID} />)
     const panel = await screen.findByRole('note', { name: 'Prerequisites' })
     expect(panel.textContent).toMatch(/Multiplication/)
-    const link = within_(panel, /Study prerequisite/)
+    const link = within_(panel, /Study →/)
     expect(link?.getAttribute('href')).toContain('/study?concept=arith.mul.single')
     expect(panel.textContent).not.toMatch(/Review: Multiplication/)
     expect(panel.textContent).not.toMatch(/Check: Multiplication/)

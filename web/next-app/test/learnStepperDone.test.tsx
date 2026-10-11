@@ -322,7 +322,7 @@ describe('Prerequisites section and decay', () => {
     })
     render(<LearnStepper conceptId={CID} />)
     const panel = await screen.findByRole('note', { name: 'Prerequisites' })
-    const link = within(panel).getByRole('link', { name: /Study prerequisite/ })
+    const link = within(panel).getByRole('link', { name: /Study →/ })
     expect(link.getAttribute('href')).toContain('/study?concept=frac.add.word')
   })
 
@@ -338,7 +338,7 @@ describe('Prerequisites section and decay', () => {
     // "Before you start" would be false here: the learner did start, and finished.
     expect(panel.textContent).toMatch(/already learned/i)
     expect(panel.textContent).toMatch(/short check is due/i)
-    const link = within(panel).getByRole('link', { name: /Study prerequisite/ })
+    const link = within(panel).getByRole('link', { name: /Study →/ })
     expect(link.getAttribute('href')).toContain('/study?concept=frac.add.word')
   })
 
@@ -357,7 +357,7 @@ describe('Prerequisites section and decay', () => {
     })
     render(<LearnStepper conceptId={CID} />)
     const panel = await screen.findByRole('note', { name: 'Prerequisites' })
-    const links = within(panel).getAllByRole('link', { name: /Study prerequisite/ })
+    const links = within(panel).getAllByRole('link', { name: /Study →/ })
     expect(links).toHaveLength(2)
     expect(links[0].getAttribute('href')).toContain('/study?concept=alg.factor.gcf')
     expect(links[1].getAttribute('href')).toContain('/study?concept=alg.poly.foil')

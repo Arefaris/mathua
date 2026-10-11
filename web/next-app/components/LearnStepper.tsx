@@ -487,12 +487,16 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   }
 
   // A locked topic is explained, never started. The server refused the questions;
-  // this renders its reason and a path into the prerequisite's own learning flow.
+  // this renders its reason and a path into each prerequisite's own reference page.
   if (ineligible && entries.length === 0) {
     const title = concepts.find(c => c.id === conceptId)?.label ?? conceptId
     return (
       <div className="max-w-2xl mx-auto">
-        <PrerequisitePanel topicTitle={title} prerequisites={ineligible.prerequisites ?? []} />
+        <PrerequisitePanel
+          topicTitle={title}
+          prerequisites={ineligible.prerequisites ?? []}
+          returnStack={prereqStack}
+        />
         <div className="mt-4 flex flex-wrap gap-3">
           <Link href="/domains" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue">
             ← Choose another topic

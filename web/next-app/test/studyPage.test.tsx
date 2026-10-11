@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, within, waitFor } from '@testing-library/react'
 import StudyPage from '../app/study/page'
 
 // `/study` is the reference and exploration surface restored by ADR-054: context-bound to one
 // concept, not a catalogue, and awarding nothing. These tests pin that behaviour — an unmastered
-// prerequisite is readable, the practise control is separate and eligibility-gated, and the
-// original target survives a return.
+// prerequisite is readable, the practise control is separate and eligibility-gated, the DAG
+// neighbourhood is drawn from real relationships, and the original target survives a return.
 
 let params = new URLSearchParams()
 const replaceMock = vi.fn()
@@ -24,11 +24,12 @@ vi.mock('../lib/auth', async (importOriginal) => ({
   getUserInfo: () => ({ student_id: 's1' }),
 }))
 
-const { getLessonReadiness, getLessonKPs, getLessons, getLessonBody } = vi.hoisted(() => ({
+const { getLessonReadiness, getLessonKPs, getLessons, getLessonBody, getProgress } = vi.hoisted(() => ({
   getLessonReadiness: vi.fn(),
   getLessonKPs: vi.fn(),
   getLessons: vi.fn(),
   getLessonBody: vi.fn(),
+  getProgress: vi.fn(),
 }))
 
 vi.mock('../lib/api', async (importOriginal) => ({
@@ -37,6 +38,7 @@ vi.mock('../lib/api', async (importOriginal) => ({
   getLessonKPs,
   getLessons,
   getLessonBody,
+  getProgress,
 }))
 
 const CID = 'alg.factor.trinomial'
@@ -48,6 +50,7 @@ beforeEach(() => {
   getLessons.mockReset()
   getLessonBody.mockReset()
   getLessonReadiness.mockReset()
+  getProgress.mockReset()
 
   getLessonKPs.mockResolvedValue({
     concept_id: CID,
@@ -56,6 +59,7 @@ beforeEach(() => {
   })
   getLessons.mockResolvedValue({ lessons: {} })
   getLessonBody.mockResolvedValue('')
+  getProgress.mockResolvedValue({})
   getLessonReadiness.mockResolvedValue({
     concept_id: CID, ready: false, weak: [], missing: [],
     eligible: false, state: 'locked',
@@ -72,16 +76,36 @@ describe('/study reference route', () => {
     expect(await screen.findByText('Factor trinomials of the form x² + bx + c')).toBeTruthy()
     // The material is not gated by eligibility: the worked example renders.
     expect(await screen.findByText(/Factor out the GCF/)).toBeTruthy()
+    // The header names the surface and the subject.
+    expect(screen.getByText(/Reference · Algebra/)).toBeTruthy()
   })
 
-  it('lists both actual prerequisites from the DAG, each openable', async () => {
+  it('lists both actual prerequisites under Depends on, each openable', async () => {
     render(<StudyPage />)
-    const panel = await screen.findByRole('note', { name: 'Prerequisites' })
-    const links = screen.getAllByRole('link', { name: /Study prerequisite/ })
-    const hrefs = links.map((l) => l.getAttribute('href') ?? '')
+    const depends = await screen.findByRole('region', { name: 'Depends on' })
+    await waitFor(() => expect(within(depends).getAllByRole('link')).toHaveLength(2))
+    const hrefs = within(depends).getAllByRole('link').map((l) => l.getAttribute('href') ?? '')
     expect(hrefs.some((h) => h.includes('/study?concept=alg.factor.gcf'))).toBe(true)
     expect(hrefs.some((h) => h.includes('/study?concept=alg.poly.foil'))).toBe(true)
-    expect(panel.textContent).toMatch(/Depends on \(2\)/)
+  })
+
+  it('lists real dependents under Unlocks', async () => {
+    render(<StudyPage />)
+    const unlocks = await screen.findByRole('region', { name: 'Unlocks' })
+    // alg.factor.ac_method lists alg.factor.trinomial as a prerequisite.
+    const hrefs = within(unlocks).getAllByRole('link').map((l) => l.getAttribute('href') ?? '')
+    expect(hrefs.some((h) => h.includes('/study?concept=alg.factor.ac_method'))).toBe(true)
+  })
+
+  it('shows neutral copy when a concept has no neighbours', async () => {
+    params = new URLSearchParams('concept=abstract.group.dihedral')
+    getLessonReadiness.mockResolvedValue({
+      concept_id: 'abstract.group.dihedral', ready: true, weak: [], missing: [],
+      eligible: true, state: 'unlocked', prerequisites: [],
+    })
+    render(<StudyPage />)
+    expect(await screen.findByText('No prerequisites listed')).toBeTruthy()
+    expect(screen.getByText('No dependent concepts listed')).toBeTruthy()
   })
 
   it('forwards to /learn when there is no concept to show', async () => {
@@ -117,5 +141,15 @@ describe('/study reference route', () => {
     render(<StudyPage />)
     const practise = await screen.findByRole('link', { name: /Practise this concept/ })
     expect(practise.getAttribute('href')).toBe('/review')
+  })
+
+  it('keeps navigation and practice available when content is missing', async () => {
+    getLessonKPs.mockResolvedValue({ concept_id: CID, kps: [] })
+    getLessons.mockResolvedValue({ lessons: {} })
+    render(<StudyPage />)
+    expect(await screen.findByText(/Detailed study material is not available/)).toBeTruthy()
+    // The gap is not a dead end: prerequisites and practice are still offered.
+    expect(screen.getByRole('link', { name: 'Explore prerequisites' })).toBeTruthy()
+    expect(screen.getAllByRole('link', { name: /Practise this concept/ }).length).toBeGreaterThan(0)
   })
 })

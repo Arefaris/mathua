@@ -163,6 +163,51 @@ test('no learner navigation offers a way into the reference as a catalogue', asy
   }
 })
 
+test('a locked prerequisite is openable for study, and Back returns to the target', async ({ page }) => {
+  // The reported dead end: a locked prerequisite rendered as an unclickable "Locked" span. It is
+  // now a link into its reference page, and the return path carries the original target.
+  await page.addInitScript(() => {
+    localStorage.setItem('mathua_token', 'fake-token')
+    localStorage.setItem('mathua_user', JSON.stringify({ student_id: 's1', name: 'Tester', username: 'tester', concepts_mastered: 0, current_streak: 0, level: 'Novice', diagnostic_completed: true }))
+  })
+  await page.route('**/api/lessons/**', route => {
+    const url = route.request().url()
+    if (url.includes('/readiness')) {
+      if (url.includes('/lessons/b/')) {
+        return route.fulfill({ json: { concept_id: 'b', ready: false, weak: [], missing: [], eligible: false, state: 'locked', prerequisites: [{ conceptId: 'a', title: 'Concept A', state: 'unlocked', met: false }] } })
+      }
+      return route.fulfill({ json: { concept_id: 'a', ready: true, weak: [], missing: [], eligible: true, state: 'unlocked', prerequisites: [] } })
+    }
+    if (url.includes('/practice')) return route.fulfill({ status: 403, json: { error: { code: 'TOPIC_LOCKED', message: 'unmet prerequisites' } } })
+    if (url.includes('/kp')) return route.fulfill({ json: { concept_id: 'a', kps: [{ label: 'A step', section: 'S', subgoals: [], worked_example: 'a + a = 2a' }], diagram: '' } })
+    if (url.includes('/body')) return route.fulfill({ json: { title: 'A', body: '', assets: [] } })
+    return route.fulfill({ json: { lessons: {} } })
+  })
+  await page.route('**/api/next', r => r.fulfill({ json: { primary: null, alternatives: [], generatedAt: '' } }))
+  await page.route('**/api/progress/**', r => r.fulfill({ json: {} }))
+  await page.route('**/api/activity**', r => r.fulfill({ json: [] }))
+  await page.route('**/api/scores/**', r => r.fulfill({ json: {} }))
+  await page.route('**/api/weaknesses**', r => r.fulfill({ json: { by_domain: {} } }))
+  await page.route('**/api/reviews/due**', r => r.fulfill({ json: { count: 0 } }))
+
+  await page.goto('/learn?concept=b')
+  const panel = page.getByRole('note', { name: 'Prerequisites' })
+  await expect(panel).toContainText('Concept A', { timeout: 30_000 })
+  const study = panel.getByRole('link', { name: /Study →/ }).first()
+  await expect(study).toBeVisible()
+  await study.click()
+
+  // The reference page, reachable while the topic is locked, with the target preserved.
+  await expect(page).toHaveURL(/\/study\?concept=a&return=/, { timeout: 30_000 })
+  await expect(page.getByText('A step')).toBeVisible()
+  // Practice is a separate control, not launched by reading.
+  await expect(page.getByRole('link', { name: /Practise this concept/ }).first()).toBeVisible()
+
+  // Back returns to the original target.
+  await page.getByRole('link', { name: /Back to/ }).first().click()
+  await expect(page).toHaveURL(/\/learn\?concept=b/, { timeout: 30_000 })
+})
+
 test('quiz gate banner appears at 50 XP on profile and links to quiz host', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('mathua_token', 'fake-token')

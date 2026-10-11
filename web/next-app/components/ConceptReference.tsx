@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import KatexContent from './KatexContent'
 import LessonDiagram from './LessonDiagram'
 import ReportMenu from './ReportMenu'
@@ -36,6 +36,11 @@ interface Props {
    * worked-example blocks.
    */
   variant?: 'panel' | 'page'
+  /**
+   * Actions to show under the missing-content message on the reference page, so a concept with no
+   * material still offers its prerequisites and the practice hand-off rather than a dead end.
+   */
+  emptyActions?: ReactNode
 }
 
 // The server's honest placeholder for a step with no written explanation (`renderMinimalSlice`,
@@ -57,7 +62,7 @@ async function fetchLessonTitle(conceptId: string): Promise<string | null> {
   return null
 }
 
-export default function ConceptReference({ conceptId, variant = 'panel' }: Props) {
+export default function ConceptReference({ conceptId, variant = 'panel', emptyActions }: Props) {
   const [shard, setShard] = useState<LessonKpsRes | null>(null)
   const [lessonTitle, setLessonTitle] = useState<string | null>(null)
   const [body, setBody] = useState<string>('')
@@ -115,10 +120,14 @@ export default function ConceptReference({ conceptId, variant = 'panel' }: Props
       )}
 
       {unavailable && (
-        <p role="note" className="font-mono text-xs text-mathua-secondary">
-          Detailed study material is not available for this concept yet. You can still open its
-          prerequisites and practise it when it is available.
-        </p>
+        <>
+          <p role="note" className="font-mono text-xs text-mathua-secondary">
+            Detailed study material is not available for this concept yet. You can still explore
+            its prerequisites and related concepts, return to your original topic, or check
+            whether practice is available.
+          </p>
+          {emptyActions && <div className="mt-4 flex flex-wrap gap-3">{emptyActions}</div>}
+        </>
       )}
 
       {blocks.length > 0 && (
@@ -219,11 +228,9 @@ export default function ConceptReference({ conceptId, variant = 'panel' }: Props
   )
 
   if (variant === 'page') {
-    return (
-      <section className="border border-mathua-border bg-mathua-surface p-4 min-w-0">
-        {content}
-      </section>
-    )
+    // No outer card: the reference page already groups the material, and a box around a box is
+    // the card-nesting the reading column should avoid.
+    return <section className="min-w-0">{content}</section>
   }
 
   return (
