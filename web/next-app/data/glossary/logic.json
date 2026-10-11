@@ -1,0 +1,945 @@
+[
+  {
+    "id": "element-of",
+    "symbol": "∈",
+    "latex": "\\in",
+    "name": "Element of",
+    "aliases": [
+      "element of",
+      "in",
+      "member",
+      "belongs to",
+      "epsilon membership"
+    ],
+    "category": "logic-sets",
+    "definition": "States that an object belongs to a set. x ∈ A means x is one of the members of A.",
+    "reading": "“x is an element of A”.",
+    "examples": [
+      {
+        "tex": "3 \\in \\{1, 2, 3\\}",
+        "explanation": "Three is a member of the set containing 1, 2 and 3."
+      }
+    ],
+    "relatedSymbols": [
+      "not-element",
+      "subset",
+      "forall"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "not-element",
+    "symbol": "∉",
+    "latex": "\\notin",
+    "name": "Not an element of",
+    "aliases": [
+      "not element",
+      "not in",
+      "not member",
+      "notin"
+    ],
+    "category": "logic-sets",
+    "definition": "States that an object is not a member of a set. It negates ∈.",
+    "reading": "“x is not an element of A”.",
+    "examples": [
+      {
+        "tex": "4 \\notin \\{1, 2, 3\\}",
+        "explanation": "Four is absent from the set."
+      }
+    ],
+    "relatedSymbols": [
+      "element-of",
+      "empty-set",
+      "negation"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "subset",
+    "symbol": "⊂",
+    "latex": "\\subset",
+    "name": "Proper subset",
+    "aliases": [
+      "subset",
+      "proper subset",
+      "contained in"
+    ],
+    "category": "logic-sets",
+    "definition": "States that every member of one set is a member of another, and the two sets differ. Convention varies: some authors let ⊂ include equality, so check the local definition.",
+    "reading": "“A is a proper subset of B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2\\} \\subset \\{1, 2, 3\\}",
+        "explanation": "Both members sit inside the larger set, which has more."
+      }
+    ],
+    "commonMistakes": [
+      "Assuming ⊂ always excludes equality; some texts use it for ⊆."
+    ],
+    "relatedSymbols": [
+      "subset-equal",
+      "element-of",
+      "superset"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "subset-equal",
+    "symbol": "⊆",
+    "latex": "\\subseteq",
+    "name": "Subset or equal",
+    "aliases": [
+      "subset equal",
+      "subseteq",
+      "contained in or equal",
+      "subsumed"
+    ],
+    "category": "logic-sets",
+    "definition": "States that every member of one set lies in another, allowing the sets to be equal. Every set is a subset of itself under ⊆.",
+    "reading": "“A is a subset of B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2\\} \\subseteq \\{1, 2\\}",
+        "explanation": "A set is always a subset of itself."
+      }
+    ],
+    "relatedSymbols": [
+      "subset",
+      "superset-equal",
+      "implies"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "superset",
+    "symbol": "⊃",
+    "latex": "\\supset",
+    "name": "Proper superset",
+    "aliases": [
+      "superset",
+      "proper superset",
+      "contains"
+    ],
+    "category": "logic-sets",
+    "definition": "The mirror of proper subset: A ⊃ B means A contains everything in B and strictly more.",
+    "reading": "“A is a proper superset of B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2, 3\\} \\supset \\{1, 2\\}",
+        "explanation": "The larger set contains the smaller and more."
+      }
+    ],
+    "relatedSymbols": [
+      "superset-equal",
+      "subset",
+      "element-of"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "superset-equal",
+    "symbol": "⊇",
+    "latex": "\\supseteq",
+    "name": "Superset or equal",
+    "aliases": [
+      "superset equal",
+      "supseteq",
+      "contains or equal"
+    ],
+    "category": "logic-sets",
+    "definition": "The mirror of ⊆: every member of the right set lies in the left set, with equality allowed.",
+    "reading": "“A is a superset of B”.",
+    "examples": [
+      {
+        "tex": "\\mathbb{R} \\supseteq \\mathbb{Q}",
+        "explanation": "Every rational number is real."
+      }
+    ],
+    "relatedSymbols": [
+      "superset",
+      "subset-equal",
+      "real-numbers"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "union",
+    "symbol": "∪",
+    "latex": "\\cup",
+    "name": "Union",
+    "aliases": [
+      "union",
+      "cup",
+      "or set",
+      "join sets"
+    ],
+    "category": "logic-sets",
+    "definition": "Collects everything in either set. An element belongs to A ∪ B when it belongs to A, to B, or to both.",
+    "reading": "“A union B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2\\} \\cup \\{2, 3\\} = \\{1, 2, 3\\}",
+        "explanation": "Shared members appear once; sets have no duplicates."
+      }
+    ],
+    "relatedSymbols": [
+      "intersection",
+      "set-difference",
+      "disjunction"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "intersection",
+    "symbol": "∩",
+    "latex": "\\cap",
+    "name": "Intersection",
+    "aliases": [
+      "intersection",
+      "cap",
+      "and set",
+      "common elements"
+    ],
+    "category": "logic-sets",
+    "definition": "Keeps only what the sets share. An element belongs to A ∩ B when it belongs to both A and B.",
+    "reading": "“A intersect B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2\\} \\cap \\{2, 3\\} = \\{2\\}",
+        "explanation": "Only 2 sits in both sets."
+      }
+    ],
+    "relatedSymbols": [
+      "union",
+      "set-difference",
+      "conjunction"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "set-difference",
+    "symbol": "∖",
+    "latex": "\\setminus",
+    "name": "Set difference",
+    "aliases": [
+      "set difference",
+      "setminus",
+      "minus set",
+      "relative complement",
+      "backslash set"
+    ],
+    "category": "logic-sets",
+    "definition": "Keeps the members of A that are absent from B. Unlike subtraction of numbers, order matters: A ∖ B usually differs from B ∖ A.",
+    "reading": "“A minus B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2, 3\\} \\setminus \\{2\\} = \\{1, 3\\}",
+        "explanation": "Remove 2 from the set."
+      }
+    ],
+    "relatedSymbols": [
+      "union",
+      "intersection",
+      "complement",
+      "minus"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "complement",
+    "symbol": "Aᶜ",
+    "latex": "A^c",
+    "name": "Set complement",
+    "aliases": [
+      "complement",
+      "A complement",
+      "not A set",
+      "A prime set"
+    ],
+    "category": "logic-sets",
+    "definition": "Collects everything outside A but inside the understood universal set. The complement depends on that universe, which must be clear from context.",
+    "reading": "“A complement”.",
+    "examples": [
+      {
+        "tex": "U = \\{1, 2, 3\\},\\quad \\{1\\}^c = \\{2, 3\\}",
+        "explanation": "Within the universe U, the complement of {1} is {2, 3}."
+      }
+    ],
+    "relatedSymbols": [
+      "set-difference",
+      "negation",
+      "empty-set"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "empty-set",
+    "symbol": "∅",
+    "latex": "\\emptyset",
+    "name": "Empty set",
+    "aliases": [
+      "empty set",
+      "null set",
+      "void set",
+      "phi set"
+    ],
+    "category": "logic-sets",
+    "definition": "The unique set with no members. It is a subset of every set, and it differs from zero, from nothing, and from a set containing the empty set.",
+    "reading": "“the empty set”.",
+    "examples": [
+      {
+        "tex": "A \\cap A^c = \\emptyset",
+        "explanation": "Nothing is both inside and outside A."
+      }
+    ],
+    "commonMistakes": [
+      "Writing {∅} for the empty set; that is a set containing one member."
+    ],
+    "relatedSymbols": [
+      "subset-equal",
+      "complement",
+      "not-element"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "power-set",
+    "symbol": "℘(A)",
+    "latex": "\\wp(A)",
+    "name": "Power set",
+    "aliases": [
+      "power set",
+      "weierstrass p",
+      "set of subsets",
+      "P(A)"
+    ],
+    "category": "logic-sets",
+    "definition": "The set of all subsets of A. A set with n members has 2ⁿ subsets, including the empty set and itself.",
+    "reading": "“the power set of A”.",
+    "examples": [
+      {
+        "tex": "\\wp(\\{1, 2\\}) = \\{\\emptyset, \\{1\\}, \\{2\\}, \\{1, 2\\}\\}",
+        "explanation": "All four subsets of a two-element set."
+      }
+    ],
+    "relatedSymbols": [
+      "subset-equal",
+      "empty-set",
+      "cardinality"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "set-builder",
+    "symbol": "{ x | … }",
+    "latex": "\\{ x \\mid \\dots \\}",
+    "name": "Set-builder notation",
+    "aliases": [
+      "set builder",
+      "such that",
+      "vertical bar set",
+      "colon set",
+      "roster vs rule"
+    ],
+    "category": "logic-sets",
+    "definition": "Defines a set by a rule instead of listing members: the set of all x satisfying the stated condition. The bar (or a colon) reads as “such that”.",
+    "reading": "“the set of all x such that…”.",
+    "examples": [
+      {
+        "tex": "\\{x \\mid x > 0\\}",
+        "explanation": "All positive numbers, without listing them."
+      }
+    ],
+    "relatedSymbols": [
+      "element-of",
+      "divides",
+      "ellipsis"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "forall",
+    "symbol": "∀",
+    "latex": "\\forall",
+    "name": "Universal quantifier",
+    "aliases": [
+      "for all",
+      "for every",
+      "for each",
+      "universal quantifier",
+      "upside down A"
+    ],
+    "category": "logic-sets",
+    "definition": "States that something holds for every member of a set. A single counterexample defeats a for-all claim.",
+    "reading": "“for all” or “for every”.",
+    "examples": [
+      {
+        "tex": "\\forall x \\in \\mathbb{R},\\; x^2 \\geq 0",
+        "explanation": "Every real number has a nonnegative square."
+      }
+    ],
+    "commonMistakes": [
+      "Confusing “for every” with “there exists”."
+    ],
+    "relatedSymbols": [
+      "exists",
+      "element-of",
+      "real-numbers"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "exists",
+    "symbol": "∃",
+    "latex": "\\exists",
+    "name": "Existential quantifier",
+    "aliases": [
+      "there exists",
+      "exists",
+      "for some",
+      "existential quantifier",
+      "backwards E",
+      "there exist"
+    ],
+    "category": "logic-sets",
+    "definition": "States that at least one member of a set has a property. One example proves an existence claim.",
+    "reading": "“there exists”.",
+    "examples": [
+      {
+        "tex": "\\exists n \\in \\mathbb{N},\\; n > 100",
+        "explanation": "Some natural number exceeds 100; 101 will do."
+      }
+    ],
+    "relatedSymbols": [
+      "forall",
+      "element-of",
+      "natural-numbers"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "negation",
+    "symbol": "¬",
+    "latex": "\\neg",
+    "name": "Logical negation",
+    "aliases": [
+      "not",
+      "negation",
+      "neg",
+      "logical not",
+      "tilde logic"
+    ],
+    "category": "logic-sets",
+    "definition": "Flips a statement's truth value: ¬P is true exactly when P is false. Negating a quantified statement swaps for-all with there-exists.",
+    "reading": "“not P”.",
+    "examples": [
+      {
+        "tex": "\\neg (x > 0)\\; \\equiv\\; x \\leq 0",
+        "explanation": "Denying “x is positive” leaves zero or negative."
+      }
+    ],
+    "relatedSymbols": [
+      "conjunction",
+      "disjunction",
+      "not-equals",
+      "forall"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "conjunction",
+    "symbol": "∧",
+    "latex": "\\land",
+    "name": "Logical conjunction (and)",
+    "aliases": [
+      "and",
+      "conjunction",
+      "wedge",
+      "logical and",
+      "both"
+    ],
+    "category": "logic-sets",
+    "definition": "Joins two statements so the combination holds only when both hold. P ∧ Q is true exactly when P and Q are each true.",
+    "reading": "“P and Q”.",
+    "examples": [
+      {
+        "tex": "(x > 0) \\land (x < 5)",
+        "explanation": "x is both positive and below 5: strictly between."
+      }
+    ],
+    "relatedSymbols": [
+      "disjunction",
+      "negation",
+      "intersection"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "disjunction",
+    "symbol": "∨",
+    "latex": "\\lor",
+    "name": "Logical disjunction (or)",
+    "aliases": [
+      "or",
+      "disjunction",
+      "vee",
+      "logical or",
+      "either"
+    ],
+    "category": "logic-sets",
+    "definition": "Joins two statements so the combination holds when at least one holds. Mathematical “or” is inclusive: both may hold.",
+    "reading": "“P or Q”.",
+    "examples": [
+      {
+        "tex": "(x = 0) \\lor (x = 1)",
+        "explanation": "x is 0 or x is 1. Mathematical or is inclusive: both sides may hold, though here they cannot both hold at once."
+      }
+    ],
+    "commonMistakes": [
+      "Reading or as exclusive; mathematics allows both sides true."
+    ],
+    "relatedSymbols": [
+      "conjunction",
+      "negation",
+      "union"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "implies",
+    "symbol": "⇒",
+    "latex": "\\Rightarrow",
+    "name": "Implication",
+    "aliases": [
+      "implies",
+      "if then",
+      "therefore arrow",
+      "material implication",
+      "double arrow right"
+    ],
+    "category": "logic-sets",
+    "definition": "States that whenever the left side holds, the right side follows. P ⇒ Q is falsified only by P true with Q false.",
+    "reading": "“P implies Q” or “if P then Q”.",
+    "examples": [
+      {
+        "tex": "x > 5 \\Rightarrow x > 0",
+        "explanation": "Anything above 5 is automatically above 0."
+      }
+    ],
+    "commonMistakes": [
+      "Assuming the converse: Q ⇒ P does not follow from P ⇒ Q."
+    ],
+    "relatedSymbols": [
+      "equivalent-iff",
+      "therefore",
+      "mapping-arrow"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "equivalent-iff",
+    "symbol": "⇔",
+    "latex": "\\Leftrightarrow",
+    "name": "Logical equivalence (if and only if)",
+    "aliases": [
+      "if and only if",
+      "iff",
+      "equivalent",
+      "double arrow",
+      "necessary and sufficient"
+    ],
+    "category": "logic-sets",
+    "definition": "States that two statements imply each other: each holds exactly when the other does. Proving ⇔ needs both directions.",
+    "reading": "“P if and only if Q”.",
+    "examples": [
+      {
+        "tex": "n \\text{ is even } \\Leftrightarrow n^2 \\text{ is even}",
+        "explanation": "Each direction holds: even input, even square, and conversely."
+      }
+    ],
+    "relatedSymbols": [
+      "implies",
+      "equals",
+      "identical-to"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "therefore",
+    "symbol": "∴",
+    "latex": "\\therefore",
+    "name": "Therefore",
+    "aliases": [
+      "therefore",
+      "hence",
+      "thus",
+      "three dots triangle"
+    ],
+    "category": "logic-sets",
+    "definition": "Marks a conclusion drawn from preceding statements. It signals the result step of an argument, not a new assumption.",
+    "reading": "“therefore”.",
+    "examples": [
+      {
+        "tex": "x = 2,\\; y = 3 \\;\\therefore\\; x + y = 5",
+        "explanation": "The sum follows from the two values."
+      }
+    ],
+    "relatedSymbols": [
+      "because",
+      "implies",
+      "qed"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "because",
+    "symbol": "∵",
+    "latex": "\\because",
+    "name": "Because",
+    "aliases": [
+      "because",
+      "since",
+      "as",
+      "three dots inverted"
+    ],
+    "category": "logic-sets",
+    "definition": "Marks a reason supporting a claim: the statement after ∵ justifies what came before. It is the mirror of ∴.",
+    "reading": "“because”.",
+    "examples": [
+      {
+        "tex": "x + y = 5 \\;\\because\\; x = 2,\\; y = 3",
+        "explanation": "The values justify the sum."
+      }
+    ],
+    "relatedSymbols": [
+      "therefore",
+      "implies",
+      "qed"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "cardinality",
+    "symbol": "|A|",
+    "latex": "|A|",
+    "name": "Cardinality",
+    "aliases": [
+      "cardinality",
+      "size of set",
+      "number of elements",
+      "order of set",
+      "absolute set"
+    ],
+    "category": "logic-sets",
+    "definition": "Counts the members of a finite set. For infinite sets, cardinality compares sizes: two sets share a cardinality when their members can be paired one-to-one.",
+    "reading": "“the cardinality of A” or “the size of A”.",
+    "examples": [
+      {
+        "tex": "|\\{a, b, c\\}| = 3",
+        "explanation": "The set has three members."
+      },
+      {
+        "tex": "|\\mathbb{N}| = |\\mathbb{Q}|",
+        "explanation": "Naturals and rationals pair off one-to-one."
+      }
+    ],
+    "relatedSymbols": [
+      "absolute-value",
+      "empty-set",
+      "power-set"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "qed",
+    "symbol": "∎",
+    "latex": "\\blacksquare",
+    "name": "End of proof (QED)",
+    "aliases": [
+      "qed",
+      "end of proof",
+      "tombstone",
+      "halmos",
+      "black square",
+      "quod erat demonstrandum"
+    ],
+    "category": "logic-sets",
+    "definition": "Marks the end of a proof. Placed after the final line, it tells the reader the argument is complete; QED abbreviates the Latin “quod erat demonstrandum”.",
+    "reading": "“Q E D” or “which was to be shown”.",
+    "examples": [
+      {
+        "tex": "\\text{If }n\\text{ is even, }n = 2k.\\ \\blacksquare",
+        "explanation": "The proof ends with its concluding line marked."
+      }
+    ],
+    "relatedSymbols": [
+      "therefore",
+      "implies",
+      "equivalent-iff"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "predicate-relation",
+    "symbol": "P(x)",
+    "latex": "P(x)",
+    "name": "Predicate",
+    "aliases": [
+      "predicate",
+      "propositional function",
+      "open sentence",
+      "P of x",
+      "relation notation"
+    ],
+    "category": "logic-sets",
+    "definition": "A statement with a free variable that becomes true or false once x is specified. Predicates are what quantifiers ∀ and ∃ range over.",
+    "reading": "“P of x”.",
+    "examples": [
+      {
+        "tex": "P(x): x > 5",
+        "explanation": "P(7) is true; P(2) is false."
+      }
+    ],
+    "relatedSymbols": [
+      "forall",
+      "exists",
+      "function-notation"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  }
+]

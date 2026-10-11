@@ -15,6 +15,7 @@ export const INDEXABLE_ROUTES = [
   '/domains',
   '/graph',
   '/leaderboard',
+  '/glossary',
   '/docs',
   '/docs/architecture',
   '/docs/contributing',

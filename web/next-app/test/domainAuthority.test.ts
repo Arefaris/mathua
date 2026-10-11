@@ -22,6 +22,19 @@ import { APP_ROOT as ROOT, REPO_ROOT as REPO } from './helpers/roots'
 const AUTHORED_DIRS = ['app', 'components', 'lib']
 const CANONICAL = path.join(ROOT, 'lib', 'graphDomains.ts')
 
+// Modules exempt from the partial-list rule, each with its reason. An
+// exemption without a reason is indistinguishable from a mistake.
+//
+// lib/glossary/categories.ts: the glossary's nine reference categories
+// (greek, arithmetic, algebra, ...) are deliberately NOT the 17-domain
+// curriculum — the glossary is a standalone reference and must not mirror,
+// enumerate or track curriculum domains (no concept mapping in v1). Three of
+// its ids ('arithmetic', 'algebra', 'calculus') coincide with curriculum
+// domain ids, which trips the array-of-quoted-ids detector. Exempting the
+// file is correct; renaming the categories to dodge the detector would make
+// the reference worse to protect a guard from a documented non-violation.
+const EXEMPT = new Set(['lib/glossary/categories.ts'])
+
 function corpusDomains(): string[] {
   const dir = path.join(REPO, 'data', 'concepts')
   const out = new Set<string>()
@@ -99,6 +112,7 @@ describe('domain list authority', () => {
   it('no other module declares a domain list that omits a domain', () => {
     const offenders: string[] = []
     for (const { rel, text } of authoredFiles()) {
+      if (EXEMPT.has(rel)) continue
       for (const { name, declared } of domainDeclarations(text, domains)) {
         const missing = domains.filter((d) => !declared.includes(d))
         if (missing.length > 0) {

@@ -38,6 +38,10 @@ export const DISPLAY_LINKS: NavLink[] = [
   // through the tab bar and the compass overflow, derived from this list minus TAB_HREFS.
   { label: 'Domains', href: '/domains' },
   { label: 'Leaderboard', href: '/leaderboard' },
+  // The mathematical glossary is a standalone reference: it grades nothing, tracks nothing
+  // and gates nothing, so it sits with the orientation surfaces rather than beside Learn.
+  // It reaches mobile through the compass overflow (it is not a bottom tab).
+  { label: 'Glossary', href: '/glossary' },
 ]
 
 export const LOGGED_IN_LINKS: NavLink[] = [

@@ -16,7 +16,7 @@ describe('navigation order', () => {
     // Learn was previously logged-in-only, which meant a signed-out visitor
     // had no route to anything they could actually do.
     expect(desktopLinks(false).map(l => l.href)).toContain('/learn')
-    expect(order(desktopLinks(false))).toEqual(['/learn', '/graph', '/domains', '/leaderboard', '/login'])
+    expect(order(desktopLinks(false))).toEqual(['/learn', '/graph', '/domains', '/leaderboard', '/glossary', '/login'])
   })
 
   it('leads every surface with Learn', () => {
@@ -106,6 +106,22 @@ describe('the Admin entry reaches mobile', () => {
     // The rail calls it "Admin"; a second wording for one destination is how two surfaces came to
     // disagree about it.
     expect(ADMIN_LINKS.map(l => l.label)).toEqual(['Admin'])
+  })
+})
+
+// The mathematical glossary is a standalone reference: it grades nothing, tracks nothing
+// and gates nothing, so it sits with the orientation surfaces (header + compass overflow)
+// rather than beside Learn — and it is not a bottom tab, so the tab bar stays at five.
+describe('the glossary is an orientation surface', () => {
+  it('appears in the desktop header for guests and learners', () => {
+    expect(desktopLinks(false).map(l => l.href)).toContain('/glossary')
+    expect(desktopLinks(true).map(l => l.href)).toContain('/glossary')
+  })
+
+  it('reaches mobile through the compass overflow, not the tab bar', () => {
+    expect(TAB_HREFS.has('/glossary')).toBe(false)
+    expect(overflowLinks(false).map(l => l.href)).toContain('/glossary')
+    expect(overflowLinks(true).map(l => l.href)).toContain('/glossary')
   })
 })
 

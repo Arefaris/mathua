@@ -145,3 +145,37 @@ unlicensed.
 
 Referenced for content design and curriculum structure. No code or content is taken
 from any of them. See the Acknowledgements section of `README.md`.
+
+### Mathematical glossary sources — consulted, original wording
+
+The glossary dataset (`web/next-app/data/glossary/`) was written in original
+wording for Mathua. Its sources were consulted as references, not copied: no
+text was adapted from any of them, so no ShareAlike or attribution clause is
+triggered by adaptation. Each entry still records the source consulted, with
+the reuse terms as verified at authoring time:
+
+- **OpenStax textbooks** (openstax.org) for elementary through university
+  mathematics. The openstax.org footer states its textbooks are licensed
+  under CC BY-NC-SA 4.0 (verified on the Introductory Statistics section
+  page, whose footer also restricts LLM training ingestion — not applicable
+  here since no text is reused). Entries cite the book consulted and use
+  original wording with no text reused, so no ShareAlike obligation is
+  triggered; the license is recorded for accuracy.
+- **NIST Digital Library of Mathematical Functions** (https://dlmf.nist.gov/)
+  for special functions and advanced notation (gamma, error functions, Bessel,
+  zeta, combinatorics, number theory). The DLMF is produced by NIST; entries
+  cite the chapter consulted and users should follow the DLMF's own citing
+  guidance. Definitions are original.
+- **Wikibooks Subject:Mathematics**
+  (https://en.wikibooks.org/wiki/Subject:Mathematics) for general notation,
+  logic and set theory. The site footer states text is available under the
+  Creative Commons Attribution-ShareAlike license; entries use original wording
+  and cite the subject page rather than adapting text.
+- **Unicode code charts** (unicode.org) for glyph identity of Greek letters
+  and mathematical operators (Greek and Coptic, Mathematical Operators),
+  under the Unicode License Agreement.
+
+If an entry could not be verified against an appropriate source, it was
+excluded rather than published with invented attribution; the excluded
+candidates are listed in `web/next-app/scripts/glossary-validation-report.json`,
+which is not bundled with the app.

@@ -1,0 +1,1013 @@
+[
+  {
+    "id": "natural-numbers",
+    "symbol": "ℕ",
+    "latex": "\\mathbb{N}",
+    "name": "Natural numbers",
+    "aliases": [
+      "natural numbers",
+      "N blackboard",
+      "counting numbers",
+      "positive integers"
+    ],
+    "category": "advanced",
+    "definition": "The counting numbers 1, 2, 3, … (some authors include 0; check the local convention). They support induction: prove a base case and the step from n to n+1.",
+    "reading": "“N”.",
+    "examples": [
+      {
+        "tex": "n \\in \\mathbb{N}",
+        "explanation": "n is a natural number."
+      }
+    ],
+    "relatedSymbols": [
+      "integers",
+      "exists",
+      "sequence-term"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "integers",
+    "symbol": "ℤ",
+    "latex": "\\mathbb{Z}",
+    "name": "Integers",
+    "aliases": [
+      "integers",
+      "Z blackboard",
+      "whole numbers",
+      "zahlen"
+    ],
+    "category": "advanced",
+    "definition": "All whole numbers, positive, negative and zero: …, −2, −1, 0, 1, 2, …. The symbol comes from German “Zahlen” (numbers).",
+    "reading": "“Z”.",
+    "examples": [
+      {
+        "tex": "-3 \\in \\mathbb{Z}",
+        "explanation": "Negative three is an integer."
+      }
+    ],
+    "relatedSymbols": [
+      "natural-numbers",
+      "rationals",
+      "divides"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "rationals",
+    "symbol": "ℚ",
+    "latex": "\\mathbb{Q}",
+    "name": "Rational numbers",
+    "aliases": [
+      "rational numbers",
+      "Q blackboard",
+      "fractions set",
+      "quotients"
+    ],
+    "category": "advanced",
+    "definition": "All ratios of integers with nonzero denominator. Decimals of rationals always terminate or repeat; anything else is irrational.",
+    "reading": "“Q”.",
+    "examples": [
+      {
+        "tex": "\\frac{2}{3} \\in \\mathbb{Q}",
+        "explanation": "Two thirds is rational."
+      }
+    ],
+    "relatedSymbols": [
+      "integers",
+      "real-numbers",
+      "fraction"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "real-numbers",
+    "symbol": "ℝ",
+    "latex": "\\mathbb{R}",
+    "name": "Real numbers",
+    "aliases": [
+      "real numbers",
+      "R blackboard",
+      "real line",
+      "continuum",
+      "irrationals"
+    ],
+    "category": "advanced",
+    "definition": "All rationals plus irrationals: every point on the number line. The reals are complete, meaning limits of convergent sequences stay inside.",
+    "reading": "“R” or “the reals”.",
+    "examples": [
+      {
+        "tex": "\\sqrt{2} \\in \\mathbb{R}",
+        "explanation": "Root two is real but not rational."
+      }
+    ],
+    "relatedSymbols": [
+      "rationals",
+      "complex-numbers",
+      "forall",
+      "supremum"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "complex-numbers",
+    "symbol": "ℂ",
+    "latex": "\\mathbb{C}",
+    "name": "Complex numbers",
+    "aliases": [
+      "complex numbers",
+      "C blackboard",
+      "complex plane",
+      "a plus bi"
+    ],
+    "category": "advanced",
+    "definition": "Numbers a + bi with real a, b and i² = −1. Every nonzero complex number has a magnitude and an angle; every polynomial equation has a complex root (fundamental theorem of algebra).",
+    "reading": "“C” or “the complex numbers”.",
+    "examples": [
+      {
+        "tex": "z = 3 + 4i",
+        "explanation": "Real part 3, imaginary part 4."
+      }
+    ],
+    "relatedSymbols": [
+      "imaginary-unit",
+      "conjugate",
+      "modulus-complex",
+      "real-numbers"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "imaginary-unit",
+    "symbol": "i",
+    "latex": "i",
+    "name": "Imaginary unit",
+    "aliases": [
+      "imaginary unit",
+      "i",
+      "sqrt minus one",
+      "j engineering"
+    ],
+    "category": "advanced",
+    "definition": "The number with i² = −1, extending the reals to the complex plane. Engineers often write j instead, since i means current.",
+    "reading": "“i”.",
+    "examples": [
+      {
+        "tex": "i^2 = -1,\\quad i^4 = 1",
+        "explanation": "Powers of i cycle every four."
+      }
+    ],
+    "relatedSymbols": [
+      "complex-numbers",
+      "euler-identity",
+      "square-root"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "conjugate",
+    "symbol": "z̄",
+    "latex": "\\bar{z}",
+    "name": "Complex conjugate",
+    "aliases": [
+      "conjugate",
+      "z bar",
+      "complex conjugate",
+      "mirror real axis"
+    ],
+    "category": "advanced",
+    "definition": "Reflects a complex number across the real axis by negating its imaginary part. A number times its conjugate gives its squared magnitude.",
+    "reading": "“z bar”.",
+    "examples": [
+      {
+        "tex": "\\overline{3 + 4i} = 3 - 4i",
+        "explanation": "Flip the sign of the imaginary part."
+      }
+    ],
+    "relatedSymbols": [
+      "complex-numbers",
+      "modulus-complex",
+      "imaginary-unit"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "real-imag-parts",
+    "symbol": "Re(z) Im(z)",
+    "latex": "\\operatorname{Re}(z), \\operatorname{Im}(z)",
+    "name": "Real and imaginary parts",
+    "aliases": [
+      "real part",
+      "imaginary part",
+      "Re z",
+      "Im z",
+      "Argand components"
+    ],
+    "category": "advanced",
+    "definition": "Extract the components of z = a + bi: Re(z) = a and Im(z) = b. Note Im(z) is the real number b, not bi.",
+    "reading": "“the real part of z” and “the imaginary part of z”.",
+    "examples": [
+      {
+        "tex": "\\operatorname{Re}(3 + 4i) = 3,\\; \\operatorname{Im}(3 + 4i) = 4",
+        "explanation": "Components of 3 + 4i."
+      }
+    ],
+    "commonMistakes": [
+      "Writing Im(3+4i) = 4i; the imaginary part is the real coefficient 4."
+    ],
+    "relatedSymbols": [
+      "complex-numbers",
+      "conjugate",
+      "imaginary-unit"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "modulus-complex",
+    "symbol": "|z|",
+    "latex": "|z|",
+    "name": "Complex modulus",
+    "aliases": [
+      "modulus",
+      "absolute complex",
+      "magnitude complex",
+      "norm complex"
+    ],
+    "category": "advanced",
+    "definition": "The distance of z from the origin: |a + bi| = √(a² + b²). It generalizes absolute value to the complex plane and equals √(z·z̄).",
+    "reading": "“the modulus of z”.",
+    "examples": [
+      {
+        "tex": "|3 + 4i| = 5",
+        "explanation": "A 3-4-5 triangle from the origin."
+      }
+    ],
+    "relatedSymbols": [
+      "absolute-value",
+      "conjugate",
+      "complex-numbers",
+      "square-root"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "euler-identity",
+    "symbol": "e^(iπ) + 1 = 0",
+    "latex": "e^{i\\pi} + 1 = 0",
+    "name": "Euler's identity",
+    "aliases": [
+      "euler identity",
+      "e i pi",
+      "most beautiful equation"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "geometry-trig",
+      "calculus"
+    ],
+    "definition": "Links five fundamental constants in one equation. It is the special case x = π of Euler's formula e^(ix) = cos x + i·sin x.",
+    "reading": "“e to the i pi plus one equals zero”.",
+    "examples": [
+      {
+        "tex": "e^{ix} = \\cos x + i\\sin x",
+        "explanation": "Euler's formula: rotation in the complex plane."
+      }
+    ],
+    "relatedSymbols": [
+      "euler-number",
+      "imaginary-unit",
+      "pi-constant",
+      "sine",
+      "cosine"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 4",
+        "url": "https://dlmf.nist.gov/4",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "gamma-function",
+    "symbol": "Γ(n)",
+    "latex": "\\Gamma(n)",
+    "name": "Gamma function",
+    "aliases": [
+      "gamma function",
+      "Gamma",
+      "factorial extension",
+      "generalized factorial"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Extends the factorial to non-integers: Γ(n) = (n−1)! for positive integers, defined by an integral elsewhere. It appears in probability distributions and volume formulas.",
+    "reading": "“Gamma of n”.",
+    "examples": [
+      {
+        "tex": "\\Gamma(5) = 4! = 24",
+        "explanation": "At integers it recovers the factorial, shifted by one."
+      }
+    ],
+    "relatedSymbols": [
+      "factorial",
+      "gamma-letter",
+      "beta-function",
+      "integral"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 5",
+        "url": "https://dlmf.nist.gov/5",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "beta-function",
+    "symbol": "B(x, y)",
+    "latex": "B(x, y)",
+    "name": "Beta function",
+    "aliases": [
+      "beta function",
+      "B x y",
+      "euler integral first kind"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "A two-argument special function closely tied to gamma: B(x,y) = Γ(x)Γ(y)/Γ(x+y). It normalizes the beta distribution in probability.",
+    "reading": "“Beta of x y”.",
+    "examples": [
+      {
+        "tex": "B(x, y) = \\frac{\\Gamma(x)\\Gamma(y)}{\\Gamma(x + y)}",
+        "explanation": "Beta expressed through gamma."
+      }
+    ],
+    "relatedSymbols": [
+      "gamma-function",
+      "beta",
+      "gamma-letter"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 5",
+        "url": "https://dlmf.nist.gov/5",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "zeta-function",
+    "symbol": "ζ(s)",
+    "latex": "\\zeta(s)",
+    "name": "Riemann zeta function",
+    "aliases": [
+      "zeta function",
+      "riemann zeta",
+      "zeta s",
+      "prime distribution"
+    ],
+    "category": "advanced",
+    "definition": "Sums 1/nˢ over all positive integers. Its values at even integers involve powers of π; its zeros encode the distribution of primes, including the unproven Riemann hypothesis.",
+    "reading": "“zeta of s”.",
+    "examples": [
+      {
+        "tex": "\\zeta(2) = \\frac{\\pi^2}{6}",
+        "explanation": "The Basel problem: reciprocals of squares sum to π²/6."
+      }
+    ],
+    "relatedSymbols": [
+      "zeta",
+      "pi-constant",
+      "infinity"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 25",
+        "url": "https://dlmf.nist.gov/25",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "error-function",
+    "symbol": "erf(x)",
+    "latex": "\\operatorname{erf}(x)",
+    "name": "Error function",
+    "aliases": [
+      "error function",
+      "erf",
+      "gaussian integral",
+      "normal cdf"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "probability",
+      "calculus"
+    ],
+    "definition": "Captures areas under the bell curve: erf(x) is twice the normal area from 0 to x. Normal probabilities are arithmetic with erf.",
+    "reading": "“erf of x”.",
+    "examples": [
+      {
+        "tex": "\\operatorname{erf}(x) = \\frac{2}{\\sqrt{\\pi}}\\int_0^x e^{-t^2}\\,dt",
+        "explanation": "Scaled area under the Gaussian bell."
+      }
+    ],
+    "relatedSymbols": [
+      "normal-distribution",
+      "integral",
+      "euler-number"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 7",
+        "url": "https://dlmf.nist.gov/7",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "bessel-function",
+    "symbol": "J_n(x)",
+    "latex": "J_n(x)",
+    "name": "Bessel function",
+    "aliases": [
+      "bessel",
+      "J n x",
+      "cylindrical functions",
+      "vibrating membrane"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Oscillating special functions solving radial wave problems: vibrations of drums, heat in cylinders, signal modes. J_n is the Bessel function of the first kind of order n.",
+    "reading": "“Bessel J sub n of x”.",
+    "examples": [
+      {
+        "tex": "J_0(0) = 1",
+        "explanation": "The zero-order Bessel function starts at 1 like cosine."
+      }
+    ],
+    "relatedSymbols": [
+      "sine",
+      "cosine",
+      "differential"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 10",
+        "url": "https://dlmf.nist.gov/10",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "group-notation",
+    "symbol": "(G, ·)",
+    "latex": "(G, \\cdot)",
+    "name": "Group",
+    "aliases": [
+      "group",
+      "abstract algebra group",
+      "group operation",
+      "subgroup",
+      "abelian group"
+    ],
+    "category": "advanced",
+    "definition": "A set G with one operation satisfying closure, associativity, an identity element and inverses. Groups capture symmetry: rotations, permutations and number systems all form groups.",
+    "reading": "“the group G under dot”.",
+    "examples": [
+      {
+        "tex": "(\\mathbb{Z}, +)",
+        "explanation": "Integers under addition: identity 0, inverse −n."
+      }
+    ],
+    "relatedSymbols": [
+      "integers",
+      "isomorphism",
+      "function-notation",
+      "mapping-arrow"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "isomorphism",
+    "symbol": "≅",
+    "latex": "\\cong",
+    "name": "Isomorphism",
+    "aliases": [
+      "isomorphism",
+      "structurally identical",
+      "homomorphism bijective",
+      "quotient structure",
+      "equivalence class"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "logic-sets"
+    ],
+    "definition": "A structure-preserving correspondence between two objects: a bijection carrying the operations across. Isomorphic objects are algebraically the same, differing only in labels.",
+    "reading": "“G is isomorphic to H”.",
+    "examples": [
+      {
+        "tex": "(\\mathbb{R}, +) \\cong (\\mathbb{R}_{>0}, \\times)",
+        "explanation": "The exponential maps addition to multiplication bijectively."
+      }
+    ],
+    "relatedSymbols": [
+      "congruent",
+      "group-notation",
+      "equivalent-iff",
+      "exponential-exp"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ],
+    "notes": "Shares the ≅ glyph with geometric congruence; the algebraic reading is set by context."
+  },
+  {
+    "id": "congruence-mod",
+    "symbol": "a ≡ b (mod n)",
+    "latex": "a \\equiv b \\pmod{n}",
+    "name": "Modular congruence",
+    "aliases": [
+      "congruence modulo",
+      "mod n equivalence",
+      "clock congruence",
+      "residue class"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "linear-discrete"
+    ],
+    "definition": "States that a and b leave the same remainder on division by n, equivalently n divides their difference. Congruence classes partition the integers into n residue systems.",
+    "reading": "“a is congruent to b mod n”.",
+    "examples": [
+      {
+        "tex": "17 \\equiv 5 \\pmod{12}",
+        "explanation": "Both leave remainder 5; their difference 12 is a multiple of 12."
+      }
+    ],
+    "relatedSymbols": [
+      "identical-to",
+      "mod-arithmetic",
+      "divides",
+      "gcd"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 27",
+        "url": "https://dlmf.nist.gov/27",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      },
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "gcd",
+    "symbol": "gcd(a, b)",
+    "latex": "\\gcd(a, b)",
+    "name": "Greatest common divisor",
+    "aliases": [
+      "gcd",
+      "greatest common divisor",
+      "greatest common factor",
+      "gcf",
+      "hcf",
+      "euclid"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "linear-discrete",
+      "arithmetic"
+    ],
+    "definition": "The largest integer dividing both a and b. Euclid's algorithm computes it with repeated remainders; it underlies fraction reduction and modular inverses.",
+    "reading": "“the g c d of a and b”.",
+    "examples": [
+      {
+        "tex": "\\gcd(12, 18) = 6",
+        "explanation": "Six is the largest shared divisor."
+      }
+    ],
+    "relatedSymbols": [
+      "lcm",
+      "divides",
+      "congruence-mod",
+      "fraction"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "OpenStax Prealgebra 2e",
+        "url": "https://openstax.org/details/books/prealgebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "lcm",
+    "symbol": "lcm(a, b)",
+    "latex": "\\operatorname{lcm}(a, b)",
+    "name": "Least common multiple",
+    "aliases": [
+      "lcm",
+      "least common multiple",
+      "lowest common multiple",
+      "common denominator"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "arithmetic"
+    ],
+    "definition": "The smallest positive integer that is a multiple of both a and b. It gives the least common denominator for adding fractions, and satisfies gcd(a,b)·lcm(a,b) = a·b.",
+    "reading": "“the l c m of a and b”.",
+    "examples": [
+      {
+        "tex": "\\operatorname{lcm}(4, 6) = 12",
+        "explanation": "Twelve is the first shared multiple."
+      }
+    ],
+    "relatedSymbols": [
+      "gcd",
+      "fraction",
+      "divides"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "OpenStax Prealgebra 2e",
+        "url": "https://openstax.org/details/books/prealgebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "totient",
+    "symbol": "φ(n)",
+    "latex": "\\varphi(n)",
+    "name": "Euler's totient function",
+    "aliases": [
+      "totient",
+      "phi function",
+      "euler phi",
+      "coprime count",
+      "phi n"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "linear-discrete"
+    ],
+    "definition": "Counts integers from 1 to n that share no factor with n. It powers RSA cryptography via Euler's theorem: a^φ(n) ≡ 1 mod n for a coprime to n.",
+    "reading": "“phi of n” or “totient of n”.",
+    "examples": [
+      {
+        "tex": "\\varphi(9) = 6",
+        "explanation": "1, 2, 4, 5, 7, 8 are coprime to 9."
+      }
+    ],
+    "relatedSymbols": [
+      "phi",
+      "gcd",
+      "congruence-mod"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 27",
+        "url": "https://dlmf.nist.gov/27",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "tensor-product",
+    "symbol": "⊗",
+    "latex": "\\otimes",
+    "name": "Tensor product",
+    "aliases": [
+      "tensor product",
+      "otimes",
+      "kronecker product",
+      "outer product spaces"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "linear-discrete"
+    ],
+    "definition": "Builds a larger vector space from two smaller ones, with dimension multiplied. It combines quantum states, extends scalars, and writes the Kronecker product of matrices.",
+    "reading": "“V tensor W”.",
+    "examples": [
+      {
+        "tex": "\\dim(V \\otimes W) = \\dim V \\cdot \\dim W",
+        "explanation": "Dimensions multiply under the tensor product."
+      }
+    ],
+    "relatedSymbols": [
+      "vector-notation",
+      "matrix-notation",
+      "cross-product"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "direct-sum-xor",
+    "symbol": "⊕",
+    "latex": "\\oplus",
+    "name": "Direct sum (exclusive or)",
+    "aliases": [
+      "direct sum",
+      "oplus",
+      "xor",
+      "exclusive or",
+      "circled plus"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "linear-discrete",
+      "logic-sets"
+    ],
+    "definition": "In algebra, the direct sum combines structures component-wise. In logic and computing, the same glyph means exclusive or: exactly one side true.",
+    "reading": "“direct sum” or “xor”.",
+    "examples": [
+      {
+        "tex": "\\mathbb{R}^2 \\oplus \\mathbb{R}^3 \\cong \\mathbb{R}^5",
+        "explanation": "Dimensions add under direct sum."
+      },
+      {
+        "tex": "P \\oplus Q",
+        "explanation": "Exactly one of P, Q holds."
+      }
+    ],
+    "contexts": [
+      {
+        "context": "Algebra",
+        "meaning": "Component-wise combination of structures."
+      },
+      {
+        "context": "Logic",
+        "meaning": "Exclusive or."
+      }
+    ],
+    "relatedSymbols": [
+      "plus",
+      "disjunction",
+      "vector-notation"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      },
+      {
+        "label": "Unicode Mathematical Operators code chart",
+        "url": "https://www.unicode.org/charts/PDF/U2200.pdf",
+        "license": "Unicode License Agreement; glyph identity"
+      }
+    ]
+  },
+  {
+    "id": "argmin-argmax",
+    "symbol": "arg min",
+    "latex": "\\operatorname{argmin}",
+    "name": "Arg min and arg max",
+    "aliases": [
+      "argmin",
+      "argmax",
+      "arg min",
+      "arg max",
+      "minimizer",
+      "maximizer",
+      "optimizer"
+    ],
+    "category": "advanced",
+    "definition": "Name where a minimum or maximum occurs, rather than its value. argmin f is the input achieving the smallest output; argmax the largest.",
+    "reading": "“arg min of f”.",
+    "examples": [
+      {
+        "tex": "\\operatorname{argmin}_x (x - 3)^2 = 3",
+        "explanation": "The square is smallest at x = 3."
+      }
+    ],
+    "relatedSymbols": [
+      "supremum",
+      "infimum",
+      "function-notation"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "fourier-transform",
+    "symbol": "ℱ",
+    "latex": "\\mathcal{F}",
+    "name": "Fourier transform",
+    "aliases": [
+      "fourier transform",
+      "F transform",
+      "frequency domain",
+      "spectrum analysis",
+      "DFT FFT"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Decomposes a signal into its frequencies: the transform at each frequency measures how much of that oscillation the signal contains. It turns differentiation into multiplication and convolution into products.",
+    "reading": "“the Fourier transform of f”.",
+    "examples": [
+      {
+        "tex": "\\mathcal{F}\\{f\\}(\\xi) = \\int_{-\\infty}^{\\infty} f(x) e^{-2\\pi i x \\xi}\\,dx",
+        "explanation": "Correlate f against every oscillation frequency."
+      }
+    ],
+    "relatedSymbols": [
+      "integral",
+      "euler-identity",
+      "laplace-transform",
+      "infinity"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions",
+        "url": "https://dlmf.nist.gov/",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "laplace-transform",
+    "symbol": "ℒ",
+    "latex": "\\mathcal{L}",
+    "name": "Laplace transform",
+    "aliases": [
+      "laplace transform",
+      "L transform",
+      "s domain",
+      "transfer function",
+      "ODE transform"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Converts differential equations into algebra by mapping functions of time to functions of a complex frequency s. Derivatives become multiplication by s, so circuits and controls solve with fractions.",
+    "reading": "“the Laplace transform of f”.",
+    "examples": [
+      {
+        "tex": "\\mathcal{L}\\{f'\\}(s) = sF(s) - f(0)",
+        "explanation": "Differentiation becomes multiplication by s."
+      }
+    ],
+    "relatedSymbols": [
+      "fourier-transform",
+      "integral",
+      "derivative-leibniz",
+      "exponential-exp"
+    ],
+    "sources": [
+      {
+        "label": "NIST Digital Library of Mathematical Functions",
+        "url": "https://dlmf.nist.gov/",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "big-o-notation",
+    "symbol": "O(n²)",
+    "latex": "O(n^2)",
+    "name": "Big-O notation",
+    "aliases": [
+      "big O",
+      "big-O",
+      "order of growth",
+      "complexity",
+      "asymptotic bound",
+      "omicron order"
+    ],
+    "category": "advanced",
+    "relatedCategories": [
+      "linear-discrete",
+      "calculus"
+    ],
+    "definition": "Bounds growth from above up to a constant factor: f is O(g) when |f| ≤ C·g eventually. It classifies algorithms (linear, quadratic, exponential) while ignoring hardware constants.",
+    "reading": "“big O of n-squared”.",
+    "examples": [
+      {
+        "tex": "3n^2 + 5n = O(n^2)",
+        "explanation": "Quadratic term dominates; constants and lower terms drop."
+      }
+    ],
+    "relatedSymbols": [
+      "omicron",
+      "asymptotic",
+      "limit",
+      "infinity"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ],
+    "notes": "Uses the Latin letter O, not omicron, by convention."
+  }
+]
