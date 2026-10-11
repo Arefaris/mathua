@@ -1273,5 +1273,118 @@
         "license": "CC BY-SA (site footer); consulted, original wording"
       }
     ]
+  },
+  {
+    "id": "irrational-numbers",
+    "symbol": "∉ ℚ",
+    "latex": "\\notin \\mathbb{Q}",
+    "name": "Irrational numbers",
+    "aliases": [
+      "irrational",
+      "irrational numbers",
+      "non-repeating decimal",
+      "not rational",
+      "surds"
+    ],
+    "category": "arithmetic",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "Real numbers that are not ratios of integers: their decimals never terminate or repeat. Square roots of non-square integers, π and e are irrational.",
+    "reading": "“x is irrational”.",
+    "examples": [
+      {
+        "tex": "\\sqrt{2} \\notin \\mathbb{Q}",
+        "explanation": "No fraction squares to 2 (classic proof by contradiction: a lowest-terms p/q would force both even)."
+      }
+    ],
+    "relatedSymbols": [
+      "rationals",
+      "real-numbers",
+      "square-root",
+      "decimal-point",
+      "pi-constant"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Prealgebra 2e",
+        "url": "https://openstax.org/details/books/prealgebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "absolute-relative-error",
+    "symbol": "|x − x̂|",
+    "latex": "|x - \\hat{x}|",
+    "name": "Absolute and relative error",
+    "aliases": [
+      "absolute error",
+      "relative error",
+      "approximation error",
+      "tolerance",
+      "significant digits",
+      "error bound"
+    ],
+    "category": "arithmetic",
+    "definition": "Absolute error is |true − approximate|; relative error divides by the true size, measuring error in context. A 1 cm miss on a pencil versus a bridge are different stories the relative error tells.",
+    "reading": "“absolute error”.",
+    "examples": [
+      {
+        "tex": "|\\pi - 3.14| \\approx 0.0016",
+        "explanation": "Absolute miss about 0.0016; relative miss about 0.05%."
+      }
+    ],
+    "relatedSymbols": [
+      "absolute-value",
+      "approx",
+      "decimal-point",
+      "scientific-notation"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Prealgebra 2e",
+        "url": "https://openstax.org/details/books/prealgebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "trapezoid-rule",
+    "symbol": "Tₙ",
+    "latex": "T_n",
+    "name": "Trapezoid rule",
+    "aliases": [
+      "trapezoid rule",
+      "trapezoidal rule",
+      "numerical integration",
+      "quadrature",
+      "Tn approximation"
+    ],
+    "category": "arithmetic",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Approximates a definite integral with trapezoids instead of rectangles: average the endpoint heights on each slice. Exact for linear functions; the error shrinks quadratically as slices narrow.",
+    "reading": "“the trapezoid rule”.",
+    "examples": [
+      {
+        "tex": "T_1 = \\frac{f(0) + f(1)}{2} = 0.5",
+        "explanation": "For ∫₀¹x²dx the single trapezoid gives 0.5 against the exact 1/3 — an overestimate, as convexity predicts."
+      }
+    ],
+    "relatedSymbols": [
+      "integral",
+      "riemann-sum",
+      "fraction",
+      "convex-function"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 2",
+        "url": "https://openstax.org/details/books/calculus-volume-2",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

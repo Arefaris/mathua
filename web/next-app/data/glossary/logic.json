@@ -1101,5 +1101,191 @@
         "license": "CC BY-SA (site footer); consulted, original wording"
       }
     ]
+  },
+  {
+    "id": "mathematical-induction",
+    "symbol": "P(1), P(k) ⇒ P(k+1)",
+    "latex": "P(1), P(k) \\Rightarrow P(k+1)",
+    "name": "Mathematical induction",
+    "aliases": [
+      "induction",
+      "proof by induction",
+      "base case",
+      "inductive step",
+      "induction hypothesis",
+      "strong induction",
+      "well ordering"
+    ],
+    "category": "logic-sets",
+    "definition": "Proves a claim for all natural numbers in two steps: verify it for the first case, then show that truth for k implies truth for k+1. Like toppling dominoes, the base case falls and each step knocks the next.",
+    "reading": "“proof by induction on n”.",
+    "examples": [
+      {
+        "tex": "1 + 2 + \\cdots + n = \\frac{n(n+1)}{2}",
+        "explanation": "Base n = 1 holds (1 = 1); assuming it for k, adding k+1 to both sides yields the k+1 formula."
+      }
+    ],
+    "relatedSymbols": [
+      "forall",
+      "natural-numbers",
+      "sequence-term",
+      "implies"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "converse-contrapositive",
+    "symbol": "Q ⇒ P",
+    "latex": "Q \\Rightarrow P",
+    "name": "Converse and contrapositive",
+    "aliases": [
+      "converse",
+      "contrapositive",
+      "inverse statement",
+      "negation converse",
+      "proof by contrapositive"
+    ],
+    "category": "logic-sets",
+    "definition": "From 'if P then Q' come two variants: the converse 'if Q then P', which need not hold, and the contrapositive 'if not Q then not P', which is always equivalent. To prove P ⇒ Q indirectly, prove its contrapositive instead.",
+    "reading": "“the contrapositive”.",
+    "examples": [
+      {
+        "tex": "x^2 \\text{ even } \\Rightarrow x \\text{ even}",
+        "explanation": "Proved via the contrapositive: odd x gives odd x², so an even square forces an even root."
+      }
+    ],
+    "commonMistakes": [
+      "Treating the converse as equivalent; affirming the consequent is the classic fallacy."
+    ],
+    "relatedSymbols": [
+      "implies",
+      "equivalent-iff",
+      "negation",
+      "qed"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "tautology-contradiction",
+    "symbol": "⊤ ⊥",
+    "latex": "\\top, \\bot",
+    "name": "Tautology and contradiction",
+    "aliases": [
+      "tautology",
+      "contradiction",
+      "top bottom logic",
+      "always true",
+      "always false",
+      "logical truth",
+      "inconsistency"
+    ],
+    "category": "logic-sets",
+    "definition": "A tautology is true under every assignment (e.g. P ∨ ¬P); a contradiction is true under none (e.g. P ∧ ¬P). Proof by contradiction assumes the negation and derives a contradiction.",
+    "reading": "“top” and “bottom”.",
+    "examples": [
+      {
+        "tex": "P \\lor \\neg P",
+        "explanation": "Excluded middle: P holds or it does not, with no third option."
+      }
+    ],
+    "relatedSymbols": [
+      "disjunction",
+      "conjunction",
+      "negation",
+      "qed"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "wlog",
+    "symbol": "WLOG",
+    "latex": "\\text{WLOG}",
+    "name": "Without loss of generality (WLOG)",
+    "aliases": [
+      "WLOG",
+      "without loss of generality",
+      "assume wlog",
+      "by symmetry",
+      "up to renaming"
+    ],
+    "category": "logic-sets",
+    "definition": "Signals a symmetry argument: the proof fixes one of several interchangeable cases (e.g. a ≤ b) because the others follow identically. It claims no generality is lost — which must actually be true.",
+    "reading": "“without loss of generality”.",
+    "examples": [
+      {
+        "tex": "\\text{Assume } a \\le b \\text{ WLOG}",
+        "explanation": "When a and b play symmetric roles, proving it under a ≤ b covers everything."
+      }
+    ],
+    "commonMistakes": [
+      "Invoking WLOG where cases genuinely differ; the symmetry must be real."
+    ],
+    "relatedSymbols": [
+      "qed",
+      "therefore",
+      "equivalent-iff",
+      "forall"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "proof-by-contradiction",
+    "symbol": "¬P ⊢ ⊥",
+    "latex": "\\neg P \\vdash \\bot",
+    "name": "Proof by contradiction",
+    "aliases": [
+      "proof by contradiction",
+      "reductio ad absurdum",
+      "assume contrary",
+      "contradiction proof",
+      "indirect proof"
+    ],
+    "category": "logic-sets",
+    "definition": "Proves P by assuming ¬P and deriving an impossibility (⊥). The assumption collapses, leaving P standing. Euclid's proof of infinitely many primes is the classic exhibit.",
+    "reading": "“proof by contradiction”.",
+    "examples": [
+      {
+        "tex": "\\sqrt{2} \\notin \\mathbb{Q}",
+        "explanation": "Assuming √2 = p/q in lowest terms forces both even — contradicting lowest terms."
+      }
+    ],
+    "relatedSymbols": [
+      "negation",
+      "tautology-contradiction",
+      "converse-contrapositive",
+      "qed",
+      "irrational-numbers"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
   }
 ]

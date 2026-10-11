@@ -1,5 +1,116 @@
 # Glossary audit — research notes (working artifact, keep until approved)
 
+## Specialist expansion (282 → 342; six fields, 60 entries)
+
+### Method
+Gap inventory per field confirmed near-zero dedicated coverage (only
+manifold, isomorphism/homomorphism, tensor-product, metric-space,
+tangent-line as related terms). 8/10/10/11/8/14 entries across category
+theory, operator theory, homological algebra, algebraic geometry,
+representation theory, differential geometry. Deliberately excluded and
+recorded: monads/comonads and cartesian-closed categories (no verified
+open source this run), trace-class/Hilbert–Schmidt operators
+(too specialized for verified sourcing), spectral sequences
+(mission-optional), divisors (needs dedicated sourcing).
+
+### Sources opened this round
+- SEP Category Theory (functor laws, naturality, adjoints F⊣G,
+  equivalence-vs-isomorphism as the notion that matters, limits/colimits
+  as adjoints, products/coproducts/pullbacks/pushouts, zero object).
+- Wikipedia Chain complex (d²=0, cycles/boundaries, H=ker/im, exact and
+  short exact sequences, chain maps/homotopies; CC BY-SA 4.0 footer
+  confirmed from the page).
+- Wikipedia Self-adjoint operator (adjoint, symmetric-vs-self-adjoint
+  domain distinction, bounded case, spectrum) and Spectral theorem
+  (normal/unitary diagonalization, compact case, projections).
+- Wikipedia Algebraic variety (affine/projective, Zariski, coordinate
+  rings, Nullstellensatz, dimension, singularities, scheme
+  generalization) and Sheaf (presheaf, locality+gluing, stalks).
+- Wikipedia Group representation (ρ:G→GL(V), invariant/irreducible,
+  Maschke hypothesis, equivalence) and Schur's lemma (full statement
+  incl. scalar self-maps over algebraically closed fields).
+- Wikipedia Differentiable manifold (charts/atlas/transitions, smooth
+  structure, tangent/cotangent/tensor bundles, Lie/exterior calculus,
+  Riemannian structures; all 14 entries' topics confirmed present).
+- UT Austin / Hamburg / Columbia homological-algebra notes used only as
+  search excerpts for Tor/Ext/resolution structure (recorded as such);
+  PlanetMath chaincomplex URL did NOT resolve (returned homepage) and
+  was never cited.
+
+### Findings
+- Data gate caught two real collisions pre-merge (compact-operator vs
+  compact-set symbol; cohomology→differential-form forward reference),
+  both fixed (symbol widened; link retargeted then restored).
+- All examples hand-checked (rotation eigenvalues ±i; Tor₁(Z/m,Z/n);
+  logistic-free elementary verifications throughout).
+
+## Final two deferred terms (280 → 282)
+
+### Sigma-algebra
+- Opened https://planetmath.org/sigmaalgebra: full definition (X∈M,
+  complements, countable unions), MSC 28A60. License opened separately
+  (https://planetmath.org/?op=license): entries under CC BY-SA.
+- Entry states all three closure properties and the finite-vs-countable
+  distinction in commonMistakes, per the brief. Example is the power set
+  on two points (verifiable by hand from the stated axioms).
+
+### Hilbert space
+- Opened the LibreTexts Fowler function-spaces page: confirms the
+  mathematician's definition (inner-product spaces of normalizable
+  functions where convergent sequences have limits). Page license is
+  NOT declared, so the entry records exactly that — consultation only,
+  no reuse claim.
+- Completeness framing cross-checked against UBC metric-completeness
+  excerpts and a CalPoly Hilbert-space thesis (search excerpts, recorded
+  as such in the entry note, not as opened sources).
+- Entry keeps the required triple (inner product, induced norm,
+  completeness) in two sentences plus a finite-dimensional example.
+
+## Coverage expansion (229 → 280; batches A–D plus trig-identities)
+
+### Method
+Taxonomy of 21 areas (MSC-coded) in `scripts/glossary-coverage.json` with
+per-area inventories, entry mapping, and honest statuses (20
+verified_complete relative to their documented inventories; 1
+gaps_remaining). Existing 229 audited automatically (no dup names, no
+same-category dup symbols, all readings present and prefix-free,
+definitions substantive, categories valid) — shared-symbol pairs are all
+legitimate cross-category distinctions. 51 new entries in 4 batches, every
+example hand-recomputed, every exact claim checked against an opened source
+or a documented derivation.
+
+### Sources opened this round
+- NIST DADS theta.html / omegaCapital.html / bigOnotation.html (formal
+  asymptotic definitions; Ω uppercase confirmed; little-omega page
+  correctly NOT cited for Big-Omega).
+- Britannica aleph-null (body confirmed: cardinality of naturals,
+  denumerable, continuum larger). Proprietary; consultation only.
+- DLMF 27.2 (π(x) sum, PNT, Möbius, totient table confirms φ(9) = 6).
+- MathWorld PiContinuedFraction (π = [3; 7, 15, 1, 292, …], convergents).
+- LibreTexts topology 1.1 (axioms; page states Public Domain) and IVC
+  differential-equation terminology (ODE/PDE/order/linear/homogeneous;
+  CC BY-NC-SA 4.0).
+- UBC Rechnitzer/Martens metric-completeness notes excerpts (epsilon-N
+  Cauchy, completeness); UChicago May REU topology notes excerpts
+  (compact/connected/homeomorphism/Heine-Borel); UCSD Bender ch.10
+  excerpts (Fibonacci GF x/(1−x−x²) for F₀=0,F₁=1).
+- SEP Turing Machines (full formal definition, Church–Turing thesis).
+- Scholarpedia Entropy, eq.5 (H = −Σp log₂p; CC BY-NC-SA 3.0 footer),
+  cited via DOI (direct https fails; DOI resolves 200).
+- MacTutor Fermat's Last Theorem (statement, Wiles 1993–95, Diophantus
+  margin context; © St Andrews, consultation only).
+- Encyclopedia of Mathematics rejected (persistent 502s); PlanetMath
+  license confirmed (CC BY-SA) but no specific articles opened, so NOT
+  cited anywhere.
+
+### Deferred with reasons
+- sigma-algebra, hilbert-space: no openly-licensed reference verifiable in
+  this run; graduate texts not openly fetchable. Ledger gaps_remaining.
+- Big-Theta/Omega note: DADS Ω definition is stronger (for-all-large-n)
+  than some textbooks' infinitely-often version — recorded in the entry.
+
+## Batch: advanced (27 entries)
+
 ## Coverage batch 2 (26 new entries, 203 → 229)
 
 ### Scope

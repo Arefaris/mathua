@@ -184,6 +184,45 @@ the reuse terms as verified at authoring time:
 - **Wolfram MathWorld** (mathworld.wolfram.com) for the pi continued
   fraction values. Proprietary content consulted as a reference only; the
   entry uses original wording with no text reused.
+- **Mathematics LibreTexts** (math.libretexts.org, CC BY-NC-SA) for
+  differential-equation terminology and the topology axioms page (the
+  latter page carries a public-domain notice, recorded per page).
+  Consulted as references; entries use original wording with no text reused.
+- **University course notes** (UC San Diego, University of British Columbia,
+  University of Chicago authors' pages)
+  for generating functions, metric-space completeness, and topology
+  formulations. Consulted as references; entries use original wording with
+  no text reused.
+- **MacTutor History of Mathematics** (University of St Andrews) for
+  Fermat's Last Theorem and Diophantine context. Consulted as a reference;
+  entries use original wording with no text reused.
+- **Stanford Encyclopedia of Philosophy** (open access) for the Turing
+  machine definition. Consulted as a reference; the entry uses original
+  wording with no text reused.
+- **Scholarpedia** (CC BY-NC-SA 3.0 per the article footer) for Shannon
+  entropy, cited via its DOI. Consulted as a reference; the entry uses
+  original wording with no text reused.
+- **PlanetMath** (CC BY-SA, per the site license page) for the
+  sigma-algebra definition. Consulted as a reference; the entry uses
+  original wording with no text reused.
+- **NIST Dictionary of Algorithms and Data Structures** (DADS,
+  xlinux.nist.gov/dads) for big-Theta and big-Omega definitions. A U.S.
+  federal reference; entries cite the term page and use original wording
+  with no text reused.
+- **Encyclopaedia Britannica** (britannica.com) for the aleph-null
+  definition. Proprietary content consulted as a reference only; the entry
+  uses original wording with no text reused.
+- **Wolfram MathWorld** (mathworld.wolfram.com) for the pi continued
+  fraction values. Proprietary content consulted as a reference only; the
+  entry uses original wording with no text reused.
+- **Wikipedia** (CC BY-SA 4.0, per article footers) for specialist
+  definitions across homological algebra, operator theory, algebraic
+  geometry, representation theory, and differential geometry. Individual
+  articles opened and verified; entries use original wording with no text
+  reused.
+- **Stanford Encyclopedia of Philosophy** (open access) for category
+  theory definitions alongside the Turing machine entry above. Consulted
+  as a reference; entries use original wording with no text reused.
 
 If an entry could not be verified against an appropriate source, it was
 excluded rather than published with invented attribution; the excluded

@@ -922,5 +922,413 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "fundamental-theorem-calculus",
+    "symbol": "∫ₐᵇ f = F(b) − F(a)",
+    "latex": "\\int_a^b f = F(b) - F(a)",
+    "name": "Fundamental theorem of calculus",
+    "aliases": [
+      "fundamental theorem",
+      "FTC",
+      "antiderivative evaluation",
+      "differentiation integration inverse",
+      "net change theorem"
+    ],
+    "category": "calculus",
+    "definition": "Links differentiation and integration in two parts: differentiating an accumulated area recovers the function, and a definite integral equals any antiderivative's net change. It turns area problems into antiderivative evaluations.",
+    "reading": "“the fundamental theorem of calculus”.",
+    "examples": [
+      {
+        "tex": "\\int_0^1 2x\\,dx = 1^2 - 0^2 = 1",
+        "explanation": "An antiderivative is x²; evaluate at the endpoints and subtract."
+      }
+    ],
+    "relatedSymbols": [
+      "integral",
+      "derivative-leibniz",
+      "continuity-note"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "mean-value-theorem",
+    "symbol": "f′(c)",
+    "latex": "f'(c)",
+    "name": "Mean value theorem",
+    "aliases": [
+      "mean value theorem",
+      "MVT",
+      "rolle theorem",
+      "average slope attained",
+      "lagrange MVT"
+    ],
+    "category": "calculus",
+    "definition": "On a smooth interval, the average slope is attained somewhere inside: some c has f′(c) = (f(b) − f(a))/(b − a). It needs continuity on the closed interval and differentiability inside; Rolle's theorem is the flat case.",
+    "reading": "“the mean value theorem”.",
+    "examples": [
+      {
+        "tex": "f(x) = x^2,\\; [0, 2]:\\; 2c = 2",
+        "explanation": "Average slope 2 is attained at c = 1, inside the interval."
+      }
+    ],
+    "relatedSymbols": [
+      "derivative-lagrange",
+      "slope",
+      "limit",
+      "continuity-note"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "improper-integral",
+    "symbol": "∫₁^∞",
+    "latex": "\\int_1^\\infty",
+    "name": "Improper integral",
+    "aliases": [
+      "improper integral",
+      "infinite limit integral",
+      "unbounded integrand",
+      "convergent integral",
+      "divergent integral"
+    ],
+    "category": "calculus",
+    "definition": "An integral over an unbounded interval or of an unbounded function, defined as a limit of proper integrals. It converges when the limit exists finitely — infinite reach does not imply infinite area.",
+    "reading": "“the improper integral from 1 to infinity”.",
+    "examples": [
+      {
+        "tex": "\\int_1^\\infty \\frac{dx}{x^2} = 1",
+        "explanation": "Truncating at b gives 1 − 1/b, which tends to 1: finite area under an endless tail."
+      }
+    ],
+    "commonMistakes": [
+      "Assuming an infinite interval always gives infinity; convergence must be checked."
+    ],
+    "relatedSymbols": [
+      "integral",
+      "limit",
+      "infinity",
+      "riemann-sum"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 2",
+        "url": "https://openstax.org/details/books/calculus-volume-2",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "metric-space",
+    "symbol": "d(x, y)",
+    "latex": "d(x, y)",
+    "name": "Metric space",
+    "aliases": [
+      "metric space",
+      "distance function",
+      "metric",
+      "metrizable",
+      "triangle inequality"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "A set equipped with a distance function d satisfying: distances are nonnegative, zero only for identical points, symmetric, and obey the triangle inequality d(x,z) ≤ d(x,y) + d(y,z). Metrics turn sets into geometric spaces where convergence makes sense.",
+    "reading": "“the metric space”.",
+    "examples": [
+      {
+        "tex": "d(x, y) = |x - y|",
+        "explanation": "The usual distance on the real line; all four axioms are elementary absolute-value facts."
+      }
+    ],
+    "relatedSymbols": [
+      "absolute-value",
+      "limit",
+      "real-numbers",
+      "cauchy-sequence"
+    ],
+    "sources": [
+      {
+        "label": "UBC Real Analysis notes, metric completeness (Rechnitzer/Martens)",
+        "url": "https://arechnitzer.gitlab.io/m319text/sec_metric_complete.html",
+        "license": "Author/university course notes; consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "cauchy-sequence",
+    "symbol": "∀ε>0",
+    "latex": "\\forall \\varepsilon > 0",
+    "name": "Cauchy sequence",
+    "aliases": [
+      "cauchy sequence",
+      "fundamental sequence",
+      "complete metric space",
+      "cauchy criterion",
+      "terms get close"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "A sequence whose terms get arbitrarily close to each other: for every ε > 0, all sufficiently late terms lie within ε. Every convergent sequence is Cauchy; a space is complete when the converse holds and every Cauchy sequence has its limit inside.",
+    "reading": "“Cauchy sequence”.",
+    "examples": [
+      {
+        "tex": "a_n = \\frac{1}{n} \\text{ in } (0, 1)",
+        "explanation": "Terms cluster together, but the limit 0 is missing from (0,1): Cauchy without converging there, so (0,1) is incomplete."
+      }
+    ],
+    "relatedSymbols": [
+      "sequence-term",
+      "limit",
+      "metric-space",
+      "real-numbers"
+    ],
+    "sources": [
+      {
+        "label": "UBC Real Analysis notes, metric completeness (Rechnitzer/Martens)",
+        "url": "https://arechnitzer.gitlab.io/m319text/sec_metric_complete.html",
+        "license": "Author/university course notes; consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "ordinary-differential-equation",
+    "symbol": "y′ = f(x, y)",
+    "latex": "y' = f(x, y)",
+    "name": "Ordinary differential equation",
+    "aliases": [
+      "ODE",
+      "ordinary differential equation",
+      "first order ODE",
+      "linear ODE",
+      "homogeneous ODE",
+      "order of equation"
+    ],
+    "category": "calculus",
+    "definition": "An equation for an unknown function of one variable involving its derivatives. The order is the highest derivative present; linear means y and its derivatives appear only to the first power, unmultiplied together.",
+    "reading": "“an O D E”.",
+    "examples": [
+      {
+        "tex": "y' = ky,\\quad y = Ce^{kt}",
+        "explanation": "Differentiating Ce^{kt} gives kCe^{kt}: exponential growth (k > 0) or decay."
+      }
+    ],
+    "relatedSymbols": [
+      "derivative-leibniz",
+      "exponential-exp",
+      "initial-value-problem",
+      "laplace-transform"
+    ],
+    "sources": [
+      {
+        "label": "LibreTexts, Differential Equation Terminology (Huber, IVC)",
+        "url": "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology",
+        "license": "CC BY-NC-SA 4.0 (page footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "partial-differential-equation",
+    "symbol": "∂u/∂t",
+    "latex": "\\frac{\\partial u}{\\partial t}",
+    "name": "Partial differential equation",
+    "aliases": [
+      "PDE",
+      "partial differential equation",
+      "heat equation",
+      "wave equation",
+      "laplace equation"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "An equation for an unknown function of several variables involving partial derivatives. The heat, wave, and Laplace equations are the canonical examples; boundary conditions pick the physical solution.",
+    "reading": "“a P D E”.",
+    "examples": [
+      {
+        "tex": "\\frac{\\partial u}{\\partial t} = \\alpha\\frac{\\partial^2 u}{\\partial x^2}",
+        "explanation": "The heat equation: temperature u spreads with diffusivity α."
+      }
+    ],
+    "relatedSymbols": [
+      "partial-derivative",
+      "ordinary-differential-equation",
+      "laplacian",
+      "initial-value-problem"
+    ],
+    "sources": [
+      {
+        "label": "LibreTexts, Differential Equation Terminology (Huber, IVC)",
+        "url": "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology",
+        "license": "CC BY-NC-SA 4.0 (page footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "initial-value-problem",
+    "symbol": "y(x₀) = y₀",
+    "latex": "y(x_0) = y_0",
+    "name": "Initial value problem",
+    "aliases": [
+      "initial value problem",
+      "IVP",
+      "initial condition",
+      "boundary condition",
+      "particular solution",
+      "uniqueness"
+    ],
+    "category": "calculus",
+    "definition": "A differential equation plus conditions fixing the solution's value (and derivatives, for higher order) at a point. An nth-order equation needs n conditions; with them, well-behaved problems have exactly one solution.",
+    "reading": "“the initial value problem”.",
+    "examples": [
+      {
+        "tex": "y' = y,\\; y(0) = 2 \\Rightarrow y = 2e^x",
+        "explanation": "General solution Ceˣ with C = 2 from y(0) = 2; check: (2eˣ)′ = 2eˣ."
+      }
+    ],
+    "relatedSymbols": [
+      "ordinary-differential-equation",
+      "exponential-exp",
+      "function-notation",
+      "equals"
+    ],
+    "sources": [
+      {
+        "label": "LibreTexts, Differential Equation Terminology (Huber, IVC)",
+        "url": "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology",
+        "license": "CC BY-NC-SA 4.0 (page footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "equilibrium-stability",
+    "symbol": "y′ = 0",
+    "latex": "y' = 0",
+    "name": "Equilibrium and stability",
+    "aliases": [
+      "equilibrium",
+      "steady state",
+      "stable equilibrium",
+      "unstable equilibrium",
+      "fixed point dynamics",
+      "phase line"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "Constant solutions where the rate vanishes (y′ = 0). An equilibrium is stable when nearby solutions approach it and unstable when they move away — read off from the sign of the rate around it.",
+    "reading": "“stable equilibrium”.",
+    "examples": [
+      {
+        "tex": "y' = y(1 - y)",
+        "explanation": "Logistic growth: y = 1 attracts nearby solutions (stable); y = 0 repels them (unstable)."
+      }
+    ],
+    "relatedSymbols": [
+      "ordinary-differential-equation",
+      "derivative-lagrange",
+      "limit",
+      "initial-value-problem"
+    ],
+    "sources": [
+      {
+        "label": "LibreTexts, Differential Equation Terminology (Huber, IVC)",
+        "url": "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology",
+        "license": "CC BY-NC-SA 4.0 (page footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "lagrange-multipliers",
+    "symbol": "∇f = λ∇g",
+    "latex": "\\nabla f = \\lambda \\nabla g",
+    "name": "Lagrange multipliers",
+    "aliases": [
+      "lagrange multipliers",
+      "constrained optimization",
+      "lambda constraint",
+      "equality constraint"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "Finds extrema of f subject to g = c: at the optimum the gradients align, ∇f = λ∇g, so level curves kiss the constraint. Solve this system jointly with the constraint itself.",
+    "reading": "“Lagrange multipliers”.",
+    "examples": [
+      {
+        "tex": "\\max(x + y),\\; x^2 + y^2 = 1",
+        "explanation": "(1,1) = λ(2x,2y) gives x = y = 1/√2, value √2: the support line touches the circle."
+      }
+    ],
+    "relatedSymbols": [
+      "nabla-gradient",
+      "lambda",
+      "argmin-argmax",
+      "partial-derivative"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 3",
+        "url": "https://openstax.org/details/books/calculus-volume-3",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "convex-function",
+    "symbol": "f″ ≥ 0",
+    "latex": "f'' \\ge 0",
+    "name": "Convex function",
+    "aliases": [
+      "convex",
+      "convex function",
+      "concave up",
+      "convex set",
+      "jensen inequality",
+      "cup shaped"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "advanced"
+    ],
+    "definition": "A function whose chord always lies above its graph (f″ ≥ 0 where twice differentiable): it cups upward, so any local minimum is global. Flipping the inequality gives concave.",
+    "reading": "“convex”.",
+    "examples": [
+      {
+        "tex": "f(x) = x^2",
+        "explanation": "Second derivative 2 > 0 everywhere: every tangent sits below the parabola."
+      }
+    ],
+    "relatedSymbols": [
+      "derivative-lagrange",
+      "supremum",
+      "argmin-argmax",
+      "interval"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

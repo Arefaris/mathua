@@ -3287,6 +3287,1440 @@
    "example_checked": true,
    "latex_checked": true,
    "xrefs_checked": true
+  },
+  "irrational-numbers": {
+   "symbol": "∉ ℚ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "absolute-relative-error": {
+   "symbol": "|x − x̂|",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "trapezoid-rule": {
+   "symbol": "Tₙ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "partial-fractions": {
+   "symbol": "P(x)/Q(x)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "remainder-factor-theorem": {
+   "symbol": "P(a) = 0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "mathematical-induction": {
+   "symbol": "P(1), P(k) ⇒ P(k+1)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "converse-contrapositive": {
+   "symbol": "Q ⇒ P",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "tautology-contradiction": {
+   "symbol": "⊤ ⊥",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "wlog": {
+   "symbol": "WLOG",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "proof-by-contradiction": {
+   "symbol": "¬P ⊢ ⊥",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "parabola": {
+   "symbol": "y = ax² + bx + c",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "ellipse": {
+   "symbol": "x²/a² + y²/b² = 1",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "hyperbola": {
+   "symbol": "x²/a² − y²/b² = 1",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "tangent-line": {
+   "symbol": "y − f(a) = f′(a)(x − a)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "hyperbolic-functions": {
+   "symbol": "sinh cosh tanh",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "fundamental-theorem-calculus": {
+   "symbol": "∫ₐᵇ f = F(b) − F(a)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "mean-value-theorem": {
+   "symbol": "f′(c)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "improper-integral": {
+   "symbol": "∫₁^∞",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "metric-space": {
+   "symbol": "d(x, y)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://arechnitzer.gitlab.io/m319text/sec_metric_complete.html"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "cauchy-sequence": {
+   "symbol": "∀ε>0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://arechnitzer.gitlab.io/m319text/sec_metric_complete.html"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "ordinary-differential-equation": {
+   "symbol": "y′ = f(x, y)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "partial-differential-equation": {
+   "symbol": "∂u/∂t",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "initial-value-problem": {
+   "symbol": "y(x₀) = y₀",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "equilibrium-stability": {
+   "symbol": "y′ = 0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/01%3A_First_Order_Differential_Equations/1.02%3A_Basic_Terminology/1.2.02%3A_Differential_Equation_Terminology"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "lagrange-multipliers": {
+   "symbol": "∇f = λ∇g",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "convex-function": {
+   "symbol": "f″ ≥ 0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "generating-function": {
+   "symbol": "G(x)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://mathweb.ucsd.edu/~ebender/CombText/ch-10.pdf"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "pigeonhole-principle": {
+   "symbol": "m+1 → m",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "binomial-theorem": {
+   "symbol": "(a+b)ⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "basis-dimension": {
+   "symbol": "dim(V)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "linear-independence": {
+   "symbol": "c₁v₁ + … = 0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "diagonalization": {
+   "symbol": "A = PDP⁻¹",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "central-limit-theorem": {
+   "symbol": "X̄ₙ → N",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "law-of-large-numbers": {
+   "symbol": "X̄ₙ → μ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "prime-number": {
+   "symbol": "p",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "holomorphic-function": {
+   "symbol": "f′(z₀)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "topological-space": {
+   "symbol": "(X, T)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Workbench/Topology%3A_A_First_Course/01%3A_Introduction_to_Topological_Spaces/1.01%3A_Introduction_to_Topological_Spaces"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "compact-set": {
+   "symbol": "compact",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Workbench/Topology%3A_A_First_Course/01%3A_Introduction_to_Topological_Spaces/1.01%3A_Introduction_to_Topological_Spaces"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "connected-set": {
+   "symbol": "connected",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Workbench/Topology%3A_A_First_Course/01%3A_Introduction_to_Topological_Spaces/1.01%3A_Introduction_to_Topological_Spaces"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "homeomorphism": {
+   "symbol": "≅ (spaces)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Workbench/Topology%3A_A_First_Course/01%3A_Introduction_to_Topological_Spaces/1.01%3A_Introduction_to_Topological_Spaces"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "manifold": {
+   "symbol": "Mⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://math.libretexts.org/Workbench/Topology%3A_A_First_Course/01%3A_Introduction_to_Topological_Spaces/1.01%3A_Introduction_to_Topological_Spaces"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "ring": {
+   "symbol": "(R, +, ×)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "field-algebra": {
+   "symbol": "𝔽",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "homomorphism": {
+   "symbol": "φ(ab) = φ(a)φ(b)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "diophantine-equation": {
+   "symbol": "x² + y² = z²",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://mathshistory.st-andrews.ac.uk/HistTopics/Fermat's_last_theorem/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "shannon-entropy": {
+   "symbol": "H",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://doi.org/10.4249/scholarpedia.3901"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "turing-machine": {
+   "symbol": "δ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/turing-machine/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "fundamental-theorem-algebra": {
+   "symbol": "n roots",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "fermats-last-theorem": {
+   "symbol": "xⁿ + yⁿ = zⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://mathshistory.st-andrews.ac.uk/HistTopics/Fermat's_last_theorem/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "riemann-hypothesis": {
+   "symbol": "Re(s) = ½",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "trigonometric-identities": {
+   "symbol": "sin² + cos² = 1",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "sigma-algebra": {
+   "symbol": "(X, M)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://planetmath.org/sigmaalgebra"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "hilbert-space": {
+   "symbol": "H",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://phys.libretexts.org/Bookshelves/Quantum_Mechanics/Quantum_Mechanics_(Fowler)/02%3A_Some_Essential_Math/2.03%3A_Function_Spaces"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "category": {
+   "symbol": "C",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "morphism": {
+   "symbol": "f: X → Y",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "functor": {
+   "symbol": "F: C → D",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "natural-transformation": {
+   "symbol": "η: F ⇒ G",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "equivalence-of-categories": {
+   "symbol": "C ≃ D",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "universal-property": {
+   "symbol": "∃!",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "limit-colimit": {
+   "symbol": "lim← lim→",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "adjoint-functors": {
+   "symbol": "F ⊣ G",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://plato.stanford.edu/entries/category-theory/"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "linear-operator": {
+   "symbol": "T: V → W",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Self-adjoint_operator"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "operator-norm": {
+   "symbol": "‖T‖",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Self-adjoint_operator"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "bounded-operator": {
+   "symbol": "‖Tx‖ ≤ C‖x‖",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Self-adjoint_operator"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "adjoint-operator": {
+   "symbol": "T*",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Self-adjoint_operator"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "self-adjoint-operator": {
+   "symbol": "A = A*",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Self-adjoint_operator"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "normal-operator": {
+   "symbol": "N*N = NN*",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Spectral_theorem"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "projection-operator": {
+   "symbol": "P² = P",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Spectral_theorem"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "compact-operator": {
+   "symbol": "compact operator",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Spectral_theorem"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "spectrum-operator": {
+   "symbol": "σ(A)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Spectral_theorem"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "spectral-theorem": {
+   "symbol": "A = UDU*",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Spectral_theorem"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "chain-complex": {
+   "symbol": "⋯ → Cₙ₊₁ → Cₙ → ⋯",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "homology-groups": {
+   "symbol": "Hₙ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "cohomology": {
+   "symbol": "Hⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "chain-map": {
+   "symbol": "fₙ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "exact-sequence": {
+   "symbol": "0 → A → B → C → 0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "cokernel": {
+   "symbol": "coker",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "projective-resolution": {
+   "symbol": "⋯ → P₁ → P₀ → M → 0",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "derived-functor": {
+   "symbol": "LₙF / RⁿF",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "tor-ext": {
+   "symbol": "Torₙ / Extⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "chain-homotopy": {
+   "symbol": "f ≃ g",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Chain_complex"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "affine-variety": {
+   "symbol": "V(S)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "projective-variety": {
+   "symbol": "ℙⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "coordinate-ring": {
+   "symbol": "k[V]",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "zariski-topology": {
+   "symbol": "Zariski",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "regular-function": {
+   "symbol": "O(V)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "variety-dimension": {
+   "symbol": "dim V",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "singular-point": {
+   "symbol": "sing",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "scheme": {
+   "symbol": "Spec R",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "sheaf": {
+   "symbol": "F(U)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Sheaf_(mathematics)"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "local-ring": {
+   "symbol": "(R, m)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Algebraic_variety"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "group-representation": {
+   "symbol": "ρ: G → GL(V)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "invariant-subspace": {
+   "symbol": "ρ(g)W ⊆ W",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "irreducible-representation": {
+   "symbol": "irrep",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "character-representation": {
+   "symbol": "χ(g)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "schurs-lemma": {
+   "symbol": "Schur",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Schur%27s_lemma"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "group-algebra": {
+   "symbol": "ℂ[G]",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "induced-representation": {
+   "symbol": "Ind",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "lie-algebra-representation": {
+   "symbol": "dρ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Group_representation"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "smooth-manifold": {
+   "symbol": "M",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "chart-atlas": {
+   "symbol": "(U, φ)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "tangent-space": {
+   "symbol": "T_pM",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "vector-field": {
+   "symbol": "X",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "differential-form": {
+   "symbol": "ω",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "riemannian-metric": {
+   "symbol": "g",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "geodesic": {
+   "symbol": "γ(t)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "connection": {
+   "symbol": "∇",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "curvature": {
+   "symbol": "R",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "exterior-derivative": {
+   "symbol": "d",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "stokes-theorem": {
+   "symbol": "∫_M dω",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "tensor-field": {
+   "symbol": "T",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "pushforward-pullback": {
+   "symbol": "dF / F*",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "lie-derivative": {
+   "symbol": "L_X",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://en.wikipedia.org/wiki/Differentiable_manifold"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
   }
  }
 }

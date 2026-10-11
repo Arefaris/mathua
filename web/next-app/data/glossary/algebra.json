@@ -734,5 +734,77 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "partial-fractions",
+    "symbol": "P(x)/Q(x)",
+    "latex": "\\frac{A}{x-a} + \\frac{B}{x-b}",
+    "name": "Partial fractions",
+    "aliases": [
+      "partial fractions",
+      "partial fraction decomposition",
+      "split rational function",
+      "cover-up method"
+    ],
+    "category": "algebra",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Splits a rational function into a sum of simpler fractions with linear (or irreducible quadratic) denominators. Each piece integrates or inverts elementarily, which is why the method powers integral calculus and Laplace transforms.",
+    "reading": "“partial fractions”.",
+    "examples": [
+      {
+        "tex": "\\frac{1}{(x-1)(x+2)} = \\frac{1/3}{x-1} - \\frac{1/3}{x+2}",
+        "explanation": "Check: combining the right side over (x−1)(x+2) gives 1/3·((x+2) − (x−1)) = 1."
+      }
+    ],
+    "relatedSymbols": [
+      "fraction",
+      "integral",
+      "laplace-transform",
+      "equals"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax College Algebra 2e",
+        "url": "https://openstax.org/details/books/college-algebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "remainder-factor-theorem",
+    "symbol": "P(a) = 0",
+    "latex": "P(a) = 0",
+    "name": "Remainder and factor theorems",
+    "aliases": [
+      "remainder theorem",
+      "factor theorem",
+      "polynomial remainder",
+      "P of a equals zero",
+      "synthetic division"
+    ],
+    "category": "algebra",
+    "definition": "Dividing a polynomial P by (x − a) leaves remainder P(a). In particular, (x − a) is a factor exactly when P(a) = 0 — evaluation tests divisibility with no division.",
+    "reading": "“P of a equals zero”.",
+    "examples": [
+      {
+        "tex": "P(x) = x^2 - 5x + 6,\\; P(2) = 0",
+        "explanation": "So (x − 2) is a factor; indeed P = (x − 2)(x − 3)."
+      }
+    ],
+    "relatedSymbols": [
+      "function-notation",
+      "quadratic-formula",
+      "divides",
+      "equals"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax College Algebra 2e",
+        "url": "https://openstax.org/details/books/college-algebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

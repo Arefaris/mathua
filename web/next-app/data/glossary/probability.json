@@ -793,5 +793,80 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "central-limit-theorem",
+    "symbol": "X̄ₙ → N",
+    "latex": "\\bar{X}_n \\to N",
+    "name": "Central limit theorem",
+    "aliases": [
+      "central limit theorem",
+      "CLT",
+      "normal approximation",
+      "sampling distribution",
+      "averages are normal"
+    ],
+    "category": "probability",
+    "definition": "Averages of many independent, identically distributed observations are approximately normal — whatever the original distribution. This is why normal models and z-procedures work so widely.",
+    "reading": "“the central limit theorem”.",
+    "examples": [
+      {
+        "tex": "\\bar{X}_n \\approx N\\left(\\mu, \\frac{\\sigma^2}{n}\\right)",
+        "explanation": "Averaging n die rolls clusters around 3.5 with spread shrinking like 1/√n."
+      }
+    ],
+    "relatedSymbols": [
+      "normal-distribution",
+      "sample-mean",
+      "standard-error",
+      "z-score",
+      "expectation"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Introductory Statistics",
+        "url": "https://openstax.org/details/books/introductory-statistics",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "law-of-large-numbers",
+    "symbol": "X̄ₙ → μ",
+    "latex": "\\bar{X}_n \\to \\mu",
+    "name": "Law of large numbers",
+    "aliases": [
+      "law of large numbers",
+      "LLN",
+      "averages converge",
+      "long-run average",
+      "gambler fallacy antidote"
+    ],
+    "category": "probability",
+    "definition": "Sample averages converge to the expected value as samples grow: X̄ₙ → μ. It justifies learning probabilities from frequencies — but gives no timetable, so short runs still surprise.",
+    "reading": "“the law of large numbers”.",
+    "examples": [
+      {
+        "tex": "\\hat{p}_n \\to \\frac{1}{2}",
+        "explanation": "Heads proportions approach one half over many fair flips, however streaky the start."
+      }
+    ],
+    "commonMistakes": [
+      "Expecting small samples to self-correct (the gambler's fallacy); convergence has no deadline."
+    ],
+    "relatedSymbols": [
+      "sample-mean",
+      "expectation",
+      "proportion-phat",
+      "central-limit-theorem",
+      "infinity"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Introductory Statistics",
+        "url": "https://openstax.org/details/books/introductory-statistics",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

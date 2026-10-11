@@ -797,5 +797,223 @@
         "license": "CC BY-SA (site footer); consulted, original wording"
       }
     ]
+  },
+  {
+    "id": "generating-function",
+    "symbol": "G(x)",
+    "latex": "G(x)",
+    "name": "Generating function",
+    "aliases": [
+      "generating function",
+      "ordinary generating function",
+      "EGF",
+      "power series combinatorics",
+      "sequence encoder"
+    ],
+    "category": "linear-discrete",
+    "definition": "Encodes a whole sequence as the coefficients of a power series: G(x) = a₀ + a₁x + a₂x² + …. Recurrences become algebra on G, and extracting coefficients solves counting problems.",
+    "reading": "“the generating function”.",
+    "examples": [
+      {
+        "tex": "F(x) = \\frac{x}{1 - x - x^2}",
+        "explanation": "For F₀ = 0, F₁ = 1: expanding gives x + x² + 2x³ + 3x⁴ + 5x⁵, the Fibonacci numbers."
+      }
+    ],
+    "relatedSymbols": [
+      "sequence-term",
+      "power",
+      "factorial",
+      "summation-sigma"
+    ],
+    "sources": [
+      {
+        "label": "UCSD Combinatorics text, ch.10 (Bender)",
+        "url": "https://mathweb.ucsd.edu/~ebender/CombText/ch-10.pdf",
+        "license": "Author/university course notes; consulted as reference, original wording, no text reused"
+      },
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "pigeonhole-principle",
+    "symbol": "m+1 → m",
+    "latex": "m+1 \\to m",
+    "name": "Pigeonhole principle",
+    "aliases": [
+      "pigeonhole principle",
+      "dirichlet principle",
+      "box principle",
+      "pigeons and holes"
+    ],
+    "category": "linear-discrete",
+    "definition": "Putting more items than containers forces sharing: with m+1 items in m boxes, some box holds at least two. Simple to state, surprisingly powerful for existence proofs.",
+    "reading": "“by pigeonhole”.",
+    "examples": [
+      {
+        "tex": "13 \\text{ people } \\Rightarrow \\text{ shared birth month}",
+        "explanation": "Thirteen people and twelve months force two into one month."
+      }
+    ],
+    "relatedSymbols": [
+      "cardinality",
+      "combination",
+      "exists",
+      "qed"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "binomial-theorem",
+    "symbol": "(a+b)ⁿ",
+    "latex": "(a + b)^n",
+    "name": "Binomial theorem",
+    "aliases": [
+      "binomial theorem",
+      "binomial expansion",
+      "a plus b to the n",
+      "pascal triangle"
+    ],
+    "category": "linear-discrete",
+    "relatedCategories": [
+      "algebra"
+    ],
+    "definition": "Expands powers of a sum with binomial coefficients: (a+b)ⁿ = Σ C(n,k) aⁿ⁻ᵏbᵏ. Each term chooses which factors contribute b.",
+    "reading": "“a plus b to the n”.",
+    "examples": [
+      {
+        "tex": "(x + 1)^2 = x^2 + 2x + 1",
+        "explanation": "Coefficients 1, 2, 1 count the ways to choose zero, one, or two ones."
+      }
+    ],
+    "relatedSymbols": [
+      "binomial-coefficient",
+      "power",
+      "summation-sigma",
+      "combination"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Precalculus 2e",
+        "url": "https://openstax.org/details/books/precalculus-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "basis-dimension",
+    "symbol": "dim(V)",
+    "latex": "\\dim(V)",
+    "name": "Basis and dimension",
+    "aliases": [
+      "basis",
+      "dimension",
+      "dim V",
+      "standard basis",
+      "coordinates",
+      "finite dimensional"
+    ],
+    "category": "linear-discrete",
+    "definition": "A basis is a minimal spanning set: independent vectors from which every vector is uniquely combined. Its size is the dimension — an invariant of the space, not of the choice.",
+    "reading": "“the dimension of V”.",
+    "examples": [
+      {
+        "tex": "\\dim(\\mathbb{R}^3) = 3",
+        "explanation": "The three unit vectors e₁, e₂, e₃ form one basis; every basis has three vectors."
+      }
+    ],
+    "relatedSymbols": [
+      "linear-span",
+      "vector-notation",
+      "linear-independence",
+      "rank"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "linear-independence",
+    "symbol": "c₁v₁ + … = 0",
+    "latex": "c_1v_1 + \\cdots = 0",
+    "name": "Linear independence",
+    "aliases": [
+      "linearly independent",
+      "linear dependence",
+      "independent vectors",
+      "trivial combination",
+      "redundant vector"
+    ],
+    "category": "linear-discrete",
+    "definition": "Vectors are independent when only the all-zero combination gives zero: none is redundant. A dependent set contains a vector already spanned by the rest.",
+    "reading": "“linearly independent”.",
+    "examples": [
+      {
+        "tex": "c_1(1, 2) + c_2(2, 4) = 0 \\Rightarrow c_1 = -2c_2",
+        "explanation": "Nonzero solutions exist (e.g. c₁ = 2, c₂ = −1), so the pair is dependent."
+      }
+    ],
+    "relatedSymbols": [
+      "basis-dimension",
+      "vector-notation",
+      "linear-span",
+      "rank"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "diagonalization",
+    "symbol": "A = PDP⁻¹",
+    "latex": "A = PDP^{-1}",
+    "name": "Diagonalization",
+    "aliases": [
+      "diagonalization",
+      "diagonalizable",
+      "PDP inverse",
+      "eigenbasis",
+      "similar to diagonal"
+    ],
+    "category": "linear-discrete",
+    "definition": "Writing A = PDP⁻¹ with D diagonal: in the eigenvector basis, the map is pure scaling. Possible exactly when eigenvectors span the space; distinct eigenvalues always suffice.",
+    "reading": "“A equals P D P inverse”.",
+    "examples": [
+      {
+        "tex": "\\begin{pmatrix} 2 & 0 \\\\ 0 & 3 \\end{pmatrix}",
+        "explanation": "Already diagonal: eigenvalues 2 and 3 act along the axes."
+      }
+    ],
+    "relatedSymbols": [
+      "eigenvalue",
+      "eigenvector",
+      "inverse-matrix",
+      "matrix-notation",
+      "basis-dimension"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
   }
 ]

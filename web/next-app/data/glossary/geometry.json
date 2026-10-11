@@ -879,5 +879,231 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "parabola",
+    "symbol": "y = ax² + bx + c",
+    "latex": "y = ax^2 + bx + c",
+    "name": "Parabola",
+    "aliases": [
+      "parabola",
+      "quadratic curve",
+      "focus directrix",
+      "vertex form",
+      "u-shaped curve"
+    ],
+    "category": "geometry-trig",
+    "definition": "The set of points equally distant from a focus point and a directrix line. Its standard equation y = ax² + bx + c opens upward for a > 0; every ray parallel to its axis reflects through the focus.",
+    "reading": "“parabola”.",
+    "examples": [
+      {
+        "tex": "y = x^2",
+        "explanation": "Focus (0, 1/4), directrix y = −1/4: each point is equally distant from both."
+      }
+    ],
+    "relatedSymbols": [
+      "quadratic-formula",
+      "function-notation",
+      "distance-formula",
+      "ellipse",
+      "hyperbola"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Algebra and Trigonometry 2e",
+        "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "ellipse",
+    "symbol": "x²/a² + y²/b² = 1",
+    "latex": "\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1",
+    "name": "Ellipse",
+    "aliases": [
+      "ellipse",
+      "oval",
+      "foci ellipse",
+      "major minor axis",
+      "eccentricity"
+    ],
+    "category": "geometry-trig",
+    "definition": "The set of points whose distances to two foci sum to a constant 2a. A circle is the special case of coincident foci; the shape's elongation is its eccentricity, between 0 and 1.",
+    "reading": "“ellipse”.",
+    "examples": [
+      {
+        "tex": "\\frac{x^2}{25} + \\frac{y^2}{9} = 1",
+        "explanation": "Semi-axes 5 and 3; c² = 25 − 9 gives foci at (±4, 0)."
+      }
+    ],
+    "relatedSymbols": [
+      "circle-equation",
+      "distance-formula",
+      "parabola",
+      "hyperbola",
+      "pi-constant"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Algebra and Trigonometry 2e",
+        "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "hyperbola",
+    "symbol": "x²/a² − y²/b² = 1",
+    "latex": "\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1",
+    "name": "Hyperbola",
+    "aliases": [
+      "hyperbola",
+      "two branches",
+      "asymptotes",
+      "foci hyperbola",
+      "rectangular hyperbola"
+    ],
+    "category": "geometry-trig",
+    "definition": "The set of points whose distances to two foci differ by a constant 2a, forming two branches. Far out, each branch approaches its asymptotes; the sign pattern in the equation decides the opening direction.",
+    "reading": "“hyperbola”.",
+    "examples": [
+      {
+        "tex": "\\frac{x^2}{9} - \\frac{y^2}{16} = 1",
+        "explanation": "Opens left-right with foci at (±5, 0) and asymptotes y = ±(4/3)x."
+      }
+    ],
+    "relatedSymbols": [
+      "parabola",
+      "ellipse",
+      "distance-formula",
+      "asymptotic"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Algebra and Trigonometry 2e",
+        "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "tangent-line",
+    "symbol": "y − f(a) = f′(a)(x − a)",
+    "latex": "y - f(a) = f'(a)(x - a)",
+    "name": "Tangent line",
+    "aliases": [
+      "tangent line",
+      "tangent to a curve",
+      "linear approximation",
+      "touching line",
+      "point-slope tangent"
+    ],
+    "category": "geometry-trig",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "The line through (a, f(a)) with the curve's slope f′(a): the best straight-line fit at that point. It touches the graph there and heads in its instantaneous direction.",
+    "reading": "“the tangent line at a”.",
+    "examples": [
+      {
+        "tex": "y - 1 = 2(x - 1)",
+        "explanation": "Tangent to y = x² at (1, 1): slope 2 gives y = 2x − 1."
+      }
+    ],
+    "relatedSymbols": [
+      "slope",
+      "derivative-lagrange",
+      "slope-intercept",
+      "perpendicular"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "hyperbolic-functions",
+    "symbol": "sinh cosh tanh",
+    "latex": "\\sinh, \\cosh, \\tanh",
+    "name": "Hyperbolic functions",
+    "aliases": [
+      "hyperbolic sine",
+      "hyperbolic cosine",
+      "sinh",
+      "cosh",
+      "tanh",
+      "hyperbola parametrization"
+    ],
+    "category": "geometry-trig",
+    "relatedCategories": [
+      "calculus"
+    ],
+    "definition": "Exponential twins of the circular functions: sinh x = (eˣ − e⁻ˣ)/2 and cosh x = (eˣ + e⁻ˣ)/2. They parametrize the hyperbola x² − y² = 1 as (cosh t, sinh t) and satisfy cosh² − sinh² = 1.",
+    "reading": "“sinch”, “cosh”, “tanch”.",
+    "examples": [
+      {
+        "tex": "\\cosh^2 x - \\sinh^2 x = 1",
+        "explanation": "The fundamental identity, with a minus where cosine has a plus."
+      }
+    ],
+    "relatedSymbols": [
+      "sine",
+      "cosine",
+      "tangent",
+      "exponential-exp",
+      "hyperbola"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      },
+      {
+        "label": "NIST Digital Library of Mathematical Functions, ch. 4",
+        "url": "https://dlmf.nist.gov/4",
+        "license": "NIST DLMF; see site for citing guidance; consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "trigonometric-identities",
+    "symbol": "sin² + cos² = 1",
+    "latex": "\\sin^2 + \\cos^2 = 1",
+    "name": "Trigonometric identities",
+    "aliases": [
+      "trig identities",
+      "pythagorean identity",
+      "angle sum",
+      "double angle",
+      "sin squared plus cos squared"
+    ],
+    "category": "geometry-trig",
+    "definition": "Equations relating trig functions that hold for every angle: the Pythagorean identity sin² + cos² = 1, angle-sum formulas, and double-angle forms. They simplify expressions and solve equations.",
+    "reading": "“sine squared plus cosine squared equals one”.",
+    "examples": [
+      {
+        "tex": "\\sin 2x = 2\\sin x\\cos x",
+        "explanation": "Double-angle: at x = 30°, both sides equal √3/2."
+      }
+    ],
+    "relatedSymbols": [
+      "sine",
+      "cosine",
+      "tangent",
+      "reciprocal-trig",
+      "pythagorean-theorem"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Algebra and Trigonometry 2e",
+        "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]
