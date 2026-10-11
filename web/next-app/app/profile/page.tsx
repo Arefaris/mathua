@@ -329,9 +329,6 @@ export default function ProfilePage() {
         <ProfileHeader
           name={user.name}
           scores={effScores ?? scores}
-          avatarSeed={user.student_id}
-          avatarUrl={avatarPreset !== null ? undefined : avatarUrl}
-          avatarPreset={avatarPreset}
           catalogue={conceptCatalog}
           progress={progress}
           frontierLabel={frontierLabel}
@@ -446,17 +443,17 @@ export default function ProfilePage() {
             <h2 className="mb-2 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
               How you&apos;re doing
             </h2>
-            <div className="flex flex-wrap gap-x-6 gap-y-3 min-w-0">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 min-w-0">
               {[
                 { label: 'First-pass', value: `${Math.round(efficacy.first_pass_rate * 100)}%`, hint: 'correct on attempt 1' },
                 { label: 'Second-pass', value: `${Math.round(efficacy.second_pass_rate * 100)}%`, hint: 'correct within 2 tries' },
                 { label: 'Avg attempts', value: efficacy.avg_attempts_per_concept.toFixed(2), hint: 'per concept' },
                 { label: 'Concepts', value: String(efficacy.concepts_touched), hint: `${efficacy.total_attempts} attempts` },
               ].map(m => (
-                <div key={m.label} className="min-w-0">
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted">{m.label}</div>
-                  <div className="font-mono text-lg leading-tight text-mathua-blue">{m.value}</div>
-                  <div className="font-mono text-[10px] text-mathua-secondary">{m.hint}</div>
+                <div key={m.label} className="border border-mathua-border bg-mathua-surface p-3 min-w-0">
+                  <div className="font-mono text-[10px] uppercase text-mathua-muted">{m.label}</div>
+                  <div className="font-mono text-xl text-mathua-blue mt-1 truncate">{m.value}</div>
+                  <div className="font-mono text-[10px] text-mathua-secondary mt-0.5 truncate">{m.hint}</div>
                 </div>
               ))}
             </div>

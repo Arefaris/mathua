@@ -1,29 +1,27 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 import type { ConceptProgress, Scores } from '../lib/api'
-import type { CatalogueConcept } from '../lib/progress'
-import ProfileStats from './ProfileStats'
-import PositionBlock from './PositionBlock'
+import { countOverall, type CatalogueConcept } from '../lib/progress'
+import { LEVEL_NAMES } from './ProfileStats'
 
 /**
- * One card answering "where am I": identity and XP on top, the reach headline and its breakdown
- * below.
+ * The learner header as a few short sentences, not a wall of tiles.
  *
- * These were two stacked bordered boxes. Each was reasonable alone, but together they made the
- * learner read two cards for one picture and printed MASTERED twice — once as a lifetime count,
- * once in the position breakdown. Merged, the strip keeps the XP/streak/weekly numbers and the
- * position block owns mastery, which is the fact its headline is about.
+ * It replaced a bordered stat strip (avatar, LV tile, XP/TOTAL/STREAK/WEEKLY tiles, one progress
+ * bar) stacked on a position card (big number, second bar, 3-column grid). Every fact below used
+ * to have its own tile and label; now each line carries several, which is the whole reduction.
+ * TOTAL XP and the WEEKLY leaderboard link were cut as part of it — the first is vanity next to
+ * today's goal, the second is navigation, and neither answers "where am I".
  *
- * `ProfileStats` is still used standalone on `/share`, so it keeps its border and its MASTERED
- * tile; this header asks it for the bare form and hides the duplicate.
+ * What the rewrite must not lose (all pinned by tests): the `Where you are` region, the literal
+ * `of {n} you can reach`, the review-debt line with its `/review` link, the frontier sentence,
+ * and the footer passthrough. `ProfileStats` is untouched and still serves `/share`.
  */
 export default function ProfileHeader({
   name,
   scores,
-  avatarSeed,
-  avatarUrl,
-  avatarPreset,
   catalogue,
   progress,
   frontierLabel,
@@ -31,36 +29,40 @@ export default function ProfileHeader({
 }: {
   name: string
   scores: Scores
-  avatarSeed?: string
-  avatarUrl?: string
-  avatarPreset?: number | null
   catalogue: CatalogueConcept[]
   progress: Record<string, ConceptProgress>
   frontierLabel?: string | null
   /** Small actions that belong on the header line rather than as their own blocks. */
   footer?: ReactNode
 }) {
+  const counts = countOverall(catalogue, progress)
+  if (counts.total === 0) return null
+  const levelNum = LEVEL_NAMES[scores.level] ?? '·'
+
   return (
-    <div className="border-[0.5px] border-mathua-border p-4 sm:p-5 sm:px-6 w-full max-w-full min-w-0 overflow-hidden">
-      <ProfileStats
-        bare
-        hideMastered
-        name={name}
-        scores={scores}
-        avatarSeed={avatarSeed}
-        avatarUrl={avatarUrl}
-        avatarPreset={avatarPreset}
-      />
-      <div className="mt-4 border-t border-mathua-border pt-4">
-        <PositionBlock
-          embedded
-          catalogue={catalogue}
-          progress={progress}
-          frontierLabel={frontierLabel}
-        />
-      </div>
+    <div className="border-[0.5px] border-mathua-border p-4 sm:px-5 w-full max-w-full min-w-0 overflow-hidden">
+      <section id="position" aria-label="Where you are" className="min-w-0">
+        <p className="font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere]">
+          {name} · LV {levelNum} {scores.level}
+        </p>
+        <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]">
+          {counts.mastered} of {counts.unlocked} you can reach · {scores.xp_today}/{scores.daily_xp_goal} XP today · {scores.current_streak} day{scores.current_streak !== 1 ? 's' : ''} streak
+        </p>
+        <p className="mt-1.5 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
+          Mastered {counts.mastered} · Unlocked {counts.unlocked} · In progress {counts.learning + counts.completed}
+          {frontierLabel ? ` · ${counts.mastered > 0 ? 'Currently working towards' : 'Start here'}: ${frontierLabel}` : ''}
+        </p>
+        {counts.dueForReview > 0 && (
+          <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary">
+            {counts.dueForReview} due for review — still learned, worth a retrieval check.{' '}
+            <Link href="/review" className="text-mathua-blue hover:underline">
+              Review →
+            </Link>
+          </p>
+        )}
+      </section>
       {footer && (
-        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px]">
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px]">
           {footer}
         </div>
       )}

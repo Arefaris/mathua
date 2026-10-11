@@ -15,7 +15,7 @@ interface Props {
   hideMastered?: boolean
 }
 
-const LEVEL_NAMES = {
+export const LEVEL_NAMES = {
   'Novice': '01',
   'Apprentice': '02',
   'Student': '03',
