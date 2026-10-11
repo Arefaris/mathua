@@ -687,5 +687,115 @@
         "license": "CC BY-SA (site footer); consulted, original wording"
       }
     ]
+  },
+  {
+    "id": "linear-span",
+    "symbol": "Span{…}",
+    "latex": "\\operatorname{Span}",
+    "name": "Linear span",
+    "aliases": [
+      "span",
+      "spanning set",
+      "linear combinations",
+      "generate a space",
+      "span vectors"
+    ],
+    "category": "linear-discrete",
+    "definition": "All vectors obtainable by combining the given ones with scalar weights. A set of vectors spans a space when every vector there is such a combination.",
+    "reading": "“the span of the vectors”.",
+    "examples": [
+      {
+        "tex": "\\operatorname{Span}\\{(1,0), (0,1)\\} = \\mathbb{R}^2",
+        "explanation": "Weighted combinations a·(1,0) + b·(0,1) reach every point (a, b)."
+      }
+    ],
+    "relatedSymbols": [
+      "vector-notation",
+      "matrix-notation",
+      "rank",
+      "eigenvector"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "null-space-kernel",
+    "symbol": "ker(T)",
+    "latex": "\\ker(T)",
+    "name": "Kernel (null space)",
+    "aliases": [
+      "kernel",
+      "null space",
+      "nullspace",
+      "ker",
+      "kernel of a matrix",
+      "nullity"
+    ],
+    "category": "linear-discrete",
+    "definition": "All inputs a linear map sends to zero. Its dimension (the nullity) plus the rank equals the number of columns: the rank–nullity theorem.",
+    "reading": "“the kernel of T”.",
+    "examples": [
+      {
+        "tex": "\\ker\\begin{pmatrix} 1 & 2 \\\\ 2 & 4 \\end{pmatrix} = \\operatorname{Span}\\{(-2, 1)\\}",
+        "explanation": "Both rows dot (−2, 1) to zero: −2 + 2 = 0."
+      }
+    ],
+    "relatedSymbols": [
+      "matrix-notation",
+      "rank",
+      "eigenvalue",
+      "linear-span"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "orthogonal-matrix",
+    "symbol": "QᵀQ = I",
+    "latex": "Q^TQ = I",
+    "name": "Orthogonal matrix",
+    "aliases": [
+      "orthogonal matrix",
+      "rotation matrix",
+      "orthonormal columns",
+      "Q transpose Q",
+      "isometry matrix"
+    ],
+    "category": "linear-discrete",
+    "relatedCategories": [
+      "geometry-trig"
+    ],
+    "definition": "A square matrix with orthonormal columns: QᵀQ = I, so Q⁻¹ = Qᵀ and lengths and angles are preserved. Rotations and reflections are the geometric examples.",
+    "reading": "“Q transpose Q equals I”.",
+    "examples": [
+      {
+        "tex": "\\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}^T\\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix} = I",
+        "explanation": "The rotation columns are unit vectors at right angles, so the product is the identity."
+      }
+    ],
+    "relatedSymbols": [
+      "transpose",
+      "inverse-matrix",
+      "identity-matrix",
+      "sine",
+      "cosine"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
   }
 ]

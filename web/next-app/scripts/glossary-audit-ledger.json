@@ -2968,6 +2968,325 @@
    "example_checked": true,
    "latex_checked": true,
    "xrefs_checked": true
+  },
+  "aleph-null": {
+   "symbol": "ℵ₀",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://www.britannica.com/science/aleph-null"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "indexed-union": {
+   "symbol": "⋃ ⋂",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "cartesian-product": {
+   "symbol": "A × B",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "symmetric-difference": {
+   "symbol": "A △ B",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "piecewise-definition": {
+   "symbol": "f(x) = {…",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "domain-range": {
+   "symbol": "dom(f)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "continued-fraction": {
+   "symbol": "[a₀; a₁, a₂, …]",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://mathworld.wolfram.com/PiContinuedFraction.html"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "pythagorean-theorem": {
+   "symbol": "a² + b² = c²",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "law-of-sines": {
+   "symbol": "a/sin A = b/sin B",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "law-of-cosines": {
+   "symbol": "c² = a² + b² − 2ab cos C",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "lhopital-rule": {
+   "symbol": "lim f/g",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "chain-rule": {
+   "symbol": "dy/dx = dy/du · du/dx",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "integration-by-parts": {
+   "symbol": "∫u dv",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "taylor-series": {
+   "symbol": "Σ f⁽ⁿ⁾(a)/n! (x−a)ⁿ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "linear-span": {
+   "symbol": "Span{…}",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "null-space-kernel": {
+   "symbol": "ker(T)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "orthogonal-matrix": {
+   "symbol": "QᵀQ = I",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "bayes-theorem": {
+   "symbol": "P(A|B) = P(B|A)P(A)/P(B)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "independence-events": {
+   "symbol": "P(A∩B)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "standard-error": {
+   "symbol": "SE = σ/√n",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "confidence-interval": {
+   "symbol": "x̄ ± z*·σ/√n",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "big-theta": {
+   "symbol": "Θ(n²)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://xlinux.nist.gov/dads/HTML/theta.html"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "big-omega": {
+   "symbol": "Ω(n)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://xlinux.nist.gov/dads/HTML/omegaCapital.html"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "euler-mascheroni": {
+   "symbol": "γ",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://dlmf.nist.gov/5.2"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "prime-counting": {
+   "symbol": "π(x)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://dlmf.nist.gov/27.2"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
+  },
+  "mobius-function": {
+   "symbol": "μ(n)",
+   "status": "verified",
+   "issues": [],
+   "changes": [],
+   "sources_consulted": [
+    "dataset-cited-sources",
+    "https://dlmf.nist.gov/27.2"
+   ],
+   "example_checked": true,
+   "latex_checked": true,
+   "xrefs_checked": true
   }
  }
 }

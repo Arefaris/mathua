@@ -663,5 +663,76 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "piecewise-definition",
+    "symbol": "f(x) = {…",
+    "latex": "\\begin{cases} ... \\end{cases}",
+    "name": "Piecewise definition",
+    "aliases": [
+      "piecewise",
+      "defined by cases",
+      "brace function",
+      "cases notation",
+      "split definition"
+    ],
+    "category": "algebra",
+    "definition": "Defines a function by different rules on different parts of its domain, grouped by a brace. Each input uses exactly one rule; together the cases must cover every input.",
+    "reading": "“f of x, defined by cases”.",
+    "examples": [
+      {
+        "tex": "f(x) = \\begin{cases} x & x \\ge 0 \\\\ -x & x < 0 \\end{cases} = |x|",
+        "explanation": "Nonnegative inputs pass through; negative inputs are negated: the absolute value."
+      }
+    ],
+    "relatedSymbols": [
+      "function-notation",
+      "absolute-value",
+      "grouping",
+      "interval"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax College Algebra 2e",
+        "url": "https://openstax.org/details/books/college-algebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "domain-range",
+    "symbol": "dom(f)",
+    "latex": "\\operatorname{dom}(f)",
+    "name": "Domain and range",
+    "aliases": [
+      "domain",
+      "range",
+      "dom",
+      "valid inputs",
+      "image set",
+      "natural domain"
+    ],
+    "category": "algebra",
+    "definition": "The domain is the set of inputs a function accepts; the range is the set of outputs it produces. Division by zero and even roots of negatives are the usual domain restrictions.",
+    "reading": "“the domain of f”.",
+    "examples": [
+      {
+        "tex": "f(x) = \\sqrt{x}: \\operatorname{dom} f = [0, \\infty)",
+        "explanation": "Square roots of negative numbers are not real, so only nonnegative inputs qualify."
+      }
+    ],
+    "relatedSymbols": [
+      "function-notation",
+      "interval",
+      "square-root",
+      "set-builder"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax College Algebra 2e",
+        "url": "https://openstax.org/details/books/college-algebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

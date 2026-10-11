@@ -1,5 +1,49 @@
 # Glossary audit — research notes (working artifact, keep until approved)
 
+## Coverage batch 2 (26 new entries, 203 → 229)
+
+### Scope
+Genuine gaps only; the three still-excluded v1 candidates (standalone nabla,
+slash-vs-fraction, per-letter Greek variants, standalone Stirling,
+sheaf/scheme) remain excluded as duplicates, by design, or out of band.
+Resolved two deferred exclusions with dedicated sources: aleph-null
+(Britannica) and big-Theta/big-Omega (NIST DADS formal pages).
+
+### Research log (all pages opened, not snippets)
+- https://xlinux.nist.gov/dads/HTML/theta.html (NIST DADS, opened): formal
+  Theta definition (c1, c2, k; "upper-case Greek letter Theta"). Supports
+  `big-theta` definition and example.
+- https://xlinux.nist.gov/dads/HTML/omegaCapital.html (NIST DADS, opened):
+  formal Big-Omega definition (uppercase confirmed) plus the note that it is
+  stronger than the traditional math definition. Supports `big-omega`
+  including its qualification. The lowercase `omega.html` page is
+  little-omega and was NOT cited for the entry.
+- https://xlinux.nist.gov/dads/HTML/bigOnotation.html (NIST DADS, opened):
+  formal O, "equal to expressed by Θ(n)", "capital O, not omicron".
+- https://www.britannica.com/science/aleph-null (opened; body confirmed):
+  aleph-null = cardinality of the naturals; denumerable/countably infinite;
+  continuum c larger. Supports `aleph-null`. Britannica is proprietary, so
+  the license string records consultation with no reuse.
+- https://dlmf.nist.gov/27.2 (DLMF, opened): 27.2.2 π(x) = sum over p≤x;
+  27.2.3 PNT π(x) ~ x/ln x; 27.2.12 Möbius definition; totient table
+  confirms φ(9) = 6. Supports `prime-counting` and `mobius-function`.
+- https://mathworld.wolfram.com/PiContinuedFraction.html (opened): π =
+  [3; 7, 15, 1, 292, …], convergents incl. 22/7. Supports
+  `continued-fraction` example. © Wolfram; consultation only.
+- DLMF 5.2.3 (previously verified): Euler constant limit. Supports
+  `euler-mascheroni`.
+- Hand-recomputed: law-of-sines b = 5√2 ≈ 7.07; law-of-cosines c² = 39;
+  Bayes ≈ 0.17 (0.0099/0.0594); IBP derivative check; kernel (−2,1);
+  SE = 1.5; CI (48.04, 51.96); rotation QᵀQ = I.
+
+### Findings and changes
+- `bayes-theorem` first written with symbol P(A|B), colliding with
+  `conditional-probability`; the data gate caught it. Symbol changed to the
+  full theorem statement. Status: verified.
+- All 26 new entries: verified at authoring. No other corrections.
+
+## Batch: advanced (27 entries)
+
 Each batch records: claims checked, sources actually opened (URL + what was
 verified there), and findings. "Searched" is not "verified": an entry counts
 as source-verified only when a claim was checked against an opened source.

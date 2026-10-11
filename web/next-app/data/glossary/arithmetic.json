@@ -1229,5 +1229,49 @@
         "license": "Unicode License Agreement; glyph identity"
       }
     ]
+  },
+  {
+    "id": "continued-fraction",
+    "symbol": "[a₀; a₁, a₂, …]",
+    "latex": "[a_0; a_1, a_2, \\dots]",
+    "name": "Continued fraction",
+    "aliases": [
+      "continued fraction",
+      "convergents",
+      "cf notation",
+      "simple continued fraction",
+      "bracket semicolon notation"
+    ],
+    "category": "arithmetic",
+    "definition": "Writes a number as a tower of fractions: [a₀; a₁, a₂, …] means a₀ + 1/(a₁ + 1/(a₂ + …)). Cutting the tower off gives convergents: exceptionally good rational approximations.",
+    "reading": "“the continued fraction 3 semicolon 7, 15, 1, 292”.",
+    "examples": [
+      {
+        "tex": "\\pi = [3; 7, 15, 1, 292, \\dots]",
+        "explanation": "The simple continued fraction of pi begins 3; 7, 15, 1, 292."
+      },
+      {
+        "tex": "\\frac{22}{7} \\approx 3.1429",
+        "explanation": "Stopping after the 7 gives the familiar 22/7 approximation."
+      }
+    ],
+    "relatedSymbols": [
+      "fraction",
+      "approx",
+      "pi-constant",
+      "divide"
+    ],
+    "sources": [
+      {
+        "label": "MathWorld, Pi Continued Fraction",
+        "url": "https://mathworld.wolfram.com/PiContinuedFraction.html",
+        "license": "© Wolfram Research (MathWorld); consulted as reference, original wording, no text reused"
+      },
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
   }
 ]

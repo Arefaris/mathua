@@ -174,6 +174,16 @@ the reuse terms as verified at authoring time:
 - **Unicode code charts** (unicode.org) for glyph identity of Greek letters
   and mathematical operators (Greek and Coptic, Mathematical Operators),
   under the Unicode License Agreement.
+- **NIST Dictionary of Algorithms and Data Structures** (DADS,
+  xlinux.nist.gov/dads) for big-Theta and big-Omega definitions. A U.S.
+  federal reference; entries cite the term page and use original wording
+  with no text reused.
+- **Encyclopaedia Britannica** (britannica.com) for the aleph-null
+  definition. Proprietary content consulted as a reference only; the entry
+  uses original wording with no text reused.
+- **Wolfram MathWorld** (mathworld.wolfram.com) for the pi continued
+  fraction values. Proprietary content consulted as a reference only; the
+  entry uses original wording with no text reused.
 
 If an entry could not be verified against an appropriate source, it was
 excluded rather than published with invented attribution; the excluded

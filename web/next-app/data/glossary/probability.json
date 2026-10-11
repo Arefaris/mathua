@@ -641,5 +641,157 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "bayes-theorem",
+    "symbol": "P(A|B) = P(B|A)P(A)/P(B)",
+    "latex": "P(A \\mid B)",
+    "name": "Bayes' theorem",
+    "aliases": [
+      "bayes theorem",
+      "bayes rule",
+      "posterior",
+      "invert conditional",
+      "base rate",
+      "prior posterior"
+    ],
+    "category": "probability",
+    "definition": "Reverses conditioning: P(A|B) = P(B|A)·P(A)/P(B). The prior P(A) updates with evidence B into the posterior; ignoring the base rate is the classic error.",
+    "reading": "“Bayes' theorem”.",
+    "examples": [
+      {
+        "tex": "P(D|+) = \\frac{0.99 \\cdot 0.01}{0.99 \\cdot 0.01 + 0.05 \\cdot 0.99} \\approx 0.17",
+        "explanation": "A 99%-sensitive, 95%-specific test for a 1% condition: most positives are healthy because the disease is rare."
+      }
+    ],
+    "commonMistakes": [
+      "Confusing P(A|B) with P(B|A); the theorem exists because they differ."
+    ],
+    "relatedSymbols": [
+      "conditional-probability",
+      "probability-of-event",
+      "random-variable",
+      "p-value"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Introductory Statistics",
+        "url": "https://openstax.org/details/books/introductory-statistics",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "independence-events",
+    "symbol": "P(A∩B)",
+    "latex": "P(A \\cap B)",
+    "name": "Independent events",
+    "aliases": [
+      "independence",
+      "independent events",
+      "multiply probabilities",
+      "P A and B",
+      "disjoint vs independent"
+    ],
+    "category": "probability",
+    "definition": "Two events are independent when neither gives information about the other: P(A∩B) = P(A)·P(B). Separate fair-coin tosses qualify; drawing cards without replacement does not.",
+    "reading": "“A and B are independent”.",
+    "examples": [
+      {
+        "tex": "P(\\text{six then six}) = \\frac{1}{6} \\cdot \\frac{1}{6} = \\frac{1}{36}",
+        "explanation": "The second die ignores the first, so the probabilities multiply."
+      }
+    ],
+    "commonMistakes": [
+      "Confusing independent with mutually exclusive; disjoint events with positive probability are never independent."
+    ],
+    "relatedSymbols": [
+      "probability-of-event",
+      "conditional-probability",
+      "intersection",
+      "multiply"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Introductory Statistics",
+        "url": "https://openstax.org/details/books/introductory-statistics",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "standard-error",
+    "symbol": "SE = σ/√n",
+    "latex": "\\frac{\\sigma}{\\sqrt{n}}",
+    "name": "Standard error",
+    "aliases": [
+      "standard error",
+      "SE",
+      "sampling variability",
+      "sigma root n",
+      "error of the mean"
+    ],
+    "category": "probability",
+    "definition": "The standard deviation of a sample mean: σ/√n. Averages of larger samples vary less; quadrupling the sample size halves the error.",
+    "reading": "“the standard error”.",
+    "examples": [
+      {
+        "tex": "\\frac{15}{\\sqrt{100}} = 1.5",
+        "explanation": "With σ = 15 and n = 100, sample means typically fall within 1.5 of μ."
+      }
+    ],
+    "relatedSymbols": [
+      "standard-deviation",
+      "sample-mean",
+      "variance",
+      "confidence-interval"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Introductory Statistics",
+        "url": "https://openstax.org/details/books/introductory-statistics",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "confidence-interval",
+    "symbol": "x̄ ± z*·σ/√n",
+    "latex": "\\bar{x} \\pm z^*\\frac{\\sigma}{\\sqrt{n}}",
+    "name": "Confidence interval",
+    "aliases": [
+      "confidence interval",
+      "CI",
+      "margin of error",
+      "95 percent interval",
+      "z star",
+      "plus minus interval"
+    ],
+    "category": "probability",
+    "definition": "A range plausibly containing the parameter: estimate ± margin. A 95% interval comes from a procedure capturing the truth in 95% of samples — not a 95% chance this particular interval holds it.",
+    "reading": "“x bar plus or minus the margin”.",
+    "examples": [
+      {
+        "tex": "\\bar{x} \\pm 1.96\\frac{10}{\\sqrt{100}} = 50 \\pm 1.96",
+        "explanation": "With x̄ = 50, σ = 10, n = 100: the interval (48.04, 51.96)."
+      }
+    ],
+    "commonMistakes": [
+      "Reading 95% as the chance the parameter sits inside this interval; it describes the procedure."
+    ],
+    "relatedSymbols": [
+      "sample-mean",
+      "standard-error",
+      "estimator-hat",
+      "z-score",
+      "p-value"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Introductory Statistics",
+        "url": "https://openstax.org/details/books/introductory-statistics",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

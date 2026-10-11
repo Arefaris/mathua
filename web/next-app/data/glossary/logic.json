@@ -941,5 +941,165 @@
         "license": "CC BY-SA (site footer); consulted, original wording"
       }
     ]
+  },
+  {
+    "id": "aleph-null",
+    "symbol": "ℵ₀",
+    "latex": "\\aleph_0",
+    "name": "Aleph-null",
+    "aliases": [
+      "aleph null",
+      "aleph naught",
+      "aleph zero",
+      "countable infinity",
+      "denumerable",
+      "first transfinite cardinal"
+    ],
+    "pronunciation": "AH-lef null",
+    "category": "logic-sets",
+    "definition": "The smallest infinite cardinal number: the size of the set of natural numbers. A set has cardinality aleph-null exactly when its members can be arranged in an endless list.",
+    "reading": "“aleph-null”.",
+    "examples": [
+      {
+        "tex": "|\\mathbb{N}| = \\aleph_0",
+        "explanation": "The natural numbers have cardinality aleph-null."
+      },
+      {
+        "tex": "n \\leftrightarrow 2n",
+        "explanation": "Pairing each natural number with its double shows the even numbers are equally numerous."
+      }
+    ],
+    "commonMistakes": [
+      "Treating aleph-null as a very large number; infinite cardinal arithmetic differs, e.g. adding one changes nothing."
+    ],
+    "relatedSymbols": [
+      "cardinality",
+      "natural-numbers",
+      "power-set",
+      "infinity"
+    ],
+    "sources": [
+      {
+        "label": "Encyclopaedia Britannica, aleph-null",
+        "url": "https://www.britannica.com/science/aleph-null",
+        "license": "© Encyclopaedia Britannica; consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "indexed-union",
+    "symbol": "⋃ ⋂",
+    "latex": "\\bigcup, \\bigcap",
+    "name": "Indexed union and intersection",
+    "aliases": [
+      "indexed union",
+      "indexed intersection",
+      "big cup",
+      "big cap",
+      "union over i",
+      "arbitrary union"
+    ],
+    "category": "logic-sets",
+    "definition": "Unions and intersections over a whole family of sets at once. The big cup collects members appearing in at least one set; the big cap keeps only members appearing in every set.",
+    "reading": "“the union over i of A sub i”.",
+    "examples": [
+      {
+        "tex": "\\bigcup_{i=1}^{2} A_i = \\{1, 2, 3\\}",
+        "explanation": "With A_1 = {1, 2} and A_2 = {2, 3}: everything appearing anywhere."
+      },
+      {
+        "tex": "\\bigcap_{i=1}^{2} A_i = \\{2\\}",
+        "explanation": "With the same sets: only what appears everywhere."
+      }
+    ],
+    "relatedSymbols": [
+      "union",
+      "intersection",
+      "sequence-term",
+      "ellipsis"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "cartesian-product",
+    "symbol": "A × B",
+    "latex": "A \\times B",
+    "name": "Cartesian product",
+    "aliases": [
+      "cartesian product",
+      "cross product sets",
+      "ordered pairs",
+      "A cross B",
+      "product set"
+    ],
+    "category": "logic-sets",
+    "definition": "The set of all ordered pairs (a, b) with a from A and b from B. Order matters: (1, 2) differs from (2, 1). For finite sets the sizes multiply.",
+    "reading": "“A cross B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2\\} \\times \\{x, y\\} = \\{(1, x), (1, y), (2, x), (2, y)\\}",
+        "explanation": "Two choices times two choices give four ordered pairs."
+      }
+    ],
+    "contexts": [
+      {
+        "context": "Coordinate geometry",
+        "meaning": "The plane is R × R: ordered pairs of real numbers."
+      }
+    ],
+    "relatedSymbols": [
+      "set-builder",
+      "cardinality",
+      "multiply",
+      "real-numbers"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
+  },
+  {
+    "id": "symmetric-difference",
+    "symbol": "A △ B",
+    "latex": "A \\triangle B",
+    "name": "Symmetric difference",
+    "aliases": [
+      "symmetric difference",
+      "delta sets",
+      "xor sets",
+      "exclusive or sets",
+      "disjunctive union"
+    ],
+    "category": "logic-sets",
+    "definition": "Keeps the members belonging to exactly one of the two sets: (A ∖ B) ∪ (B ∖ A). Members in both, or in neither, are excluded.",
+    "reading": "“A symmetric difference B”.",
+    "examples": [
+      {
+        "tex": "\\{1, 2, 3\\} \\triangle \\{2, 3, 4\\} = \\{1, 4\\}",
+        "explanation": "1 is only on the left, 4 only on the right; 2 and 3 are shared and dropped."
+      }
+    ],
+    "relatedSymbols": [
+      "set-difference",
+      "union",
+      "disjunction",
+      "triangle"
+    ],
+    "sources": [
+      {
+        "label": "Wikibooks Subject:Mathematics",
+        "url": "https://en.wikibooks.org/wiki/Subject:Mathematics",
+        "license": "CC BY-SA (site footer); consulted, original wording"
+      }
+    ]
   }
 ]

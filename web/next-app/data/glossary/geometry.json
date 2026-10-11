@@ -774,5 +774,110 @@
         "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
       }
     ]
+  },
+  {
+    "id": "pythagorean-theorem",
+    "symbol": "a² + b² = c²",
+    "latex": "a^2 + b^2 = c^2",
+    "name": "Pythagorean theorem",
+    "aliases": [
+      "pythagoras",
+      "pythagorean theorem",
+      "a squared plus b squared",
+      "hypotenuse",
+      "3-4-5 triangle"
+    ],
+    "category": "geometry-trig",
+    "definition": "In a right triangle, the squares on the two legs sum to the square on the hypotenuse: a² + b² = c², with c opposite the right angle. It is the distance formula with the root unsquared.",
+    "reading": "“a squared plus b squared equals c squared”.",
+    "examples": [
+      {
+        "tex": "3^2 + 4^2 = 9 + 16 = 25 = 5^2",
+        "explanation": "Legs 3 and 4 give hypotenuse 5."
+      }
+    ],
+    "relatedSymbols": [
+      "distance-formula",
+      "square-root",
+      "triangle",
+      "angle"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Prealgebra 2e",
+        "url": "https://openstax.org/details/books/prealgebra-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "law-of-sines",
+    "symbol": "a/sin A = b/sin B",
+    "latex": "\\frac{a}{\\sin A} = \\frac{b}{\\sin B}",
+    "name": "Law of sines",
+    "aliases": [
+      "law of sines",
+      "sine rule",
+      "ASA triangle",
+      "AAS triangle",
+      "ambiguous case"
+    ],
+    "category": "geometry-trig",
+    "definition": "In any triangle, each side over the sine of its opposite angle gives the same ratio (twice the circumradius). It solves triangles given two angles, or two sides with a non-included angle.",
+    "reading": "“a over sine A equals b over sine B”.",
+    "examples": [
+      {
+        "tex": "\\frac{5}{\\sin 30^\\circ} = \\frac{b}{\\sin 45^\\circ} \\Rightarrow b = 5\\sqrt{2}",
+        "explanation": "With A = 30°, a = 5 and B = 45°: b = 5·(√2/2)/(1/2) = 5√2, about 7.07."
+      }
+    ],
+    "relatedSymbols": [
+      "sine",
+      "triangle",
+      "proportion",
+      "law-of-cosines"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Algebra and Trigonometry 2e",
+        "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "law-of-cosines",
+    "symbol": "c² = a² + b² − 2ab cos C",
+    "latex": "c^2 = a^2 + b^2 - 2ab\\cos C",
+    "name": "Law of cosines",
+    "aliases": [
+      "law of cosines",
+      "cosine rule",
+      "SSS triangle",
+      "SAS triangle",
+      "generalized pythagoras"
+    ],
+    "category": "geometry-trig",
+    "definition": "Generalizes Pythagoras to any triangle: c² = a² + b² − 2ab·cos C. When C is a right angle the correction term vanishes and Pythagoras returns.",
+    "reading": "“c squared equals a squared plus b squared minus 2 a b cosine C”.",
+    "examples": [
+      {
+        "tex": "c^2 = 25 + 49 - 2(5)(7)\\left(\\frac{1}{2}\\right) = 39",
+        "explanation": "With a = 5, b = 7 and included angle 60°: c = √39, about 6.24."
+      }
+    ],
+    "relatedSymbols": [
+      "cosine",
+      "triangle",
+      "pythagorean-theorem",
+      "law-of-sines"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Algebra and Trigonometry 2e",
+        "url": "https://openstax.org/details/books/algebra-and-trigonometry-2e",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]

@@ -776,5 +776,151 @@
       }
     ],
     "notes": "Continuity has no single standard symbol; the entry covers the concept because limits and derivatives depend on it."
+  },
+  {
+    "id": "lhopital-rule",
+    "symbol": "lim f/g",
+    "latex": "\\lim_{x \\to c} \\frac{f(x)}{g(x)}",
+    "name": "L'Hôpital's rule",
+    "aliases": [
+      "lhopital",
+      "lhopital rule",
+      "0/0 limit",
+      "indeterminate form",
+      "hospital rule"
+    ],
+    "category": "calculus",
+    "definition": "For 0/0 or ∞/∞ limits with f and g differentiable near c (and g′ nonzero there), the limit of f/g equals the limit of f′/g′ when the latter exists. Confirm the indeterminate form first; the rule never applies otherwise.",
+    "reading": "“the limit of f over g”.",
+    "examples": [
+      {
+        "tex": "\\lim_{x \\to 0} \\frac{\\sin x}{x} = \\lim_{x \\to 0} \\cos x = 1",
+        "explanation": "Both top and bottom vanish at 0, so differentiate each: cosine at 0 is 1."
+      }
+    ],
+    "commonMistakes": [
+      "Applying the rule to a limit that is not 0/0 or ∞/∞."
+    ],
+    "relatedSymbols": [
+      "limit",
+      "derivative-leibniz",
+      "infinity",
+      "sine"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "chain-rule",
+    "symbol": "dy/dx = dy/du · du/dx",
+    "latex": "\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}",
+    "name": "Chain rule",
+    "aliases": [
+      "chain rule",
+      "composite derivative",
+      "outside inside derivative",
+      "dydu dudx"
+    ],
+    "category": "calculus",
+    "definition": "Differentiates a composition: differentiate the outer function evaluated at the inner value, then multiply by the inner function's derivative.",
+    "reading": "“d y by d x equals d y by d u times d u by d x”.",
+    "examples": [
+      {
+        "tex": "\\frac{d}{dx}(3x+1)^2 = 2(3x+1) \\cdot 3",
+        "explanation": "Outer derivative 2(3x+1) times inner derivative 3."
+      }
+    ],
+    "relatedSymbols": [
+      "derivative-leibniz",
+      "composition",
+      "derivative-lagrange",
+      "power"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 1",
+        "url": "https://openstax.org/details/books/calculus-volume-1",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "integration-by-parts",
+    "symbol": "∫u dv",
+    "latex": "\\int u\\,dv",
+    "name": "Integration by parts",
+    "aliases": [
+      "integration by parts",
+      "u dv minus v du",
+      "product antiderivative",
+      "IBP",
+      "parts formula"
+    ],
+    "category": "calculus",
+    "definition": "Integrates products by shifting the derivative: ∫u dv = uv − ∫v du. Pick u to simplify under differentiation (logarithms, powers) and dv to integrate easily (exponentials, sines).",
+    "reading": "“the integral of u d v”.",
+    "examples": [
+      {
+        "tex": "\\int x e^x\\,dx = x e^x - e^x + C",
+        "explanation": "With u = x and dv = e^x dx: uv minus the integral of v du."
+      }
+    ],
+    "relatedSymbols": [
+      "integral",
+      "derivative-lagrange",
+      "product-notation",
+      "exponential-exp"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 2",
+        "url": "https://openstax.org/details/books/calculus-volume-2",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
+  },
+  {
+    "id": "taylor-series",
+    "symbol": "Σ f⁽ⁿ⁾(a)/n! (x−a)ⁿ",
+    "latex": "\\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x-a)^n",
+    "name": "Taylor series",
+    "aliases": [
+      "taylor series",
+      "maclaurin series",
+      "power series expansion",
+      "polynomial approximation",
+      "taylor polynomial"
+    ],
+    "category": "calculus",
+    "relatedCategories": [
+      "algebra"
+    ],
+    "definition": "Rebuilds a smooth function from its derivatives at one point: matching value, slope, curvature and beyond. Centered at zero it is called a Maclaurin series; stopping after finitely many terms gives polynomial approximations.",
+    "reading": "“the Taylor series of f at a”.",
+    "examples": [
+      {
+        "tex": "e^x = \\sum_{n=0}^{\\infty} \\frac{x^n}{n!}",
+        "explanation": "Every derivative of eˣ at zero is 1, leaving the cleanest series of all."
+      }
+    ],
+    "relatedSymbols": [
+      "summation-sigma",
+      "power",
+      "derivative-lagrange",
+      "euler-number",
+      "factorial"
+    ],
+    "sources": [
+      {
+        "label": "OpenStax Calculus Volume 2",
+        "url": "https://openstax.org/details/books/calculus-volume-2",
+        "license": "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused"
+      }
+    ]
   }
 ]
