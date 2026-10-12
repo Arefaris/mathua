@@ -223,11 +223,6 @@ function GlossaryPageInner() {
       <Header />
       <main className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
         <SectionHeader label="Reference" title="Mathematical glossary" />
-        <p className="font-mono text-[11px] text-mathua-secondary mb-6">
-          Look up symbols, Greek letters, notation and terminology — from
-          arithmetic through university mathematics. Browsing here never
-          affects your progress, XP or mastery.
-        </p>
 
         <GlossarySearch
           query={query}
