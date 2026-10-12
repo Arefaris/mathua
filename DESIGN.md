@@ -1,6 +1,6 @@
 # Mathua Design System
 
-A mathematics learning platform design system built on a geometric sans (Space Grotesk) paired with a technical monospace (JetBrains Mono). Dark-first, warm-neutral, gold-accented. Warm parchment for the web. Precision above decoration.
+A mathematics learning platform design system built on a geometric sans (Space Grotesk) paired with a technical monospace (JetBrains Mono). Dark-first, warm-neutral, blue-accented. Precision above decoration.
 
 ---
 
@@ -8,61 +8,59 @@ A mathematics learning platform design system built on a geometric sans (Space G
 
 **One family, two voices.** Space Grotesk carries all text — headings and body use weight alone for hierarchy. JetBrains Mono carries code, labels, nav, and structure. A grotesque for reading, a coding mono for structure: the pairing reads modern and technical without clashing.
 
-The palette is warm: dark surfaces are `#0b0f1a` (a hint of blue, not pure black) and light surfaces are `#fefcf4` (warmest parchment, never pure white). A single gold accent (`#c8a96e` light / `#b8933e` dark) marks mastery, theorems, and structure. Secondary accents serve semantic roles — green for correct, red for errors, teal for decay.
+The palette is defined as CSS custom properties in `web/next-app/app/globals.css`, and the colors are authored in **OKLCH**, not hex. OKLCH is perceptually uniform, so a lightness step is an even step to the eye, and the light and dark sets can share hue and chroma while differing only in lightness. A warm **gold** (`#c8a96e`) survives as the brand mark in two places that predate the token system — the 3D concept graph (`components/MathConceptGraph3D.tsx`) and the global error page (`app/global-error.tsx`) — but it is not a theme token and does not follow light and dark mode. The theme accent is blue.
+
+This document describes the tokens; `globals.css` is the source. If the two disagree, the CSS is right.
 
 ---
 
 ## Color Palette
 
-### Dark Mode (default)
+Every value below is declared in `:root` for light mode and `.dark` for dark mode. They are semantic tokens: components reference `var(--token)`, never a literal color, so a theme change is one file.
 
-| Token | Hex | Usage |
-|---|---|---|
-| `--bg` | `#0b0f1a` | Page background |
-| `--surface` | `#0f172a` | Cards, raised panels |
-| `--surface-elevated` | `#1e293b` | Hover states, code blocks |
-| `--surface-highlight` | `#334155` | Active elements |
-| `--text-primary` | `#e8e2d5` | Headings, body text |
-| `--text-secondary` | `#9fa8b4` | Secondary text, descriptions |
-| `--text-muted` | `#5a6577` | Labels, metadata, captions |
-| `--accent-gold` | `#c8a96e` | **Theorem gold** — mastery, links, structural accents |
-| `--accent-gold-hover` | `#d4b87a` | Gold hover state |
-| `--accent-blue` | `#3b82f6` | **Integral blue** — links (legacy), interactive states |
-| `--accent-blue-hover` | `#60a5fa` | Blue hover state |
-| `--accent-green` | `#10b981` | **Proof green** — correct answers, mastered |
-| `--accent-red` | `#ef4444` | **Error red** — incorrect answers |
-| `--accent-teal` | `#4db8a0` | **Decay teal** — concepts needing review |
-| `--border` | `#1e2d45` | Card borders, dividers |
-| `--border-strong` | `#2a3f5f` | Strong separators |
-| `--code-bg` | `#1e293b` | Code block backgrounds |
-| `--division` | `#1e2d45` | Section dividers |
+### Core surfaces and text
 
-### Light Mode
+| Token | Light | Dark | Usage |
+|---|---|---|---|
+| `--bg` | `oklch(1 0 0)` | `oklch(0.16 0.004 264)` | Page background |
+| `--surface` | `oklch(0.95 0 0)` | `oklch(0.21 0 0 / 0.8)` | Cards, raised panels |
+| `--surface-elevated` | `oklch(0.92 0 0)` | `oklch(0.24 0 0)` | Hover states, code blocks |
+| `--surface-highlight` | `oklch(0.89 0 0)` | `oklch(0.27 0 0)` | Active elements |
+| `--text-primary` | `oklch(0.16 0.004 264)` | `oklch(1 0 0)` | Headings, body text |
+| `--text-secondary` | `oklch(0.54 0 0)` | `oklch(0.66 0 0)` | Secondary text, descriptions |
+| `--text-muted` | `oklch(0.54 0 0)` | `oklch(0.66 0 0)` | Labels, metadata, captions |
 
-| Token | Hex | Usage |
-|---|---|---|
-| `--bg` | `#fefcf4` | Page background |
-| `--surface` | `#faf8f0` | Cards |
-| `--surface-elevated` | `#f5f1e6` | Hover states, code blocks |
-| `--surface-highlight` | `#e8e4d6` | Active elements |
-| `--text-primary` | `#1e293b` | Headings, body |
-| `--text-secondary` | `#475569` | Descriptions |
-| `--text-muted` | `#94a3b8` | Labels, captions |
-| `--accent-gold` | `#b8933e` | Theorem gold |
-| `--accent-gold-hover` | `#a07a2e` | Gold hover |
-| `--accent-teal` | `#3a9a8a` | Decay teal |
-| `--accent-blue` | `#2563eb` | Integral blue |
-| `--accent-blue-hover` | `#1d4ed8` | Blue hover |
-| `--accent-green` | `#059669` | Proof green |
-| `--accent-red` | `#dc2626` | Errors |
-| `--border` | `#d6d3c8` | Card borders |
-| `--border-strong` | `#b8b5a8` | Strong separators |
-| `--code-bg` | `#f0ede0` | Code block backgrounds |
-| `--division` | `#d6d3c8` | Section dividers |
+### Borders and code
+
+| Token | Light | Dark | Usage |
+|---|---|---|---|
+| `--border` | `oklch(0.85 0.02 264)` | `oklch(0.35 0.02 264)` | Card borders, dividers |
+| `--border-strong` | `oklch(0.75 0.03 264)` | `oklch(0.45 0.03 264)` | Strong separators |
+| `--code-bg` | `oklch(0.95 0 0)` | `oklch(0.21 0 0 / 0.8)` | Code block backgrounds |
+| `--division` | `oklch(0.85 0.02 264 / 0.45)` | `oklch(0.35 0.02 264 / 0.45)` | Section dividers |
+| `--graph-surface` | `oklch(0.95 0 0 / 0.7)` | `oklch(0.21 0 0 / 0.65)` | Concept-graph panel |
+
+### Semantic accents
+
+| Token | Light | Dark | Usage |
+|---|---|---|---|
+| `--accent-blue` | `oklch(0.6 0.16 255)` | `oklch(0.72 0.145 230)` | Links, interactive states, focus rings |
+| `--accent-blue-hover` | `oklch(0.53 0.17 255)` | `oklch(0.79 0.14 230)` | Blue hover state |
+| `--accent-teal` | `oklch(0.68 0.15 250)` | `oklch(0.68 0.15 250)` | Secondary emphasis |
+| `--accent-green` | `#059669` | `#10b981` | Correct answers, mastered |
+| `--accent-red` | `#dc2626` | `#ef4444` | Incorrect answers |
+
+Green and red stay as hex because their values are tuned to match the grading semantics rather than the OKLCH ramp.
+
+### Heatmap ramp
+
+The activity heatmap uses a five-step ramp, `--heat-0` through `--heat-4`, with matching foreground colors `--heat-fg-1` through `--heat-fg-4`. Light mode runs pale blue to deep blue; dark mode runs near-black to bright cyan. The foreground tokens flip between near-black and white so a label stays legible on every step.
 
 ---
 
 ## Typography
+
+Fonts are loaded with `next/font/local` in `app/layout.tsx` and exposed as `--font-space-grotesk` and `--font-jetbrains-mono`.
 
 | Role | Font Family | Weight | Size / Line | Responsive |
 |---|---|---|---|---|
@@ -112,7 +110,7 @@ Examples:
 | Cards, panels | `0.5px solid var(--border)` |
 | Strong separators | `0.5px solid var(--border-strong)` |
 | Section dividers | `0.5px solid var(--border)` |
-| Gold accents | `2px solid var(--accent-gold)` (left-border on formula blocks) |
+| Blue accents | `2px solid var(--accent-blue)` (left-border on formula blocks) |
 | Buttons | No border-radius (`borderRadius: 0`) |
 | Code blocks | `border none` with `background: var(--surface)` |
 
@@ -122,7 +120,7 @@ Prefer 0.5px borders throughout — they render as 1px on most displays and feel
 
 ## Link Hover Effect
 
-All clickable text links use the `.link-underline` class — a gold line that animates from left to right on hover via a `::after` pseudo-element:
+All clickable text links use the `.link-underline` class — a line that animates from left to right on hover via a `::after` pseudo-element:
 
 ```css
 .link-underline {
@@ -137,7 +135,7 @@ All clickable text links use the `.link-underline` class — a gold line that an
   bottom: -2px;
   width: 100%;
   height: 1px;
-  background: var(--accent-gold);
+  background: var(--accent-blue);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.2s ease;
@@ -156,11 +154,11 @@ Applied to: Header nav links, Footer links, docs page links, in-page reference l
 
 ### Header
 
-Sticky blurred nav bar at the top of every page. Single component in `components/Header.tsx`, shared across all 8 pages.
+Sticky blurred nav bar at the top of every page. In `components/Header.tsx`.
 
 - Position: `sticky top-0 z-100`, backdrop-filter: `blur(8px)`
-- Background: semitransparent (`rgba(11, 15, 26, 0.95)` dark / `rgba(254, 252, 244, 0.95)` light)
-- Font: JetBrains Mono, 12px links, 13px brand name in `var(--accent-gold)`
+- Background: semitransparent surface, driven by `--surface`
+- Font: JetBrains Mono, 12px links, 13px brand name
 - Mobile: horizontal scroll (`overflow-x: auto`) with `white-space: nowrap` — no hamburger, no JS state
 - Theme toggle: inline button in bar (not floating), hidden until `mounted`
 
@@ -170,26 +168,15 @@ In `components/Footer.tsx`. Links use `display: flex; flex-wrap: wrap` with `gap
 
 ### FormulaBlock
 
-In `components/FormulaBlock.tsx`. Renders formulas with a gold left-border accent. Uses `white-space: pre-wrap` + `max-width: 100%` to prevent horizontal overflow on mobile.
-
-### D2 Diagram
-
-In `components/D2Diagram.tsx`. Maps diagram names to pre-rendered light/dark SVG pairs served from `public/diagrams/`. D2 source files live in `diagrams/*.d2` at the project root. Generated with:
-
-```bash
-d2 -t 0  diagrams/name.d2 diagrams/generated/name-light.svg
-d2 -t 200 diagrams/name.d2 diagrams/generated/name-dark.svg
-```
-
-SVGs are committed to the repo. The component picks the right variant based on the `theme` prop from `useTheme()`.
+In `components/FormulaBlock.tsx`. Renders formulas with an accent left-border. Uses `white-space: pre-wrap` + `max-width: 100%` to prevent horizontal overflow on mobile.
 
 ### Section Header
 
-In `components/SectionHeader.tsx`. Renders a centered page-section heading with a gold left-border block. Title font: Space Grotesk, `1.9rem max-sm:1.5rem`.
+In `components/SectionHeader.tsx`. Renders a centered page-section heading with an accent left-border block. Title font: Space Grotesk, `1.9rem max-sm:1.5rem`.
 
-### Pipeline, DomainTable, ProgressionLevels
+### DomainTable and ProgressionLevels
 
-All use `width: 100%` and JetBrains Mono for labels/structure. Pipeline wraps with `flex-wrap`. DomainTable uses `overflow-x: auto` for safe table scrolling.
+Both use `width: 100%` and JetBrains Mono for labels/structure. DomainTable uses `overflow-x: auto` for safe table scrolling.
 
 ---
 
@@ -197,12 +184,17 @@ All use `width: 100%` and JetBrains Mono for labels/structure. Pipeline wraps wi
 
 All architecture and workflow diagrams are pre-rendered D2 SVGs. No browser-side rendering. No Mermaid runtime.
 
+Source files live in `web/next-app/diagrams/*.d2`, and the rendered SVGs are committed under `docs/diagrams/` and mirrored to `web/next-app/public/diagrams/`.
+
 | Diagram | File | Used in |
 |---|---|---|
-| Architecture (5-layer stack) | `architecture.d2` | `/docs/architecture` |
-| CAT diagnostic (info-gain over a covering set) | `cat-diagnostic.d2` | `/docs/architecture`, `/diagnose` |
-| Contributing (PR workflow) | `contributing.d2` | Pre-rendered but not displayed (numbered list is clearer) |
-| Student model (state pipeline) | `student-model.d2` | Available for future use |
+| Architecture (5-layer stack) | `architecture.d2` | `docs/architecture.md`, `docs/system-design.md` |
+| System design (architecture) | `system-design-architecture.d2` | `docs/system-design.md` |
+| Data model | `system-design-data-model.d2` | `docs/system-design.md` |
+| Request flow | `system-design-request-flow.d2` | `docs/system-design.md` |
+| Grading pipeline | `system-design-grading-pipeline.d2` | `docs/system-design.md` |
+| SM-2 & mastery | `system-design-sm2-mastery.d2` | `docs/system-design.md` |
+| CAT diagnostic | `cat-diagnostic.d2`, `system-design-cat-diagnostic.d2` | `docs/system-design.md`, in-app docs |
 
 Generate with `npm run diagrams`.
 

@@ -744,6 +744,32 @@ def check_diagram_citations(rep: Report) -> None:
                                   f"`{rel}` does not exist")
 
 
+def check_design_tokens(rep: Report) -> None:
+    """Every token DESIGN.md documents must exist in globals.css.
+
+    DESIGN.md described a hex palette with `--accent-gold` while globals.css had moved to OKLCH
+    and had no such token. The stale palette had also propagated into two other docs before the
+    move. Nothing ever read the design doc, so nothing noticed. This reads both.
+    """
+    # Font variables are declared by next/font in app/layout.tsx, not in CSS, so both files
+    # are sources of a legitimate token name.
+    css = read("web/next-app/app/globals.css") + read("web/next-app/app/layout.tsx")
+    defined = set(re.findall(r"(--[\w-]+)\s*:", css)) | set(re.findall(r"variable:\s*'(--[\w-]+)'", css))
+    if not defined:
+        rep.error("web/next-app/app/globals.css", "design-tokens",
+                  "no custom properties found; this checker cannot verify DESIGN.md")
+        return
+    doc = ROOT / "DESIGN.md"
+    if not doc.is_file():
+        return
+    for line_no, line in enumerate(doc.read_text(encoding="utf-8").split("\n"), 1):
+        # A token named in a table cell or inline code, not a CSS snippet's own declaration.
+        for m in re.finditer(r"`(--[\w-]+)`", line):
+            if m.group(1) not in defined:
+                rep.error(f"DESIGN.md:{line_no}", "design-tokens",
+                          f"`{m.group(1)}` is documented but not defined in globals.css")
+
+
 def main() -> int:
     rep = Report()
     check_xp_gate(rep)
@@ -764,6 +790,7 @@ def main() -> int:
     check_toolchain(rep)
     check_sm2_intervals(rep)
     check_diagram_citations(rep)
+    check_design_tokens(rep)
 
     for where, rule, msg in rep.errors:
         print(f"ERROR   {where} [{rule}] {msg}", file=sys.stderr)
@@ -775,7 +802,7 @@ def main() -> int:
           "(XP gate, KP rule, corpus counts, ADR refs, links, spelling, tables, roles, "
           "daily goal, removed XP terms, grading timeout, diagnostic bounds, "
           "citations, stub claims, route counts, toolchain, SM-2 intervals, "
-          "diagram citations)")
+          "diagram citations, design tokens)")
     return 0
 
 
