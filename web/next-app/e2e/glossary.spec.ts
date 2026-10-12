@@ -36,6 +36,7 @@ test('glossary filters by category, clears, and handles empty results', async ({
   await page.goto('/glossary')
   await expect(page.getByRole('searchbox', { name: 'Search symbols, names or meanings' })).toBeVisible({ timeout: 30_000 })
 
+  await page.getByRole('button', { name: 'Tags' }).click()
   await page.getByRole('button', { name: 'Geometry and trigonometry' }).click()
   await expect(page.getByRole('heading', { name: 'Sine', exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Integral', exact: true })).toHaveCount(0)
@@ -114,4 +115,18 @@ test('glossary math mode searches by typed notation', async ({ page }) => {
   await page.getByRole('button', { name: 'Text', exact: true }).click()
   await expect(page.getByRole('searchbox', { name: 'Search symbols, names or meanings' })).toBeVisible()
   await expect(page.getByRole('heading', { name: /Greek letters/ })).toBeVisible()
+})
+
+test('glossary tags toggle reveals category filters', async ({ page }) => {
+  await page.goto('/glossary')
+  await expect(page.getByRole('heading', { name: 'Mathematical glossary' })).toBeVisible({ timeout: 30_000 })
+  const toggle = page.getByRole('button', { name: 'Tags' })
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.getByRole('button', { name: 'Geometry and trigonometry' })).toHaveCount(0)
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  await expect(page.getByRole('button', { name: 'Geometry and trigonometry' })).toBeVisible()
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.getByRole('button', { name: 'Geometry and trigonometry' })).toHaveCount(0)
 })

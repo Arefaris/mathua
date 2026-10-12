@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import MathInput from './math/MathInput'
+import { Plus } from './icons'
 import { GLOSSARY_CATEGORIES } from '../lib/glossary/categories'
 import type { GlossaryCategoryId } from '../lib/glossary/types'
 
@@ -45,6 +47,10 @@ export default function GlossarySearch({
   onClear,
 }: GlossarySearchProps) {
   const active = query.trim() !== '' || mathLatex.trim() !== '' || category !== 'all'
+  // Category chips hide behind a Tags toggle: nine chips eat a full phone
+  // screen before a single result. The toggle is a real button (keyboard
+  // accessible, aria-expanded announced); the plus rotates into a cross.
+  const [tagsOpen, setTagsOpen] = useState(false)
   return (
     <div className="space-y-3">
       <div role="group" aria-label="Search input type" className="flex gap-2">
@@ -103,7 +109,23 @@ export default function GlossarySearch({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+      <div>
+        <button
+          type="button"
+          onClick={() => setTagsOpen(o => !o)}
+          aria-expanded={tagsOpen}
+          aria-controls="glossary-tags"
+          className="flex items-center gap-2 border border-mathua-border px-4 py-1 font-mono text-[11px] min-h-[44px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue transition-colors"
+        >
+          <Plus
+            size={14}
+            aria-hidden="true"
+            className={`transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none ${tagsOpen ? 'rotate-45' : ''}`}
+          />
+          Tags
+        </button>
+        {tagsOpen && (
+          <div id="glossary-tags" className="flex flex-wrap gap-2 mt-2" role="group" aria-label="Filter by category">
         <button
           type="button"
           onClick={() => onCategoryChange('all')}
@@ -132,6 +154,8 @@ export default function GlossarySearch({
             {c.label}
           </button>
         ))}
+          </div>
+        )}
       </div>
 
       <p role="status" aria-live="polite" className="font-mono text-[11px] text-mathua-muted">
