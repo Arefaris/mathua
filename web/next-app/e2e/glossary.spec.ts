@@ -104,16 +104,37 @@ test('glossary math mode searches by typed notation', async ({ page }) => {
   await page.getByRole('button', { name: 'Math: f(x)' }).click()
   const field = page.locator('math-field')
   await expect(field).toBeVisible({ timeout: 30_000 })
+  // Focus first: under parallel CI load the click alone can land before the
+  // field is ready and keystrokes go nowhere (the same class of flake the
+  // answer-input helpers guard against with explicit focus asserts).
   await field.click()
+  await expect(field).toBeFocused({ timeout: 10_000 })
   // A pasted/tapped symbol arrives as the glyph itself (the mobile keypad
   // inserts commands that serialize the same way); typing a raw backslash
   // command char-by-char does not, which is MathLive input behavior, not search.
+  const fieldLatex = (): Promise<string> =>
+    field.evaluate(el => {
+      const withValue = el as unknown as { getValue?: (f: string) => string; value?: string }
+      try {
+        return withValue.getValue ? withValue.getValue('latex') : (withValue.value ?? '')
+      } catch {
+        return withValue.value ?? ''
+      }
+    })
   await page.keyboard.type('∀', { delay: 40 })
-  await page.waitForTimeout(500)
+  // Poll for arrival instead of sleeping once: dropped keystrokes under load
+  // leave an empty field, and no fixed wait can distinguish that from parsing.
+  try {
+    await expect.poll(fieldLatex, { timeout: 15_000 }).not.toBe('')
+  } catch {
+    await field.click()
+    await page.keyboard.type('∀', { delay: 80 })
+    await expect.poll(fieldLatex, { timeout: 15_000 }).not.toBe('')
+  }
   await expect(page.getByRole('heading', { name: 'Universal quantifier' })).toBeVisible({ timeout: 15_000 })
   // Switching back to text restores the text box and clears the math query.
   await page.getByRole('button', { name: 'Text', exact: true }).click()
-  await expect(page.getByRole('searchbox', { name: 'Search symbols, names or meanings' })).toBeVisible()
+  await expect(page.getByRole('searchbox', { name: 'Search symbols, names or meanings' })).toBeVisible({ timeout: 15_000 })
   await expect(page.getByRole('heading', { name: /Greek letters/ })).toBeVisible()
 })
 
