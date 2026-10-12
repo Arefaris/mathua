@@ -118,7 +118,6 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
             >
               {s.label}
             </a>
-            {' '}({s.license})
           </span>
         ))}
       </p>
