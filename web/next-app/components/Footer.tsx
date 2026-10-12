@@ -206,6 +206,7 @@ export default function Footer({ className = '' }: FooterProps) {
             <nav aria-labelledby="footer-resources">
               <h2 id="footer-resources" className={headingClass}>Resources</h2>
               <ul className="mt-3 space-y-2 font-mono text-xs">
+                <li><Link href="/how-it-works" className={linkClass}>How it works</Link></li>
                 <li><Link href="/docs" className={linkClass}>Docs</Link></li>
                 <li><Link href="/docs/contributing" className={linkClass}>Contributing</Link></li>
                 <li><Link href="/note" className={linkClass}>Creator&apos;s Note</Link></li>
