@@ -1,46 +1,52 @@
-# Mathua CAT Diagnostic  --  Binary Search on Concept Graph
+# Mathua CAT Diagnostic  --  information gain over a compressed covering set
 
 direction: down
 
-Start: Start Diagnostic\nGet all concepts (topo-sorted)\nSet Low=0, High=N-1
+Start: Start Diagnostic\nConcepts in topological order\nEvery learner starts UNSEEN
 
-Loop: Binary Search Loop {
-  Mid: Compute Midpoint\nPos = Low + (High-Low)/2
+Cover: Build compressed cover\nroots + evenly spaced\ntarget 30 concepts
 
-  Question: Generate Question\nfor concept at Pos
+Loop: Assessment Loop {
+  Score: Score candidates\nuncertainty x coverage influence
 
-  Answer: Student Answers\nwithin time limit
+  Pick: Pick highest info gain\nnot yet covered
 
-  Decision: Evaluate\ncorrect + fast enough?
+  Question: Generate Question\nfor chosen concept
+
+  Answer: Student Answers\ngraded with evidence
+
+  Decision: Record evidence\npropagate +-0.3 to neighbours
+
 }
 
-Correct: Correct\nMove forward\nLow = Pos + 1
-
-Incorrect: Incorrect/Slow\nMove backward\nHigh = Pos - 1
-
-Check: Streak Check\nX correct in a row?
-
-Result: Frontier Located\nEstimate approx position\nRecord mastery for all passed
-
-Done: Diagnostic Complete\nMerge with existing progress\nOptimistic merge
-
-# Flow
-Start -> Loop
-Loop -> Mid
-Mid -> Question
+Score -> Pick
+Pick -> Question
 Question -> Answer
 Answer -> Decision
-Decision -> Correct: Yes
-Decision -> Incorrect: No
-Correct -> Check
-Incorrect -> Loop: reset streak
-Check -> Loop: No, continue
-Check -> Result: Yes, X in a row
-Check -> Result: Hit boundaries
+Decision -> Stop
+Decision -> Score: next
+
+Stop: Stop when\ncover done AND asked >= 25,\nor asked >= 45
+
+Supplemental: Supplemental probe\nwhen confidence < 0.7
+
+Frontier: Frontier at\nlargest belief drop
+
+Result: Frontier located\ngaps by domain\ncompletion estimates
+
+Done: Diagnostic Complete\nMerge with existing progress\noptimistic merge
+
+# Flow
+Start -> Cover
+Cover -> Loop
+Stop -> Supplemental: confidence < 0.7
+Stop -> Frontier: No
+Supplemental -> Frontier
+Frontier -> Result
 Result -> Done
 
 # Side note
-Note: "Key Parameters: midpoint topo-DAG to binary search, ~20-35 questions"
+Note: "Key Parameters: compressed covering set (30), info-gain selection, 25-45 questions"
 
 # Styling
 nodes: {

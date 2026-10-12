@@ -415,10 +415,19 @@ def check_removed_xp_terms(rep: Report) -> None:
     this: it matches "N XP" near a gate, and these terms are bare coefficients in a code fence.
     """
     banned = ("timeMultiplier", "streakMultiplier", "time multiplier", "streak multiplier")
+    # A doc may name a removed term while explaining the removal. The package comment in
+    # internal/xp/policy.go does exactly this, and a rule that flagged it would push authors to
+    # delete the only record of why the term is gone. Require the sentence to be about removal.
+    about_removal = re.compile(
+        r"\b(?:remov\w+|revert\w+|no longer|used to|previously|was |were |deleted|"
+        r"deliberate|does not|not rewarded)\b", re.I)
     for doc in DOCS:
-        for line_no, line in enumerate(read(doc).split("\n"), 1):
+        # Check the sentence, not the line: these docs wrap at ~100 columns, so the removal
+        # language ("the old time multiplier paid for guessing") sits on the next line from the
+        # term itself. A line-scoped check flags correct prose for a formatting reason.
+        for line_no, sent in sentences(read(doc)):
             for b in banned:
-                if re.search(rf"\b{re.escape(b)}\b", line, re.I):
+                if re.search(rf"\b{re.escape(b)}\b", sent, re.I) and not about_removal.search(sent):
                     rep.error(f"{doc}:{line_no}", "xp-terms",
                               f'"{b}" was removed; see the package comment in '
                               f"internal/xp/policy.go")
@@ -472,10 +481,14 @@ def check_diagnostic_bounds(rep: Report) -> None:
                 if (a, b) != (lo_n, hi_n):
                     rep.error(f"{doc}:{line_no}", "diagnostic-bounds",
                               f'"{m.group(0)}" but cat.go bounds it at {lo_n}-{hi_n}')
-    # "binary search" describes an algorithm the code does not use.
-    for doc in DOCS + ["web/next-app/app/docs/architecture/page.tsx",
-                       "web/next-app/app/how-it-works/sections.tsx",
-                       "web/next-app/app/diagnose/page.tsx"]:
+    # "binary search" describes an algorithm the code does not use. Diagram sources are
+    # included because they are documentation that regenerates into docs/diagrams/*.svg, and
+    # a wrong claim there is published to every reader of the rendered diagram.
+    algo_docs = DOCS + ["web/next-app/app/docs/architecture/page.tsx",
+                        "web/next-app/app/how-it-works/sections.tsx",
+                        "web/next-app/app/diagnose/page.tsx"]
+    algo_docs += [f"web/next-app/diagrams/{p.name}" for p in sorted((ROOT / "web/next-app/diagrams").glob("*.d2"))]
+    for doc in algo_docs:
         p = ROOT / doc
         if not p.is_file():
             continue

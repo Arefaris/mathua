@@ -59,7 +59,11 @@ The architecture is streamlined with a single UI delivery method through the RES
 
 ### Schema Overview
 
-Five core tables: `students`, `concept_progress`, `sessions`, `attempts`, `questions`.
+Eighteen tables. The five that carry the learning loop are `students`, `concept_progress`,
+`sessions`, `attempts` and `questions`. The other thirteen support the product around it:
+`active_sessions`, `student_topic_speed`, `quiz_completions`, `avatar_images`,
+`password_resets`, `identities`, `email_verifications`, `link_tokens`, `question_reports`,
+`admin_invitations`, `admin_audit`, `server_sessions` and `schema_migrations`.
 
 ![Data Model](diagrams/system-design-data-model-dark.svg)
 
@@ -77,7 +81,7 @@ Five core tables: `students`, `concept_progress`, `sessions`, `attempts`, `quest
 | `xp_total` | INTEGER | Lifetime XP (`MAX(0, xp_total+?)` floor `sqlite.go:199`) |
 | `xp_today` | INTEGER | Resets via `xp_date` check (`MAX(0, …)`) |
 | `xp_date` | TEXT | Date of `xp_today` bucket (`YYYY-MM-DD`) |
-| `daily_xp_goal` | INTEGER | Daily goal (default 10, migrated from legacy 150 via versioned backfill `sqlite.go`) |
+| `daily_xp_goal` | INTEGER | Daily goal (default 30, `xp.DefaultDailyGoal`; migrated from legacy 150 via versioned backfill `sqlite.go`) |
 | `settings` | TEXT (JSON) | Arbitrary key-value settings (`pause_until`, `accommodations.extra_time`) |
 | `diagnostic_completed` | INTEGER | Boolean flag |
 | `share_token` | TEXT | `s_` + 12 random bytes (`engine.go:1270`) |
@@ -180,7 +184,7 @@ The engine is the central orchestrator. It holds references to every subsystem a
 | **Scheduler** | `internal/scheduler/` (`scheduler.go:229`, `scheduler.go:87`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
 | **Generators** | 17 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74` — no static question bank |
 | **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:22`, `sm2.go:15`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `scheduler.go:194`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
-| **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `scoring/updater.go:59` |
+| **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `xp.DefaultDailyGoal` (`xp/policy.go`) |
 | **Weakness Propagation** | In engine `engine.go:1575` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
 | **Diagnostic** | `internal/diagnostic/` (`cat.go:1`, `report.go:11`) | Compressed covering set + info-gain CAT with `±0.3` evidence propagation, per-concept `KnowledgeConfidence 0–1`, frontier at max belief drop, supplemental when `<0.7` |
 | **Planner** | `internal/planning/` | Course paths loaded from `data/courses.json` (22 courses) |
@@ -290,12 +294,22 @@ Quality is derived from correctness and response time:
 
 ### XP Scoring
 
+The task type does not change the base, speed is not rewarded, and there is no streak bonus.
+Each of those three was removed on purpose, and `internal/xp/policy.go` records why in its
+package comment.
+
+The removed time multiplier paid for guessing and penalised careful work. The removed streak
+bonus let a learner on a long run out-earn the same work done carefully.
+
 ```
-base = 10 (new) or 5 (review)
-timeMultiplier = clamp(2.0 - elapsed / threshold, 0.5, 1.5)
-streakMultiplier = 1.0 + min(streak, 10) × 0.1
-XP = int(base × timeMultiplier × streakMultiplier)
+base = EffortBase(timeThreshold)      # clamped to 1-5 XP, from expected effort
+XP = int(base × PerformanceMultiplier)  # correct answers only
 ```
+
+`PerformanceMultiplier` is 1.1 inside the concept's own time threshold and 1.0 outside it.
+Because the base is clamped to 1-5 and the award truncates, `int(base × 1.1) == base` for every
+base in range: on the integer award the tier is absorbed by rounding. It is still real in the
+model, and `ExpectedXP` returns it as a float for the workload estimator to read.
 
 ### Levels
 
@@ -343,7 +357,7 @@ For symbolic math (polynomial simplification, expression equivalence), Mathua sp
 4. **Symbolic equivalence**: `simplify(diff) == 0`, `expand(diff) == 0`, `trigsimp`, `radsimp`, `powsimp`, `factor`, `ee.equals(ea)`
 5. **Numerical verification**: 10 random points checked within `1e-6` tolerance
 6. **Output**: JSON line on stdout `{id, correct, feedback}`
-7. **Safeguards**: 10-second `SIGALRM` timeout, 500-character input limit, character allowlist
+7. **Safeguards**: 3-second `SIGALRM` timeout, 500-character input limit, character allowlist
 
 The service is bundled into the production image (pinned `grading/requirements.txt`) and self-tested at build time; there is no pure-Go fallback for these types.
 
@@ -379,7 +393,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | GET | `/api/leagues` | auth | Weekly leagues with promotion/demotion |
 | POST | `/api/share` | auth | Enable/disable share link (`s_` token `engine.go:1270`) |
 | GET | `/api/share/{token}` | shareLimiter, public | Read-only parent/teacher report |
-| GET | `/api/courses` | auth | Available courses (21) |
+| GET | `/api/courses` | auth | Available courses (22) |
 | GET | `/api/courses/{id}` | auth | Course detail + progress |
 | POST | `/api/courses/{id}/diagnostic` | auth | Set course + activate path |
 | GET | `/api/transcript` | auth | Transcript JSON or `?format=csv` |
@@ -388,7 +402,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/goal/diagnostic/answer` | write: writeLimiter, optional | Submit goal diagnostic answer (graded via stored problem) |
 | POST | `/api/goal/plan` | write: writeLimiter, optional | Persist diagnostic + readiness report |
 | GET | `/api/weaknesses` | auth | Weakness scores by domain (`weakness >0.2`) |
-| POST | `/api/goals/xp` | auth | Set daily XP goal (1–10000) |
+| POST | `/api/goals/xp` | auth | Set daily XP goal (10–100, `xp.MinDailyGoal`–`xp.MaxDailyGoal`) |
 | GET/PUT | `/api/settings` | auth | Student settings JSON (`pause_until`, `accommodations.extra_time`) |
 | GET | `/api/reviews/due` | auth | Count due reviews (paused → 0) |
 | POST | `/api/reviews/session` | write: writeLimiter, auth | Create review-only session |
@@ -402,7 +416,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer (`TaskQuiz 20` `engine.go:1126`) |
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
-| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"admin"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change |
+| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/architecture.md` for the permission matrix and `CanAssign` |
 | GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route, and no update or delete method on either store |
 | GET | `/api/activity` | auth | Daily activity heatmap (`?days=365`) |
 | GET | `/api/efficacy` | auth | First-pass/second-pass efficacy |
@@ -521,9 +535,10 @@ Mathua implements a compressed-covering + info-gain CAT to locate a student's kn
 
 ### Goal-Oriented Diagnostic
 
-A variant that targets a specific set of concept goals. Instead of starting at the DAG midpoint, it:
+A variant that targets a specific set of concept goals. `StartWithPath` runs the same
+info-gain CAT, restricted to the caller's path rather than the whole graph:
 1. Collects all prerequisite chains for the target concepts
-2. Runs binary search only within the prerequisite subspace
+2. Picks each question by information gain over the covering set, within that path
 3. Produces a readiness assessment: which prerequisites are mastered and which need work
 
 ---
@@ -564,7 +579,7 @@ Trade-off: generation latency. Complex polynomial questions require a SymPy subp
 
 ### Why No ORM?
 
-The schema has 5 tables with straightforward relationships. Raw SQL with `database/sql` gives:
+The schema has 18 tables with straightforward relationships. Raw SQL with `database/sql` gives:
 - Full control over query optimization (especially the SM-2 upsert and leaderboard queries)
 - No query generation overhead
 - Transparent SQL for debugging

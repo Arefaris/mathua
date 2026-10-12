@@ -200,7 +200,7 @@ All architecture and workflow diagrams are pre-rendered D2 SVGs. No browser-side
 | Diagram | File | Used in |
 |---|---|---|
 | Architecture (5-layer stack) | `architecture.d2` | `/docs/architecture` |
-| CAT diagnostic (binary search) | `cat-diagnostic.d2` | `/docs/architecture`, `/diagnose` |
+| CAT diagnostic (info-gain over a covering set) | `cat-diagnostic.d2` | `/docs/architecture`, `/diagnose` |
 | Contributing (PR workflow) | `contributing.d2` | Pre-rendered but not displayed (numbered list is clearer) |
 | Student model (state pipeline) | `student-model.d2` | Available for future use |
 

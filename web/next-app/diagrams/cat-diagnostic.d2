@@ -1,4 +1,4 @@
-# CAT Diagnostic — Binary search frontier detection
+# CAT Diagnostic — info-gain over a compressed covering set
 style.font: mono
 
 Start: {
@@ -12,49 +12,34 @@ Start: {
   }
 }
 
-Start -> Midpoint
+Start -> Cover
 
-Midpoint: Test midpoint? {
-  shape: diamond
-  width: 105
-  height: 52
-  style: {
-    font-color: "#141413"
-  }
-}
+Cover: Compressed covering set\nroots + evenly spaced\ntarget 30 concepts
 
-Midpoint -> Forward: "Correct, Fast"
+Cover -> Pick
 
-Forward: Forward\n(harder concepts)
+Pick: Pick next concept\nby information gain\n(uncertainty x coverage)
 
-Midpoint -> Backward: "Incorrect, Slow"
+Pick -> Question
 
-Backward: Backward\n(foundational)
+Question: Generate question\nfor chosen concept
 
-Forward -> Check
-Backward -> Check
+Question -> Answer
 
-Check: 3 correct\nin a row? {
-  shape: diamond
-  width: 105
-  height: 52
-  style: {
-    font-color: "#141413"
-  }
-}
+Answer: Student answers\ngraded with evidence
 
-Check -> Locked: Yes
+Answer -> Propagate
 
-Locked: FRONTIER\nLOCKED {
-  shape: oval
-  style: {
-    fill: "#EEF2F7"
-    font-color: "#1B365D"
-    stroke: "#1B365D"
-  }
-}
+Propagate: Propagate evidence\n+-0.3 to neighbours
 
-Check -> Midpoint: No
+Propagate -> Stop
+
+Stop: Cover done AND\nasked >= 25,\nor asked >= 45
+
+Stop -> Done: Yes
+Stop -> Pick: No
+
+Done: Frontier located\ngaps by domain\ncompletion estimates
 
 nodes: {
   style: {

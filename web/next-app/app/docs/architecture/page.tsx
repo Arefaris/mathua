@@ -232,9 +232,9 @@ export default function ArchitecturePage() {
       <section className="py-20 max-sm:py-12">
         <h2 style={h2Style}>V. Computerised Adaptive Testing</h2>
         <p style={bodyStyle}>
-          The diagnostic engine finds a student&apos;s starting point using binary search on
-          the topologically sorted concept graph. This reduces the assessment from 657 questions
-          (one per concept) to approximately 20-35.
+          The diagnostic engine finds a student&apos;s starting point with an information-gain
+          CAT over a compressed covering set of the concept graph. This reduces the assessment
+          from 657 questions (one per concept) to between 25 and 45.
         </p>
 
         <DiagnosticFlow />
