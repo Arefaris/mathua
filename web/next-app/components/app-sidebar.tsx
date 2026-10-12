@@ -10,6 +10,7 @@ import {
   ChevronsRight,
   FileText,
   Handshake,
+  House,
   Layers,
   LogOut,
   Shield,
@@ -65,16 +66,17 @@ const NAV_ITEMS: SidebarNavItem[] = [
   { label: 'Settings', href: '/settings', icon: Settings },
 ]
 
-// Resources group: docs, glossary, contributing, creator's note.
-// Informational pages only — never Diagnostic / Quiz / Review (no CTA
-// duplication). The glossary is a standalone reference with no progress,
-// XP or gating, so it sits here rather than beside Learn.
-const RESOURCE_ITEMS: SidebarNavItem[] = [
-  { label: 'Docs', href: '/docs', icon: FileText },
-  { label: 'Glossary', href: '/glossary', icon: BookOpen },
-  { label: 'Contribute', href: '/docs/contributing', icon: Handshake },
-  { label: "Creator's note", href: '/note', icon: Pencil },
-]
+// Resources group: docs, glossary, contributing, creator's note, how it works.
+  // Informational pages only — never Diagnostic / Quiz / Review (no CTA
+  // duplication). The glossary is a standalone reference with no progress,
+  // XP or gating, so it sits here rather than beside Learn.
+  const RESOURCE_ITEMS: SidebarNavItem[] = [
+    { label: 'Docs', href: '/docs', icon: FileText },
+    { label: 'Glossary', href: '/glossary', icon: BookOpen },
+    { label: 'Contribute', href: '/docs/contributing', icon: Handshake },
+    { label: "Creator's note", href: '/note', icon: Pencil },
+    { label: 'How it works', href: '/how-it-works', icon: House },
+  ]
 
 const ADMIN_ITEM: SidebarNavItem = {
   label: 'Admin',
