@@ -474,7 +474,8 @@ def check_removed_xp_terms(rep: Report) -> None:
     contradicts a decision that is already recorded in the code. The XP gate check cannot see
     this: it matches "N XP" near a gate, and these terms are bare coefficients in a code fence.
     """
-    banned = ("timeMultiplier", "streakMultiplier", "time multiplier", "streak multiplier")
+    banned = ("timeMultiplier", "streakMultiplier", "time multiplier", "streak multiplier",
+              "time multipliers", "streak multipliers")
     # A doc may name a removed term while explaining the removal. The package comment in
     # internal/xp/policy.go does exactly this, and a rule that flagged it would push authors to
     # delete the only record of why the term is gone. Require the sentence to be about removal.

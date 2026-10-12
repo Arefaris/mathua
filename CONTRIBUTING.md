@@ -1,6 +1,6 @@
 # Contributing to Mathua
 
-Mathua is community-built. Someone added every concept, every generator, and every line of the concept graph. They wanted to help others learn math better. The most useful thing you can contribute is a new concept — and it takes exactly three pieces.
+Mathua is community-built. Someone added every concept, every generator and every line of the concept graph. They wanted to help others learn math better. The most useful thing you can contribute is a new concept — and it takes exactly three pieces.
 
 ## Quick start
 
@@ -18,7 +18,7 @@ DATABASE_URL=postgres://... ./mathua --serve --port 8080
 
 The concept graph lives in per-domain files under `data/concepts/`. Generators live in `internal/generator/`. Here are the kinds of contributions that move the needle:
 
-- New concepts — the single most impactful thing you can add. A pinned SymPy service checks equivalence for `polynomial`, `expression`, `symbolic`, and `complex` grading. The service is `grading/sympy_service.py`, and its version is in `grading/requirements.txt`. The production image ships it. There is no pure-Go equivalence fallback. Run `go test ./...` and the grader tests with SymPy installed.
+- New concepts — the single most impactful thing you can add. A pinned SymPy service checks equivalence for `polynomial`, `expression`, `symbolic` and `complex` grading. The service is `grading/sympy_service.py`, and its version is in `grading/requirements.txt`. The production image ships it. There is no pure-Go equivalence fallback. Run `go test ./...` and the grader tests with SymPy installed.
 - New generators — make existing or new concepts produce better problems.
 - Bug fixes in the scheduling engine or graders.
 - Documentation and diagram improvements.
@@ -175,13 +175,13 @@ A second audit guards the lesson corpus (`python3 scripts/audit_lessons.py:191`)
 3. Write the fuzz test with 1 000 samples.
 4. (Optional) Write a lesson and register it in `data/lessons/lessons.json`.
 5. (Recommended) Add KP shards under `data/lessons/kp/`.
-6. Run `go test ./...`, `go run scripts/validate_graph.go`, and `python3 scripts/audit_lessons.py` locally.
+6. Run `go test ./...`, `go run scripts/validate_graph.go` and `python3 scripts/audit_lessons.py` locally.
 7. Content waves change the corpus size — run `python3 scripts/counts.py --write` to refresh the counts in the docs (CI runs `--check` and fails on drift).
 7. Open a PR. The CI pipeline runs the validator and all tests automatically.
-8. A maintainer reviews the concept ordering, thresholds, and generator quality.
+8. A maintainer reviews the concept ordering, thresholds and generator quality.
 
 Reviews usually happen within a few days. If a week passes with no response, ping the thread. We read every PR.
 
 ## Full guide
 
-For the detailed walkthrough with field schemas, code examples, and design conventions, see the **[Contributing docs](https://mathua.vercel.app/docs/contributing)** in the web app.
+For the detailed walkthrough with field schemas, code examples and design conventions, see the **[Contributing docs](https://mathua.vercel.app/docs/contributing)** in the web app.

@@ -1,19 +1,19 @@
 # AGENTS.md — Mathua
 
 Hard rules for anyone or anything editing this repository. Each one states the rule, why it
-exists, and how it is checked, because a rule nobody can verify is an aspiration.
+exists and how it is checked, because a rule nobody can verify is an aspiration.
 
 ---
 
 ## 1. No emoji anywhere we author
 
 **Emoji are not permitted in any file we author** — application source, components, tests,
-scripts, Go, or documentation. This is not a style preference; see the reasons below.
+scripts, Go or documentation. This is not a style preference; see the reasons below.
 
 ### Why
 
 - **An emoji is not a theme surface.** Its glyph, color and baseline come from the *font*, so it
-  cannot inherit `currentColor`, cannot follow light and dark mode, and cannot be sized
+  cannot inherit `currentColor`, cannot follow light and dark mode and cannot be sized
   consistently against the mono type Mathua's UI uses. Everything else in the app is a theme
   token; an emoji is the one thing that is not.
 - **They render differently per platform.** The same codepoint is a different picture on macOS,
@@ -49,7 +49,7 @@ were deleted: they were a third icon system built on `motion`, and removing that
 
 These are deliberate and allowed: arrows (`→ ← ↑ ↓ ↔ ⇒ ⇔ ⟶ ⟹`), check and ballot marks
 (`✓ ✗ ✔ ✕ ✖`), decorative stars (`✦ ✧`), bullets (`· •`), floor/ceiling brackets
-(`⌈ ⌉ ⌊ ⌋`), mathematical symbols (`∈ ∑ ∏ √ ∞ ≈ × ÷ ≠ ≥ ≤ ° ² ′`), and punctuation
+(`⌈ ⌉ ⌊ ⌋`), mathematical symbols (`∈ ∑ ∏ √ ∞ ≈ × ÷ ≠ ≥ ≤ ° ² ′`) and punctuation
 (`… — – § †`). They are typography with Unicode codepoints Mathua chose, not pictographs, and
 some of them — `⌈`/`⌉` especially — appear inside generated mathematics where "clearing an
 emoji" would corrupt a set.
@@ -78,15 +78,15 @@ next unused number.
 Mathua's documentation is written in **two registers**, and both are deliberate.
 
 **Procedural and onboarding prose follows Simplified Technical English.** It covers `CONTRIBUTING.md`,
-`docs/mobile-device-checklist.md`, `docs/architecture.md`, and the instructional sections of
+`docs/mobile-device-checklist.md`, `docs/architecture.md` and the instructional sections of
 `README.md`. STE is a controlled language from the aerospace industry: short sentences, active
 voice, one instruction each, no semicolons, no contractions, no "should" or "may". It exists
 because a newcomer following steps under time pressure must not have to parse a long sentence.
 
 **Analytical prose does not.** `CONTEXT.md` and the ADRs, `docs/mastery-*.md`,
-`docs/system-design.md`, `docs/administration.md`, and `docs/lesson-media.md` keep their current
+`docs/system-design.md`, `docs/administration.md` and `docs/lesson-media.md` keep their current
 register. Their value is the evidence in them: measured ratios such as "853 of 875 edges", the
-rejection of two wrong measurement methods, and a published retraction of one of my own wrong
+rejection of two wrong measurement methods and a published retraction of one of my own wrong
 numbers. The STE rules strip exactly that. A retraction that reads "the measurement was wrong"
 instead of naming the Kahn bug that caused it is not more readable, it is less useful.
 

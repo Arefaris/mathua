@@ -53,7 +53,7 @@ roles, the permission model, invitations, the last-owner invariant and the audit
 
 ![CAT diagnostic](diagrams/cat-diagnostic-dark.svg)
 
-Locates a student's knowledge frontier using a compressed covering set + info-gain CAT (`internal/diagnostic/cat.go`, `internal/diagnostic/report.go:11`). The engine builds a minimal covering set of the DAG. It repeatedly picks the concept that gives the maximal entropy reduction. It propagates `+0.3` evidence to prerequisites on correct and `-0.3` to dependents on incorrect, and tracks per-concept `KnowledgeConfidence 0–1`. The frontier is the highest belief drop. A supplemental diagnostic runs when confidence `<0.7`.
+Locates a student's knowledge frontier using a compressed covering set + info-gain CAT (`internal/diagnostic/cat.go`, `internal/diagnostic/report.go:11`). The engine builds a minimal covering set of the DAG. It repeatedly picks the concept that gives the maximal entropy reduction. It propagates `+0.3` evidence to prerequisites on correct and `-0.3` to dependents on incorrect and tracks per-concept `KnowledgeConfidence 0–1`. The frontier is the highest belief drop. A supplemental diagnostic runs when confidence `<0.7`.
 
 `minTotalQuestions=25` and `maxTotalQuestions=45` bound the assessment (`internal/diagnostic/cat.go:33-35`). The engine does not test all 657 concepts.
 
@@ -63,4 +63,4 @@ The engine targets `80%` difficulty via `engine.computeDifficulty` (`internal/en
 
 ## Full documentation
 
-For interactive D2 diagrams, internal module detail, and formatted code blocks, see the **[Architecture docs](https://mathua.vercel.app/docs/architecture)** in the web app.
+For interactive D2 diagrams, internal module detail and formatted code blocks, see the **[Architecture docs](https://mathua.vercel.app/docs/architecture)** in the web app.

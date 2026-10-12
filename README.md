@@ -23,7 +23,7 @@
 
 ---
 
-Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 657 atomic concepts and 22 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 1971 worked examples (657 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links, and graph visualisation. Transcripts export as CSV via the API.
+Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 657 atomic concepts and 22 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 1971 worked examples (657 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
 
 ---
 
@@ -33,7 +33,7 @@ Mathua is a local-first adaptive math learning engine inspired by the mastery-ga
 - **Speed matters, not just accuracy.** A correct answer that took 45 seconds on a concept with a 12-second threshold counts as weak mastery. You need to be both right and fast.
 - **Nothing is forgotten.** Concepts resurface automatically through per-topic spaced repetition (SM-2 scaled by your learning speed). A concept mastered three weeks ago will reappear before it decays.
 - **Problems are generated, not stored.** Every problem is produced on demand by a parameterised generator. The same concept gives you a different problem every time. There is nothing to memorise.
-- **Weekly leagues and shareable progress.** Bronze → Diamond leagues promote the top 2 each Monday, and any student can generate a read-only share link (Settings → Share) for a parent or teacher. Pauses, accommodated timing, and a 50 XP mastery-check quiz are built in.
+- **Weekly leagues and shareable progress.** Bronze → Diamond leagues promote the top 2 each Monday, and any student can generate a read-only share link (Settings → Share) for a parent or teacher. Pauses, accommodated timing and a 50 XP mastery-check quiz are built in.
 
 ---
 
@@ -117,7 +117,7 @@ Three hard rules apply: never surface a concept whose prerequisites are not mast
 
 ### Spaced repetition
 
-When a concept reaches MASTERED, Mathua schedules its next review using SM-2 scaled by your per-topic learning speed (0.5 slow → 2.0 fast). The interval grows with each successful review (1 day → 6 days → previous × easiness factor × your speed) and resets on failure. Reviews are woven into normal sessions; every 50 XP a mastery-check quiz surfaces at 80% difficulty. Diagnostic reports include a frontier placement, gaps by domain, and completion estimates for accreditation.
+When a concept reaches MASTERED, Mathua schedules its next review using SM-2 scaled by your per-topic learning speed (0.5 slow → 2.0 fast). The interval grows with each successful review (1 day → 6 days → previous × easiness factor × your speed) and resets on failure. Reviews are woven into normal sessions; every 50 XP a mastery-check quiz surfaces at 80% difficulty. Diagnostic reports include a frontier placement, gaps by domain and completion estimates for accreditation.
 
 ---
 
@@ -160,11 +160,11 @@ The five-layer architecture — UI, API, Core Engine, Grading, Storage — is fu
 
 ## Courses and transcripts
 
-22 courses from 4th grade to university are wired through the DAG — including Calculus I/II, Linear Algebra, Discrete Math I/II, Probability & Statistics, Differential Equations, Abstract Algebra I/II, Topology, and Machine Learning. Each course shows mastered/total, percent, and an estimate of days remaining at your daily XP goal. Transcripts export as CSV via `GET /api/transcript?format=csv` and the read-only share link (Settings → Share) lets a parent or teacher follow along.
+22 courses from 4th grade to university are wired through the DAG — including Calculus I/II, Linear Algebra, Discrete Math I/II, Probability & Statistics, Differential Equations, Abstract Algebra I/II, Topology and Machine Learning. Each course shows mastered/total, percent and an estimate of days remaining at your daily XP goal. Transcripts export as CSV via `GET /api/transcript?format=csv` and the read-only share link (Settings → Share) lets a parent or teacher follow along.
 
 ## Contributing
 
-The most impactful contributions are new concepts and improved generators. Adding a concept requires exactly three things: a JSON entry in the concept graph, a Go generator function, and a fuzz test. Adding a lesson shard requires exactly 3 KPs per concept (`data/lessons/kp/<id>.json`) with verified section refs. See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the quick-start guide and the full **[contributing docs](/docs/contributing)** for the detailed walkthrough with code examples and field schemas.
+The most impactful contributions are new concepts and improved generators. Adding a concept requires exactly three things: a JSON entry in the concept graph, a Go generator function and a fuzz test. Adding a lesson shard requires exactly 3 KPs per concept (`data/lessons/kp/<id>.json`) with verified section refs. See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the quick-start guide and the full **[contributing docs](/docs/contributing)** for the detailed walkthrough with code examples and field schemas.
 
 ---
 
@@ -227,7 +227,7 @@ Lesson content and diagrams sourced from [Algebrica](https://algebrica.org) by A
 
 Profile characters served by [DiceBear](https://www.dicebear.com) (individual avatar styles carry their own licenses, see their [license overview](https://www.dicebear.com/licenses/)).
 
-Mathematical answers are entered through [MathLive](https://mathlive.io/mathfield/) (MIT) — used as published, not forked. See [docs/math-input.md](docs/math-input.md) for how an answer reaches a verdict, and [docs/mobile-device-checklist.md](docs/mobile-device-checklist.md) for what still needs a real phone, and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for license obligations.
+Mathematical answers are entered through [MathLive](https://mathlive.io/mathfield/) (MIT) — used as published, not forked. See [docs/math-input.md](docs/math-input.md) for how an answer reaches a verdict, [docs/mobile-device-checklist.md](docs/mobile-device-checklist.md) for what still needs a real phone and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for license obligations.
 
 ---
 

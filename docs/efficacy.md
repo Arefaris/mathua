@@ -1,7 +1,7 @@
 # Efficacy Instrumentation
 
 Mathua records every graded attempt and derives efficacy metrics from that log.
-This document defines the metrics, the endpoints that expose them, and the
+This document defines the metrics, the endpoints that expose them and the
 honest limits of what they can and cannot claim.
 
 ## What is recorded
@@ -81,7 +81,7 @@ Automated refresh: `.github/workflows/figures.yml` runs every Monday 06:00 UTC
 (matching the Monday-start weekly buckets) plus on demand via
 `workflow_dispatch`. It pulls the public prod datasets
 (`figures/fetch_prod.py` → `/api/efficacy/all` + `/api/efficacy/trend`),
-re-renders, syncs the `web/next-app/public/figures/` copy, and commits only
+re-renders, syncs the `web/next-app/public/figures/` copy and commits only
 on material change (bundle/PNG/PDF gate the commit; the SVG embeds random
 element ids per save, so it always diffs cosmetically).
 

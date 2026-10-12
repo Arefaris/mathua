@@ -289,7 +289,7 @@ Quality is derived from correctness and response time:
 
 ### XP Scoring
 
-The task type does not change the base, speed is not rewarded, and there is no streak bonus.
+The task type does not change the base. Speed is not rewarded. There is no streak bonus.
 Each of those three was removed on purpose, and `internal/xp/policy.go` records why in its
 package comment.
 
@@ -412,7 +412,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
 | PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
-| GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route, and no update or delete method on either store |
+| GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route and no update or delete method on either store |
 | GET | `/api/activity` | auth | Daily activity heatmap (`?days=365`) |
 | GET | `/api/efficacy` | auth | First-pass/second-pass efficacy |
 | GET | `/api/efficacy/all` | no | Aggregate efficacy across students |
@@ -491,13 +491,13 @@ Here's the complete flow when a student submits an answer:
 3. **Handler** looks the question up in the server-side anchor — written when the question was served — and calls `Engine.SubmitStudyAnswer(studentID, conceptID, answer, elapsed)`. There is no client-supplied expected answer to fall back on: no anchor means a 409 and a re-serve, not a guess.
 4. **Grading**  --  route to the correct grader based on `grading_type`: numeric graders parse the answer, SymPy handles symbolic equivalence, etc.
 5. **Machine**  --  `mastery.Machine.Next()` determines if the student's performance qualifies for a state transition (UNSEEN → LEARNING → etc.)
-6. **SM-2**  --  `scheduler.ComputeSM2()` computes new repetition count, interval, and easiness factor
+6. **SM-2**  --  `scheduler.ComputeSM2()` computes new repetition count, interval and easiness factor
 7. **Upsert**  --  `repo.UpsertProgress()` saves all state (including SM-2 fields) with an SQLite `ON CONFLICT ... DO UPDATE` query
 8. **Weakness**  --  if the concept's weakness score exceeds 0.3, propagate to dependent concepts at `w × 0.3`
 9. **Attempt**  --  `repo.RecordAttempt()` inserts a row into the `attempts` table
-10. **XP**  --  `computeXP()` calculates XP using base, time, and streak multipliers, then `repo.AddXP()` updates the student record
+10. **XP**  --  `xp.Award()` computes the award from the concept's own effort base, then `repo.AddXP()` updates the student record
 11. **Next**  --  the client refetches the practice set, which generates the next problem and writes its anchor. The scheduler picks the next concept on the following turn.
-12. **Response**  --  JSON response with result, next question, and session state
+12. **Response**  --  JSON response with result, next question and session state
 
 Total latency target: under 100ms for numeric grading, under 500ms for SymPy-based grading (including subprocess round-trip).
 

@@ -2,7 +2,7 @@
 
 Mathua has one authentication system and one role boundary. This document is the design
 rationale for that boundary: why the role lives in the database and not in the token, why the
-permission model is data, why staff arrive by invitation, and why the last owner cannot be
+permission model is data, why staff arrive by invitation and why the last owner cannot be
 removed. It is analytical prose, not a procedure.
 
 For the system overview, see [`architecture.md`](architecture.md).
@@ -85,7 +85,7 @@ An owner or admin adds a contributor from `/admin/contributors`. The server crea
 invitation. The invitation carries a token, an email and a role.
 
 The server stores only a SHA-256 hash of the token. A database read therefore yields no usable
-credential. The raw token returns once, in the response, and nowhere else.
+credential. The raw token returns once, in the response and nowhere else.
 
 The invitation is single-use, time-limited and bound to the invited address. Acceptance burns
 the token. Acceptance checks the signed-in account against the invited email. A revoked,
@@ -142,7 +142,7 @@ therefore cannot exist without a record.
 
 The log has no foreign key on `actor_id`. A trail deleted together with the account it records
 is not a trail. Neither store offers an update path. Neither store offers a delete path. No HTTP
-route offers either. Each event names the actor, the action, the entity, the time, and the state
+route offers either. Each event names the actor, the action, the entity, the time and the state
 either side of the change.
 
 `ListAdminAuditFor` reads the events about one entity. A role history and a report history are

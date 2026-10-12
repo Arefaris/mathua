@@ -5,8 +5,8 @@ true at each step.
 
 The short version: **the answer is a plain string on the wire, and it always has
 been.** The math editor changed where that string comes from and how good it is. It
-did not change the wire format, the endpoints, or the graders. This document records
-the contract, the parts of MathJSON that are reserved for later, and the places where
+did not change the wire format, the endpoints or the graders. This document records
+the contract, the parts of MathJSON that are reserved for later and the places where
 the third-party libraries did not do what their names suggest.
 
 - The editor: `web/next-app/components/math/`
@@ -27,7 +27,7 @@ learner types  →  MathLive (LaTeX internally)
 ```
 
 `answer` is a string. It was a string before the editor existed and it is a string
-now. No endpoint field was added, no grading type was added, and no mastery rule was
+now. No endpoint field was added, no grading type was added and no mastery rule was
 touched. That was deliberate: ADR-005 makes `Engine.GradeAnswer` the single grading
 entry point, and keeping it untouched is what makes the editor safe to ship.
 
@@ -166,7 +166,7 @@ almost every input.
 | `3.14` | `3.14` | high precision needs the `{"num": "…"}` object form |
 
 So the subset a Go grader would need is `Add`, `Multiply`, `Power`, `Divide`, `Negate`,
-`Rational`, `Sqrt`, `Root`, `Sin`/`Cos`/… , `Pi`, and bare symbols — and it must
+`Rational`, `Sqrt`, `Root`, `Sin`/`Cos`/… , `Pi` and bare symbols — and it must
 tolerate that **`Subtract` never arrives**, `Divide` only survives with a symbolic
 denominator, and constant subexpressions arrive already evaluated.
 
@@ -196,7 +196,7 @@ That last row is the one that matters. CE will not call two plainly unequal symb
 expressions *different* — it declines rather than guess — which is why `'unknown'` is a
 first-class outcome and not an error path.
 
-**No state renders a verdict.** Not `'equivalent'`, not `'different'`, and above all not
+**No state renders a verdict.** Not `'equivalent'`, not `'different'` and above all not
 `'unknown'`: nothing may render as "correct", "incorrect", "wrong", "try again" or "not
 yet". `test/selfCheck.test.tsx` asserts that for all three states, using a real pair
 that reaches each one.
@@ -318,7 +318,7 @@ const ZERO_WIDE: Keycap = { latex: '[0]', width: 2 }
 
     Assumed: a keycap whose `latex` names a bracketed command performs that command.
     Actual 0.111.0: `latex` is *inserted*. `executeKeycapCommand` resolves in order —
-    `command`, then `insert`, then `key`, then `latex` (run as an insert), and only
+    `command`, then `insert`, then `key`, then `latex` (run as an insert) and only
     then `typedText(label)`. Separately, `normalizeKeycap` merges MathLive's own
     `KEYCAP_SHORTCUTS` definition only when the keycap is a bare string, or carries a
     `label` or `key` naming a known shortcut. `latex` is not one of those.
@@ -475,7 +475,7 @@ toolbar renders it and shows "untitled" without one. Letters come from MathLive'
 Real-device verification lives in [`mobile-device-checklist.md`](./mobile-device-checklist.md).
 Nothing in this document is a substitute for it: the automated suite uses emulated
 viewports, which cannot reproduce OS-keyboard suppression, iOS viewport units, safe-area
-insets, iOS focus zoom, or real parse cost. The numbers below are floors.
+insets, iOS focus zoom or real parse cost. The numbers below are floors.
 
 What is actually configured, all verified against the pinned MathLive 0.111.0 rather
 than remembered from an earlier version.
@@ -526,7 +526,7 @@ not exist. Measured: two taps produced two requests for
 to load no sounds; `test/mobile-math.spec.ts` asserts none are requested.
 
 **Compute Engine.** Dynamically imported by `SelfCheck`, never in initial JS. 787 kB
-gzip, fetched once, on first use, and skipped entirely when
+gzip, fetched once, on first use and skipped entirely when
 `navigator.connection.saveData` is set or the effective type is `2g`/`slow-3g`.
 
 **Client-only loading.** `MathLiveField.tsx` is the only file that imports `mathlive`,
