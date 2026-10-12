@@ -13,7 +13,7 @@
 
 *An open-source adaptive math learning engine*
 
-[![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat-square&logo=go&logoColor=white)](https://golang.org)
+[![Go](https://img.shields.io/badge/Go-1.26+-00ADD8?style=flat-square&logo=go&logoColor=white)](https://golang.org)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![License](https://img.shields.io/badge/license-MIT-c8a96e?style=flat-square)](LICENSE)
 [![Concepts](https://img.shields.io/badge/concepts-657-a8a0f0?style=flat-square)](#content)
@@ -117,7 +117,7 @@ Three hard rules apply: never surface a concept whose prerequisites are not mast
 
 ### Spaced repetition
 
-When a concept reaches MASTERED, Mathua schedules its next review using SM-2 scaled by your per-topic learning speed (0.5 slow → 2.0 fast). The interval grows with each successful review (1 day → 3 days → 1 week → ...) and resets on failure. Reviews are woven into normal sessions; every 50 XP a mastery-check quiz surfaces at 80% difficulty. Diagnostic reports include a frontier placement, gaps by domain, and completion estimates for accreditation.
+When a concept reaches MASTERED, Mathua schedules its next review using SM-2 scaled by your per-topic learning speed (0.5 slow → 2.0 fast). The interval grows with each successful review (1 day → 6 days → previous × easiness factor × your speed) and resets on failure. Reviews are woven into normal sessions; every 50 XP a mastery-check quiz surfaces at 80% difficulty. Diagnostic reports include a frontier placement, gaps by domain, and completion estimates for accreditation.
 
 ---
 

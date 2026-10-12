@@ -624,6 +624,55 @@ def check_no_stub_claims(rep: Report) -> None:
                               "the router has no pure-Go symbolic fallback branch")
 
 
+def check_toolchain(rep: Report) -> None:
+    """The README's Go badge must agree with go.mod.
+
+    The badge said 1.21+ while the same file's requirements line said 1.26+ and go.mod
+    targeted 1.26.6. A badge is the first thing a prospective contributor reads, and a wrong
+    one sends them to install a toolchain the module will not build under.
+    """
+    m = re.search(r"^go\s+([0-9.]+)", read("go.mod"), re.M)
+    if not m:
+        rep.error("go.mod", "go-version", "no go directive found")
+        return
+    floor = ".".join(m.group(1).split(".")[:2])  # 1.26.6 -> 1.26
+    for doc in ("README.md", "CONTRIBUTING.md"):
+        for line_no, line in enumerate(read(doc).split("\n"), 1):
+            # shields.io encodes the "+" as %2B, but the badge may carry either form.
+            for hm in re.finditer(r"badge/Go-([0-9.]+)(?:\+|%2B)", line):
+                if hm.group(1) != floor:
+                    rep.error(f"{doc}:{line_no}", "go-version",
+                              f'badge says Go {hm.group(1)}+ but go.mod targets {floor}+')
+            for hm in re.finditer(r"Go\s+([0-9.]+)\+", line):
+                if hm.group(1) != floor:
+                    rep.error(f"{doc}:{line_no}", "go-version",
+                              f'"{hm.group(0)}" but go.mod targets {floor}+')
+
+
+def check_sm2_intervals(rep: Report) -> None:
+    """A quoted first-or-second SM-2 interval must match the code.
+
+    README said "1 day -> 3 days -> 1 week". sm2.go uses 1 day then 6 days, and every interval
+    is additionally scaled by the learner's per-topic speed, which the same sentence did not
+    mention. system-design.md had the 6 right, so the two documents disagreed.
+    """
+    src = read("internal/scheduler/sm2.go")
+    first = re.search(r"case 0:\s*\n\s*interval = int\(math\.Round\((\d+)", src)
+    second = re.search(r"case 1:\s*\n\s*interval = int\(math\.Round\((\d+)", src)
+    if not (first and second):
+        rep.error("internal/scheduler/sm2.go", "sm2",
+                  "interval constants not found; this checker cannot verify the docs")
+        return
+    f_n, s_n = first.group(1), second.group(1)
+    pat = re.compile(r"\b1 day\s*(?:→|->|→|to)\s*(\d+)\s*days?\b", re.I)
+    for doc in DOCS:
+        for line_no, line in enumerate(read(doc).split("\n"), 1):
+            for m in pat.finditer(line):
+                if m.group(1) != s_n:
+                    rep.error(f"{doc}:{line_no}", "sm2",
+                              f'"1 day -> {m.group(1)} days" but sm2.go uses {s_n} for rep 1')
+
+
 def main() -> int:
     rep = Report()
     check_xp_gate(rep)
@@ -641,6 +690,8 @@ def main() -> int:
     check_adr_headers(rep)
     check_symbol_citations(rep)
     check_no_stub_claims(rep)
+    check_toolchain(rep)
+    check_sm2_intervals(rep)
 
     for where, rule, msg in rep.errors:
         print(f"ERROR   {where} [{rule}] {msg}", file=sys.stderr)
@@ -651,7 +702,7 @@ def main() -> int:
     print("OK: docs agree with the code and the corpus "
           "(XP gate, KP rule, corpus counts, ADR refs, links, spelling, tables, roles, "
           "daily goal, removed XP terms, grading timeout, diagnostic bounds, "
-          "citations, stub claims, route counts)")
+          "citations, stub claims, route counts, toolchain, SM-2 intervals)")
     return 0
 
 
