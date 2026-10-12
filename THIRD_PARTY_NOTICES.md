@@ -218,3 +218,7 @@ If an entry could not be verified against an appropriate source, it was
 excluded rather than published with invented attribution; the excluded
 candidates are listed in `web/next-app/scripts/glossary-validation-report.json`,
 which is not bundled with the app.
+
+The audit trail for these attributions — which page was opened for each term, what
+was verified there, and what was corrected — is in
+[`docs/glossary-provenance.md`](docs/glossary-provenance.md).

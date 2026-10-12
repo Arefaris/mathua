@@ -44,6 +44,7 @@ DOCS = [
     "docs/architecture.md",
     "docs/code-defects.md",
     "docs/efficacy.md",
+    "docs/glossary-provenance.md",
     "docs/lesson-media.md",
     "docs/mastery-assessments.md",
     "docs/mastery-semantics.md",
