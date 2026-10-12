@@ -553,6 +553,77 @@ def check_symbol_citations(rep: Report) -> None:
                               f"`{rel}:{start}` is past the end of the file ({total} lines)")
 
 
+def check_no_stub_claims(rep: Report) -> None:
+    """A doc may not call an implemented store a stub, or promise a fallback that is absent.
+
+    Three claims rotted together. PostgresStore was described as "a stub with all methods
+    returning 'not implemented'" in the in-app docs while postgres.go carried 2,141 lines and
+    no such string. The grading diagram drew a "Symbolic Go fallback" that router.go does not
+    branch to, and the endpoint count said 25+ against 88 registered routes. All three are
+    reads of the code, so they are reads of the code here too.
+    """
+    pg = read("internal/storage/postgres.go")
+    if re.search(r"not implemented", pg, re.I):
+        rep.error("internal/storage/postgres.go", "postgres-stub",
+                  "the doc says this store is a stub and the file now says 'not implemented'")
+    routes = len(re.findall(r"mux\.HandleFunc", read("internal/server/server.go")))
+    if routes == 0:
+        rep.error("internal/server/server.go", "routes",
+                  "no mux.HandleFunc found; this checker cannot verify the docs")
+        return
+    ctx = re.compile(r"REST endpoints?|routes?|API exposes", re.I)
+    loose = re.compile(r"\b(\d+)\+?\s+(?:REST\s+)?(?:endpoints?|routes?)\b", re.I)
+    stub_ctx = re.compile(r"stub|not implemented|awaiting implementation", re.I)
+    for doc in DOCS + ["web/next-app/app/docs/architecture/page.tsx",
+                       "web/next-app/components/SystemDesignFlow/ArchitectureFlow.tsx",
+                       "web/next-app/components/GradingFlow.tsx"]:
+        p = ROOT / doc
+        if not p.is_file():
+            continue
+        # Paragraph-scoped: these pages wrap prose across lines, so "postgres.go" and
+        # "a stub awaiting implementation" routinely land on different lines. A line-scoped
+        # check found one of the two claims and let the other through.
+        # The claim has two parts and both must be about PostgresStore in the same sentence:
+        # "the PostgresStore is a stub" / "currently a stub awaiting implementation". Matching
+        # the pair anywhere in a paragraph produced a false positive in CONTEXT.md, where the
+        # whole ADR block is one paragraph and an unrelated line supplies the other half.
+        text = p.read_text(encoding="utf-8")
+        claim = re.compile(
+            r"(?:Postgres\w*|PostgreSQL\w*)\s+(?:is|are)\s+(?:\w+\s+){0,4}?"
+            r"(?:a\s+)?(?:stub|not implemented|awaiting implementation)", re.I)
+        for line_no, line in enumerate(text.split("\n"), 1):
+            for sent in re.split(r"(?<=[.!?:])\s+", line):
+                if claim.search(sent):
+                    rep.error(f"{doc}:{line_no}", "postgres-stub",
+                              "postgres.go is implemented and contains no 'not implemented'")
+        for line_no, line in enumerate(text.split("\n"), 1):
+            if ctx.search(line):
+                for m in loose.finditer(line):
+                    n = int(m.group(1))
+                    # A "+" floor is not automatically wrong -- "25+" is true of 88. But a
+                    # floor that understates by more than half reads as a total, and that is
+                    # what a reader takes from it. Require the floor to be within a factor of
+                    # the real count, so the number has to be maintained.
+                    if "+" in m.group(0) and n * 2 < routes:
+                        rep.error(f"{doc}:{line_no}", "routes",
+                                  f'"{m.group(0)}" understates the {routes} routes the router '
+                                  f"registers")
+                    elif "+" not in m.group(0) and n != routes:
+                        rep.error(f"{doc}:{line_no}", "routes",
+                                  f'"{m.group(0)}" but the router registers {routes}')
+    # A grading fallback the router does not branch to.
+    if "symbolicGrader" not in read("internal/grader/router.go") + read("internal/grader/grader.go"):
+        for doc in ["web/next-app/components/GradingFlow.tsx",
+                    "web/next-app/components/SystemDesignFlow/ArchitectureFlow.tsx"]:
+            p = ROOT / doc
+            if not p.is_file():
+                continue
+            for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+                if re.search(r"symbolic.{0,20}fallback|fallback.{0,20}symbolic", line, re.I):
+                    rep.error(f"{doc}:{line_no}", "grading-fallback",
+                              "the router has no pure-Go symbolic fallback branch")
+
+
 def main() -> int:
     rep = Report()
     check_xp_gate(rep)
@@ -569,6 +640,7 @@ def main() -> int:
     check_diagnostic_bounds(rep)
     check_adr_headers(rep)
     check_symbol_citations(rep)
+    check_no_stub_claims(rep)
 
     for where, rule, msg in rep.errors:
         print(f"ERROR   {where} [{rule}] {msg}", file=sys.stderr)
@@ -578,7 +650,8 @@ def main() -> int:
         return 1
     print("OK: docs agree with the code and the corpus "
           "(XP gate, KP rule, corpus counts, ADR refs, links, spelling, tables, roles, "
-          "daily goal, removed XP terms, grading timeout, diagnostic bounds, citations)")
+          "daily goal, removed XP terms, grading timeout, diagnostic bounds, "
+          "citations, stub claims, route counts)")
     return 0
 
 

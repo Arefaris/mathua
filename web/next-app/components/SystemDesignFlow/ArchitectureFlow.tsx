@@ -19,7 +19,7 @@ const monoFont = "var(--font-jetbrains-mono), 'JetBrains Mono', monospace"
 
 const detailInfo = {
   'web-app': 'Next.js 14 static export with React + KaTeX. Served directly by the Go binary. Dark/light theme via CSS custom properties.',
-  'api-router': 'net/http standard library. 25+ REST endpoints. Middleware stack: CORS, logging, JWT auth, rate limiting.',
+  'api-router': 'net/http standard library. 88 REST endpoints. Middleware stack: CORS, logging, JWT auth, rate limiting.',
   'auth': 'JWT-based (HS256, 30-day expiry). bcrypt password hashing. Rate-limited by token bucket (5/min).',
   'session': 'Practice session management. Creates sessions, routes answers through the engine.',
   'dag-loader': 'Loads data/concepts/*.json. Validates no cycles, no orphaned prereqs. Topological sort via Kahn.',
@@ -30,7 +30,7 @@ const detailInfo = {
   'cat-diagnostic': 'Binary search on topological concept order. ~20-35 questions vs 284. Optimistic merge on retake.',
   'leaderboard': 'Weekly scores. Score = weekly_mastered * 100. Ranked descending. Resets Monday.',
   'numeric-grader': 'Go native. Handles integers, decimals, fractions (big.Rat), mixed numbers, scientific notation.',
-  'sympy-grader': 'Long-lived Python subprocess. JSON over stdin/stdout. 10s timeout. Fallback to Go symbolic grader.',
+  'sympy-grader': 'Long-lived Python subprocess. JSON over stdin/stdout. 10s timeout. No pure-Go fallback; the image requires Python.',
   'multiple-choice': 'Case-insensitive. Single-letter matching (B matches Option B).',
   'sqlite': 'Local/dev. WAL mode, foreign_keys ON, busy_timeout 5000. File-based, zero config.',
   'postgresql': 'Production web. Shared state, concurrent connections. Via Repository interface.',

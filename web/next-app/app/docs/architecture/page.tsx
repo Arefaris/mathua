@@ -125,7 +125,7 @@ export default function ArchitecturePage() {
         <p style={bodyStyle}>
           The system is organized into five layers. The UI has a single implementation -- the web frontend
           (React/Next.js) -- calling into the Go engine through the REST API.
-          The API exposes 25+ REST endpoints through net/http. The Core Engine handles DAG loading,
+          The API exposes 88 REST endpoints through net/http. The Core Engine handles DAG loading,
           SM-2 scheduling, problem generation, mastery tracking, scoring and the CAT diagnostic.
           The Grading layer dispatches to 6+ grader strategies with a SymPy subprocess for symbolic
           math. Storage is abstracted behind a Repository interface.
@@ -154,7 +154,7 @@ export default function ArchitecturePage() {
         </p>
 
         <div style={calloutStyle}>
-          The PostgresStore exists as a stub with all methods returning &quot;not implemented.&quot;
+          The PostgresStore is fully implemented through pgx/v5/stdlib, against the same Repository interface.
           The same Repository interface works for both databases -- the schema is identical.
         </div>
       </section>
@@ -294,8 +294,7 @@ export default function ArchitecturePage() {
           </strong>
           <p style={{ margin: '4px 0 0' }}>
             SQLite for zero-config local development, PostgreSQL for production web. Same schema,
-            same Repository interface. Transparent via DATABASE_URL. The PostgresStore is currently
-            a stub awaiting implementation.
+            same Repository interface. Transparent via DATABASE_URL.
           </p>
         </div>
 
