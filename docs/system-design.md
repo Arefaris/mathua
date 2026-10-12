@@ -416,7 +416,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer (`TaskQuiz 20` `engine.go:1126`) |
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
-| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/architecture.md` for the permission matrix and `CanAssign` |
+| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
 | GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route, and no update or delete method on either store |
 | GET | `/api/activity` | auth | Daily activity heatmap (`?days=365`) |
 | GET | `/api/efficacy` | auth | First-pass/second-pass efficacy |

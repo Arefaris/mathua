@@ -42,6 +42,7 @@ DOCS = [
     "AGENTS.md",
     "CONTEXT.md",
     "docs/architecture.md",
+    "docs/administration.md",
     "docs/code-defects.md",
     "docs/efficacy.md",
     "docs/glossary-provenance.md",

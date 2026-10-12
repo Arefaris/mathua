@@ -84,11 +84,11 @@ voice, one instruction each, no semicolons, no contractions, no "should" or "may
 because a newcomer following steps under time pressure must not have to parse a long sentence.
 
 **Analytical prose does not.** `CONTEXT.md` and the ADRs, `docs/mastery-*.md`,
-`docs/system-design.md`, and `docs/lesson-media.md` keep their current register. Their value is the
-evidence in them: measured ratios such as "853 of 875 edges", the rejection of two wrong
-measurement methods, and a published retraction of one of my own wrong numbers. The STE rules
-strip exactly that. A retraction that reads "the measurement was wrong" instead of naming the
-Kahn bug that caused it is not more readable, it is less useful.
+`docs/system-design.md`, `docs/administration.md`, and `docs/lesson-media.md` keep their current
+register. Their value is the evidence in them: measured ratios such as "853 of 875 edges", the
+rejection of two wrong measurement methods, and a published retraction of one of my own wrong
+numbers. The STE rules strip exactly that. A retraction that reads "the measurement was wrong"
+instead of naming the Kahn bug that caused it is not more readable, it is less useful.
 
 `scripts/check_ste.py` enforces the first tier. It is a **derived structural subset, not
 ASD-STE100 conformance**, and must never be described as conformance — the upstream skill says of
@@ -105,6 +105,14 @@ reimplementation rather than a vendored call:
   dictionary.
 
 Moving a document between tiers is a decision to record here, not one to make silently.
+
+**Recorded moves.** `docs/administration.md` was split out of `docs/architecture.md` on
+2026-10-12 and placed in the analytical tier. The administration section was 68% of
+`architecture.md` and it is design rationale — "a count read before a write loses a race" — which
+is the register STE strips. Keeping it in the STE file meant checking it against rules written
+for procedure. The overview that remained, the five-layer stack and the diagnostic, is
+descriptive and stays in the STE tier. `check_ste.py --mode descriptive docs/administration.md`
+reports a violation, which is the expected result for a document in this tier.
 
 ---
 

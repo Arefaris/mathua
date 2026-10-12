@@ -52,6 +52,7 @@ DOCS_TO_SCAN = [
     "README.md",
     "CONTRIBUTING.md",
     "docs/architecture.md",
+    "docs/administration.md",
     "docs/system-design.md",
     "docs/system-design-slides.md",
     "docs/wasc-uc-ag-research.md",
