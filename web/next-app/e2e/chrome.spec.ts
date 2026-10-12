@@ -16,7 +16,7 @@ for (const route of ['/docs', '/diagnose', '/goals', '/how-it-works']) {
     if (route === '/docs') {
       await expect(page.locator('footer')).toHaveCount(1)
       // Docs section header survives; the default app header must not.
-      await expect(page.getByText('Architecture and contributing guide')).toBeVisible()
+      await expect(page.getByText('Architecture, design and the contributing guide')).toBeVisible()
     }
   })
 }
