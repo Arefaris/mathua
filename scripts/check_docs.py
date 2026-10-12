@@ -25,11 +25,15 @@ Exit code 0 = no errors. Exit code 1 = at least one error.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Built once per run by file_index(); see check_symbol_citations.
+_FILE_INDEX = None
 
 # ---------------------------------------------------------------- what we check
 
@@ -556,6 +560,49 @@ def check_adr_headers(rep: Report) -> None:
                               f"{m.group(0)} is cited in code but not defined in docs/adr/")
 
 
+def git_ignored(paths: list) -> set:
+    """Return the subset of paths that git ignores.
+
+    A citation resolves only if the file is in the repository. A path under a gitignored tree
+    exists on a developer's machine and nowhere else, so a check that reads the filesystem
+    passes locally and fails on a clean clone -- which is what a citation check must not do.
+    CONTEXT.md cited `skills/skills/engineering/tdd/SKILL.md`, and `skills/` is ignored, so the
+    check passed here and failed in CI. Consulting git closes the gap.
+    """
+    if not paths:
+        return set()
+    try:
+        import subprocess
+        r = subprocess.run(["git", "check-ignore", "--stdin"], cwd=ROOT,
+                           input="\n".join(str(p) for p in paths),
+                           capture_output=True, text=True, timeout=30)
+        return {line for line in r.stdout.splitlines() if line}
+    except Exception:
+        # git absent or the call failed: fall back to the filesystem alone rather than
+        # reporting every citation as broken.
+        return set()
+
+
+def file_index() -> dict:
+    """Map a basename to every file with that name, walking the tree once.
+
+    The citation check looks up files by basename, because the docs cite "engine.go" and
+    "main.go" with no directory. A rglob per citation cost about eight seconds across the
+    corpus; one walk costs a fraction of that.
+    """
+    global _FILE_INDEX
+    if _FILE_INDEX is not None:
+        return _FILE_INDEX
+    skip = {"node_modules", ".next", ".git", "dist", "build"}
+    idx: dict = {}
+    for dirpath, dirnames, filenames in os.walk(ROOT):
+        dirnames[:] = [d for d in dirnames if d not in skip]
+        for fn in filenames:
+            idx.setdefault(fn, []).append(Path(dirpath) / fn)
+    _FILE_INDEX = idx
+    return idx
+
+
 def check_symbol_citations(rep: Report) -> None:
     """A `file.go:LINE` citation must point at a line that still exists.
 
@@ -564,6 +611,12 @@ def check_symbol_citations(rep: Report) -> None:
     every other check in this file looks at the claim rather than the pointer.
     """
     pat = re.compile(r"`([\w./-]+\.(?:go|py|tsx|ts|mjs|md)):(\d+)(?:-(\d+))?`")
+    idx = file_index()
+
+    # First pass: resolve every citation to the file it means, then ask git once which of
+    # those files are ignored. Calling git per citation cost about ten seconds; one call over
+    # the whole set costs one.
+    resolved: list[tuple] = []
     for doc in DOCS:
         p = ROOT / doc
         if not p.is_file():
@@ -571,44 +624,42 @@ def check_symbol_citations(rep: Report) -> None:
         for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
             for m in pat.finditer(line):
                 rel, start = m.group(1), int(m.group(2))
-                # Try the cited path, then the same basename anywhere in the tree. Docs cite
-                # "engine.go", "main.go" and "audit_lessons.py" without a directory.
-                roots = ["internal", "cmd", "scripts", "grading", "web/next-app", "docs"]
-                cands = [ROOT / rel]
-                for r in roots:
-                    cands += sorted((ROOT / r).rglob(rel))
-                cands += [ROOT / rel.split("/")[-1]]
-                # rglob descends into node_modules and .next, where a same-named file is not
-                # the one the doc means. A probe citation to a nonexistent `notes.md` resolved
-                # to `web/next-app/node_modules/resolve/.claude/notes.md` until this filter.
-                skip = ("node_modules", ".next", ".git", "dist", "build")
-                cands = [x for x in cands if not any(s in x.parts for s in skip)]
-                target = next((c for c in cands if c.is_file()), None)
-                if target is None:
-                    rep.error(f"{doc}:{line_no}", "citation",
-                              f"`{rel}` does not exist")
-                    continue
-                total = len(target.read_text(encoding="utf-8").split("\n"))
-                end = int(m.group(3) or start)
-                if end > total:
-                    rep.error(f"{doc}:{line_no}", "citation",
-                              f"`{rel}:{start}` is past the end of the file ({total} lines)")
-                    continue
-                # The shape test below is for code. A citation into a markdown file is checked
-                # for existence only: a blank line in prose is normal, and the rule exists to
-                # catch a code anchor that slid onto whitespace.
-                if rel.endswith(".md"):
-                    continue
-                # A citation that lands on a blank line, a closing brace, or an import names
-                # nothing. These are the three shapes the line numbers drift into: a file grows
-                # and the anchor slides onto whitespace or into a neighbouring block. It is a
-                # mechanical test, so it costs nothing and needs no knowledge of the symbol.
-                content = target.read_text(encoding="utf-8").split("\n")[start - 1]
-                if not content.strip() or re.match(r'^\s*[\}\)\]],?\s*$', content) \
-                        or re.match(r'\s*(?:import|"[\w./-]+")\s', content):
-                    rep.error(f"{doc}:{line_no}", "citation",
-                              f"`{rel}:{start}` lands on {content.strip()[:30] or 'a blank line'!r}"
-                              f", which names no symbol")
+                # The exact cited path, then the same basename anywhere in the tree.
+                cands = [ROOT / rel] + list(idx.get(rel.split("/")[-1], []))
+                # A gitignored file is not in the repository, so a citation to it does not
+                # resolve for anyone who clones. Filtered below so local and CI agree.
+                resolved.append((doc, line_no, rel, start, m.group(3), cands))
+
+    present = [c for _, _, _, _, _, cs in resolved for c in cs if c.is_file()]
+    ignored = git_ignored(present)
+
+    for doc, line_no, rel, start, end_s, cands in resolved:
+        cands = [c for c in cands if str(c) not in ignored]
+        target = next((c for c in cands if c.is_file()), None)
+        if target is None:
+            rep.error(f"{doc}:{line_no}", "citation", f"`{rel}` does not exist")
+            continue
+        total = len(target.read_text(encoding="utf-8").split("\n"))
+        end = int(end_s or start)
+        if end > total:
+            rep.error(f"{doc}:{line_no}", "citation",
+                      f"`{rel}:{start}` is past the end of the file ({total} lines)")
+            continue
+        # The shape test below is for code. A citation into a markdown file is checked for
+        # existence only: a blank line in prose is normal, and the rule exists to catch a code
+        # anchor that slid onto whitespace.
+        if rel.endswith(".md"):
+            continue
+        # A citation that lands on a blank line, a closing brace, or an import names nothing.
+        # These are the three shapes the line numbers drift into: a file grows and the anchor
+        # slides onto whitespace or into a neighbouring block. It is a mechanical test, so it
+        # costs nothing and needs no knowledge of the symbol.
+        content = target.read_text(encoding="utf-8").split("\n")[start - 1]
+        if not content.strip() or re.match(r'^\s*[\}\)\]],?\s*$', content) \
+                or re.match(r'\s*(?:import|"[\w./-]+")\s', content):
+            rep.error(f"{doc}:{line_no}", "citation",
+                      f"`{rel}:{start}` lands on {content.strip()[:30] or 'a blank line'!r}"
+                      f", which names no symbol")
 
 
 def check_no_stub_claims(rep: Report) -> None:
