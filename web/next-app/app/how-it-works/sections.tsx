@@ -38,7 +38,7 @@ const GradingFlow = dynamic(() => import('../../components/GradingFlow'), {
 
 export function ConceptGraphSection() {
   return (
-    <section id="concept-graph" className="mt-12 pt-6">
+    <section id="concept-graph" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>The Concept Graph</h2>
       <p style={bodyStyle}>
         Mathua represents all mathematical knowledge as a directed acyclic graph (a DAG). Each
@@ -89,7 +89,7 @@ export function StudentModelSection() {
     ['Long division', '5', '20 seconds'],
   ]
   return (
-    <section id="student-model" className="mt-12 pt-6">
+    <section id="student-model" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>The Student Model</h2>
       <p style={bodyStyle}>
         Every concept in the graph has a state for each student:
@@ -144,7 +144,7 @@ export function StudentModelSection() {
 
 export function SpacedRepetitionSection() {
   return (
-    <section id="spaced-repetition" className="mt-12 pt-6">
+    <section id="spaced-repetition" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>Spaced Repetition</h2>
       <p style={bodyStyle}>
         When a concept reaches MASTERED, Mathua immediately schedules its next review using a
@@ -176,7 +176,7 @@ export function DiagnosticSection() {
     'The diagnostic records a starting mastery estimate for every concept the student passed through. Concepts answered correctly count as LEARNING. Concepts answered quickly and accurately count as conditionally MASTERED and are skipped in early sessions.',
   ]
   return (
-    <section id="diagnostic" className="mt-12 pt-6">
+    <section id="diagnostic" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>The Diagnostic Algorithm</h2>
       <p style={bodyStyle}>
         When a student first opens Mathua, they enter a Computerised Adaptive Testing (CAT)
@@ -225,7 +225,7 @@ export function SchedulerSection() {
     'The scheduler targets a session composition of 70% new and practicing material, 30% review.',
   ]
   return (
-    <section id="scheduler" className="mt-12 pt-6">
+    <section id="scheduler" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>The Task Selection Algorithm</h2>
       <p style={bodyStyle}>
         The scheduler runs after every question is submitted. It selects the next concept by
@@ -263,7 +263,7 @@ export function SchedulerSection() {
 
 export function ScoringSection() {
   return (
-    <section id="scoring" className="mt-12 pt-6">
+    <section id="scoring" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>Scoring and Ranking</h2>
       <p style={bodyStyle}>
         Mathua tracks two separate scoring systems:
@@ -285,7 +285,7 @@ speed_bonus = max(0, (time_limit − avg_time) / time_limit × 50)`}
 
 export function GeneratorsSection() {
   return (
-    <section id="generators" className="mt-12 pt-6">
+    <section id="generators" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>Generator-Based Problems</h2>
       <p style={bodyStyle}>
         Every problem in Mathua is generated on demand by a parameterised Go function: a
@@ -317,7 +317,7 @@ func (g *AddSingleGen) Generate(difficulty float64) generator.Problem {
 
 export function SymbolicGradingSection() {
   return (
-    <section id="symbolic-grading" className="mt-12 pt-6">
+    <section id="symbolic-grading" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>Expression Grading with SymPy</h2>
       <p style={bodyStyle}>
         From algebra onward, answers are expressions:{' '}
@@ -412,7 +412,7 @@ export function MeasuringLearningSection() {
     ['First-pass trend', 'Last week minus first week. Positive means accuracy improved across the observed window; noisy at small N.'],
   ]
   return (
-    <section id="measuring-learning" className="mt-12 pt-6">
+    <section id="measuring-learning" className="mt-12 pt-6 scroll-mt-28">
       <h2 style={h2Style}>Measuring Learning</h2>
       <p style={bodyStyle}>
         Every answer in Mathua writes one row to an attempt log: student, concept,

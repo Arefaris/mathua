@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useTheme } from '../hooks/useTheme'
 import { DIAGRAMS } from '../lib/docsDiagrams'
+import { slugify } from '../lib/docsToc'
 
 // Render a repository markdown document as a web page.
 //
@@ -38,7 +39,9 @@ function diagramName(src: string): string | null {
 }
 
 function headingId(text: string): string {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  // The same function the generator used to mint the heading ids in the table of contents, so a
+  // link and its heading always agree.
+  return slugify(text)
 }
 
 function extractText(children: React.ReactNode): string {
@@ -102,6 +105,7 @@ export default function DocsMarkdown({ body, className = '' }: { body: string; c
 
       <style jsx global>{`
         .docs-prose { overflow-x: clip; overflow-wrap: break-word; font-family: var(--font-space-grotesk), 'Space Grotesk', serif; color: var(--text-secondary); }
+        .docs-prose h1, .docs-prose h2, .docs-prose h3, .docs-prose h4 { scroll-margin-top: 96px; }
         .docs-prose h1 { font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem); font-weight: 400; color: var(--text-primary); margin: 0 0 1rem; }
         .docs-prose h2 { font-size: clamp(1.15rem, 1rem + 0.8vw, 1.3rem); font-weight: 400; color: var(--text-primary); border-bottom: 0.5px solid var(--border); padding-bottom: 0.5rem; margin: 2rem 0 1rem; }
         .docs-prose h3 { font-size: clamp(1rem, 0.95rem + 0.4vw, 1.1rem); font-weight: 500; color: var(--text-primary); margin: 1.5rem 0 0.75rem; }

@@ -18,6 +18,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { extractHeadings } from '../lib/docsToc.ts'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const appRoot = join(here, '..')
@@ -76,6 +77,13 @@ function withoutTitle(markdown) {
   return markdown.replace(/^#\s+.*(\r?\n)+/, '')
 }
 
+// Remove a hand-written "Table of Contents" block. The website builds its own from the headings
+// and shows it in the sidebar, so rendering the repo's list too would put two tables of contents
+// on one page. The repo keeps its own for GitHub.
+function withoutRepoToc(markdown) {
+  return markdown.replace(/^##\s+Table of Contents[^\n]*\n[\s\S]*?(?=^##\s)/m, '')
+}
+
 export function build() {
   const out = {}
   const missing = []
@@ -88,11 +96,13 @@ export function build() {
       continue
     }
     const raw = readFileSync(path, 'utf8')
+    const body = withoutRepoToc(withoutTitle(raw)).trimEnd() + '\n'
     out[doc.slug] = {
       title: titleOf(raw, doc.slug),
       description: doc.description,
       source: doc.source,
-      body: withoutTitle(raw).trimEnd() + '\n',
+      body,
+      headings: extractHeadings(body),
     }
   }
   if (missing.length) {
