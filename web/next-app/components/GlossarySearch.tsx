@@ -9,6 +9,8 @@ interface GlossarySearchProps {
   query: string
   category: GlossaryCategoryFilter
   resultCount: number
+  rangeStart: number
+  rangeEnd: number
   onQueryChange: (q: string) => void
   onCategoryChange: (c: GlossaryCategoryFilter) => void
   onClear: () => void
@@ -20,6 +22,8 @@ export default function GlossarySearch({
   query,
   category,
   resultCount,
+  rangeStart,
+  rangeEnd,
   onQueryChange,
   onCategoryChange,
   onClear,
@@ -86,7 +90,13 @@ export default function GlossarySearch({
       </div>
 
       <p role="status" aria-live="polite" className="font-mono text-[11px] text-mathua-muted">
-        {resultCount === 1 ? '1 entry' : `${resultCount} entries`}
+        {resultCount === 0
+          ? '0 entries'
+          : resultCount === 1
+            ? '1 entry'
+            : rangeEnd - rangeStart + 1 === resultCount
+              ? `${resultCount} entries`
+              : `Showing ${rangeStart}–${rangeEnd} of ${resultCount} entries`}
       </p>
     </div>
   )

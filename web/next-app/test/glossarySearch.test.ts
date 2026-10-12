@@ -1,6 +1,14 @@
 import { describe, it, expect } from 'vitest'
 import { GLOSSARY_ENTRIES } from '../lib/glossary/data'
-import { exactSymbolMatches, filterEntries, searchEntries } from '../lib/glossary/search'
+import {
+  exactSymbolMatches,
+  filterEntries,
+  GLOSSARY_PAGE_SIZE,
+  paginateEntries,
+  parsePageParam,
+  searchEntries,
+  totalPagesFor,
+} from '../lib/glossary/search'
 
 describe('glossary search', () => {
   it('finds entries by exact symbol', () => {
@@ -69,5 +77,37 @@ describe('glossary search', () => {
 
   it('returns nothing matchable rather than everything on nonsense', () => {
     expect(searchEntries(GLOSSARY_ENTRIES, 'zzzqqq').length).toBe(0)
+  })
+})
+
+describe('glossary pagination', () => {
+  it('pages at twenty entries', () => {
+    expect(GLOSSARY_PAGE_SIZE).toBe(20)
+    expect(totalPagesFor(342)).toBe(18)
+    expect(totalPagesFor(0)).toBe(1)
+    expect(totalPagesFor(20)).toBe(1)
+    expect(totalPagesFor(21)).toBe(2)
+  })
+
+  it('slices pages without overlap or gaps', () => {
+    const p1 = paginateEntries(GLOSSARY_ENTRIES, 1)
+    const p2 = paginateEntries(GLOSSARY_ENTRIES, 2)
+    expect(p1).toHaveLength(20)
+    expect(p2).toHaveLength(20)
+    expect(new Set([...p1, ...p2].map(e => e.id)).size).toBe(40)
+    const last = paginateEntries(GLOSSARY_ENTRIES, totalPagesFor(GLOSSARY_ENTRIES.length))
+    expect(last.length).toBeGreaterThan(0)
+    expect(last.length).toBeLessThanOrEqual(20)
+  })
+
+  it('parses and clamps ?page= values', () => {
+    expect(parsePageParam(null, 18)).toBe(1)
+    expect(parsePageParam('', 18)).toBe(1)
+    expect(parsePageParam('abc', 18)).toBe(1)
+    expect(parsePageParam('0', 18)).toBe(1)
+    expect(parsePageParam('-3', 18)).toBe(1)
+    expect(parsePageParam('2', 18)).toBe(2)
+    expect(parsePageParam('99', 18)).toBe(18)
+    expect(parsePageParam('5', 1)).toBe(1)
   })
 })

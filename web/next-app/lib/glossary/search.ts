@@ -62,3 +62,26 @@ export function filterEntries(entries: GlossaryEntry[], filter: GlossaryFilter):
     filter.category === 'all' ? entries : entries.filter(e => e.category === filter.category)
   return searchEntries(inCategory, filter.query)
 }
+
+/** Entries per glossary results page. */
+export const GLOSSARY_PAGE_SIZE = 20
+
+export function totalPagesFor(total: number, pageSize: number = GLOSSARY_PAGE_SIZE): number {
+  return Math.max(1, Math.ceil(total / pageSize))
+}
+
+/** Parse a ?page= param into a valid 1-based page, clamping garbage and overflow. */
+export function parsePageParam(raw: string | null, totalPages: number): number {
+  const n = typeof raw === 'string' ? Number.parseInt(raw, 10) : NaN
+  if (!Number.isFinite(n) || n < 1) return 1
+  return Math.min(Math.floor(n), Math.max(1, totalPages))
+}
+
+export function paginateEntries(
+  entries: GlossaryEntry[],
+  page: number,
+  pageSize: number = GLOSSARY_PAGE_SIZE,
+): GlossaryEntry[] {
+  const start = (Math.max(1, page) - 1) * pageSize
+  return entries.slice(start, start + pageSize)
+}
