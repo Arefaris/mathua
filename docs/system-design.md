@@ -250,7 +250,7 @@ Two corrections to this table, both of which hid a real cost for months:
 - **`required_streak` is not "typically 3".** It is **10 for 459 of the 657 concepts**, 3
   for 171, and 5/7/15 for the remaining 27. The old figure was wrong for 70% of the corpus.
 - **The three tiers were meant to be gated on different evidence.** The state diagram
-  (`docs/diagrams/student-model.svg`) labels them "first correct", "streak reached" and
+  (`docs/diagrams/student-model-dark.svg`) labels them "first correct", "streak reached" and
   **"interval elapsed"** — the last being a spacing interval before `MASTERED`. The
   implemented condition is the same for all three, so the spacing rung was lost.
 - **The reset on advance was not documented here.** Combined with the identical condition

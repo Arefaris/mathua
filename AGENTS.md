@@ -62,6 +62,17 @@ fixtures are written as escape sequences — because a guard that reads nothing 
 and one that flags its own fixtures gets deleted rather than fixed.
 ---
 
+## 2. Sections 2 through 5 were removed and the numbers were not reused
+
+The rules below are numbered 1, 6 and 7. Sections 2 through 5 existed once and were removed.
+Their numbers were left alone on purpose, so that a rule cited as "AGENTS.md §6" in a review or
+a commit message still points at the section that author read.
+
+Do not renumber, and do not reuse 2 through 5 for new rules. If a rule is added, give it the
+next unused number.
+
+---
+
 ## 6. Two tiers of prose, and the split is a decision
 
 Mathua's documentation is written in **two registers**, and both are deliberate.

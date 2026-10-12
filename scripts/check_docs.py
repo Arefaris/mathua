@@ -673,6 +673,32 @@ def check_sm2_intervals(rep: Report) -> None:
                               f'"1 day -> {m.group(1)} days" but sm2.go uses {s_n} for rep 1')
 
 
+def check_diagram_citations(rep: Report) -> None:
+    """A cited diagram must exist, including the ones cited from a Go doc comment.
+
+    check_links only sees markdown `[text](target)`. Three docs and internal/mastery/machine.go
+    cited `docs/diagrams/student-model.svg`, which does not exist -- the files are
+    student-model-dark.svg and student-model-light.svg -- and no rule noticed, because the
+    citation is in backticks, not a link.
+    """
+    pat = re.compile(r"`((?:docs|web/next-app/public)/diagrams/[\w.-]+\.svg)`")
+    for doc in DOCS + [str(f.relative_to(ROOT)) for f in
+                       sorted((ROOT / "internal").rglob("*.go")) if not f.name.endswith("_test.go")]:
+        p = ROOT / doc
+        if not p.is_file():
+            continue
+        for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+            for m in pat.finditer(line):
+                rel = m.group(1)
+                if not (ROOT / rel).is_file():
+                    # The docs are written from the repo root; a path under web/next-app/public
+                    # is the same file mirrored. Accept either root.
+                    alt = ROOT / "web/next-app/public" / rel.split("diagrams/", 1)[1]
+                    if not alt.is_file():
+                        rep.error(f"{doc}:{line_no}", "diagram",
+                                  f"`{rel}` does not exist")
+
+
 def main() -> int:
     rep = Report()
     check_xp_gate(rep)
@@ -692,6 +718,7 @@ def main() -> int:
     check_no_stub_claims(rep)
     check_toolchain(rep)
     check_sm2_intervals(rep)
+    check_diagram_citations(rep)
 
     for where, rule, msg in rep.errors:
         print(f"ERROR   {where} [{rule}] {msg}", file=sys.stderr)
@@ -702,7 +729,8 @@ def main() -> int:
     print("OK: docs agree with the code and the corpus "
           "(XP gate, KP rule, corpus counts, ADR refs, links, spelling, tables, roles, "
           "daily goal, removed XP terms, grading timeout, diagnostic bounds, "
-          "citations, stub claims, route counts, toolchain, SM-2 intervals)")
+          "citations, stub claims, route counts, toolchain, SM-2 intervals, "
+          "diagram citations)")
     return 0
 
 

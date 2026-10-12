@@ -205,16 +205,6 @@ the reuse terms as verified at authoring time:
 - **PlanetMath** (CC BY-SA, per the site license page) for the
   sigma-algebra definition. Consulted as a reference; the entry uses
   original wording with no text reused.
-- **NIST Dictionary of Algorithms and Data Structures** (DADS,
-  xlinux.nist.gov/dads) for big-Theta and big-Omega definitions. A U.S.
-  federal reference; entries cite the term page and use original wording
-  with no text reused.
-- **Encyclopaedia Britannica** (britannica.com) for the aleph-null
-  definition. Proprietary content consulted as a reference only; the entry
-  uses original wording with no text reused.
-- **Wolfram MathWorld** (mathworld.wolfram.com) for the pi continued
-  fraction values. Proprietary content consulted as a reference only; the
-  entry uses original wording with no text reused.
 - **Wikipedia** (CC BY-SA 4.0, per article footers) for specialist
   definitions across homological algebra, operator theory, algebraic
   geometry, representation theory, and differential geometry. Individual

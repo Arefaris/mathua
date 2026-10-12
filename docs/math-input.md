@@ -47,15 +47,23 @@ type MathInputValue = { latex: string; plainAnswer: string; mathJson?: unknown }
 
 ### Which concepts get the editor
 
-`components/math/keyboards.ts` is the only place this is decided.
+`components/math/keyboards.ts` is the only place this is decided, and the answer is now all
+of them: `MATH_GRADING_TYPES` holds every one of the nine `grading_type` values.
 
 | `grading_type` | control | concepts |
 |---|---|---|
 | `numeric`, `symbolic`, `expression`, `polynomial`, `complex` | MathLive editor | 415 |
-| `multiple_choice`, `tuple`, `ordering`, `comparison` | plain `<input>` + `SymbolPalette` | 242 |
+| `multiple_choice`, `tuple`, `ordering`, `comparison` | MathLive editor, with `ChoiceOptions` above the field | 242 |
 
-The split is not cosmetic. A third of the corpus answers with a tap target or a short
-list; a math editor there is a downgrade, not an upgrade. The server already sends
+The editor used to be scoped to the five expression-valued types, on the reasoning that a
+third of the corpus answers with a tap target and a math editor there was a downgrade. That
+changed: multiple choice still renders `ChoiceOptions`, so a yes/no question stays a tap, and
+the keypad is there for the learner who would rather type. The counts above are the split by
+grading type, not a description of the control.
+
+Note that `SymbolPalette` is still shipped and still renders in text mode; the editor change removed it from math mode, not from the app.
+
+The server already sends
 `grading_type` on every question (ADR-009), so this needed no new schema and no
 per-question special cases.
 
@@ -75,7 +83,7 @@ regenerate with `node scripts/record-mathlive-corpus.mjs`):
 | `7 \div 2` | `7 -: 2` | **false miss** — SymPy reads `-:` as subtraction |
 | `\sin(x)+\cos(x)` | `sin (x)+cos (x)` | unreliable — SymPy's implicit-multiplication pass needs `sin(` |
 
-The fifth row is the one that already bit: the retired `SymbolPalette` inserted the
+The fifth row is the one that already bit: the `SymbolPalette` inserted the
 `×` glyph, which `grading/sympy_service.py` rejects outright. Not a new class of bug —
 an existing one.
 
@@ -409,7 +417,7 @@ and passes now. The recovery behavior itself still wants a real-device check.
 ### Every question gets the editor
 
 The editor was once scoped to the five expression-valued `grading_type`s. That left 223
-of 657 concepts — 209 `multiple_choice`, 11 `tuple`, 1 `ordering`, 2 `comparison` —
+of 657 concepts — 213 `multiple_choice`, 26 `tuple`, 1 `ordering`, 2 `comparison` —
 typing mathematics into a plain `<input>`, because the answer hosts render a text field
 even when the question also offers tappable options.
 
@@ -536,7 +544,7 @@ route actually ships.
 | `/review` | 433 kB | 434 kB | +1 |
 | `/goals` | 440 kB | 441 kB | +1 |
 | `/onboard` | 438 kB | 438 kB | 0 |
-| `/study` (later closed — a 460 B forwarder; see ADR-046) | 462 kB | 462 kB | 0 |
+| `/study` (context-bound reference page, restored by ADR-054) | 429 kB | 429 kB | 0 |
 | `/profile` | 248 kB | 248 kB | 0 |
 | `/history` | 411 kB | 411 kB | 0 |
 | `/graph` | 252 kB | 252 kB | 0 |
@@ -664,7 +672,7 @@ the binding constraint for the 44px touch-target floor; this was.
 
 **Typing the `√` glyph produces `\surd`, not `\sqrt{9}`.** `\surd` is an ordinary
 symbol with the radicand outside it. This is why the keypad's `√` key inserts
-`\sqrt{#0}` — and why the retired `SymbolPalette`'s `√` could never have worked.
+`\sqrt{#0}` — and why the `SymbolPalette`'s `√` could never have worked.
 
 **`preventDefault()` on Enter is unnecessary.** MathLive treats Enter as "commit the
 expression". Leave it alone.

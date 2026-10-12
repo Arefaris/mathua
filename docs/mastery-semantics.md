@@ -99,7 +99,7 @@ Three pieces of evidence:
    also documents `streak` resetting to 0 on an incorrect answer and not at all on a tier
    advance.
 
-And the strongest evidence is the state diagram itself. `docs/diagrams/student-model.svg`
+And the strongest evidence is the state diagram itself. `docs/diagrams/student-model-dark.svg`
 labels the three transitions:
 
 ```
@@ -188,7 +188,7 @@ is that nothing *within* acquisition rewards a gap.
 
 ### Spacing, honestly
 
-The ladder as drawn (`student-model.svg`) already ends in **"interval elapsed"** — a
+The ladder as drawn (`student-model-dark.svg`) already ends in **"interval elapsed"** — a
 spacing interval before `MASTERED`. That is the shape to restore, and the part the data
 model cannot currently express:
 
