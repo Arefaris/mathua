@@ -42,6 +42,7 @@ DOCS = [
     "AGENTS.md",
     "CONTEXT.md",
     "docs/architecture.md",
+    "docs/code-defects.md",
     "docs/efficacy.md",
     "docs/lesson-media.md",
     "docs/mastery-assessments.md",
@@ -330,6 +331,215 @@ def check_spelling(rep: Report) -> None:
                               f'"{m.group(0)}" is British English; use "{american}"')
 
 
+# ---------------------------------------------------------------- schema and policy facts
+#
+# Each rule below reads its value from the code that owns it, for the reason in the module
+# docstring: a checker that pins its own copy of the number goes stale in exactly the way it
+# was written to prevent. Every one of these is a fact the docs already stated wrongly at some
+# point, so each has already paid for itself once.
+
+def go_roles() -> list[str]:
+    """The four role values, read from the storage type that orders them."""
+    m = re.search(r"const \(\s*(RoleStudent\s+Role\s*=\s*\"(\w+)\")", read("internal/storage/store.go"))
+    src = read("internal/storage/store.go")
+    return re.findall(r'Role\w+\s+Role\s+=\s*"(\w+)"', src)
+
+
+def check_table_count(rep: Report) -> None:
+    """"Five core tables" must match the CREATE TABLE statements in the migration."""
+    src = read("internal/storage/migrate.go")
+    tables = set(re.findall(r"CREATE TABLE IF NOT EXISTS (\w+)", src))
+    if not tables:
+        rep.error("internal/storage/migrate.go", "tables",
+                  "no CREATE TABLE found; this checker cannot verify the docs")
+        return
+    pat = re.compile(r"\b(five|six|seven|eight|\d+)\s+(?:core\s+)?tables?\b", re.I)
+    words = {"five": 5, "six": 6, "seven": 7, "eight": 8}
+    for doc in DOCS:
+        for line_no, sent in sentences(read(doc)):
+            for m in pat.finditer(sent):
+                got = words.get(m.group(1).lower(), None)
+                if got is None:
+                    got = int(m.group(1))
+                if got != len(tables):
+                    rep.error(f"{doc}:{line_no}", "tables",
+                              f'"{m.group(0)}" but the migration creates {len(tables)}')
+
+
+def check_roles(rep: Report) -> None:
+    """A doc that enumerates the roles must enumerate the ones the code has."""
+    roles = go_roles()
+    if not roles:
+        rep.error("internal/storage/store.go", "roles",
+                  "no role constants found; this checker cannot verify the docs")
+        return
+    n = len(roles)
+    # "admin|student" in a PATCH body is the two-role model the code left behind.
+    pat = re.compile(r'"(admin)"\s*\|\s*"(student)"', re.I)
+    for doc in DOCS:
+        for line_no, line in enumerate(read(doc).split("\n"), 1):
+            if pat.search(line):
+                rep.error(f"{doc}:{line_no}", "roles",
+                          f'a two-role body, but the code has {n}: {", ".join(roles)}')
+    for doc in DOCS:
+        for line_no, sent in sentences(read(doc)):
+            m = re.search(r"\b(?:two|three|four|five)\s+roles?\b", sent, re.I)
+            if m:
+                got = {"two": 2, "three": 3, "four": 4, "five": 5}[m.group(1).lower()]
+                if got != n:
+                    rep.error(f"{doc}:{line_no}", "roles",
+                              f'"{m.group(0)}" but the code has {n} roles')
+
+
+def check_daily_goal(rep: Report) -> None:
+    """A default daily XP goal in the docs must equal the constant the code owns."""
+    goal = go_const("internal/xp/policy.go", "DefaultDailyGoal")
+    if goal is None:
+        rep.error("internal/xp/policy.go", "daily-goal",
+                  "DefaultDailyGoal not found; this checker cannot verify the docs")
+        return
+    pat = re.compile(r"daily[_ ]xp[_ ]goal[^.\n]{0,60}?default[^.\n]{0,20}?(\d+)", re.I)
+    for doc in DOCS:
+        for line_no, sent in sentences(read(doc)):
+            for m in pat.finditer(sent):
+                if int(m.group(1)) != goal:
+                    rep.error(f"{doc}:{line_no}", "daily-goal",
+                              f'"{m.group(0)}" but xp.DefaultDailyGoal is {goal}')
+
+
+def check_removed_xp_terms(rep: Report) -> None:
+    """The time and streak multipliers were removed on purpose. No doc may state them.
+
+    internal/xp/policy.go explains the removal and why, so a doc that reintroduces the formula
+    contradicts a decision that is already recorded in the code. The XP gate check cannot see
+    this: it matches "N XP" near a gate, and these terms are bare coefficients in a code fence.
+    """
+    banned = ("timeMultiplier", "streakMultiplier", "time multiplier", "streak multiplier")
+    for doc in DOCS:
+        for line_no, line in enumerate(read(doc).split("\n"), 1):
+            for b in banned:
+                if re.search(rf"\b{re.escape(b)}\b", line, re.I):
+                    rep.error(f"{doc}:{line_no}", "xp-terms",
+                              f'"{b}" was removed; see the package comment in '
+                              f"internal/xp/policy.go")
+
+
+def check_grading_timeout(rep: Report) -> None:
+    """The SymPy subprocess timeout must match the alarm the service raises."""
+    m = re.search(r"signal\.alarm\((\d+)\)", read("grading/sympy_service.py"))
+    if not m:
+        rep.error("grading/sympy_service.py", "grading-timeout",
+                  "no signal.alarm found; this checker cannot verify the docs")
+        return
+    secs = int(m.group(1))
+    pat = re.compile(r"(\d+)[- ]second\s+(?:SIGALRM\s+)?timeout", re.I)
+    for doc in DOCS:
+        for line_no, sent in sentences(read(doc)):
+            for hm in pat.finditer(sent):
+                if int(hm.group(1)) != secs:
+                    rep.error(f"{doc}:{line_no}", "grading-timeout",
+                              f'"{hm.group(0)}" but sympy_service.py raises signal.alarm({secs})')
+
+
+def check_diagnostic_bounds(rep: Report) -> None:
+    """The diagnostic question bounds must match the constants the engine enforces.
+
+    The in-app docs said "binary search ... approximately 20-35" while the code bounds an
+    info-gain CAT at 25-45. The wrong figure was also visible to learners, because the
+    onboarding briefing quoted the real one.
+    """
+    src = read("internal/diagnostic/cat.go")
+    lo = re.search(r"minTotalQuestions\s*=\s*(\d+)", src)
+    hi = re.search(r"maxTotalQuestions\s*=\s*(\d+)", src)
+    if not (lo and hi):
+        rep.error("internal/diagnostic/cat.go", "diagnostic-bounds",
+                  "bounds not found; this checker cannot verify the docs")
+        return
+    lo_n, hi_n = int(lo.group(1)), int(hi.group(1))
+    # A range written as "20-35", "20–35" or "20 to 35".
+    rng = re.compile(r"\b(\d+)\s*(?:-|–|to)\s*(\d+)\s*questions?\b", re.I)
+    ctx = re.compile(r"diagnostic|assessment|CAT|info[- ]gain|test", re.I)
+    for doc in DOCS + ["web/next-app/app/docs/architecture/page.tsx",
+                       "web/next-app/app/how-it-works/sections.tsx"]:
+        p = ROOT / doc
+        if not p.is_file():
+            continue
+        for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+            if not ctx.search(line):
+                continue
+            for m in rng.finditer(line):
+                a, b = int(m.group(1)), int(m.group(2))
+                if (a, b) != (lo_n, hi_n):
+                    rep.error(f"{doc}:{line_no}", "diagnostic-bounds",
+                              f'"{m.group(0)}" but cat.go bounds it at {lo_n}-{hi_n}')
+    # "binary search" describes an algorithm the code does not use.
+    for doc in DOCS + ["web/next-app/app/docs/architecture/page.tsx",
+                       "web/next-app/app/how-it-works/sections.tsx",
+                       "web/next-app/app/diagnose/page.tsx"]:
+        p = ROOT / doc
+        if not p.is_file():
+            continue
+        for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+            if re.search(r"binary search", line, re.I):
+                rep.error(f"{doc}:{line_no}", "diagnostic-algo",
+                          '"binary search" but cat.go runs an info-gain CAT over a covering set')
+
+
+def check_adr_headers(rep: Report) -> None:
+    """Every ADR a source file or a doc cites must have a header in CONTEXT.md.
+
+    check_adr_refs scans markdown only. ADR-050 had no header and was cited by three Go files,
+    so nothing failed: the decision existed, was load-bearing, and was unrecorded as a
+    decision. This walks internal/ as well.
+    """
+    defined = set(re.findall(r"^- (ADR-\d{3})\b", read("CONTEXT.md"), re.M))
+    if not defined:
+        rep.error("CONTEXT.md", "adr", "no ADR definitions found; the pattern changed?")
+        return
+    for f in sorted((ROOT / "internal").rglob("*.go")):
+        if f.name.endswith("_test.go"):
+            continue
+        for line_no, line in enumerate(f.read_text(encoding="utf-8").split("\n"), 1):
+            for m in re.finditer(r"\bADR-\d{3}\b", line):
+                if m.group(0) not in defined:
+                    rel = f.relative_to(ROOT)
+                    rep.error(f"{rel}:{line_no}", "adr-ref",
+                              f"{m.group(0)} is cited in code but not defined in CONTEXT.md")
+
+
+def check_symbol_citations(rep: Report) -> None:
+    """A `file.go:LINE` citation must point at a line that still exists.
+
+    The docs cite source locations, and the locations rot: a short file grows, the line numbers
+    do not move, and the citation quietly names unrelated code. No rule read them, because
+    every other check in this file looks at the claim rather than the pointer.
+    """
+    pat = re.compile(r"`([\w./-]+\.(?:go|py|tsx|ts|mjs)):(\d+)(?:-(\d+))?`")
+    for doc in DOCS:
+        p = ROOT / doc
+        if not p.is_file():
+            continue
+        for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+            for m in pat.finditer(line):
+                rel, start = m.group(1), int(m.group(2))
+                # Try the cited path, then the same basename anywhere in the tree. Docs cite
+                # "engine.go", "main.go" and "audit_lessons.py" without a directory.
+                roots = ["internal", "cmd", "scripts", "grading", "web/next-app"]
+                cands = [ROOT / rel]
+                for r in roots:
+                    cands += sorted((ROOT / r).rglob(rel))
+                target = next((c for c in cands if c.is_file()), None)
+                if target is None:
+                    rep.error(f"{doc}:{line_no}", "citation",
+                              f"`{rel}` does not exist")
+                    continue
+                total = len(target.read_text(encoding="utf-8").split("\n"))
+                end = int(m.group(3) or start)
+                if end > total:
+                    rep.error(f"{doc}:{line_no}", "citation",
+                              f"`{rel}:{start}` is past the end of the file ({total} lines)")
+
+
 def main() -> int:
     rep = Report()
     check_xp_gate(rep)
@@ -338,6 +548,14 @@ def main() -> int:
     check_adr_refs(rep)
     check_links(rep)
     check_spelling(rep)
+    check_table_count(rep)
+    check_roles(rep)
+    check_daily_goal(rep)
+    check_removed_xp_terms(rep)
+    check_grading_timeout(rep)
+    check_diagnostic_bounds(rep)
+    check_adr_headers(rep)
+    check_symbol_citations(rep)
 
     for where, rule, msg in rep.errors:
         print(f"ERROR   {where} [{rule}] {msg}", file=sys.stderr)
@@ -346,7 +564,8 @@ def main() -> int:
               file=sys.stderr)
         return 1
     print("OK: docs agree with the code and the corpus "
-          "(XP gate, KP rule, corpus counts, ADR refs, links, spelling)")
+          "(XP gate, KP rule, corpus counts, ADR refs, links, spelling, tables, roles, "
+          "daily goal, removed XP terms, grading timeout, diagnostic bounds, citations)")
     return 0
 
 

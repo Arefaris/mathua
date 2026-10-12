@@ -5,7 +5,7 @@ the prose and the code disagreed, and in each case the prose was closer to corre
 reader would expect.
 
 They are recorded separately from the documentation work on purpose. A fix here changes
-product behaviour, so it needs its own review and its own test.
+product behavior, so it needs its own review and its own test.
 
 ## 1. The daily XP goal fallback is a literal, and the package above it exists to prevent that
 
@@ -72,7 +72,7 @@ a further deviation that the comment does not name.
 
 **Suggested fix.** Either log when the fallback fires, or extend the `replay` doc comment to
 name this deviation alongside the two it already names. A test covering a concept with a zero
-`AvgTimeSeconds` would pin the behaviour either way.
+`AvgTimeSeconds` would pin the behavior either way.
 
 **Impact.** Low. Affects only repair runs over concepts with a missing or zero threshold.
 
