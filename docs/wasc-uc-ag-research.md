@@ -1,6 +1,11 @@
 # WASC Accreditation & UC A-G Approval — Research for Mathua
 
-> Research task (2026-08-29). No code changes. Primary sources only: acswasc.org, wscuc.org, ucop.edu, admission.universityofcalifornia.edu, cde.ca.gov / leginfo (statute), ftc.gov, eCFR, W3C. Mathua facts cited to repo files (`internal/diagnostic/report.go:11`, `data/courses.json:1`, `improve.md:148`).
+> Research task (2026-08-29). No code changes.
+>
+> **Status: external research, not a Mathua decision.** This records what WASC and the UC A-G
+> process require and what Mathua does not yet have. It is the input to the gap list; no
+> requirement in it is committed to. Where a capability is described as PARTIAL or MISSING, that
+> is the state of 2026-08-29 and may have moved since. Owner: unassigned. Primary sources only: acswasc.org, wscuc.org, ucop.edu, admission.universityofcalifornia.edu, cde.ca.gov / leginfo (statute), ftc.gov, eCFR, W3C. Mathua facts cited to repo files (`internal/diagnostic/report.go:11`, `data/courses.json:1`, `improve.md:148`).
 >
 > Note: `https://www.ucop.edu/ag-guide/` and `https://hs-articulation.ucal.edu/` no longer resolve; the canonical UC pages are the UC Admissions site (`admission.universityofcalifornia.edu`) and the A-G Policy Resource Guide (`hs-articulation.ucop.edu/guide`), used below. `cde.ca.gov` was unreachable from this environment (timeouts); the governing statute is cited directly from California Legislative Information instead.
 
@@ -218,4 +223,4 @@ Each step is an artifact or a small product change; none require the full accred
 - National Standards for Quality Online Courses: https://www.nsqol.org/
 
 **Mathua (repo, not web sources)**
-- `README.md:14,26,66-89` — mission, mastery gating, SM-2; `data/courses.json:1` — 22 courses; `internal/diagnostic/report.go:11-33` — `DiagnosticReport{PlacementCourseID, MasteryLevels, CompletionEstimates, GapsByDomain}`; `internal/server/server.go:1448-1491` — `/api/transcript?format=csv`; `internal/mastery/machine.go:41` — threshold gating; `internal/lessons/lesson.go:32` — lesson loading; `improve.md:139,148` — planned accommodations, accreditation-track design.
+- `README.md:14,26,66-89` — mission, mastery gating, SM-2; `data/courses.json:1` — 22 courses; `internal/diagnostic/report.go:11-33` — `DiagnosticReport{PlacementCourseID, MasteryLevels, CompletionEstimates, GapsByDomain}`; `internal/server/server.go:2513-2556` — `/api/transcript?format=csv`; `internal/mastery/machine.go:41` — threshold gating; `internal/lessons/lesson.go:32` — lesson loading; `improve.md:139,148` — planned accommodations, accreditation-track design.
