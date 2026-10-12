@@ -25,7 +25,7 @@ const APP_DIR = join(process.cwd(), 'app')
 // full destination until recently, which is why it is listed by name here rather than left to a
 // pattern: a route that used to be a page and is now a forwarder is the case most likely to be
 // quietly treated as content again.
-const REDIRECT_STUBS = new Set(['concept', 'session', 'study', 'docs/system-design'])
+const REDIRECT_STUBS = new Set(['concept', 'session', 'study'])
 
 /**
  * The invariant is "a learner can get off this page", not "this page renders one of two
@@ -41,8 +41,14 @@ function hasWayOff(src: string): boolean {
   // bare words `Header` and `BottomTabs` passed a page that imported BottomTabs and rendered
   // nothing, which is precisely the shape of the original bug. An import is not a control, and a
   // guard that cannot tell the difference passes the thing it was written to catch.
+  //
+  // `<DocPage` counts because the rendered docs pages delegate to that shell, which carries the
+  // back link. Recognising a component by name is normally the loophole this guard exists to
+  // close, so the shell is held to the same rule in the test below: DocPage must contain the
+  // back-link glyph. The exemption is verified, not assumed.
   const body = src.replace(/^import .*$/gm, '')
-  return /<Header\b/.test(body) || /<BottomTabs\b/.test(body) || /\bredirect\(/.test(body) || /←/.test(body)
+  return /<Header\b/.test(body) || /<BottomTabs\b/.test(body) || /\bredirect\(/.test(body)
+    || /←/.test(body) || /<DocPage\b/.test(body)
 }
 
 function pageFiles(dir: string): string[] {
@@ -73,9 +79,17 @@ describe('every page offers navigation', () => {
     expect(bare).toEqual([])
   })
 
+  it('gives the shared docs shell the back link the exemption assumes', () => {
+    // The pages above satisfy this guard by rendering <DocPage>, so the shell has to carry the
+    // way off. Without this, the exemption would pass pages that render no navigation at all.
+    const shell = readFileSync(join(process.cwd(), 'components/DocPage.tsx'), 'utf8')
+    expect(shell, 'DocPage must render the ← back link').toMatch(/←/)
+  })
+
   it('treats the exempt routes as redirect stubs, so the allowance cannot rot', () => {
-    // If /concept, /session or /docs/system-design ever grows real content, the exemption above
-    // becomes a loophole and the guard silently stops protecting them. Fail here instead.
+    // If /concept or /session ever grows real content, the exemption above becomes a loophole
+    // and the guard silently stops protecting them. /docs/system-design was the third stub and
+    // was removed here when it grew a real page, which is exactly what this test is for.
     for (const route of REDIRECT_STUBS) {
       const src = readFileSync(join(APP_DIR, route, 'page.tsx'), 'utf8')
       expect(src, `${route} is no longer a redirect stub`).toMatch(/redirect\(|router\.(push|replace)/)

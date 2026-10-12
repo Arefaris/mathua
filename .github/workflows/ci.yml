@@ -73,6 +73,10 @@ jobs:
           cache: npm
           cache-dependency-path: web/next-app/package-lock.json
       - run: npm ci
+      # The docs pages render content/docs.generated.json, built from docs/*.md. This fails if a
+      # repo doc changed without regenerating it, so the published page cannot silently drift
+      # from its source. Runs before tsc because the module is imported by typed components.
+      - run: npm run docs:check
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: npm run lint:antislop

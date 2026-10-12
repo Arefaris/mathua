@@ -4,30 +4,10 @@ Mathua is a single Go binary with a web delivery mode. The engine core serves a 
 
 ## Five-layer architecture
 
-```
-┌──────────────────────────────────────────────┐
-│  UI Layer                                     │
-│  Web browser (React + Next.js)                │
-├──────────────────────────────────────────────┤
-│  API Layer                                     │
-│  REST API — net/http                          │
-│  Session · Graph · Leaderboard · Diagnostic   │
-├──────────────────────────────────────────────┤
-│  Core Engine                                   │
-│  DAG Loader · Scheduler (SM-2) · Generators   │
-│  Mastery Tracking · Scoring                   │
-├──────────────────────────────────────────────┤
-│  Grading                                       │
-│  Numeric · Choice · Comparison · Ordering ·    │
-│  Tuple · Complex (pure Go)                     │
-│  Symbolic · Polynomial · Expression → SymPy    │
-│  (Python, shipped in the image)                │
-├──────────────────────────────────────────────┤
-│  Storage                                       │
-│  SQLite (local) · PostgreSQL (web)            │
-│  data/concepts/ — per-domain DAG files          │
-└──────────────────────────────────────────────┘
-```
+![Five-layer architecture](diagrams/architecture-dark.svg)
+
+The five layers are drawn above and described below. The diagram source is
+`web/next-app/diagrams/architecture.d2`. The website renders it as an interactive graph.
 
 ### UI Layer — Web frontend, one engine
 
@@ -70,6 +50,8 @@ Administration has its own document: [`administration.md`](administration.md) co
 roles, the permission model, invitations, the last-owner invariant and the audit log.
 
 ## Diagnostic — Computerised Adaptive Testing
+
+![CAT diagnostic](diagrams/cat-diagnostic-dark.svg)
 
 Locates a student's knowledge frontier using a compressed covering set + info-gain CAT (`internal/diagnostic/cat.go`, `internal/diagnostic/report.go:11`). The engine builds a minimal covering set of the DAG. It repeatedly picks the concept that gives the maximal entropy reduction. It propagates `+0.3` evidence to prerequisites on correct and `-0.3` to dependents on incorrect, and tracks per-concept `KnowledgeConfidence 0–1`. The frontier is the highest belief drop. A supplemental diagnostic runs when confidence `<0.7`.
 

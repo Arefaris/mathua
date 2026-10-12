@@ -378,6 +378,26 @@ def check_spelling(rep: Report) -> None:
 # was written to prevent. Every one of these is a fact the docs already stated wrongly at some
 # point, so each has already paid for itself once.
 
+def app_source_files() -> list:
+    """The next-app files that carry prose a reader sees.
+
+    Diagram components hold their labels and detail strings in TypeScript, so a wrong algorithm
+    or a removed formula can live there exactly as it can in markdown. No rule read them until
+    the components were found describing a binary search and a deleted XP formula -- the same
+    defects already fixed in the docs and the .d2 sources.
+    """
+    out = []
+    for sub in ("components", "app"):
+        out += sorted((ROOT / "web/next-app" / sub).rglob("*.tsx"))
+        out += sorted((ROOT / "web/next-app" / sub).rglob("*.ts"))
+    return [str(p.relative_to(ROOT)) for p in out if p.is_file()]
+
+
+def read_any(rel: str) -> str:
+    p = ROOT / rel
+    return p.read_text(encoding="utf-8") if p.is_file() else ""
+
+
 def go_roles() -> list[str]:
     """The four role values, read from the storage type that orders them."""
     m = re.search(r"const \(\s*(RoleStudent\s+Role\s*=\s*\"(\w+)\")", read("internal/storage/store.go"))
@@ -461,11 +481,11 @@ def check_removed_xp_terms(rep: Report) -> None:
     about_removal = re.compile(
         r"\b(?:remov\w+|revert\w+|no longer|used to|previously|was |were |deleted|"
         r"deliberate|does not|not rewarded)\b", re.I)
-    for doc in DOCS:
+    for doc in DOCS + app_source_files():
         # Check the sentence, not the line: these docs wrap at ~100 columns, so the removal
         # language ("the old time multiplier paid for guessing") sits on the next line from the
         # term itself. A line-scoped check flags correct prose for a formatting reason.
-        for line_no, sent in sentences(read(doc)):
+        for line_no, sent in sentences(read_any(doc)):
             for b in banned:
                 if re.search(rf"\b{re.escape(b)}\b", sent, re.I) and not about_removal.search(sent):
                     rep.error(f"{doc}:{line_no}", "xp-terms",
@@ -528,14 +548,23 @@ def check_diagnostic_bounds(rep: Report) -> None:
                         "web/next-app/app/how-it-works/sections.tsx",
                         "web/next-app/app/diagnose/page.tsx"]
     algo_docs += [f"web/next-app/diagrams/{p.name}" for p in sorted((ROOT / "web/next-app/diagrams").glob("*.d2"))]
+    algo_docs += app_source_files()
     for doc in algo_docs:
         p = ROOT / doc
         if not p.is_file():
             continue
-        for line_no, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
-            if re.search(r"binary search", line, re.I):
-                rep.error(f"{doc}:{line_no}", "diagnostic-algo",
-                          '"binary search" but cat.go runs an info-gain CAT over a covering set')
+        text = p.read_text(encoding="utf-8")
+        for line_no, sent in sentences(text):
+            if not re.search(r"binary search", sent, re.I):
+                continue
+            # A doc or a comment may name the superseded algorithm while explaining what
+            # replaced it. Without this, the only way to satisfy the rule would be to delete
+            # the record of the change, which is the part worth keeping.
+            if re.search(r"\b(?:replaced|not a?|used to|previously|no longer|superseded|"
+                         r"describes|instead|rather than)\b", sent, re.I):
+                continue
+            rep.error(f"{doc}:{line_no}", "diagnostic-algo",
+                      '"binary search" but cat.go runs an info-gain CAT over a covering set')
 
 
 def check_adr_headers(rep: Report) -> None:
