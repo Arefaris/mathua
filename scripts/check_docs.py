@@ -53,6 +53,10 @@ DOCS = [
     "docs/system-design-slides.md",
     "docs/wasc-uc-ag-research.md",
 ]
+# The ADRs are a generated, uniform set, so a glob is the honest description rather than 54
+# lines that each need editing when a decision is added. They were inline in CONTEXT.md and
+# were covered by the rules below until the split, so they stay covered after it.
+DOCS += [str(p.relative_to(ROOT)) for p in sorted((ROOT / "docs/adr").glob("ADR-*.md"))]
 
 # Files exempt from the spelling rule, each with its reason. An exemption without a reason is
 # indistinguishable from a mistake.
@@ -67,14 +71,19 @@ APP_ROUTES = ("/docs", "/learn", "/study", "/review", "/onboard", "/profile", "/
               "/transcript", "/home", "/rewards")
 
 BRITISH = {
-    "behaviour": "behavior", "behaviours": "behaviors",
+    "behaviour": "behavior", "behaviours": "behaviors", "behavioural": "behavioral",
     "colour": "color", "colours": "colors", "coloured": "colored", "colouring": "coloring",
     "labelled": "labeled", "labelling": "labeling",
     "licence": "license", "licences": "licenses",
     "centre": "center", "centres": "centers",
-    "defence": "defense", "analyse": "analyze", "analysed": "analyzed",
+    "defence": "defense",
+    "analyse": "analyze", "analysed": "analyzed", "analyses": "analyzes", "analysing": "analyzing",
     "organisation": "organization", "organisations": "organizations",
-    "recognise": "recognize", "normalise": "normalize", "canonicalise": "canonicalize",
+    "recognise": "recognize", "recognised": "recognized", "recognises": "recognizes",
+    "normalise": "normalize", "normalised": "normalized", "normalises": "normalizes",
+    "canonicalise": "canonicalize", "canonicalised": "canonicalized",
+    "serialise": "serialize", "serialised": "serialized",
+    "prioritise": "prioritize", "prioritised": "prioritized",
     "whilst": "while", "amongst": "among",
 }
 
@@ -85,6 +94,7 @@ BRITISH = {
 HISTORICAL_GATE_CITERS = {
     "CONTEXT.md": "ADR-020 records the 150 -> 50 rescale as history",
     "AGENTS.md": "quotes the stale 150 XP figure as the motivating example for this rule",
+    "docs/adr/ADR-003-q3.md": "the superseded decision whose title names ADR-020 as its replacement",
 }
 
 
@@ -130,24 +140,32 @@ def go_const(path: str, name: str) -> int | None:
 # ---------------------------------------------------------------- checks
 
 def check_xp_gate(rep: Report) -> None:
-    """Any mastery-check gate figure in the docs must equal the constant in the code."""
+    """Any mastery-check gate figure in the docs must equal the constant in the code.
+
+    The gate word and the figure must be close together. An earlier version flagged any "N XP"
+    on a line that mentioned "quiz" or "mastery", which fired on legitimate statements of other
+    XP amounts -- "diagnostic 0 XP", a historical "+3 XP" bug fix -- because those words are
+    everywhere in this corpus. Requiring the figure within 40 characters of the gate word keeps
+    the rule on the claim it was written for.
+    """
     gate = go_const("internal/xp/policy.go", "QuizGateXP")
     if gate is None:
         rep.error("internal/xp/policy.go", "quiz-gate",
                   "QuizGateXP not found; this checker cannot verify the docs")
         return
-    # "150 XP" and "50 XP" near a gate/mastery-check/quiz mention. Historical references to the
-    # old value are allowed only in CONTEXT.md, which records the rescale as history.
     pat = re.compile(r"(\d+)\s*XP", re.I)
-    ctx = re.compile(r"gate|mastery[- ]check|quiz", re.I)
+    gateword = re.compile(r"\bgate\b|mastery[- ]check", re.I)
     for doc in DOCS:
         p = ROOT / doc
         if not p.is_file():
             continue
         for i, line in enumerate(read(doc).split("\n"), 1):
-            if not ctx.search(line):
+            positions = [g.start() for g in gateword.finditer(line)]
+            if not positions:
                 continue
             for m in pat.finditer(line):
+                if not any(abs(m.start() - g) <= 40 for g in positions):
+                    continue
                 n = int(m.group(1))
                 if n == gate or doc in HISTORICAL_GATE_CITERS:
                     continue
@@ -260,11 +278,27 @@ def check_corpus_figures(rep: Report) -> None:
                               f'"{m.group(0)}" but the corpus has {facts[key]} {key}')
 
 
+def defined_adrs() -> set:
+    """Every ADR, read from docs/adr/ one file each.
+
+    The ADRs lived inline in CONTEXT.md as one bullet per decision until the file reached
+    140 KB. They are now one file per decision, so the source of truth is the directory: a file
+    named ADR-NNN-*.md defines ADR-NNN. Reading the directory rather than a single file is what
+    lets the check survive the split.
+    """
+    out = set()
+    for f in sorted((ROOT / "docs/adr").glob("ADR-*.md")):
+        m = re.match(r"(ADR-\d{3})-", f.name)
+        if m:
+            out.add(m.group(1))
+    return out
+
+
 def check_adr_refs(rep: Report) -> None:
-    """Every ADR a doc cites must be defined in CONTEXT.md."""
-    defined = set(re.findall(r"^- (ADR-\d{3})\b", read("CONTEXT.md"), re.M))
+    """Every ADR a doc cites must be defined in docs/adr/."""
+    defined = defined_adrs()
     if not defined:
-        rep.error("CONTEXT.md", "adr", "no ADR definitions found; the pattern changed?")
+        rep.error("docs/adr", "adr", "no ADR files found; the pattern changed?")
         return
     for doc in DOCS:
         if doc == "CONTEXT.md":
@@ -273,7 +307,7 @@ def check_adr_refs(rep: Report) -> None:
             for m in re.finditer(r"\bADR-\d{3}\b", line):
                 if m.group(0) not in defined:
                     rep.error(f"{doc}:{i}", "adr-ref",
-                              f"{m.group(0)} is cited but not defined in CONTEXT.md")
+                              f"{m.group(0)} is cited but not defined in docs/adr/")
 
 
 def check_links(rep: Report) -> None:
@@ -499,15 +533,15 @@ def check_diagnostic_bounds(rep: Report) -> None:
 
 
 def check_adr_headers(rep: Report) -> None:
-    """Every ADR a source file or a doc cites must have a header in CONTEXT.md.
+    """Every ADR a source file or a doc cites must have a file in docs/adr/.
 
     check_adr_refs scans markdown only. ADR-050 had no header and was cited by three Go files,
-    so nothing failed: the decision existed, was load-bearing, and was unrecorded as a
-    decision. This walks internal/ as well.
+    so nothing failed: the decision existed, was load-bearing, and was unrecorded as a decision.
+    This walks internal/ as well.
     """
-    defined = set(re.findall(r"^- (ADR-\d{3})\b", read("CONTEXT.md"), re.M))
+    defined = defined_adrs()
     if not defined:
-        rep.error("CONTEXT.md", "adr", "no ADR definitions found; the pattern changed?")
+        rep.error("docs/adr", "adr", "no ADR files found; the pattern changed?")
         return
     for f in sorted((ROOT / "internal").rglob("*.go")):
         if f.name.endswith("_test.go"):
@@ -517,7 +551,7 @@ def check_adr_headers(rep: Report) -> None:
                 if m.group(0) not in defined:
                     rel = f.relative_to(ROOT)
                     rep.error(f"{rel}:{line_no}", "adr-ref",
-                              f"{m.group(0)} is cited in code but not defined in CONTEXT.md")
+                              f"{m.group(0)} is cited in code but not defined in docs/adr/")
 
 
 def check_symbol_citations(rep: Report) -> None:

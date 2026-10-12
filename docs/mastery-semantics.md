@@ -268,7 +268,7 @@ attempt 7: MASTERED    score 0.658  instances 1
 ```
 
 **Six answers to master, from any starting `required_streak`, and the exit holds.** The
-per-concept threshold no longer affects the cost at all: the score is already normalised
+per-concept threshold no longer affects the cost at all: the score is already normalized
 against the concept's own difficulty and time threshold, so concepts differ in what counts
 as hard, not in how much evidence proves competence.
 

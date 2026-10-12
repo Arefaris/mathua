@@ -2,7 +2,7 @@
 
 Status: **design. No migration written, no unit authored, no threshold chosen.**
 
-This is the decision map for **ADR-046** (`CONTEXT.md`). ADR-046 settles the *shape* — a
+This is the decision map for **ADR-046** (`docs/adr/ADR-046-a-mastery-assessment-verifies-evidence-it-does.md`). ADR-046 settles the *shape* — a
 mastery unit is a named partition of the existing concept DAG, an assessment contributes
 evidence rather than writing mastery, two unit states are stored and five are derived, and
 `Engine.ProgressionGate` is the single server-side answer to "can this learner progress".
