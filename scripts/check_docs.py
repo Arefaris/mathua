@@ -561,7 +561,7 @@ def check_symbol_citations(rep: Report) -> None:
     do not move, and the citation quietly names unrelated code. No rule read them, because
     every other check in this file looks at the claim rather than the pointer.
     """
-    pat = re.compile(r"`([\w./-]+\.(?:go|py|tsx|ts|mjs)):(\d+)(?:-(\d+))?`")
+    pat = re.compile(r"`([\w./-]+\.(?:go|py|tsx|ts|mjs|md)):(\d+)(?:-(\d+))?`")
     for doc in DOCS:
         p = ROOT / doc
         if not p.is_file():
@@ -571,10 +571,16 @@ def check_symbol_citations(rep: Report) -> None:
                 rel, start = m.group(1), int(m.group(2))
                 # Try the cited path, then the same basename anywhere in the tree. Docs cite
                 # "engine.go", "main.go" and "audit_lessons.py" without a directory.
-                roots = ["internal", "cmd", "scripts", "grading", "web/next-app"]
+                roots = ["internal", "cmd", "scripts", "grading", "web/next-app", "docs"]
                 cands = [ROOT / rel]
                 for r in roots:
                     cands += sorted((ROOT / r).rglob(rel))
+                cands += [ROOT / rel.split("/")[-1]]
+                # rglob descends into node_modules and .next, where a same-named file is not
+                # the one the doc means. A probe citation to a nonexistent `notes.md` resolved
+                # to `web/next-app/node_modules/resolve/.claude/notes.md` until this filter.
+                skip = ("node_modules", ".next", ".git", "dist", "build")
+                cands = [x for x in cands if not any(s in x.parts for s in skip)]
                 target = next((c for c in cands if c.is_file()), None)
                 if target is None:
                     rep.error(f"{doc}:{line_no}", "citation",
@@ -585,6 +591,11 @@ def check_symbol_citations(rep: Report) -> None:
                 if end > total:
                     rep.error(f"{doc}:{line_no}", "citation",
                               f"`{rel}:{start}` is past the end of the file ({total} lines)")
+                    continue
+                # The shape test below is for code. A citation into a markdown file is checked
+                # for existence only: a blank line in prose is normal, and the rule exists to
+                # catch a code anchor that slid onto whitespace.
+                if rel.endswith(".md"):
                     continue
                 # A citation that lands on a blank line, a closing brace, or an import names
                 # nothing. These are the three shapes the line numbers drift into: a file grows

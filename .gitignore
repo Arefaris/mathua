@@ -138,9 +138,6 @@ design/
 # Local skills marketplace (vendored, has own .git)
 skills/
 
-# local research — do not commit
-improve.md
-
 # TypeSafe ingestion-QA eval — throwaway, never commit (may hold API key)
 eval/
 
