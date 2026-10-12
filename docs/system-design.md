@@ -232,38 +232,33 @@ Decaying concepts (≥14 days since last review) get `+5` priority bonus. The sc
 
 ### Mastery State Machine
 
-Four stored states, one computed state:
+Four stored states, one computed state. Advancement is decided by evidence, not by a streak.
 
 | State | Transition | Condition |
 |-------|-----------|-----------|
-| **UNSEEN** → LEARNING | First correct | Streak ≥ required AND avg time ≤ threshold |
-| **LEARNING** → PRACTICING | Consistent correct | Same |
-| **PRACTICING** → MASTERED | Mastery achieved | Same |
+| **UNSEEN** → LEARNING | First correct answer | Evidence reaches the first rung |
+| **LEARNING** → PRACTICING | Consistent across attempts | Evidence reaches the next rung |
+| **PRACTICING** → MASTERED | Demonstrated and transferable | Evidence reaches the mastery rung |
 | **MASTERED** → DECAYING | 14+ days idle | Computed at read time, never stored |
 
-The `streak` resets to 0 on any incorrect answer, **and to 1 on every tier advance**
-(`engine.go:1124`). Each concept has a `required_streak` and a `time_threshold`
-(typically 120s for generated, 60s for review).
+The evidence score is assembled from the last six attempts (`EvidenceWindow`). Each attempt
+contributes by correctness, the difficulty it was served at, the variety of problem instance,
+and elapsed time. A concept counts as demonstrated at `MasteryThreshold = 0.6` once at least
+`MasteryEvidenceFloor = 6` attempts support it. An attempt with no recorded difficulty is
+credited at `NeutralDifficulty = 0.55`, the difficulty the engine serves with no learner
+information, rather than dropped.
 
-Two corrections to this table, both of which hid a real cost for months:
+**Status only moves forward.** A miss lowers the evidence score but does not un-learn a concept:
+`MASTERED` is an exit, and decay asks about retention, not attainment. The `required_streak` and
+`time_threshold` fields still exist — SM-2 reads the streak to grade a review — but they no
+longer gate the ladder.
 
-- **`required_streak` is not "typically 3".** It is **10 for 459 of the 657 concepts**, 3
-  for 171, and 5/7/15 for the remaining 27. The old figure was wrong for 70% of the corpus.
-- **The three tiers were meant to be gated on different evidence.** The state diagram
-  (`docs/diagrams/student-model-dark.svg`) labels them "first correct", "streak reached" and
-  **"interval elapsed"** — the last being a spacing interval before `MASTERED`. The
-  implemented condition is the same for all three, so the spacing rung was lost.
-- **The reset on advance was not documented here.** Combined with the identical condition
-  above, it means `MASTERED` costs **3 × `required_streak` consecutive correct answers** —
-  30 for most of the corpus, all-or-nothing, since one miss zeroes the streak. Measured
-  cost, per concept: median 12 minutes of answer time, and a 4% chance of completing a
-  30-answer run in one sitting at 90% per-answer accuracy.
-
-That cost is not a design decision: it arrived with commit `725fad9`, *"fix mastery state
-machine — reset streak on level-up"*, whose message has no body. See
-`docs/mastery-semantics.md` for the measurements and for the evidence model this should
-be replaced by — which already exists at `web/next-app/lib/progression.ts` and is, today,
-only a label.
+This replaced a streak-based ladder, and the cost of the old one is worth recording because it
+was invisible for months. All three tiers were gated on the single condition
+`streak >= required AND avg time <= threshold`, so the ladder was one test repeated until the
+streak was long enough: for the 459 concepts whose `required_streak` is 10, `MASTERED` cost 30
+consecutive correct answers, all-or-nothing, because one miss zeroed the streak. See
+`docs/mastery-semantics.md` for the measurements and ADR-038 for the decision.
 
 ### SM-2 Spaced Repetition
 

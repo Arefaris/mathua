@@ -28,7 +28,7 @@ const stepData = {
   '7-upsert': { label: 'Upsert Progress', desc: 'ON CONFLICT DO UPDATE\nSave all SM-2 fields' },
   '8-weakness': { label: 'Propagate Weakness', desc: 'If weakness > 0.3\nPropagate w*0.3 to dependents' },
   '9-attempt': { label: 'Record Attempt', desc: 'INSERT INTO attempts\n{session, concept, answer, correct,\ntime, explanation}' },
-  '10-xp': { label: 'Compute XP', desc: 'base * timeMult * streakMult\nrepo.AddXP()' },
+  '10-xp': { label: 'Compute XP', desc: 'EffortBase(threshold)\n× PerformanceMultiplier\nrepo.AddXP()' },
   '11-next': { label: 'Next Question', desc: 'Client refetches practice\nNew problem, new anchor' },
   '12-response': { label: 'Response', desc: 'JSON to client\n{correct, feedback, explanation, xp}' },
 } satisfies Record<string, { label: string; desc: string }>

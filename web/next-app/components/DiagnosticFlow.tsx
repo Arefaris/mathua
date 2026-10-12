@@ -7,7 +7,6 @@ import {
   Controls,
   Handle,
   Position,
-  MarkerType,
   useNodesState,
   useEdgesState,
   type Node,
@@ -101,21 +100,29 @@ export default function DiagnosticFlow() {
   const isDark = theme === 'dark'
   const c = themeColors[isDark ? 'dark' : 'light']
 
-  const gap = 64
+  // A single column: the algorithm is a loop, not a binary search. These labels follow
+  // internal/diagnostic/cat.go -- compressedCover, infoGain, and shouldStop -- and the same
+  // drawing is in diagrams/system-design-cat-diagnostic.d2. This component said "test midpoint"
+  // and "move forward / backward", which described the binary search the code replaced and was
+  // shown to learners on /docs/architecture and /diagnose.
+  const gap = 56
   const yStart = 4
-  const yMid = yStart + 28 + 6
-  const yBranch = yMid + 44 + gap
-  const yCheck = yBranch + 44 + gap
-  const yLocked = yCheck + 44 + gap
-  const midX = CX - NODE_W / 2 + 40
+  const yCover = yStart + 28 + 20
+  const yPick = yCover + 44 + gap
+  const yQuestion = yPick + 44 + gap
+  const yPropagate = yQuestion + 44 + gap
+  const yStop = yPropagate + 44 + gap
+  const yFrontier = yStop + 44 + gap
+  const midX = CX - NODE_W / 2
 
   const initialNodes: Node[] = [
     { id: 'start', type: 'startNode', position: { x: CX - 14, y: yStart }, data: { label: '' } },
-    { id: 'midpoint', type: 'decisionNode', position: { x: midX, y: yMid }, data: { label: 'Test midpoint\nconcept?' } },
-    { id: 'forward', type: 'processNode', position: { x: CX - NODE_W - 30, y: yBranch }, data: { label: 'Move forward:\nharder concepts' } },
-    { id: 'backward', type: 'processNode', position: { x: CX + 30, y: yBranch }, data: { label: 'Move backward:\nfoundational' } },
-    { id: 'check', type: 'decisionNode', position: { x: CX - NODE_W / 2, y: yCheck }, data: { label: 'X correct\nin a row?' } },
-    { id: 'locked', type: 'terminalNode', position: { x: CX - NODE_W / 2, y: yLocked }, data: { label: 'PLACEMENT\nLOCKED' } },
+    { id: 'cover', type: 'decisionNode', position: { x: midX, y: yCover }, data: { label: 'Build covering set\nroots + evenly spaced\ntarget 30 concepts' } },
+    { id: 'pick', type: 'processNode', position: { x: midX, y: yPick }, data: { label: 'Pick highest\ninformation gain' } },
+    { id: 'question', type: 'processNode', position: { x: midX, y: yQuestion }, data: { label: 'Ask one question\nrecord evidence' } },
+    { id: 'propagate', type: 'processNode', position: { x: midX, y: yPropagate }, data: { label: 'Propagate evidence\n±0.3 to neighbours' } },
+    { id: 'stop', type: 'decisionNode', position: { x: midX, y: yStop }, data: { label: 'Cover done AND\nasked ≥ 25,\nor asked ≥ 45' } },
+    { id: 'frontier', type: 'terminalNode', position: { x: midX, y: yFrontier }, data: { label: 'FRONTIER AT\nLARGEST BELIEF DROP' } },
   ]
 
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
@@ -125,42 +132,22 @@ export default function DiagnosticFlow() {
     const labelStyle = (color: string) => ({ fontFamily: monoFont, fontSize: '10px', fill: color, fontWeight: 500 })
 
     return [
-      { id: 'e-start-mid', source: 'start', target: 'midpoint', style: edgeStyle(c.borderStrong) },
+      { id: 'e-start-cover', source: 'start', target: 'cover', style: edgeStyle(c.borderStrong) },
+      { id: 'e-cover-pick', source: 'cover', target: 'pick', style: edgeStyle(c.borderStrong) },
+      { id: 'e-pick-question', source: 'pick', target: 'question', style: edgeStyle(c.borderStrong) },
+      { id: 'e-question-propagate', source: 'question', target: 'propagate', style: edgeStyle(c.borderStrong) },
+      { id: 'e-propagate-stop', source: 'propagate', target: 'stop', style: edgeStyle(c.borderStrong) },
       {
-        id: 'e-mid-forward', source: 'midpoint', target: 'forward',
-        label: 'Correct, fast',
-        labelStyle: labelStyle(c.accentGreen),
-        style: edgeStyle(c.accentGreen),
-        markerEnd: { type: MarkerType.ArrowClosed, color: c.accentGreen },
-      },
-      {
-        id: 'e-mid-backward', source: 'midpoint', target: 'backward',
-        label: 'Incorrect, slow',
-        labelStyle: labelStyle(c.accentRed),
-        style: edgeStyle(c.accentRed),
-        markerEnd: { type: MarkerType.ArrowClosed, color: c.accentRed },
-      },
-      {
-        id: 'e-forward-check', source: 'forward', target: 'check',
-        style: edgeStyle(c.borderStrong),
-        type: 'smoothstep',
-      },
-      {
-        id: 'e-backward-check', source: 'backward', target: 'check',
-        style: edgeStyle(c.borderStrong),
-        type: 'smoothstep',
-      },
-      {
-        id: 'e-check-locked', source: 'check', target: 'locked',
+        id: 'e-stop-frontier', source: 'stop', target: 'frontier',
         label: 'Yes', animated: true,
         labelStyle: labelStyle(c.accentGreen),
         style: edgeStyle(c.accentGreen),
       },
       {
-        id: 'e-check-mid', source: 'check', target: 'midpoint',
+        id: 'e-stop-pick', source: 'stop', target: 'pick',
         label: 'No',
-        labelStyle: labelStyle(c.accentRed),
-        style: { ...edgeStyle(c.accentRed), strokeDasharray: '5 5' },
+        labelStyle: labelStyle(c.accentBlue),
+        style: { ...edgeStyle(c.accentBlue), strokeDasharray: '5 5' },
         type: 'smoothstep',
       },
     ]
@@ -172,11 +159,11 @@ export default function DiagnosticFlow() {
     setEdges(styledEdges)
   }, [styledEdges, setEdges])
 
-  if (!mounted) return <div style={{ height: 440, width: '100%' }} />
+  if (!mounted) return <div style={{ height: 580, width: '100%' }} />
 
   return (
     <div style={{
-      height: 440, width: '100%',
+      height: 580, width: '100%',
       border: '0.5px solid ' + c.border,
       background: isDark ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.02)',
     }}>

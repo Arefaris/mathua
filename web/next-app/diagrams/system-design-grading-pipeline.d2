@@ -16,15 +16,15 @@ Order: Ordering Grader\nwhitespace | comma split
 
 Tuple: Tuple Grader\nparentheses comma-separated
 
-Complex: Complex Grader\npolar + I to SymPy
+Complex: Complex Grader\na + bi forms, pure Go
 
-Symbolic: Symbolic (fallback)\nnormalize to string equals
-
-SymPyService: SymPy Python Subprocess
+SymPyService: SymPy Python Subprocess\nsymbolic | polynomial | expression
 
 Result: Grade Result\ncorrect + score + feedback
 
-# Dispatch flow
+# Dispatch flow. Six types are pure Go; three route to the SymPy subprocess.
+# There is no pure-Go symbolic fallback: router.go sends these straight to Python,
+# and the production image installs it and fails the build if it is missing.
 Generator -> Router: grading_type determines path
 
 Router -> Numeric: numeric
@@ -33,11 +33,7 @@ Router -> Comp: comparison
 Router -> Order: ordering
 Router -> Tuple: tuple
 Router -> Complex: complex
-Router -> SymPyService: polynomial / expression
-
-# Fallback paths
-Complex -> Symbolic: SymPy unavailable
-SymPyService -> Symbolic: fallback
+Router -> SymPyService: symbolic / polynomial / expression
 
 # All converge
 Numeric -> Result
@@ -47,7 +43,6 @@ Order -> Result
 Tuple -> Result
 Complex -> Result
 SymPyService -> Result
-Symbolic -> Result
 
 # Styling
 nodes: {

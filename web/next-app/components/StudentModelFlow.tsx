@@ -11,11 +11,15 @@ export default function StudentModelFlow() {
     { id: 'decaying', label: 'DECAYING', variant: 'error' },
   ]
 
+  // Labels follow internal/mastery/machine.go. Advancement is decided by evidence, so the
+  // rungs are named for what the evidence shows, not for a streak. The previous labels were
+  // also off by one rung: "first correct" sat on LEARNING -> PRACTICING and "streak reached"
+  // on PRACTICING -> MASTERED, which is not the ladder the state diagram draws.
   const edges: FlowEdgeDef[] = [
-    { id: 'e-unseen-learning', source: 'unseen', target: 'learning', animated: true },
-    { id: 'e-learning-practicing', source: 'learning', target: 'practicing', label: 'first\ncorrect', color: 'green', animated: true },
-    { id: 'e-practicing-mastered', source: 'practicing', target: 'mastered', label: 'streak\nreached', color: 'green', animated: true },
-    { id: 'e-mastered-decaying', source: 'mastered', target: 'decaying', label: 'interval\nelapsed', color: 'blue', animated: true },
+    { id: 'e-unseen-learning', source: 'unseen', target: 'learning', label: 'first\ncorrect', color: 'green', animated: true },
+    { id: 'e-learning-practicing', source: 'learning', target: 'practicing', label: 'consistent\nattempts', color: 'green', animated: true },
+    { id: 'e-practicing-mastered', source: 'practicing', target: 'mastered', label: 'evidence\nreached', color: 'green', animated: true },
+    { id: 'e-mastered-decaying', source: 'mastered', target: 'decaying', label: '14 days\nidle', color: 'blue', animated: true },
     { id: 'e-decaying-practicing', source: 'decaying', target: 'practicing', label: 'review\ncorrect', dashed: true, color: 'green' },
   ]
 

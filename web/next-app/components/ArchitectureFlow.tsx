@@ -118,12 +118,16 @@ const layers: LayerDef[] = [
   {
     id: 'grading', label: 'Grading Layer',
     items: [
+      // Six pure-Go graders, then the three that route to SymPy. `Symbolic` used to be drawn
+      // as a Go node, but router.go sends symbolic, polynomial and expression to the Python
+      // subprocess; tuple and complex were missing entirely.
       { id: 'numeric', label: 'Numeric\nGo' },
-      { id: 'sympy', label: 'SymPy\nPython' },
-      { id: 'symbolic', label: 'Symbolic\nGo' },
       { id: 'choice', label: 'Choice\nGo' },
       { id: 'comp', label: 'Comparison\nGo' },
       { id: 'order', label: 'Ordering\nGo' },
+      { id: 'tuple', label: 'Tuple\nGo' },
+      { id: 'complex', label: 'Complex\nGo' },
+      { id: 'sympy', label: 'SymPy\nPython' },
     ],
   },
   {
@@ -149,11 +153,12 @@ const archEdges: ArchEdge[] = [
   { source: 'gen', target: 'grade' },
   { source: 'grade', target: 'score' },
   { source: 'gen', target: 'numeric' },
-  { source: 'gen', target: 'sympy' },
-  { source: 'gen', target: 'symbolic' },
   { source: 'gen', target: 'choice' },
   { source: 'gen', target: 'comp' },
   { source: 'gen', target: 'order' },
+  { source: 'gen', target: 'tuple' },
+  { source: 'gen', target: 'complex' },
+  { source: 'gen', target: 'sympy' },
   { source: 'score', target: 'sqlite' },
   { source: 'score', target: 'pg' },
 ]
