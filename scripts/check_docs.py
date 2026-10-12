@@ -551,6 +551,17 @@ def check_symbol_citations(rep: Report) -> None:
                 if end > total:
                     rep.error(f"{doc}:{line_no}", "citation",
                               f"`{rel}:{start}` is past the end of the file ({total} lines)")
+                    continue
+                # A citation that lands on a blank line, a closing brace, or an import names
+                # nothing. These are the three shapes the line numbers drift into: a file grows
+                # and the anchor slides onto whitespace or into a neighbouring block. It is a
+                # mechanical test, so it costs nothing and needs no knowledge of the symbol.
+                content = target.read_text(encoding="utf-8").split("\n")[start - 1]
+                if not content.strip() or re.match(r'^\s*[\}\)\]],?\s*$', content) \
+                        or re.match(r'\s*(?:import|"[\w./-]+")\s', content):
+                    rep.error(f"{doc}:{line_no}", "citation",
+                              f"`{rel}:{start}` lands on {content.strip()[:30] or 'a blank line'!r}"
+                              f", which names no symbol")
 
 
 def check_no_stub_claims(rep: Report) -> None:
