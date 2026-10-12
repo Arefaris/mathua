@@ -89,7 +89,17 @@ const shapeUrl = (seed: string) =>
 const linkClass = 'block opacity-80 transition-opacity hover:opacity-100'
 const headingClass = 'font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--footer-ink-muted)]'
 
-const CREDITS = ['MIT License', 'Avatars by DiceBear']
+// The credits strip names each license the shipped content carries, not only the software.
+// Algebrica lesson content is CC BY-NC 4.0, which requires attribution, and the glossary draws
+// on OpenStax, DLMF and others. A short line cannot carry title, author, source and license for
+// every source, so the line names them and "Licenses" links to /licenses, which renders
+// THIRD_PARTY_NOTICES.md in full.
+const CREDITS = [
+  'MIT License',
+  'Avatars by DiceBear',
+  'Lesson content: Algebrica (CC BY-NC 4.0)',
+  'Glossary: OpenStax, DLMF and others',
+]
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
@@ -216,10 +226,13 @@ export default function Footer({ className = '' }: FooterProps) {
 
         <div className="footer-credits border-t pt-5 font-mono text-[10px] opacity-80">
           {CREDITS.map(credit => (
-            <span key={credit} className="after:ml-3 after:content-['·'] last:after:content-none">
+            <span key={credit} className="after:ml-3 after:content-['·']">
               {credit}
             </span>
           ))}
+          <Link href="/licenses" className="underline hover:no-underline">
+            Licenses
+          </Link>
         </div>
       </div>
     </footer>
