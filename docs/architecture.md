@@ -168,7 +168,7 @@ A count read before a write loses a race. Two owners who demote each other at th
 both read two. Both write. The system reaches zero through the feature meant to stop it. One
 statement means the second attempt matches no rows.
 
-The invariant is on the owner, not the admin. An admin or a moderator can be removed freely. An
+The invariant is on the owner, not the admin. You can remove an admin or a moderator freely. An
 owner cannot be, because nothing but an owner can create another owner.
 
 ### Bootstrap

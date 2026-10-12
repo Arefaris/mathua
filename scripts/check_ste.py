@@ -21,6 +21,7 @@ What this enforces (all objective, all mechanical):
   2. No contractions.
   3. No "should", "would", "may", "might", "shall", "ought" — STE allows only can/must/will.
   4. No helping verb plus past participle ("has been", "have written") — use the simple past.
+  4a. No complex passive with a modal: "can be adjusted" names no actor — rule 3.4.
   5. No progressive "-ing" forms, except the eight STE permits.
   6. No passive "is/are/was/were ... by".
   7. Sentence length limits: 20 words procedural, 25 descriptive.
@@ -86,6 +87,60 @@ HAVE_PARTICIPLE = re.compile(
 PASSIVE_BY = re.compile(
     r"\b(?:is|are|was|were|be|been|being)\s+(?:\w+\s+){0,2}?\w+(?:ed|en)\s+by\b", re.IGNORECASE)
 
+# Rule 3.4: complex verb structure with a helping verb and a past participle.
+#
+# PASSIVE_BY above needs an explicit agent ("by the operator") to fire. A complex passive has
+# no agent to promote and no "by" phrase, so that pattern cannot see it: the rule's own
+# examples are "the volume control can be adjusted" and "the temperature must be adjusted".
+#
+# The pattern requires the BE. Without it the rule does not apply and the pattern misfires on
+# ordinary modal verbs — "then" ends in -en, and "can happen" is not a participle at all — so a
+# bare modal-plus-participle shape flags correct prose. This form matches only the structures
+# the rule actually names.
+#
+# Adjectives after BE are exempt. "the wires are disconnected" is a condition and is permitted
+# (rule 3.6 permits a past participle after is/are); the same participle in "can be
+# disconnected" is the construction this rule exists to catch, so the exemption is keyed on the
+# modal, not on the participle.
+CAN_BE = re.compile(
+    r"\b(?:can|could|will|would|may|might|must|shall|should|ought)\s+"
+    r"(?:not\s+|only\s+|always\s+|never\s+|also\s+|easily\s+|directly\s+|manually\s+)*"
+    r"(?:be|been)\s+"
+    r"(?:automatically\s+|safely\s+|properly\s+|correctly\s+|easily\s+|first\s+|also\s+)*"
+    r"(\w+(?:ed|en))\b", re.IGNORECASE)
+
+# Irregular past participles. "-ed"/"-en" cannot see these: "sent", "done" and "found" do not
+# end in either, so a morphology-only pattern misses the commonest complex passives in English
+# ("will be sent", "must be done", "can be found"). Listed rather than inferred, because an
+# irregular-participle guesser would have to decide whether each word is a participle or an
+# adjective, which is the judgement this rule is trying to make mechanically.
+CAN_BE_IRR = re.compile(
+    r"\b(?:can|could|will|would|may|might|must|shall|should|ought)\s+"
+    r"(?:not\s+|only\s+|always\s+|never\s+|also\s+|easily\s+|directly\s+|manually\s+)*"
+    r"(?:be|been)\s+"
+    r"(?:automatically\s+|safely\s+|properly\s+|correctly\s+|easily\s+|first\s+|also\s+)*"
+    r"(sent|done|found|held|kept|left|read|run|set|put|cut|shut|torn|worn|drawn|shown|seen|"
+    r"taken|given|written|made|built|brought|bought|caught|taught|thought|told|sold|paid|"
+    r"lost|won|chosen|driven|eaten|fallen|forgotten|hidden|risen|spoken|stolen|born|grown|"
+    r"thrown|frozen|proven)\b", re.IGNORECASE)
+
+CAN_BE_IRREGULAR = {
+    "sent", "done", "found", "held", "kept", "left", "read", "run", "set", "put", "cut",
+    "shut", "torn", "worn", "drawn", "shown", "seen", "taken", "given", "written", "made",
+    "built", "brought", "bought", "caught", "taught", "thought", "told", "sold", "paid",
+    "lost", "won", "chosen", "driven", "eaten", "fallen", "forgotten", "hidden", "risen",
+    "spoken", "stolen", "worn", "born", "grown", "thrown", "frozen", "proven", "risen",
+}
+
+# Participles that read as nouns or fixed labels rather than as the verb of a complex
+# passive. Deliberately short. An earlier version excused sent/done/shown/seen, which is wrong
+# here: "will be sent" and "should be done" are exactly the constructions rule 3.4 names, and
+# excusing them left the rule unable to catch the ordinary case. Keep only words that are nouns
+# wherever they appear.
+CAN_BE_ADJ = {
+    "needed", "used", "linked", "related", "given", "limited", "combined",
+}
+
 # Rule 3.5: progressive.
 BE_ING = re.compile(r"\b(?:is|are|was|were|be|been|am)\s+(\w+ing)\b", re.IGNORECASE)
 
@@ -138,6 +193,12 @@ def check_sentence(sent: str, limit: int, where: str, errors: list[tuple[str, st
     m = PASSIVE_BY.search(sent)
     if m:
         errors.append((where, f'3.6 passive voice "{m.group(0)}": make the agent the subject.'))
+    for rx in (CAN_BE, CAN_BE_IRR):
+        m = rx.search(sent)
+        if m and m.group(1).lower() not in CAN_BE_ADJ:
+            errors.append((where, f'3.4 complex passive "{m.group(0)}": name the actor, or write '
+                                   f'it without "can be".'))
+            break
     m = BE_ING.search(sent)
     if m and m.group(1).lower() not in ING_APPROVED:
         errors.append((where, f'3.5 progressive "{m.group(0)}": use a simple tense.'))
