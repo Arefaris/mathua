@@ -22,7 +22,7 @@ type TransitionCtx struct {
 
 // Machine steps from one mastery status to the next based on evidence.
 //
-// Rules, as the state diagram draws them (`docs/diagrams/student-model.svg`):
+// Rules, as the state diagram draws them (`docs/diagrams/student-model-dark.svg`):
 //
 //	UNSEEN     → LEARNING    one correct answer            "first correct"
 //	LEARNING   → PRACTICING  consistent across attempts    "streak reached"

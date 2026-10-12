@@ -38,7 +38,7 @@ A single Go binary, a web delivery mode, one engine core.
 
 ![width:1000](diagrams/system-design-data-model-dark.svg)
 
-5 tables: `students`, `concept_progress`, `sessions`, `attempts`, `questions`
+18 tables. Five carry the learning loop: `students`, `concept_progress`, `sessions`, `attempts`, `questions`.
 
 ---
 
@@ -60,7 +60,7 @@ quality >= 3 (success):
 quality < 3 (failure):
   rep = 0, interval = 1
 
-XP = base(10/5) * timeMult(0.5-1.5) * streakMult(1 + min(s,10)*0.1)
+XP = EffortBase(threshold) * PerformanceMultiplier   # correct only
 ```
 
 Quality from: correctness + response time ratio.
@@ -136,7 +136,7 @@ Middleware: CORS, logging, JWT auth, rate limiting (5/min on auth).
 
 ![width:1000](diagrams/system-design-cat-diagnostic-dark.svg)
 
-Binary search on topologically sorted DAG. ~20-35 questions vs 657.
+Info-gain CAT over a compressed covering set. 25-45 questions vs 657.
 
 ---
 

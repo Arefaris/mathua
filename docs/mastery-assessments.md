@@ -2,7 +2,7 @@
 
 Status: **design. No migration written, no unit authored, no threshold chosen.**
 
-This is the decision map for **ADR-046** (`CONTEXT.md`). ADR-046 settles the *shape* — a
+This is the decision map for **ADR-046** (`docs/adr/ADR-046-a-mastery-assessment-verifies-evidence-it-does.md`). ADR-046 settles the *shape* — a
 mastery unit is a named partition of the existing concept DAG, an assessment contributes
 evidence rather than writing mastery, two unit states are stored and five are derived, and
 `Engine.ProgressionGate` is the single server-side answer to "can this learner progress".
@@ -221,7 +221,7 @@ Settings, and remediation all stay reachable. The remaining question is whether
 
 One half of that question is answered by closure rather than by decision. Study used to be a
 reference surface with its own embedded practice, and it asked whether that practice should
-refuse. Study is closed as a learner workflow (ADR-046), so the question no longer has two
+refuse. Study is closed as a learner workflow (ADR-047), so the question no longer has two
 halves: there is one learning path, it asks one question, and whether *it* refuses is the
 question above.
 

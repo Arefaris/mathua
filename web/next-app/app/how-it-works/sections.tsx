@@ -169,10 +169,10 @@ minimum value: 1.3`}
 
 export function DiagnosticSection() {
   const steps = [
-    'The concept graph is sorted topologically. The diagnostic starts at the concept at the midpoint of the sorted order.',
+    'The concept graph is sorted topologically. The diagnostic builds a covering set from the graph roots and evenly spaced concepts.',
     'If the student answers correctly within the time limit, the algorithm moves forward: it next tests a concept further along the prerequisite chain.',
     'If the student answers incorrectly or exceeds twice the expected time, the algorithm moves backward: it tests a concept earlier in the chain.',
-    'This binary search continues with multiple probes per concept until the student\'s starting point is clearly established.',
+    'The assessment continues with multiple probes per concept until the student\'s starting point is clearly established.',
     'The diagnostic records a starting mastery estimate for every concept the student passed through. Concepts answered correctly count as LEARNING. Concepts answered quickly and accurately count as conditionally MASTERED and are skipped in early sessions.',
   ]
   return (
@@ -205,7 +205,7 @@ export function DiagnosticSection() {
       <p style={bodyStyle}>
         The diagnostic test asks as few questions as possible. Without this algorithm, a
         naive assessment of 657 concepts would require up to 657 questions. The CAT approach,
-        combining binary search with the topological ordering, reduces this by roughly 90%.
+        picking each question by information gain over a covering set, reduces this by roughly 94%.
       </p>
       <p style={bodyStyle}>
         The diagnostic test can be retaken at any time from your profile. Retaking does not

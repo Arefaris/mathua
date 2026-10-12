@@ -59,7 +59,11 @@ The architecture is streamlined with a single UI delivery method through the RES
 
 ### Schema Overview
 
-Five core tables: `students`, `concept_progress`, `sessions`, `attempts`, `questions`.
+Eighteen tables. The five that carry the learning loop are `students`, `concept_progress`,
+`sessions`, `attempts` and `questions`. The other thirteen support the product around it:
+`active_sessions`, `student_topic_speed`, `quiz_completions`, `avatar_images`,
+`password_resets`, `identities`, `email_verifications`, `link_tokens`, `question_reports`,
+`admin_invitations`, `admin_audit`, `server_sessions` and `schema_migrations`.
 
 ![Data Model](diagrams/system-design-data-model-dark.svg)
 
@@ -77,7 +81,7 @@ Five core tables: `students`, `concept_progress`, `sessions`, `attempts`, `quest
 | `xp_total` | INTEGER | Lifetime XP (`MAX(0, xp_total+?)` floor `sqlite.go:199`) |
 | `xp_today` | INTEGER | Resets via `xp_date` check (`MAX(0, …)`) |
 | `xp_date` | TEXT | Date of `xp_today` bucket (`YYYY-MM-DD`) |
-| `daily_xp_goal` | INTEGER | Daily goal (default 10, migrated from legacy 150 via versioned backfill `sqlite.go`) |
+| `daily_xp_goal` | INTEGER | Daily goal (default 30, `xp.DefaultDailyGoal`; migrated from legacy 150 via versioned backfill `sqlite.go`) |
 | `settings` | TEXT (JSON) | Arbitrary key-value settings (`pause_until`, `accommodations.extra_time`) |
 | `diagnostic_completed` | INTEGER | Boolean flag |
 | `share_token` | TEXT | `s_` + 12 random bytes (`engine.go:1270`) |
@@ -162,7 +166,7 @@ Migrations are embedded directly in the application binary  --  no external migr
 The `Repository` interface abstracts the storage layer (`store.go:127`):
 
 - **SQLiteStore**  --  Fully implemented (`sqlite.go:1`, `WAL` `migrate.go:23`), used for local dev and `DATABASE_URL=sqlite:mathua.db` / `:memory:` tests
-- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:7` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions) — used when `DATABASE_URL=postgres://` `main.go:57`
+- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:19` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions) — used when `DATABASE_URL=postgres://` `main.go:69`
 
 The codebase checks `DATABASE_URL` at startup and opens `pgx` for `postgres://` else `SQLite` (`mathua.db`).
 
@@ -177,10 +181,10 @@ The engine is the central orchestrator. It holds references to every subsystem a
 | Module | File | Responsibility |
 |--------|------|----------------|
 | **DAG Loader** | `internal/concepts/` (`loader.go:13`, `dag.go`) | Loads `data/concepts/*.json` + `enrichment.json` heuristics (`Encompasses`, `InterferenceGroup`, `Variants`), validates no cycles/orphans/dup IDs, no singletons, encompass cycles, produces topological sort via Kahn's algorithm |
-| **Scheduler** | `internal/scheduler/` (`scheduler.go:229`, `scheduler.go:87`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
+| **Scheduler** | `internal/scheduler/` (`scheduler.go:243`, `scheduler.go:87`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
 | **Generators** | 17 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74` — no static question bank |
-| **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:22`, `sm2.go:15`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `scheduler.go:194`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
-| **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `scoring/updater.go:59` |
+| **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:41`, `sm2.go:34`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `mastery/status.go:24`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
+| **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `xp.DefaultDailyGoal` (`xp/policy.go`) |
 | **Weakness Propagation** | In engine `engine.go:1575` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
 | **Diagnostic** | `internal/diagnostic/` (`cat.go:1`, `report.go:11`) | Compressed covering set + info-gain CAT with `±0.3` evidence propagation, per-concept `KnowledgeConfidence 0–1`, frontier at max belief drop, supplemental when `<0.7` |
 | **Planner** | `internal/planning/` | Course paths loaded from `data/courses.json` (22 courses) |
@@ -228,38 +232,33 @@ Decaying concepts (≥14 days since last review) get `+5` priority bonus. The sc
 
 ### Mastery State Machine
 
-Four stored states, one computed state:
+Four stored states, one computed state. Advancement is decided by evidence, not by a streak.
 
 | State | Transition | Condition |
 |-------|-----------|-----------|
-| **UNSEEN** → LEARNING | First correct | Streak ≥ required AND avg time ≤ threshold |
-| **LEARNING** → PRACTICING | Consistent correct | Same |
-| **PRACTICING** → MASTERED | Mastery achieved | Same |
+| **UNSEEN** → LEARNING | First correct answer | Evidence reaches the first rung |
+| **LEARNING** → PRACTICING | Consistent across attempts | Evidence reaches the next rung |
+| **PRACTICING** → MASTERED | Demonstrated and transferable | Evidence reaches the mastery rung |
 | **MASTERED** → DECAYING | 14+ days idle | Computed at read time, never stored |
 
-The `streak` resets to 0 on any incorrect answer, **and to 1 on every tier advance**
-(`engine.go:1124`). Each concept has a `required_streak` and a `time_threshold`
-(typically 120s for generated, 60s for review).
+The evidence score is assembled from the last six attempts (`EvidenceWindow`). Each attempt
+contributes by correctness, the difficulty it was served at, the variety of problem instance,
+and elapsed time. A concept counts as demonstrated at `MasteryThreshold = 0.6` once at least
+`MasteryEvidenceFloor = 6` attempts support it. An attempt with no recorded difficulty is
+credited at `NeutralDifficulty = 0.55`, the difficulty the engine serves with no learner
+information, rather than dropped.
 
-Two corrections to this table, both of which hid a real cost for months:
+**Status only moves forward.** A miss lowers the evidence score but does not un-learn a concept:
+`MASTERED` is an exit, and decay asks about retention, not attainment. The `required_streak` and
+`time_threshold` fields still exist — SM-2 reads the streak to grade a review — but they no
+longer gate the ladder.
 
-- **`required_streak` is not "typically 3".** It is **10 for 459 of the 657 concepts**, 3
-  for 171, and 5/7/15 for the remaining 27. The old figure was wrong for 70% of the corpus.
-- **The three tiers were meant to be gated on different evidence.** The state diagram
-  (`docs/diagrams/student-model.svg`) labels them "first correct", "streak reached" and
-  **"interval elapsed"** — the last being a spacing interval before `MASTERED`. The
-  implemented condition is the same for all three, so the spacing rung was lost.
-- **The reset on advance was not documented here.** Combined with the identical condition
-  above, it means `MASTERED` costs **3 × `required_streak` consecutive correct answers** —
-  30 for most of the corpus, all-or-nothing, since one miss zeroes the streak. Measured
-  cost, per concept: median 12 minutes of answer time, and a 4% chance of completing a
-  30-answer run in one sitting at 90% per-answer accuracy.
-
-That cost is not a design decision: it arrived with commit `725fad9`, *"fix mastery state
-machine — reset streak on level-up"*, whose message has no body. See
-`docs/mastery-semantics.md` for the measurements and for the evidence model this should
-be replaced by — which already exists at `web/next-app/lib/progression.ts` and is, today,
-only a label.
+This replaced a streak-based ladder, and the cost of the old one is worth recording because it
+was invisible for months. All three tiers were gated on the single condition
+`streak >= required AND avg time <= threshold`, so the ladder was one test repeated until the
+streak was long enough: for the 459 concepts whose `required_streak` is 10, `MASTERED` cost 30
+consecutive correct answers, all-or-nothing, because one miss zeroed the streak. See
+`docs/mastery-semantics.md` for the measurements and ADR-038 for the decision.
 
 ### SM-2 Spaced Repetition
 
@@ -290,12 +289,22 @@ Quality is derived from correctness and response time:
 
 ### XP Scoring
 
+The task type does not change the base, speed is not rewarded, and there is no streak bonus.
+Each of those three was removed on purpose, and `internal/xp/policy.go` records why in its
+package comment.
+
+The removed time multiplier paid for guessing and penalised careful work. The removed streak
+bonus let a learner on a long run out-earn the same work done carefully.
+
 ```
-base = 10 (new) or 5 (review)
-timeMultiplier = clamp(2.0 - elapsed / threshold, 0.5, 1.5)
-streakMultiplier = 1.0 + min(streak, 10) × 0.1
-XP = int(base × timeMultiplier × streakMultiplier)
+base = EffortBase(timeThreshold)      # clamped to 1-5 XP, from expected effort
+XP = int(base × PerformanceMultiplier)  # correct answers only
 ```
+
+`PerformanceMultiplier` is 1.1 inside the concept's own time threshold and 1.0 outside it.
+Because the base is clamped to 1-5 and the award truncates, `int(base × 1.1) == base` for every
+base in range: on the integer award the tier is absorbed by rounding. It is still real in the
+model, and `ExpectedXP` returns it as a float for the workload estimator to read.
 
 ### Levels
 
@@ -343,7 +352,7 @@ For symbolic math (polynomial simplification, expression equivalence), Mathua sp
 4. **Symbolic equivalence**: `simplify(diff) == 0`, `expand(diff) == 0`, `trigsimp`, `radsimp`, `powsimp`, `factor`, `ee.equals(ea)`
 5. **Numerical verification**: 10 random points checked within `1e-6` tolerance
 6. **Output**: JSON line on stdout `{id, correct, feedback}`
-7. **Safeguards**: 10-second `SIGALRM` timeout, 500-character input limit, character allowlist
+7. **Safeguards**: 3-second `SIGALRM` timeout, 500-character input limit, character allowlist
 
 The service is bundled into the production image (pinned `grading/requirements.txt`) and self-tested at build time; there is no pure-Go fallback for these types.
 
@@ -379,7 +388,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | GET | `/api/leagues` | auth | Weekly leagues with promotion/demotion |
 | POST | `/api/share` | auth | Enable/disable share link (`s_` token `engine.go:1270`) |
 | GET | `/api/share/{token}` | shareLimiter, public | Read-only parent/teacher report |
-| GET | `/api/courses` | auth | Available courses (21) |
+| GET | `/api/courses` | auth | Available courses (22) |
 | GET | `/api/courses/{id}` | auth | Course detail + progress |
 | POST | `/api/courses/{id}/diagnostic` | auth | Set course + activate path |
 | GET | `/api/transcript` | auth | Transcript JSON or `?format=csv` |
@@ -388,7 +397,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/goal/diagnostic/answer` | write: writeLimiter, optional | Submit goal diagnostic answer (graded via stored problem) |
 | POST | `/api/goal/plan` | write: writeLimiter, optional | Persist diagnostic + readiness report |
 | GET | `/api/weaknesses` | auth | Weakness scores by domain (`weakness >0.2`) |
-| POST | `/api/goals/xp` | auth | Set daily XP goal (1–10000) |
+| POST | `/api/goals/xp` | auth | Set daily XP goal (10–100, `xp.MinDailyGoal`–`xp.MaxDailyGoal`) |
 | GET/PUT | `/api/settings` | auth | Student settings JSON (`pause_until`, `accommodations.extra_time`) |
 | GET | `/api/reviews/due` | auth | Count due reviews (paused → 0) |
 | POST | `/api/reviews/session` | write: writeLimiter, auth | Create review-only session |
@@ -402,7 +411,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer (`TaskQuiz 20` `engine.go:1126`) |
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
-| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"admin"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change |
+| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
 | GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route, and no update or delete method on either store |
 | GET | `/api/activity` | auth | Daily activity heatmap (`?days=365`) |
 | GET | `/api/efficacy` | auth | First-pass/second-pass efficacy |
@@ -521,9 +530,10 @@ Mathua implements a compressed-covering + info-gain CAT to locate a student's kn
 
 ### Goal-Oriented Diagnostic
 
-A variant that targets a specific set of concept goals. Instead of starting at the DAG midpoint, it:
+A variant that targets a specific set of concept goals. `StartWithPath` runs the same
+info-gain CAT, restricted to the caller's path rather than the whole graph:
 1. Collects all prerequisite chains for the target concepts
-2. Runs binary search only within the prerequisite subspace
+2. Picks each question by information gain over the covering set, within that path
 3. Produces a readiness assessment: which prerequisites are mastered and which need work
 
 ---
@@ -564,7 +574,7 @@ Trade-off: generation latency. Complex polynomial questions require a SymPy subp
 
 ### Why No ORM?
 
-The schema has 5 tables with straightforward relationships. Raw SQL with `database/sql` gives:
+The schema has 18 tables with straightforward relationships. Raw SQL with `database/sql` gives:
 - Full control over query optimization (especially the SM-2 upsert and leaderboard queries)
 - No query generation overhead
 - Transparent SQL for debugging
@@ -592,5 +602,5 @@ The Go binary serves the Next.js static export directly. This means:
 
 ## Summary
 
-Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:7` / `storage/sqlite.go:1`, same `Repository` `store.go:127`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 17 domain registries (657 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
+Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:19` / `storage/sqlite.go:1`, same `Repository` `store.go:127`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 17 domain registries (657 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
 

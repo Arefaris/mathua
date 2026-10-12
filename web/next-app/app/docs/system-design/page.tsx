@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import DocPage from '../../../components/DocPage'
 
-export default function SystemDesignRedirect() {
-  redirect('/docs/architecture')
+export default function SystemDesignPage() {
+  return <DocPage slug="system-design" />
 }

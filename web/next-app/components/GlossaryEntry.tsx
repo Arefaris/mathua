@@ -114,6 +114,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
               href={s.url}
               target="_blank"
               rel="noreferrer"
+              title={s.license}
               className="underline hover:text-mathua-blue"
             >
               {s.label}
@@ -121,6 +122,21 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
           </span>
         ))}
       </p>
+
+      {/* The license was suppressed here because the full reuse terms are long and repeat on
+          every card. Attribution is a condition of several of these sources, so it belongs on
+          the card and not only on /licenses — the note is the source and its license, once per
+          source, in the smallest type the card uses. */}
+      {entry.sources.some(s => s.license) && (
+        <p className="mt-1 font-mono text-[10px] text-mathua-muted">
+          {entry.sources.filter(s => s.license).map((s, i) => (
+            <span key={i}>
+              {i > 0 && '; '}
+              {s.label}: {s.license}
+            </span>
+          ))}
+        </p>
+      )}
 
       {entry.notes && (
         <p className="mt-1 font-mono text-[10px] text-mathua-muted">{entry.notes}</p>

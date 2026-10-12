@@ -29,6 +29,7 @@ validate:
 	python3 scripts/counts.py --check
 	python3 scripts/check_docs.py
 	python3 scripts/check_ste.py
+	node web/next-app/scripts/build-docs.mjs --check
 	go test ./internal/generator/ -run TestLearnerDomainsHaveSchemas
 
 # Strict LaTeX check: runs every math span in the lesson corpus through Compute

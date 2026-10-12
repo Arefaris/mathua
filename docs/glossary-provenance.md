@@ -1,4 +1,14 @@
-# Glossary audit — research notes (working artifact, keep until approved)
+# Glossary provenance and audit log
+
+This is the evidence behind the glossary's source attributions. [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) states
+each license obligation; this file records the work that established it — which page was opened,
+what was verified there, and what was corrected as a result. Keep it: an obligation whose audit
+trail is gone cannot be defended or re-verified.
+
+Rounds are newest first. Each round names its batch, the sources opened, and the findings. A
+term counts as source-verified only when a claim was checked against a page that was opened, not
+against a search result.
+
 
 ## Specialist expansion (282 → 342; six fields, 60 entries)
 
@@ -69,7 +79,7 @@ open source this run), trace-class/Hilbert–Schmidt operators
 ## Coverage expansion (229 → 280; batches A–D plus trig-identities)
 
 ### Method
-Taxonomy of 21 areas (MSC-coded) in `scripts/glossary-coverage.json` with
+Taxonomy of 21 areas (MSC-coded) in `web/next-app/scripts/glossary-coverage.json` with
 per-area inventories, entry mapping, and honest statuses (20
 verified_complete relative to their documented inventories; 1
 gaps_remaining). Existing 229 audited automatically (no dup names, no
@@ -108,8 +118,6 @@ or a documented derivation.
   this run; graduate texts not openly fetchable. Ledger gaps_remaining.
 - Big-Theta/Omega note: DADS Ω definition is stronger (for-all-large-n)
   than some textbooks' infinitely-often version — recorded in the entry.
-
-## Batch: advanced (27 entries)
 
 ## Coverage batch 2 (26 new entries, 203 → 229)
 
@@ -153,7 +161,7 @@ Resolved two deferred exclusions with dedicated sources: aleph-null
   full theorem statement. Status: verified.
 - All 26 new entries: verified at authoring. No other corrections.
 
-## Batch: advanced (27 entries)
+## How a round is recorded
 
 Each batch records: claims checked, sources actually opened (URL + what was
 verified there), and findings. "Searched" is not "verified": an entry counts

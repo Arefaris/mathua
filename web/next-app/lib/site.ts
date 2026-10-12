@@ -18,9 +18,12 @@ export const INDEXABLE_ROUTES = [
   '/glossary',
   '/docs',
   '/docs/architecture',
+  '/docs/administration',
   '/docs/contributing',
   '/docs/efficacy',
+  '/docs/math-input',
   '/docs/system-design',
+  '/licenses',
   '/note',
   '/login',
 ] as const

@@ -1,10 +1,5 @@
 # Student Model — Concept state pipeline
 
-UNSEEN -> LEARNING
-LEARNING -> PRACTICING
-PRACTICING -> MASTERED
-MASTERED -> DECAYING
-
 UNSEEN: {
   style: {
     fill: "#EEF2F7"
@@ -13,9 +8,10 @@ UNSEEN: {
   }
 }
 
-LEARNING -> PRACTICING: first\ncorrect
-PRACTICING -> MASTERED: streak\nreached
-MASTERED -> DECAYING: interval\nelapsed
+UNSEEN -> LEARNING: first\ncorrect
+LEARNING -> PRACTICING: consistent\nattempts
+PRACTICING -> MASTERED: evidence\nreached
+MASTERED -> DECAYING: 14 days\nidle
 
 MASTERED: {
   style: {
