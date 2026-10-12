@@ -1,9 +1,12 @@
 'use client'
 
+import MathInput from './math/MathInput'
 import { GLOSSARY_CATEGORIES } from '../lib/glossary/categories'
 import type { GlossaryCategoryId } from '../lib/glossary/types'
 
 export type GlossaryCategoryFilter = GlossaryCategoryId | 'all'
+
+export type GlossarySearchMode = 'text' | 'math'
 
 interface GlossarySearchProps {
   query: string
@@ -11,41 +14,83 @@ interface GlossarySearchProps {
   resultCount: number
   rangeStart: number
   rangeEnd: number
+  mode: GlossarySearchMode
+  mathLatex: string
   onQueryChange: (q: string) => void
   onCategoryChange: (c: GlossaryCategoryFilter) => void
+  onModeChange: (m: GlossarySearchMode) => void
+  onMathChange: (latex: string) => void
   onClear: () => void
 }
 
 // Search + category filter + result count + clear. The count is a live
 // status so assistive tech announces filtering without moving focus.
+//
+// Two input modes share one active query: text for names, aliases and
+// definition words; math (MathLive) for notation typed as notation. Only one
+// is active at a time — MathLive splits prose into spaced letters rather
+// than words, so combining the two would silently corrupt word queries.
 export default function GlossarySearch({
   query,
   category,
   resultCount,
   rangeStart,
   rangeEnd,
+  mode,
+  mathLatex,
   onQueryChange,
   onCategoryChange,
+  onModeChange,
+  onMathChange,
   onClear,
 }: GlossarySearchProps) {
-  const active = query.trim() !== '' || category !== 'all'
+  const active = query.trim() !== '' || mathLatex.trim() !== '' || category !== 'all'
   return (
     <div className="space-y-3">
+      <div role="group" aria-label="Search input type" className="flex gap-2">
+        {(['text', 'math'] as const).map(m => (
+          <button
+            key={m}
+            type="button"
+            onClick={() => onModeChange(m)}
+            aria-pressed={mode === m}
+            className={`border px-4 py-1 font-mono text-[11px] min-h-[44px] transition-colors ${
+              mode === m
+                ? 'border-mathua-blue text-mathua-blue'
+                : 'border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue'
+            }`}
+          >
+            {m === 'text' ? 'Text' : 'Math: f(x)'}
+          </button>
+        ))}
+      </div>
       <div className="flex flex-col gap-2 sm:flex-row">
         <div className="min-w-0 flex-1">
-          <label htmlFor="glossary-search" className="sr-only">
-            Search symbols, names or meanings
-          </label>
-          <input
-            id="glossary-search"
-            type="search"
-            autoComplete="off"
-            spellCheck={false}
-            value={query}
-            onChange={e => onQueryChange(e.target.value)}
-            placeholder="Search a symbol, name or meaning — e.g. ∀, integral, lambda"
-            className="w-full border border-mathua-border bg-mathua-surface px-4 py-2 font-mono text-sm text-mathua-primary placeholder:text-mathua-muted focus:border-mathua-blue focus:outline-none min-h-[44px]"
-          />
+          {mode === 'text' ? (
+            <>
+              <label htmlFor="glossary-search" className="sr-only">
+                Search symbols, names or meanings
+              </label>
+              <input
+                id="glossary-search"
+                type="search"
+                autoComplete="off"
+                spellCheck={false}
+                value={query}
+                onChange={e => onQueryChange(e.target.value)}
+                placeholder="Search a symbol, name or meaning — e.g. ∀, integral, lambda"
+                className="w-full border border-mathua-border bg-mathua-surface px-4 py-2 font-mono text-sm text-mathua-primary placeholder:text-mathua-muted focus:border-mathua-blue focus:outline-none min-h-[44px]"
+              />
+            </>
+          ) : (
+            <MathInput
+              value={mathLatex}
+              mode="algebra"
+              ariaLabel="Search by math notation"
+              placeholder="Type a symbol, e.g. ∫ or \alpha"
+              onChange={v => onMathChange(v.latex)}
+            />
+          )}
         </div>
         {active && (
           <button

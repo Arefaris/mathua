@@ -7,7 +7,7 @@ import BottomTabs from '../../components/BottomTabs'
 import SectionHeader from '../../components/SectionHeader'
 import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
-import GlossarySearch, { type GlossaryCategoryFilter } from '../../components/GlossarySearch'
+import GlossarySearch, { type GlossaryCategoryFilter, type GlossarySearchMode } from '../../components/GlossarySearch'
 import GlossaryEntryCard from '../../components/GlossaryEntry'
 import { useTheme } from '../../hooks/useTheme'
 import { GLOSSARY_ENTRIES } from '../../lib/glossary/data'
@@ -19,6 +19,7 @@ import {
   parsePageParam,
   totalPagesFor,
 } from '../../lib/glossary/search'
+import { mathSearchEntries } from '../../lib/glossary/mathQuery'
 
 /**
  * The mathematical glossary: a standalone reference for symbols, notation
@@ -106,13 +107,17 @@ function GlossaryPageInner() {
   const searchParams = useSearchParams()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<GlossaryCategoryFilter>('all')
+  const [mode, setMode] = useState<GlossarySearchMode>('text')
+  const [mathLatex, setMathLatex] = useState('')
   const [page, setPageState] = useState(1)
   const resultsTopRef = useRef<HTMLDivElement>(null)
   const pendingScrollId = useRef<string | null>(null)
 
+  const inCategory =
+    category === 'all' ? GLOSSARY_ENTRIES : GLOSSARY_ENTRIES.filter(e => e.category === category)
   const results = useMemo(
-    () => filterEntries(GLOSSARY_ENTRIES, { query, category }),
-    [query, category],
+    () => (mode === 'math' ? mathSearchEntries(inCategory, mathLatex) : filterEntries(GLOSSARY_ENTRIES, { query, category })),
+    [inCategory, mathLatex, mode, query, category],
   )
   const totalPages = totalPagesFor(results.length)
 
@@ -159,6 +164,22 @@ function GlossaryPageInner() {
 
   function handleQueryChange(q: string) {
     setQuery(q)
+    if (mathLatex !== '') setMathLatex('')
+    writePage(1, false)
+  }
+
+  function handleMathChange(latex: string) {
+    setMathLatex(latex)
+    if (query !== '') setQuery('')
+    // Stay on the current page while typing so the list does not jump;
+    // clearing to empty shows the full list again via the no-terms path.
+  }
+
+  function handleModeChange(m: GlossarySearchMode) {
+    setMode(m)
+    // One active query: switching modes clears the other input.
+    if (m === 'math') setQuery('')
+    else setMathLatex('')
     writePage(1, false)
   }
 
@@ -170,6 +191,7 @@ function GlossaryPageInner() {
   function clear() {
     setQuery('')
     setCategory('all')
+    setMathLatex('')
     writePage(1, false)
   }
 
@@ -213,8 +235,12 @@ function GlossaryPageInner() {
           resultCount={results.length}
           rangeStart={rangeStart}
           rangeEnd={rangeEnd}
+          mode={mode}
+          mathLatex={mathLatex}
           onQueryChange={handleQueryChange}
           onCategoryChange={handleCategoryChange}
+          onModeChange={handleModeChange}
+          onMathChange={handleMathChange}
           onClear={clear}
         />
 

@@ -96,3 +96,22 @@ test('glossary related links jump across pages', async ({ page }) => {
   await page.getByRole('button', { name: /Show Summation/ }).click()
   await expect(page.getByRole('heading', { name: 'Summation', exact: true })).toBeVisible()
 })
+
+test('glossary math mode searches by typed notation', async ({ page }) => {
+  await page.goto('/glossary')
+  await expect(page.getByRole('heading', { name: 'Mathematical glossary' })).toBeVisible({ timeout: 30_000 })
+  await page.getByRole('button', { name: 'Math: f(x)' }).click()
+  const field = page.locator('math-field')
+  await expect(field).toBeVisible({ timeout: 30_000 })
+  await field.click()
+  // A pasted/tapped symbol arrives as the glyph itself (the mobile keypad
+  // inserts commands that serialize the same way); typing a raw backslash
+  // command char-by-char does not, which is MathLive input behavior, not search.
+  await page.keyboard.type('∀', { delay: 40 })
+  await page.waitForTimeout(500)
+  await expect(page.getByRole('heading', { name: 'Universal quantifier' })).toBeVisible({ timeout: 15_000 })
+  // Switching back to text restores the text box and clears the math query.
+  await page.getByRole('button', { name: 'Text', exact: true }).click()
+  await expect(page.getByRole('searchbox', { name: 'Search symbols, names or meanings' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /Greek letters/ })).toBeVisible()
+})
