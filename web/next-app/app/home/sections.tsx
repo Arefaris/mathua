@@ -71,7 +71,7 @@ export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
             earlier wash, because phone copy spans the full frame. */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/35 lg:hidden" />
       </div>
-      <div className="relative max-w-[72ch] py-16 [text-shadow:0_1px_14px_rgba(0,0,0,0.45)] md:py-24 lg:order-1 lg:[text-shadow:none]">
+      <div className="relative max-w-[72ch] px-4 py-16 [text-shadow:0_1px_14px_rgba(0,0,0,0.45)] md:py-24 lg:order-1 lg:px-0 lg:[text-shadow:none]">
         <div className="section-label hero-label reveal">( 01 · Title Block )</div>
         <h1
           className="reveal mt-5 max-w-[18ch] text-balance font-serif text-[clamp(2.5rem,6vw,4.5rem)] font-normal leading-[1.05] sm:leading-[0.95] tracking-tight text-white lg:text-mathua-primary"
