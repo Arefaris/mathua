@@ -6,11 +6,13 @@ test('landing page renders a diagram-free hero', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   const hero = page.locator('section').first()
   await hero.scrollIntoViewIfNeeded()
-  // The hero is intentionally text-only; neither the figure caption nor its
-  // interactive domain controls should render here.
+  // The hero is art-backed but still diagram-free: the picture is the login
+  // illustration, and neither the figure caption nor its interactive domain
+  // controls should render here.
   await expect(hero.getByText('Fig. A — Concept Graph')).toHaveCount(0)
   await expect(hero.getByRole('button', { name: 'Astrolabe', exact: true })).toHaveCount(0)
   await expect(hero.locator('.graph-label--domain')).toHaveCount(0)
+  await expect(hero.locator('img[src="/hero/manreader.jpeg"]')).toHaveCount(1)
 })
 
 test('landing page does not ship the concept corpus in First Load JS', async ({ page }) => {

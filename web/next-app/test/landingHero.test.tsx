@@ -59,6 +59,26 @@ describe('landing hero', () => {
     await waitFor(() => expect(replaceMock).toHaveBeenCalledWith('/profile'))
   })
 
+  it('keeps the two hero actions on separate, non-conflicting backgrounds', async () => {
+    render(<HomePage />)
+    const primary = await screen.findByRole('button', { name: 'Get started' })
+    const ghost = await screen.findByRole('link', { name: 'View on GitHub' })
+    // The ghost button was once the primary button plus overrides, so both
+    // `bg-mathua-blue` and `bg-transparent` (and both hover backgrounds) sat on one
+    // element. Same property, same specificity: Tailwind's emitted order decided the
+    // winner, and the GitHub action hovered to blue over the artwork. The ghost now
+    // carries its own transparent pair below lg and themed `lg:` overrides for the
+    // desktop panel — compared as exact class tokens, because the legitimate
+    // `lg:hover:bg-mathua-blue-faint` contains `bg-mathua-blue` as a substring.
+    const primaryTokens = primary.className.split(/\s+/)
+    const ghostTokens = ghost.className.split(/\s+/)
+    expect(primaryTokens).toContain('bg-mathua-blue')
+    expect(primaryTokens).toContain('hover:bg-mathua-blue-hover')
+    expect(ghostTokens).toContain('bg-transparent')
+    expect(ghostTokens).not.toContain('bg-mathua-blue')
+    expect(ghostTokens).not.toContain('hover:bg-mathua-blue-hover')
+  })
+
   it('lists Learn in the landing header and does not advertise the closed library', async () => {
     render(<HomePage />)
     const header = await screen.findByRole('banner')

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { LOGIN_HERO } from '../../lib/loginHero'
 import {
   PIPELINE_STATES,
   conceptCount,
@@ -12,40 +13,95 @@ import {
   levels,
 } from './data'
 
+// The two hero actions. They are written out in full rather than composed, because
+// the ghost button used to be the primary button plus overrides and the two
+// background utilities (`bg-mathua-blue` and `bg-transparent`, `hover:bg-mathua-blue-hover`
+// and `hover:bg-white/15`) collided: same property, same specificity, so the winner was
+// whichever Tailwind emitted last — and the GitHub button hovered to blue on the image.
+// Separate constants with no overlapping property cannot collide. Both actions are
+// content-width and left-aligned on phones: as full-width bars with only the page's
+// 16px gutters they read as touching the screen edges.
+const CTA_PRIMARY =
+  'inline-flex min-h-[44px] items-center justify-center bg-mathua-blue px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-mathua-blue-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-blue'
+// On the artwork the second action is a white hairline over a dark scrim, not the
+// themed surface border: a `mathua-border` line is tuned for the page background,
+// not for a photograph, and would disappear against the drawing.
+// Wipe-fill ghost: on hover a blue layer sweeps left to right behind the label
+// (origin-left scale-x). The fill lives on a child span, not the anchor, so the
+// anchor never carries two background utilities at once — the collision that once
+// turned this button blue. `overflow-hidden` clips the sweep; the label sits
+// `relative` above it.
+const CTA_GHOST_ON_ART =
+  'group relative inline-flex min-h-[44px] items-center justify-center overflow-hidden border border-white/45 bg-transparent px-6 py-3 text-sm font-medium text-white transition-colors hover:border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+
 export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
   return (
-    <section className="border-b border-mathua-division pb-16 pt-12 md:pt-20">
-      <div className="min-w-0 max-w-[72ch]">
-        <div className="section-label reveal">( 01 · Title Block )</div>
+    // One responsive hero, not two stacked variants. Below lg it is the full-bleed
+    // treatment (B): art behind the copy under a scrim. At lg and up it is the
+    // side-by-side panel (A): copy left, art right, scrim gone and copy back on
+    // theme tokens. A single h1 and a single img serve both — no duplicated
+    // heading, no second download.
+    //
+    // The section sits in the page's capped, padded column, so the picture is a
+    // banner aligned to the content rather than a window-wide bleed — every other
+    // section shares that column, and a hero that ignored it would be the odd one
+    // out. `isolate` keeps the background's stacking context local so it cannot
+    // paint over the sticky header.
+    <section className="group/hero relative isolate overflow-hidden border-b border-mathua-division lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-10">
+      {/* Art. Full-bleed backdrop below lg; the grid's right column at lg and up.
+          `lg:relative` re-seats it as a grid item while the img keeps filling it
+          with object-cover, and `lg:order-2` puts it right of the copy. DOM order
+          stays art-first so that on phones — where both layers are positioned —
+          the copy paints above the picture.
+          The picture never touches the header: `top-4` holds it off the section
+          top on phones, `lg:mt-10` on desktop (`lg:top-auto lg:bottom-auto` cancel
+          the phone offsets once it is a grid item). */}
+      <div aria-hidden="true" className="hero-art-in absolute inset-x-0 bottom-0 top-4 overflow-hidden lg:relative lg:bottom-auto lg:top-auto lg:order-2 lg:mt-10 lg:min-h-[480px]">
+        <img
+          src={LOGIN_HERO.file}
+          alt=""
+          width={LOGIN_HERO.width}
+          height={LOGIN_HERO.height}
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 size-full object-cover object-center transition-transform duration-700 ease-out group-hover/hero:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover/hero:scale-100"
+        />
+        {/* Phone scrim only: it darkens the text side and fades toward the art, so
+            the copy has contrast without flattening the drawing. Stronger than the
+            earlier wash, because phone copy spans the full frame. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/35 lg:hidden" />
+      </div>
+      <div className="relative max-w-[72ch] py-16 [text-shadow:0_1px_14px_rgba(0,0,0,0.45)] md:py-24 lg:order-1 lg:[text-shadow:none]">
+        <div className="section-label hero-label reveal">( 01 · Title Block )</div>
         <h1
-          className="reveal mt-5 max-w-[18ch] text-balance font-serif text-[clamp(2.5rem,6vw,4.5rem)] font-normal leading-[1.05] sm:leading-[0.95] tracking-tight text-mathua-primary"
+          className="reveal mt-5 max-w-[18ch] text-balance font-serif text-[clamp(2.5rem,6vw,4.5rem)] font-normal leading-[1.05] sm:leading-[0.95] tracking-tight text-white lg:text-mathua-primary"
           style={{ animationDelay: '80ms' }}
         >
           Adaptive math learning platform
         </h1>
         <p
-          className="reveal mt-6 max-w-[46ch] text-pretty text-base sm:text-[15px] leading-relaxed text-mathua-secondary"
+          className="reveal mt-6 max-w-[46ch] text-pretty text-base sm:text-[15px] leading-relaxed text-white/85 lg:text-mathua-secondary"
           style={{ animationDelay: '160ms' }}
         >
           Mathua is an open-source adaptive math learning engine. You cannot advance until you
           have truly mastered the prerequisite — both speed and accuracy must be proven.
         </p>
-        <div className="reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center" style={{ animationDelay: '240ms' }}>
-          <button
-            type="button"
-            onClick={onGetStarted}
-            className="inline-flex w-full min-h-[44px] items-center justify-center bg-mathua-blue px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-mathua-blue-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-blue sm:w-auto"
-          >
+        <div className="reveal mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center" style={{ animationDelay: '240ms' }}>
+          <button type="button" onClick={onGetStarted} className={CTA_PRIMARY}>
             Get started
           </button>
           <a
             href="https://github.com/chuma-beep/mathua"
-            className="inline-flex w-full min-h-[44px] items-center justify-center border border-mathua-border px-6 py-3 text-sm font-medium text-mathua-primary transition-colors hover:border-mathua-blue hover:bg-mathua-blue-faint focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-blue sm:w-auto"
+            className={`${CTA_GHOST_ON_ART} lg:border-mathua-border lg:text-mathua-primary lg:hover:border-mathua-blue lg:focus-visible:outline-mathua-blue`}
           >
-            View on GitHub
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 origin-left scale-x-0 bg-mathua-blue transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none"
+            />
+            <span className="relative group-hover:text-white">View on GitHub</span>
           </a>
         </div>
-        <p className="reveal mt-4 font-mono text-[11px] text-mathua-muted" style={{ animationDelay: '320ms' }}>
+        <p className="reveal mt-4 font-mono text-[11px] text-white/60 lg:text-mathua-muted" style={{ animationDelay: '320ms' }}>
           No account needed to start.
         </p>
       </div>

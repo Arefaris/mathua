@@ -204,6 +204,20 @@ footer .link-underline:hover {
   color: var(--text-muted);
 }
 
+/* Landing hero label: white over the artwork on phones, themed beside it on
+   desktop. A plain rule rather than a `text-white/70` utility, because
+   `.section-label` above is unlayered and unlayered CSS beats Tailwind's layered
+   color utilities — the utility would silently lose and the label would stay
+   muted on the art. */
+.hero-label {
+  color: rgb(255 255 255 / 0.7);
+}
+@media (min-width: 1024px) {
+  .hero-label {
+    color: var(--text-muted);
+  }
+}
+
 /* Landing: staggered entrance for hero copy */
 @keyframes reveal-up {
   from {
@@ -220,8 +234,30 @@ footer .link-underline:hover {
   animation: reveal-up 0.5s ease-out both;
 }
 
+/* Landing hero art: fade-and-settle entrance. This lives on the art *wrapper*,
+   not the img, on purpose: a filled (`both`) animation keeps winning over later
+   transforms on the same element, which would silently pin the img and kill its
+   hover zoom. Separate elements, no conflict. */
+@keyframes hero-art-in {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-art-in {
+  animation: hero-art-in 1.2s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
+    animation: none;
+  }
+  .hero-art-in {
     animation: none;
   }
 }
