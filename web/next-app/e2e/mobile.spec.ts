@@ -226,7 +226,7 @@ test('the bottom edge brings the chrome back, and only while it is hidden', asyn
   await expect(toggle).toHaveAttribute('aria-expanded', 'true')
 })
 
-test('mobile landing hero graph supports tap, pan and pinch', async ({ page }) => {
+test('mobile landing hero is diagram-free and overflow-safe', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', e => errors.push(String(e)))
   page.on('console', m => {
@@ -234,39 +234,11 @@ test('mobile landing hero graph supports tap, pan and pinch', async ({ page }) =
   })
 
   await page.goto('/')
-  const canvas = page.locator('canvas').first()
-  await canvas.scrollIntoViewIfNeeded()
-  await expect(canvas).toBeVisible({ timeout: 45_000 })
-  await expect(page.locator('.graph-label--domain').first()).toBeVisible({ timeout: 30_000 })
+  const hero = page.locator('section').first()
+  await hero.getByRole('heading', { level: 1 }).scrollIntoViewIfNeeded()
+  await expect(hero.locator('.graph-label--domain')).toHaveCount(0)
+  await expect(hero.getByRole('button', { name: 'Astrolabe', exact: true })).toHaveCount(0)
   expect(await overflowPx(page)).toBeLessThanOrEqual(1)
-
-  const box = (await canvas.boundingBox())!
-  const cx = box.x + box.width / 2
-  const cy = box.y + box.height / 2
-
-  // Tap selects a concept; the info panel below always names the active one.
-  await page.touchscreen.tap(cx, cy)
-  await expect(page.getByText('selected concept', { exact: true })).toBeVisible()
-
-  // One-finger pan + two-finger pinch through CDP touch events.
-  const cdp = await page.context().newCDPSession(page)
-  await cdp.send('Input.synthesizeScrollGesture', {
-    x: Math.round(cx),
-    y: Math.round(cy),
-    xDistance: -140,
-    yDistance: 70,
-    speed: 900,
-    gestureSourceType: 'touch',
-  })
-  await cdp.send('Input.synthesizePinchGesture', {
-    x: Math.round(cx),
-    y: Math.round(cy),
-    scaleFactor: 1.7,
-    relativeSpeed: 700,
-    gestureSourceType: 'touch',
-  })
-  await page.waitForTimeout(600)
-  await expect(canvas).toBeVisible()
   expect(errors).toEqual([])
 })
 

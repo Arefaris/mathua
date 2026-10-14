@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { layoutDAG3D } from '../lib/layoutDAG3D.ts'
+import { layoutDAG3D } from './layoutDAG3D.ts'
 import { buildGraphMeta, buildGraphPayload } from '../lib/graphPayload.ts'
 import { DOMAIN_ORDER } from '../lib/graphDomains.ts'
 

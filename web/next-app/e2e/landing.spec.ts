@@ -1,15 +1,16 @@
 import { test, expect } from '@playwright/test'
 import conceptsData from '../data/concepts.json'
 
-test('landing page renders hero and lazy-mounts the 3D graph', async ({ page }) => {
+test('landing page renders a diagram-free hero', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   const hero = page.locator('section').first()
   await hero.scrollIntoViewIfNeeded()
-  await page.mouse.wheel(0, 400)
-  await expect(page.locator('canvas').first()).toBeVisible({ timeout: 30_000 })
-  // Domain cluster labels are painted by the imperative label overlay.
-  await expect(page.locator('.graph-label--domain').first()).toBeVisible({ timeout: 30_000 })
+  // The hero is intentionally text-only; neither the figure caption nor its
+  // interactive domain controls should render here.
+  await expect(hero.getByText('Fig. A — Concept Graph')).toHaveCount(0)
+  await expect(hero.getByRole('button', { name: 'Astrolabe', exact: true })).toHaveCount(0)
+  await expect(hero.locator('.graph-label--domain')).toHaveCount(0)
 })
 
 test('landing page does not ship the concept corpus in First Load JS', async ({ page }) => {
@@ -24,7 +25,7 @@ test('landing page does not ship the concept corpus in First Load JS', async ({ 
     // Corpus-only label; the build-generated graph payload is fetched, not bundled.
     expect(body).not.toContain('Subgroups and cosets')
   }
-  // The fetched graph payload stays available for the scene.
+  // The fetched graph payload stays available for the dedicated graph route.
   const payload = await page.request.get('/data/concepts.graph.json')
   expect(payload.ok()).toBe(true)
   const json = await payload.json()

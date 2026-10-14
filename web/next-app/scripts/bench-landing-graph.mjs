@@ -9,7 +9,7 @@
 //   (default: starts `serve out` on :3999 itself)
 import { spawn } from 'node:child_process'
 import { chromium, devices } from 'playwright'
-import { layoutDAG3D } from '../lib/layoutDAG3D.ts'
+import { layoutDAG3D } from '../scripts/layoutDAG3D.ts'
 
 const PORT = 3999
 const stressArg = process.argv.find(a => a.startsWith('--stress='))

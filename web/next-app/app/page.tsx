@@ -18,7 +18,7 @@ import {
 } from './home/sections'
 
 export default function HomePage() {
-  const { theme, mounted } = useTheme()
+  const { mounted } = useTheme()
   const { push } = useRouter()
   // Logged-in visits bounce to /profile; explicit Home clicks stay put.
   const homeChecked = useHomeRedirect(mounted)
@@ -44,7 +44,7 @@ export default function HomePage() {
           vanish on the page that introduces it. */}
       <Header links={[{ label: 'Learn', href: '/learn' }, { label: 'How it works', href: '/how-it-works' }, { label: 'Docs', href: '/docs' }, { label: 'Note', href: '/note' }, { label: 'Leaderboard', href: '/leaderboard' }, { label: 'Login', href: '/login' }]} />
       <main className="max-w-container mx-auto px-4 sm:px-6 overflow-x-clip min-w-0">
-        <HeroSection theme={theme} onGetStarted={handleGetStarted} />
+        <HeroSection onGetStarted={handleGetStarted} />
         <TrustSection />
         <FeaturesSection />
         <StatesSection />

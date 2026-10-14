@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { layoutDAG3D, type ConceptLayoutInput } from '../lib/layoutDAG3D'
+import { layoutDAG3D, type ConceptLayoutInput } from '../scripts/layoutDAG3D'
 
 function chain(length: number): ConceptLayoutInput[] {
   return Array.from({ length }, (_, i) => ({

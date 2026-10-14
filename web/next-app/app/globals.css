@@ -431,21 +431,6 @@ footer .link-underline:hover {
   font-size: 11px;
 }
 
-.graph-label--domain {
-  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  opacity: 0.8;
-  text-shadow: 0 0 4px var(--graph-surface), 0 0 4px var(--graph-surface);
-}
-
-/* Dark surfaces carry faint text better; light needs the extra opacity. */
-.dark .graph-label--domain {
-  opacity: 0.6;
-}
-
 /* Footer artwork and text.
 
    One grid cell holds both the picture and every word of the footer. The row is
@@ -645,17 +630,6 @@ footer .link-underline:hover {
   .footer {
     margin-bottom: max(68px, calc(56px + env(safe-area-inset-bottom)));
   }
-}
-
-/* Self-keying cluster labels: the domain color rides on the label itself,
-   so the standalone legend is no longer needed. */
-.graph-label--domain::before {
-  content: '●';
-  margin-right: 5px;
-  color: var(--label-color, var(--text-muted));
-  font-size: 8px;
-  letter-spacing: 0;
-  vertical-align: 1px;
 }
 
 .graph-label.is-dim {

@@ -1,10 +1,7 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import React, { useEffect, useRef, useState } from 'react'
-import Loading from '../../components/Loading'
-import { loadPositionEntries } from '../../lib/graphPositions'
+import { useEffect, useRef, useState } from 'react'
 import {
   PIPELINE_STATES,
   conceptCount,
@@ -14,139 +11,11 @@ import {
   domainOrder,
   levels,
 } from './data'
-import { loadingGraphStyle } from './styles'
 
-const MathConceptGraph3D = dynamic(() => import('../../components/MathConceptGraph3D'), {
-  ssr: false,
-  loading: () => (
-    <div style={loadingGraphStyle}>
-      <Loading label="LOADING GRAPH" />
-    </div>
-  ),
-})
-
-// Error boundary scoped to the WebGL hero graph. A chunk-load failure
-// (stale deploy, flaky network, no WebGL) must never take down the page:
-// fall back to the static SVG poster, which carries the same data.
-export function GraphErrorBoundary({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) {
-  return <GraphErrorBoundaryInner fallback={fallback}>{children}</GraphErrorBoundaryInner>
-}
-
-class GraphErrorBoundaryInner extends React.Component<{ children: React.ReactNode; fallback: React.ReactNode }, { failed: boolean }> {
-  state = { failed: false }
-
-  static getDerivedStateFromError() {
-    return { failed: true }
-  }
-
-  componentDidCatch(error: Error) {
-    // eslint-disable-next-line no-console
-    console.error('hero graph failed, showing poster fallback:', error.message)
-  }
-
-  render() {
-    if (this.state.failed) return this.props.fallback
-    return this.props.children
-  }
-}
-
-export function LazyGraphMount({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el || typeof IntersectionObserver === 'undefined') {
-      setVisible(true)
-      return
-    }
-    let idleId: number | undefined
-    let timeoutId: ReturnType<typeof setTimeout> | undefined
-    const obs = new IntersectionObserver(
-      entries => {
-        if (!entries[0]?.isIntersecting) return
-        obs.disconnect()
-        // Mount after the page is interactive: the WebGL context + 657-node
-        // scene must not compete with hydration/first paint.
-        if (typeof window.requestIdleCallback === 'function') {
-          idleId = window.requestIdleCallback(() => setVisible(true), { timeout: 1500 })
-        } else {
-          timeoutId = setTimeout(() => setVisible(true), 200)
-        }
-      },
-      { rootMargin: '200px' }
-    )
-    obs.observe(el)
-    return () => {
-      obs.disconnect()
-      if (idleId !== undefined) window.cancelIdleCallback?.(idleId)
-      if (timeoutId !== undefined) clearTimeout(timeoutId)
-    }
-  }, [])
-
-  return <div ref={ref}>{visible ? children : fallback ?? <div style={loadingGraphStyle}><Loading label="PREPARING GRAPH" /></div>}</div>
-}
-
-// Static SVG snapshot of the DAG (orthographic x/y scatter from the same
-// precomputed positions the WebGL scene uses). Positions arrive via fetch
-// (public/ copy) so the 26KB payload stays out of the page bundle; the box
-// paints with first paint and dots pop in when the fetch resolves.
-export function GraphPoster() {
-  const [entries, setEntries] = useState<Array<[string, [number, number, number]]>>([])
-  useEffect(() => {
-    let live = true
-    loadPositionEntries().then(list => {
-      if (live) setEntries(list)
-    })
-    return () => {
-      live = false
-    }
-  }, [])
-  const W = 400
-  const H = 400
-  const PAD = 16
-  let minX = Infinity
-  let maxX = -Infinity
-  let minY = Infinity
-  let maxY = -Infinity
-  for (const [, p] of entries) {
-    if (p[0] < minX) minX = p[0]
-    if (p[0] > maxX) maxX = p[0]
-    if (p[1] < minY) minY = p[1]
-    if (p[1] > maxY) maxY = p[1]
-  }
-  const spanX = Math.max(maxX - minX, 1e-6)
-  const spanY = Math.max(maxY - minY, 1e-6)
-  // Fit data bounds exactly (no letterbox); flip y so root layers read top-down.
-  const dot = (p: [number, number, number]): [number, number] => [
-    PAD + ((p[0] - minX) / spanX) * (W - 2 * PAD),
-    PAD + (1 - (p[1] - minY) / spanY) * (H - 2 * PAD),
-  ]
+export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
   return (
-    <div style={loadingGraphStyle} aria-hidden="true">
-      <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="presentation">
-        {entries.map(([id, p], i) => {
-          const [cx, cy] = dot(p)
-          return (
-            <circle
-              key={id}
-              cx={cx.toFixed(1)}
-              cy={cy.toFixed(1)}
-              r={i % 12 === 0 ? 2.6 : 1.6}
-              fill={i % 12 === 0 ? 'var(--accent-blue)' : 'var(--text-muted)'}
-              opacity={i % 12 === 0 ? 0.9 : 0.7}
-            />
-          )
-        })}
-      </svg>
-    </div>
-  )
-}
-
-export function HeroSection({ theme, onGetStarted }: { theme: 'dark' | 'light'; onGetStarted: () => void }) {
-  return (
-    <section className="grid grid-cols-1 gap-10 border-b border-mathua-division pb-16 pt-12 md:grid-cols-12 md:gap-8 md:pt-20">
-      <div className="min-w-0 md:col-span-7">
+    <section className="border-b border-mathua-division pb-16 pt-12 md:pt-20">
+      <div className="min-w-0 max-w-[72ch]">
         <div className="section-label reveal">( 01 · Title Block )</div>
         <h1
           className="reveal mt-5 max-w-[18ch] text-balance font-serif text-[clamp(2.5rem,6vw,4.5rem)] font-normal leading-[1.05] sm:leading-[0.95] tracking-tight text-mathua-primary"
@@ -178,22 +47,6 @@ export function HeroSection({ theme, onGetStarted }: { theme: 'dark' | 'light'; 
         </div>
         <p className="reveal mt-4 font-mono text-[11px] text-mathua-muted" style={{ animationDelay: '320ms' }}>
           No account needed to start.
-        </p>
-      </div>
-      <div className="min-w-0 md:col-span-5">
-        <div className="mb-2 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-mathua-muted">
-          <span>Fig. A — Concept Graph</span>
-          <span>N 47°12′</span>
-        </div>
-        <div className="w-full max-w-full min-w-0 overflow-hidden">
-          <LazyGraphMount fallback={<GraphPoster />}>
-            <GraphErrorBoundary fallback={<GraphPoster />}>
-              <MathConceptGraph3D theme={theme} />
-            </GraphErrorBoundary>
-          </LazyGraphMount>
-        </div>
-        <p className="mt-2 font-mono text-[11px] text-mathua-muted sm:hidden">
-          Pinch to zoom · tap a node to explore
         </p>
       </div>
     </section>
