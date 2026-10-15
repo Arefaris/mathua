@@ -105,7 +105,11 @@ export default function LessonDiagram({ src, alt, maxHeight = 180 }: LessonDiagr
       className="lesson-diagram"
       role="img"
       aria-label={label}
-      style={{ maxHeight: `${maxHeight}px` }}
+      // The height bound goes to the SVG, not to this box. Bounding the box and hiding the
+      // overflow clipped the figure instead of scaling it: the arithmetic diagrams are
+      // 360x200 and 123 of the 127 mapped SVGs are taller than the 180px default, so the
+      // bottom of nearly every diagram was cut off at any width that did not force a scale.
+      style={{ '--lesson-diagram-max-height': `${maxHeight}px` } as React.CSSProperties}
       dangerouslySetInnerHTML={{ __html: inline }} // aislop-ignore-line security/dangerously-set-innerhtml -- inline is DOMPurify-sanitized upstream SVG set via sanitizeSvg(); raw fetch output never reaches the DOM
     />
   )

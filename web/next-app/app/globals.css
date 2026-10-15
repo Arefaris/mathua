@@ -699,12 +699,17 @@ footer .link-underline:hover {
   background: var(--surface);
   border: 0.5px solid var(--border);
   padding: 12px;
-  overflow: hidden;
   max-width: 100%;
 }
+/* The height bound lives on the SVG, so a tall figure scales down to fit. Putting it on the
+   box above and hiding the overflow clipped the figure instead: the arithmetic diagrams are
+   360x200 and most mapped SVGs are taller than the 180px default, so the bottom of nearly
+   every diagram was cut off at any width that did not force a scale. */
 .lesson-diagram svg {
   display: block;
   max-width: 100%;
+  max-height: var(--lesson-diagram-max-height, 180px);
+  width: auto;
   height: auto;
   margin: 0 auto;
 }
