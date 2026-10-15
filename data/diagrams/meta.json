@@ -105,9 +105,9 @@
   ],
   "title": "Completing the square",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/complex-plane.svg": {
   "concepts": [
@@ -116,9 +116,9 @@
   ],
   "title": "Imaginary unit i and complex numbers",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/composite-functions-1-1.png": {
   "concepts": [
@@ -417,9 +417,9 @@
   ],
   "title": "Hyperbolic sine and cosine functions",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/improper-integrals-1.svg": {
   "concepts": [
@@ -498,9 +498,9 @@
   ],
   "title": "Inverse trig functions",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/irr-ineq-1.png": {
   "concepts": [
@@ -528,9 +528,9 @@
   ],
   "title": "Law of cosines",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/law-of-sines.svg": {
   "concepts": [
@@ -538,9 +538,9 @@
   ],
   "title": "Law of sines",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/limits-1.svg": {
   "concepts": [
@@ -590,9 +590,9 @@
   ],
   "title": "Graph a linear equation",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/lines-5.png": {
   "concepts": [
@@ -711,9 +711,9 @@
   ],
   "title": "Absolute value",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/number-line-intervals.svg": {
   "concepts": [
@@ -721,9 +721,9 @@
   ],
   "title": "Interval notation",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/number-line-real.svg": {
   "concepts": [
@@ -731,9 +731,9 @@
   ],
   "title": "Real numbers and the number line",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/number-types-venn.svg": {
   "concepts": [
@@ -741,9 +741,9 @@
   ],
   "title": "Types of numbers",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/parabola-1.svg": {
   "concepts": [
@@ -803,9 +803,9 @@
   ],
   "title": "Pascal's triangle and binomial theorem",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/polar-coordinates-1-1.png": {
   "concepts": [
@@ -834,9 +834,9 @@
   ],
   "title": "Roots of a polynomial",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/pythagorean-theorem.svg": {
   "concepts": [
@@ -845,9 +845,9 @@
   ],
   "title": "Pythagorean theorem",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/quad-eq-complex-roots.png": {
   "concepts": [
@@ -907,9 +907,9 @@
   ],
   "title": "Reference angles and quadrants",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/riemann-integrability-criteria-1.svg": {
   "concepts": [
@@ -937,9 +937,9 @@
   ],
   "title": "Right triangle trigonometry",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/right-triangle-unit-circle.svg": {
   "concepts": [
@@ -947,9 +947,9 @@
   ],
   "title": "Sine and cosine definitions in right triangles",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/rolle-theorem-1-1.png": {
   "concepts": [
@@ -967,9 +967,9 @@
   ],
   "title": "Reciprocal trig functions: csc, sec, cot",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/sequence-functions-1.png": {
   "concepts": [
@@ -1039,9 +1039,9 @@
   ],
   "title": "Graph of sine function",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/squeeze-theorem.png": {
   "concepts": [
@@ -1120,9 +1120,9 @@
   ],
   "title": "Unit circle: sine and cosine of standard angles",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/unit-circle-sine-cosine.svg": {
   "concepts": [
@@ -1130,9 +1130,9 @@
   ],
   "title": "Radians and degrees conversion",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/unit-circle-tangent.svg": {
   "concepts": [
@@ -1140,9 +1140,9 @@
   ],
   "title": "Tangent definition and ratio identity",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/vector-addition.svg": {
   "concepts": [
@@ -1151,9 +1151,9 @@
   ],
   "title": "Vector addition and scalar multiplication",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/vector-arrow.svg": {
   "concepts": [
@@ -1161,9 +1161,9 @@
   ],
   "title": "Vectors: magnitude and direction",
   "description": "",
-  "source": "algebrica",
+  "source": "local",
   "upstream": null,
-  "license": "CC BY-NC 4.0 (Antonio Lupetti / Algebrica) \u2014 modification with attribution"
+  "license": "Mathua (own work)"
  },
  "/diagrams/algebrica/vector-equation-line-1.png": {
   "concepts": [

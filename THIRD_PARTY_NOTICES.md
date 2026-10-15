@@ -102,9 +102,12 @@ repository. SymPy (MIT) is the grading runtime; it is pinned in
 
 ### Algebrica — CC BY-NC 4.0
 
-Lesson content and diagrams under `data/lessons/` and `figures/` are sourced from
+Vendored lesson content and diagrams are sourced from
 [Algebrica](https://algebrica.org) by Antonio Lupetti, used under
-[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). `data/diagrams/meta.json` is the
+authoritative list: an entry with `"source": "algebrica"` is Algebrica's, and an entry with
+`"source": "local"` is Mathua's own work, as are the diagrams under
+`web/next-app/public/diagrams/arithmetic/` and the drawing code in `scripts/gen-diagrams.py`.
 
 **This is a non-commercial licence.** Mathua's own MIT licence does not extend to this
 content: the lesson material and diagrams remain CC BY-NC 4.0 and carry that
