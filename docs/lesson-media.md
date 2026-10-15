@@ -59,7 +59,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/alg.seq.sum_arith.md` | 195 | likely | *Unemployment in the United States* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/alg.systems.word.md` | 45 | likely | *Amount in Savings Account* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.dec.intro.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole...* | auto-numbered figure/table label |
+| `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
@@ -221,14 +221,14 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.numeric.md` | 522 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 536 | certain | *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Eins...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole...* | auto-numbered figure/table label |
+| `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/dec.convert.from_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/dec.convert.to_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/dec.ops.add.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.div.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.mult.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole...* | auto-numbered figure/table label |
+| `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/dec.ops.sub.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/frac.add.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/frac.add.word.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |

@@ -82,21 +82,21 @@ Since percents are ratios, they can easily be expressed as fractions. Remember t
 
 Convert each percent to a fraction:
 
-1.  ⓐ$\text{36\%}$
-2.  ⓑ$\text{125\%}$
+1.  (a)$\text{36\%}$
+2.  (b)$\text{125\%}$
 
 #### Solution
 
 |                                        |                    |
 |----------------------------------------|--------------------|
-| ⓐ                                      |                    |
+| (a)                                      |                    |
 |                                        | $36\%$           |
 | Write as a ratio with denominator 100. | $\frac{36}{100}$ |
 | Simplify.                              | $\frac{9}{25}$   |
 
 |                                        |                     |
 |----------------------------------------|---------------------|
-| ⓑ                                      |                     |
+| (b)                                      |                     |
 |                                        | $125\%$           |
 | Write as a ratio with denominator 100. | $\frac{125}{100}$ |
 | Simplify.                              | $\frac{5}{4}$     |
@@ -105,15 +105,15 @@ Convert each percent to a fraction:
 
 Convert each percent to a fraction:
 
-1.  ⓐ$\text{48\%}$
-2.  ⓑ$\text{110\%}$
+1.  (a)$\text{48\%}$
+2.  (b)$\text{110\%}$
 
 ### Try It 6.6
 
 Convert each percent to a fraction:
 
-1.  ⓐ$\text{64\%}$
-2.  ⓑ$\text{150\%}$
+1.  (a)$\text{64\%}$
+2.  (b)$\text{150\%}$
 
 The previous example shows that a percent can be greater than 1. We saw that $\text{125\%}$ means $\frac{125}{100},$ or $\frac{5}{4}.$ These are improper fractions, and their values are greater than one.
 
@@ -121,14 +121,14 @@ The previous example shows that a percent can be greater than 1. We saw that $\t
 
 Convert each percent to a fraction:
 
-1.  ⓐ$\text{24.5\%}$
-2.  ⓑ$33\frac{1}{3}\%$
+1.  (a)$\text{24.5\%}$
+2.  (b)$33\frac{1}{3}\%$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | $24.5\%$ |
 | Write as a ratio with denominator 100. | $\frac{24.5}{100}$ |
 | Clear the decimal by multiplying numerator and denominator by 10. | $\frac{24.5{(10)}}{100{(10)}}$ |
@@ -138,7 +138,7 @@ Convert each percent to a fraction:
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $33\frac{1}{3}\%$ |
 | Write as a ratio with denominator 100. | $\frac{33\frac{1}{3}}{100}$ |
 | Write the numerator as an improper fraction. | $\frac{\ \ \ \frac{100}{3}\ \ \ \ }{100}$ |
@@ -150,15 +150,15 @@ Convert each percent to a fraction:
 
 Convert each percent to a fraction:
 
-1.  ⓐ$\text{64.4\%}$
-2.  ⓑ$66\frac{2}{3}\%$
+1.  (a)$\text{64.4\%}$
+2.  (b)$66\frac{2}{3}\%$
 
 ### Try It 6.8
 
 Convert each percent to a fraction:
 
-1.  ⓐ$\text{42.5\%}$
-2.  ⓑ$8\frac{3}{4}\%$
+1.  (a)$\text{42.5\%}$
+2.  (b)$8\frac{3}{4}\%$
 
 In Decimals, we learned how to convert fractions to decimals. To convert a percent to a decimal, we first convert it to a fraction and then change the fraction to a decimal.
 
@@ -173,8 +173,8 @@ In Decimals, we learned how to convert fractions to decimals. To convert a perce
 
 Convert each percent to a decimal:
 
-1.  ⓐ$\text{6\%}$
-2.  ⓑ$\text{78\%}$
+1.  (a)$\text{6\%}$
+2.  (b)$\text{78\%}$
 
 #### Solution
 
@@ -182,14 +182,14 @@ Because we want to change to a decimal, we will leave the fractions with denomin
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | $6\%$ |
 | Write as a ratio with denominator 100. | $\frac{6}{100}$ |
 | Change the fraction to a decimal by dividing the numerator by the denominator. | 0.06 |
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $78\%$ |
 | Write as a ratio with denominator 100. | $\frac{78}{100}$ |
 | Change the fraction to a decimal by dividing the numerator by the denominator. | 0.78 |
@@ -198,35 +198,35 @@ Because we want to change to a decimal, we will leave the fractions with denomin
 
 Convert each percent to a decimal:
 
-1.  ⓐ$\text{9\%}$
-2.  ⓑ$\text{87\%}$
+1.  (a)$\text{9\%}$
+2.  (b)$\text{87\%}$
 
 ### Try It 6.10
 
 Convert each percent to a decimal:
 
-1.  ⓐ$\text{3\%}$
-2.  ⓑ$\text{91\%}$
+1.  (a)$\text{3\%}$
+2.  (b)$\text{91\%}$
 
 ### Example 6.6
 
 Convert each percent to a decimal:
 
-1.  ⓐ$\text{135\%}$
-2.  ⓑ$\text{12.5\%}$
+1.  (a)$\text{135\%}$
+2.  (b)$\text{12.5\%}$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | $135\%$ |
 | Write as a ratio with denominator 100. | $\frac{135}{100}$ |
 | Change the fraction to a decimal by dividing the numerator by the denominator. | 1.35 |
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $12.5\%$ |
 | Write as a ratio with denominator 100. | $\frac{12.5}{100}$ |
 | Change the fraction to a decimal by dividing the numerator by the denominator. | 0.125 |
@@ -235,15 +235,15 @@ Convert each percent to a decimal:
 
 Convert each percent to a decimal:
 
-1.  ⓐ$\text{115\%}$
-2.  ⓑ$\text{23.5\%}$
+1.  (a)$\text{115\%}$
+2.  (b)$\text{23.5\%}$
 
 ### Try It 6.12
 
 Convert each percent to a decimal:
 
-1.  ⓐ$\text{123\%}$
-2.  ⓑ$\text{16.8\%}$
+1.  (a)$\text{123\%}$
+2.  (b)$\text{16.8\%}$
 
 Let's summarize the results from the previous examples in Table 6.1, and look for a pattern we could use to quickly convert a percent number to a decimal number.
 
@@ -268,31 +268,31 @@ Figure 6.3 uses the percents in Table 6.1 and shows visually how to convert them
 
 Among a group of business leaders, $\text{77\%}$ believe that poor math and science education in the U.S. will lead to higher unemployment rates.
 
-Convert the percent to: ⓐ a fraction ⓑ a decimal
+Convert the percent to: (a) a fraction (b) a decimal
 
 #### Solution
 
 |                                        |                    |
 |----------------------------------------|--------------------|
-| ⓐ                                      |                    |
+| (a)                                      |                    |
 |                                        | $77\%$           |
 | Write as a ratio with denominator 100. | $\frac{77}{100}$ |
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $\frac{77}{100}$ |
 | Change the fraction to a decimal by dividing the numerator by the denominator. | 0.77 |
 
 ### Try It 6.13
 
-Convert the percent to: ⓐ a fraction and ⓑ a decimal
+Convert the percent to: (a) a fraction and (b) a decimal
 
 Twitter's share of web traffic jumped $\text{24\%}$ when one celebrity tweeted live on air.
 
 ### Try It 6.14
 
-Convert the percent to: ⓐ a fraction and ⓑ a decimal
+Convert the percent to: (a) a fraction and (b) a decimal
 
 The U.S. Census estimated that in $2013,\text{44\%}$ of the population of Boston age 25 or older have a bachelor's or higher degrees.
 
@@ -300,8 +300,8 @@ The U.S. Census estimated that in $2013,\text{44\%}$ of the population of Boston
 
 There are four suits of cards in a deck of cards—hearts, diamonds, clubs, and spades. The probability of randomly choosing a heart from a shuffled deck of cards is $\text{25\%}.$ Convert the percent to:
 
-1.  ⓐ a fraction
-2.  ⓑ a decimal
+1.  (a) a fraction
+2.  (b) a decimal
 
 *Figure 6.4 (credit: Riles32807, Wikimedia Commons)*
 
@@ -309,25 +309,25 @@ There are four suits of cards in a deck of cards—hearts, diamonds, clubs, and 
 
 |                                        |                    |
 |----------------------------------------|--------------------|
-| ⓐ                                      |                    |
+| (a)                                      |                    |
 |                                        | $25\%$           |
 | Write as a ratio with denominator 100. | $\frac{25}{100}$ |
 | Simplify.                              | $\frac{1}{4}$    |
 
 |  |  |
 |----|----|
-| ⓑ | $\frac{1}{4}$ |
+| (b) | $\frac{1}{4}$ |
 | Change the fraction to a decimal by dividing the numerator by the denominator. | 0.25 |
 
 ### Try It 6.15
 
-Convert the percent to: ⓐ a fraction, and ⓑ a decimal
+Convert the percent to: (a) a fraction, and (b) a decimal
 
 The probability that it will rain Monday is $\text{30\%}.$
 
 ### Try It 6.16
 
-Convert the percent to: ⓐ a fraction, and ⓑ a decimal
+Convert the percent to: (a) a fraction, and (b) a decimal
 
 The probability of getting heads three times when tossing a coin three times is $\text{12.5\%}.$
 
@@ -345,43 +345,43 @@ To convert a decimal to a percent, remember that percent means per hundred. If w
 
 ### Example 6.9
 
-Convert each decimal to a percent: ⓐ0.05 ⓑ0.83
+Convert each decimal to a percent: (a)0.05 (b)0.83
 
 #### Solution
 
 |                                              |                   |
 |----------------------------------------------|-------------------|
-| ⓐ                                            |                   |
+| (a)                                            |                   |
 |                                              | 0.05          |
 | Write as a fraction. The denominator is 100. | $\frac{5}{100}$ |
 | Write this ratio as a percent.               | $5\%$           |
 
 |                                |                    |
 |--------------------------------|--------------------|
-| ⓑ                              |                    |
+| (b)                              |                    |
 |                                | 0.83           |
 | The denominator is 100.        | $\frac{83}{100}$ |
 | Write this ratio as a percent. | $83\%$           |
 
 ### Try It 6.17
 
-Convert each decimal to a percent: ⓐ0.01 ⓑ0.17.
+Convert each decimal to a percent: (a)0.01 (b)0.17.
 
 ### Try It 6.18
 
-Convert each decimal to a percent: ⓐ0.04 ⓑ0.41
+Convert each decimal to a percent: (a)0.04 (b)0.41
 
 To convert a mixed number to a percent, we first write it as an improper fraction.
 
 ### Example 6.10
 
-Convert each decimal to a percent: ⓐ1.05 ⓑ0.075
+Convert each decimal to a percent: (a)1.05 (b)0.075
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | 0.05 |
 | Write as a fraction. | $1\frac{5}{100}$ |
 | Write as an improper fraction. The denominator is 100. | $\frac{105}{100}$ |
@@ -391,7 +391,7 @@ Notice that since $1.05 > 1,$ the result is more than $\text{100\%.}$
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | 0.075 |
 | Write as a fraction. The denominator is 1,000. | $\frac{75}{1,000}$ |
 | Divide the numerator and denominator by 10, so that the denominator is 100. | $\frac{7.5}{100}$ |
@@ -399,11 +399,11 @@ Notice that since $1.05 > 1,$ the result is more than $\text{100\%.}$
 
 ### Try It 6.19
 
-Convert each decimal to a percent: ⓐ1.75 ⓑ0.0825
+Convert each decimal to a percent: (a)1.75 (b)0.0825
 
 ### Try It 6.20
 
-Convert each decimal to a percent: ⓐ2.25 ⓑ0.0925
+Convert each decimal to a percent: (a)2.25 (b)0.0925
 
 Let's summarize the results from the previous examples in Table 6.2 so we can look for a pattern.
 
@@ -433,7 +433,7 @@ In Decimals, we learned how to convert fractions to decimals. Now we also know h
 
 ### Example 6.11
 
-Convert each fraction or mixed number to a percent: ⓐ$\frac{3}{4}$ ⓑ$\frac{11}{8}$ ⓒ$2\frac{1}{5}$
+Convert each fraction or mixed number to a percent: (a)$\frac{3}{4}$ (b)$\frac{11}{8}$ (c)$2\frac{1}{5}$
 
 #### Solution
 
@@ -441,21 +441,21 @@ To convert a fraction to a decimal, divide the numerator by the denominator.
 
 |                                                      |                 |
 |------------------------------------------------------|-----------------|
-| ⓐ                                                    |                 |
+| (a)                                                    |                 |
 | Change to a decimal.                                 | $\frac{3}{4}$ |
 | Write as a percent by moving the decimal two places. |                 |
 |                                                      | $75\%$        |
 
 |                                                      |                  |
 |------------------------------------------------------|------------------|
-| ⓑ                                                    |                  |
+| (b)                                                    |                  |
 | Change to a decimal.                                 | $\frac{11}{8}$ |
 | Write as a percent by moving the decimal two places. |                  |
 |                                                      | $137.5\%$      |
 
 |                                |                  |
 |--------------------------------|------------------|
-| ⓒ                              |                  |
+| (c)                              |                  |
 | Write as an improper fraction. | $2\frac{1}{5}$ |
 | Change to a decimal.           | $\frac{11}{5}$ |
 | Write as a percent.            |                  |
@@ -465,11 +465,11 @@ Notice that we needed to add zeros at the end of the number when moving the deci
 
 ### Try It 6.21
 
-Convert each fraction or mixed number to a percent: ⓐ $\frac{5}{8}$ ⓑ $\frac{11}{4}$ ⓒ $3\frac{2}{5}$
+Convert each fraction or mixed number to a percent: (a) $\frac{5}{8}$ (b) $\frac{11}{4}$ (c) $3\frac{2}{5}$
 
 ### Try It 6.22
 
-Convert each fraction or mixed number to a percent: ⓐ$\frac{7}{8}$ ⓑ$\frac{9}{4}$ ⓒ$1\frac{3}{5}$
+Convert each fraction or mixed number to a percent: (a)$\frac{7}{8}$ (b)$\frac{9}{4}$ (c)$1\frac{3}{5}$
 
 Sometimes when changing a fraction to a decimal, the division continues for many decimal places and we will round off the quotient. The number of decimal places we round to will depend on the situation. If the decimal involves money, we round to the hundredths place. For most other cases in this book we will round the number to the nearest thousandth, so the percent will be rounded to the nearest tenth.
 

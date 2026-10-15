@@ -69,12 +69,12 @@ Quadrantal angles are angles in standard position whose terminal side lies on an
 
 #### Drawing an Angle in Standard Position Measured in Degrees
 
-  1. ⓐ Sketch an angle of 30° in standard position.
-  2. ⓑ Sketch an angle of −135° in standard position.
+  1. (a) Sketch an angle of 30° in standard position.
+  2. (b) Sketch an angle of −135° in standard position.
 
 ####  Solution
 
-  1. ⓐ Divide the angle measure by 360°. 
+  1. (a) Divide the angle measure by 360°. 
 
 30° 360° = 1 12 30° 360° = 1 12
 
@@ -86,7 +86,7 @@ One-twelfth equals one-third of a quarter, so by dividing a quarter rotation int
 
 Figure  8
 
-  2. ⓑ Divide the angle measure by 360°. 
+  2. (b) Divide the angle measure by 360°. 
 
 −135° 360° =− 3 8 −135° 360° =− 3 8
 
@@ -216,18 +216,18 @@ To convert between degrees and radians, use the proportion
 
 Convert each radian measure to degrees.
 
-  1. ⓐ π 6 π 6
-  2. ⓑ 3
+  1. (a) π 6 π 6
+  2. (b) 3
 
 ####  Solution
 
 Because we are given radians and we want degrees, we should set up a proportion and solve it. 
 
-  1. ⓐ We use the proportion, substituting the given information. 
+  1. (a) We use the proportion, substituting the given information. 
 
 θ 180 = θ R π θ 180 = π 6 π θ= 180 6 θ= 30 ∘ θ 180 = θ R π θ 180 = π 6 π θ= 180 6 θ= 30 ∘
 
-  2. ⓑ We use the proportion, substituting the given information. 
+  2. (b) We use the proportion, substituting the given information. 
 
 θ 180 = θ R π θ 180 = 3 π θ= 3(180) π θ≈ 172 ∘ θ 180 = θ R π θ 180 = 3 π θ= 3(180) π θ≈ 172 ∘
 
@@ -392,12 +392,12 @@ Figure  21
 
 Assume the orbit of Mercury around the sun is a perfect circle. Mercury is approximately 36 million miles from the sun.
 
-  1. ⓐ In one Earth day, Mercury completes 0.0114 of its total revolution. How many miles does it travel in one day?
-  2. ⓑ Use your answer from part (a) to determine the radian measure for Mercury’s movement in one Earth day.
+  1. (a) In one Earth day, Mercury completes 0.0114 of its total revolution. How many miles does it travel in one day?
+  2. (b) Use your answer from part (a) to determine the radian measure for Mercury’s movement in one Earth day.
 
 ####  Solution
 
-  1. ⓐLet’s begin by finding the circumference of Mercury’s orbit. 
+  1. (a)Let’s begin by finding the circumference of Mercury’s orbit. 
 
 C=2πr =2π(36 million miles) ≈226 million miles C=2πr =2π(36 million miles) ≈226 million miles
 
@@ -405,7 +405,7 @@ Since Mercury completes 0.0114 of its total revolution in one Earth day, we can 
 
 ( 0.0114 )226 million miles = 2.58 million miles ( 0.0114 )226 million miles = 2.58 million miles
 
-  2. ⓑ Now, we convert to radians: 
+  2. (b) Now, we convert to radians: 
 
 radian = arclength radius = 2.58 million miles 36 million miles =0.0717 radian = arclength radius = 2.58 million miles 36 million miles =0.0717
 

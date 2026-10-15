@@ -80,13 +80,13 @@ The number 15.68 is read *fifteen and sixty-eight hundredths*.
 
 ### Example 5.1
 
-Name each decimal: ⓐ4.3 ⓑ2.45 ⓒ0.009 ⓓ$-15.571.$
+Name each decimal: (a)4.3 (b)2.45 (c)0.009 (d)$-15.571.$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | 4.3 |
 | Name the number to the left of the decimal point. | four\_\_\_\_\_ |
 | Write "and" for the decimal point. | four and\_\_\_\_\_ |
@@ -95,7 +95,7 @@ Name each decimal: ⓐ4.3 ⓑ2.45 ⓒ0.009 ⓓ$-15.571.$
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | 2.45 |
 | Name the number to the left of the decimal point. | two\_\_\_\_\_ |
 | Write "and" for the decimal point. | two and\_\_\_\_\_ |
@@ -104,7 +104,7 @@ Name each decimal: ⓐ4.3 ⓑ2.45 ⓒ0.009 ⓓ$-15.571.$
 
 |  |  |
 |----|----|
-| ⓒ |  |
+| (c) |  |
 |  | 0.009 |
 | Name the number to the left of the decimal point. | Zero is the number to the left of the decimal; it is not included in the name. |
 | Name the number to the right of the decimal point as if it were a whole number. | nine\_\_\_\_\_ |
@@ -112,7 +112,7 @@ Name each decimal: ⓐ4.3 ⓑ2.45 ⓒ0.009 ⓓ$-15.571.$
 
 |  |  |
 |----|----|
-| ⓓ |  |
+| (d) |  |
 |  | $- 15.571$ |
 | Name the number to the left of the decimal point. | negative fifteen |
 | Write "and" for the decimal point. | negative fifteen and\_\_\_\_\_ |
@@ -123,13 +123,13 @@ Name each decimal: ⓐ4.3 ⓑ2.45 ⓒ0.009 ⓓ$-15.571.$
 
 Name each decimal:
 
-ⓐ6.7 ⓑ19.58 ⓒ0.018 ⓓ$-2.053$
+(a)6.7 (b)19.58 (c)0.018 (d)$-2.053$
 
 ### Try It 5.2
 
 Name each decimal:
 
-ⓐ5.8 ⓑ3.57 ⓒ0.005 ⓓ$-13.461$
+(a)5.8 (b)3.57 (c)0.005 (d)$-13.461$
 
 ### Write Decimals
 
@@ -301,7 +301,7 @@ Notice that when the number to the left of the decimal is zero, we get a proper 
 
 Write each of the following decimal numbers as a fraction or a mixed number:
 
-ⓐ4.09 ⓑ3.7 ⓒ$-0.286$
+(a)4.09 (b)3.7 (c)$-0.286$
 
 #### Solution
 
@@ -312,7 +312,7 @@ Write each of the following decimal numbers as a fraction or a mixed number:
 </colgroup>
 <tbody>
 <tr>
-<td>ⓐ</td>
+<td>(a)</td>
 <td></td>
 </tr>
 <tr>
@@ -353,7 +353,7 @@ Did you notice that the number of zeros in the denominator is the same as the nu
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ</td>
+<td>(b)</td>
 <td></td>
 </tr>
 <tr>
@@ -392,7 +392,7 @@ Write 7 in the numerator as it is the number to the right of the decimal point.<
 </colgroup>
 <tbody>
 <tr>
-<td>ⓒ</td>
+<td>(c)</td>
 <td></td>
 </tr>
 <tr>
@@ -425,13 +425,13 @@ Write 1,000 in the denominator as the place value of the final digit, 6, is thou
 
 Write as a fraction or mixed number. Simplify the answer if possible.
 
-ⓐ5.3 ⓑ6.07 ⓒ$-0.234$
+(a)5.3 (b)6.07 (c)$-0.234$
 
 ### Try It 5.8
 
 Write as a fraction or mixed number. Simplify the answer if possible.
 
-ⓐ8.7 ⓑ1.03 ⓒ$-0.024$
+(a)8.7 (b)1.03 (c)$-0.024$
 
 ### Locate Decimals on the Number Line
 
@@ -538,8 +538,8 @@ Remember, writing zeros at the end of a decimal does not change its value.
 
 Order the following decimals using $< \ \text{or}\ \text{>:}$
 
-1.  ⓐ$0.64\ \text{\;\;}0.6$
-2.  ⓑ$0.83\ \text{\;\;}0.803$
+1.  (a)$0.64\ \text{\;\;}0.6$
+2.  (b)$0.83\ \text{\;\;}0.803$
 
 #### Solution
 
@@ -550,7 +550,7 @@ Order the following decimals using $< \ \text{or}\ \text{>:}$
 </colgroup>
 <tbody>
 <tr>
-<td>ⓐ</td>
+<td>(a)</td>
 <td></td>
 </tr>
 <tr>
@@ -581,7 +581,7 @@ $0.64 > 0.6$</td>
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ</td>
+<td>(b)</td>
 <td></td>
 </tr>
 <tr>
@@ -609,13 +609,13 @@ $0.83 > 0.803$</td>
 
 Order each of the following pairs of numbers, using $< \ \text{or}\ \text{>:}$
 
-ⓐ$0.42\text{\;\;}0.4$ ⓑ$0.76\text{\;\;}0.706$
+(a)$0.42\text{\;\;}0.4$ (b)$0.76\text{\;\;}0.706$
 
 ### Try It 5.14
 
 Order each of the following pairs of numbers, using $< \ \text{or}\ \text{>:}$
 
-ⓐ$0.1\text{\;\;}0.18$ ⓑ$0.305\text{\;\;}0.35$
+(a)$0.1\text{\;\;}0.18$ (b)$0.305\text{\;\;}0.35$
 
 When we order negative decimals, it is important to remember how to order negative integers. Recall that larger numbers are to the right on the number line. For example, because $-2$ lies to the right of $-3$ on the number line, we know that $-2 > -3.$ Similarly, smaller numbers lie to the left on the number line. For example, because $-9$ lies to the left of $-6$ on the number line, we know that $-9 < -6.$
 
@@ -670,7 +670,7 @@ $-0.6\;\;\_-0.7$
 
 In the United States, gasoline prices are usually written with the decimal part as thousandths of a dollar. For example, a gas station might post the price of unleaded gas at $\text{\$3.279}$ per gallon. But if you were to buy exactly one gallon of gas at this price, you would pay $\text{\$3.28}$, because the final price would be rounded to the nearest cent. In Whole Numbers, we saw that we round numbers to get an approximate value when the exact value is not needed. Suppose we wanted to round $\text{\$2.72}$ to the nearest dollar. Is it closer to $\text{\$2}$ or to $\text{\$3}?$ What if we wanted to round $\text{\$2.72}$ to the nearest ten cents; is it closer to $\text{\$2.70}$ or to $\text{\$2.80}?$ The number lines in Figure 5.4 can help us answer those questions.
 
-*Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. ⓑ We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.*
+*Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.*
 
 Can we round decimals without number lines? Yes! We use a method based on the one we used to round whole numbers.
 
@@ -710,13 +710,13 @@ Round to the nearest hundredth: 9.173.
 
 ### Example 5.10
 
-Round 18.379 to the nearest ⓐ tenth ⓑ whole number.
+Round 18.379 to the nearest (a) tenth (b) whole number.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ Round 18.379 to the nearest tenth. |  |
+| (a) Round 18.379 to the nearest tenth. |  |
 |  |  |
 | Locate the tenths place and mark it with an arrow. |  |
 | Underline the digit to the right of the tenths digit. |  |
@@ -726,7 +726,7 @@ Round 18.379 to the nearest ⓐ tenth ⓑ whole number.
 
 |  |  |
 |----|----|
-| ⓑ Round 18.379 to the nearest whole number. |  |
+| (b) Round 18.379 to the nearest whole number. |  |
 |  |  |
 | Locate the ones place and mark it with an arrow. |  |
 | Underline the digit to the right of the ones place. |  |
@@ -736,8 +736,8 @@ Round 18.379 to the nearest ⓐ tenth ⓑ whole number.
 
 ### Try It 5.19
 
-Round 6.582 to the nearest ⓐ hundredth ⓑ tenth ⓒ whole number.
+Round 6.582 to the nearest (a) hundredth (b) tenth (c) whole number.
 
 ### Try It 5.20
 
-Round 15.2175 to the nearest ⓐ thousandth ⓑ hundredth ⓒ tenth.
+Round 15.2175 to the nearest (a) thousandth (b) hundredth (c) tenth.

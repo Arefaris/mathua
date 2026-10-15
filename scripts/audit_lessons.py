@@ -491,6 +491,32 @@ def main():
         errors.append(f"duplicated caption text ({len(caption_dupes)}):\n  "
                       + "\n  ".join(caption_dupes[:20]))
 
+    # 17. Enclosed-alphanumeric glyphs in lesson text. OpenStax wrote a two-part
+    # example as "ⓐ ... ⓑ ..." and the ingester copied the codepoint through.
+    # At lesson size U+24D0 is an "a" inside a circle -- indistinguishable from
+    # "@" -- and no theme font carries the codepoint, so the browser substitutes
+    # a face at a different size and baseline. The corpus already spells the
+    # parts out as "(a)" in prose ("part (a)" appears 22 times against the
+    # marker), so all 2340 markers were normalised to "(a)".."(e)" on
+    # 2026-10-15 and no baseline remains.
+    enclosed = []
+    if os.path.isdir(LESSONS):
+        for root, _dirs, files in os.walk(LESSONS):
+            for name in sorted(files):
+                if not name.endswith(".md"):
+                    continue
+                p = os.path.join(root, name)
+                with open(p, encoding="utf-8") as f:
+                    for i, line in enumerate(f, 1):
+                        glyphs = sorted({ch for ch in line
+                                         if 0x2460 <= ord(ch) <= 0x24FF})
+                        if glyphs:
+                            enclosed.append(f"{os.path.relpath(p, ROOT)}:{i}: "
+                                            f"{' '.join(glyphs)}")
+    if enclosed:
+        errors.append(f"enclosed-alphanumeric glyphs in lesson text "
+                      f"({len(enclosed)}); write (a), (b) instead:\n  "
+                      + "\n  ".join(enclosed[:20]))
 
     if errors:
         print("\n\n".join(errors))

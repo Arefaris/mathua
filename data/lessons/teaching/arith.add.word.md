@@ -36,27 +36,27 @@ To describe addition, we can use symbols and words.
 
 Translate from math notation to words:
 
-1.  ⓐ $7 + 1$
-2.  ⓑ $12 + 14$
+1.  (a) $7 + 1$
+2.  (b) $12 + 14$
 
 #### Solution
 
-- ⓐ The expression consists of a plus symbol connecting the addends 7 and 1. We read this as *seven plus one*. The result is *the sum of seven and one*.
-- ⓑ The expression consists of a plus symbol connecting the addends 12 and 14. We read this as *twelve plus fourteen*. The result is the *sum of twelve and fourteen*.
+- (a) The expression consists of a plus symbol connecting the addends 7 and 1. We read this as *seven plus one*. The result is *the sum of seven and one*.
+- (b) The expression consists of a plus symbol connecting the addends 12 and 14. We read this as *twelve plus fourteen*. The result is the *sum of twelve and fourteen*.
 
 ### Try It 1.21
 
 Translate from math notation to words:
 
-1.  ⓐ $8 + 4$
-2.  ⓑ $18 + 11$
+1.  (a) $8 + 4$
+2.  (b) $18 + 11$
 
 ### Try It 1.22
 
 Translate from math notation to words:
 
-1.  ⓐ $21 + 16$
-2.  ⓑ $100 + 200$
+1.  (a) $21 + 16$
+2.  (b) $100 + 200$
 
 ### Model Addition of Whole Numbers
 
@@ -236,29 +236,29 @@ $$
 
 Find each sum:
 
-1.  ⓐ $0 + 11$
-2.  ⓑ $42 + 0$
+1.  (a) $0 + 11$
+2.  (b) $42 + 0$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ The first addend is zero. The sum of any number and zero is the number. | $0 + 11 = 11$ |
-| ⓑ The second addend is zero. The sum of any number and zero is the number. | $42 + 0 = 42$ |
+| (a) The first addend is zero. The sum of any number and zero is the number. | $0 + 11 = 11$ |
+| (b) The second addend is zero. The sum of any number and zero is the number. | $42 + 0 = 42$ |
 
 ### Try It 1.29
 
 Find each sum:
 
-1.  ⓐ $0 + 19$
-2.  ⓑ $39 + 0$
+1.  (a) $0 + 19$
+2.  (b) $39 + 0$
 
 ### Try It 1.30
 
 Find each sum:
 
-1.  ⓐ $0 + 24$
-2.  ⓑ $57 + 0$
+1.  (a) $0 + 24$
+2.  (b) $57 + 0$
 
 Look at the pairs of sums.
 
@@ -282,24 +282,24 @@ $$
 
 Add:
 
-1.  ⓐ $8 + 7$
-2.  ⓑ $7 + 8$
+1.  (a) $8 + 7$
+2.  (b) $7 + 8$
 
 #### Solution
 
 |      |           |
   |------|-----------|
-  | ⓐ    |           |
+  | (a)    |           |
   | Add. | $8 + 7$ |
   |      | 15    |
 
 |      |           |
   |------|-----------|
-  | ⓑ    |           |
+  | (b)    |           |
   | Add. | $7 + 8$ |
   |      | 15    |
 
-Did you notice that changing the order of the addends did not change their sum? We could have immediately known the sum from part ⓑ just by recognizing that the addends were the same as in part ⓑ, but in the reverse order. As a result, both sums are the same.
+Did you notice that changing the order of the addends did not change their sum? We could have immediately known the sum from part (b) just by recognizing that the addends were the same as in part (b), but in the reverse order. As a result, both sums are the same.
 
 ### Try It 1.31
 

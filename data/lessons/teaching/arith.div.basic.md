@@ -76,25 +76,25 @@ Division is performed on two numbers at a time. When translating from math notat
 
 Translate from math notation to words.
 
-ⓐ $64 \div 8$ ⓑ $\frac{42}{7}$ ⓒ 428
+(a) $64 \div 8$ (b) $\frac{42}{7}$ (c) 428
 
 #### Solution
 
-- ⓐ We read this as *sixty-four divided by eight* and the result is *the quotient of sixty-four and eight*.
-- ⓑ We read this as *forty-two divided by seven* and the result is *the quotient of forty-two and seven*.
-- ⓒ We read this as *twenty-eight divided by four* and the result is *the quotient of twenty-eight and four*.
+- (a) We read this as *sixty-four divided by eight* and the result is *the quotient of sixty-four and eight*.
+- (b) We read this as *forty-two divided by seven* and the result is *the quotient of forty-two and seven*.
+- (c) We read this as *twenty-eight divided by four* and the result is *the quotient of twenty-eight and four*.
 
 ### Try It 1.111
 
 Translate from math notation to words:
 
-ⓐ $84 \div 7$ ⓑ $\frac{18}{6}$ ⓒ 824
+(a) $84 \div 7$ (b) $\frac{18}{6}$ (c) 824
 
 ### Try It 1.112
 
 Translate from math notation to words:
 
-ⓐ $72 \div 9$ ⓑ $\frac{21}{3}$ ⓒ 654
+(a) $72 \div 9$ (b) $\frac{21}{3}$ (c) 654
 
 ### Model Division of Whole Numbers
 
@@ -136,7 +136,7 @@ We check our answer to division by multiplying the quotient by the divisor to de
 
 ### Example 1.58
 
-Divide. Then check by multiplying. ⓐ $42 \div 6$ ⓑ $\frac{72}{9}$ ⓒ 763
+Divide. Then check by multiplying. (a) $42 \div 6$ (b) $\frac{72}{9}$ (c) 763
 
 #### Solution
 
@@ -147,7 +147,7 @@ Divide. Then check by multiplying. ⓐ $42 \div 6$ ⓑ $\frac{72}{9}$ ⓒ 763
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓐ</td>
+  <td>(a)</td>
   <td></td>
   </tr>
   <tr>
@@ -177,7 +177,7 @@ Divide. Then check by multiplying. ⓐ $42 \div 6$ ⓑ $\frac{72}{9}$ ⓒ 763
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓑ</td>
+  <td>(b)</td>
   <td></td>
   </tr>
   <tr>
@@ -207,7 +207,7 @@ Divide. Then check by multiplying. ⓐ $42 \div 6$ ⓑ $\frac{72}{9}$ ⓒ 763
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓒ</td>
+  <td>(c)</td>
   <td></td>
   </tr>
   <tr>
@@ -234,13 +234,13 @@ Divide. Then check by multiplying. ⓐ $42 \div 6$ ⓑ $\frac{72}{9}$ ⓒ 763
 
 Divide. Then check by multiplying:
 
-ⓐ $54 \div 6$ ⓑ $\frac{27}{9}$
+(a) $54 \div 6$ (b) $\frac{27}{9}$
 
 ### Try It 1.116
 
 Divide. Then check by multiplying:
 
-ⓐ $\frac{36}{9}$ ⓑ 840
+(a) $\frac{36}{9}$ (b) 840
 
 What is the quotient when you divide a number by itself?
 
@@ -263,9 +263,9 @@ Table 1.6
 
 Divide. Then check by multiplying:
 
-1.  ⓐ $11 \div 11$
-2.  ⓑ $\frac{19}{1}$
-3.  ⓒ 17
+1.  (a) $11 \div 11$
+2.  (b) $\frac{19}{1}$
+3.  (c) 17
 
 #### Solution
 
@@ -276,7 +276,7 @@ Divide. Then check by multiplying:
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓐ</td>
+  <td>(a)</td>
   <td></td>
   </tr>
   <tr>
@@ -306,7 +306,7 @@ Divide. Then check by multiplying:
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓑ</td>
+  <td>(b)</td>
   <td></td>
   </tr>
   <tr>
@@ -336,7 +336,7 @@ Divide. Then check by multiplying:
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓒ</td>
+  <td>(c)</td>
   <td></td>
   </tr>
   <tr>
@@ -363,13 +363,13 @@ Divide. Then check by multiplying:
 
 Divide. Then check by multiplying:
 
-ⓐ $14 \div 14$ ⓑ $\frac{27}{1}$
+(a) $14 \div 14$ (b) $\frac{27}{1}$
 
 ### Try It 1.118
 
 Divide. Then check by multiplying:
 
-ⓐ $\frac{16}{1}$ ⓑ 14
+(a) $\frac{16}{1}$ (b) 14
 
 Suppose we have $\text{\$0},$ and want to divide it among 3 people. How much would each person get? Each person would get $\text{\$0}.$ Zero divided by any number is 0.
 
@@ -390,7 +390,7 @@ Another way to explain why division by zero is undefined is to remember that div
 
 ### Example 1.60
 
-Divide. Check by multiplying: ⓐ $0 \div 3$ ⓑ $10/0.$
+Divide. Check by multiplying: (a) $0 \div 3$ (b) $10/0.$
 
 #### Solution
 
@@ -401,7 +401,7 @@ Divide. Check by multiplying: ⓐ $0 \div 3$ ⓑ $10/0.$
   </colgroup>
   <tbody>
   <tr>
-  <td>ⓐ</td>
+  <td>(a)</td>
   <td></td>
   </tr>
   <tr>
@@ -426,7 +426,7 @@ Divide. Check by multiplying: ⓐ $0 \div 3$ ⓑ $10/0.$
 
 - |                                |           |
   |--------------------------------|-----------|
-  | ⓑ                              |           |
+  | (b)                              |           |
   |                                | $10/0$  |
   | Division by zero is undefined. | undefined |
 
@@ -434,13 +434,13 @@ Divide. Check by multiplying: ⓐ $0 \div 3$ ⓑ $10/0.$
 
 Divide. Then check by multiplying:
 
-ⓐ $0 \div 2$ ⓑ $17/0$
+(a) $0 \div 2$ (b) $17/0$
 
 ### Try It 1.120
 
 Divide. Then check by multiplying:
 
-ⓐ $0 \div 6$ ⓑ $13/0$
+(a) $0 \div 6$ (b) $13/0$
 
 When the divisor or the dividend has more than one digit, it is usually easier to use the 412 notation. This process is called long division. Let’s work through the process by dividing 78 by 3.
 

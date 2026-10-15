@@ -215,21 +215,21 @@ The order of operations introduced in Use the Language of Algebra also applies t
 
 Simplify the expressions:
 
-1.  ⓐ$7\left( {18.3 - 21.7} \right)$
-2.  ⓑ$\frac{2}{3}\left( {8.3 - 3.8} \right)$
+1.  (a)$7\left( {18.3 - 21.7} \right)$
+2.  (b)$\frac{2}{3}\left( {8.3 - 3.8} \right)$
 
 #### Solution
 
 |                              |                    |
 |------------------------------|--------------------|
-| ⓐ                            |                    |
+| (a)                            |                    |
 |                              | $7(18.3 - 21.7)$ |
 | Simplify inside parentheses. | $7(-3.4)$        |
 | Multiply.                    | $-23.8$          |
 
 |                              |                                |
 |------------------------------|--------------------------------|
-| ⓑ                            |                                |
+| (b)                            |                                |
 |                              | $\frac{2}{3}(8.3 - 3.8)$     |
 | Simplify inside parentheses. | $\frac{2}{3}(4.5)$           |
 | Write 4.5 as a fraction. | $\frac{2}{3}(\frac{4.5}{1})$ |
@@ -238,24 +238,24 @@ Simplify the expressions:
 
 ### Try It 5.69
 
-Simplify: ⓐ$8(14.6 - 37.5)$ ⓑ$\frac{3}{5}(9.6 - 2.1)\text{.}$
+Simplify: (a)$8(14.6 - 37.5)$ (b)$\frac{3}{5}(9.6 - 2.1)\text{.}$
 
 ### Try It 5.70
 
-Simplify: ⓐ$25(25.69 - 56.74)$ ⓑ$\frac{2}{7}(11.9 - 4.2)\text{.}$
+Simplify: (a)$25(25.69 - 56.74)$ (b)$\frac{2}{7}(11.9 - 4.2)\text{.}$
 
 ### Example 5.36
 
 Simplify each expression:
 
-1.  ⓐ$6 \div 0.6 + (0.2)4 - {(0.1)}^{2}$
-2.  ⓑ$\left( \frac{1}{10} \right)^{2} + (3.5)(0.9)$
+1.  (a)$6 \div 0.6 + (0.2)4 - {(0.1)}^{2}$
+2.  (b)$\left( \frac{1}{10} \right)^{2} + (3.5)(0.9)$
 
 #### Solution
 
 |                     |                                       |
 |---------------------|---------------------------------------|
-| ⓐ                   |                                       |
+| (a)                   |                                       |
 |                     | $6 \div 0.6 + (0.2)4 - {(0.1)}^{2}$ |
 | Simplify exponents. | $6 \div 0.6 + (0.2)4 - 0.01$        |
 | Divide.             | $10 + (0.2)4 - 0.01$                |
@@ -265,7 +265,7 @@ Simplify each expression:
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $\left( \frac{1}{10} \right)^{2} + (3.5)(0.9)$ |
 | Simplify exponents. | $\frac{1}{100} + (3.5)(0.9)$ |
 | Multiply. | $\frac{1}{100} + 3.15$ |
@@ -343,59 +343,59 @@ Remember to use square units, such as square inches, when you calculate the area
 
 ### Example 5.37
 
-A circle has radius 10 centimeters. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius 10 centimeters. Approximate its (a) circumference and (b) area.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ Find the circumference when $r = 10.$ |  |
+| (a) Find the circumference when $r = 10.$ |  |
 | Write the formula for circumference. | $C = 2\text{π}\textit{r}$ |
 | Substitute 3.14 for $\pi$ and 10 for ,$r$. | $C \approx 2(3.14)(10)$ |
 | Multiply. | $C \approx 62.8\ \text{centimeters}$ |
 
 |  |  |
 |----|----|
-| ⓑ Find the area when $r = 10.$ |  |
+| (b) Find the area when $r = 10.$ |  |
 | Write the formula for area. | $A = \ \text{π}\textit{r}^{2}$ |
 | Substitute 3.14 for $\pi$ and 10 for $r$. | $A \approx (3.14){\text{(}10\text{)}}^{2}$ |
 | Multiply. | $A \approx 314\ \text{square centimeters}$ |
 
 ### Try It 5.73
 
-A circle has radius 50 inches. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius 50 inches. Approximate its (a) circumference and (b) area.
 
 ### Try It 5.74
 
-A circle has radius 100 feet. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius 100 feet. Approximate its (a) circumference and (b) area.
 
 ### Example 5.38
 
-A circle has radius 42.5 centimeters. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius 42.5 centimeters. Approximate its (a) circumference and (b) area.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ Find the circumference when $r = 42.5.$ |  |
+| (a) Find the circumference when $r = 42.5.$ |  |
 | Write the formula for circumference. | $C = 2\text{π}\textit{r}$ |
 | Substitute 3.14 for $\pi$ and 42.5 for $r$ | $C \approx 2(3.14)(42.5)$ |
 | Multiply. | $C \approx 266.9\ \text{centimeters}$ |
 
 |  |  |
 |----|----|
-| ⓑ Find the area when $r = 42.5$. |  |
+| (b) Find the area when $r = 42.5$. |  |
 | Write the formula for area. | $A = \ \text{π}\textit{r}^{2}$ |
 | Substitute 3.14 for $\pi$ and 42.5 for $r$. | $A \approx (3.14){\text{(}42.5\text{)}}^{2}$ |
 | Multiply. | $A \approx 5671.625\ \text{square centimeters}$ |
 
 ### Try It 5.75
 
-A circle has radius 51.8 centimeters. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius 51.8 centimeters. Approximate its (a) circumference and (b) area.
 
 ### Try It 5.76
 
-A circle has radius 26.4 meters. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius 26.4 meters. Approximate its (a) circumference and (b) area.
 
 #### Approximate $\pi$ with a Fraction
 
@@ -403,28 +403,28 @@ Convert the fraction $\frac{22}{7}$ to a decimal. If you use your calculator, th
 
 ### Example 5.39
 
-A circle has radius $\frac{14}{15}$ meter. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius $\frac{14}{15}$ meter. Approximate its (a) circumference and (b) area.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ Find the circumference when $r = \frac{14}{15}.$ |  |
+| (a) Find the circumference when $r = \frac{14}{15}.$ |  |
 | Write the formula for circumference. | $C = 2\text{π}\textit{r}$ |
 | Substitute $\frac{22}{7}$ for $\pi$ and $\frac{14}{15}$ for $r$. | $C \approx 2(\frac{22}{7})(\frac{14}{15})$ |
 | Multiply. | $C \approx \frac{88}{15}\ \text{meters}$ |
 
 |  |  |
 |----|----|
-| ⓑ Find the area when $r = \frac{14}{15}.$ |  |
+| (b) Find the area when $r = \frac{14}{15}.$ |  |
 | Write the formula for area. | $A = \ \text{π}\textit{r}^{2}$ |
 | Substitute $\frac{22}{7}$ for $\pi$ and $\frac{14}{15}$ for $r$. | $A \approx (\frac{22}{7}){\text{(}\frac{14}{15}\text{)}}^{2}$ |
 | Multiply. | $A \approx \frac{616}{225}\ \text{square meters}$ |
 
 ### Try It 5.77
 
-A circle has radius $\frac{5}{21}$ meters. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius $\frac{5}{21}$ meters. Approximate its (a) circumference and (b) area.
 
 ### Try It 5.78
 
-A circle has radius $\frac{10}{33}$ inches. Approximate its ⓐ circumference and ⓑ area.
+A circle has radius $\frac{10}{33}$ inches. Approximate its (a) circumference and (b) area.

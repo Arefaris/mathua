@@ -269,7 +269,7 @@
     {
       "lesson": "teaching/arith.dec.intro.md",
       "line": 673,
-      "text": "Figure 5.4 \u24d0 We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. \u24d1 We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
+      "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1403,7 +1403,7 @@
     {
       "lesson": "teaching/dec.basics.compare.md",
       "line": 673,
-      "text": "Figure 5.4 \u24d0 We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. \u24d1 We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
+      "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1452,7 +1452,7 @@
     {
       "lesson": "teaching/dec.ops.round.md",
       "line": 673,
-      "text": "Figure 5.4 \u24d0 We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. \u24d1 We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
+      "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },

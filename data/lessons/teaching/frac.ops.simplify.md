@@ -48,7 +48,7 @@ Name the fraction of the shape that is shaded in each of the figures.
 
 We need to ask two questions. First, how many equal parts are there? This will be the denominator. Second, of these equal parts, how many are shaded? This will be the numerator.
 
-ⓐ  
+(a)  
 \$\begin{array}{lccl}
 \text{How many equal parts are there?} & & & {\text{There are eight equal parts}\text{.}} \\
 \text{How many are shaded?} & & & {\text{Five parts are shaded}\text{.}}
@@ -56,7 +56,7 @@ We need to ask two questions. First, how many equal parts are there? This will b
 
 Five out of eight parts are shaded. Therefore, the fraction of the circle that is shaded is $\frac{5}{8}.$
 
-ⓑ  
+(b)  
 \$\begin{array}{lccl}
 \text{How many equal parts are there?} & & & {\text{There are nine equal parts}\text{.}} \\
 \text{How many are shaded?} & & & {\text{Two parts are shaded}\text{.}}
@@ -78,9 +78,9 @@ Shade $\frac{3}{4}$ of the circle.
 
 #### Solution
 
-The denominator is 4, so we divide the circle into four equal parts ⓐ.
+The denominator is 4, so we divide the circle into four equal parts (a).
 
-The numerator is 3, so we shade three of the four parts ⓑ.
+The numerator is 3, so we shade three of the four parts (b).
 
 $\frac{3}{4}$ of the circle is shaded.
 
@@ -126,9 +126,9 @@ Doing the Manipulative Mathematics activity "Fractions Equivalent to One" will h
 
 Use fraction circles to make wholes using the following pieces:
 
-1.  ⓐ 4 fourths
-2.  ⓑ 5 fifths
-3.  ⓒ 6 sixths
+1.  (a) 4 fourths
+2.  (b) 5 fifths
+3.  (c) 6 sixths
 
 #### Solution
 
@@ -146,17 +146,17 @@ What if we have more fraction pieces than we need for 1 whole? We’ll look at t
 
 Use fraction circles to make wholes using the following pieces:
 
-1.  ⓐ 3 halves
-2.  ⓑ 8 fifths
-3.  ⓒ 7 thirds
+1.  (a) 3 halves
+2.  (b) 8 fifths
+3.  (c) 7 thirds
 
 #### Solution
 
-ⓐ 3 halves make 1 whole with 1 half left over.
+(a) 3 halves make 1 whole with 1 half left over.
 
-ⓑ 8 fifths make 1 whole with 3 fifths left over.
+(b) 8 fifths make 1 whole with 3 fifths left over.
 
-ⓒ7 thirds make 2 wholes with 1 third left over.
+(c)7 thirds make 2 wholes with 1 third left over.
 
 ### Try It 4.7
 
@@ -421,17 +421,17 @@ Doing the activity "Equivalent Fractions" will help you develop a better underst
 
 Use fraction tiles to find equivalent fractions. Show your result with a figure.
 
-1.  ⓐ How many eighths equal one-half?
-2.  ⓑ How many tenths equal one-half?
-3.  ⓒ How many twelfths equal one-half?
+1.  (a) How many eighths equal one-half?
+2.  (b) How many tenths equal one-half?
+3.  (c) How many twelfths equal one-half?
 
 #### Solution
 
-ⓐ It takes four $\frac{1}{8}$ tiles to exactly cover the $\frac{1}{2}$ tile, so $\frac{4}{8} = \frac{1}{2}.$
+(a) It takes four $\frac{1}{8}$ tiles to exactly cover the $\frac{1}{2}$ tile, so $\frac{4}{8} = \frac{1}{2}.$
 
-ⓑ It takes five $\frac{1}{10}$ tiles to exactly cover the $\frac{1}{2}$ tile, so $\frac{5}{10} = \frac{1}{2}.$
+(b) It takes five $\frac{1}{10}$ tiles to exactly cover the $\frac{1}{2}$ tile, so $\frac{5}{10} = \frac{1}{2}.$
 
-ⓒ It takes six $\frac{1}{12}$ tiles to exactly cover the $\frac{1}{2}$ tile, so $\frac{6}{12} = \frac{1}{2}.$
+(c) It takes six $\frac{1}{12}$ tiles to exactly cover the $\frac{1}{2}$ tile, so $\frac{6}{12} = \frac{1}{2}.$
 
 Suppose you had tiles marked $\frac{1}{20}.$ How many of them would it take to equal $\frac{1}{2}?$ Are you thinking ten tiles? If you are, you’re right, because $\frac{10}{20} = \frac{1}{2}.$
 
@@ -609,35 +609,35 @@ We can use the inequality symbols to order fractions. Remember that $a > b$ mean
 
 Order each of the following pairs of numbers, using $<$ or $\text{>:}$
 
-1.  ⓐ$- \frac{2}{3}\;\;\;\;-1$
-2.  ⓑ$-3\frac{1}{2}\;\;\;\;-3$
-3.  ⓒ$- \frac{3}{7}\;\;\;\; - \frac{3}{8}$
-4.  ⓓ$-2\;\;\;\;\frac{-16}{9}$
+1.  (a)$- \frac{2}{3}\;\;\;\;-1$
+2.  (b)$-3\frac{1}{2}\;\;\;\;-3$
+3.  (c)$- \frac{3}{7}\;\;\;\; - \frac{3}{8}$
+4.  (d)$-2\;\;\;\;\frac{-16}{9}$
 
 #### Solution
 
-ⓐ $- \frac{2}{3} > -1$
+(a) $- \frac{2}{3} > -1$
 
-ⓑ $-3\frac{1}{2} < -3$
+(b) $-3\frac{1}{2} < -3$
 
-ⓒ $- \frac{3}{7}\ \text{<}\  - \frac{3}{8}$
+(c) $- \frac{3}{7}\ \text{<}\  - \frac{3}{8}$
 
-ⓓ $-2 < \frac{-16}{9}$
+(d) $-2 < \frac{-16}{9}$
 
 ### Try It 4.35
 
 Order each of the following pairs of numbers, using $<$ or $\text{>:}$
 
-1.  ⓐ$- \frac{1}{3}\underset{\;\;}{\quad} - 1$
-2.  ⓑ$-1\frac{1}{2}\underset{\;\;}{\quad} - 2$
-3.  ⓒ$- \frac{2}{3}\underset{\;\;}{\quad} - \frac{1}{3}$
-4.  ⓓ$-3\underset{\;\;}{\quad} - \frac{7}{3}$
+1.  (a)$- \frac{1}{3}\underset{\;\;}{\quad} - 1$
+2.  (b)$-1\frac{1}{2}\underset{\;\;}{\quad} - 2$
+3.  (c)$- \frac{2}{3}\underset{\;\;}{\quad} - \frac{1}{3}$
+4.  (d)$-3\underset{\;\;}{\quad} - \frac{7}{3}$
 
 ### Try It 4.36
 
 Order each of the following pairs of numbers, using $<$ or $\text{>:}$
 
-1.  ⓐ$-3\text{\;\;} - \frac{17}{5}$
-2.  ⓑ$-2\frac{1}{4}\text{\;\;}-2$
-3.  ⓒ$- \frac{3}{5}\underset{\;\;}{\quad} - \frac{4}{5}$
-4.  ⓓ$-4\underset{\;\;}{\quad} - \frac{10}{3}$
+1.  (a)$-3\text{\;\;} - \frac{17}{5}$
+2.  (b)$-2\frac{1}{4}\text{\;\;}-2$
+3.  (c)$- \frac{3}{5}\underset{\;\;}{\quad} - \frac{4}{5}$
+4.  (d)$-4\underset{\;\;}{\quad} - \frac{10}{3}$

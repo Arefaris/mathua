@@ -32,26 +32,26 @@ To describe subtraction, we can use symbols and words.
 
 ### Example 1.26
 
-Translate from math notation to words: ⓐ $8 - 1$ ⓑ $26 - 14$.
+Translate from math notation to words: (a) $8 - 1$ (b) $26 - 14$.
 
 #### Solution
 
-- ⓐ We read this as *eight minus one*. The result is *the difference of eight and one*.
-- ⓑ We read this as *twenty-six minus fourteen*. The resuilt is *the difference of twenty-six and fourteen*.
+- (a) We read this as *eight minus one*. The result is *the difference of eight and one*.
+- (b) We read this as *twenty-six minus fourteen*. The resuilt is *the difference of twenty-six and fourteen*.
 
 ### Try It 1.51
 
 Translate from math notation to words:
 
-1.  ⓐ $12 - 4$
-2.  ⓑ $29 - 11$
+1.  (a) $12 - 4$
+2.  (b) $29 - 11$
 
 ### Try It 1.52
 
 Translate from math notation to words:
 
-1.  ⓐ $11 - 2$
-2.  ⓑ $29 - 12$
+1.  (a) $11 - 2$
+2.  (b) $29 - 12$
 
 ### Model Subtraction of Whole Numbers
 
@@ -156,8 +156,8 @@ $$
 
 Subtract and then check by adding:
 
-1.  ⓐ $9 - 7$
-2.  ⓑ $8 - 3.$
+1.  (a) $9 - 7$
+2.  (b) $8 - 3.$
 
 #### Solution
 
@@ -168,7 +168,7 @@ Subtract and then check by adding:
 </colgroup>
 <tbody>
 <tr>
-<td>ⓐ</td>
+<td>(a)</td>
 <td></td>
 </tr>
 <tr>
@@ -194,7 +194,7 @@ $2 + 7 = 9$</td>
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ</td>
+<td>(b)</td>
 <td></td>
 </tr>
 <tr>
@@ -535,12 +535,12 @@ Table 1.3
 
 Translate and then simplify:
 
-1.  ⓐ the difference of 13 and 8
-2.  ⓑ subtract 24 from 43
+1.  (a) the difference of 13 and 8
+2.  (b) subtract 24 from 43
 
 #### Solution
 
-- ⓐ
+- (a)
 
   The word *difference* tells us to subtract the two numbers. The numbers stay in the same order as in the phrase.
 
@@ -550,7 +550,7 @@ Translate and then simplify:
   | Translate. | $13 - 8$                 |
   | Simplify.  | 5                          |
 
-- ⓑ
+- (b)
 
   The words *subtract* *from* tells us to take the second number away from the first. We must be careful to get the order correct.
 
@@ -564,15 +564,15 @@ Translate and then simplify:
 
 Translate and simplify:
 
-1.  ⓐ the difference of 14 and 9
-2.  ⓑ subtract 21 from 37
+1.  (a) the difference of 14 and 9
+2.  (b) subtract 21 from 37
 
 ### Try It 1.72
 
 Translate and simplify:
 
-1.  ⓐ 11 decreased by 6
-2.  ⓑ 18 less than 67
+1.  (a) 11 decreased by 6
+2.  (b) 18 less than 67
 
 ### Subtract Whole Numbers in Applications
 

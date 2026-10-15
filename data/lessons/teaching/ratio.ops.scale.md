@@ -30,28 +30,28 @@ If we compare quantities with units, we have to be sure we are comparing them in
 
 Write each sentence as a proportion:
 
-1.  ⓐ3 is to 7 as 15 is to 35.
-2.  ⓑ5 hits in 8 at bats is the same as 30 hits in 48 at-bats.
-3.  ⓒ$\text{\$1.50}$ for 6 ounces is equivalent to $\text{\$2.25}$ for 9 ounces.
+1.  (a)3 is to 7 as 15 is to 35.
+2.  (b)5 hits in 8 at bats is the same as 30 hits in 48 at-bats.
+3.  (c)$\text{\$1.50}$ for 6 ounces is equivalent to $\text{\$2.25}$ for 9 ounces.
 
 #### Solution
 
 |                        |                                 |
 |------------------------|---------------------------------|
-| ⓐ                      |                                 |
+| (a)                      |                                 |
 |                        | 3 is to 7 as 15 is to 35.       |
 | Write as a proportion. | $\frac{3}{7} = \frac{15}{35}$ |
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | 5 hits in 8 at-bats is the same as 30 hits in 48 at-bats. |
 | Write each fraction to compare hits to at-bats. | $\frac{\text{hits}}{\text{at-bats}} = \frac{\text{hits}}{\text{at-bats}}$ |
 | Write as a proportion. | $\frac{5}{8} = \frac{30}{48}$ |
 
 |  |  |
 |----|----|
-| ⓒ |  |
+| (c) |  |
 |  | \$1.50 for 6 ounces is equivalent to \$2.25 for 9 ounces. |
 | Write each fraction to compare dollars to ounces. | $\frac{\$}{\text{ounces}} = \frac{\$}{\text{ounces}}$ |
 | Write as a proportion. | $\frac{1.50}{6} = \frac{2.25}{9}$ |
@@ -60,17 +60,17 @@ Write each sentence as a proportion:
 
 Write each sentence as a proportion:
 
-1.  ⓐ5 is to 9 as 20 is to 36.
-2.  ⓑ7 hits in 11 at-bats is the same as 28 hits in 44 at-bats.
-3.  ⓒ$\text{\$2.50}$ for 8 ounces is equivalent to $\text{\$3.75}$ for 12 ounces.
+1.  (a)5 is to 9 as 20 is to 36.
+2.  (b)7 hits in 11 at-bats is the same as 28 hits in 44 at-bats.
+3.  (c)$\text{\$2.50}$ for 8 ounces is equivalent to $\text{\$3.75}$ for 12 ounces.
 
 ### Try It 6.80
 
 Write each sentence as a proportion:
 
-1.  ⓐ6 is to 7 as 36 is to 42.
-2.  ⓑ8 adults for 36 children is the same as 12 adults for 54 children.
-3.  ⓒ$\text{\$3.75}$ for 6 ounces is equivalent to $\text{\$2.50}$ for 4 ounces.
+1.  (a)6 is to 7 as 36 is to 42.
+2.  (b)8 adults for 36 children is the same as 12 adults for 54 children.
+3.  (c)$\text{\$3.75}$ for 6 ounces is equivalent to $\text{\$2.50}$ for 4 ounces.
 
 Look at the proportions $\frac{1}{2} = \frac{4}{8}$ and $\frac{2}{3} = \frac{6}{9}.$ From our work with equivalent fractions we know these equations are true. But how do we know if an equation is a proportion with equivalent fractions if it contains fractions with larger numbers?
 
@@ -86,8 +86,8 @@ Cross products can be used to test whether a proportion is true. To test whether
 
 Determine whether each equation is a proportion:
 
-1.  ⓐ$\frac{4}{9} = \frac{12}{28}$
-2.  ⓑ$\frac{17.5}{37.5} = \frac{7}{15}$
+1.  (a)$\frac{4}{9} = \frac{12}{28}$
+2.  (b)$\frac{17.5}{37.5} = \frac{7}{15}$
 
 #### Solution
 
@@ -100,7 +100,7 @@ To determine if the equation is a proportion, we find the cross products. If the
 </colgroup>
 <tbody>
 <tr>
-<td>ⓐ</td>
+<td>(a)</td>
 <td></td>
 </tr>
 <tr>
@@ -124,7 +124,7 @@ Since the cross products are not equal, $28 \cdot 4 \neq 9 \cdot 12,$ the equati
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ</td>
+<td>(b)</td>
 <td></td>
 </tr>
 <tr>
@@ -145,15 +145,15 @@ Since the cross products are equal, $15 \cdot 17.5 = 37.5 \cdot 7,$ the equation
 
 Determine whether each equation is a proportion:
 
-1.  ⓐ$\frac{7}{9} = \frac{54}{72}$
-2.  ⓑ$\frac{24.5}{45.5} = \frac{7}{13}$
+1.  (a)$\frac{7}{9} = \frac{54}{72}$
+2.  (b)$\frac{24.5}{45.5} = \frac{7}{13}$
 
 ### Try It 6.82
 
 Determine whether each equation is a proportion:
 
-1.  ⓐ$\frac{8}{9} = \frac{56}{73}$
-2.  ⓑ$\frac{28.5}{52.5} = \frac{8}{15}$
+1.  (a)$\frac{8}{9} = \frac{56}{73}$
+2.  (b)$\frac{28.5}{52.5} = \frac{8}{15}$
 
 ### Solve Proportions
 

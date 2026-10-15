@@ -318,7 +318,7 @@ Sometimes when we need to move the decimal point, there are not enough decimal p
 
 ### Example 5.18
 
-Multiply 5.63 by factors of ⓐ10 ⓑ100ⓒ1000.
+Multiply 5.63 by factors of (a)10 (b)100(c)1000.
 
 #### Solution
 
@@ -326,32 +326,32 @@ By looking at the number of zeros in the multiple of ten, we see the number of p
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | $56.3(10)$ |
 | There is 1 zero in 10, so move the decimal point 1 place to the right. |  |
 |  | 56.3 |
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $5.63(100)$ |
 | There are 2 zeros in 100, so move the decimal point 2 places to the right. |  |
 |  | 563 |
 
 |  |  |
 |----|----|
-| ⓒ |  |
+| (c) |  |
 |  | $5.63(1000)$ |
 | There are 3 zeros in 1000, so move the decimal point 3 places to the right. |  |
 | A zero must be added at the end. | 5,630 |
 
 ### Try It 5.35
 
-Multiply 2.58 by factors of ⓐ10 ⓑ100 ⓒ1000.
+Multiply 2.58 by factors of (a)10 (b)100 (c)1000.
 
 ### Try It 5.36
 
-Multiply 14.2 by factors of ⓐ10 ⓑ100 ⓒ1000.
+Multiply 14.2 by factors of (a)10 (b)100 (c)1000.
 
 ### Divide Decimals
 

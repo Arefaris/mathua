@@ -76,21 +76,21 @@ The last digit of each highlighted number in Figure 2.6 is either $0,2,4,6,\text
 
 Determine whether each of the following is a multiple of $2\text{:}$
 
-1.  ⓐ489
-2.  ⓑ 3,714
+1.  (a)489
+2.  (b) 3,714
 
 #### Solution
 
 |                                     |                             |
 |-------------------------------------|-----------------------------|
-| ⓐ                                   |                             |
+| (a)                                   |                             |
 | Is 489 a multiple of 2?             |                             |
 | Is the last digit 0, 2, 4, 6, or 8? | No.                         |
 |                                     | 489 is not a multiple of 2. |
 
 |                                     |                           |
 |-------------------------------------|---------------------------|
-| ⓑ                                   |                           |
+| (b)                                   |                           |
 | Is 3,714 a multiple of 2?           |                           |
 | Is the last digit 0, 2, 4, 6, or 8? | Yes.                      |
 |                                     | 3,714 is a multiple of 2. |
@@ -99,15 +99,15 @@ Determine whether each of the following is a multiple of $2\text{:}$
 
 Determine whether each number is a multiple of $2\text{:}$
 
-1.  ⓐ 678
-2.  ⓑ 21,493
+1.  (a) 678
+2.  (b) 21,493
 
 ### Try It 2.80
 
 Determine whether each number is a multiple of $2\text{:}$
 
-1.  ⓐ 979
-2.  ⓑ 17,780
+1.  (a) 979
+2.  (b) 17,780
 
 Now let’s look at multiples of 5. Figure 2.7 highlights all of the multiples of 5 between 1 and 50. What do you notice about the multiples of $5?$
 
@@ -119,21 +119,21 @@ All multiples of 5 end with either 5 or 0. Just like we identify multiples of 2 
 
 Determine whether each of the following is a multiple of $5\text{:}$
 
-1.  ⓐ 579
-2.  ⓑ 880
+1.  (a) 579
+2.  (b) 880
 
 #### Solution
 
 |                           |                             |
 |---------------------------|-----------------------------|
-| ⓐ                         |                             |
+| (a)                         |                             |
 | Is 579 a multiple of 5?   |                             |
 | Is the last digit 5 or 0? | No.                         |
 |                           | 579 is not a multiple of 5. |
 
 |                           |                         |
 |---------------------------|-------------------------|
-| ⓑ                         |                         |
+| (b)                         |                         |
 | Is 880 a multiple of 5?   |                         |
 | Is the last digit 5 or 0? | Yes.                    |
 |                           | 880 is a multiple of 5. |
@@ -142,15 +142,15 @@ Determine whether each of the following is a multiple of $5\text{:}$
 
 Determine whether each number is a multiple of 5.
 
-1.  ⓐ 675
-2.  ⓑ 1,578
+1.  (a) 675
+2.  (b) 1,578
 
 ### Try It 2.82
 
 Determine whether each number is a multiple of 5.
 
-1.  ⓐ 421
-2.  ⓑ 2,690
+1.  (a) 421
+2.  (b) 2,690
 
 Figure 2.8 highlights the multiples of 10 between 1 and 50. All multiples of 10 all end with a zero.
 
@@ -160,21 +160,21 @@ Figure 2.8 highlights the multiples of 10 between 1 and 50. All multiples of 10 
 
 Determine whether each of the following is a multiple of $10\text{:}$
 
-1.  ⓐ 425
-2.  ⓑ 350
+1.  (a) 425
+2.  (b) 350
 
 #### Solution
 
 |                          |                              |
 |--------------------------|------------------------------|
-| ⓐ                        |                              |
+| (a)                        |                              |
 | Is 425 a multiple of 10? |                              |
 | Is the last digit zero?  | No.                          |
 |                          | 425 is not a multiple of 10. |
 
 |                          |                          |
 |--------------------------|--------------------------|
-| ⓑ                        |                          |
+| (b)                        |                          |
 | Is 350 a multiple of 10? |                          |
 | Is the last digit zero?  | Yes.                     |
 |                          | 350 is a multiple of 10. |
@@ -183,15 +183,15 @@ Determine whether each of the following is a multiple of $10\text{:}$
 
 Determine whether each number is a multiple of $10\text{:}$
 
-1.  ⓐ 179
-2.  ⓑ 3,540
+1.  (a) 179
+2.  (b) 3,540
 
 ### Try It 2.84
 
 Determine whether each number is a multiple of $10\text{:}$
 
-1.  ⓐ 110
-2.  ⓑ 7,595
+1.  (a) 110
+2.  (b) 7,595
 
 Figure 2.9 highlights multiples of 3. The pattern for multiples of 3 is not as obvious as the patterns for multiples of $2,5,\text{and}\ 10.$
 
@@ -227,12 +227,12 @@ Consider the number 42. The digits are 4 and 2, and their sum is $4 + 2 = 6.$ Si
 
 Determine whether each of the given numbers is a multiple of $3\text{:}$
 
-1.  ⓐ 645
-2.  ⓑ 10,519
+1.  (a) 645
+2.  (b) 10,519
 
 #### Solution
 
-ⓐ Is 645 a multiple of $3?$
+(a) Is 645 a multiple of $3?$
 
 |  |  |
 |----|----|
@@ -241,7 +241,7 @@ Determine whether each of the given numbers is a multiple of $3\text{:}$
 | If we're not sure, we could add its digits to find out. We can check it by dividing 645 by 3. | $645 \div 3$ |
 | The quotient is 215. | $3 \cdot 215 = 645$ |
 
-ⓑ Is 10,519 a multiple of $3?$
+(b) Is 10,519 a multiple of $3?$
 
 |                                               |                            |
 |-----------------------------------------------|----------------------------|
@@ -259,15 +259,15 @@ When we divide 10,519 by 3, we do not get a counting number, so 10,519 is not th
 
 Determine whether each number is a multiple of $3\text{:}$
 
-1.  ⓐ 954
-2.  ⓑ 3,742
+1.  (a) 954
+2.  (b) 3,742
 
 ### Try It 2.86
 
 Determine whether each number is a multiple of $3\text{:}$
 
-1.  ⓐ 643
-2.  ⓑ 8,379
+1.  (a) 643
+2.  (b) 8,379
 
 Look back at the charts where you highlighted the multiples of 2, of 5, and of 10. Notice that the multiples of 10 are the numbers that are multiples of both 2 and 5. That is because $10 = 2 \cdot 5.$ Likewise, since $6 = 2 \cdot 3,$ the multiples of 6 are the numbers that are multiples of both 2 and 3.
 
@@ -531,12 +531,12 @@ The prime numbers less than 20 are $2,3,5,7,11,13,17,\text{and}\ 19.$ There are 
 
 Identify each number as prime or composite:
 
-1.  ⓐ 83
-2.  ⓑ 77
+1.  (a) 83
+2.  (b) 77
 
 #### Solution
 
-ⓐ Test each prime, in order, to see if it is a factor of 83, starting with 2, as shown. We will stop when the quotient is smaller than the divisor.
+(a) Test each prime, in order, to see if it is a factor of 83, starting with 2, as shown. We will stop when the quotient is smaller than the divisor.
 
 | **Prime** | **Test** | **Factor of** $83?$ |
 |----|----|----|
@@ -550,7 +550,7 @@ We can stop when we get to 11 because the quotient $\text{(7.545…)}$ is less t
 
 We did not find any prime numbers that are factors of 83, so we know 83 is prime.
 
-ⓑ Test each prime, in order, to see if it is a factor of 77.
+(b) Test each prime, in order, to see if it is a factor of 77.
 
 | **Prime** | **Test** | **Factor of $77?$** |
 |----|----|----|

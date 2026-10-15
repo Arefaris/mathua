@@ -363,15 +363,15 @@ When multiplying a fraction by an integer, it may be helpful to write the intege
 
 Multiply, and write the answer in simplified form:
 
-ⓐ$\frac{1}{7} \cdot 56$
+(a)$\frac{1}{7} \cdot 56$
 
-ⓑ$\frac{12}{5}\left( {-20x} \right)$
+(b)$\frac{12}{5}\left( {-20x} \right)$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | $\frac{1}{7} \cdot 56$ |
 | Write 56 as a fraction. | $\frac{1}{7} \cdot \frac{56}{1}$ |
 | Determine the sign of the product; multiply. | $\frac{56}{7}$ |
@@ -379,7 +379,7 @@ Multiply, and write the answer in simplified form:
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $\frac{12}{5}\left( {-20x} \right)$ |
 | Write −20x as a fraction. | $\frac{12}{5}\left( \frac{-20x}{1} \right)$ |
 | Determine the sign of the product; multiply. | $- \frac{12 \cdot 20 \cdot x}{5 \cdot 1}$ |
@@ -390,15 +390,15 @@ Multiply, and write the answer in simplified form:
 
 Multiply, and write the answer in simplified form:
 
-1.  ⓐ$\frac{1}{8} \cdot 72\quad$
-2.  ⓑ$\frac{11}{3}\left( {-9a} \right)$
+1.  (a)$\frac{1}{8} \cdot 72\quad$
+2.  (b)$\frac{11}{3}\left( {-9a} \right)$
 
 ### Try It 4.56
 
 Multiply, and write the answer in simplified form:
 
-1.  ⓐ$\frac{3}{8} \cdot 64$
-2.  ⓑ$16x \cdot \frac{11}{12}$
+1.  (a)$\frac{3}{8} \cdot 64$
+2.  (b)$16x \cdot \frac{11}{12}$
 
 ### Find Reciprocals
 
@@ -430,10 +430,10 @@ To find the reciprocal, keep the same sign and invert the fraction. The number z
 
 Find the reciprocal of each number. Then check that the product of each number and its reciprocal is 1.
 
-1.  ⓐ$\frac{4}{9}$
-2.  ⓑ$- \frac{1}{6}$
-3.  ⓒ$- \frac{14}{5}$
-4.  ⓓ7
+1.  (a)$\frac{4}{9}$
+2.  (b)$- \frac{1}{6}$
+3.  (c)$- \frac{14}{5}$
+4.  (d)7
 
 #### Solution
 
@@ -441,7 +441,7 @@ To find the reciprocals, we keep the sign and invert the fractions.
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 | Find the reciprocal of $\frac{4}{9}$. | The reciprocal of $\frac{4}{9}$ is $\frac{9}{4}$. |
 | Check: |  |
 | Multiply the number and its reciprocal. | $\frac{4}{9} \cdot \frac{9}{4}$ |
@@ -450,7 +450,7 @@ To find the reciprocals, we keep the sign and invert the fractions.
 
 |                                           |                                |
 |-------------------------------------------|--------------------------------|
-| ⓑ                                         |                                |
+| (b)                                         |                                |
 | Find the reciprocal of $- \frac{1}{6}$. | $- \frac{6}{1}$              |
 | Simplify.                                 | $- 6$                        |
 | Check:                                    | $- \frac{1}{6} \cdot ( - 6)$ |
@@ -458,7 +458,7 @@ To find the reciprocals, we keep the sign and invert the fractions.
 
 |  |  |
 |----|----|
-| ⓒ |  |
+| (c) |  |
 | Find the reciprocal of $- \frac{14}{5}$. | $- \frac{5}{14}$ |
 | Check: | $- \frac{14}{5} \cdot \left( - \frac{5}{14} \right)$ |
 |  | $\frac{70}{70}$ |
@@ -466,7 +466,7 @@ To find the reciprocals, we keep the sign and invert the fractions.
 
 |  |  |
 |----|----|
-| ⓓ |  |
+| (d) |  |
 | Find the reciprocal of 7. |  |
 | Write 7 as a fraction. | $\frac{7}{1}$ |
 | Write the reciprocal of $\frac{7}{1}$. | $\frac{1}{7}$ |
@@ -477,19 +477,19 @@ To find the reciprocals, we keep the sign and invert the fractions.
 
 Find the reciprocal:
 
-1.  ⓐ$\frac{5}{7}$
-2.  ⓑ$- \frac{1}{8}$
-3.  ⓒ$- \frac{11}{4}$
-4.  ⓓ14
+1.  (a)$\frac{5}{7}$
+2.  (b)$- \frac{1}{8}$
+3.  (c)$- \frac{11}{4}$
+4.  (d)14
 
 ### Try It 4.58
 
 Find the reciprocal:
 
-1.  ⓐ$\frac{3}{7}$
-2.  ⓑ$- \frac{1}{12}$
-3.  ⓒ$- \frac{14}{9}$
-4.  ⓓ21
+1.  (a)$\frac{3}{7}$
+2.  (b)$- \frac{1}{12}$
+3.  (c)$- \frac{14}{9}$
+4.  (d)21
 
 In a previous chapter, we worked with opposites and absolute values. Table 4.1 compares opposites, absolute values, and reciprocals.
 

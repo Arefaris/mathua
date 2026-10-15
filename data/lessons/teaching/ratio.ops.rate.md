@@ -24,33 +24,33 @@ In this section, we will use the fraction notation. When a ratio is written in f
 
 ### Example 5.58
 
-Write each ratio as a fraction: ⓐ$15\ \text{to}\ 27$ⓑ$45\ \text{to}\ 18.$
+Write each ratio as a fraction: (a)$15\ \text{to}\ 27$(b)$45\ \text{to}\ 18.$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 |  | $\text{15 to 27}$ |
 | Write as a fraction with the first number in the numerator and the second in the denominator. | $\frac{15}{27}$ |
 | Simplify the fraction. | $\frac{5}{9}$ |
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 |  | $\text{45 to 18}$ |
 | Write as a fraction with the first number in the numerator and the second in the denominator. | $\frac{45}{18}$ |
 | Simplify. | $\frac{5}{2}$ |
 
-We leave the ratio in ⓑ as an improper fraction.
+We leave the ratio in (b) as an improper fraction.
 
 ### Try It 5.115
 
-Write each ratio as a fraction: ⓐ$21\ \text{to}\ 56$ⓑ$48\ \text{to}\ 32.$
+Write each ratio as a fraction: (a)$21\ \text{to}\ 56$(b)$48\ \text{to}\ 32.$
 
 ### Try It 5.116
 
-Write each ratio as a fraction: ⓐ$27\ \text{to}\ 72$ⓑ$51\ \text{to}\ 34.$
+Write each ratio as a fraction: (a)$27\ \text{to}\ 72$(b)$51\ \text{to}\ 34.$
 
 #### Ratios Involving Decimals
 
@@ -72,14 +72,14 @@ You do not have to write out every step when you multiply the numerator and deno
 
 Write each ratio as a fraction of whole numbers:
 
-1.  ⓐ$4.8\ \text{to}\ 11.2$
-2.  ⓑ$2.7\ \text{to}\ 0.54$
+1.  (a)$4.8\ \text{to}\ 11.2$
+2.  (b)$2.7\ \text{to}\ 0.54$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ$\text{4.8 to 11.2}$ |  |
+| (a)$\text{4.8 to 11.2}$ |  |
 | Write as a fraction. | $\frac{4.8}{11.2}$ |
 | Rewrite as an equivalent fraction without decimals, by moving both decimal points 1 place to the right. | $\frac{48}{112}$ |
 | Simplify. | $\frac{3}{7}$ |
@@ -93,7 +93,7 @@ So $4.8\ \text{to}\ 11.2$ is equivalent to $\frac{3}{7}.$
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ<br />
+<td>(b)<br />
 The numerator has one decimal place and the denominator has 2. To clear both decimals we need to move the decimal 2 places to the right.<br />
 $2.7 to 0.54$</td>
 <td></td>
@@ -117,11 +117,11 @@ So $2.7\ \text{to}\ 0.54$ is equivalent to $\frac{5}{1}.$
 
 ### Try It 5.117
 
-Write each ratio as a fraction: ⓐ$4.6\ \text{to}\ 11.5$ⓑ$2.3\ \text{to}\ 0.69.$
+Write each ratio as a fraction: (a)$4.6\ \text{to}\ 11.5$(b)$2.3\ \text{to}\ 0.69.$
 
 ### Try It 5.118
 
-Write each ratio as a fraction: ⓐ$3.4\ \text{to}\ 15.3$ⓑ$3.4\ \text{to}\ 0.68.$
+Write each ratio as a fraction: (a)$3.4\ \text{to}\ 15.3$(b)$3.4\ \text{to}\ 0.68.$
 
 Some ratios compare two mixed numbers. Remember that to divide mixed numbers, you first rewrite them as improper fractions.
 
@@ -154,11 +154,11 @@ One real-world application of ratios that affects many people involves measuring
 
 ### Example 5.61
 
-Hector's total cholesterol is 249 mg/dl and his HDL cholesterol is 39 mg/dl. ⓐ Find the ratio of his total cholesterol to his HDL cholesterol. ⓑ Assuming that a ratio less than 5 to 1 is considered good, what would you suggest to Hector?
+Hector's total cholesterol is 249 mg/dl and his HDL cholesterol is 39 mg/dl. (a) Find the ratio of his total cholesterol to his HDL cholesterol. (b) Assuming that a ratio less than 5 to 1 is considered good, what would you suggest to Hector?
 
 #### Solution
 
-ⓐ First, write the words that express the ratio. We want to know the ratio of Hector's total cholesterol to his HDL cholesterol.
+(a) First, write the words that express the ratio. We want to know the ratio of Hector's total cholesterol to his HDL cholesterol.
 
 |  |  |
 |----|----|
@@ -166,7 +166,7 @@ Hector's total cholesterol is 249 mg/dl and his HDL cholesterol is 39 mg/dl. ⓐ
 | Substitute the values. | $\frac{249}{39}$ |
 | Simplify. | $\frac{83}{13}$ |
 
-ⓑ Is Hector's cholesterol ratio ok? If we divide 83 by 13 we obtain approximately 6.4, so $\frac{83}{13} \approx \frac{6.4}{1}.$ Hector's cholesterol ratio is high! Hector should either lower his total cholesterol or raise his HDL cholesterol.
+(b) Is Hector's cholesterol ratio ok? If we divide 83 by 13 we obtain approximately 6.4, so $\frac{83}{13} \approx \frac{6.4}{1}.$ Hector's cholesterol ratio is high! Hector should either lower his total cholesterol or raise his HDL cholesterol.
 
 ### Try It 5.121
 
@@ -401,27 +401,27 @@ Have you noticed that the examples in this section used the comparison words *ra
 
 Translate the word phrase into an algebraic expression:
 
-1.  ⓐ427 miles per $h$ hours
-2.  ⓑ$x$ students to 3 teachers
-3.  ⓒ$y$ dollars for 18 hours
+1.  (a)427 miles per $h$ hours
+2.  (b)$x$ students to 3 teachers
+3.  (c)$y$ dollars for 18 hours
 
 #### Solution
 
 |                  |                                              |
 |------------------|----------------------------------------------|
-| ⓐ                |                                              |
+| (a)                |                                              |
 |                  | $\text{427 miles per}\ h\ \text{hours}$    |
 | Write as a rate. | $\frac{\text{427 miles}}{h\ \text{hours}}$ |
 
 |                  |                                                  |
 |------------------|--------------------------------------------------|
-| ⓑ                |                                                  |
+| (b)                |                                                  |
 |                  | $x\ \text{students to 3 teachers}$             |
 | Write as a rate. | $\frac{x\ \text{students}}{\text{3 teachers}}$ |
 
 |                  |                                    |
 |------------------|------------------------------------|
-| ⓒ                |                                    |
+| (c)                |                                    |
 |                  | $y\ \text{dollars for 18 hours}$ |
 | Write as a rate. | $\frac{\$ y}{\text{18 hours}}$   |
 
@@ -429,10 +429,10 @@ Translate the word phrase into an algebraic expression:
 
 Translate the word phrase into an algebraic expression.
 
-ⓐ689 miles per $h$ hours ⓑ $y$ parents to 22 students ⓒ $d$ dollars for 9 minutes
+(a)689 miles per $h$ hours (b) $y$ parents to 22 students (c) $d$ dollars for 9 minutes
 
 ### Try It 5.136
 
 Translate the word phrase into an algebraic expression.
 
-ⓐ $m$ miles per 9 hours ⓑ $x$ students to 8 buses ⓒ $y$ dollars for 40 hours
+(a) $m$ miles per 9 hours (b) $x$ students to 8 buses (c) $y$ dollars for 40 hours

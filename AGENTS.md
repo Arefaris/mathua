@@ -54,6 +54,16 @@ These are deliberate and allowed: arrows (`→ ← ↑ ↓ ↔ ⇒ ⇔ ⟶ ⟹`)
 some of them — `⌈`/`⌉` especially — appear inside generated mathematics where "clearing an
 emoji" would corrupt a set.
 
+**Circled letters are not in that list, and they were removed from the corpus on 2026-10-15.**
+OpenStax wrote a two-part example as `ⓐ … ⓑ …` and the ingester copied the codepoint straight
+through: 2340 of them across 72 lessons, in example text and inside figure captions. At lesson size
+`ⓐ` is an `a` inside a circle, which is what `@` is, so a reader sees a stray email sign in front
+of a sentence. No theme font carries the codepoint, so the browser substitutes a face at a
+different size and baseline — the same objection as an emoji. And the corpus already spelled the
+parts out in prose: `part (a)` appears 22 times next to a marker that still said `ⓐ`. They are now
+`(a)` … `(e)`, and rule 17 of `scripts/audit_lessons.py` fails on any enclosed-alphanumeric glyph
+in lesson text.
+
 ### How it is checked
 
 `web/next-app/test/noEmoji.test.ts` scans every authored file and fails on any emoji outside

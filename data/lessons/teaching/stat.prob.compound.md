@@ -321,15 +321,15 @@ This basic definition of probability assumes that all the outcomes are equally l
 
 The ski club is holding a raffle to raise money. They sold 100 tickets. All of the tickets are placed in a jar. One ticket will be pulled out of the jar at random, and the winner will receive a prize. Cherie bought one raffle ticket.
 
-ⓐ Find the probability she will win the prize.
+(a) Find the probability she will win the prize.
 
-ⓑ Convert the fraction to a decimal.
+(b) Convert the fraction to a decimal.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 | What are you asked to find? | The probability Cherie wins the prize. |
 | What is the number of favorable outcomes? | 1, because Cherie has 1 ticket. |
 | Use the definition of probability. | $\text{Probability of an event} = \frac{\text{number of favorable outcomes}}{\text{total number of outcomes}}$ |
@@ -337,32 +337,32 @@ The ski club is holding a raffle to raise money. They sold 100 tickets. All of t
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 | Convert the fraction to a decimal. |  |
 | Write the probability as a fraction. | $\text{Probability} = \frac{1}{100}$ |
 | Convert the fraction to a decimal. | $\text{Probability} = 0.01$ |
 
 ### Try It 5.111
 
-Ignaly is attending a fashion show where the guests are seated at tables of ten. One guest from each table will be selected at random to receive a door prize. ⓐ Find the probability Ignaly will win the door prize for her table. ⓑ Convert the fraction to a decimal.
+Ignaly is attending a fashion show where the guests are seated at tables of ten. One guest from each table will be selected at random to receive a door prize. (a) Find the probability Ignaly will win the door prize for her table. (b) Convert the fraction to a decimal.
 
 ### Try It 5.112
 
-Hoang is among 20 people available to sit on a jury. One person will be chosen at random from the 20. ⓐ Find the probability Hoang will be chosen. ⓑ Convert the fraction to a decimal.
+Hoang is among 20 people available to sit on a jury. One person will be chosen at random from the 20. (a) Find the probability Hoang will be chosen. (b) Convert the fraction to a decimal.
 
 ### Example 5.57
 
 Three women and five men interviewed for a job. One of the candidates will be offered the job.
 
-ⓐ Find the probability the job is offered to a woman.
+(a) Find the probability the job is offered to a woman.
 
-ⓑ Convert the fraction to a decimal.
+(b) Convert the fraction to a decimal.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 | What are you asked to find? | The probability the job is offered to a woman. |
 | What is the number of favorable outcomes? | 3, because there are three women. |
 | What are the total number of outcomes? | 8, because 8 people interviewed. |
@@ -371,15 +371,15 @@ Three women and five men interviewed for a job. One of the candidates will be of
 
 |                                      |                                      |
 |--------------------------------------|--------------------------------------|
-| ⓑ                                    |                                      |
+| (b)                                    |                                      |
 | Convert the fraction to a decimal.   |                                      |
 | Write the probability as a fraction. | $\text{Probability} = \frac{3}{8}$ |
 | Convert the fraction to a decimal.   | $\text{Probability} = 0.375$       |
 
 ### Try It 5.113
 
-A bowl of Halloween candy contains 5 chocolate candies and 3 lemon candies. Tanya will choose one piece of candy at random. ⓐ Find the probability Tanya will choose a chocolate candy. ⓑ Convert the fraction to a decimal.
+A bowl of Halloween candy contains 5 chocolate candies and 3 lemon candies. Tanya will choose one piece of candy at random. (a) Find the probability Tanya will choose a chocolate candy. (b) Convert the fraction to a decimal.
 
 ### Try It 5.114
 
-Dan has 2 pairs of black socks and 6 pairs of blue socks. He will choose one pair at random to wear tomorrow. ⓐ Find the probability Dan will choose a pair of black socks ⓑ Convert the fraction to a decimal.
+Dan has 2 pairs of black socks and 6 pairs of blue socks. He will choose one pair at random to wear tomorrow. (a) Find the probability Dan will choose a pair of black socks (b) Convert the fraction to a decimal.

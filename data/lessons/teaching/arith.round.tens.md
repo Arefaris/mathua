@@ -53,26 +53,26 @@ We stopped at 5 when listing the first few counting numbers and whole numbers. W
 
 ### Example 1.1
 
-Which of the following are ⓐ counting numbers? ⓑ whole numbers?
+Which of the following are (a) counting numbers? (b) whole numbers?
 
 $0,\frac{1}{4},3,5.2,15,105$
 
 #### Solution
 
-- ⓐ The counting numbers start at 1, so 0 is not a counting number. The numbers $3,15,\ \text{and}\ 105$ are all counting numbers.
-- ⓑ Whole numbers are counting numbers and 0. The numbers $0,3,15,\ \text{and}\ 105$ are whole numbers.
+- (a) The counting numbers start at 1, so 0 is not a counting number. The numbers $3,15,\ \text{and}\ 105$ are all counting numbers.
+- (b) Whole numbers are counting numbers and 0. The numbers $0,3,15,\ \text{and}\ 105$ are whole numbers.
 
 The numbers $\frac{1}{4}$ and 5.2 are neither counting numbers nor whole numbers. We will discuss these numbers later.
 
 ### Try It 1.1
 
-Which of the following are ⓐ counting numbers ⓑ whole numbers?
+Which of the following are (a) counting numbers (b) whole numbers?
 
 $0,\frac{2}{3},2,9,11.8,241,376$
 
 ### Try It 1.2
 
-Which of the following are ⓐ counting numbers ⓑ whole numbers?
+Which of the following are (a) counting numbers (b) whole numbers?
 
 $0,\frac{5}{3},7,8.8,13,201$
 
@@ -156,41 +156,41 @@ Figure 1.6 shows how the number 5,278,194 is written in a place value chart.
 
 In the number $63,407,218;$ find the place value of each of the following digits:
 
-1.  ⓐ 7
-2.  ⓑ 0
-3.  ⓒ 1
-4.  ⓓ 6
-5.  ⓔ 3
+1.  (a) 7
+2.  (b) 0
+3.  (c) 1
+4.  (d) 6
+5.  (e) 3
 
 #### Solution
 
 Write the number in a place value chart, starting at the right.  
 
-- ⓐ The 7 is in the thousands place.
-- ⓑ The 0 is in the ten thousands place.
-- ⓒ The 1 is in the tens place.
-- ⓓ The 6 is in the ten millions place.
-- ⓔ The 3 is in the millions place.
+- (a) The 7 is in the thousands place.
+- (b) The 0 is in the ten thousands place.
+- (c) The 1 is in the tens place.
+- (d) The 6 is in the ten millions place.
+- (e) The 3 is in the millions place.
 
 ### Try It 1.5
 
 For each number, find the place value of digits listed: 27,493,615
 
-1.  ⓐ 2
-2.  ⓑ 1
-3.  ⓒ 4
-4.  ⓓ 7
-5.  ⓔ 5
+1.  (a) 2
+2.  (b) 1
+3.  (c) 4
+4.  (d) 7
+5.  (e) 5
 
 ### Try It 1.6
 
 For each number, find the place value of digits listed: 519,711,641,328
 
-1.  ⓐ 9
-2.  ⓑ 4
-3.  ⓒ 2
-4.  ⓓ 6
-5.  ⓔ 7
+1.  (a) 9
+2.  (b) 4
+3.  (c) 2
+4.  (d) 6
+5.  (e) 7
 
 ### Use Place Value to Name Whole Numbers
 
@@ -273,12 +273,12 @@ We will now reverse the process and write a number given in words as digits.
 
 Write the following numbers using digits.
 
-- ⓐ fifty-three million, four hundred one thousand, seven hundred forty-two
-- ⓑ nine billion, two hundred forty-six million, seventy-three thousand, one hundred eighty-nine
+- (a) fifty-three million, four hundred one thousand, seven hundred forty-two
+- (b) nine billion, two hundred forty-six million, seventy-three thousand, one hundred eighty-nine
 
 #### Solution
 
-ⓐ Identify the words that indicate periods.
+(a) Identify the words that indicate periods.
 
 Except for the first period, all other periods must have three places. Draw three blanks to indicate the number of places needed in each period. Separate the periods by commas.
 
@@ -286,7 +286,7 @@ Then write the digits in each period.
 
 Put the numbers together, including the commas. The number is 53,401,742.
 
-ⓑ Identify the words that indicate periods.
+(b) Identify the words that indicate periods.
 
 Except for the first period, all other periods must have three places. Draw three blanks to indicate the number of places needed in each period. Separate the periods by commas.
 
@@ -294,7 +294,7 @@ Then write the digits in each period.
 
 The number is 9,246,073,189.
 
-Notice that in part ⓑ, a zero was needed as a place-holder in the hundred thousands place. Be sure to write zeros as needed to make sure that each period, except possibly the first, has three places.
+Notice that in part (b), a zero was needed as a place-holder in the hundred thousands place. Be sure to write zeros as needed to make sure that each period, except possibly the first, has three places.
 
 ### Try It 1.11
 
@@ -397,8 +397,8 @@ Round to the nearest ten: 884.
 
 Round each number to the nearest hundred:
 
-1.  ⓐ 23,658
-2.  ⓑ 3,978
+1.  (a) 23,658
+2.  (b) 3,978
 
 #### Solution
 
@@ -409,7 +409,7 @@ Round each number to the nearest hundred:
 </colgroup>
 <tbody>
 <tr>
-<td>ⓐ</td>
+<td>(a)</td>
 <td></td>
 </tr>
 <tr>
@@ -435,7 +435,7 @@ So 23,658 rounded to the nearest hundred is 23,700.</td>
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ</td>
+<td>(b)</td>
 <td></td>
 </tr>
 <tr>
@@ -466,8 +466,8 @@ Round to the nearest hundred: 4,951.
 
 Round each number to the nearest thousand:
 
-1.  ⓐ 147,032
-2.  ⓑ 29,504
+1.  (a) 147,032
+2.  (b) 29,504
 
 #### Solution
 
@@ -478,7 +478,7 @@ Round each number to the nearest thousand:
 </colgroup>
 <tbody>
 <tr>
-<td>ⓐ</td>
+<td>(a)</td>
 <td></td>
 </tr>
 <tr>
@@ -504,7 +504,7 @@ So 147,032 rounded to the nearest thousand is 147,000.</td>
 </colgroup>
 <tbody>
 <tr>
-<td>ⓑ</td>
+<td>(b)</td>
 <td></td>
 </tr>
 <tr>
@@ -523,7 +523,7 @@ So 29,504 rounded to the nearest thousand is 30,000.</td>
 </tbody>
 </table>
 
-Notice that in part ⓑ, when we add 1 thousand to the 9 thousands, the total is 10 thousands. We regroup this as 1 ten thousand and 0 thousands. We add the 1 ten thousand to the 3 ten thousands and put a 0 in the thousands place.
+Notice that in part (b), when we add 1 thousand to the 9 thousands, the total is 10 thousands. We regroup this as 1 ten thousand and 0 thousands. We add the 1 ten thousand to the 3 ten thousands and put a 0 in the thousands place.
 
 ### Try It 1.19
 

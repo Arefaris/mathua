@@ -74,29 +74,29 @@ $3(8)$</td>
 
 Translate from math notation to words:
 
-1.  ⓐ $7\  \times \ 6$
-2.  ⓑ $12 \cdot 14$
-3.  ⓒ $6(13)$
+1.  (a) $7\  \times \ 6$
+2.  (b) $12 \cdot 14$
+3.  (c) $6(13)$
 
 #### Solution
 
-- ⓐ We read this as *seven times six* and the result is *the product of seven and six*.
-- ⓑ We read this as *twelve times fourteen* and the result is *the product of twelve and fourteen*.
-- ⓒ We read this as *six times thirteen* and the result is *the product of six and thirteen*.
+- (a) We read this as *seven times six* and the result is *the product of seven and six*.
+- (b) We read this as *twelve times fourteen* and the result is *the product of twelve and fourteen*.
+- (c) We read this as *six times thirteen* and the result is *the product of six and thirteen*.
 
 ### Try It 1.77
 
 Translate from math notation to words:
 
-1.  ⓐ $8\  \times \ 7$
-2.  ⓑ $18 \cdot 11$
+1.  (a) $8\  \times \ 7$
+2.  (b) $18 \cdot 11$
 
 ### Try It 1.78
 
 Translate from math notation to words:
 
-1.  ⓐ $(13)(7)$
-2.  ⓑ $5(16)$
+1.  (a) $(13)(7)$
+2.  (b) $5(16)$
 
 ### Model Multiplication of Whole Numbers
 
@@ -165,31 +165,31 @@ $$
 
 Multiply:
 
-1.  ⓐ $0 \cdot 11$
-2.  ⓑ $(42)0$
+1.  (a) $0 \cdot 11$
+2.  (b) $(42)0$
 
 #### Solution
 
 |                                             |                |
 |---------------------------------------------|----------------|
-| ⓐ                                           | $0 \cdot 11$ |
+| (a)                                           | $0 \cdot 11$ |
 | The product of any number and zero is zero. | 0          |
-| ⓑ                                           | $(42)0$      |
+| (b)                                           | $(42)0$      |
 | Multiplying by zero results in zero.        | 0          |
 
 ### Try It 1.81
 
 Find each product:
 
-1.  ⓐ $0 \cdot 19$
-2.  ⓑ $(39)0$
+1.  (a) $0 \cdot 19$
+2.  (b) $(39)0$
 
 ### Try It 1.82
 
 Find each product:
 
-1.  ⓐ $0 \cdot 24$
-2.  ⓑ $(57)0$
+1.  (a) $0 \cdot 24$
+2.  (b) $(57)0$
 
 What happens when you multiply a number by one? Multiplying a number by one does not change its value. We call this fact the Identity Property of Multiplication, and 1 is called the multiplicative identity.
 
@@ -208,31 +208,31 @@ $$
 
 Multiply:
 
-1.  ⓐ $(11)1$
-2.  ⓑ $1 \cdot 42$
+1.  (a) $(11)1$
+2.  (b) $1 \cdot 42$
 
 #### Solution
 
 |                                                  |                |
 |--------------------------------------------------|----------------|
-| ⓐ                                                | $(11)1$      |
+| (a)                                                | $(11)1$      |
 | The product of any number and one is the number. | 11         |
-| ⓑ                                                | $1 \cdot 42$ |
+| (b)                                                | $1 \cdot 42$ |
 | Multiplying by one does not change the value.    | 42         |
 
 ### Try It 1.83
 
 Find each product:
 
-1.  ⓐ $(19)1$
-2.  ⓑ $1 \cdot 39$
+1.  (a) $(19)1$
+2.  (b) $1 \cdot 39$
 
 ### Try It 1.84
 
 Find each product:
 
-1.  ⓐ$(24)(1)$
-2.  ⓑ $1\  \times \ 57$
+1.  (a)$(24)(1)$
+2.  (b) $1\  \times \ 57$
 
 Earlier in this chapter, we learned that the Commutative Property of Addition states that changing the order of addition does not change the sum. We saw that $8 + 9 = 17$ is the same as $9 + 8 = 17.$
 
@@ -264,16 +264,16 @@ $$
 
 Multiply:
 
-1.  ⓐ $8 \cdot 7$
-2.  ⓑ $7 \cdot 8$
+1.  (a) $8 \cdot 7$
+2.  (b) $7 \cdot 8$
 
 #### Solution
 
 |           |               |
 |-----------|---------------|
-| ⓐ         | $8 \cdot 7$ |
+| (a)         | $8 \cdot 7$ |
 | Multiply. | 56        |
-| ⓑ         | $7 \cdot 8$ |
+| (b)         | $7 \cdot 8$ |
 | Multiply. | 56        |
 
 Changing the order of the factors does not change the product.
@@ -282,15 +282,15 @@ Changing the order of the factors does not change the product.
 
 Multiply:
 
-1.  ⓐ $9 \cdot 6$
-2.  ⓑ $6 \cdot 9$
+1.  (a) $9 \cdot 6$
+2.  (b) $6 \cdot 9$
 
 ### Try It 1.86
 
 Multiply:
 
-1.  ⓐ $8 \cdot 6$
-2.  ⓑ $6 \cdot 8$
+1.  (a) $8 \cdot 6$
+2.  (b) $6 \cdot 8$
 
 To multiply numbers with more than one digit, it is usually easier to write the numbers vertically in columns just as we did for addition and subtraction.
 
@@ -478,21 +478,21 @@ Multiply: $64(59).$
 
 Multiply:
 
-1.  ⓐ $47 \cdot 10$
-2.  ⓑ $47 \cdot 100.$
+1.  (a) $47 \cdot 10$
+2.  (b) $47 \cdot 100.$
 
 #### Solution
 
 |                    |                                                 |
 |--------------------|-------------------------------------------------|
-| ⓐ $47 \cdot 10$. | \$\begin{array}{r}                              
+| (a) $47 \cdot 10$. | \$\begin{array}{r}                              
                       {47} \\                              
                       \underset{\text{\_\_\_}}{\times 10} \\           
                       00 \\                                            
                       \underset{\text{\_\_\_}}{470} \\                 
                       470                                              
                       \end{array}\$                                    |
-| ⓑ $47 \cdot 100$ | \$\begin{array}{r}                              
+| (b) $47 \cdot 100$ | \$\begin{array}{r}                              
                       {47\ } \\                                        
                       {\underset{\text{\_\_\_\_\_}}{\times 100}\ } \\  
                       {00\;} \\                                        
@@ -511,15 +511,15 @@ Do you see the pattern? If we multiplied 47 times 10,000, which has four zeros, 
 
 Multiply:
 
-1.  ⓐ $54 \cdot 10$
-2.  ⓑ $54 \cdot 100.$
+1.  (a) $54 \cdot 10$
+2.  (b) $54 \cdot 100.$
 
 ### Try It 1.94
 
 Multiply:
 
-1.  ⓐ $75 \cdot 10$
-2.  ⓑ $75 \cdot 100.$
+1.  (a) $75 \cdot 10$
+2.  (b) $75 \cdot 100.$
 
 ### Example 1.48
 

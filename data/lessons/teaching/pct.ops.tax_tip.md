@@ -49,14 +49,14 @@ $$
 
 Cathy bought a bicycle in Washington, where the sales tax rate was $\text{6.5\%}$ of the purchase price. What was
 
-1.  ⓐ the sales tax and
-2.  ⓑ the total cost of a bicycle if the purchase price of the bicycle was $\text{\$392}?$
+1.  (a) the sales tax and
+2.  (b) the total cost of a bicycle if the purchase price of the bicycle was $\text{\$392}?$
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 | Identify what you are asked to find. | What is the sales tax? |
 | Choose a variable to represent it. | Let $t =$ sales tax. |
 | Write a sentence that gives the information to find it. | The sales tax is 6.5% of the purchase price. |
@@ -68,7 +68,7 @@ Cathy bought a bicycle in Washington, where the sales tax rate was $\text{6.5\%}
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 | Identify what you are asked to find. | What is the total cost of the bicycle? |
 | Choose a variable to represent it. | Let $c =$ total cost of bicycle. |
 | Write a sentence that gives the information to find it. | The total cost is the purchase price plus the sales tax. |
@@ -80,11 +80,11 @@ Cathy bought a bicycle in Washington, where the sales tax rate was $\text{6.5\%}
 
 ### Try It 6.49
 
-Find ⓐ the sales tax and ⓑ the total cost: Alexandra bought a television set for $\text{\$724}$ in Boston, where the sales tax rate was $\text{6.25\%}$ of the purchase price.
+Find (a) the sales tax and (b) the total cost: Alexandra bought a television set for $\text{\$724}$ in Boston, where the sales tax rate was $\text{6.25\%}$ of the purchase price.
 
 ### Try It 6.50
 
-Find ⓐ the sales tax and ⓑ the total cost: Kim bought a winter coat for $\text{\$250}$ in St. Louis, where the sales tax rate was $\text{8.2\%}$ of the purchase price.
+Find (a) the sales tax and (b) the total cost: Kim bought a winter coat for $\text{\$250}$ in St. Louis, where the sales tax rate was $\text{8.2\%}$ of the purchase price.
 
 ### Example 6.26
 
@@ -298,11 +298,11 @@ In Example 6.29, the amount of discount was a set amount, $\text{\$10}.$ In Exam
 
 ### Example 6.30
 
-Elise bought a dress that was discounted $\text{35\%}$ off of the original price of $\text{\$140}.$ What was ⓐ the amount of discount and ⓑ the sale price of the dress?
+Elise bought a dress that was discounted $\text{35\%}$ off of the original price of $\text{\$140}.$ What was (a) the amount of discount and (b) the sale price of the dress?
 
 #### Solution
 
-ⓐ Before beginning, you may find it helpful to organize the information in a list.  
+(a) Before beginning, you may find it helpful to organize the information in a list.  
 Original price = \$140  
 Discount rate = 35%  
 Amount of discount = ?  
@@ -318,7 +318,7 @@ Amount of discount = ?
 | Yes. A \$49 discount is reasonable for a \$140 dress. |  |
 | Write a complete sentence that answers the question. | The amount of discount was \$49. |
 
-ⓑ  
+(b)  
 Original price = \$140  
 Amount of discount = \$49  
 Sale price = ?  
@@ -336,21 +336,21 @@ Sale price = ?
 
 ### Try It 6.59
 
-Find ⓐ the amount of discount and ⓑ the sale price: Sergio bought a belt that was discounted $\text{40\%}$ from an original price of $\text{\$29}.$
+Find (a) the amount of discount and (b) the sale price: Sergio bought a belt that was discounted $\text{40\%}$ from an original price of $\text{\$29}.$
 
 ### Try It 6.60
 
-Find ⓐ the amount of discount and ⓑ the sale price: Oscar bought a barbecue grill that was discounted $\text{65\%}$ from an original price of $\text{\$395}.$
+Find (a) the amount of discount and (b) the sale price: Oscar bought a barbecue grill that was discounted $\text{65\%}$ from an original price of $\text{\$395}.$
 
 There may be times when you buy something on sale and want to know the discount rate. The next example will show this case.
 
 ### Example 6.31
 
-Jeannette bought a swimsuit at a sale price of $\text{\$13.95}.$ The original price of the swimsuit was $\text{\$31}.$ Find the ⓐ amount of discount and ⓑ discount rate.
+Jeannette bought a swimsuit at a sale price of $\text{\$13.95}.$ The original price of the swimsuit was $\text{\$31}.$ Find the (a) amount of discount and (b) discount rate.
 
 #### Solution
 
-ⓐ Before beginning, you may find it helpful to organize the information in a list.  
+(a) Before beginning, you may find it helpful to organize the information in a list.  
 Original price = \$31  
 Amount of discount = ?  
 Sale price = \$13.95
@@ -366,7 +366,7 @@ Sale price = \$13.95
 | Yes. The \$17.05 discount is less than the original price. |  |
 | Write a complete sentence that answers the question. | The amount of discount was \$17.05. |
 
-ⓑ Before beginning, you may find it helpful to organize the information in a list.  
+(b) Before beginning, you may find it helpful to organize the information in a list.  
 Original price = \$31  
 Amount of discount = \$17.05  
 Discount rate = ?
@@ -385,11 +385,11 @@ Discount rate = ?
 
 ### Try It 6.61
 
-Find ⓐ the amount of discount and ⓑ the discount rate: Lena bought a kitchen table at the sale price of $\text{\$375.20}.$ The original price of the table was $\text{\$560}.$
+Find (a) the amount of discount and (b) the discount rate: Lena bought a kitchen table at the sale price of $\text{\$375.20}.$ The original price of the table was $\text{\$560}.$
 
 ### Try It 6.62
 
-Find ⓐ the amount of discount and ⓑ the discount rate: Nick bought a multi-room air conditioner at a sale price of $\text{\$340}.$ The original price of the air conditioner was $\text{\$400}.$
+Find (a) the amount of discount and (b) the discount rate: Nick bought a multi-room air conditioner at a sale price of $\text{\$340}.$ The original price of the air conditioner was $\text{\$400}.$
 
 ### Solve Mark-up Applications
 
@@ -410,13 +410,13 @@ The list price should always be more than the wholesale price.
 
 ### Example 6.32
 
-Adam's art gallery bought a photograph at the wholesale price of $\text{\$250}.$ Adam marked the price up $\text{40\%}.$ Find the ⓐ amount of mark-up and ⓑ the list price of the photograph.
+Adam's art gallery bought a photograph at the wholesale price of $\text{\$250}.$ Adam marked the price up $\text{40\%}.$ Find the (a) amount of mark-up and (b) the list price of the photograph.
 
 #### Solution
 
 |  |  |
 |----|----|
-| ⓐ |  |
+| (a) |  |
 | Identify what you are asked to find. | What is the amount of mark-up? |
 | Choose a variable to represent it. | Let $m =$ the amount of each mark-up. |
 | Write a sentence that gives the information to find it. | The mark-up is 40% of the wholesale price. |
@@ -428,7 +428,7 @@ Adam's art gallery bought a photograph at the wholesale price of $\text{\$250}.$
 
 |  |  |
 |----|----|
-| ⓑ |  |
+| (b) |  |
 | Identify what you are asked to find. | What is the list price? |
 | Choose a variable to represent it. | Let $p =$ the list price. |
 | Write a sentence that gives the information to find it. | The list price is the wholesale price plus the mark-up. |
@@ -440,8 +440,8 @@ Adam's art gallery bought a photograph at the wholesale price of $\text{\$250}.$
 
 ### Try It 6.63
 
-Jim's music store bought a guitar at wholesale price $\text{\$1,200}.$ Jim marked the price up $\text{50\%}.$ Find the ⓐ amount of mark-up and ⓑ the list price.
+Jim's music store bought a guitar at wholesale price $\text{\$1,200}.$ Jim marked the price up $\text{50\%}.$ Find the (a) amount of mark-up and (b) the list price.
 
 ### Try It 6.64
 
-The Auto Resale Store bought Pablo's Toyota for $\text{\$8,500}.$ They marked the price up $\text{35\%}.$ Find the ⓐ amount of mark-up and ⓑ the list price.
+The Auto Resale Store bought Pablo's Toyota for $\text{\$8,500}.$ They marked the price up $\text{35\%}.$ Find the (a) amount of mark-up and (b) the list price.

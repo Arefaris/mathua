@@ -545,14 +545,14 @@ $$
 
 Simplify:  
 
-1.  ⓐ$- \frac{1}{4} + \frac{1}{6}$
-2.  ⓑ$- \frac{1}{4} \div \frac{1}{6}$
+1.  (a)$- \frac{1}{4} + \frac{1}{6}$
+2.  (b)$- \frac{1}{4} \div \frac{1}{6}$
 
 #### Solution
 
 First we ask ourselves, “What is the operation?”
 
-ⓐ The operation is addition.
+(a) The operation is addition.
 
 Do the fractions have a common denominator? No.
 
@@ -590,7 +590,7 @@ Do the fractions have a common denominator? No.
 </tbody>
 </table>
 
-ⓑ The operation is division. We do not need a common denominator.
+(b) The operation is division. We do not need a common denominator.
 
 |  |  |
 |----|----|
@@ -603,26 +603,26 @@ Do the fractions have a common denominator? No.
 
 Simplify each expression:
 
-1.  ⓐ $- \frac{3}{4} - \frac{1}{6}$
-2.  ⓑ $- \frac{3}{4} \cdot \frac{1}{6}$
+1.  (a) $- \frac{3}{4} - \frac{1}{6}$
+2.  (b) $- \frac{3}{4} \cdot \frac{1}{6}$
 
 ### Try It 4.146
 
 Simplify each expression:
 
-1.  ⓐ$\frac{5}{6} \div \left( - \frac{1}{4} \right)$
-2.  ⓑ$\frac{5}{6} - \left( - \frac{1}{4} \right)$
+1.  (a)$\frac{5}{6} \div \left( - \frac{1}{4} \right)$
+2.  (b)$\frac{5}{6} - \left( - \frac{1}{4} \right)$
 
 ### Example 4.74
 
 Simplify:  
 
-1.  ⓐ$\frac{5x}{6} - \frac{3}{10}$
-2.  ⓑ$\frac{5x}{6} \cdot \frac{3}{10}$
+1.  (a)$\frac{5x}{6} - \frac{3}{10}$
+2.  (b)$\frac{5x}{6} \cdot \frac{3}{10}$
 
 #### Solution
 
-ⓐ The operation is subtraction. The fractions do not have a common denominator.
+(a) The operation is subtraction. The fractions do not have a common denominator.
 
 |  |  |
 |----|----|
@@ -631,7 +631,7 @@ Simplify:
 |  | $\frac{25x}{30} - \frac{9}{30}$ |
 | Subtract the numerators and place the difference over the common denominator. | $\frac{25x - 9}{30}$ |
 
-ⓑ The operation is multiplication; no need for a common denominator.
+(b) The operation is multiplication; no need for a common denominator.
 
 |  |  |
 |----|----|
@@ -644,15 +644,15 @@ Simplify:
 
 Simplify:  
 
-1.  ⓐ$\frac{3a}{4} - \frac{8}{9}$
-2.  ⓑ$\frac{3a}{4} \cdot \frac{8}{9}$
+1.  (a)$\frac{3a}{4} - \frac{8}{9}$
+2.  (b)$\frac{3a}{4} \cdot \frac{8}{9}$
 
 ### Try It 4.148
 
 Simplify:  
 
-1.  ⓐ$\frac{4k}{5} + \frac{5}{6}$
-2.  ⓑ$\frac{4k}{5} \div \frac{5}{6}$
+1.  (a)$\frac{4k}{5} + \frac{5}{6}$
+2.  (b)$\frac{4k}{5} \div \frac{5}{6}$
 
 ### Use the Order of Operations to Simplify Complex Fractions
 
@@ -729,12 +729,12 @@ We have evaluated expressions before, but now we can also evaluate expressions w
 
 Evaluate $x + \frac{1}{3}$ when  
 
-1.  ⓐ$x = - \frac{1}{3}$
-2.  ⓑ$x = - \frac{3}{4}.$
+1.  (a)$x = - \frac{1}{3}$
+2.  (b)$x = - \frac{3}{4}.$
 
 #### Solution
 
-ⓐ To evaluate $x + \frac{1}{3}$ when $x = - \frac{1}{3},$ substitute $- \frac{1}{3}$ for $x$ in the expression.
+(a) To evaluate $x + \frac{1}{3}$ when $x = - \frac{1}{3},$ substitute $- \frac{1}{3}$ for $x$ in the expression.
 
 |           |                     |
 |-----------|---------------------|
@@ -742,7 +742,7 @@ Evaluate $x + \frac{1}{3}$ when
 |           |                     |
 | Simplify. | 0               |
 
-ⓑ To evaluate $x + \frac{1}{3}$ when $x = - \frac{3}{4},$ we substitute $- \frac{3}{4}$ for $x$ in the expression.
+(b) To evaluate $x + \frac{1}{3}$ when $x = - \frac{3}{4},$ we substitute $- \frac{3}{4}$ for $x$ in the expression.
 
 |  |  |
 |----|----|
@@ -756,15 +756,15 @@ Evaluate $x + \frac{1}{3}$ when
 
 Evaluate: $x + \frac{3}{4}$ when  
 
-1.  ⓐ $x = - \frac{7}{4}$
-2.  ⓑ $x = - \frac{5}{4}$
+1.  (a) $x = - \frac{7}{4}$
+2.  (b) $x = - \frac{5}{4}$
 
 ### Try It 4.154
 
 Evaluate: $y + \frac{1}{2}$ when  
 
-1.  ⓐ $y = \frac{2}{3}$
-2.  ⓑ $y = - \frac{3}{4}$
+1.  (a) $y = \frac{2}{3}$
+2.  (b) $y = - \frac{3}{4}$
 
 ### Example 4.78
 

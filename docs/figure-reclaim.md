@@ -94,6 +94,15 @@ marks a variable with `<em>` — stopped matching `audit_lesson_media.py`'s stan
 which removed eight imageless captions from this plan. The test now allows a balanced inner span
 and still rejects a thematic break (`* * *`); the report is back at 318 candidates, 214 certain.
 
+**One glyph normalisation, in the same text.** OpenStax marks the parts of a two-part example with
+circled letters (`ⓐ` … `ⓔ`), and the ingester copied the codepoint through. At lesson size `ⓐ` is an
+`a` inside a circle — which is what `@` is — so a caption reads as if an email sign preceded it, and
+no theme font carries the codepoint, so the browser substitutes a face at a different size and
+baseline. The corpus already spelled the parts out in prose (`part (a)`, 22 times, next to a marker
+that said `ⓐ`), so all 2340 markers across 72 lessons, several of them inside captions, were written
+as `(a)` … `(e)` on 2026-10-15. AGENTS.md section 1 records the reasoning and rule 17 of
+`scripts/audit_lessons.py` enforces it; the captions in section 6 are the repaired text with that
+normalisation applied.
 
 **Not repaired, and a different fault.** `trig.period` and `trig.radians` are the only two lessons
 that came from the retired hand-rolled converter (`scripts/extract_openstax.py`), and their text is
@@ -182,7 +191,7 @@ when it lands.
 | 4.61 | The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.7 | Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar. | Prealgebra | 4 Add and Subtract Fractions with Different Denominators | 3 | illustration, fetch |
 | 5.2 | This chart illustrates place values to the left and right of the decimal point. | Prealgebra | 5 Decimals | 3 | illustration, fetch |
-| 5.4 | ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole nu... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
+| 5.4 | (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole ... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
 | 6.2 | Among every 100 community college students, 57 are female. | Prealgebra | 6 Understand Percent | 3 | illustration, fetch |
 | 6.6 | A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$ | Prealgebra | 6 Solve General Applications of Percent | 3 | illustration, fetch |
 | 6.7 | The sales tax is calculated as a percent of the purchase price. | Prealgebra | 6 Solve Sales Tax, Commission, and Discount Applications | 2 | illustration, fetch |
