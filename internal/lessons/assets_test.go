@@ -486,6 +486,14 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 //	     worked answers has two of them, so a tier-based rule deletes a heading from 15
 //	     geometry lessons.
 //
+// The figure is not the same set of rows it was. Two moves on 2026-10-15 offset each other:
+// reclaiming Figures 1.2 and then 1.7-1.9 removed 24 rows from the first bucket, and exempting
+// auto-numbered labels from the list/table/quote edge test in `orphanCaptions` put back 24 that
+// had been hidden for sitting above a table or a bullet list. The total stayed at 324 while its
+// composition changed, which is a coincidence and not a reason to trust either number: the
+// audit's tiers -- 220 `certain`, 33 `strong`, 71 `likely` on the same day -- are the
+// measurement, and this ceiling is only a ratchet on it.
+//
 // This is a ceiling on a known, explained remainder, not an assertion that 324 is correct.
 // The audit is the tool for that judgement — see docs/lesson-media.md — and it is a report,
 // because the remaining cases are per instance.
@@ -536,6 +544,11 @@ func TestOrphanCaptionsDoNotGrow(t *testing.T) {
 // agreement is itself the cross-check, and a drift shows up as a failing number rather than as
 // a silently weaker gate. The pruning script imports the audit for the same reason: two
 // versions of this rule disagreed by 74, and the extra 74 included content that had to stay.
+//
+// `numberedCaptionRe` is the audit's `NUMBERED_CAPTION_RE`: an auto-numbered "Figure 1.5" or
+// "Table 1.4" label, which PreTeXt emits for a figure and which survives ingestion.
+var numberedCaptionRe = regexp.MustCompile(`(?i)^(figure|table|graph|diagram)\s+\d+(\.\d+)*\b`)
+
 func orphanCaptions(body string) []string {
 	lines := strings.Split(body, "\n")
 	// All four prefixes the audit checks. Omitting "*" counted 398 against the audit's 324,
@@ -566,8 +579,14 @@ func orphanCaptions(body string) []string {
 			continue
 		}
 		// A caption introduced by a list, table or blockquote edge is part of that structure
-		// rather than a dropped figure.
-		if edge(nonBlank(i-1, -1)) || edge(nonBlank(i+1, 1)) {
+		// rather than a dropped figure -- unless it carries an auto-numbered Figure/Table
+		// label, because that label is decisive and a caption legitimately sits above a table
+		// or a list: Figure 1.5 is above the place-value table, Figure 1.6 above the bulleted
+		// list of digit values, Figures 4.50 and 4.51 are two captions in a row. Applying the
+		// edge test to labelled lines as well hid 24 rows and 10 distinct figures from the
+		// audit, measured 2026-10-15; the exemption is in `section_a_candidates` too, and the
+		// two have to agree for the ceiling below to mean anything.
+		if !numberedCaptionRe.MatchString(t[1:len(t)-1]) && (edge(nonBlank(i-1, -1)) || edge(nonBlank(i+1, 1))) {
 			continue
 		}
 		out = append(out, fmt.Sprintf("%d: %s", i+1, t))

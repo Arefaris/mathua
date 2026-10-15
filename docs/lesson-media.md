@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-300 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **196 certain**, **33 strong**, **71 likely**.
+324 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **220 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -59,6 +59,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/alg.seq.sum_arith.md` | 195 | likely | *Unemployment in the United States* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/alg.systems.word.md` | 45 | likely | *Amount in Savings Account* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.dec.intro.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
+| `teaching/arith.dec.intro.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
@@ -121,16 +122,28 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.neg.order_ops.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.place.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.place.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.place.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.place.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.place.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.place.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.round.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.round.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.round.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.round.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.round.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.round.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -142,9 +155,11 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.implicit.md` | 167 | certain | *Figure 3.32 Finding the tangent line to the folium of Descartes at $\left( {\frac{3}{2},\frac...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.product_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
 | `teaching/calc.deriv.product_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.product_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.product_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.quotient_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
 | `teaching/calc.deriv.quotient_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.quotient_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.quotient_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 23 | certain | *Figure 4.2 As the balloon is being filled with air, both the radius and the volume are increa...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 95 | certain | *Figure 4.3 An airplane is flying at a constant height of 4000 ft. The distance between the pe...* | auto-numbered figure/table label |
@@ -153,6 +168,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.related_rates.md` | 243 | certain | *Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.trig.md` | 29 | certain | *Figure 3.25 The graph of the function $D(x)$ looks a lot like a cosine curve.* | auto-numbered figure/table label |
 | `teaching/calc.deriv.trig.md` | 70 | certain | *Figure 3.26 These graphs show two important limits needed to establish the derivative formula...* | auto-numbered figure/table label |
@@ -174,6 +190,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.integral.volume.md` | 267 | certain | *Figure 6.34* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 284 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 304 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 23 | certain | *Figure 4.40 The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 56 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 60 | certain | *Figure 4.42 The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its hori...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 79 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
@@ -183,11 +200,16 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.infinity.md` | 156 | certain | *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 206 | certain | *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \ri...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 262 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 313 | certain | *Figure 4.50 For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 315 | certain | *Figure 4.51 For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 369 | certain | *Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with t...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 410 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\right...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 419 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ a...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 428 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 448 | certain | *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\l...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 497 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 507 | certain | *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\r...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 509 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 520 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 531 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 25 | certain | *Figure 2.12 These graphs show the behavior of three different functions around $x = 2.$* | auto-numbered figure/table label |
@@ -203,6 +225,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.numeric.md` | 522 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 536 | certain | *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Eins...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
+| `teaching/dec.basics.compare.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/dec.convert.from_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/dec.convert.to_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
@@ -210,6 +233,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/dec.ops.div.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.mult.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
+| `teaching/dec.ops.round.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/dec.ops.sub.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/frac.add.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |

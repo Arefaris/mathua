@@ -268,6 +268,13 @@
     },
     {
       "lesson": "teaching/arith.dec.intro.md",
+      "line": 60,
+      "text": "Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.dec.intro.md",
       "line": 673,
       "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
       "confidence": "certain",
@@ -701,6 +708,20 @@
       "reason": "auto-numbered figure/table label"
     },
     {
+      "lesson": "teaching/arith.place.hundreds.md",
+      "line": 95,
+      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.place.hundreds.md",
+      "line": 145,
+      "text": "Figure 1.6",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
       "lesson": "teaching/arith.place.tens.md",
       "line": 85,
       "text": "Figure 1.3",
@@ -711,6 +732,20 @@
       "lesson": "teaching/arith.place.tens.md",
       "line": 91,
       "text": "Figure 1.4",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.place.tens.md",
+      "line": 95,
+      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.place.tens.md",
+      "line": 145,
+      "text": "Figure 1.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -729,6 +764,20 @@
       "reason": "auto-numbered figure/table label"
     },
     {
+      "lesson": "teaching/arith.place.thousands.md",
+      "line": 95,
+      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.place.thousands.md",
+      "line": 145,
+      "text": "Figure 1.6",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
       "lesson": "teaching/arith.round.hundreds.md",
       "line": 85,
       "text": "Figure 1.3",
@@ -739,6 +788,20 @@
       "lesson": "teaching/arith.round.hundreds.md",
       "line": 91,
       "text": "Figure 1.4",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.round.hundreds.md",
+      "line": 95,
+      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.round.hundreds.md",
+      "line": 145,
+      "text": "Figure 1.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -757,6 +820,20 @@
       "reason": "auto-numbered figure/table label"
     },
     {
+      "lesson": "teaching/arith.round.tens.md",
+      "line": 95,
+      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.round.tens.md",
+      "line": 145,
+      "text": "Figure 1.6",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
       "lesson": "teaching/arith.round.thousands.md",
       "line": 85,
       "text": "Figure 1.3",
@@ -767,6 +844,20 @@
       "lesson": "teaching/arith.round.thousands.md",
       "line": 91,
       "text": "Figure 1.4",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.round.thousands.md",
+      "line": 95,
+      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/arith.round.thousands.md",
+      "line": 145,
+      "text": "Figure 1.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -849,6 +940,13 @@
     },
     {
       "lesson": "teaching/calc.deriv.product_rule.md",
+      "line": 708,
+      "text": "Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.deriv.product_rule.md",
       "line": 716,
       "text": "Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\\left( {-1.9,2.8} \\right).$",
       "confidence": "certain",
@@ -865,6 +963,13 @@
       "lesson": "teaching/calc.deriv.quotient_rule.md",
       "line": 680,
       "text": "Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.deriv.quotient_rule.md",
+      "line": 708,
+      "text": "Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -921,6 +1026,13 @@
       "lesson": "teaching/calc.deriv.sum_rule.md",
       "line": 680,
       "text": "Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.deriv.sum_rule.md",
+      "line": 708,
+      "text": "Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1073,6 +1185,13 @@
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
+      "line": 23,
+      "text": "Figure 4.40 The function approaches the asymptote $y = 2$ as $x$ approaches $\\text{\\pm}\\infty.$",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.limit.infinity.md",
       "line": 56,
       "text": "Figure 4.41 (a) As $x\\rightarrow\\infty,$ the values of $f$ are getting arbitrarily close to $L.$ The line $y = L$ is a horizontal asymptote of $f.$ (b) As $x\\rightarrow\\text{-}\\infty,$ the values of $f$ are getting arbitrarily close to $M.$ The line $y = M$ is a horizontal asymptote of $f.$",
       "confidence": "certain",
@@ -1136,6 +1255,27 @@
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
+      "line": 313,
+      "text": "Figure 4.50 For power functions with an even exponent of $n,$ $\\underset{x\\rightarrow\\infty}{\\text{lim}}x^{n} = \\infty = \\underset{x\\rightarrow\\text{-}\\infty}{\\text{lim}}x^{n}.$",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.limit.infinity.md",
+      "line": 315,
+      "text": "Figure 4.51 For power functions with an odd exponent of $n,$ $\\underset{x\\rightarrow\\infty}{\\text{lim}}x^{n} = \\infty$ and $\\underset{x\\rightarrow\\text{-}\\infty}{\\text{lim}}x^{n} = \\text{-}\\infty.$",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.limit.infinity.md",
+      "line": 369,
+      "text": "Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with the largest exponent.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.limit.infinity.md",
       "line": 410,
       "text": "Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\\rightarrow\\text{\\pm}\\infty.$",
       "confidence": "certain",
@@ -1166,6 +1306,20 @@
       "lesson": "teaching/calc.limit.infinity.md",
       "line": 497,
       "text": "Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.limit.infinity.md",
+      "line": 507,
+      "text": "Figure 4.58 The function $f(x) = \\text{sin} x$ oscillates between $1\\ \\text{and}\\ -1$ as $x\\rightarrow\\text{\\pm}\\infty$",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/calc.limit.infinity.md",
+      "line": 509,
+      "text": "Figure 4.59 The function $f(x) = \\text{tan} x$ does not approach a limit and does not approach $\\text{\\pm}\\infty$ as $x\\rightarrow\\text{\\pm}\\infty$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1276,6 +1430,13 @@
     },
     {
       "lesson": "teaching/dec.basics.compare.md",
+      "line": 60,
+      "text": "Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/dec.basics.compare.md",
       "line": 673,
       "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
       "confidence": "certain",
@@ -1320,6 +1481,13 @@
       "lesson": "teaching/dec.ops.round.md",
       "line": 49,
       "text": "Figure 5.2 This chart illustrates place values to the left and right of the decimal point.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/dec.ops.round.md",
+      "line": 60,
+      "text": "Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },

@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-300 paragraphs across 113 lessons read as a caption whose image was dropped:
-196 certain, 33 strong and 71 likely. Every one sits
+324 paragraphs across 113 lessons read as a caption whose image was dropped:
+220 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -23,8 +23,8 @@ Every teaching lesson opens with a credit line naming its source, for example:
 > Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY 4.0
 ```
 
-Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (62 figures) and
-**OpenStax Prealgebra** (30). Both are CC BY 4.0, which permits reuse and adaptation with
+Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (69 figures) and
+**OpenStax Prealgebra** (33). Both are CC BY 4.0, which permits reuse and adaptation with
 attribution, and the attribution is already the lesson's own header line.
 
 That changes what "a direct look-alike" means for these figures. Their visual target is their own
@@ -32,19 +32,19 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 196 rows and 92 distinct figures
+## 3. The captions are 220 rows and 102 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **92 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **102 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 35 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 35 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| schematic, redraw | 43 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| illustration, fetch | 37 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 17 | The caption is a bare `Figure 1.13` with no description, so the upstream section has to be opened to find out what the figure is before anything can be drawn or fetched. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
 
@@ -54,10 +54,25 @@ nothing else: *76 is closer to 80 than to 70* describes a picture of a number li
 of a number line is an illustration. Opening Prealgebra 1.1 shows all three are the same 70..80
 number line as Figure 1.2 under a different mark, which makes them schematics. They were redrawn
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
-row lost three: the counts above are 35 and 35 where the caption alone suggested 35 and 38. The
-lesson is that this column is a guess until someone opens upstream, and the `unidentified` rows
-cannot be classified at all without doing so — which is why they are the largest open question
-rather than a disposition.
+row lost three: the counts above are 43 and 37 where the caption alone suggested 35 and 38.
+
+**The column is a guess until someone opens upstream, and the caption is the wrong thing to
+read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
+the argument the picture supports: Figure 1.7's caption is a sentence about rounding, while its
+alt is *An image of a number line from 70 to 80 with increments of one*. That is how Figure 1.6 was
+placed here as a `schematic, redraw` even though its caption is a bare `Figure 1.6` — Prealgebra
+1.1 gives it an alt of *A chart titled 'Place value' with fifteen columns and 4 rows* — and it is
+how the seventeen `unidentified` rows below can be classified without drawing anything.
+
+**Ten of the figures below were invisible until 2026-10-15**, because of a defect in this plan's own
+measurement rather than in the corpus. `section_a_candidates` skipped any standalone-italic
+paragraph whose neighbour started with `-`, `*`, `|` or `>`, which is right for a line inside a
+list and wrong for a caption that simply sits above one: Figure 1.5 is above the place-value table,
+Figure 1.6 above the bulleted list of digit values, Figures 4.50 and 4.51 are two captions in a
+row. Exempting auto-numbered labels from that test added 24 rows and these ten figures — 1.5, 1.6,
+3.20, 4.40, 4.50, 4.51, 4.52, 4.58, 4.59 and 5.3 — every one of which rates `certain` and none of
+which is a list item. The tier is 220 rows now rather than 196, which is a fix and not a
+regression: the same corpus, counted without the exclusion.
 
 ## 5. The captions were damaged too, and are repaired
 
@@ -103,8 +118,9 @@ corpus-wide doubled-token test is not usable: it reports 1009 legitimately repea
 **One measurement it moved.** The repaired captions that gained inner `*x*` emphasis — OpenStax
 marks a variable with `<em>` — stopped matching `audit_lesson_media.py`'s standalone-emphasis test,
 which removed eight imageless captions from this plan. The test now allows a balanced inner span
-and still rejects a thematic break (`* * *`); the report is back at 300 candidates, 196 certain
-after the first two reclaims in section 7.
+and still rejects a thematic break (`* * *`); the report is back at 324 candidates and 220 certain
+once the two reclaims in section 7 have removed eighteen rows and the label exemption in section 4
+has restored twenty-four.
 
 **One glyph normalisation, in the same text.** OpenStax marks the parts of a two-part example with
 circled letters (`ⓐ` … `ⓔ`), and the ingester copied the codepoint through. At lesson size `ⓐ` is an
@@ -127,7 +143,8 @@ rather than repair them. That is a content decision and this record leaves it op
 
 ## 6. The figures
 
-Sorted by disposition, then figure number. `Lessons` is how many concept lessons carry the
+Sorted by disposition, then figure number compared as text, which is why 1.12 comes before 1.5 and
+2.10 before 2.6. `Lessons` is how many concept lessons carry the
 caption; one figure is restored once and every lesson that cites it gains the image. The caption is
 the text as repaired in section 5, truncated at 85 characters, so it is what the figure will carry
 when it lands. A figure that has landed leaves this table and is recorded in section 7 instead, so
@@ -136,6 +153,8 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 1.12 | The area of a rectangle is the product of its length and its width, or 6 square feet. | Prealgebra | 1 Multiply Whole Numbers | 6 | schematic, redraw |
+| 1.5 | We use place value notation to show the value of the number 138. | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
+| 1.6 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
 | 2.12 | These graphs show the behavior of three different functions around $x = 2.$ | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.13 | The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.14 | The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
@@ -150,11 +169,17 @@ every count here is work still to do.
 | 3.27 | Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $f(x)... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
 | 3.33 | The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$ | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | schematic, redraw |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
+| 4.40 | The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.42 | The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its horizont... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.45 | The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
+| 4.50 | For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{\tex... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
+| 4.51 | For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\text... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
+| 4.52 | The end behavior of a polynomial is determined by the behavior of the term with the l... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.53 | The graph of this rational function approaches a horizontal asymptote as $x\rightarro... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.54 | The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.56 | The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\left(... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
+| 4.58 | The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\right... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
+| 4.59 | The function $f(x) = \text{tan} x$ does not approach a limit and does not approach $\... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 5.32 | The graph shows speed versus time for the given motion of a car. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.33 | The graph shows velocity versus time for a particle moving with a linear velocity fun... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
@@ -178,6 +203,7 @@ every count here is work still to do.
 | 2.9 | Multiples of 3 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
 | 3.18 | The derivative of $g(x)$ is 3 times the derivative of $f(x).$ | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
 | 3.19 | This function has horizontal tangent lines at *x* = 2/3 and *x* = 4. | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
+| 3.20 | The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race trac... | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
 | 3.21 | (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2... | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
 | 3.30 | The equation $x^{2} + y^{2} = 25$ defines many functions implicitly. | Calculus Volume 1 | 3 Implicit Differentiation | 1 | illustration, fetch |
 | 3.31 | The line $y = \frac{3}{4}x - \frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at the ... | Calculus Volume 1 | 3 Implicit Differentiation | 1 | illustration, fetch |
@@ -201,6 +227,7 @@ every count here is work still to do.
 | 4.61 | The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.7 | Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar. | Prealgebra | 4 Add and Subtract Fractions with Different Denominators | 3 | illustration, fetch |
 | 5.2 | This chart illustrates place values to the left and right of the decimal point. | Prealgebra | 5 Decimals | 3 | illustration, fetch |
+| 5.3 | When we write a check, we write the amount as a decimal number as well as in words. T... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
 | 5.4 | (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole ... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
 | 6.2 | Among every 100 community college students, 57 are female. | Prealgebra | 6 Understand Percent | 3 | illustration, fetch |
 | 6.6 | A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$ | Prealgebra | 6 Solve General Applications of Percent | 3 | illustration, fetch |

@@ -171,7 +171,16 @@ def section_a_candidates():
                 # the shape ingest_pretext.mjs emits for a figure caption.
                 before = prev_nonblank(lines, i)
                 after = next((lines[j].strip() for j in range(i + 1, len(lines)) if lines[j].strip()), "")
-                if before.startswith(("-", "*", "|", ">")) or after.startswith(("-", "*", "|", ">")):
+                # The neighbour test keeps a line that sits inside a list, a table or a quote out
+                # of the report. A line carrying an auto-numbered Figure/Table label is exempt,
+                # because that label is decisive and captions legitimately sit above those things:
+                # Figure 1.5 is above the place-value table, Figure 1.6 above the bulleted list of
+                # digit values, and Figures 4.50/4.51 are two captions in a row. Applying the test
+                # to labelled lines as well lost 24 rows and 10 distinct figures from the report,
+                # measured 2026-10-15; it still guards every unlabelled line, which is where a list
+                # item or a quoted sentence is a real risk.
+                if not NUMBERED_CAPTION_RE.match(text) and (
+                        before.startswith(("-", "*", "|", ">")) or after.startswith(("-", "*", "|", ">"))):
                     continue
                 corpus = rel.split(os.sep)[0].split("/")[0]
                 conf, why = rate_candidate(text, texts.count(text), corpus)
