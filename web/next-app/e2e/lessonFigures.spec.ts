@@ -41,6 +41,11 @@ const CASES = [
   { concept: 'alg.exp.concept', file: 'algebrica/functions/exponential-function.md', expectFigures: 3 },
   { concept: 'calc.deriv.cauchy_mvt', file: 'algebrica/differential-calculus-theorems/cauchy-theorem.md', expectFigures: 1 },
   { concept: 'calc.seq.euler', file: 'algebrica/sequences/euler-number-limit-sequence.md', expectFigures: 1 },
+  // A reclaimed OpenStax figure, and the reason the selector below is `/diagrams/` rather than
+  // `/diagrams/algebrica/`: it was vendored-only, so it counted nothing in this directory and a
+  // figure that failed to draw here would have been reported as a lesson with no figures at all.
+  // Four, not one: this body also carries Figure 1.2.
+  { concept: 'arith.round.tens', file: 'teaching/arith.round.tens.md', expectFigures: 4 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }
@@ -114,7 +119,7 @@ async function measuredSize(locator: import('@playwright/test').Locator) {
   return locator.evaluate((e: HTMLImageElement) => ({ w: e.naturalWidth, h: e.naturalHeight }))
 }
 
-const FIGURE = 'img[src*="/diagrams/algebrica/"]'
+const FIGURE = 'img[src*="/diagrams/"]'
 
 test.describe('lesson figures render', () => {
   test('every referenced figure draws at non-zero size', async ({ page }) => {
