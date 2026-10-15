@@ -928,6 +928,22 @@
     "source": "teaching/dec.ops.div.md"
   },
   {
+    "concept_id": "dec.ops.add.word",
+    "source": "teaching/dec.ops.add.md"
+  },
+  {
+    "concept_id": "dec.ops.sub.word",
+    "source": "teaching/dec.ops.sub.md"
+  },
+  {
+    "concept_id": "dec.ops.mult.word",
+    "source": "teaching/dec.ops.mult.md"
+  },
+  {
+    "concept_id": "dec.ops.div.word",
+    "source": "teaching/dec.ops.div.md"
+  },
+  {
     "concept_id": "dec.ops.mult",
     "source": "teaching/dec.ops.mult.md"
   },

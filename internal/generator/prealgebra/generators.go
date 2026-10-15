@@ -18,6 +18,10 @@ func Register(reg *generator.Registry) {
 	reg.Register("dec.ops.sub", &decAddSubGen{op: "-"})
 	reg.Register("dec.ops.mult", &decMultGen{})
 	reg.Register("dec.ops.div", &decDivGen{})
+	reg.Register("dec.ops.add.word", &decAddWordGen{})
+	reg.Register("dec.ops.sub.word", &decSubWordGen{})
+	reg.Register("dec.ops.mult.word", &decMultWordGen{})
+	reg.Register("dec.ops.div.word", &decDivWordGen{})
 	reg.Register("dec.convert.from_frac", &decFromFracGen{})
 	reg.Register("dec.convert.to_frac", &decToFracGen{})
 	reg.Register("dec.ops.round", &decRoundGen{})
@@ -127,6 +131,177 @@ func (g *decDivGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		Answer:      fmt.Sprintf("%.1f", q),
 		Explanation: fmt.Sprintf("%.2f / %.1f = %.1f", a, b, q),
 		Facts:       map[string]string{"a": fmt.Sprintf("%.2f", a), "b": fmt.Sprintf("%.1f", b), "result": fmt.Sprintf("%.1f", q)},
+	}
+}
+
+// Money application generators.
+//
+// These are the decimal siblings of the arithmetic `*.word` concepts: the same
+// operation the parent teaches, asked as a shopping problem. Every amount is a
+// whole number of cents and the money arithmetic stays in cents, because binary
+// floating point cannot hold 0.1 and a total that prints as 7.030000000000001 is
+// a wrong answer to the grader. Only the rendering divides by 100.
+
+// moneyCents renders a whole number of cents as dollars, e.g. 474 -> "4.74".
+func moneyCents(c int) string {
+	return fmt.Sprintf("%d.%02d", c/100, c%100)
+}
+
+// moneyItems returns n distinct things a shopper could buy. Every word is one
+// that pluralises with a plain "s", because decDivWordGen prints the plural.
+func moneyItems(n int) []string {
+	all := []string{"notebook", "pen", "marker", "juice", "eraser", "ruler",
+		"bagel", "apple", "sticker", "crayon"}
+	rand.Shuffle(len(all), func(i, j int) { all[i], all[j] = all[j], all[i] })
+	return all[:n]
+}
+
+// priceCents is a price in [1.00, maxCents] cents.
+func priceCents(maxCents int) int {
+	return rand.Intn(maxCents-99) + 100
+}
+
+// article is the indefinite article for a shopping item, because "a apple" and
+// "a eraser" are the sort of thing a generated question must not print.
+func article(word string) string {
+	if strings.ContainsRune("aeiou", rune(word[0])) {
+		return "an"
+	}
+	return "a"
+}
+
+func joinPrices(parts []string) string {
+	switch len(parts) {
+	case 1:
+		return parts[0]
+	case 2:
+		return parts[0] + " and " + parts[1]
+	default:
+		return strings.Join(parts[:len(parts)-1], ", ") + " and " + parts[len(parts)-1]
+	}
+}
+
+// decAddWordGen: the total cost of two or three items.
+type decAddWordGen struct{}
+
+func (g *decAddWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	// Staged ladder: two cheap items, then three with larger prices.
+	maxCents, n := 600, 2
+	if ctx.Difficulty >= 0.45 {
+		maxCents = 1500
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxCents, n = 4000, 3
+	}
+	items := moneyItems(n)
+	asks, sums := make([]string, n), make([]string, n)
+	total := 0
+	for i := range asks {
+		cents := priceCents(maxCents)
+		total += cents
+		asks[i] = fmt.Sprintf("%s %s for $%s", article(items[i]), items[i], moneyCents(cents))
+		sums[i] = fmt.Sprintf("$%s", moneyCents(cents))
+	}
+	return generator.Problem{
+		Question: fmt.Sprintf("You buy %s. What is the total cost?", joinPrices(asks)),
+		Answer:   moneyCents(total),
+		Explanation: fmt.Sprintf("%s = %s. Line up the decimal points before adding.",
+			strings.Join(sums, " + "), moneyCents(total)),
+		Facts: map[string]string{
+			"n": strconv.Itoa(n), "items": joinPrices(items),
+			"list": strings.Join(sums, " + "), "total": moneyCents(total),
+		},
+	}
+}
+
+// decSubWordGen: the change from paying for one item with a note.
+type decSubWordGen struct{}
+
+func (g *decSubWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	maxCents := 900
+	if ctx.Difficulty >= 0.45 {
+		maxCents = 2500
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxCents = 6000
+	}
+	price := priceCents(maxCents)
+	// The smallest note that covers the price, or the next one up, so the change
+	// is not always the same round amount.
+	notes := []int{1000, 2000, 5000, 10000}
+	i := 0
+	for i < len(notes)-1 && notes[i] <= price {
+		i++
+	}
+	if i < len(notes)-1 && rand.Intn(2) == 0 {
+		i++
+	}
+	paid := notes[i]
+	item := moneyItems(1)[0]
+	return generator.Problem{
+		Question: fmt.Sprintf("You pay for a $%s %s with a $%s bill. How much change do you get?",
+			moneyCents(price), item, moneyCents(paid)),
+		Answer: moneyCents(paid - price),
+		Explanation: fmt.Sprintf("%s - %s = %s. Subtract the price from the amount paid.",
+			moneyCents(paid), moneyCents(price), moneyCents(paid-price)),
+		Facts: map[string]string{
+			"item": item, "price": moneyCents(price),
+			"paid": moneyCents(paid), "change": moneyCents(paid - price),
+		},
+	}
+}
+
+// decMultWordGen: the cost of several items at one unit price.
+type decMultWordGen struct{}
+
+func (g *decMultWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	maxCents, qtyMax := 500, 3
+	if ctx.Difficulty >= 0.45 {
+		maxCents, qtyMax = 1200, 5
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxCents, qtyMax = 2500, 8
+	}
+	unit := priceCents(maxCents)
+	qty := 2 + rand.Intn(qtyMax-1)
+	item := moneyItems(1)[0]
+	return generator.Problem{
+		Question: fmt.Sprintf("One %s costs $%s. How much do %d of them cost?",
+			item, moneyCents(unit), qty),
+		Answer: moneyCents(unit * qty),
+		Explanation: fmt.Sprintf("%s x %d = %s. Multiply the unit price by the number of items.",
+			moneyCents(unit), qty, moneyCents(unit*qty)),
+		Facts: map[string]string{
+			"item": item, "unit": moneyCents(unit),
+			"qty": strconv.Itoa(qty), "total": moneyCents(unit * qty),
+		},
+	}
+}
+
+// decDivWordGen: the unit price, built from the unit so the division is exact.
+type decDivWordGen struct{}
+
+func (g *decDivWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	maxCents, qtyMax := 600, 3
+	if ctx.Difficulty >= 0.45 {
+		maxCents, qtyMax = 1500, 5
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxCents, qtyMax = 3000, 8
+	}
+	unit := priceCents(maxCents)
+	qty := 2 + rand.Intn(qtyMax-1)
+	item := moneyItems(1)[0]
+	return generator.Problem{
+		Question: fmt.Sprintf("You pay $%s for %d %ss. What is the price of one %s?",
+			moneyCents(unit*qty), qty, item, item),
+		Answer: moneyCents(unit),
+		Explanation: fmt.Sprintf("%s / %d = %s. Divide the total by the number of items.",
+			moneyCents(unit*qty), qty, moneyCents(unit)),
+		Facts: map[string]string{
+			"item": item, "qty": strconv.Itoa(qty),
+			"total": moneyCents(unit * qty), "unit": moneyCents(unit),
+		},
 	}
 }
 

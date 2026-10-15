@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 657 |
+| Total concepts | 661 |
 | Total units | 91 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -100,8 +100,8 @@ exists to make concrete.
 | `number_theory.b6` | number_theory | 6 | 1 | 1 | 20–20 |
 | `prealgebra.b0` | prealgebra | 0 | 1 | 1 | 1–1 |
 | `prealgebra.b2` | prealgebra | 2 | 1 | 1 | 8–8 |
-| `prealgebra.b3` | prealgebra | 3 | 18 | 6 | 9–11 |
-| `prealgebra.b4` | prealgebra | 4 | 12 | 5 | 12–14 |
+| `prealgebra.b3` | prealgebra | 3 | 21 | 6 | 9–11 |
+| `prealgebra.b4` | prealgebra | 4 | 13 | 5 | 12–14 |
 | `prealgebra.b5` | prealgebra | 5 | 6 | 3 | 15–17 |
 | `prealgebra.b6` | prealgebra | 6 | 2 | 2 | 18–18 |
 | `precalculus.b4` | precalculus | 4 | 5 | 2 | 12–14 |
@@ -140,7 +140,7 @@ at every width.
 | 2 | 117 | 4 | 33 | 19 | 54 | 3 | 0 |
 | 3 | 91 | 5 | 48 | 18 | 38 | 4 | 0 |
 | 4 | 73 | 6 | 48 | 8 | 26 | 3 | 0 |
-| 5 | 64 | 7 | 63 | 8 | 19 | 3 | 0 |
+| 5 | 64 | 7 | 63 | 8 | 19 | 4 | 0 |
 | 6 | 58 | 8 | 81 | 4 | 14 | 3 | 0 |
 | 8 | 47 | 10 | 71 | 4 | 11 | 6 | 0 |
 | 10 | 42 | 12 | 104 | 5 | 10 | 6 | 0 |
@@ -248,7 +248,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 657
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 661
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

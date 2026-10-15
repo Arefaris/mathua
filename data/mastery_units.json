@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 657,
+  "concept_count": 661,
   "unit_count": 91,
   "units": [
     {
@@ -1596,10 +1596,13 @@
         "dec.basics.compare",
         "dec.convert.from_frac",
         "dec.ops.add",
+        "dec.ops.add.word",
         "dec.ops.div",
         "dec.ops.mult",
+        "dec.ops.mult.word",
         "dec.ops.round",
         "dec.ops.sub",
+        "dec.ops.sub.word",
         "pct.basics.concept",
         "pct.convert.from_dec",
         "pct.convert.to_dec",
@@ -1608,7 +1611,7 @@
         "prealg.types",
         "ratio.ops.simplify"
       ],
-      "concept_count": 18
+      "concept_count": 21
     },
     {
       "id": "prealgebra.b4",
@@ -1627,6 +1630,7 @@
       "concept_ids": [
         "arith.sci_notation.ops",
         "dec.convert.to_frac",
+        "dec.ops.div.word",
         "pct.ops.discount",
         "pct.ops.find_rate",
         "pct.ops.increase",
@@ -1638,7 +1642,7 @@
         "ratio.ops.rate",
         "ratio.ops.scale"
       ],
-      "concept_count": 12
+      "concept_count": 13
     },
     {
       "id": "prealgebra.b5",

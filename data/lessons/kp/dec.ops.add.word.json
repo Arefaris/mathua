@@ -1,0 +1,29 @@
+[
+  {
+    "label": "Add the prices",
+    "section": "Add and Subtract Decimals",
+    "subgoals": [
+      "Line up the decimal points",
+      "Add the digits column by column",
+      "Place the decimal point in the sum"
+    ]
+  },
+  {
+    "label": "Read the money problem",
+    "section": "Use Decimals in Money Applications",
+    "subgoals": [
+      "Find what the question asks you to total",
+      "List the prices to combine",
+      "Write the addition"
+    ]
+  },
+  {
+    "label": "Answer in dollars",
+    "section": "Strategy for Applications",
+    "subgoals": [
+      "Add the prices in cents",
+      "Give the answer to two decimal places",
+      "Label the answer in dollars"
+    ]
+  }
+]

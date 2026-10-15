@@ -19,7 +19,7 @@ Read this before writing any migration. Two of these (D1, D2) determine the tabl
 
 The expensive part is not the code. It is:
 
-- **D3** — the partition over 657 concepts. Nothing in the corpus *states* block boundaries:
+- **D3** — the partition over 661 concepts. Nothing in the corpus *states* block boundaries:
   `data/concepts/*.json` carries only `id`, `label`, `domain`, `subdomain`, `prerequisites`,
   `grading_type`, `mastery_threshold`; `data/courses.json` has 22 entries of 4 loose `targets`
   each; `data/concepts/enrichment.json` is 10 heuristic overrides of which 2 carry
@@ -88,7 +88,7 @@ Carry into the ADR: the count of stored unit states, currently two.
 
 **Blocks:** D4 (you cannot set a pass threshold for an undefined unit), and everything.
 
-**Measured 2026-10-06 and re-measured 2026-10-07, over all 657 concepts.** The corpus was
+**Measured 2026-10-06 and re-measured 2026-10-07, over all 661 concepts.** The corpus was
 assumed to have no block structure. The first measurement said it had usable ones; that
 measurement was **wrong**, and correcting it is the substance of this entry.
 
@@ -114,7 +114,7 @@ answer rather than a missing one**, which is the failure mode this ADR exists to
 | `subdomain` values | 125 | — |
 | **Subdomain condensation depth** | **does not exist for 60 of 125** | 26 subdomains sit inside 9 cycles (`abstract_algebra.{fields,groups,rings,structures}`, `calculus.{advanced,derivatives,integrals,limits}`, `algebra.{factoring,polynomials,quadratics}` ↔ `complex_numbers.basics`, `topology.{algebraic,covering,manifolds}`, `linear_algebra.{determinants,matrices,vectors}`, and three more) and 34 more sit downstream, which Kahn cannot order either because ordering requires predecessors first. |
 | Domain condensation depth | **does not exist for 14 of 17** | Only 3 domains level. Grouping loses the DAG's acyclicity. |
-| Concept depth | resolves **657 of 657**, max 44 | The only well-defined depth function. |
+| Concept depth | resolves **661 of 661**, max 44 | The only well-defined depth function. |
 | `(domain, floor(conceptDepth/3))` | **91 units**, median 5, 18 singletons | Violates §12: 18 singletons is a quiz per concept. |
 
 **The 22 backward edges were never a property of the corpus.** They were the same Kahn bug. Under
@@ -145,7 +145,7 @@ are, they cannot be "one per domain" or "one per subdomain" and still inherit th
 
 ### What is committed
 
-`data/mastery_units.json` is the width-3 draft: 91 units, all 657 concepts covered exactly once,
+`data/mastery_units.json` is the width-3 draft: 91 units, all 661 concepts covered exactly once,
 no authored prerequisite edges, band width recorded in the file rather than in a constant.
 `data/mastery_units.report.md` carries the table above and the unit list.
 `go run ./cmd/masteryunits -band N` regenerates at any width; `make validate` checks coverage,

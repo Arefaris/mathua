@@ -15,7 +15,7 @@ Everything below is measured against the corpus and the code, not estimated.
 ## Summary
 
 Mastery costs **3 × `mastery_threshold.streak` consecutive correct answers**, because
-the engine resets the streak to 1 on every tier advance. For **459 of 657 concepts
+the engine resets the streak to 1 on every tier advance. For **463 of 661 concepts
 (70%)** that is **30 in a row**. A single miss sets the streak to 0, so a run restarts
 from the beginning: at a per-answer accuracy of 0.90 the chance of ever completing a
 30-answer run on the first attempt is **4.2%**.
@@ -43,24 +43,24 @@ identical repetitions of the same test.
 
 ### Answers required
 
-Measured over `web/next-app/data/concepts.json` (657 concepts, all with a threshold):
+Measured over `web/next-app/data/concepts.json` (661 concepts, all with a threshold):
 
 | Answers for MASTERED | Concepts | Share |
 |---|---|---|
 | 9 | 171 | 26% |
 | 15 | 21 | 3% |
 | 21 | 5 | 1% |
-| **30** | **459** | **70%** |
+| **30** | **463** | **70%** |
 | 45 | 1 | 0.2% |
 
-Mastering the whole corpus this way is **15,774 consecutive correct answers**.
+Mastering the whole corpus this way is **15,894 consecutive correct answers**.
 
 ### Time floor
 
 Using each concept's `avg_time_seconds` — a floor, since practised answers are faster and
 the threshold is a cap:
 
-- **130 hours** of pure answer time for the corpus
+- **131 hours** of pure answer time for the corpus
 - per concept: median **12 min**, p90 **18 min**, max **30 min**
 
 `/learn` serves **3 questions per batch** (`LearnStepper.tsx:97`), so 30 consecutive is
@@ -90,7 +90,7 @@ Three pieces of evidence:
    tier-advance problem, not as a decision to triple the cost of mastery.
 2. **The documentation contradicts the corpus.** `docs/system-design.md` says
    *"Each concept has a `required_streak` (typically 3)"*. The actual distribution is 10
-   for 459 concepts, 3 for 171. The documented world costs 9 answers; the real one costs
+   for 463 concepts, 3 for 171. The documented world costs 9 answers; the real one costs
    30 for most of the corpus.
 3. **The documentation records the redundancy itself.** Its transition table gives the
    condition for all three tiers as **"Same"**, while labeling the evidence "First

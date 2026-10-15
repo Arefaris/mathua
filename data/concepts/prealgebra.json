@@ -73,6 +73,62 @@
     }
   },
   {
+    "id": "dec.ops.add.word",
+    "label": "Money: total cost",
+    "domain": "prealgebra",
+    "subdomain": "prealgebra.decimals",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "dec.ops.add"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "dec.ops.sub.word",
+    "label": "Money: change from a purchase",
+    "domain": "prealgebra",
+    "subdomain": "prealgebra.decimals",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "dec.ops.sub"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "dec.ops.mult.word",
+    "label": "Money: cost of several items",
+    "domain": "prealgebra",
+    "subdomain": "prealgebra.decimals",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "dec.ops.mult"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "dec.ops.div.word",
+    "label": "Money: unit price",
+    "domain": "prealgebra",
+    "subdomain": "prealgebra.decimals",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "dec.ops.div"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
     "id": "dec.convert.from_frac",
     "label": "Convert fraction to decimal by division",
     "domain": "prealgebra",

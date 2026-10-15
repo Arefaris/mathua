@@ -416,8 +416,8 @@ and passes now. The recovery behavior itself still wants a real-device check.
 
 ### Every question gets the editor
 
-The editor was once scoped to the five expression-valued `grading_type`s. That left 223
-of 657 concepts — 213 `multiple_choice`, 26 `tuple`, 1 `ordering`, 2 `comparison` —
+The editor was once scoped to the five expression-valued `grading_type`s. That left 241
+of 661 concepts — 212 `multiple_choice`, 26 `tuple`, 1 `ordering`, 2 `comparison` —
 typing mathematics into a plain `<input>`, because the answer hosts render a text field
 even when the question also offers tappable options.
 
