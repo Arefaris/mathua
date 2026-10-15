@@ -33,6 +33,8 @@ $$
 
 Counting numbers and whole numbers can be visualized on a number line as shown in Figure 1.2.
 
+![The numbers on the number line increase from left to right, and decrease from right to left.](/diagrams/arithmetic/number-line-counting.svg)
+
 *Figure 1.2 The numbers on the number line increase from left to right, and decrease from right to left.*
 
 The point labeled 0 is called the origin. The points are equally spaced to the right of 0 and labeled with the counting numbers. When a number is paired with a point, it is called the coordinate of the point.
