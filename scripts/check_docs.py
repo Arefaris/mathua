@@ -48,7 +48,10 @@ DOCS = [
     "docs/architecture.md",
     "docs/administration.md",
     "docs/code-defects.md",
+    "docs/content-expansion.md",
+    "docs/diagram-style.md",
     "docs/efficacy.md",
+    "docs/figure-reclaim.md",
     "docs/glossary-provenance.md",
     "docs/lesson-media.md",
     "docs/mastery-assessments.md",
@@ -282,6 +285,109 @@ def check_corpus_figures(rep: Report) -> None:
                 if n != facts[key]:
                     rep.error(f"{doc}:{line_no}", "corpus-count",
                               f'"{m.group(0)}" but the corpus has {facts[key]} {key}')
+
+
+def check_course_reach(rep: Report) -> None:
+    """How much of the graph the course catalog reaches must match the doc that quotes it.
+
+    A course is a set of target concepts, and a target reaches everything in its transitive
+    prerequisite closure (`collectChain` in internal/planning/planner.go). The union of those
+    closures is the content the catalog can route a learner to, and it is smaller than the
+    corpus: a course samples a path, it does not cover a domain. The figure is read from
+    data/courses.json and data/concepts here, so the doc that states it cannot drift the way
+    README's XP gate once drifted from xp.QuizGateXP.
+
+    It requires the claim to be present, because a checker that finds no number to check
+    passes and reports nothing -- the failure mode this file is written to avoid.
+    """
+    doc = "docs/content-expansion.md"
+    path = ROOT / doc
+    if not path.is_file():
+        rep.error(doc, "course-reach", "the doc that states the reach no longer exists")
+        return
+
+    prereq: dict = {}
+    for f in sorted((ROOT / "data/concepts").glob("*.json")):
+        if f.name == "enrichment.json":
+            continue
+        for c in json.loads(f.read_text(encoding="utf-8")):
+            prereq[c["id"]] = set(c.get("prerequisites") or [])
+    if not prereq:
+        rep.error("data/concepts", "course-reach", "no concepts read; cannot verify the docs")
+        return
+
+    def closure(ids: list) -> set:
+        seen: set = set()
+        stack = list(ids)
+        while stack:
+            cid = stack.pop()
+            if cid in seen:
+                continue
+            seen.add(cid)
+            stack.extend(prereq.get(cid, ()))
+        return seen
+
+    reach: set = set()
+    for course in json.loads(read("data/courses.json")):
+        reach |= closure(course["targets"])
+
+    claim = re.compile(r"(\d[\d,]*)\s+of the\s+(\d[\d,]*)\s+concepts")
+    found = 0
+    for line_no, line in enumerate(path.read_text(encoding="utf-8").split("\n"), 1):
+        for m in claim.finditer(line):
+            found += 1
+            reached = int(m.group(1).replace(",", ""))
+            total = int(m.group(2).replace(",", ""))
+            if reached != len(reach) or total != len(prereq):
+                rep.error(f"{doc}:{line_no}", "course-reach",
+                          f'"{m.group(0)}" but the catalog reaches {len(reach)} of the '
+                          f"{len(prereq)} concepts")
+    if found == 0:
+        rep.error(doc, "course-reach",
+                  "the course-reach claim is gone; a check that reads nothing reports nothing")
+
+
+def check_media_candidates(rep: Report) -> None:
+    """Orphan caption counts quoted in the docs must match the corpus that owns them.
+
+    `scripts/audit_lesson_media.py` rates every paragraph that reads as a caption whose image
+    was dropped. Three docs quote the result, and a caption repair moves it, so the counts are
+    read from the corpus here rather than copied into this file: a checker that pinned 214
+    would go stale the next time a figure lands or a caption changes shape.
+
+    It requires the claim in each doc, because a checker that finds no number to check passes
+    and reports nothing -- the failure mode this file is written to avoid.
+    """
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import audit_lesson_media as media
+
+    tiers: dict[str, int] = {}
+    for row in media.section_a_candidates():
+        tiers[row["confidence"]] = tiers.get(row["confidence"], 0) + 1
+    facts = {
+        "paragraph": sum(tiers.values()), "candidate": sum(tiers.values()),
+        "certain": tiers.get("certain", 0), "strong": tiers.get("strong", 0),
+        "likely": tiers.get("likely", 0),
+    }
+    claim = re.compile(r"(\d[\d,]*)\s+(paragraphs?|candidates?|certain|strong|likely)\b")
+    for doc in ("docs/content-expansion.md", "docs/figure-reclaim.md", "docs/lesson-media.md"):
+        path = ROOT / doc
+        if not path.is_file():
+            rep.error(doc, "media-candidates", "the doc that states the counts no longer exists")
+            continue
+        found = 0
+        for line_no, line in enumerate(path.read_text(encoding="utf-8").split("\n"), 1):
+            for m in claim.finditer(line):
+                found += 1
+                word = m.group(2).rstrip("s")
+                if int(m.group(1).replace(",", "")) != facts[word]:
+                    rep.error(f"{doc}:{line_no}", "media-candidates",
+                              f'"{m.group(0)}" but the orphan-caption audit counts '
+                              f"{facts[word]}")
+        if found == 0:
+            rep.error(doc, "media-candidates",
+                      "the orphan-caption count is gone; a check that reads nothing reports "
+                      "nothing")
 
 
 def defined_adrs() -> set:
@@ -869,6 +975,8 @@ def main() -> int:
     check_xp_gate(rep)
     check_kp_rule(rep)
     check_corpus_figures(rep)
+    check_course_reach(rep)
+    check_media_candidates(rep)
     check_adr_refs(rep)
     check_links(rep)
     check_spelling(rep)
@@ -893,8 +1001,9 @@ def main() -> int:
               file=sys.stderr)
         return 1
     print("OK: docs agree with the code and the corpus "
-          "(XP gate, KP rule, corpus counts, ADR refs, links, spelling, tables, roles, "
-          "daily goal, removed XP terms, grading timeout, diagnostic bounds, "
+          "(XP gate, KP rule, corpus counts, course reach, media candidates, ADR refs, links, "
+          "spelling, tables, "
+          "roles, daily goal, removed XP terms, grading timeout, diagnostic bounds, "
           "citations, stub claims, route counts, toolchain, SM-2 intervals, "
           "diagram citations, design tokens)")
     return 0
