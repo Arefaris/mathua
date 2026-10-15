@@ -92,7 +92,7 @@ Base-10 blocks provide another way to model place value, as shown in Figure 1.4.
 
 Figure 1.5 shows the number 138 modeled with $\text{base-10}$ blocks.
 
-*Figure 1.5 We use place value notation to show the value of the number 138 . 138 .*
+*Figure 1.5 We use place value notation to show the value of the number 138.*
 
 | Digit | Place value | Number | Value   | Total value           |
 |-------|-------------|--------|---------|-----------------------|
@@ -338,15 +338,15 @@ The process of approximating a number is called rounding. Numbers are rounded to
 
 Using the number line can help you visualize and understand the rounding process. Look at the number line in Figure 1.7. Suppose we want to round the number 76 to the nearest ten. Is 76 closer to 70 or 80 on the number line?
 
-*Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the nearest ten is 80 . 80 .*
+*Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is 80.*
 
 Now consider the number 72. Find 72 in Figure 1.8.
 
-*Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten is 70 . 70 .*
+*Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.*
 
 How do we round 75 to the nearest ten. Find 75 in Figure 1.9.
 
-*Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .*
+*Figure 1.9 The number 75 is exactly midway between 70 and 80.*
 
 So that everyone rounds the same way in cases like this, mathematicians have agreed to round to the higher number, 80. So, 75 rounded to the nearest ten is 80.
 

@@ -295,7 +295,7 @@ $$
 
 Since $2 \cdot \frac{500}{3} = \frac{1000}{3},$ we have verified the formula for even functions in this particular example.
 
-*Figure 5.35 Graph (a) shows the positive area between the curve and the x -axis, whereas graph (b) shows the negative area between the curve and the x -axis. Both views show the symmetry about the y -axis.*
+*Figure 5.35 Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (b) shows the negative area between the curve and the *x*-axis. Both views show the symmetry about the *y*-axis.*
 
 ### Example 5.29
 
@@ -319,7 +319,7 @@ $$
 \end{array}
 $$
 
-*Figure 5.36 The graph shows areas between a curve and the x -axis for an odd function.*
+*Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.*
 
 ### Checkpoint 5.24
 

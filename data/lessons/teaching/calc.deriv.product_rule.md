@@ -307,7 +307,7 @@ $$
 
 Since $f(x) = x^{2}$ has derivative $f'(x) = 2x,$ we see that the derivative of $g(x)$ is 3 times the derivative of $f(x).$ This relationship is illustrated in Figure 3.18.
 
-*Figure 3.18 The derivative of g ( x ) g ( x ) is 3 times the derivative of f ( x ) . f ( x ) .*
+*Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$*
 
 ### Example 3.21
 
@@ -677,7 +677,7 @@ $$
 
 we must solve $\left( {3x - 2} \right)\left( {x - 4} \right) = 0.$ Thus we see that the function has horizontal tangent lines at $x = \frac{2}{3}$ and $x = 4$ as shown in the following graph.
 
-*Figure 3.19 This function has horizontal tangent lines at x = 2/3 and x = 4.*
+*Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.*
 
 ### Example 3.32
 
@@ -713,7 +713,7 @@ Safety is especially a concern on turns. If a driver does not slow down enough b
 
 Suppose you are designing a new Formula One track. One section of the track can be modeled by the function $f(x) = x^{3} + 3x^{2} + x$ (Figure 3.21). The current plan calls for grandstands to be built along the first straightaway and around a portion of the first curve. The plans call for the front corner of the grandstand to be located at the point $\left( {-1.9,2.8} \right).$ We want to determine whether this location puts the spectators in danger if a driver loses control of the car.
 
-*Figure 3.21 (a) One section of the racetrack can be modeled by the function f ( x ) = x 3 + 3 x 2 + x . f ( x ) = x 3 + 3 x 2 + x . (b) The front corner of the grandstand is located at ( −1.9 , 2.8 ) . ( −1.9 , 2.8 ) .*
+*Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\left( {-1.9,2.8} \right).$*
 
 1.  Physicists have determined that drivers are most likely to lose control of their cars as they are coming into a turn, at the point where the slope of the tangent line is 1. Find the $\left( {x,y} \right)$ coordinates of this point near the turn.
 2.  Find an equation of the tangent line to the curve at this point.

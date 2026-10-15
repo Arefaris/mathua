@@ -41,6 +41,34 @@ def norm_section(s):
     return " ".join(s.split())
 
 
+CAPTION_RE = re.compile(r"^\s*\*{1,2}Figure\s+\d")
+
+
+def doubled_caption_run(line):
+    """Return the first immediately repeated token run in a caption, or None.
+
+    The OpenStax captions were ingested with `figcaption.get_text(' ', strip=True)`.
+    A figcaption's math is present twice — presentation MathML plus its
+    annotation-xml — so the flattened caption carried both copies and read
+    "the number 138 . 138 .". The bug doubles numbers, letters, expressions and
+    percentages alike: "The region R R", "the graph shows f ( x ) . f ( x ) .".
+    A caption is one line of prose, so an adjacent repeated token run is that
+    bug and not English emphasis. On the corpus as repaired this finds 0 false
+    positives; on the damaged text it finds 63 of the 67 damaged captions.
+    """
+    toks = line.strip().strip("*").split()
+    n = len(toks)
+    for i in range(n):
+        for j in range(i + 1, min(n, i + 21)):
+            span = j - i
+            if j + span > n:
+                break
+            run = toks[i:j]
+            if toks[i:j] == toks[j:j + span] and any(re.search(r"[A-Za-z0-9]", t) for t in run):
+                return " ".join(run)
+    return None
+
+
 def main():
     errors = []
 
@@ -386,34 +414,14 @@ def main():
     if os.path.exists(meta_path):
         with open(meta_path, encoding="utf-8") as f:
             meta = json.load(f)
-    # Grandfathered: algebrica-dir SVGs with no same-stem upstream twin
-    # (local renames or older releases). New algebrica SVGs must link.
-    UNLINKED_GRANDFATHERED = frozenset({
-        "/diagrams/algebrica/completing-square.svg",
-        "/diagrams/algebrica/complex-plane.svg",
-        "/diagrams/algebrica/hyperbolic-functions.svg",
-        "/diagrams/algebrica/inverse-trig-graphs.svg",
-        "/diagrams/algebrica/law-of-cosines.svg",
-        "/diagrams/algebrica/law-of-sines.svg",
-        "/diagrams/algebrica/linear-equation-graph.svg",
-        "/diagrams/algebrica/number-line-absolute-value.svg",
-        "/diagrams/algebrica/number-line-intervals.svg",
-        "/diagrams/algebrica/number-line-real.svg",
-        "/diagrams/algebrica/number-types-venn.svg",
-        "/diagrams/algebrica/pascals-triangle.svg",
-        "/diagrams/algebrica/polynomial-roots-graph.svg",
-        "/diagrams/algebrica/pythagorean-theorem.svg",
-        "/diagrams/algebrica/reference-angles.svg",
-        "/diagrams/algebrica/right-triangle-trig.svg",
-        "/diagrams/algebrica/right-triangle-unit-circle.svg",
-        "/diagrams/algebrica/sec-csc-cot-graphs.svg",
-        "/diagrams/algebrica/sine-cosine-graph.svg",
-        "/diagrams/algebrica/unit-circle-labeled.svg",
-        "/diagrams/algebrica/unit-circle-sine-cosine.svg",
-        "/diagrams/algebrica/unit-circle-tangent.svg",
-        "/diagrams/algebrica/vector-addition.svg",
-        "/diagrams/algebrica/vector-arrow.svg",
-    })
+    # Empty, and it stays empty. It held the 24 algebrica-dir SVGs that had no upstream twin,
+    # which turned out to be exactly the files scripts/gen-diagrams.py writes: Mathua's own
+    # output, sitting in the vendored directory and labelled `source: algebrica`, so the
+    # exemption existed to stop the attribution rule firing on our own work. They are
+    # `source: local` now and the rule below needs no exemption. Do not add entries back: a
+    # vendored Algebrica SVG must link its upstream, and Mathua-authored diagrams are not
+    # Algebrica's to license.
+    UNLINKED_GRANDFATHERED = frozenset()
     meta_bad, raster_local = [], []
     for asset in mapped_assets:
         ent = meta.get(asset)
@@ -438,6 +446,51 @@ def main():
         errors.append(f"diagram metadata problems ({len(meta_bad)}):\n  " + "\n  ".join(meta_bad[:30]))
     if raster_local:
         errors.append(f"raster local diagrams ({len(raster_local)}):\n  " + "\n  ".join(raster_local[:30]))
+
+    # 15. The published diagram metadata must equal the source of truth.
+    # LessonDiagram fetches /diagrams/meta.json -- web/next-app/public/diagrams/meta.json --
+    # while this audit and the engine's conceptDiagrams map read data/diagrams/meta.json.
+    # Nothing published one from the other, and they had drifted: the served copy was 18
+    # entries behind, so those diagrams lost their title and their Algebrica attribution line
+    # while every check still passed. Publish with
+    #   cp data/diagrams/meta.json web/next-app/public/diagrams/meta.json
+    pub_path = os.path.join(ROOT, "web", "next-app", "public", "diagrams", "meta.json")
+    if os.path.exists(meta_path) and os.path.exists(pub_path):
+        with open(pub_path, encoding="utf-8") as f:
+            published = json.load(f)
+        missing = sorted(set(meta) - set(published))
+        extra = sorted(set(published) - set(meta))
+        differing = sorted(k for k in set(meta) & set(published) if meta[k] != published[k])
+        if missing or extra or differing:
+            errors.append(
+                f"published diagram metadata is stale ({len(missing)} missing, {len(extra)} "
+                f"extra, {len(differing)} differing): copy data/diagrams/meta.json to "
+                f"web/next-app/public/diagrams/meta.json\n  "
+                + "\n  ".join((missing + extra + differing)[:20]))
+
+    # 16. Duplicated caption text: the flattened-math artefact of the OpenStax
+    # caption ingestion (see doubled_caption_run). Every caption in the corpus
+    # was repaired from its upstream figure, so this has no baseline and fails
+    # on the first new instance. Re-run scripts/ingest/ingest_openstax.py only
+    # with the fixed figure handler.
+    caption_dupes = []
+    if os.path.isdir(LESSONS):
+        for root, _dirs, files in os.walk(LESSONS):
+            for name in sorted(files):
+                if not name.endswith(".md"):
+                    continue
+                p = os.path.join(root, name)
+                with open(p, encoding="utf-8") as f:
+                    for i, line in enumerate(f, 1):
+                        if CAPTION_RE.match(line):
+                            run = doubled_caption_run(line)
+                            if run:
+                                caption_dupes.append(
+                                    f"{os.path.relpath(p, ROOT)}:{i}: repeated {run!r}")
+    if caption_dupes:
+        errors.append(f"duplicated caption text ({len(caption_dupes)}):\n  "
+                      + "\n  ".join(caption_dupes[:20]))
+
 
     if errors:
         print("\n\n".join(errors))

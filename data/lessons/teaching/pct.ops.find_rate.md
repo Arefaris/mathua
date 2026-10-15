@@ -20,7 +20,7 @@ When Aolani and her friends ate dinner at a restaurant, the bill came to $\text{
 
 To solve this, we want to find what *amount* is $\text{20\%}$ of $\text{\$80}.$ The $\text{\$80}$ is called the *base*. The amount of the tip would be $0.20(80),$ or $\text{\$16}$ See Figure 6.6. To find the amount of the tip, we multiplied the percent by the base.
 
-*Figure 6.6 A 20% 20% tip for an \$80 \$80 restaurant bill comes out to \$16 . \$16 .*
+*Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$*
 
 In the next examples, we will find the amount. We must be sure to change the given percent to a decimal when we translate the words into an equation.
 

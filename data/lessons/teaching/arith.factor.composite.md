@@ -68,7 +68,7 @@ Doing the Manipulative Mathematics activity “Multiples” will help you develo
 
 Figure 2.6 shows the counting numbers from 1 to 50. Multiples of 2 are highlighted. Do you notice a pattern?
 
-*Figure 2.6 Multiples of 2 2 between 1 1 and 50 50*
+*Figure 2.6 Multiples of 2 between 1 and 50*
 
 The last digit of each highlighted number in Figure 2.6 is either $0,2,4,6,\text{or}\ 8.$ This is true for the product of 2 and any counting number. So, to tell if any number is a multiple of 2 look at the last digit. If it is $0,2,4,6,\ \text{or}\ 8,$ then the number is a multiple of 2.
 
@@ -111,7 +111,7 @@ Determine whether each number is a multiple of $2\text{:}$
 
 Now let’s look at multiples of 5. Figure 2.7 highlights all of the multiples of 5 between 1 and 50. What do you notice about the multiples of $5?$
 
-*Figure 2.7 Multiples of 5 5 between 1 1 and 50 50*
+*Figure 2.7 Multiples of 5 between 1 and 50*
 
 All multiples of 5 end with either 5 or 0. Just like we identify multiples of 2 by looking at the last digit, we can identify multiples of 5 by looking at the last digit.
 
@@ -154,7 +154,7 @@ Determine whether each number is a multiple of 5.
 
 Figure 2.8 highlights the multiples of 10 between 1 and 50. All multiples of 10 all end with a zero.
 
-*Figure 2.8 Multiples of 10 10 between 1 1 and 50 50*
+*Figure 2.8 Multiples of 10 between 1 and 50*
 
 ### Example 2.42
 
@@ -195,7 +195,7 @@ Determine whether each number is a multiple of $10\text{:}$
 
 Figure 2.9 highlights multiples of 3. The pattern for multiples of 3 is not as obvious as the patterns for multiples of $2,5,\text{and}\ 10.$
 
-*Figure 2.9 Multiples of 3 3 between 1 1 and 50 50*
+*Figure 2.9 Multiples of 3 between 1 and 50*
 
 Unlike the other patterns we’ve examined so far, this pattern does not involve the last digit. The pattern for multiples of 3 is based on the sum of the digits. If the sum of the digits of a number is a multiple of 3, then the number itself is a multiple of 3. See Table 2.9.
 
@@ -515,7 +515,7 @@ A composite number is a counting number that is not prime.
 
 Figure 2.10 lists the counting numbers from 2 through 20 along with their factors. The highlighted numbers are prime, since each has only two factors.
 
-*Figure 2.10 Factors of the counting numbers from 2 2 through 20 , 20 , with prime numbers highlighted*
+*Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted*
 
 The prime numbers less than 20 are $2,3,5,7,11,13,17,\text{and}\ 19.$ There are many larger prime numbers too. In order to determine whether a number is prime or composite, we need to see if the number has any factors other than 1 and itself. To do this, we can test each of the smaller prime numbers in order to see if it is a factor of the number. If none of the prime numbers are factors, then that number is also prime.
 

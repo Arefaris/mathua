@@ -88,9 +88,15 @@ def strip_emphasis(t):
 def is_standalone_emphasis(line):
     """True for `*text*` alone on its line.
 
-    Excludes the two near-misses that a naive scan counts as captions and must not: a
-    bullet item (`* **Sampling**`) and a bold-only line (`**Header**`). Counting those was
-    how an earlier pass of this report overstated the candidate set.
+    Excludes the near-misses that a naive scan counts as captions and must not: a
+    bullet item (`* **Sampling**`), a bold-only line (`**Header**`) and a thematic
+    break (`* * *`). Counting those was how an earlier pass of this report
+    overstated the candidate set.
+
+    Inner emphasis is allowed because a caption can contain it: OpenStax marks a
+    variable with `<em>`, so `Figure 2.19 ... as *x* approaches 0` is one caption
+    and not two. The earlier rule rejected any inner asterisk, which dropped eight
+    imageless captions from the report the moment their text was repaired.
     """
     t = line.strip()
     if not (t.startswith("*") and t.endswith("*") and len(t) > 2):
@@ -100,7 +106,7 @@ def is_standalone_emphasis(line):
     inner = t[1:-1]
     if inner.startswith("*") and inner.endswith("*"):
         return False
-    return "*" not in inner
+    return inner.count("*") % 2 == 0
 
 
 def prev_nonblank(lines, i):

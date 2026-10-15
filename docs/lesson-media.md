@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-324 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **220 certain**, **33 strong**, **71 likely**.
+318 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **214 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -59,7 +59,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/alg.seq.sum_arith.md` | 195 | likely | *Unemployment in the United States* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/alg.systems.word.md` | 45 | likely | *Amount in Savings Account* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.dec.intro.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 2.72 is closer to 3 3 than to 2 . 2 . So, 2.72 2.72 rounded to ...* | auto-numbered figure/table label |
+| `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole...* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
 | `teaching/arith.div.basic.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
@@ -75,38 +75,38 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.div.word.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
 | `teaching/arith.div.word.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
 | `teaching/arith.div.word.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 71 | certain | *Figure 2.6 Multiples of 2 2 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 114 | certain | *Figure 2.7 Multiples of 5 5 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 157 | certain | *Figure 2.8 Multiples of 10 10 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 198 | certain | *Figure 2.9 Multiples of 3 3 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 2 through 20 , 20 , with prime numbers hig...* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 71 | certain | *Figure 2.6 Multiples of 2 2 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 114 | certain | *Figure 2.7 Multiples of 5 5 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 157 | certain | *Figure 2.8 Multiples of 10 10 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 198 | certain | *Figure 2.9 Multiples of 3 3 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 2 through 20 , 20 , with prime numbers hig...* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 71 | certain | *Figure 2.6 Multiples of 2 2 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 114 | certain | *Figure 2.7 Multiples of 5 5 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 157 | certain | *Figure 2.8 Multiples of 10 10 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 198 | certain | *Figure 2.9 Multiples of 3 3 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 2 through 20 , 20 , with prime numbers hig...* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 71 | certain | *Figure 2.6 Multiples of 2 2 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 114 | certain | *Figure 2.7 Multiples of 5 5 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 157 | certain | *Figure 2.8 Multiples of 10 10 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 198 | certain | *Figure 2.9 Multiples of 3 3 between 1 1 and 50 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 2 through 20 , 20 , with prime numbers hig...* | auto-numbered figure/table label |
+| `teaching/arith.factor.composite.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.composite.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.composite.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.composite.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.composite.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
+| `teaching/arith.factor.find.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.find.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.find.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.find.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.find.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime_fact.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime_fact.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime_fact.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime_fact.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
+| `teaching/arith.factor.prime_fact.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
 | `teaching/arith.mult.2_5_10.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.2_5_10.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 6 square...* | auto-numbered figure/table label |
+| `teaching/arith.mult.2_5_10.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.concept.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.concept.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 6 square...* | auto-numbered figure/table label |
+| `teaching/arith.mult.concept.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.double.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.double.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 6 square...* | auto-numbered figure/table label |
+| `teaching/arith.mult.double.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.tables.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.tables.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 6 square...* | auto-numbered figure/table label |
+| `teaching/arith.mult.tables.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.triple.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.triple.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 6 square...* | auto-numbered figure/table label |
+| `teaching/arith.mult.triple.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.word.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.word.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 6 square...* | auto-numbered figure/table label |
+| `teaching/arith.mult.word.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.neg.add_sub.md` | 13 | likely | *Number line with interesting Celsius temperatures* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -119,125 +119,119 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.neg.order_ops.md` | 13 | likely | *Number line with interesting Celsius temperatures* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.order_ops.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.order_ops.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/arith.place.hundreds.md` | 36 | certain | *Figure 1.2 The numbers on the number line increase from left to right, and decrease from righ...* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 83 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 89 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 339 | certain | *Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the...* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 343 | certain | *Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten i...* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 347 | certain | *Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 36 | certain | *Figure 1.2 The numbers on the number line increase from left to right, and decrease from righ...* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 83 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 89 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 339 | certain | *Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the...* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 343 | certain | *Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten i...* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 347 | certain | *Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 36 | certain | *Figure 1.2 The numbers on the number line increase from left to right, and decrease from righ...* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 83 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 89 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 339 | certain | *Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the...* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 343 | certain | *Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten i...* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 347 | certain | *Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 36 | certain | *Figure 1.2 The numbers on the number line increase from left to right, and decrease from righ...* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 83 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 89 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 339 | certain | *Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the...* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 343 | certain | *Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten i...* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 347 | certain | *Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 36 | certain | *Figure 1.2 The numbers on the number line increase from left to right, and decrease from righ...* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 83 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 89 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 339 | certain | *Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the...* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 343 | certain | *Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten i...* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 347 | certain | *Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 36 | certain | *Figure 1.2 The numbers on the number line increase from left to right, and decrease from righ...* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 83 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 89 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 339 | certain | *Figure 1.7 We can see that 76 76 is closer to 80 80 than to 70 . 70 . So 76 76 rounded to the...* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 343 | certain | *Figure 1.8 We can see that 72 72 is closer to 70 , 70 , so 72 72 rounded to the nearest ten i...* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 347 | certain | *Figure 1.9 The number 75 75 is exactly midway between 70 70 and 80 . 80 .* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
+| `teaching/arith.place.hundreds.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
+| `teaching/arith.place.tens.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
+| `teaching/arith.place.thousands.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
+| `teaching/arith.round.hundreds.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
+| `teaching/arith.round.tens.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
+| `teaching/arith.round.thousands.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/calc.deriv.exp_log.md` | 43 | certain | *Figure 3.33 The graph of E ( x ) = e x E ( x ) = e x is between y = 2 x y = 2 x and y = 3 x ....* | auto-numbered figure/table label |
-| `teaching/calc.deriv.exp_log.md` | 73 | certain | *Figure 3.34 The tangent line to E ( x ) = e x E ( x ) = e x at x = 0 x = 0 has slope 1.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.exp_log.md` | 239 | certain | *Figure 3.35 The function y = ln x The function y = ln x is increasing on ( 0 , + ∞ ) . ( 0 , ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.implicit.md` | 25 | certain | *Figure 3.30 The equation x 2 + y 2 = 25 x 2 + y 2 = 25 defines many functions implicitly.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.implicit.md` | 159 | certain | *Figure 3.31 The line y = 3 4 x − 25 4 y = 3 4 x − 25 4 is tangent to x 2 + y 2 = 25 x 2 + y 2...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.implicit.md` | 167 | certain | *Figure 3.32 Finding the tangent line to the folium of Descartes at ( 3 2 , 3 2 ) . ( 3 2 , 3 ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 310 | certain | *Figure 3.18 The derivative of g ( x ) g ( x ) is 3 times the derivative of f ( x ) . f ( x ) .* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at x = 2/3 and x = 4.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function f ( x ) = x 3 + 3...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 310 | certain | *Figure 3.18 The derivative of g ( x ) g ( x ) is 3 times the derivative of f ( x ) . f ( x ) .* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at x = 2/3 and x = 4.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function f ( x ) = x 3 + 3...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.exp_log.md` | 43 | certain | *Figure 3.33 The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$* | auto-numbered figure/table label |
+| `teaching/calc.deriv.exp_log.md` | 73 | certain | *Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.exp_log.md` | 239 | certain | *Figure 3.35 $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.implicit.md` | 25 | certain | *Figure 3.30 The equation $x^{2} + y^{2} = 25$ defines many functions implicitly.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.implicit.md` | 159 | certain | *Figure 3.31 The line $y = \frac{3}{4}x - \frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at ...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.implicit.md` | 167 | certain | *Figure 3.32 Finding the tangent line to the folium of Descartes at $\left( {\frac{3}{2},\frac...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.product_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
+| `teaching/calc.deriv.product_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.product_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.quotient_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
+| `teaching/calc.deriv.quotient_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.quotient_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 23 | certain | *Figure 4.2 As the balloon is being filled with air, both the radius and the volume are increa...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 95 | certain | *Figure 4.3 An airplane is flying at a constant height of 4000 ft. The distance between the pe...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 161 | certain | *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 169 | certain | *Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of th...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 243 | certain | *Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 310 | certain | *Figure 3.18 The derivative of g ( x ) g ( x ) is 3 times the derivative of f ( x ) . f ( x ) .* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at x = 2/3 and x = 4.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function f ( x ) = x 3 + 3...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.trig.md` | 29 | certain | *Figure 3.25 The graph of the function D ( x ) D ( x ) looks a lot like a cosine curve.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.sum_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
+| `teaching/calc.deriv.sum_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.trig.md` | 29 | certain | *Figure 3.25 The graph of the function $D(x)$ looks a lot like a cosine curve.* | auto-numbered figure/table label |
 | `teaching/calc.deriv.trig.md` | 70 | certain | *Figure 3.26 These graphs show two important limits needed to establish the derivative formula...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.trig.md` | 95 | certain | *Figure 3.27 Where f ( x ) f ( x ) has a maximum or a minimum, f ′ ( x ) = 0 f ′ ( x ) = 0 tha...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.trig.md` | 95 | certain | *Figure 3.27 Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 78 | certain | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 129 | certain | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 197 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 298 | certain | *Figure 5.35 Graph (a) shows the positive area between the curve and the x -axis, whereas grap...* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 322 | certain | *Figure 5.36 The graph shows areas between a curve and the x -axis for an odd function.* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 16 | certain | *Figure 6.25 (a) A region bounded by the graph of a function of x . x . (b) The solid of revol...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 20 | certain | *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the y ...* | auto-numbered figure/table label |
+| `teaching/calc.integral.power_rule.md` | 298 | certain | *Figure 5.35 Graph (a) shows the positive area between the curve and the *x*-axis, whereas gra...* | auto-numbered figure/table label |
+| `teaching/calc.integral.power_rule.md` | 322 | certain | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 16 | certain | *Figure 6.25 (a) A region bounded by the graph of a function of $x.$ (b) The solid of revoluti...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 20 | certain | *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 24 | certain | *Figure 6.27 Calculating the volume of the shell.* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 51 | certain | *Figure 6.28 (a) Make a vertical cut in a representative shell. (b) Open the shell up to form ...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 97 | certain | *Figure 6.29 (a) The region R R under the graph of f ( x ) = 1 / x f ( x ) = 1 / x over the in...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 123 | certain | *Figure 6.30 (a) The region R R under the graph of f ( x ) = 2 x − x 2 f ( x ) = 2 x − x 2 ove...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 159 | certain | *Figure 6.31 (a) The region Q Q to the left of the function g ( y ) g ( y ) over the interval ...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 219 | certain | *Figure 6.32 (a) The region R R between the graph of f ( x ) f ( x ) and the x -axis x -axis o...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 247 | certain | *Figure 6.33 (a) The region R R between the graph of f ( x ) f ( x ) and the graph of g ( x ) ...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 97 | certain | *Figure 6.29 (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\lef...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 123 | certain | *Figure 6.30 (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\lef...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 159 | certain | *Figure 6.31 (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lb...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 219 | certain | *Figure 6.32 (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the i...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 247 | certain | *Figure 6.33 (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the i...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 267 | certain | *Figure 6.34* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 284 | certain | *Figure 6.35 (a) The region R R bounded by two lines and the x -axis . x -axis . (b) The solid...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 304 | certain | *Figure 6.36 (a) The region R R between the curve and the x -axis . x -axis . (b) The solid of...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 56 | certain | *Figure 4.41 (a) As x → ∞ , x → ∞ , the values of f f are getting arbitrarily close to L . L ....* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 60 | certain | *Figure 4.42 The graph of f ( x ) = ( cos x ) / x + 1 f ( x ) = ( cos x ) / x + 1 crosses its ...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 79 | certain | *Figure 4.43 This function approaches a horizontal asymptote as x → ± ∞ . x → ± ∞ .* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 284 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 304 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 56 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 60 | certain | *Figure 4.42 The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its hori...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 79 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 103 | certain | *Figure 4.44 This function crosses its horizontal asymptote multiple times.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.45 The graph of tan x tan x has vertical asymptotes at x = ± π 2 x = ± π 2* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.45 The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 135 | certain | *Figure 4.46 This function has two horizontal asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 156 | certain | *Figure 4.47 For this function, the functional values approach infinity as x → ± ∞ . x → ± ∞ .* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 206 | certain | *Figure 4.48 For a function with a limit at infinity, for all x \> N , x \> N , \\| f ( x ) − ...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 262 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all x \> N , x \> N , f ( ...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 410 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as x → ± ∞ ...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 419 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote y = 0 y =...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 428 | certain | *Figure 4.55 As x → ∞ , x → ∞ , the values f ( x ) → ∞ . f ( x ) → ∞ . As x → − ∞ , x → − ∞ , ...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 448 | certain | *Figure 4.56 The graph of the rational function f ( x ) = ( 3 x 2 + 4 x ) / ( x + 2 ) f ( x ) ...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 156 | certain | *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 206 | certain | *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \ri...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 262 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 410 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\right...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 419 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ a...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 428 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 448 | certain | *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\l...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 497 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 520 | certain | *Figure 4.60 The exponential function approaches zero as x → − ∞ x → − ∞ and approaches ∞ ∞ as...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 531 | certain | *Figure 4.61 The natural logarithm function approaches ∞ ∞ as x → ∞ . x → ∞ .* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 25 | certain | *Figure 2.12 These graphs show the behavior of three different functions around x = 2 . x = 2 .* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 94 | certain | *Figure 2.13 The graph of f ( x ) = ( sin x ) / x f ( x ) = ( sin x ) / x confirms the estimat...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 118 | certain | *Figure 2.14 The graph of f ( x ) = x − 2 x − 4 f ( x ) = x − 2 x − 4 confirms the estimate fr...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 132 | certain | *Figure 2.15 The graph of g ( x ) g ( x ) includes one value not on a smooth curve.* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 520 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 531 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 25 | certain | *Figure 2.12 These graphs show the behavior of three different functions around $x = 2.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 94 | certain | *Figure 2.13 The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Tabl...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 118 | certain | *Figure 2.14 The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 132 | certain | *Figure 2.15 The graph of $g(x)$ includes one value not on a smooth curve.* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 144 | certain | *Figure 2.16* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 220 | certain | *Figure 2.17 The graph of f ( x ) = sin ( 1 / x ) f ( x ) = sin ( 1 / x ) oscillates rapidly b...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 293 | certain | *Figure 2.18 The graph of f ( x ) = { x + 1 if x \< 2 x 2 − 4 if x ≥ 2 f ( x ) = { x + 1 if x ...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 411 | certain | *Figure 2.19 The graph of f ( x ) = 1 / x f ( x ) = 1 / x confirms that the limit as x approac...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 423 | certain | *Figure 2.20 The function f ( x ) = 1 / ( x − a ) n f ( x ) = 1 / ( x − a ) n has infinite lim...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 503 | certain | *Figure 2.21 The graph shows f ( x ) . f ( x ) .* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 220 | certain | *Figure 2.17 The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 an...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 293 | certain | *Figure 2.18 The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} -...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 411 | certain | *Figure 2.19 The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 do...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 423 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 503 | certain | *Figure 2.21 The graph shows $f(x).$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 522 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 536 | certain | *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Eins...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 2.72 is closer to 3 3 than to 2 . 2 . So, 2.72 2.72 rounded to ...* | auto-numbered figure/table label |
+| `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole...* | auto-numbered figure/table label |
 | `teaching/dec.convert.from_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/dec.convert.to_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/dec.ops.add.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.div.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.mult.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 2.72 is closer to 3 3 than to 2 . 2 . So, 2.72 2.72 rounded to ...* | auto-numbered figure/table label |
+| `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole...* | auto-numbered figure/table label |
 | `teaching/dec.ops.sub.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
-| `teaching/frac.add.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 35 cents, or 35 100 35 100 of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.add.word.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 35 cents, or 35 100 35 100 of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.add.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.add.word.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/frac.basics.concept.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
 | `teaching/frac.basics.concept.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
 | `teaching/frac.basics.concept.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
@@ -268,7 +262,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/frac.ops.simplify.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
 | `teaching/frac.ops.simplify.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
 | `teaching/frac.ops.to_decimal.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
-| `teaching/frac.sub.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 35 cents, or 35 100 35 100 of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.sub.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/geo.basic.angle_measure.md` | 30 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angle_measure.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angles.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
@@ -302,23 +296,23 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/geo.triangle.area.md` | 32 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 34 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 46 | strong | *Solution* | duplicated 2x in this lesson |
-| `teaching/pct.basics.concept.md` | 23 | certain | *Figure 6.2 Among every 100 100 community college students, 57 57 are female.* | auto-numbered figure/table label |
+| `teaching/pct.basics.concept.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
 | `teaching/pct.basics.concept.md` | 265 | certain | *Figure 6.3* | auto-numbered figure/table label |
 | `teaching/pct.basics.concept.md` | 306 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/pct.basics.concept.md` | 423 | certain | *Figure 6.5* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 23 | certain | *Figure 6.2 Among every 100 100 community college students, 57 57 are female.* | auto-numbered figure/table label |
+| `teaching/pct.convert.from_dec.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
 | `teaching/pct.convert.from_dec.md` | 265 | certain | *Figure 6.3* | auto-numbered figure/table label |
 | `teaching/pct.convert.from_dec.md` | 306 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/pct.convert.from_dec.md` | 423 | certain | *Figure 6.5* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 23 | certain | *Figure 6.2 Among every 100 100 community college students, 57 57 are female.* | auto-numbered figure/table label |
+| `teaching/pct.convert.to_dec.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
 | `teaching/pct.convert.to_dec.md` | 265 | certain | *Figure 6.3* | auto-numbered figure/table label |
 | `teaching/pct.convert.to_dec.md` | 306 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/pct.convert.to_dec.md` | 423 | certain | *Figure 6.5* | auto-numbered figure/table label |
 | `teaching/pct.ops.discount.md` | 35 | certain | *Figure 6.7 The sales tax is calculated as a percent of the purchase price.* | auto-numbered figure/table label |
 | `teaching/pct.ops.discount.md` | 257 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
-| `teaching/pct.ops.find_rate.md` | 23 | certain | *Figure 6.6 A 20% 20% tip for an \$80 \$80 restaurant bill comes out to \$16 . \$16 .* | auto-numbered figure/table label |
-| `teaching/pct.ops.increase.md` | 23 | certain | *Figure 6.6 A 20% 20% tip for an \$80 \$80 restaurant bill comes out to \$16 . \$16 .* | auto-numbered figure/table label |
-| `teaching/pct.ops.of_number.md` | 23 | certain | *Figure 6.6 A 20% 20% tip for an \$80 \$80 restaurant bill comes out to \$16 . \$16 .* | auto-numbered figure/table label |
+| `teaching/pct.ops.find_rate.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
+| `teaching/pct.ops.increase.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
+| `teaching/pct.ops.of_number.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
 | `teaching/pct.ops.tax_tip.md` | 35 | certain | *Figure 6.7 The sales tax is calculated as a percent of the purchase price.* | auto-numbered figure/table label |
 | `teaching/pct.ops.tax_tip.md` | 257 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
 | `teaching/prealg.eq.one_step_add.md` | 43 | likely | *Add 2 to mystery number to get 6, or subtract 2 from 6 to get mystery number* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -361,8 +355,8 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.factor.lcm.md` | 126 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168467446629" data-label="" data-summary="The figure shows two factor trees with the number 84 at the top. In the first tree two branches are splitti |
 | `teaching/calc.integral.power_rule.md` | 78 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
 | `teaching/calc.integral.power_rule.md` | 129 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
-| `teaching/calc.integral.power_rule.md` | 322 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the x -axis for an odd function.* |
-| `teaching/calc.limit.numeric.md` | 503 | The graph shows | *Figure 2.21 The graph shows f ( x ) . f ( x ) .* |
+| `teaching/calc.integral.power_rule.md` | 322 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
+| `teaching/calc.limit.numeric.md` | 503 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.number_line.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -387,7 +381,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-586 diagrams ship, 279 URLs are referenced by lesson bodies, and
+587 diagrams ship, 280 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
@@ -492,12 +486,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.order_ops.basic.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.order_ops.full.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.order_ops.nested.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
-| `teaching/arith.place.hundreds.md` | no | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
-| `teaching/arith.place.tens.md` | no | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
-| `teaching/arith.place.thousands.md` | no | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
-| `teaching/arith.round.hundreds.md` | no | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
-| `teaching/arith.round.tens.md` | no | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
-| `teaching/arith.round.thousands.md` | no | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.sci_notation.ops.md` | no | — | `big-o-notation-1.svg` |
 | `teaching/arith.sqrt.perfect.md` | no | — | `sqrt-perfect.svg`, `sqrt-simplify.svg` |
 | `teaching/calc.integral.power_rule.md` | no | — | `integral-test-for-series-convergence-1.svg` |
@@ -660,5 +648,11 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/series/power-series.md` | yes | — | `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `exp-power-rule.svg` |
 | `algebrica/trigonometry/pythagorean-identity.md` | yes | — | `pythagorean-theorem-1.svg`, `pythagorean-theorem-2.svg`, `pythagorean-theorem-3.svg` |
 | `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg` |
+| `teaching/arith.place.hundreds.md` | yes | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
+| `teaching/arith.place.tens.md` | yes | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
+| `teaching/arith.place.thousands.md` | yes | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
+| `teaching/arith.round.hundreds.md` | yes | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
+| `teaching/arith.round.tens.md` | yes | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
+| `teaching/arith.round.thousands.md` | yes | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 
 wrote data/lessons/figure-audit.json

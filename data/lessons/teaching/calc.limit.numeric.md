@@ -22,7 +22,7 @@ $$
 
 which are shown in Figure 2.12. In particular, let’s focus our attention on the behavior of each graph at and around $x = 2.$
 
-*Figure 2.12 These graphs show the behavior of three different functions around x = 2 . x = 2 .*
+*Figure 2.12 These graphs show the behavior of three different functions around $x = 2.$*
 
 Each of the three functions is undefined at $x = 2,$ but if we make this statement and no other, we give a very incomplete picture of how each function behaves in the vicinity of $x = 2.$ To express the behavior of each graph in the vicinity of 2 more completely, we need to introduce the concept of a limit.
 
@@ -91,7 +91,7 @@ Table 2.2 Table of Functional Values for $\underset{x\rightarrow 0}{\text{lim}}\
 
 As we read down each $\frac{\left( {\text{sin} x} \right)}{x}$ column, we see that the values in each column appear to be approaching one. Thus, it is fairly reasonable to conclude that $\underset{x\rightarrow 0}{\text{lim}}\frac{\text{sin} x}{x} = 1.$ A calculator or computer-generated graph of $f(x) = \frac{\left( {\text{sin} x} \right)}{x}$ would be similar to that shown in Figure 2.13, and it confirms our estimate.
 
-*Figure 2.13 The graph of f ( x ) = ( sin x ) / x f ( x ) = ( sin x ) / x confirms the estimate from Table 2.2 .*
+*Figure 2.13 The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.2.*
 
 ### Example 2.5
 
@@ -115,7 +115,7 @@ Table 2.3 Table of Functional Values for $\underset{x\rightarrow 4}{\text{lim}}\
 
 After inspecting this table, we see that the functional values less than 4 appear to be decreasing toward 0.25 whereas the functional values greater than 4 appear to be increasing toward 0.25. We conclude that $\underset{x\rightarrow 4}{\text{lim}}\frac{\sqrt{x} - 2}{x - 4} = 0.25.$ We confirm this estimate using the graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ shown in Figure 2.14.
 
-*Figure 2.14 The graph of f ( x ) = x − 2 x − 4 f ( x ) = x − 2 x − 4 confirms the estimate from Table 2.3 .*
+*Figure 2.14 The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3.*
 
 ### Checkpoint 2.4
 
@@ -129,7 +129,7 @@ At this point, we see from Example 2.4 and Example 2.5 that it may be just as ea
 
 For $g(x)$ shown in Figure 2.15, evaluate $\underset{x\rightarrow-1}{\text{lim}}g(x).$
 
-*Figure 2.15 The graph of g ( x ) g ( x ) includes one value not on a smooth curve.*
+*Figure 2.15 The graph of $g(x)$ includes one value not on a smooth curve.*
 
 #### Solution
 
@@ -217,7 +217,7 @@ $$
 
 At this point we can indeed conclude that $\underset{x\rightarrow 0}{\text{lim}}\text{sin}\left( {1\text{/}\textit{x}} \right)$ does not exist. (Mathematicians frequently abbreviate “does not exist” as DNE. Thus, we would write $\underset{x\rightarrow 0}{\text{lim}}\text{sin}\left( {1\text{/}\textit{x}} \right)$ DNE.) The graph of $f(x) = \text{sin}\left( {1\text{/}x} \right)$ is shown in Figure 2.17 and it gives a clearer picture of the behavior of $\text{sin}({1\text{/}{x)}}$ as *x* approaches 0. You can see that $\text{sin}({1\text{/}{\textit{x})}}$ oscillates ever more wildly between −1 and 1 as *x* approaches 0.
 
-*Figure 2.17 The graph of f ( x ) = sin ( 1 / x ) f ( x ) = sin ( 1 / x ) oscillates rapidly between −1 and 1 as x approaches 0.*
+*Figure 2.17 The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 and 1 as *x* approaches 0.*
 
 ### Checkpoint 2.6
 
@@ -290,7 +290,7 @@ Table 2.6 Table of Functional Values for \$f(x) = \left\{ \begin{array}{l}
 
 Based on this table, we can conclude that a. $\underset{x\rightarrow 2^{-}}{\text{lim}}f(x) = 3$ and b. $\underset{x\rightarrow 2^{+}}{\text{lim}}f(x) = 0.$ Therefore, the (two-sided) limit of $f(x)$ does not exist at $x = 2.$ Figure 2.18 shows a graph of $f(x)$ and reinforces our conclusion about these limits.
 
-*Figure 2.18 The graph of f ( x ) = { x + 1 if x \< 2 x 2 − 4 if x ≥ 2 f ( x ) = { x + 1 if x \< 2 x 2 − 4 if x ≥ 2 has a break at x = 2 . x = 2 .*
+*Figure 2.18 The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} - 4\ \text{if}\ x \geq 2} \end{matrix} \right.$ has a break at $x = 2.$*
 
 ### Checkpoint 2.7
 
@@ -408,7 +408,7 @@ Table 2.7 Table of Functional Values for $f(x) = \frac{1}{x}$
 
 The graph of $f(x) = {1\text{/}x}$ in Figure 2.19 confirms these conclusions.
 
-*Figure 2.19 The graph of f ( x ) = 1 / x f ( x ) = 1 / x confirms that the limit as x approaches 0 does not exist.*
+*Figure 2.19 The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 does not exist.*
 
 ### Checkpoint 2.8
 
@@ -420,7 +420,7 @@ Evaluate each of the following limits, if possible. Use a table of functional va
 
 It is useful to point out that functions of the form $f(x) = {1\text{/}\left( {x - a} \right)^{n}},$ where *n* is a positive integer, have infinite limits as *x* approaches *a* from either the left or right (Figure 2.20). These limits are summarized in Infinite Limits from Positive Integers.
 
-*Figure 2.20 The function f ( x ) = 1 / ( x − a ) n f ( x ) = 1 / ( x − a ) n has infinite limits at a .*
+*Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits at *a*.*
 
 ### Theorem 2.3
 
@@ -500,7 +500,7 @@ Use the graph of $f(x)$ in Figure 2.21 to determine each of the following values
 3.  $\underset{x\rightarrow 1^{-}}{\text{lim}}f(x);\underset{x\rightarrow 1^{+}}{\text{lim}}f(x);\underset{x\rightarrow 1}{\text{lim}}f(x);f(1)$
 4.  $\underset{x\rightarrow 3^{-}}{\text{lim}}f(x);\underset{x\rightarrow 3^{+}}{\text{lim}}f(x);\underset{x\rightarrow 3}{\text{lim}}f(x);f(3)$
 
-*Figure 2.21 The graph shows f ( x ) . f ( x ) .*
+*Figure 2.21 The graph shows $f(x).$*
 
 #### Solution
 

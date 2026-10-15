@@ -81,12 +81,23 @@ def flatten_html(html: str) -> str:
             t.unwrap()
     for t in content.find_all("figure"):
         cap = t.find("figcaption")
-        if cap is not None:
-            p = soup.new_tag("p")
-            p.string = f"*{cap.get_text(' ', strip=True)}*"
-            t.replace_with(p)
-        else:
+        if cap is None:
             t.unwrap()
+            continue
+        # Keep the caption's inline markup so pandoc converts its math to
+        # `$...$`. `cap.get_text(" ", strip=True)` flattened the caption and
+        # put a space between every math token; OpenStax math carries the
+        # expression twice (presentation MathML plus its annotation-xml), so
+        # the flattened text held both copies and captions read
+        # "the number 138 . 138 .". The annotation is the duplicate: drop it.
+        for ann in cap.find_all("annotation-xml"):
+            ann.decompose()
+        em = soup.new_tag("em")
+        for child in list(cap.contents):
+            em.append(child.extract())
+        p = soup.new_tag("p")
+        p.append(em)
+        t.replace_with(p)
     # Emit only the wrapper's children: the wrapper div itself carries
     # id/class/data-type attributes that pandoc would keep as raw HTML.
     return "".join(str(c) for c in content.contents)

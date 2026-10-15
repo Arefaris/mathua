@@ -670,7 +670,7 @@ $-0.6\;\;\_-0.7$
 
 In the United States, gasoline prices are usually written with the decimal part as thousandths of a dollar. For example, a gas station might post the price of unleaded gas at $\text{\$3.279}$ per gallon. But if you were to buy exactly one gallon of gas at this price, you would pay $\text{\$3.28}$, because the final price would be rounded to the nearest cent. In Whole Numbers, we saw that we round numbers to get an approximate value when the exact value is not needed. Suppose we wanted to round $\text{\$2.72}$ to the nearest dollar. Is it closer to $\text{\$2}$ or to $\text{\$3}?$ What if we wanted to round $\text{\$2.72}$ to the nearest ten cents; is it closer to $\text{\$2.70}$ or to $\text{\$2.80}?$ The number lines in Figure 5.4 can help us answer those questions.
 
-*Figure 5.4 ⓐ We see that 2.72 2.72 is closer to 3 3 than to 2 . 2 . So, 2.72 2.72 rounded to the nearest whole number is 3 . 3 . ⓑ We see that 2.72 2.72 is closer to 2.70 2.70 than 2.80 . 2.80 . So we say that 2.72 2.72 rounded to the nearest tenth is 2.7 . 2.7 .*
+*Figure 5.4 ⓐ We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. ⓑ We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.*
 
 Can we round decimals without number lines? Yes! We use a method based on the one we used to round whole numbers.
 

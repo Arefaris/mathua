@@ -40,7 +40,7 @@ We also assume that for $B(x) = b^{x},b > 0,$ the value $B'(0)$ of the derivativ
 
 We make one final assumption: that there is a unique value of $b > 0$ for which $B'(0) = 1.$ We define $e$ to be this unique value, as we did in Introduction to Functions and Graphs. Figure 3.33 provides graphs of the functions $y = 2^{x},y = 3^{x},y = 2.7^{x},$ and $y = 2.8^{x}.$ A visual estimate of the slopes of the tangent lines to these functions at 0 provides evidence that the value of *e* lies somewhere between 2.7 and 2.8. The function $E(x) = e^{x}$ is called the natural exponential function. Its inverse, $L(x) = \text{log}_{e}x = \text{ln} x$ is called the natural logarithmic function.
 
-*Figure 3.33 The graph of E ( x ) = e x E ( x ) = e x is between y = 2 x y = 2 x and y = 3 x . y = 3 x .*
+*Figure 3.33 The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$*
 
 For a better estimate of $e,$ we may construct a table of estimates of $B'(0)$ for functions of the form $B(x) = b^{x}.$ Before doing this, recall that
 
@@ -70,7 +70,7 @@ The evidence from the table suggests that $2.7182 < e < 2.7183.$
 
 The graph of $E(x) = e^{x}$ together with the line $y = x + 1$ are shown in Figure 3.34. This line is tangent to the graph of $E(x) = e^{x}$ at $x = 0.$
 
-*Figure 3.34 The tangent line to E ( x ) = e x E ( x ) = e x at x = 0 x = 0 has slope 1.*
+*Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.*
 
 Now that we have laid out our basic assumptions, we begin our investigation by exploring the derivative of $B(x) = b^{x},b > 0.$ Recall that we have assumed that $B'(0)$ exists. By applying the limit definition to the derivative we conclude that
 
@@ -236,7 +236,7 @@ $$
 
 The graph of $y = \text{ln} x$ and its derivative $\frac{dy}{dx} = \frac{1}{x}$ are shown in Figure 3.35.
 
-*Figure 3.35 The function y = ln x The function y = ln x is increasing on ( 0 , + ∞ ) . ( 0 , + ∞ ) . Its derivative y ′ = 1 x y ′ = 1 x is greater than zero on ( 0 , + ∞ ) . ( 0 , + ∞ ) .*
+*Figure 3.35 $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its derivative $y' = \frac{1}{x}$ is greater than zero on $(0,\text{+}\infty).$*
 
 ### Example 3.77
 

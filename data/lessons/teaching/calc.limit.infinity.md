@@ -20,7 +20,7 @@ We begin by examining what it means for a function to have a finite limit at inf
 
 Recall that $\underset{x\rightarrow a}{\text{lim}}f(x) = L$ means $f(x)$ becomes arbitrarily close to $L$ as long as $x$ is sufficiently close to $a.$ We can extend this idea to limits at infinity. For example, consider the function $f(x) = 2 + \frac{1}{x}.$ As can be seen graphically in Figure 4.40 and numerically in Table 4.2, as the values of $x$ get larger, the values of $f(x)$ approach 2. We say the limit as $x$ approaches $\infty$ of $f(x)$ is 2 and write $\underset{x\rightarrow\infty}{\text{lim}}f(x) = 2.$ Similarly, for $x < 0,$ as the values $|x|$ get larger, the values of $f(x)$ approaches 2. We say the limit as $x$ approaches $\text{-}\infty$ of $f(x)$ is 2 and write $\underset{x\rightarrow - \infty}{\text{lim}}f(x) = 2.$
 
-*Figure 4.40 The function approaches the asymptote y = 2 y = 2 as x x approaches ± ∞ . ± ∞ .*
+*Figure 4.40 The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$*
 
 |                         |         |          |           |             |
 |-------------------------|---------|----------|-----------|-------------|
@@ -53,11 +53,11 @@ If the values $f(x)$ are getting arbitrarily close to some finite value $L$ as $
 
 If $\underset{x\rightarrow\infty}{\text{lim}}f(x) = L$ or $\underset{x\rightarrow\text{-}\infty}{\text{lim}}f(x) = L,$ we say the line $y = L$ is a horizontal asymptote of $f.$
 
-*Figure 4.41 (a) As x → ∞ , x → ∞ , the values of f f are getting arbitrarily close to L . L . The line y = L y = L is a horizontal asymptote of f . f . (b) As x → − ∞ , x → − ∞ , the values of f f are getting arbitrarily close to M . M . The line y = M y = M is a horizontal asymptote of f . f .*
+*Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $L.$ The line $y = L$ is a horizontal asymptote of $f.$ (b) As $x\rightarrow\text{-}\infty,$ the values of $f$ are getting arbitrarily close to $M.$ The line $y = M$ is a horizontal asymptote of $f.$*
 
 A function cannot cross a vertical asymptote because the graph must approach infinity (or $\text{-}\infty)$ from at least one direction as $x$ approaches the vertical asymptote. However, a function may cross a horizontal asymptote. In fact, a function may cross a horizontal asymptote an unlimited number of times. For example, the function ${f(x) = \frac{\left( {\text{cos} x} \right)}{x}} + 1$ shown in Figure 4.42 intersects the horizontal asymptote $y = 1$ an infinite number of times as it oscillates around the asymptote with ever-decreasing amplitude.
 
-*Figure 4.42 The graph of f ( x ) = ( cos x ) / x + 1 f ( x ) = ( cos x ) / x + 1 crosses its horizontal asymptote y = 1 y = 1 an infinite number of times.*
+*Figure 4.42 The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its horizontal asymptote $y = 1$ an infinite number of times.*
 
 The algebraic limit laws and squeeze theorem we introduced in Introduction to Limits also apply to limits at infinity. We illustrate how to use these laws to compute several limits at infinity.
 
@@ -76,7 +76,7 @@ For each of the following functions $f,$ evaluate $\underset{x\rightarrow\infty}
 1.  Using the algebraic limit laws, we have $\underset{x\rightarrow\infty}{\text{lim}}\left( {5 - \frac{2}{x^{2}}} \right) = \underset{x\rightarrow\infty}{\text{lim}}5 - 2\left( {\underset{x\rightarrow\infty}{\text{lim}}\frac{1}{x}} \right).\left( {\underset{x\rightarrow\infty}{\text{lim}}\frac{1}{x}} \right) = 5 - 2 \cdot 0 = 5.$  
     Similarly, $\underset{x\rightarrow - \infty}{\text{lim}}f(x) = 5.$ Therefore, $f(x) = 5 - \frac{2}{x^{2}}$ has a horizontal asymptote of $y = 5$ and $f$ approaches this horizontal asymptote as $x\rightarrow\text{\pm}\infty$ as shown in the following graph.  
 
-    *Figure 4.43 This function approaches a horizontal asymptote as x → ± ∞ . x → ± ∞ .*
+    *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$*
 
 2.  Since $-1 \leq \text{sin} x \leq 1$ for all $x,$ we have  
     ``` math
@@ -104,7 +104,7 @@ For each of the following functions $f,$ evaluate $\underset{x\rightarrow\infty}
 
 3.  To evaluate $\underset{x\rightarrow\infty}{\text{lim}}\text{tan}^{-1}(x)$ and $\underset{x\rightarrow\text{-}\infty}{\text{lim}}\text{tan}^{-1}(x),$ we first consider the graph of $y = \text{tan}(x)$ over the interval $\left( {\text{-}\pi\text{/}2,\pi\text{/}2} \right)$ as shown in the following graph.  
 
-    *Figure 4.45 The graph of tan x tan x has vertical asymptotes at x = ± π 2 x = ± π 2*
+    *Figure 4.45 The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$*
 
 Since
 
@@ -153,7 +153,7 @@ For example, consider the function $f(x) = x^{3}.$ As seen in Table 4.3 and Figu
 
 Table 4.3 Values of a power function as $x\rightarrow\text{\pm}\infty$
 
-*Figure 4.47 For this function, the functional values approach infinity as x → ± ∞ . x → ± ∞ .*
+*Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{\pm}\infty.$*
 
 ### Definition
 
@@ -203,7 +203,7 @@ $$
 \underset{x\rightarrow\text{−}\infty}{\text{lim}}f(x) = L.
 $$
 
-*Figure 4.48 For a function with a limit at infinity, for all x \> N , x \> N , \| f ( x ) − L \| \< ε . \| f ( x ) − L \| \< ε .*
+*Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left| {f(x) - L} \right| < \varepsilon.$*
 
 Earlier in this section, we used graphical evidence in Figure 4.40 and numerical evidence in Table 4.2 to conclude that $\underset{x\rightarrow\infty}{\text{lim}}\left( 2 + \frac{1}{x} \right) = 2.$ Here we use the formal definition of limit at infinity to prove this result rigorously.
 
@@ -259,7 +259,7 @@ for all $x > N.$
 
 Similarly we can define limits as $x\rightarrow\text{-}\infty.$
 
-*Figure 4.49 For a function with an infinite limit at infinity, for all x \> N , x \> N , f ( x ) \> M . f ( x ) \> M .*
+*Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$*
 
 Earlier, we used graphical evidence (Figure 4.47) and numerical evidence (Table 4.3) to conclude that $\underset{x\rightarrow\infty}{\text{lim}}x^{3} = \infty.$ Here we use the formal definition of infinite limit at infinity to prove that result.
 
@@ -310,9 +310,9 @@ $$
 \end{array}.} \right.
 $$
 
-*Figure 4.50 For power functions with an even exponent of n , n , lim x → ∞ x n = ∞ = lim x → − ∞ x n . lim x → ∞ x n = ∞ = lim x → − ∞ x n .*
+*Figure 4.50 For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{\text{lim}}x^{n} = \infty = \underset{x\rightarrow\text{-}\infty}{\text{lim}}x^{n}.$*
 
-*Figure 4.51 For power functions with an odd exponent of n , n , lim x → ∞ x n = ∞ lim x → ∞ x n = ∞ and lim x → − ∞ x n = − ∞ . lim x → − ∞ x n = − ∞ .*
+*Figure 4.51 For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\text{lim}}x^{n} = \infty$ and $\underset{x\rightarrow\text{-}\infty}{\text{lim}}x^{n} = \text{-}\infty.$*
 
 Using these facts, it is not difficult to evaluate $\underset{x\rightarrow\infty}{\text{lim}}cx^{n}$ and $\underset{x\rightarrow\text{-}\infty}{\text{lim}}cx^{n},$ where $c$ is any constant and $n$ is a positive integer. If $c > 0,$ the graph of $y = cx^{n}$ is a vertical stretch or compression of $y = x^{n},$ and therefore
 
@@ -407,7 +407,7 @@ For each of the following functions, determine the limits as $x\rightarrow\infty
       
     Since $\underset{x\rightarrow\text{\pm}\infty}{\text{lim}}f(x) = \frac{3}{2},$ we know that $y = \frac{3}{2}$ is a horizontal asymptote for this function as shown in the following graph.  
 
-    *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as x → ± ∞ . x → ± ∞ .*
+    *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$*
 
 2.  Since the largest power of $x$ appearing in the denominator is $x^{3},$ divide the numerator and denominator by $x^{3}.$ After doing so and applying algebraic limit laws, we obtain  
     ``` math
@@ -416,7 +416,7 @@ For each of the following functions, determine the limits as $x\rightarrow\infty
       
     Therefore $f$ has a horizontal asymptote of $y = 0$ as shown in the following graph.  
 
-    *Figure 4.54 The graph of this rational function approaches the horizontal asymptote y = 0 y = 0 as x → ± ∞ . x → ± ∞ .*
+    *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x\rightarrow\text{\pm}\infty.$*
 
 3.  Dividing the numerator and denominator by $x,$ we have  
     ``` math
@@ -425,7 +425,7 @@ For each of the following functions, determine the limits as $x\rightarrow\infty
       
     As $x\rightarrow\text{\pm}\infty,$ the denominator approaches 1. As $x\rightarrow\infty,$ the numerator approaches $+ \infty.$ As $x\rightarrow\text{-}\infty,$ the numerator approaches $\text{-}\infty.$ Therefore $\underset{x\rightarrow\infty}{\text{lim}}f(x) = \infty,$ whereas $\underset{x\rightarrow\text{-}\infty}{\text{lim}}f(x) = \text{-}\infty$ as shown in the following figure.  
 
-    *Figure 4.55 As x → ∞ , x → ∞ , the values f ( x ) → ∞ . f ( x ) → ∞ . As x → − ∞ , x → − ∞ , the values f ( x ) → − ∞ . f ( x ) → − ∞ .*
+    *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\text{-}\infty,$ the values $f(x)\rightarrow\text{-}\infty.$*
 
 ### Checkpoint 4.24
 
@@ -445,7 +445,7 @@ $$
 
 Therefore, the graph of $f$ approaches the line $y = 3x - 2$ as $x\rightarrow\text{\pm}\infty.$ This line is known as an oblique asymptote for $f$ (Figure 4.56).
 
-*Figure 4.56 The graph of the rational function f ( x ) = ( 3 x 2 + 4 x ) / ( x + 2 ) f ( x ) = ( 3 x 2 + 4 x ) / ( x + 2 ) approaches the oblique asymptote y = 3 x − 2 as x → ± ∞ . y = 3 x − 2 as x → ± ∞ .*
+*Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\left( {x + 2} \right)$ approaches the oblique asymptote $y = 3x - 2\ \text{as}\ x\rightarrow\text{\pm}\infty.$*
 
 We can summarize the results of Example 4.25 to make the following conclusion regarding end behavior for rational functions. Consider a rational function
 
@@ -504,9 +504,9 @@ Evaluate $\underset{x\rightarrow\infty}{\text{lim}}\frac{\sqrt{3x^{2} + 4}}{x + 
 
 The six basic trigonometric functions are periodic and do not approach a finite limit as $x\rightarrow\text{\pm}\infty.$ For example, $\text{sin} x$ oscillates between $1\ \text{and}\ -1$ (Figure 4.58). The tangent function, $\text{tan}(x)$, has an infinite number of vertical asymptotes as $x\rightarrow\text{\pm}\infty;$ therefore, it does not approach a finite limit nor does it approach $\text{\pm}\infty$ as $x\rightarrow\text{\pm}\infty$ as shown in Figure 4.59.
 
-*Figure 4.58 The function f ( x ) = sin x f ( x ) = sin x oscillates between 1 and −1 1 and −1 as x → ± ∞ x → ± ∞*
+*Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\rightarrow\text{\pm}\infty$*
 
-*Figure 4.59 The function f ( x ) = tan x f ( x ) = tan x does not approach a limit and does not approach ± ∞ ± ∞ as x → ± ∞ x → ± ∞*
+*Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approach $\text{\pm}\infty$ as $x\rightarrow\text{\pm}\infty$*
 
 Recall that for any base $b > 0,b \neq 1,$ the function $y = b^{x}$ is an exponential function with domain $\left( {\text{-}\infty,\infty} \right)$ and range $\left( {0,\infty} \right).$ If $b > 1,y = b^{x}$ is increasing over $`\left( {\text{-}\infty,\infty} \right).$ If $0 < b < 1,$ $y = b^{x}$ is decreasing over $\left( {\text{-}\infty,\infty} \right).$ For the natural exponential function $f(x) = e^{x},$ $e \approx 2.718 > 1.$ Therefore, $f(x) = e^{x}$ is increasing on $`\left( {\text{-}\infty,\infty} \right)$ and the range is $`\left( {0,\infty} \right).$ The exponential function $f(x) = e^{x}$ approaches $\infty$ as $x\rightarrow\infty$ and approaches 0 as $x\rightarrow\text{-}\infty$ as shown in Table 4.5 and Figure 4.60.
 
@@ -517,7 +517,7 @@ Recall that for any base $b > 0,b \neq 1,$ the function $y = b^{x}$ is an expone
 
 Table 4.5 End behavior of the natural exponential function
 
-*Figure 4.60 The exponential function approaches zero as x → − ∞ x → − ∞ and approaches ∞ ∞ as x → ∞ . x → ∞ .*
+*Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and approaches $\infty$ as $x\rightarrow\infty.$*
 
 Recall that the natural logarithm function $f(x) = \text{ln}(x)$ is the inverse of the natural exponential function $y = e^{x}.$ Therefore, the domain of $f(x) = \text{ln}(x)$ is $\left( {0,\infty} \right)$ and the range is $\left( {\text{-}\infty,\infty} \right).$ The graph of $f(x) = \text{ln}(x)$ is the reflection of the graph of $y = e^{x}$ about the line $y = x.$ Therefore, $\text{ln}(x)\rightarrow\text{-}\infty$ as $x\rightarrow 0^{+}$ and $\text{ln}(x)\rightarrow\infty$ as $x\rightarrow\infty$ as shown in Figure 4.61 and Table 4.6.
 
@@ -528,7 +528,7 @@ Recall that the natural logarithm function $f(x) = \text{ln}(x)$ is the inverse 
 
 Table 4.6 End behavior of the natural logarithm function
 
-*Figure 4.61 The natural logarithm function approaches ∞ ∞ as x → ∞ . x → ∞ .*
+*Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$*
 
 ### Example 4.27
 

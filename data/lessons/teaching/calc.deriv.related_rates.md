@@ -92,7 +92,7 @@ An airplane is flying overhead at a constant elevation of $4000\ \text{ft}.$ A m
 
 Step 1. Draw a picture, introducing variables to represent the different quantities involved.
 
-*Figure 4.3 An airplane is flying at a constant height of 4000 ft. The distance between the person and the airplane and the person and the place on the ground directly below the airplane are changing. We denote those quantities with the variables s s and x , x , respectively.*
+*Figure 4.3 An airplane is flying at a constant height of 4000 ft. The distance between the person and the airplane and the person and the place on the ground directly below the airplane are changing. We denote those quantities with the variables $s$ and $x,$ respectively.*
 
 As shown, $x$ denotes the distance between the man and the position on the ground directly below the airplane. The variable $s$ denotes the distance between the man and the plane. Note that both $x$ and $s$ are functions of time. We do not introduce a variable for the height of the plane because it remains at a constant elevation of $4000\ \text{ft}.$ Since an object’s height above the ground is measured as the shortest distance between the object and the ground, the line segment of length 4000 ft is perpendicular to the line segment of length $x$ feet, creating a right triangle.
 
@@ -166,7 +166,7 @@ A rocket is launched so that it rises vertically. A camera is positioned $5000\ 
 
 Step 1. Draw a picture introducing the variables.
 
-*Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of the rocket and the angle of the camera are changing with respect to time. We denote those quantities with the variables h h and θ , θ , respectively.*
+*Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of the rocket and the angle of the camera are changing with respect to time. We denote those quantities with the variables $h$ and $\theta,$ respectively.*
 
 Let $h$ denote the height of the rocket above the launch pad and $\theta$ be the angle between the camera lens and the ground.
 
@@ -240,7 +240,7 @@ Water is draining from the bottom of a cone-shaped funnel at the rate of $0.0{3\
 
 Step 1: Draw a picture introducing the variables.
 
-*Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the water and the radius of water are changing over time. We denote these quantities with the variables h h and r , r , respectively.*
+*Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the water and the radius of water are changing over time. We denote these quantities with the variables $h$ and $r,$ respectively.*
 
 Let $h$ denote the height of the water in the funnel, $r$ denote the radius of the water at its surface, and $V$ denote the volume of the water.
 
