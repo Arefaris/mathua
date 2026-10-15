@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-318 paragraphs across 113 lessons read as a caption whose image was dropped:
-214 certain, 33 strong and 71 likely. Every one sits
+300 paragraphs across 113 lessons read as a caption whose image was dropped:
+196 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -24,7 +24,7 @@ Every teaching lesson opens with a credit line naming its source, for example:
 ```
 
 Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (62 figures) and
-**OpenStax Prealgebra** (33). Both are CC BY 4.0, which permits reuse and adaptation with
+**OpenStax Prealgebra** (30). Both are CC BY 4.0, which permits reuse and adaptation with
 attribution, and the attribution is already the lesson's own header line.
 
 That changes what "a direct look-alike" means for these figures. Their visual target is their own
@@ -32,11 +32,11 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 214 rows and 95 distinct figures
+## 3. The captions are 196 rows and 92 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **95 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **92 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
@@ -44,9 +44,20 @@ the method.
 | Disposition | Figures | Action |
 | --- | --- | --- |
 | schematic, redraw | 35 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 38 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| illustration, fetch | 35 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 17 | The caption is a bare `Figure 1.13` with no description, so the upstream section has to be opened to find out what the figure is before anything can be drawn or fetched. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
+
+**One correction the first batch forced.** Figures 1.7, 1.8 and 1.9 were assigned
+`illustration, fetch` when this table was drawn, because the assignment read the caption and
+nothing else: *76 is closer to 80 than to 70* describes a picture of a number line, and a picture
+of a number line is an illustration. Opening Prealgebra 1.1 shows all three are the same 70..80
+number line as Figure 1.2 under a different mark, which makes them schematics. They were redrawn
+(section 7), so the redraw row gained three figures and then lost the same three, and the fetch
+row lost three: the counts above are 35 and 35 where the caption alone suggested 35 and 38. The
+lesson is that this column is a guess until someone opens upstream, and the `unidentified` rows
+cannot be classified at all without doing so — which is why they are the largest open question
+rather than a disposition.
 
 ## 5. The captions were damaged too, and are repaired
 
@@ -92,7 +103,8 @@ corpus-wide doubled-token test is not usable: it reports 1009 legitimately repea
 **One measurement it moved.** The repaired captions that gained inner `*x*` emphasis — OpenStax
 marks a variable with `<em>` — stopped matching `audit_lesson_media.py`'s standalone-emphasis test,
 which removed eight imageless captions from this plan. The test now allows a balanced inner span
-and still rejects a thematic break (`* * *`); the report is back at 318 candidates, 214 certain.
+and still rejects a thematic break (`* * *`); the report is back at 300 candidates, 196 certain
+after the first two reclaims in section 7.
 
 **One glyph normalisation, in the same text.** OpenStax marks the parts of a two-part example with
 circled letters (`ⓐ` … `ⓔ`), and the ingester copied the codepoint through. At lesson size `ⓐ` is an
@@ -118,7 +130,8 @@ rather than repair them. That is a content decision and this record leaves it op
 Sorted by disposition, then figure number. `Lessons` is how many concept lessons carry the
 caption; one figure is restored once and every lesson that cites it gains the image. The caption is
 the text as repaired in section 5, truncated at 85 characters, so it is what the figure will carry
-when it lands.
+when it lands. A figure that has landed leaves this table and is recorded in section 7 instead, so
+every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
@@ -157,9 +170,6 @@ when it lands.
 | 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.36 | (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of revolu... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
-| 1.7 | We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is 80... | Prealgebra | 1 Introduction to Whole Numbers | 6 | illustration, fetch |
-| 1.8 | We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70. | Prealgebra | 1 Introduction to Whole Numbers | 6 | illustration, fetch |
-| 1.9 | The number 75 is exactly midway between 70 and 80. | Prealgebra | 1 Introduction to Whole Numbers | 6 | illustration, fetch |
 | 2.10 | Factors of the counting numbers from 2 through 20, with prime numbers highlighted | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
 | 2.20 | The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits at *a... | Calculus Volume 1 | 2 The Limit of a Function | 1 | illustration, fetch |
 | 2.6 | Multiples of 2 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
@@ -227,6 +237,22 @@ embedded in all six lessons that cite it (`arith.place.hundreds`, `arith.place.t
 `arith.place.thousands`, `arith.round.hundreds`, `arith.round.tens`, `arith.round.thousands`), and
 the regenerated audit dropped those six rows from the `certain` tier. It is a lesson figure, so it
 needs no `data/diagrams/meta.json` entry (section 5 of the style doc explains why).
+
+**Figures 1.7, 1.8 and 1.9** (the same 70..80 number line under three marks: 76 nearer 80, 72
+nearer 70, 75 exactly midway) landed on 2026-10-15 as one batch, in those six lessons. They are
+`number-line-round-76.svg`, `-72.svg` and `-75.svg`, beside Figure 1.2's
+`number-line-counting.svg` and on its canvas to the pixel — 460x130, the same ink, the same
+tick style — because the four sit within a few paragraphs of each other and a figure that does
+not match its neighbours is worse than no figure. Each draws the distance to both neighbouring
+tens to scale, so the shorter span is the argument for which way the number rounds; the ink weight
+on that span's arrow agrees with it, and at 75 both spans are the same length and both are inked.
+The alt text is the caption minus its `Figure 1.7 ` label, which is the rule
+`scripts/place_lesson_figures.py` follows and the exact text Figure 1.2 carries.
+
+Those three captions held eighteen rows, and the regenerated audit dropped all of them: 318
+candidates to 300, and 214 in the certain tier to 196. They were the first batch drawn from a
+disposition that had been assigned by reading a caption, and the reading was wrong — section 4
+records the correction.
 
 ## 8. Order of work
 

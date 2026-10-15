@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-318 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **214 certain**, **33 strong**, **71 likely**.
+300 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **196 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -121,34 +121,16 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.neg.order_ops.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.place.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.place.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.place.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.place.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.place.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.place.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.round.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.round.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.round.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.round.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.round.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.round.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 341 | certain | *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is...* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 345 | certain | *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 349 | certain | *Figure 1.9 The number 75 is exactly midway between 70 and 80.* | auto-numbered figure/table label |
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -381,7 +363,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-587 diagrams ship, 280 URLs are referenced by lesson bodies, and
+590 diagrams ship, 283 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

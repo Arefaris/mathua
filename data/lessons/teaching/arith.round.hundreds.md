@@ -338,13 +338,19 @@ The process of approximating a number is called rounding. Numbers are rounded to
 
 Using the number line can help you visualize and understand the rounding process. Look at the number line in Figure 1.7. Suppose we want to round the number 76 to the nearest ten. Is 76 closer to 70 or 80 on the number line?
 
+![We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is 80.](/diagrams/arithmetic/number-line-round-76.svg)
+
 *Figure 1.7 We can see that 76 is closer to 80 than to 70. So 76 rounded to the nearest ten is 80.*
 
 Now consider the number 72. Find 72 in Figure 1.8.
 
+![We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.](/diagrams/arithmetic/number-line-round-72.svg)
+
 *Figure 1.8 We can see that 72 is closer to 70, so 72 rounded to the nearest ten is 70.*
 
 How do we round 75 to the nearest ten. Find 75 in Figure 1.9.
+
+![The number 75 is exactly midway between 70 and 80.](/diagrams/arithmetic/number-line-round-75.svg)
 
 *Figure 1.9 The number 75 is exactly midway between 70 and 80.*
 
