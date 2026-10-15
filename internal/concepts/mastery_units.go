@@ -169,7 +169,7 @@ func Subdomains(dag *DAG) []string {
 // The depth function is **concept** depth, not subdomain depth, and that changed during D3.
 // Banding on subdomain depth is not merely lossy here — it is *undefined* for 26 of the 125
 // subdomains, because the subdomain condensation contains cycles. Concept depth is a proper
-// topological ranking on an acyclic graph, so it resolves all 657 concepts and produces zero
+// topological ranking on an acyclic graph, so it resolves every concept in the corpus and produces zero
 // backward band edges by construction.
 //
 // The band width is a parameter with no default in this package on purpose: a caller that

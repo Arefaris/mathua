@@ -257,7 +257,7 @@ func writeReport(path string, dag *concepts.DAG, mu *concepts.MasteryUnits, find
 	} else {
 		w("All subdomains resolved.")
 	}
-	w("Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 657")
+	w("Concept depth is a proper topological ranking on an acyclic graph, so it resolves all %d", mu.ConceptCount)
 	w("concepts and yields zero backward band edges by construction.")
 	w("")
 

@@ -33,7 +33,7 @@ describe('learner-facing copy tells the truth', () => {
   const stale = [
     { re: /\b20 XP\b/, what: 'a flat per-answer XP award the economy does not use' },
     { re: /\b150 XP\b/, what: 'the pre-rescale quiz gate; QuizGateXP is 50' },
-    { re: /\b641\b/, what: 'a superseded concept count; the graph holds 657' },
+    { re: /\b641\b/, what: 'a superseded concept count; the graph holds 661' },
     { re: /2 in a row to advance before you practice/, what: 'an advance gate the Learn loop does not have' },
     { re: /worked example first, then answer/, what: 'an answer step the Learn loop does not have' },
   ]
@@ -64,11 +64,11 @@ describe('learner-facing copy tells the truth', () => {
 // The concept count is generated, so it is checked against the corpus rather
 // than denylisted: counts.py owns the number and README badges.
 describe('stated concept count matches the corpus', () => {
-  it('the graph holds the number the meta description advertises', () => {
-    const dir = join(__dirname, '..', '..', '..', 'data', 'concepts')
-    // Unique ids, not raw entries: data/concepts/enrichment.json holds
-    // overrides for concepts that already exist in their own domain file, and
-    // counts.py skips it for the same reason.
+  const dir = join(__dirname, '..', '..', '..', 'data', 'concepts')
+  // Unique ids, not raw entries: data/concepts/enrichment.json holds
+  // overrides for concepts that already exist in their own domain file, and
+  // counts.py skips it for the same reason.
+  function corpusConceptIds(): Set<string> {
     const ids = new Set<string>()
     for (const name of readdirSync(dir)) {
       if (!name.endsWith('.json')) continue
@@ -78,12 +78,32 @@ describe('stated concept count matches the corpus', () => {
         if (c && typeof c === 'object' && 'id' in c) ids.add(c.id as string)
       }
     }
-    const layout = readFileSync(join(APP, 'app', 'layout.tsx'), 'utf-8')
-    const claimed = [...layout.matchAll(/(\d+) concepts/g)].map(m => Number(m[1]))
-    expect(claimed.length).toBeGreaterThan(0)
-    for (const n of claimed) {
-      expect(n, `layout.tsx advertises ${n} concepts, corpus has ${ids.size}`).toBe(ids.size)
+    return ids
+  }
+
+  // The pages a learner reads prose on. Deliberately not every source: a
+  // rationale comment may quote the count it was written against ("on 657 nodes
+  // costs ~2.2s"), and a comment is a record of a measurement rather than a
+  // claim about today. These are the ones that render.
+  const COPY_FILES = ['app/layout.tsx', 'app/how-it-works/sections.tsx']
+
+  it('every advertised count is the corpus size', () => {
+    const ids = corpusConceptIds()
+    const problems: string[] = []
+    let read = 0
+    for (const rel of COPY_FILES) {
+      const text = readFileSync(join(APP, rel), 'utf-8')
+      for (const m of text.matchAll(/(\d+) concepts/g)) {
+        read++
+        if (Number(m[1]) !== ids.size) {
+          problems.push(`${rel} advertises ${m[1]} concepts, corpus has ${ids.size}`)
+        }
+      }
     }
+    // A check that reads nothing reports nothing, so the count of claims that
+    // were actually inspected is part of the assertion.
+    expect(read).toBeGreaterThanOrEqual(3)
+    expect(problems).toEqual([])
   })
 })
 

@@ -34,6 +34,7 @@ def authored() -> set[str]:
 def main() -> int:
     have = authored()
     by_domain: dict[str, list[str]] = {}
+    known: set[str] = set()
     for name in sorted(os.listdir(CONCEPTS)):
         if not name.endswith(".json"):
             continue
@@ -44,7 +45,10 @@ def main() -> int:
             if not isinstance(item, dict):
                 continue
             cid, dom = item.get("id"), item.get("domain")
-            if cid and dom in LEARNER_DOMAINS:
+            if not cid:
+                continue
+            known.add(cid)
+            if dom in LEARNER_DOMAINS:
                 by_domain.setdefault(dom, []).append(cid)
 
     total = sum(len(v) for v in by_domain.values())
@@ -55,8 +59,12 @@ def main() -> int:
         print(f"note: solutions: {dom:14} {n:3}/{len(cs):<3} authored")
 
     # Every shipped schema must name a concept that exists, or it is dead
-    # content that will never be served.
-    known = {c for v in by_domain.values() for c in v}
+    # content that will never be served. "Exists" is the corpus, not the six
+    # learner domains: `topo.dimension` computes from parameters and answers with
+    # an authored schema, and the engine serves it exactly as it serves a
+    # learner-domain concept. Restricting this set to the learner domains
+    # reported that schema as dead, so `make validate` failed on it while CI --
+    # which does not run this script -- stayed green.
     orphans = sorted(have - known)
     if orphans:
         print(f"error: {len(orphans)} schema(s) name no concept in the six learner domains:",
