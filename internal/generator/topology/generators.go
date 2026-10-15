@@ -1,7 +1,9 @@
 package topology
 
 import (
+	"fmt"
 	"math/rand"
+	"strconv"
 
 	"github.com/chuma-beep/mathua/internal/generator"
 )
@@ -734,24 +736,49 @@ func (g *stoneCechGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
+// dimensionGen asks for the Lebesgue covering dimension of a space whose
+// dimension is a definite integer, and publishes the space, the dimension and
+// the rule that fixes it as facts so the authored schema in
+// data/lessons/solutions can explain any instance.
+//
+// It replaced a table of yes/no recognition rows. Covering dimension is a
+// number, so the learner should produce the number rather than pick "yes" from
+// a list, which is the recognition-without-production shape the pool ratchet
+// exists to catch.
 type dimensionGen struct{}
 
 func (g *dimensionGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct{ q, a, e string }
-	easy := []entry{
-		{"What is the covering dimension of R^2?", "2", "dim R^n = n, so the plane has dimension 2."},
-		{"What is the covering dimension of the Cantor set?", "0", "Totally disconnected compacta have dimension 0."},
-		{"Is covering dimension of R^n equal n? (yes/no)", "yes", "Lebesgue dimension of Euclidean n-space is n."},
-		{"Does dimension increase under subspaces? (yes/no)", "no", "Subspaces never exceed the ambient dimension."},
+	// The ambient dimension offered grows with difficulty: 1 at the easy end,
+	// up to 5 once the learner is answering well.
+	n := rand.Intn(int(1+ctx.Difficulty*4)) + 1
+
+	type family struct {
+		space string // LaTeX body, without the surrounding delimiters
+		dim   int
+		rule  string
 	}
-	hard := []entry{{"Is inductive dimension equal covering for separable metric? (yes/no)", "yes", "Coincidence."}, {"Does Brouwer show dimension is topological invariant? (yes/no)", "yes", "Invariance of domain."}, {"Is Menger-Nöbeling embed n-dim compact in R^{2n+1}? (yes/no)", "yes", "Embedding."}}
-	pool := easy
-	if scale > 3 {
-		pool = append(easy, hard...)
+	families := []family{
+		{fmt.Sprintf(`\mathbb{R}^{%d}`, n), n,
+			fmt.Sprintf(`Euclidean n-space has covering dimension n, and here n is %d`, n)},
+		{fmt.Sprintf(`S^{%d}`, n), n,
+			fmt.Sprintf(`an n-sphere is an n-dimensional manifold, and here n is %d`, n)},
+		{fmt.Sprintf(`T^{%d}`, n), n,
+			fmt.Sprintf(`an n-torus has n independent circular directions, and here n is %d`, n)},
+		{`\text{the Cantor set}`, 0,
+			`the Cantor set is totally disconnected, and a totally disconnected compact metric space has covering dimension 0`},
 	}
-	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	f := families[rand.Intn(len(families))]
+
+	return generator.Problem{
+		Question:    fmt.Sprintf(`What is the Lebesgue covering dimension of \(%s\)? (enter a number)`, f.space),
+		Answer:      strconv.Itoa(f.dim),
+		Explanation: fmt.Sprintf(`The covering dimension of \(%s\) is %d: %s.`, f.space, f.dim, f.rule),
+		Facts: map[string]string{
+			"space": f.space,
+			"dim":   strconv.Itoa(f.dim),
+			"rule":  f.rule,
+		},
+	}
 }
 
 type coveringGen struct{}

@@ -348,7 +348,7 @@
     "label": "Lebesgue covering dimension",
     "domain": "topology",
     "subdomain": "topology.dimension",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "topo.compactification.stone_cech"
     ],
