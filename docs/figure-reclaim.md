@@ -1209,6 +1209,27 @@ grey card that nothing else on the page shares.
 The ten drawings that landed before this batch are still in OpenStax's color, and the commit that
 follows converts them; that is also where the format the CDN actually serves is recorded.
 
+**The ten drawings fetched before this batch are now real PNGs on the same greys.** They were fetched
+as `.png` and sixteen of the nineteen were not PNGs at all: byte-identical to OpenStax's raw archive
+resource, which is a CMYK JPEG with an Adobe APP14 marker, named `.png`. The image CDN serves that
+original while its `f=png` transform is cold and answers `content-type: image/jpeg`, and the guard in
+the fetch script tested the header's prefix, `image/`, which `image/jpeg` satisfies — so the lie was
+stored. The guard now tests the PNG signature, the download retries six times, and it raises rather
+than storing a fallback. All nineteen re-downloaded through `f=png` as lossless palette PNGs: 1896 KB
+of CMYK became 387 KB of PNG, and the sixteen that were JPEGs went 1819 KB to 311 KB.
+
+**One hash does not transform at all**, which is why the guard raises instead of falling back
+silently: Figure 1.2's number line, `5ac935f7de7aea3f4f9f847d30f647fca6a89942`, still answered
+`image/jpeg` after six retries, because the CDN 302s to its image API and that 302s again to the
+archive resource. It is not in the fetched set yet, so nothing here depends on it, and a later batch
+that meets it needs a deliberate local CMYK-to-sRGB conversion with a note saying so.
+
+**A review montage is not evidence about a CMYK file.** ImageMagick's `montage` renders an Adobe CMYK
+JPEG as black with red rules while a plain `magick in.png out.png` converts it correctly, and it
+renders 16-bit grayscale PNGs as blank white. Montages are therefore built from 8-bit sRGB copies,
+and Chromium — which drew the CMYK originals correctly, and is why the first batch looked right in
+the app the whole time — stays the authority on what a figure looks like.
+
 ## 8. Order of work
 
 The list is three tiers now rather than four: the `unidentified` tier used to lead here as its own
