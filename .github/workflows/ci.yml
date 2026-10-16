@@ -26,7 +26,13 @@ jobs:
       - run: go test ./...
       - run: make lint-go
       - run: go run scripts/validate_graph.go
+      # These two run in `make validate` and were absent here, which is how a
+      # solution schema outside the six learner domains sat dead in the corpus
+      # (`topo.dimension`) while main stayed green. Both read the corpus rather
+      # than a copy of it, so neither needs updating when content grows.
+      - run: go run ./cmd/validate-mastery-units
       - run: python3 scripts/audit_lessons.py
+      - run: python3 scripts/audit_solutions.py
       - run: python3 scripts/counts.py --check
       - run: python3 scripts/check_docs.py
       - run: python3 scripts/check_ste.py
@@ -87,7 +93,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      # Sharded single-worker e2e: the 657-node graph + 3D suites crash
+      # Sharded single-worker e2e: the graph and 3D suites crash
       # Chromium ("session closed") when two heavy specs share a runner.
       - run: npx playwright test --shard=1/2
         env:
