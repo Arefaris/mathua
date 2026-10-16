@@ -113,6 +113,25 @@ component lives. The unit suite renders components in isolation and cannot see
 any of those: a renamed button and a page that moved both reached `main` green
 on `vitest` while six Playwright tests failed.
 
+#### A red e2e run is not always your change
+
+Some Playwright tests wait for an element that the browser renders after it runs
+the JavaScript bundle. On a loaded runner the bundle can arrive late. The test
+then clicks a button before the page is interactive. The click reaches nothing
+and the element never appears. The cause is not yet confirmed.
+
+You can tell this class from a real break. The failing tests vary between runs,
+and each one passes on its own:
+
+```bash
+cd web/next-app
+PW_WORKERS=1 CI=1 npx playwright test --shard=1/2                 # the full shard, about 4 minutes
+npx playwright test e2e/admin.spec.ts:300 --project=chromium      # one of them alone, passes in 1 second
+```
+
+The first command reproduces the failures on a developer machine. The second
+command passes against the same commit. Do not change a test to make it pass.
+
 
 ### 4. (Optional) Write a lesson
 
