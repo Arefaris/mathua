@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-282 paragraphs across 113 lessons read as a caption whose image was dropped:
-178 certain, 33 strong and 71 likely. Every one sits
+276 paragraphs across 113 lessons read as a caption whose image was dropped:
+172 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 178 rows and 95 distinct figures
+## 3. The captions are 172 rows and 93 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **95 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **93 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 46 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 44 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed seven.
+again to 53 and 44, of which section 7 has since landed nine.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -221,14 +221,12 @@ every count here is work still to do.
 | 6.27 | Calculating the volume of the shell. | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.28 | (a) Make a vertical cut in a representative shell. (b) Open the shell up to form a fl... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.29 | (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
-| 6.3 | (none) | Prealgebra | 6 Understand Percent | 3 | schematic, redraw |
 | 6.30 | (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.31 | (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lbrack... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.32 | (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.36 | (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of revolu... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
-| 6.5 | (none) | Prealgebra | 6 Understand Percent | 3 | schematic, redraw |
 | 1.11 | (none) | Prealgebra | 1 Multiply Whole Numbers | 6 | illustration, fetch |
 | 1.13 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
 | 1.14 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
@@ -384,6 +382,37 @@ Those eighteen captions held eighteen rows, and the regenerated audit dropped al
 282, and the tier that opens on an auto-numbered label from 196 to 178. The ceiling for orphan
 captions in `internal/lessons/assets_test.go` follows, to 282. This batch leaves no lesson in the
 `frac.*` set without a figure, since all eleven had none.
+
+**Figures 6.3 and 6.5** (one mechanism shown in both directions: the percents of Table 6.1 as
+decimals, and the decimals of Table 6.2 as percents) landed on 2026-10-16 in the three `pct.*`
+lessons that cite them, as `percent-to-decimal.svg` and `decimal-to-percent.svg`.
+
+This is the first place in the plan where the upstream is inconsistent with itself rather than
+merely silent. The section page references **one image hash for both figures** — the same table — and
+that table is the `Percent | Decimal` one with `006.%` through `012.5%`. Figure 6.5's alt names the
+columns in the other order and lists five decimals where that image's decimal column has four
+values, so the alt and the image cannot both be describing Figure 6.5. The lesson prose decides it:
+"Figure 6.5 uses the decimal numbers in Table 6.2 and shows visually to convert them to percents by
+moving the decimal point two places to the right". Two tables are drawn, each following its own
+figure's alt, because for 6.5 the alt is the only description of what the figure is for. The four
+values of Table 6.2 are in it and so is the fifth the alt names, and the prose stays true either way
+since it claims the figure uses those numbers rather than only those.
+
+The notation `006.%` is upstream's and not a slip: it writes the percent as a number with its
+decimal point visible at the end, so the two hops under it have something to move. The hops are two
+small arcs under the right end of the value, where the point arrives; they are not themselves
+directional, and the prose says which way the point travels.
+
+Each table is `250` wide, which is the width of its content: two columns of `115` holding labels of
+up to six characters at the family's 13px. The header row is filled `#e6e6e6` and the body cells are
+white, ruled with guides and framed in ink, which is the same division of structure the place value
+chart uses. The white background rect is there as in every local figure, so the tables read on the
+dark panel.
+
+Their alt text is upstream's `data-alt` verbatim, read out of the scrape with its encoding inverted.
+Those six captions held six rows, and the regenerated audit dropped all of them: 282 to 276, and 172
+in the certain tier. The ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to
+276.
 
 ## 8. Order of work
 

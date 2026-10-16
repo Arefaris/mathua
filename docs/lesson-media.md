@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-282 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **178 certain**, **33 strong**, **71 likely**.
+276 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **172 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -261,17 +261,11 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/geo.triangle.types.md` | 34 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 46 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/pct.basics.concept.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
-| `teaching/pct.basics.concept.md` | 265 | certain | *Figure 6.3* | auto-numbered figure/table label |
-| `teaching/pct.basics.concept.md` | 306 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.basics.concept.md` | 423 | certain | *Figure 6.5* | auto-numbered figure/table label |
+| `teaching/pct.basics.concept.md` | 308 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/pct.convert.from_dec.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 265 | certain | *Figure 6.3* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 306 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 423 | certain | *Figure 6.5* | auto-numbered figure/table label |
+| `teaching/pct.convert.from_dec.md` | 308 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/pct.convert.to_dec.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 265 | certain | *Figure 6.3* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 306 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 423 | certain | *Figure 6.5* | auto-numbered figure/table label |
+| `teaching/pct.convert.to_dec.md` | 308 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/pct.ops.discount.md` | 35 | certain | *Figure 6.7 The sales tax is calculated as a percent of the purchase price.* | auto-numbered figure/table label |
 | `teaching/pct.ops.discount.md` | 257 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
 | `teaching/pct.ops.find_rate.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
@@ -345,7 +339,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-597 diagrams ship, 290 URLs are referenced by lesson bodies, and
+599 diagrams ship, 292 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

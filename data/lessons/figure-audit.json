@@ -1682,22 +1682,8 @@
     },
     {
       "lesson": "teaching/pct.basics.concept.md",
-      "line": 265,
-      "text": "Figure 6.3",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.basics.concept.md",
-      "line": 306,
+      "line": 308,
       "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.basics.concept.md",
-      "line": 423,
-      "text": "Figure 6.5",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1710,22 +1696,8 @@
     },
     {
       "lesson": "teaching/pct.convert.from_dec.md",
-      "line": 265,
-      "text": "Figure 6.3",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.from_dec.md",
-      "line": 306,
+      "line": 308,
       "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.from_dec.md",
-      "line": 423,
-      "text": "Figure 6.5",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1738,22 +1710,8 @@
     },
     {
       "lesson": "teaching/pct.convert.to_dec.md",
-      "line": 265,
-      "text": "Figure 6.3",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.to_dec.md",
-      "line": 306,
+      "line": 308,
       "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.to_dec.md",
-      "line": 423,
-      "text": "Figure 6.5",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -2170,8 +2128,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 290,
-    "shipped": 597,
+    "referenced": 292,
+    "shipped": 599,
     "unreferenced_content": 287,
     "candidates": [
       {

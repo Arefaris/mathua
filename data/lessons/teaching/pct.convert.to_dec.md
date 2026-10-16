@@ -262,6 +262,8 @@ To convert a percent number to a decimal number, we move the decimal point two p
 
 Figure 6.3 uses the percents in Table 6.1 and shows visually how to convert them to decimals by moving the decimal point two places to the left.
 
+![The figures shows two columns and five rows . The  first row is a header row and it labels each column “Percent” and “Decimal”. Under the “Percent” column are the values: 6%, 78%, 135%, 12.5%. Under the “Decimal” column are the values: 0.06, 0.78, 1.35, 0.125. There are two jumps for each percent to show how to convert it to a decimal.](/diagrams/arithmetic/percent-to-decimal.svg)
+
 *Figure 6.3*
 
 ### Example 6.7
@@ -419,6 +421,8 @@ Table 6.2
 Do you see the pattern? To convert a decimal to a percent, we move the decimal point two places to the right and then add the percent sign.
 
 Figure 6.5 uses the decimal numbers in Table 6.2 and shows visually to convert them to percents by moving the decimal point two places to the right and then writing the $\%$ sign.
+
+![The figure shows two columns and five rows. The  first row is a header row and it labels each column “Decimal” and “Percent”. Under the “Decimal” column are the values: 0.05, 0.83, 1.05, 0.075, 0.3. Under the “Percent” column are the values: 5%, 83%, 105%, 7.5%, 30%. There are two jumps for each decimal to show how to convert it to a percent.](/diagrams/arithmetic/decimal-to-percent.svg)
 
 *Figure 6.5*
 

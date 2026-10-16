@@ -55,6 +55,12 @@ const CASES = [
   // and 4.3 are cited by the same seven lessons, so this is a body with two reclaimed figures
   // and nothing else. Together the cases now cover one, two, three, six and seven figures.
   { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 2 },
+  // The other kind of two: the percent pair is a table rather than a drawing, so this case
+  // proves a reclaimed figure that is ruled cells and text renders, which the lines, blocks and
+  // bars above cannot show. It is also the batch where upstream shipped one image for both
+  // figures, so what is measured here is the figure the lesson needs and not the one upstream
+  // linked twice.
+  { concept: 'pct.convert.to_dec', file: 'teaching/pct.convert.to_dec.md', expectFigures: 2 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }
