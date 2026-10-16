@@ -13,47 +13,20 @@ import (
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/engine"
 	"github.com/chuma-beep/mathua/internal/generator"
-	"github.com/chuma-beep/mathua/internal/generator/abstract"
-	"github.com/chuma-beep/mathua/internal/generator/algebra"
-	"github.com/chuma-beep/mathua/internal/generator/arithmetic"
-	"github.com/chuma-beep/mathua/internal/generator/calculus"
-	"github.com/chuma-beep/mathua/internal/generator/complex"
-	"github.com/chuma-beep/mathua/internal/generator/discrete"
-	"github.com/chuma-beep/mathua/internal/generator/fractions"
-	"github.com/chuma-beep/mathua/internal/generator/geometry"
-	"github.com/chuma-beep/mathua/internal/generator/linalg"
-	"github.com/chuma-beep/mathua/internal/generator/machinelearning"
-	"github.com/chuma-beep/mathua/internal/generator/numtheory"
-	"github.com/chuma-beep/mathua/internal/generator/odes"
-	"github.com/chuma-beep/mathua/internal/generator/prealgebra"
-	"github.com/chuma-beep/mathua/internal/generator/precalculus"
-	"github.com/chuma-beep/mathua/internal/generator/statistics"
-	"github.com/chuma-beep/mathua/internal/generator/topology"
-	"github.com/chuma-beep/mathua/internal/generator/trigonometry"
+	"github.com/chuma-beep/mathua/internal/generator/all"
 	"github.com/chuma-beep/mathua/internal/planning"
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
-// productionRegistry mirrors cmd/mathua wiring: every domain registered.
+// productionRegistry is the production registry, not a copy of it.
+//
+// It listed the seventeen domains by hand, which is the drift internal/generator/all was
+// created to end: adding the combinatorics domain left this file registering sixteen of
+// them, so the test that exists to prove every concept has a generator failed for six
+// concepts that have one.
 func productionRegistry() *generator.Registry {
 	reg := generator.NewRegistry()
-	arithmetic.Register(reg)
-	fractions.Register(reg)
-	geometry.Register(reg)
-	prealgebra.Register(reg)
-	algebra.Register(reg)
-	trigonometry.Register(reg)
-	precalculus.Register(reg)
-	statistics.Register(reg)
-	numtheory.Register(reg)
-	complex.Register(reg)
-	linalg.Register(reg)
-	machinelearning.Register(reg)
-	discrete.Register(reg)
-	calculus.Register(reg)
-	odes.Register(reg)
-	abstract.Register(reg)
-	topology.Register(reg)
+	all.Register(reg)
 	return reg
 }
 

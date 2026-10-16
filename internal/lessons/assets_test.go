@@ -475,13 +475,13 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 // 104 are kept on purpose, and the reasons are recorded here because the number looks
 // indefensible without them:
 //
-//	 74  no picture vocabulary, so the text could as readily be emphasis. Several are real
-//	     captions ("Share of all income held by the top 1%, United States") and the rule that
-//	     would catch them also catches content that must stay.
-//	 30  bare section labels such as `*Solution*`, which head a worked answer. The audit's
-//	     "duplicated in this lesson" signal rates them `strong`, because a lesson with two
-//	     worked answers has two of them, so a tier-based rule deletes a heading from 15
-//	     geometry lessons.
+//	74  no picture vocabulary, so the text could as readily be emphasis. Several are real
+//	    captions ("Share of all income held by the top 1%, United States") and the rule that
+//	    would catch them also catches content that must stay.
+//	30  bare section labels such as `*Solution*`, which head a worked answer. The audit's
+//	    "duplicated in this lesson" signal rates them `strong`, because a lesson with two
+//	    worked answers has two of them, so a tier-based rule deletes a heading from 15
+//	    geometry lessons.
 //
 // There was a third reason until 2026-10-16, and it no longer keeps any row: the lesson's prose
 // cites the figure — by number ("as shown in Figure 1.2") or by position ("the graph above
