@@ -157,8 +157,8 @@ concepts.
 
 ### 4.4 Ingestion dropped figures and kept their captions
 
-`docs/lesson-media.md` is the owner of this measurement, and it reports 276 paragraphs across
-113 lessons that read as a caption whose image was dropped: 172 certain, 33 strong, 71 likely. A
+`docs/lesson-media.md` is the owner of this measurement, and it reports 272 paragraphs across
+109 lessons that read as a caption whose image was dropped: 168 certain, 33 strong, 71 likely. A
 `certain` case opens with an auto-numbered `Figure 3.2` label, which the ingestion pipeline emits
 for a figure and which survives when the image does not. `scripts/audit_lesson_media.py`
 regenerates the list, and the remaining work is per instance: each candidate is either matched to

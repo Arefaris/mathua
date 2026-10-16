@@ -1289,27 +1289,6 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/dec.ops.add.md",
-      "line": 374,
-      "text": "Figure 5.5",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.ops.div.md",
-      "line": 374,
-      "text": "Figure 5.5",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.ops.mult.md",
-      "line": 374,
-      "text": "Figure 5.5",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/dec.ops.round.md",
       "line": 49,
       "text": "Figure 5.2 This chart illustrates place values to the left and right of the decimal point.",
@@ -1327,13 +1306,6 @@
       "lesson": "teaching/dec.ops.round.md",
       "line": 673,
       "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.ops.sub.md",
-      "line": 374,
-      "text": "Figure 5.5",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -2128,8 +2100,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 292,
-    "shipped": 599,
+    "referenced": 293,
+    "shipped": 600,
     "unreferenced_content": 287,
     "candidates": [
       {

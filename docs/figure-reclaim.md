@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-276 paragraphs across 113 lessons read as a caption whose image was dropped:
-172 certain, 33 strong and 71 likely. Every one sits
+272 paragraphs across 109 lessons read as a caption whose image was dropped:
+168 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 172 rows and 93 distinct figures
+## 3. The captions are 168 rows and 92 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **93 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **92 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 44 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 43 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed nine.
+again to 53 and 44, of which section 7 has since landed ten.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -213,7 +213,6 @@ every count here is work still to do.
 | 5.33 | The graph shows velocity versus time for a particle moving with a linear velocity fun... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.36 | The graph shows areas between a curve and the *x*-axis for an odd function. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
-| 5.5 | (none) | Prealgebra | 5 Decimal Operations | 4 | schematic, redraw |
 | 5.6 | (none) | Prealgebra | 5 Decimals and Fractions | 3 | schematic, redraw |
 | 5.7 | (none) | Prealgebra | 5 Averages and Probability | 5 | schematic, redraw |
 | 6.25 | (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution f... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -413,6 +412,33 @@ Their alt text is upstream's `data-alt` verbatim, read out of the scrape with it
 Those six captions held six rows, and the regenerated audit dropped all of them: 282 to 276, and 172
 in the certain tier. The ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to
 276.
+
+**Figure 5.5** (a number line from 0 to 1 marked every 0.2, with a measurement bracket over each
+step) landed on 2026-10-16 in the four `dec.ops.*` lessons, as `decimal-number-line.svg`. It is the
+first reclaim in the plan that reuses a dialect already in the tree rather than starting one: the
+`number-line-*.svg` files have drawn the same axis, ticks, arrowheads and 13px labels since the
+arithmetic set was placed, so this adds one primitive to that vocabulary, the bracket, and inherits
+the rest.
+
+The bracket is where the drawing and upstream disagree about the figure's own text. Upstream's image
+braces four of the five steps -- the one from 0.8 to 1 has none -- while its alt says the braces show
+"a distance of 0.2 between each adjacent set of 2 numbers", which is five. Five are drawn. That is
+the rule section 7 records for Figure 6.5, and the reason is the same: the alt is the description
+that ships with the figure, and a reader told about a bracket that is not there has been told
+something false. It also happens to be the better figure, since the claim being made is that every
+step is worth the same amount.
+
+The bracket itself is one unfilled path: a bar whose ends turn down toward the axis, with a small
+peak at the center, drawn in `#636363` because it annotates the axis rather than being part of it.
+The five `0.2` labels over it are ink, not annotation, because they are the measurement the figure
+exists to make; the six axis numbers stay in the annotation color, as they do in every other number
+line here. The canvas is 460 by 130, the size the other number lines use, so the figures that share
+lessons with this one line up.
+
+Its alt text is upstream's `data-alt` verbatim, read out of the scrape with its encoding inverted.
+Those four captions held four rows, and the regenerated audit dropped all of them: 276 to 272, and
+168 in the certain tier. The ceiling for orphan captions in `internal/lessons/assets_test.go`
+follows, to 272.
 
 ## 8. Order of work
 

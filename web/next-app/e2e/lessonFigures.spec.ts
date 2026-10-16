@@ -61,6 +61,10 @@ const CASES = [
   // figures, so what is measured here is the figure the lesson needs and not the one upstream
   // linked twice.
   { concept: 'pct.convert.to_dec', file: 'teaching/pct.convert.to_dec.md', expectFigures: 2 },
+  // One, and the one primitive the cases above do not carry: Figure 5.5's measurement bracket
+  // is an unfilled path with turned-down ends, so this asserts that a reclaimed figure made of
+  // paths draws at all and not only figures made of lines, rects and text.
+  { concept: 'dec.ops.sub', file: 'teaching/dec.ops.sub.md', expectFigures: 1 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

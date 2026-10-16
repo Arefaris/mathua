@@ -371,6 +371,8 @@ $$
 
 We can think of this as “If we divide 8 tenths into four groups, how many are in each group?” Figure 5.5 shows that there are four groups of two-tenths in eight-tenths. So $0.8 \div 4 = 0.2.$
 
+![A number line is shown with 0, 0.2, 0.4, 0.6, 0.8, and 1. There are braces showing a distance of 0.2 between each adjacent set of 2 numbers.](/diagrams/arithmetic/decimal-number-line.svg)
+
 *Figure 5.5*
 
 Using long division notation, we would write
