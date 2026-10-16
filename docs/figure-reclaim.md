@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-229 paragraphs across 100 lessons read as a caption whose image was dropped:
-125 certain, 33 strong and 71 likely. Every one sits
+228 paragraphs across 100 lessons read as a caption whose image was dropped:
+124 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 125 rows and 55 distinct figures
+## 3. The captions are 124 rows and 54 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **55 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **54 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 6 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 5 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed forty-seven.
+again to 53 and 44, of which section 7 has since landed forty-eight.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,7 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.30 | (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.31 | (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lbrack... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.32 | (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -1015,6 +1014,27 @@ Those two captions held two rows: the report went from 231 to 229, and the certa
 125. Distinct figures go from 57 to 55 and redraws from 8 to 6. The lesson keeps seven other orphan
 captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
 follows, to 229.
+
+**Figure 6.30** (the region under `f(x) = 2x - x^2` and the solid it sweeps about the y-axis)
+landed on 2026-10-16 in `calc.integral.volume`, as `calculus/two-x-minus-x-squared-solid.svg`.
+
+**The parabola's two branches are the solid's two walls.** The right branch is the outer wall,
+because `x = 1 + sqrt(1 - y)` is the region's far edge at height `y`, and the left branch is the
+funnel, because `x = 1 - sqrt(1 - y)` is its near edge. So the walls meet at `y = 1`, where the
+solid's top is a circular knife edge and not a rim, and the hole closes on the base's center at
+`y = 0`, where the inner radius is 0 and the base is a full disc.
+
+**A hole that closes inside the solid is drawn as the whole silhouette of the void, exactly as a
+through-hole is.** 6.30(b)'s funnel is the apex, the two generatrices and the rim's far arc, filled
+white. Its lower half is hidden behind the dome's near surface in a real view, and 6.26 already
+settled that the tree draws a void's whole silhouette rather than the part that is not occluded, so
+6.30 follows 6.26 and not the occlusion. The rim is still a full ellipse in ink, so its near arc
+crosses the white.
+
+That caption held one row: the report went from 229 to 228, and the certain tier from 125 to 124.
+Distinct figures go from 55 to 54 and redraws from 6 to 5. The lesson keeps six other orphan
+captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
+follows, to 228.
 
 ## 8. Order of work
 

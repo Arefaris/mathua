@@ -130,6 +130,8 @@ Define *R* as the region bounded above by the graph of $f(x) = 2x - x^{2}$ and b
 
 First graph the region $R$ and the associated solid of revolution, as shown in the following figure.
 
+![(a) The region R under the graph of f(x) = 2x - x^2 over the interval [0,2]. (b) The volume of revolution obtained by revolving R about the y-axis.](/diagrams/calculus/two-x-minus-x-squared-solid.svg)
+
 *Figure 6.30 (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\left\lbrack {0,2} \right\rbrack.$ (b) The volume of revolution obtained by revolving $R$ about the $y\text{-axis}.$*
 
 Then the volume of the solid is given by
