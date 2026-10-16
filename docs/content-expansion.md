@@ -266,9 +266,16 @@ Three things follow, and together they decide the first two policies.
 20 are reached by no course path today. The union reach goes from 247 to 273 and the course count
 from 22 to 23, which the README quotes.
 
+**The narrowest closure rule does not help either.** Narrowing the band to the subdomains a course
+already touches — sinks that share a subdomain with something the course reaches — the union still
+goes from 247 to 543, and the courses still inflate 1.9x to 3.4x: 4th Grade Math 17 to 32, `calc1`
+67 to 230, `calc2` 70 to 265, `diffeq` 77 to 263. `discrete` and `discrete2` still land on 145 each.
+No rule that closes over a set of sinks is compatible with staging at any radius, so the targets have
+to be *chosen*, and that is curriculum work rather than a policy switch.
+
 **What "sample more" still needs is a number.** Widening the sample has no new invariant to satisfy,
-so the decision left is how far: it is a target size for the catalog, and the two measurements above
-are the boundary that number has to stay clear of. Section 6's first step is that decision, and it is
+so the decision left is how far: it is a target size for the catalog, and the measurements above are
+the boundary that number has to be drawn against. Section 6's first step is that decision, and it is
 also the gate on a new domain (section 5.4), because a domain with no course target is unreachable.
 
 ### 5.2 Producing an answer in a multiple-choice domain
