@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-223 paragraphs across 100 lessons read as a caption whose image was dropped:
-119 certain, 33 strong and 71 likely. Every one sits
+176 paragraphs across 79 lessons read as a caption whose image was dropped:
+72 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -23,8 +23,8 @@ Every teaching lesson opens with a credit line naming its source, for example:
 > Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY 4.0
 ```
 
-Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (69 figures) and
-**OpenStax Prealgebra** (33). Both are CC BY 4.0, which permits reuse and adaptation with
+Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (36 captions) and
+**OpenStax Prealgebra** (36). Both are CC BY 4.0, which permits reuse and adaptation with
 attribution, and the attribution is already the lesson's own header line.
 
 That changes what "a direct look-alike" means for these figures. Their visual target is their own
@@ -32,11 +32,11 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 119 rows and 49 distinct figures
+## 3. The captions are 72 rows and 39 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
-`Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **49 distinct figures** still to reclaim. Section 6 gives
+`Figure 4.4` is the caption in eight of them, and `Figure 4.6` in five. Deduplicating on the pair
+(figure number, caption) leaves **39 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
@@ -44,7 +44,7 @@ the method.
 | Disposition | Figures | Action |
 | --- | --- | --- |
 | schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| illustration, fetch | 34 | Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/`. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
 
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed fifty-three.
+again to 53 and 44, of which section 7 has since landed sixty-three.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,17 +183,7 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 1.11 | (none) | Prealgebra | 1 Multiply Whole Numbers | 6 | illustration, fetch |
-| 1.13 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
-| 1.14 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
-| 1.15 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
-| 1.3 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | illustration, fetch |
-| 2.10 | Factors of the counting numbers from 2 through 20, with prime numbers highlighted | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
 | 2.20 | The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits at *a... | Calculus Volume 1 | 2 The Limit of a Function | 1 | illustration, fetch |
-| 2.6 | Multiples of 2 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
-| 2.7 | Multiples of 5 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
-| 2.8 | Multiples of 10 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
-| 2.9 | Multiples of 3 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
 | 3.18 | The derivative of $g(x)$ is 3 times the derivative of $f(x).$ | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
 | 3.19 | This function has horizontal tangent lines at *x* = 2/3 and *x* = 4. | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
 | 3.20 | The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race trac... | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
@@ -1144,6 +1134,36 @@ The two captions held one row each: the report went from 225 to 223, the certain
 119, distinct figures from 51 to 49 and redraws from 2 to 0, which empties the tier. The lesson
 keeps one other orphan caption, so the lesson count stays at 100, and the ceiling in
 `internal/lessons/assets_test.go` follows, to 223. The lesson's e2e case count moves to eleven.
+
+**Ten Prealgebra upstream drawings** (Figures 1.3, 1.11, 1.13, 1.14, 1.15 and 2.6 to 2.10) landed
+on 2026-10-16 in twenty-one arithmetic lessons, as
+`web/next-app/public/diagrams/prealgebra/<number>.png`. They are the first figures in the tree that
+are fetched rather than drawn: their disposition is `illustration, fetch`, so upstream's own drawing
+is the look-alike, and the credit line is already the lesson's header.
+
+**Fetched figures live under `diagrams/`, beside the drawn ones.** That is where the tree already
+keeps a lesson figure — the reclaimed OpenStax SVGs are in `diagrams/calculus/` and
+`diagrams/arithmetic/` — and it is what puts them under the e2e spec's `img[src*="/diagrams/"]`
+selector and its 404 watch. A separate `public/figures/` directory would have rendered fine and been
+measured by nothing. The diagram audit's metadata rules iterate only the assets the engine's
+`conceptDiagrams` map names, so a fetched lesson figure needs no `meta.json` entry.
+
+**A dollar sign in an alt is escaped.** Upstream's alt for Figure 1.3 describes three stacks of
+currency and names `$100`, `$10` and `$1` bills. The app's math pass runs on the raw markdown before
+parsing, so an unescaped `$100 bills ... $300` pairs two prices into an inline math span and eats
+the rest of the alt; `\$` is the corpus's own spelling for a literal dollar and survives the pass.
+
+**Both alt cases appear in this batch.** Figures 1.3, 1.11, 1.13, 1.14 and 1.15 have a bare label
+for a caption, so their alt is upstream's `data-alt` verbatim; Figures 2.6 to 2.10 have a caption
+that is a sentence, so their alt is that sentence with the label stripped. Every caption here is
+plain text, so `plain` had nothing to render.
+
+The ten captions held 47 rows between them: the report went from 223 to 176, the certain tier from
+119 to 72, distinct figures from 49 to 39 and the fetch tier from 44 to 34. The audit's shipped and
+referenced counts both move by ten, to 653 and 347, because the figures are files under
+`public/diagrams/` that lesson bodies now reference. The lesson count drops from 100 to 79, since
+twenty-one lessons no longer carry an orphan. The ceiling in `internal/lessons/assets_test.go`
+follows, to 176, and the e2e case counts move to eight and two.
 
 ## 8. Order of work
 

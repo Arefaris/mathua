@@ -16,6 +16,8 @@ By the end of this section, you will be able to:
 
 Suppose you were asked to count all these pennies shown in Figure 1.11.
 
+![An image of 3 horizontal rows of pennies, each row containing 8 pennies.](/diagrams/prealgebra/1.11.png)
+
 *Figure 1.11*
 
 Would you count the pennies individually? Or would you count the number of pennies in each row and add that number 3 times.

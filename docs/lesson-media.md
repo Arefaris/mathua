@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-223 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **119 certain**, **33 strong**, **71 likely**.
+176 paragraphs across 79 lessons look like a figure caption whose image
+was dropped while its text was kept: **72 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -61,47 +61,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.dec.intro.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
 | `teaching/arith.dec.intro.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
-| `teaching/arith.div.basic.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
-| `teaching/arith.div.basic.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
-| `teaching/arith.div.basic.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
-| `teaching/arith.div.concept.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
-| `teaching/arith.div.concept.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
-| `teaching/arith.div.concept.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
-| `teaching/arith.div.long.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
-| `teaching/arith.div.long.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
-| `teaching/arith.div.long.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
-| `teaching/arith.div.remainder.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
-| `teaching/arith.div.remainder.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
-| `teaching/arith.div.remainder.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
-| `teaching/arith.div.word.md` | 19 | certain | *Figure 1.13* | auto-numbered figure/table label |
-| `teaching/arith.div.word.md` | 671 | certain | *Figure 1.14* | auto-numbered figure/table label |
-| `teaching/arith.div.word.md` | 675 | certain | *Figure 1.15* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.composite.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.find.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 71 | certain | *Figure 2.6 Multiples of 2 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 114 | certain | *Figure 2.7 Multiples of 5 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 157 | certain | *Figure 2.8 Multiples of 10 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
-| `teaching/arith.factor.prime_fact.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
-| `teaching/arith.mult.2_5_10.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.concept.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.double.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.tables.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.triple.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.word.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
 | `teaching/arith.neg.add_sub.md` | 13 | likely | *Number line with interesting Celsius temperatures* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -114,12 +73,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.neg.order_ops.md` | 13 | likely | *Number line with interesting Celsius temperatures* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.order_ops.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.order_ops.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/arith.place.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -286,7 +239,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-643 diagrams ship, 337 URLs are referenced by lesson bodies, and
+653 diagrams ship, 347 URLs are referenced by lesson bodies, and
 **286 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
@@ -374,12 +327,8 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/alg.linear.standard_form.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg` |
 | `teaching/alg.systems.substitution.md` | no | — | `systems-of-linear-equations-in-two-variables-1.svg` |
 | `teaching/alg.systems.word.md` | no | — | `systems-of-linear-equations-in-two-variables-1.svg` |
-| `teaching/arith.factor.composite.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
-| `teaching/arith.factor.find.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/arith.factor.gcf.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/arith.factor.lcm.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
-| `teaching/arith.factor.prime.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
-| `teaching/arith.factor.prime_fact.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/arith.order_ops.basic.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.order_ops.full.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.order_ops.nested.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
@@ -539,6 +488,10 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/series/power-series.md` | yes | — | `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `exp-power-rule.svg` |
 | `algebrica/trigonometry/pythagorean-identity.md` | yes | — | `pythagorean-theorem-1.svg`, `pythagorean-theorem-2.svg`, `pythagorean-theorem-3.svg` |
 | `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg` |
+| `teaching/arith.factor.composite.md` | yes | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
+| `teaching/arith.factor.find.md` | yes | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
+| `teaching/arith.factor.prime.md` | yes | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
+| `teaching/arith.factor.prime_fact.md` | yes | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/arith.mult.2_5_10.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.mult.concept.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.mult.double.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |

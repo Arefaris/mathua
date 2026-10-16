@@ -16,6 +16,8 @@ By the end of this section, you will be able to:
 
 So far we have explored addition, subtraction, and multiplication. Now let’s consider division. Suppose you have the 12 cookies in Figure 1.13 and want to package them in bags with 4 cookies in each bag. How many bags would we need?
 
+![An image of three rows of four cookies to show twelve cookies.](/diagrams/prealgebra/1.13.png)
+
 *Figure 1.13*
 
 You might put 4 cookies in first bag, 4 in the second bag, and so on until you run out of cookies. Doing it this way, you would fill 3 bags.
@@ -668,9 +670,13 @@ Divide. Then check by multiplying: $5,663 \div 7.$
 
 So far all the division problems have worked out evenly. For example, if we had 24 cookies and wanted to make bags of 8 cookies, we would have 3 bags. But what if there were 28 cookies and we wanted to make bags of $8?$ Start with the 28 cookies as shown in Figure 1.14.
 
+![An image of 28 cookies placed at random.](/diagrams/prealgebra/1.14.png)
+
 *Figure 1.14*
 
 Try to put the cookies in groups of eight as in Figure 1.15.
+
+![An image of 28 cookies. There are 3 circles, each containing 8 cookies, leaving 3 cookies outside the circles.](/diagrams/prealgebra/1.15.png)
 
 *Figure 1.15*
 

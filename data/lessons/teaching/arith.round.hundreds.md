@@ -82,6 +82,8 @@ Our number system is called a place value system because the value of a digit de
 
 Money gives us a familiar model of place value. Suppose a wallet contains three $\text{\$100}$ bills, seven $\text{\$10}$ bills, and four $\text{\$1}$ bills. The amounts are summarized in Figure 1.3. How much money is in the wallet?
 
+![An image of three stacks of American currency. First stack from left to right is a stack of 3 \$100 bills, with label “Three \$100 bills, 3 times \$100 equals \$300”. Second stack from left to right is a stack of 7 \$10 bills, with label “Seven \$10 bills, 7 times \$10 equals \$70”. Third stack from left to right is a stack of 4 \$1 bills, with label “Four \$1 bills, 4 times \$1 equals \$4”.](/diagrams/prealgebra/1.3.png)
+
 *Figure 1.3*
 
 Find the total value of each kind of bill, and then add to find the total. The wallet contains $\text{\$374}.$

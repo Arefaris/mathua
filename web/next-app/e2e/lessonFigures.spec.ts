@@ -44,16 +44,17 @@ const CASES = [
   // A reclaimed OpenStax figure, and the reason the selector below is `/diagrams/` rather than
   // `/diagrams/algebrica/`: it was vendored-only, so it counted nothing in this directory and a
   // figure that failed to draw here would have been reported as a lesson with no figures at all.
-  // Seven, not one: this body carries Figures 1.2 and 1.4-1.9, the arithmetic reclaims.
-  { concept: 'arith.round.tens', file: 'teaching/arith.round.tens.md', expectFigures: 7 },
-  // The other direction: a lesson that carried no figure at all until Figure 1.12 was drawn
-  // into it. One, so what is measured is a reclaimed figure drawing in a body that had nothing
-  // else in it — the arithmetic case above cannot show this, since it counts figures that have
-  // been drawing alongside each other since before this case existed.
-  { concept: 'arith.mult.tables', file: 'teaching/arith.mult.tables.md', expectFigures: 1 },
+  // Eight, not one: this body carries Figures 1.2, 1.3 and 1.4-1.9, the arithmetic reclaims and
+  // one fetched upstream drawing.
+  { concept: 'arith.round.tens', file: 'teaching/arith.round.tens.md', expectFigures: 8 },
+  // Two, and the only body where a fetched figure and a redrawn one stand side by side: Figure
+  // 1.11 was fetched from OpenStax and Figure 1.12 was drawn into the same lesson, so this is the
+  // case that would catch the two tiers disagreeing about how a figure is written into a body.
+  { concept: 'arith.mult.tables', file: 'teaching/arith.mult.tables.md', expectFigures: 2 },
   // Two, the one count the cases above miss, and the count the fraction reclaims produce: 4.2
   // and 4.3 are cited by the same seven lessons, so this is a body with two reclaimed figures
-  // and nothing else. Together the cases now cover one, two, three, six and seven figures.
+  // and nothing else. Together the cases now cover one, two, three, six, eight, ten and eleven
+  // figures.
   { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 2 },
   // The other kind of two: the percent pair is a table rather than a drawing, so this case
   // proves a reclaimed figure that is ruled cells and text renders, which the lines, blocks and
