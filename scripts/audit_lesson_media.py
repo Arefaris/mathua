@@ -54,8 +54,28 @@ DIAGRAMS = os.path.join(PUBLIC, "diagrams")
 # counted 259 orphan captions and this audit counted 260, on the same corpus, because Figure
 # 2.16's caption sat under an image this pattern could not see. Section 1 of
 # docs/figure-reclaim.md quotes the audit, so the report was wrong by that one row too.
-IMAGE_RE = re.compile(r"!\[((?:[^\]\\]|\\.|\])*)\]\(\s*([^)\s]+)\s*\)")
-IMAGE_OPEN_RE = re.compile(r"!\[(?:[^\]\\]|\\.|\])*\]\(")
+#
+# Two further guards come from the same regex and were missing here until 2026-10-16. The path
+# is anchored to an image extension, because an exclamation mark in prose followed by
+# `[continuous](../continuous-functions/)` is otherwise a perfect match for an image, and the
+# corpus points 494 inline links at targets that are not images. That guard changes no count
+# today -- all 409 image openers in the corpus already end in an extension -- and it is here so
+# that this pattern cannot drift from the one it mirrors.
+#
+# The paragraph split is the guard that moves a number. Alt text may wrap lines but cannot span
+# a blank line, and without the split the first `![` in a lesson pairs with the *last* `](` in
+# it and swallows every figure between them into its alt text. Section C read
+# `calc.integral.volume.md`, which has five images, as referencing one, and reported 525
+# content diagrams as referenced by nothing against the true 286: 239 diagrams that are in
+# fact referenced were being offered to other lessons as free material.
+IMAGE_OPEN_RE = re.compile(
+    r"!\[(?:[^\]\\]|\\.|\])*\]\(\s*[^)\s<]*\.(?:svg|png|jpe?g|webp|gif)")
+IMAGE_RE = re.compile(
+    r"!\[((?:[^\]\\]|\\.|\])*)\]\(\s*([^)\s<]*\.(?:svg|png|jpe?g|webp|gif))\s*\)")
+
+# A paragraph break, as imageRe's caller in assets.go has it: `paragraphChunks` splits the body
+# there before matching, and a markdown image reference cannot span one.
+BLANK_LINE_RE = re.compile(r"\n[ \t]*\n")
 
 # Textual markers that a paragraph is describing a picture. Used only to *rank* candidates,
 # never to delete: absence of a marker is not evidence of absence.
@@ -270,7 +290,8 @@ def section_c_unreferenced():
             path = os.path.join(dirpath, name)
             rel = os.path.relpath(path, LESSONS)
             body = open(path, encoding="utf-8").read()
-            urls = {resolve(m.group(2)) for m in IMAGE_RE.finditer(body)}
+            urls = {resolve(m.group(2)) for chunk in BLANK_LINE_RE.split(body)
+                    for m in IMAGE_RE.finditer(chunk)}
             every_lesson[rel] = urls
             referenced |= urls
 
