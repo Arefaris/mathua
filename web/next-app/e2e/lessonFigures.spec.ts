@@ -78,12 +78,12 @@ const CASES = [
   // figure ever stopped working. The count is the lesson's, and it has moved four times:
   // three, then five, then eight, then ten.
   { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 10 },
-  // Seven, and the only case whose figures are solids of revolution: a circular end is an ellipse,
+  // Eight, and the only case whose figures are solids of revolution: a circular end is an ellipse,
   // the hidden half of a base is a dashed annotation arc, and a hole is a white-filled silhouette,
   // so this asserts that a figure the sanitizer keeps is one whose shape is a sampled arc rather
-  // than a line or a rect. The count is the lesson's, and it has moved five times: two, then
-  // three, then five, then six, then seven.
-  { concept: 'calc.integral.volume', file: 'teaching/calc.integral.volume.md', expectFigures: 7 },
+  // than a line or a rect. The count is the lesson's, and it has moved six times: two, then
+  // three, then five, then six, then seven, then eight.
+  { concept: 'calc.integral.volume', file: 'teaching/calc.integral.volume.md', expectFigures: 8 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

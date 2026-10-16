@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-227 paragraphs across 100 lessons read as a caption whose image was dropped:
-123 certain, 33 strong and 71 likely. Every one sits
+226 paragraphs across 100 lessons read as a caption whose image was dropped:
+122 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 123 rows and 53 distinct figures
+## 3. The captions are 122 rows and 52 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **53 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **52 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 4 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 3 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed forty-nine.
+again to 53 and 44, of which section 7 has since landed fifty.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,7 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.32 | (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.36 | (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of revolu... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -1064,6 +1063,34 @@ g(y)" and the figure's own curve label carries `g(y) = 2` and a root. That capti
 the report went from 228 to 227, and the certain tier from 124 to 123. Distinct figures go from 54
 to 53 and redraws from 5 to 4. The lesson keeps five other orphan captions, so the lesson count
 stays at 100, and the ceiling in `internal/lessons/assets_test.go` follows, to 227.
+
+**Figure 6.32** (R between `f(x) = x` and the x-axis over [1, 2], revolved about the line
+`x = -1`) landed on 2026-10-16 in `calc.integral.volume`, as `calculus/bowl-offset-axis-solid.svg`.
+
+**The axis of revolution need not be a coordinate axis.** Panel (b) is centred on the line
+`x = -1` rather than on the y-axis, so that line is drawn as an annotation -- annotation grey,
+solid where it is outside the solid and dashed where the solid hides it, with no arrowhead,
+because it is not an axis -- and the coordinate axes are still drawn at `x = 0` and `y = 0`. The
+y-axis crosses the solid and keeps its dashed hidden span, and so does the axis of revolution. The
+label that names it goes inside the cavity, on the white, because the top of the panel is where the
+rim's far arc already is.
+
+**A cavity can have a floor, which 6.26 and 6.30 did not have.** The solid is an outer cylinder of
+radius 3 from `y = 0` to `y = 2` whose cavity is a cylinder of radius 2 from `y = 0` to `y = 1` and
+then opens as `y + 1`, so the top is a knife edge and the cavity's floor is a real disc. Its rim is
+one annotation-grey ellipse, the way 6.26 draws a hole's inner base, because at this projection's
+angle the floor is not visible: a ray from the deepest point of it leaves the cavity through the
+wall. The cavity's right slant edge is the line `x = y`, which is why upstream draws `f(x) = x`
+through panel (b) as well, and that edge carries the label `y = f(x)`.
+
+Both panels keep equal scales, because the region's upper boundary is the line `y = x` and a line
+drawn with unequal scales is a different line, and because the solid is 6 units across and 2 tall,
+which a filled panel would redraw as a deep bowl.
+
+That caption held one row: the report went from 227 to 226, and the certain tier from 123 to 122.
+Distinct figures go from 53 to 52 and redraws from 4 to 3. The lesson keeps four other orphan
+captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
+follows, to 226.
 
 ## 8. Order of work
 
