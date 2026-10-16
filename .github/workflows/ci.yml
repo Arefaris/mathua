@@ -101,6 +101,19 @@ jobs:
       - run: npx playwright test --shard=2/2
         env:
           PW_WORKERS: 1
+      # A failing e2e run used to leave nothing behind: the config retains a trace and writes an HTML
+      # report, and this job uploaded neither, so the only evidence was the assertion text in the log.
+      # The trace has the DOM snapshot, the network log and the screenshots.
+      - name: Upload the Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            web/next-app/playwright-report
+            web/next-app/test-results
+          retention-days: 7
+          if-no-files-found: ignore
 
   docker:
     name: Build production image
