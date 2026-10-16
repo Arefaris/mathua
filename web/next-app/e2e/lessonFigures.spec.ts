@@ -69,14 +69,15 @@ const CASES = [
   // `Circumference` is thirteen `<text>` elements carrying a `transform`, so this asserts a
   // figure reaches the page at all when its labels are placed by rotation and not by `x`/`y`.
   { concept: 'frac.ops.to_decimal', file: 'teaching/frac.ops.to_decimal.md', expectFigures: 1 },
-  // Eight, and the only case with a graph: Figures 2.12 to 2.19 carry y axes, tick labels and
-  // nine markers between them, eight of those drawn as `fill="white"` circles and one as a
-  // filled dot, so this asserts that a figure whose points are holes rather than values keeps
-  // its markers through the sanitizer. It also carries the heaviest figure here, Figure 2.17,
-  // whose band is 1,500 points per branch of path data and so is the one that would time out
-  // first if inlining a figure ever stopped working. The count is the lesson's, and it has
-  // moved three times: three, then five, then eight.
-  { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 8 },
+  // Ten, and the only case with a graph: Figures 2.12 to 2.23 carry y axes, tick labels —
+  // including two axes named for the quantity, `v/c` and `m/m0` — and twelve markers between
+  // them, eleven of those drawn as `fill="white"` circles and one as a filled dot, so this
+  // asserts that a figure whose points are holes rather than values keeps its markers through
+  // the sanitizer. It also carries the heaviest figure here, Figure 2.17, whose band is 1,500
+  // points per branch of path data and so is the one that would time out first if inlining a
+  // figure ever stopped working. The count is the lesson's, and it has moved four times:
+  // three, then five, then eight, then ten.
+  { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 10 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

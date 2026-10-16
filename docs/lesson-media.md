@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-256 paragraphs across 101 lessons look like a figure caption whose image
-was dropped while its text was kept: **152 certain**, **33 strong**, **71 likely**.
+254 paragraphs across 101 lessons look like a figure caption whose image
+was dropped while its text was kept: **150 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -189,9 +189,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.infinity.md` | 520 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 531 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 439 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 519 | certain | *Figure 2.21 The graph shows $f(x).$* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 538 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 552 | certain | *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Eins...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 540 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
@@ -294,7 +292,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.integral.power_rule.md` | 78 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
 | `teaching/calc.integral.power_rule.md` | 129 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
 | `teaching/calc.integral.power_rule.md` | 322 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
-| `teaching/calc.limit.numeric.md` | 519 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
+| `teaching/calc.limit.numeric.md` | 521 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.number_line.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -319,8 +317,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-610 diagrams ship, 123 URLs are referenced by lesson bodies, and
-**506 content diagrams are referenced by nothing** (site chrome
+612 diagrams ship, 123 URLs are referenced by lesson bodies, and
+**508 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today

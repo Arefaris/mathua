@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-256 paragraphs across 101 lessons read as a caption whose image was dropped:
-152 certain, 33 strong and 71 likely. Every one sits
+254 paragraphs across 101 lessons read as a caption whose image was dropped:
+150 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 152 rows and 82 distinct figures
+## 3. The captions are 150 rows and 80 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **82 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **80 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 33 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 31 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed twenty.
+again to 53 and 44, of which section 7 has since landed twenty-two.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,8 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.21 | The graph shows $f(x).$ | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
-| 2.23 | This graph shows the ratio of masses as a function of the ratio of speeds in Einstein... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 3.25 | The graph of the function $D(x)$ looks a lot like a cosine curve. | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
 | 3.26 | These graphs show two important limits needed to establish the derivative formulas fo... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
 | 3.27 | Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $f(x)... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
@@ -611,6 +609,38 @@ and the caption is not.
 Those three captions held three rows, and the regenerated audit drops all three: 259 to 256, and 152
 in the certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at
 101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 256.
+
+**Figures 2.21 and 2.23** (the figure an exercise is read off -- four limits and four values asked at
+`x = -4, -2, 1` and `3`, with a curve interrupted twice and a vertical asymptote in the middle of it
+-- and Einstein's mass ratio against speed ratio) landed on 2026-10-16 in `calc.limit.numeric`, as
+`calculus/interrupted-curve.svg` and `calculus/mass-ratio.svg`. They are the last two redrawable
+figures of Calculus 2.2.
+
+2.21 is drawn in the alt's order rather than as one function, because that is what it is: a spline
+below `x = -2` ending at an open circle at `(-2, 3)`, a second spline from there to a filled dot at
+`(1, 6)`, an open circle at `(1, 3)` with a branch running down to `-infinity` along `x = 3`, and the
+mirror branch on the other side of the asymptote, which comes back up through the concavity change
+the alt names in the first quadrant. Only the two interesting y values are numbered, 3 and 6, and
+only the four x values the exercise asks about -- upstream's choice, and the right one: numbers
+everywhere would have a reader checking the graph instead of reading it.
+
+2.23's axes are named for its quantities, `v/c` and `m/m0`, and the formula is written inside the
+frame the way upstream writes it, as a fraction with a bar and the root below it. That covers the
+whole figure: there is no tick label above 5 and no second series. `m0` is written with a plain
+zero and not U+2080, because no theme font carries a subscript zero and a substituted face would sit
+at a different size and baseline inside the drawing -- which is the objection AGENTS.md section 1
+makes about a codepoint the fonts do not carry, and it applies to a subscript as much as to a
+pictograph. The two superscripts are U+00B2, the one the arithmetic figures already use.
+
+Both have captions that are prose, so both alts are the caption minus its label: 2.21's is "The graph
+shows f(x)." and 2.23's is the sentence about Einstein's equation, kept with the author's
+typographic apostrophe.
+
+Those two captions held two rows, and the regenerated audit drops both: 256 to 254, and 150 in the
+certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
+the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 254. With 2.23
+landed, every redrawable figure in Calculus 2.2 is drawn: 2.12 through 2.19 and 2.21, with 2.20 and
+2.22 remaining as fetched illustrations and a photograph.
 
 ## 8. Order of work
 

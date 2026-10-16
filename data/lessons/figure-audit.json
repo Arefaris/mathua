@@ -1178,22 +1178,8 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 519,
-      "text": "Figure 2.21 The graph shows $f(x).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 538,
+      "line": 540,
       "text": "Figure 2.22 (credit: NASA)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 552,
-      "text": "Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Einstein\u2019s equation for the mass of a moving object.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1856,7 +1842,7 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 519,
+      "line": 521,
       "phrase": "The graph shows",
       "context": "*Figure 2.21 The graph shows $f(x).$*"
     },
@@ -1989,8 +1975,8 @@
   ],
   "unreferenced_diagrams": {
     "referenced": 123,
-    "shipped": 610,
-    "unreferenced_content": 506,
+    "shipped": 612,
+    "unreferenced_content": 508,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -5854,12 +5840,14 @@
       "/diagrams/arithmetic/sub-double.svg",
       "/diagrams/arithmetic/sub-single.svg",
       "/diagrams/arithmetic/sub-word.svg",
+      "/diagrams/calculus/interrupted-curve.svg",
       "/diagrams/calculus/limit-behavior.svg",
       "/diagrams/calculus/missing-vertex.svg",
       "/diagrams/calculus/one-value-off-the-curve.svg",
       "/diagrams/calculus/oscillation.svg",
       "/diagrams/calculus/piecewise-jump.svg",
       "/diagrams/calculus/radical-over-x.svg",
+      "/diagrams/calculus/reciprocal.svg",
       "/diagrams/calculus/sine-over-x.svg"
     ]
   }

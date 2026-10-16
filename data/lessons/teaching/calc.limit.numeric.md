@@ -516,6 +516,8 @@ Use the graph of $f(x)$ in Figure 2.21 to determine each of the following values
 3.  $\underset{x\rightarrow 1^{-}}{\text{lim}}f(x);\underset{x\rightarrow 1^{+}}{\text{lim}}f(x);\underset{x\rightarrow 1}{\text{lim}}f(x);f(1)$
 4.  $\underset{x\rightarrow 3^{-}}{\text{lim}}f(x);\underset{x\rightarrow 3^{+}}{\text{lim}}f(x);\underset{x\rightarrow 3}{\text{lim}}f(x);f(3)$
 
+![The graph shows f(x).](/diagrams/calculus/interrupted-curve.svg)
+
 *Figure 2.21 The graph shows $f(x).$*
 
 #### Solution
@@ -548,6 +550,8 @@ m = \frac{m_{0}}{\sqrt{1 - \frac{v^{2}}{c^{2}}}},
 $$
 
 where $m_{0}$ is the object’s mass at rest, *v* is its speed, and *c* is the speed of light. To see how the mass changes at high speeds, we can graph the ratio of masses $m\text{/}m_{0}$ as a function of the ratio of speeds, $v\text{/}c$ (Figure 2.23).
+
+![This graph shows the ratio of masses as a function of the ratio of speeds in Einstein’s equation for the mass of a moving object.](/diagrams/calculus/mass-ratio.svg)
 
 *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Einstein’s equation for the mass of a moving object.*
 
