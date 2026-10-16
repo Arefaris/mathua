@@ -7706,6 +7706,118 @@
     "subdomain": "machine_learning.reinforcement"
   },
   {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.linreg.least_squares",
+    "label": "The least-squares line",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.loss.mse"
+    ],
+    "subdomain": "machine_learning.regression"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.linreg.predict",
+    "label": "Prediction from a fitted model",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.linreg.least_squares"
+    ],
+    "subdomain": "machine_learning.regression"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.reg.ridge_penalty",
+    "label": "The ridge penalty",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.regularization"
+    ],
+    "subdomain": "machine_learning.regression"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.eval.accuracy",
+    "label": "Accuracy",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.validation"
+    ],
+    "subdomain": "machine_learning.evaluation"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.eval.precision",
+    "label": "Precision",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.eval.accuracy"
+    ],
+    "subdomain": "machine_learning.evaluation"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.eval.recall",
+    "label": "Recall",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.eval.accuracy"
+    ],
+    "subdomain": "machine_learning.evaluation"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.pca.variance_percent",
+    "label": "Variance explained by a component",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.eigen.compute"
+    ],
+    "subdomain": "machine_learning.unsupervised"
+  },
+  {
+    "domain": "machine_learning",
+    "grading_type": "numeric",
+    "id": "ml.knn.nearest_distance",
+    "label": "Nearest-neighbour distance",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ml.forward_pass"
+    ],
+    "subdomain": "machine_learning.unsupervised"
+  },
+  {
     "domain": "number_theory",
     "grading_type": "multiple_choice",
     "id": "nt.basics.divisibility",

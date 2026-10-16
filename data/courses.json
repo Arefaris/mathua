@@ -158,6 +158,6 @@
     "name": "Machine Learning",
     "grade": "college",
     "description": "Vector foundations and backpropagation through neural networks.",
-    "targets": ["linalg.vector.dot", "linalg.matrix.mult", "stat.dist.normal", "ml.backpropagation"]
+    "targets": ["linalg.vector.dot", "linalg.matrix.mult", "stat.dist.normal", "ml.backpropagation", "ml.linreg.least_squares", "ml.linreg.predict", "ml.reg.ridge_penalty", "ml.eval.accuracy", "ml.eval.precision", "ml.eval.recall", "ml.pca.variance_percent", "ml.knn.nearest_distance"]
   }
 ]

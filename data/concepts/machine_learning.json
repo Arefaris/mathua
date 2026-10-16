@@ -357,5 +357,117 @@
       "streak": 10,
       "avg_time_seconds": 26.0
     }
+    },
+  {
+    "id": "ml.linreg.least_squares",
+    "label": "The least-squares line",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.regression",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.loss.mse"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.linreg.predict",
+    "label": "Prediction from a fitted model",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.regression",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.linreg.least_squares"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.reg.ridge_penalty",
+    "label": "The ridge penalty",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.regression",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.regularization"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.eval.accuracy",
+    "label": "Accuracy",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.evaluation",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.validation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.eval.precision",
+    "label": "Precision",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.evaluation",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.eval.accuracy"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.eval.recall",
+    "label": "Recall",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.evaluation",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.eval.accuracy"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.pca.variance_percent",
+    "label": "Variance explained by a component",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.unsupervised",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "linalg.eigen.compute"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.knn.nearest_distance",
+    "label": "Nearest-neighbour distance",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.unsupervised",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.forward_pass"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
   }
 ]

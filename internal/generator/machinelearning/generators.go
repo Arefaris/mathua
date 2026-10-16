@@ -32,6 +32,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("ml.reinforcement.policy_gradient", &policyGradientGen{})
 	reg.Register("ml.nlp.bert", &bertGen{})
 	reg.Register("ml.reinforcement.actor_critic", &actorCriticGen{})
+	registerNumeric(reg)
 }
 
 type backpropGen struct{}

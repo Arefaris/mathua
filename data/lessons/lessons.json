@@ -2990,5 +2990,37 @@
   {
     "concept_id": "calc.polar.slope",
     "source": "authored/calc.polar.slope.md"
+  },
+  {
+    "concept_id": "ml.linreg.least_squares",
+    "source": "authored/ml.linreg.least_squares.md"
+  },
+  {
+    "concept_id": "ml.linreg.predict",
+    "source": "authored/ml.linreg.predict.md"
+  },
+  {
+    "concept_id": "ml.reg.ridge_penalty",
+    "source": "authored/ml.reg.ridge_penalty.md"
+  },
+  {
+    "concept_id": "ml.eval.accuracy",
+    "source": "authored/ml.eval.accuracy.md"
+  },
+  {
+    "concept_id": "ml.eval.precision",
+    "source": "authored/ml.eval.precision.md"
+  },
+  {
+    "concept_id": "ml.eval.recall",
+    "source": "authored/ml.eval.recall.md"
+  },
+  {
+    "concept_id": "ml.pca.variance_percent",
+    "source": "authored/ml.pca.variance_percent.md"
+  },
+  {
+    "concept_id": "ml.knn.nearest_distance",
+    "source": "authored/ml.knn.nearest_distance.md"
   }
 ]
