@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-306 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **202 certain**, **33 strong**, **71 likely**.
+300 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **196 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -97,17 +97,11 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.factor.prime_fact.md` | 198 | certain | *Figure 2.9 Multiples of 3 between 1 and 50* | auto-numbered figure/table label |
 | `teaching/arith.factor.prime_fact.md` | 518 | certain | *Figure 2.10 Factors of the counting numbers from 2 through 20, with prime numbers highlighted* | auto-numbered figure/table label |
 | `teaching/arith.mult.2_5_10.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.2_5_10.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.concept.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.concept.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.double.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.double.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.tables.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.tables.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.triple.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.triple.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.mult.word.md` | 19 | certain | *Figure 1.11* | auto-numbered figure/table label |
-| `teaching/arith.mult.word.md` | 743 | certain | *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square f...* | auto-numbered figure/table label |
 | `teaching/arith.neg.add_sub.md` | 13 | likely | *Number line with interesting Celsius temperatures* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -369,7 +363,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-593 diagrams ship, 286 URLs are referenced by lesson bodies, and
+594 diagrams ship, 287 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
@@ -465,12 +459,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.factor.lcm.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/arith.factor.prime.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/arith.factor.prime_fact.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
-| `teaching/arith.mult.2_5_10.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
-| `teaching/arith.mult.concept.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
-| `teaching/arith.mult.double.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
-| `teaching/arith.mult.tables.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
-| `teaching/arith.mult.triple.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
-| `teaching/arith.mult.word.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.order_ops.basic.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.order_ops.full.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.order_ops.nested.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
@@ -636,6 +624,12 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/series/power-series.md` | yes | — | `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `exp-power-rule.svg` |
 | `algebrica/trigonometry/pythagorean-identity.md` | yes | — | `pythagorean-theorem-1.svg`, `pythagorean-theorem-2.svg`, `pythagorean-theorem-3.svg` |
 | `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg` |
+| `teaching/arith.mult.2_5_10.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
+| `teaching/arith.mult.concept.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
+| `teaching/arith.mult.double.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
+| `teaching/arith.mult.tables.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
+| `teaching/arith.mult.triple.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
+| `teaching/arith.mult.word.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.place.hundreds.md` | yes | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
 | `teaching/arith.place.tens.md` | yes | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |
 | `teaching/arith.place.thousands.md` | yes | — | `place-hundreds.svg`, `place-tens.svg`, `place-thousands.svg` |

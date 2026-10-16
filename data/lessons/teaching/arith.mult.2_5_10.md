@@ -740,6 +740,8 @@ If we want to know the size of a wall that needs to be painted or a floor that n
 
 For a rectangular figure, the area is the product of the length and the width. Figure 1.12 shows a rectangular rug with a length of 2 feet and a width of 3 feet. Each square is 1 foot wide by 1 foot long, or 1 square foot. The rug is made of 6 squares. The area of the rug is 6 square feet.
 
+![The area of a rectangle is the product of its length and its width, or 6 square feet.](/diagrams/arithmetic/rectangle-area.svg)
+
 *Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.*
 
 ### Example 1.55

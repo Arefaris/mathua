@@ -46,6 +46,11 @@ const CASES = [
   // figure that failed to draw here would have been reported as a lesson with no figures at all.
   // Seven, not one: this body carries Figures 1.2 and 1.4-1.9, the arithmetic reclaims.
   { concept: 'arith.round.tens', file: 'teaching/arith.round.tens.md', expectFigures: 7 },
+  // The other direction: a lesson that carried no figure at all until Figure 1.12 was drawn
+  // into it. One, so what is measured is a reclaimed figure drawing in a body that had nothing
+  // else in it — the arithmetic case above cannot show this, since it counts figures that have
+  // been drawing alongside each other since before this case existed.
+  { concept: 'arith.mult.tables', file: 'teaching/arith.mult.tables.md', expectFigures: 1 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

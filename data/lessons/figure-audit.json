@@ -533,23 +533,9 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/arith.mult.2_5_10.md",
-      "line": 743,
-      "text": "Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.mult.concept.md",
       "line": 19,
       "text": "Figure 1.11",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.mult.concept.md",
-      "line": 743,
-      "text": "Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -561,23 +547,9 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/arith.mult.double.md",
-      "line": 743,
-      "text": "Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.mult.tables.md",
       "line": 19,
       "text": "Figure 1.11",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.mult.tables.md",
-      "line": 743,
-      "text": "Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -589,23 +561,9 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/arith.mult.triple.md",
-      "line": 743,
-      "text": "Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.mult.word.md",
       "line": 19,
       "text": "Figure 1.11",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.mult.word.md",
-      "line": 743,
-      "text": "Figure 1.12 The area of a rectangle is the product of its length and its width, or 6 square feet.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -2338,8 +2296,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 286,
-    "shipped": 593,
+    "referenced": 287,
+    "shipped": 594,
     "unreferenced_content": 287,
     "candidates": [
       {
@@ -3334,90 +3292,6 @@
           "/diagrams/arithmetic/factor-lcm.svg",
           "/diagrams/arithmetic/factor-prime-fact.svg",
           "/diagrams/arithmetic/factor-prime.svg"
-        ]
-      },
-      {
-        "lesson": "teaching/arith.mult.2_5_10.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/arithmetic/mult-2-5-10.svg",
-          "/diagrams/arithmetic/mult-concept.svg",
-          "/diagrams/arithmetic/mult-double.svg",
-          "/diagrams/arithmetic/mult-tables.svg",
-          "/diagrams/arithmetic/mult-triple.svg",
-          "/diagrams/arithmetic/mult-word.svg",
-          "/diagrams/arithmetic/neg-mult-div.svg"
-        ]
-      },
-      {
-        "lesson": "teaching/arith.mult.concept.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/arithmetic/mult-2-5-10.svg",
-          "/diagrams/arithmetic/mult-concept.svg",
-          "/diagrams/arithmetic/mult-double.svg",
-          "/diagrams/arithmetic/mult-tables.svg",
-          "/diagrams/arithmetic/mult-triple.svg",
-          "/diagrams/arithmetic/mult-word.svg",
-          "/diagrams/arithmetic/neg-mult-div.svg"
-        ]
-      },
-      {
-        "lesson": "teaching/arith.mult.double.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/arithmetic/mult-2-5-10.svg",
-          "/diagrams/arithmetic/mult-concept.svg",
-          "/diagrams/arithmetic/mult-double.svg",
-          "/diagrams/arithmetic/mult-tables.svg",
-          "/diagrams/arithmetic/mult-triple.svg",
-          "/diagrams/arithmetic/mult-word.svg",
-          "/diagrams/arithmetic/neg-mult-div.svg"
-        ]
-      },
-      {
-        "lesson": "teaching/arith.mult.tables.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/arithmetic/mult-2-5-10.svg",
-          "/diagrams/arithmetic/mult-concept.svg",
-          "/diagrams/arithmetic/mult-double.svg",
-          "/diagrams/arithmetic/mult-tables.svg",
-          "/diagrams/arithmetic/mult-triple.svg",
-          "/diagrams/arithmetic/mult-word.svg",
-          "/diagrams/arithmetic/neg-mult-div.svg"
-        ]
-      },
-      {
-        "lesson": "teaching/arith.mult.triple.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/arithmetic/mult-2-5-10.svg",
-          "/diagrams/arithmetic/mult-concept.svg",
-          "/diagrams/arithmetic/mult-double.svg",
-          "/diagrams/arithmetic/mult-tables.svg",
-          "/diagrams/arithmetic/mult-triple.svg",
-          "/diagrams/arithmetic/mult-word.svg",
-          "/diagrams/arithmetic/neg-mult-div.svg"
-        ]
-      },
-      {
-        "lesson": "teaching/arith.mult.word.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/arithmetic/mult-2-5-10.svg",
-          "/diagrams/arithmetic/mult-concept.svg",
-          "/diagrams/arithmetic/mult-double.svg",
-          "/diagrams/arithmetic/mult-tables.svg",
-          "/diagrams/arithmetic/mult-triple.svg",
-          "/diagrams/arithmetic/mult-word.svg",
-          "/diagrams/arithmetic/neg-mult-div.svg"
         ]
       },
       {
@@ -5125,6 +4999,90 @@
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+        ]
+      },
+      {
+        "lesson": "teaching/arith.mult.2_5_10.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
+        ]
+      },
+      {
+        "lesson": "teaching/arith.mult.concept.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
+        ]
+      },
+      {
+        "lesson": "teaching/arith.mult.double.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
+        ]
+      },
+      {
+        "lesson": "teaching/arith.mult.tables.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
+        ]
+      },
+      {
+        "lesson": "teaching/arith.mult.triple.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
+        ]
+      },
+      {
+        "lesson": "teaching/arith.mult.word.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
         ]
       },
       {
