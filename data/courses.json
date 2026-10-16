@@ -123,7 +123,7 @@
     "name": "Number Theory",
     "grade": "college",
     "description": "Divisibility, primes, modular arithmetic, Euler's theorem, and cryptography.",
-    "targets": ["nt.basics.divisibility", "nt.basics.gcd_euclidean", "nt.basics.modular", "nt.adv.fermat_little"]
+    "targets": ["nt.basics.divisibility", "nt.basics.gcd_euclidean", "nt.basics.modular", "nt.adv.fermat_little", "nt.divisor.count", "nt.divisor.sum", "nt.prime.exponent", "nt.congruence.linear", "nt.pythagorean.hypotenuse", "nt.residue.count", "nt.base.convert"]
   },
   {
     "id": "diffeq",

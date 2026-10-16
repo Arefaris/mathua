@@ -8659,6 +8659,104 @@
     "subdomain": "number_theory.advanced"
   },
   {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.divisor.count",
+    "label": "Counting divisors",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.basics.divisibility"
+    ],
+    "subdomain": "number_theory.basics"
+  },
+  {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.divisor.sum",
+    "label": "The sum of the divisors",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.divisor.count"
+    ],
+    "subdomain": "number_theory.basics"
+  },
+  {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.prime.exponent",
+    "label": "The exponent of a prime in a factorial",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.basics.divisibility"
+    ],
+    "subdomain": "number_theory.advanced"
+  },
+  {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.congruence.linear",
+    "label": "Linear congruences",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.basics.congruence"
+    ],
+    "subdomain": "number_theory.basics"
+  },
+  {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.pythagorean.hypotenuse",
+    "label": "Primitive Pythagorean triples",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.basics.gcd_euclidean"
+    ],
+    "subdomain": "number_theory.advanced"
+  },
+  {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.residue.count",
+    "label": "Quadratic residues",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.adv.legendre"
+    ],
+    "subdomain": "number_theory.advanced"
+  },
+  {
+    "domain": "number_theory",
+    "grading_type": "numeric",
+    "id": "nt.base.convert",
+    "label": "Writing a number in another base",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "nt.basics.divisibility"
+    ],
+    "subdomain": "number_theory.basics"
+  },
+  {
     "domain": "prealgebra",
     "grading_type": "comparison",
     "id": "dec.basics.compare",

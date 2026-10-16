@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 797,
+  "concept_count": 804,
   "unit_count": 95,
   "units": [
     {
@@ -1648,12 +1648,17 @@
       ],
       "concept_ids": [
         "nt.adv.fermat_little",
+        "nt.base.convert",
         "nt.basics.congruence",
         "nt.basics.gcd_euclidean",
         "nt.basics.modular",
-        "nt.basics.prime_inf"
+        "nt.basics.prime_inf",
+        "nt.congruence.linear",
+        "nt.divisor.count",
+        "nt.divisor.sum",
+        "nt.prime.exponent"
       ],
-      "concept_count": 5
+      "concept_count": 10
     },
     {
       "id": "number_theory.b4",
@@ -1678,9 +1683,11 @@
         "nt.app.crypto",
         "nt.basics.bezout",
         "nt.basics.crt",
-        "nt.basics.order_mod"
+        "nt.basics.order_mod",
+        "nt.pythagorean.hypotenuse",
+        "nt.residue.count"
       ],
-      "concept_count": 10
+      "concept_count": 12
     },
     {
       "id": "number_theory.b5",

@@ -35,6 +35,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("nt.adv.elliptic_curve", &ellipticCurveGen{})
 	reg.Register("nt.adv.continued_fractions", &continuedFractionsGen{})
 	reg.Register("nt.adv.class_number", &classNumberGen{})
+	registerNumeric(reg)
 }
 
 type divisibilityGen struct{}

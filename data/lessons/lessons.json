@@ -3186,5 +3186,33 @@
   {
     "concept_id": "calc.deriv.higher_order_value",
     "source": "authored/calc.deriv.higher_order_value.md"
+  },
+  {
+    "concept_id": "nt.divisor.count",
+    "source": "authored/nt.divisor.count.md"
+  },
+  {
+    "concept_id": "nt.divisor.sum",
+    "source": "authored/nt.divisor.sum.md"
+  },
+  {
+    "concept_id": "nt.prime.exponent",
+    "source": "authored/nt.prime.exponent.md"
+  },
+  {
+    "concept_id": "nt.congruence.linear",
+    "source": "authored/nt.congruence.linear.md"
+  },
+  {
+    "concept_id": "nt.pythagorean.hypotenuse",
+    "source": "authored/nt.pythagorean.hypotenuse.md"
+  },
+  {
+    "concept_id": "nt.residue.count",
+    "source": "authored/nt.residue.count.md"
+  },
+  {
+    "concept_id": "nt.base.convert",
+    "source": "authored/nt.base.convert.md"
   }
 ]
