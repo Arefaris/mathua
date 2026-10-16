@@ -42,6 +42,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("linalg.decomp.svd", &svdGen{})
 	reg.Register("linalg.decomp.jordan", &jordanGen{})
 	reg.Register("linalg.subspace", &subspaceGen{})
+	registerFoundations(reg)
 }
 
 type vectorConceptGen struct{}

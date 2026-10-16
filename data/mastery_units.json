@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 756,
+  "concept_count": 764,
   "unit_count": 95,
   "units": [
     {
@@ -1355,6 +1355,7 @@
       "subdomains": [
         "linear_algebra.decompositions",
         "linear_algebra.determinants",
+        "linear_algebra.inner_product",
         "linear_algebra.matrices",
         "linear_algebra.vectors"
       ],
@@ -1363,11 +1364,14 @@
         "linalg.det.2x2",
         "linalg.det.3x3",
         "linalg.matrix.identity",
+        "linalg.matrix.inverse_2x2",
         "linalg.matrix.mult",
+        "linalg.orth.projection_coeff",
+        "linalg.vec.norm_squared",
         "linalg.vec.span",
         "linalg.vector.cosine_similarity"
       ],
-      "concept_count": 7
+      "concept_count": 10
     },
     {
       "id": "linear_algebra.b4",
@@ -1384,12 +1388,14 @@
       ],
       "concept_ids": [
         "linalg.decomp.qr",
+        "linalg.independence.count",
         "linalg.inner_product",
         "linalg.matrix.rank",
+        "linalg.rank.nullity",
         "linalg.subspace",
         "linalg.vec.basis"
       ],
-      "concept_count": 5
+      "concept_count": 7
     },
     {
       "id": "linear_algebra.b7",
@@ -1405,9 +1411,10 @@
       "concept_ids": [
         "linalg.lintrans.concept",
         "linalg.sys.cramer",
-        "linalg.systems.matrix"
+        "linalg.systems.matrix",
+        "linalg.transform.det_scale"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "linear_algebra.b8",
@@ -1422,9 +1429,11 @@
       "concept_ids": [
         "linalg.eigen.compute",
         "linalg.eigen.concept",
-        "linalg.eigen.diagonalization"
+        "linalg.eigen.det_product",
+        "linalg.eigen.diagonalization",
+        "linalg.eigen.trace"
       ],
-      "concept_count": 3
+      "concept_count": 5
     },
     {
       "id": "linear_algebra.b9",

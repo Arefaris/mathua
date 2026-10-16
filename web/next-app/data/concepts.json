@@ -7347,6 +7347,120 @@
     "subdomain": "linear_algebra.decompositions"
   },
   {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.independence.count",
+    "label": "Linear independence",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.vec.span"
+    ],
+    "subdomain": "linear_algebra.vectors"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.rank.nullity",
+    "label": "The rank-nullity theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.matrix.rank"
+    ],
+    "subdomain": "linear_algebra.matrices"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.matrix.inverse_2x2",
+    "label": "The inverse of a two-by-two matrix",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.det.2x2"
+    ],
+    "subdomain": "linear_algebra.matrices"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.eigen.trace",
+    "label": "The trace as a sum of eigenvalues",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.eigen.compute"
+    ],
+    "subdomain": "linear_algebra.eigenvalues"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.eigen.det_product",
+    "label": "The determinant as a product of eigenvalues",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.eigen.compute",
+      "linalg.det.2x2"
+    ],
+    "subdomain": "linear_algebra.eigenvalues"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.orth.projection_coeff",
+    "label": "Projection onto a vector",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.vector.dot"
+    ],
+    "subdomain": "linear_algebra.inner_product"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.vec.norm_squared",
+    "label": "The norm of a vector",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.vector.dot"
+    ],
+    "subdomain": "linear_algebra.vectors"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.transform.det_scale",
+    "label": "Rotation-scaling matrices",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.lintrans.concept",
+      "linalg.det.2x2"
+    ],
+    "subdomain": "linear_algebra.transformations"
+  },
+  {
     "domain": "machine_learning",
     "grading_type": "multiple_choice",
     "id": "ml.perceptron",

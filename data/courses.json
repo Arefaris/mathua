@@ -95,7 +95,7 @@
     "name": "Linear Algebra",
     "grade": "college",
     "description": "Vectors, matrices, determinants, systems, eigenvalues, spans and bases, and linear transformations.",
-    "targets": ["linalg.matrix.mult", "linalg.det.3x3", "linalg.eigen.compute", "linalg.vec.span", "linalg.vec.basis", "linalg.lintrans.concept", "linalg.subspace"]
+    "targets": ["linalg.matrix.mult", "linalg.det.3x3", "linalg.eigen.compute", "linalg.vec.span", "linalg.vec.basis", "linalg.lintrans.concept", "linalg.subspace", "linalg.independence.count", "linalg.rank.nullity", "linalg.matrix.inverse_2x2", "linalg.eigen.trace", "linalg.eigen.det_product", "linalg.orth.projection_coeff", "linalg.vec.norm_squared", "linalg.transform.det_scale"]
   },
   {
     "id": "discrete",

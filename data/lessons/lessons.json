@@ -3022,5 +3022,37 @@
   {
     "concept_id": "ml.knn.nearest_distance",
     "source": "authored/ml.knn.nearest_distance.md"
+  },
+  {
+    "concept_id": "linalg.independence.count",
+    "source": "authored/linalg.independence.count.md"
+  },
+  {
+    "concept_id": "linalg.rank.nullity",
+    "source": "authored/linalg.rank.nullity.md"
+  },
+  {
+    "concept_id": "linalg.matrix.inverse_2x2",
+    "source": "authored/linalg.matrix.inverse_2x2.md"
+  },
+  {
+    "concept_id": "linalg.eigen.trace",
+    "source": "authored/linalg.eigen.trace.md"
+  },
+  {
+    "concept_id": "linalg.eigen.det_product",
+    "source": "authored/linalg.eigen.det_product.md"
+  },
+  {
+    "concept_id": "linalg.orth.projection_coeff",
+    "source": "authored/linalg.orth.projection_coeff.md"
+  },
+  {
+    "concept_id": "linalg.vec.norm_squared",
+    "source": "authored/linalg.vec.norm_squared.md"
+  },
+  {
+    "concept_id": "linalg.transform.det_scale",
+    "source": "authored/linalg.transform.det_scale.md"
   }
 ]
