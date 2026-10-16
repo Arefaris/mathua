@@ -67,7 +67,7 @@
     "name": "Precalculus",
     "grade": "11th-12th",
     "description": "Advanced trigonometry, complex numbers, vectors, matrices, limits, and sequences.",
-    "targets": ["trig.adv.law_cosines", "trig.func.arcsine", "trig.func.arctangent", "precalc.func.floor_ceiling", "precalc.func.heaviside", "complex.adv.polar", "linalg.vector.concept", "calc.limit.concept", "precalc.rational.asymptote", "precalc.exp.growth_model", "precalc.log.evaluate", "precalc.func.inverse_value", "precalc.conic.circle_radius"]
+    "targets": ["trig.adv.law_cosines", "trig.func.arcsine", "trig.func.arctangent", "precalc.func.floor_ceiling", "precalc.func.heaviside", "complex.adv.polar", "linalg.vector.concept", "calc.limit.concept", "precalc.rational.asymptote", "precalc.exp.growth_model", "precalc.log.evaluate", "precalc.func.inverse_value", "precalc.conic.circle_radius", "precalc.poly.zeros_multiplicity", "precalc.poly.descartes", "precalc.poly.complex_conjugate", "precalc.rational.oblique_asymptote", "precalc.log.equation", "precalc.exp.compound_interest", "precalc.func.composition_value", "precalc.analytic.distance"]
   },
   {
     "id": "calc1",

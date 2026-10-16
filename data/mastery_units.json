@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 711,
-  "unit_count": 93,
+  "concept_count": 719,
+  "unit_count": 94,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -1761,6 +1761,21 @@
       "concept_count": 2
     },
     {
+      "id": "precalculus.b3",
+      "title": "Precalculus · Stage 4",
+      "domain": "precalculus",
+      "band": 3,
+      "depth_min": 10,
+      "depth_max": 10,
+      "subdomains": [
+        "precalculus.analytic"
+      ],
+      "concept_ids": [
+        "precalc.analytic.distance"
+      ],
+      "concept_count": 1
+    },
+    {
       "id": "precalculus.b4",
       "title": "Precalculus · Stage 5",
       "domain": "precalculus",
@@ -1817,11 +1832,14 @@
         "precalc.func.piecewise",
         "precalc.func.transformations",
         "precalc.partial_fractions",
+        "precalc.poly.complex_conjugate",
+        "precalc.poly.descartes",
         "precalc.poly.rational_roots",
         "precalc.poly.remainder_theorem",
+        "precalc.poly.zeros_multiplicity",
         "precalc.rational.asymptote"
       ],
-      "concept_count": 10
+      "concept_count": 13
     },
     {
       "id": "precalculus.b8",
@@ -1836,6 +1854,7 @@
         "precalculus.exponential",
         "precalculus.functions",
         "precalculus.parametric",
+        "precalculus.rational",
         "precalculus.sequences",
         "precalculus.systems"
       ],
@@ -1843,13 +1862,16 @@
         "precalc.conic.ellipse",
         "precalc.conic.hyperbola",
         "precalc.conic.parabola",
+        "precalc.exp.compound_interest",
         "precalc.exp.equation",
         "precalc.exp.growth_model",
+        "precalc.func.composition_value",
         "precalc.func.heaviside",
         "precalc.induction",
         "precalc.log.evaluate",
         "precalc.parametric.equations",
         "precalc.parametric.graph",
+        "precalc.rational.oblique_asymptote",
         "precalc.seq.arithmetic",
         "precalc.seq.geometric",
         "precalc.seq.summation",
@@ -1857,7 +1879,7 @@
         "precalc.series.geometric",
         "precalc.systems.nonlinear"
       ],
-      "concept_count": 16
+      "concept_count": 19
     },
     {
       "id": "precalculus.b9",
@@ -1867,12 +1889,14 @@
       "depth_min": 27,
       "depth_max": 27,
       "subdomains": [
+        "precalculus.exponential",
         "precalculus.sequences"
       ],
       "concept_ids": [
+        "precalc.log.equation",
         "precalc.series.geom_infinite"
       ],
-      "concept_count": 1
+      "concept_count": 2
     },
     {
       "id": "statistics.b0",

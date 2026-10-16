@@ -8792,6 +8792,118 @@
     "subdomain": "precalculus.conics"
   },
   {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.poly.zeros_multiplicity",
+    "label": "The multiplicity of a zero",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.poly.remainder_theorem"
+    ],
+    "subdomain": "precalculus.polynomials"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.poly.descartes",
+    "label": "Descartes' rule of signs",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.poly.rational_roots"
+    ],
+    "subdomain": "precalculus.polynomials"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.poly.complex_conjugate",
+    "label": "The conjugate-root theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.poly.remainder_theorem"
+    ],
+    "subdomain": "precalculus.polynomials"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.rational.oblique_asymptote",
+    "label": "Oblique asymptotes",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.rational.asymptote"
+    ],
+    "subdomain": "precalculus.rational"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.log.equation",
+    "label": "Solving logarithmic equations",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.log.evaluate"
+    ],
+    "subdomain": "precalculus.exponential"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.exp.compound_interest",
+    "label": "Compound interest",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.exp.growth_model"
+    ],
+    "subdomain": "precalculus.exponential"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.func.composition_value",
+    "label": "Composition of functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "precalc.func.inverse_value"
+    ],
+    "subdomain": "precalculus.functions"
+  },
+  {
+    "domain": "precalculus",
+    "grading_type": "numeric",
+    "id": "precalc.analytic.distance",
+    "label": "The distance formula",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.sqrt.perfect"
+    ],
+    "subdomain": "precalculus.analytic"
+  },
+  {
     "domain": "statistics",
     "grading_type": "numeric",
     "id": "stat.data.read_table",

@@ -2842,5 +2842,37 @@
   {
     "concept_id": "precalc.conic.circle_radius",
     "source": "authored/precalc.conic.circle_radius.md"
+  },
+  {
+    "concept_id": "precalc.poly.zeros_multiplicity",
+    "source": "authored/precalc.poly.zeros_multiplicity.md"
+  },
+  {
+    "concept_id": "precalc.poly.descartes",
+    "source": "authored/precalc.poly.descartes.md"
+  },
+  {
+    "concept_id": "precalc.poly.complex_conjugate",
+    "source": "authored/precalc.poly.complex_conjugate.md"
+  },
+  {
+    "concept_id": "precalc.rational.oblique_asymptote",
+    "source": "authored/precalc.rational.oblique_asymptote.md"
+  },
+  {
+    "concept_id": "precalc.log.equation",
+    "source": "authored/precalc.log.equation.md"
+  },
+  {
+    "concept_id": "precalc.exp.compound_interest",
+    "source": "authored/precalc.exp.compound_interest.md"
+  },
+  {
+    "concept_id": "precalc.func.composition_value",
+    "source": "authored/precalc.func.composition_value.md"
+  },
+  {
+    "concept_id": "precalc.analytic.distance",
+    "source": "authored/precalc.analytic.distance.md"
   }
 ]
