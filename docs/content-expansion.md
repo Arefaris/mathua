@@ -323,6 +323,47 @@ README's domain table iterates the label list, so an unlabeled domain is absent 
 `counts.py` still counts it. `counts.py --check` fails on that mismatch now, in both directions,
 because the change this section prepares for is the one that would have tripped it.
 
+### 5.5 The concept target, and where it goes
+
+The catalog holds 703 concepts. Reaching a thousand means adding 297, and this is the table that says
+where. `Now` is read from the corpus; `Target` is the decision.
+
+| Domain | Tier | Now | Target | Add |
+|---|---|---:|---:|---:|
+| precalculus | bridge | 25 | 50 | +25 |
+| calculus | bridge | 151 | 175 | +24 |
+| geometry | school | 23 | 45 | +22 |
+| machine_learning | university | 25 | 45 | +20 |
+| fractions | school | 26 | 45 | +19 |
+| linear_algebra | university | 26 | 45 | +19 |
+| statistics | bridge | 37 | 55 | +18 |
+| number_theory | university | 25 | 42 | +17 |
+| differential_equations | university | 25 | 42 | +17 |
+| trigonometry | school | 32 | 48 | +16 |
+| discrete_math | university | 39 | 55 | +16 |
+| complex_numbers | university | 26 | 42 | +16 |
+| algebra | school | 89 | 104 | +15 |
+| arithmetic | school | 46 | 60 | +14 |
+| prealgebra | school | 46 | 60 | +14 |
+| abstract_algebra | university | 32 | 45 | +13 |
+| topology | university | 30 | 42 | +12 |
+
+**A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
+work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still
+collapses the staged pairs. So the number is a curriculum decision and is written down here rather
+than derived, which is why the deltas above are computable and the targets are not.
+
+**What the tiers mean.** *school* is the arithmetic-to-trigonometry sequence a learner meets first,
+and its targets are set so each domain carries a year of practice rather than a sampling of one.
+*bridge* is precalculus, statistics and calculus, which carry the heaviest course loads and the
+longest dependency chains. *university* is the rest, where a target is a floor and not a ceiling:
+enough that the domain reads as a subject rather than as a module attached to one course.
+
+**Why the floor matters more than the depth.** Eleven of the seventeen domains sit under 40 concepts,
+and five sit at 25 or fewer with most of their content `multiple_choice`. Section 4.2 measured that
+as the corpus's weakest surface, so the floor is not only a count: a domain grown from 25 to 42 is
+also where the produced-answer conversions of section 5.2 get their room.
+
 ## 6. A sequenced plan
 
 1. Decide the course-wiring policy in section 5.1, then apply it with `TestAllCoursesResolve` as the
@@ -336,6 +377,9 @@ because the change this section prepares for is the one that would have tripped 
    empty and the remainder is measured by section 4.4.
 5. Add a domain only after 1 to 4, using the topology addition as the copy target, because a domain
    costs six hand-edited files, a course target and six regenerated ones (section 5.4).
+6. Reach the thousand, in the order of section 5.5's targets, largest deficit first. Each batch
+   regenerates everything through `scripts/sweep_counts.py`, which is the difference between a batch
+   costing a turn and costing an afternoon.
 
 ## 7. Method
 
