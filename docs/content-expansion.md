@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 661 concepts, and there are 661 KP shard files
-holding 1983 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 666 concepts, and there are 666 KP shard files
+holding 1998 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -53,11 +53,11 @@ leaves the learner a placeholder instead of a worked example, and the audit refu
 All four content guards pass on the current corpus:
 
 ```
-OK: 661 concepts across 17 domains                    scripts/validate_graph.go
-OK: 661 concepts mapped, 661 entries, 565 sources,
-    661 kp files, 1983 KPs, kp shards resolved,
+OK: 666 concepts across 17 domains                    scripts/validate_graph.go
+OK: 666 concepts mapped, 666 entries, 565 sources,
+    666 kp files, 1998 KPs, kp shards resolved,
     0 issues                                          scripts/audit_lessons.py
-counts ok: 661 concepts, 661 KP files, 22 courses     scripts/counts.py --check
+counts ok: 666 concepts, 666 KP files, 22 courses     scripts/counts.py --check
 OK: docs agree with the code and the corpus           scripts/check_docs.py
 ```
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 247 of the 661 concepts
+### 4.1 The course catalog reaches 247 of the 666 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 22 courses those closures reach
-247 of the 661 concepts: 414 of them have a node, a generator, a lesson and three KP shards and
+247 of the 666 concepts: 419 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -82,7 +82,7 @@ The count of unreachable concepts by domain:
 | Domain | Concepts | Unreachable |
 |---|---|---|
 | calculus | 128 | 100 |
-| algebra | 87 | 51 |
+| algebra | 89 | 53 |
 | topology | 30 | 27 |
 | statistics | 37 | 24 |
 | precalculus | 25 | 22 |
@@ -91,13 +91,13 @@ The count of unreachable concepts by domain:
 | complex_numbers | 26 | 20 |
 | number_theory | 25 | 20 |
 | differential_equations | 25 | 19 |
-| prealgebra | 44 | 21 |
+| prealgebra | 46 | 23 |
 | trigonometry | 32 | 17 |
 | arithmetic | 46 | 14 |
 | linear_algebra | 26 | 12 |
 | abstract_algebra | 32 | 11 |
 | discrete_math | 25 | 7 |
-| geometry | 22 | 6 |
+| geometry | 23 | 7 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
 cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
@@ -139,8 +139,8 @@ the schema.
 
 ### 4.3 Lesson depth is thin at the bottom
 
-Lessons come from three places. The `teaching/` tree holds 322 mappings, the Algebrica import
-holds 326, and 9 are authored. The median lesson is 8315 bytes, and seven lessons are under 1 KB:
+Lessons come from three places. The `teaching/` tree holds 329 mappings, the Algebrica import
+holds 328, and 9 are authored. The median lesson is 8648 bytes, and seven lessons are under 1 KB:
 
 | Concept | Lesson | Bytes |
 |---|---|---|
@@ -167,9 +167,35 @@ an existing asset in `data/diagrams/meta.json` or removed.
 ### 4.5 Diagrams and solution schemas are complete against their own rules
 
 `data/diagrams/meta.json` maps 183 assets, each to at least one concept and a license.
-`data/lessons/solutions/` holds 219 schemas, and the six learner domains require one per
+`data/lessons/solutions/` holds 230 schemas, and the six learner domains require one per
 computed concept; the table-driven exceptions are an explicit allowlist with a reason per entry
 in `internal/generator/solutions_coverage_test.go`. Growing either is additive work, not repair.
+
+### 4.6 Application siblings: the same technique inside a story
+
+Twenty-one concepts apply a technique their parent teaches rather than teach a new one:
+`arith.{add,sub,mult,div}.word`, `frac.{add,sub,mult,div,compare,mixed}.word`,
+`dec.ops.{add,sub,mult,div}.word`, `ratio.ops.{rate,proportion}.word`, `prealg.eq.word`,
+`alg.eq.vars_both_sides.word`, `alg.ineq.multi_step.word`, `alg.systems.word` and
+`geo.triangle.pythagorean.word`. They cover 17 subdomains.
+
+Each one is a *dependent*: a parent technique is one of its prerequisites. Twenty of the
+twenty-one are also leaves, so nothing else depends on them and no course closure needs them —
+they are inside the 419 unreachable concepts of section 4.1. `prealg.eq.word` is the exception on
+both counts: something depends on it, and that something is what pulls it into a course closure.
+
+The pattern is cheap because it writes no lesson prose. A sibling shares its parent's lesson file
+— `data/lessons/lessons.json` points both ids at one source — so its three KP sections come from
+headings that already exist, and the new files are the shard and the authored solution schema. The
+generator and its test extend package files that are already there, and the concept node joins an
+existing domain file.
+
+Where it stops, measured against the same two conditions: the parent lesson must carry an
+application-shaped heading to draw three KPs from. `trig.basics.sin_cos_def` has one and it is
+"Applications in integration", which is not a word problem; `geo.quad.perimeter` and
+`geo.solid.volume_rect` have none; `prealg.ineq.two_step` and `alg.quad.discriminant` have one each
+and carry two empty headings, so a shard there would need written prose first. Past this point the
+work is lesson authoring, not generator writing.
 
 ## 5. Options, and what each one costs
 
@@ -267,4 +293,6 @@ PY
 ```
 
 Lesson sizes and sources come from `data/lessons/lessons.json`; figure candidates come from
-`scripts/audit_lesson_media.py`.
+`scripts/audit_lesson_media.py`. The application siblings of section 4.6 are the concept ids ending
+in `.word` in `data/concepts/*.json`; whether anything depends on one, and whether a course closure
+reaches it, are read from those files and from `data/courses.json`.

@@ -43,6 +43,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("ratio.ops.proportion", &ratioProportionGen{})
 	reg.Register("ratio.ops.rate", &ratioRateGen{})
 	reg.Register("ratio.ops.scale", &ratioScaleGen{})
+	reg.Register("ratio.ops.rate.word", &rateWordGen{})
+	reg.Register("ratio.ops.proportion.word", &proportionWordGen{})
 
 	reg.Register("arith.exp.neg", &expNegGen{})
 	reg.Register("arith.exp.zero", &expZeroGen{})
@@ -623,6 +625,86 @@ func (g *ratioScaleGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		Answer:      fmt.Sprintf("%d", actual),
 		Explanation: fmt.Sprintf("%d x %d = %d cm.", length, factor, actual),
 		Facts:       map[string]string{"factor": strconv.Itoa(factor), "length": strconv.Itoa(length), "actual": strconv.Itoa(actual)},
+	}
+}
+
+// Ratio and rate word problems.
+//
+// Both build the exact quantity first -- the unit rate, or the unit price -- and
+// derive every other number from it, so the division the learner is asked to do
+// is exact and the answer is never a rounded value. A word problem whose numbers
+// come out of a float division is a word problem whose answer the grader can
+// disagree with.
+
+type rateWordGen struct{}
+
+func (g *rateWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	// Staged ladder: small round rates over a short time, then larger rates over
+	// a longer one.
+	maxRate, maxTime := 20, 4
+	if ctx.Difficulty >= 0.45 {
+		maxRate, maxTime = 45, 6
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxRate, maxTime = 90, 9
+	}
+	rate := rand.Intn(maxRate-4) + 5 // 5..maxRate
+	time := 2 + rand.Intn(maxTime-1) // 2..maxTime, so the noun is always plural
+	total := rate * time
+	stories := []struct{ subject, verb, unit, per string }{
+		{"car", "travels", "miles", "hour"},
+		{"printer", "prints", "pages", "minute"},
+		{"pump", "moves", "litres", "minute"},
+		{"cyclist", "rides", "kilometres", "hour"},
+		{"machine", "makes", "parts", "hour"},
+		{"tap", "fills", "cups", "minute"},
+	}
+	s := stories[rand.Intn(len(stories))]
+	return generator.Problem{
+		Question: fmt.Sprintf("A %s %s %d %s in %d %ss. What is the rate in %s per %s?",
+			s.subject, s.verb, total, s.unit, time, s.per, s.unit, s.per),
+		Answer: strconv.Itoa(rate),
+		Explanation: fmt.Sprintf("%d %s / %d %ss = %d %s per %s. A rate is the amount for one %s.",
+			total, s.unit, time, s.per, rate, s.unit, s.per, s.per),
+		Facts: map[string]string{
+			"subject": s.subject, "verb": s.verb, "total": strconv.Itoa(total),
+			"unit": s.unit, "time": strconv.Itoa(time), "per": s.per,
+			"rate": strconv.Itoa(rate),
+		},
+	}
+}
+
+type proportionWordGen struct{}
+
+func (g *proportionWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	// The unit price is built first and both bundles are derived from it, so the
+	// proportion has an exact integer solution.
+	maxUnit, maxQty := 9, 6
+	if ctx.Difficulty >= 0.45 {
+		maxUnit, maxQty = 25, 8
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxUnit, maxQty = 60, 12
+	}
+	unit := rand.Intn(maxUnit-1) + 2 // 2..maxUnit
+	qty1 := 2 + rand.Intn(maxQty-1)
+	qty2 := 2 + rand.Intn(maxQty-1)
+	if qty2 == qty1 {
+		qty2++
+	}
+	cost1, cost2 := unit*qty1, unit*qty2
+	items := []string{"notebooks", "tickets", "pens", "muffins", "tiles", "bottles", "bags of flour"}
+	item := items[rand.Intn(len(items))]
+	return generator.Problem{
+		Question: fmt.Sprintf("%d %s cost $%d. At the same price, how much do %d %s cost?",
+			qty1, item, cost1, qty2, item),
+		Answer: strconv.Itoa(cost2),
+		Explanation: fmt.Sprintf("$%d for %d %s is $%d each, so %d %s cost %d x $%d = $%d.",
+			cost1, qty1, item, unit, qty2, item, qty2, unit, cost2),
+		Facts: map[string]string{
+			"item": item, "qty1": strconv.Itoa(qty1), "cost1": strconv.Itoa(cost1),
+			"qty2": strconv.Itoa(qty2), "cost2": strconv.Itoa(cost2), "unit": strconv.Itoa(unit),
+		},
 	}
 }
 

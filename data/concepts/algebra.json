@@ -100,6 +100,20 @@
     }
   },
   {
+    "id": "alg.eq.vars_both_sides.word",
+    "label": "Equations word problems: two offers",
+    "domain": "algebra",
+    "subdomain": "algebra.equations",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "alg.eq.vars_both_sides"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
     "id": "alg.eq.literal",
     "label": "Literal equations: solve for a variable",
     "domain": "algebra",
@@ -126,6 +140,20 @@
     "mastery_threshold": {
       "streak": 10,
       "avg_time_seconds": 20.0
+    }
+  },
+  {
+    "id": "alg.ineq.multi_step.word",
+    "label": "Inequality word problems: at most",
+    "domain": "algebra",
+    "subdomain": "algebra.inequalities",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "alg.ineq.multi_step"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
     }
   },
   {

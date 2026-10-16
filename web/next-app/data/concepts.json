@@ -563,6 +563,20 @@
   },
   {
     "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.eq.vars_both_sides.word",
+    "label": "Equations word problems: two offers",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.eq.vars_both_sides"
+    ],
+    "subdomain": "algebra.equations"
+  },
+  {
+    "domain": "algebra",
     "grading_type": "expression",
     "id": "alg.eq.literal",
     "label": "Literal equations: solve for a variable",
@@ -587,6 +601,20 @@
     "prerequisites": [
       "prealg.ineq.two_step",
       "alg.eq.multi_step"
+    ],
+    "subdomain": "algebra.inequalities"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.ineq.multi_step.word",
+    "label": "Inequality word problems: at most",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.ineq.multi_step"
     ],
     "subdomain": "algebra.inequalities"
   },
@@ -5791,6 +5819,20 @@
   },
   {
     "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.triangle.pythagorean.word",
+    "label": "Pythagorean word problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.triangle.pythagorean"
+    ],
+    "subdomain": "geometry.triangles"
+  },
+  {
+    "domain": "geometry",
     "grading_type": "multiple_choice",
     "id": "geo.quad.types",
     "label": "Types of quadrilaterals",
@@ -7442,6 +7484,34 @@
     "label": "Unit rates",
     "mastery_threshold": {
       "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ratio.ops.proportion"
+    ],
+    "subdomain": "prealgebra.ratios"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "ratio.ops.rate.word",
+    "label": "Rate word problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ratio.ops.rate"
+    ],
+    "subdomain": "prealgebra.ratios"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "ratio.ops.proportion.word",
+    "label": "Proportion word problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
       "streak": 10
     },
     "prerequisites": [

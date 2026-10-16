@@ -92,6 +92,10 @@
     "source": "teaching/alg.eq.vars_both_sides.md"
   },
   {
+    "concept_id": "alg.eq.vars_both_sides.word",
+    "source": "teaching/alg.eq.vars_both_sides.md"
+  },
+  {
     "concept_id": "alg.exp.concept",
     "source": "algebrica/functions/exponential-function.md"
   },
@@ -201,6 +205,10 @@
   },
   {
     "concept_id": "alg.ineq.multi_step",
+    "source": "algebrica/inequalities/linear-inequalities.md"
+  },
+  {
+    "concept_id": "alg.ineq.multi_step.word",
     "source": "algebrica/inequalities/linear-inequalities.md"
   },
   {
@@ -1184,6 +1192,10 @@
     "source": "algebrica/trigonometry/pythagorean-theorem.md"
   },
   {
+    "concept_id": "geo.triangle.pythagorean.word",
+    "source": "algebrica/trigonometry/pythagorean-theorem.md"
+  },
+  {
     "concept_id": "geo.triangle.types",
     "source": "teaching/geo.triangle.types.md"
   },
@@ -1520,7 +1532,15 @@
     "source": "teaching/ratio.ops.proportion.md"
   },
   {
+    "concept_id": "ratio.ops.proportion.word",
+    "source": "teaching/ratio.ops.proportion.md"
+  },
+  {
     "concept_id": "ratio.ops.rate",
+    "source": "teaching/ratio.ops.rate.md"
+  },
+  {
+    "concept_id": "ratio.ops.rate.word",
     "source": "teaching/ratio.ops.rate.md"
   },
   {

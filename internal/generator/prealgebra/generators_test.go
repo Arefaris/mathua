@@ -24,6 +24,8 @@ func TestDecAddSubGen(t *testing.T)       { fuzzGen(t, &decAddSubGen{}) }
 func TestDecMultGen(t *testing.T)         { fuzzGen(t, &decMultGen{}) }
 func TestDecDivGen(t *testing.T)          { fuzzGen(t, &decDivGen{}) }
 func TestDecAddWordGen(t *testing.T)      { fuzzGen(t, &decAddWordGen{}) }
+func TestRateWordGen(t *testing.T)        { fuzzGen(t, &rateWordGen{}) }
+func TestProportionWordGen(t *testing.T)  { fuzzGen(t, &proportionWordGen{}) }
 func TestDecSubWordGen(t *testing.T)      { fuzzGen(t, &decSubWordGen{}) }
 func TestDecMultWordGen(t *testing.T)     { fuzzGen(t, &decMultWordGen{}) }
 func TestDecDivWordGen(t *testing.T)      { fuzzGen(t, &decDivWordGen{}) }

@@ -374,6 +374,34 @@
     }
   },
   {
+    "id": "ratio.ops.rate.word",
+    "label": "Rate word problems",
+    "domain": "prealgebra",
+    "subdomain": "prealgebra.ratios",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ratio.ops.rate"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "ratio.ops.proportion.word",
+    "label": "Proportion word problems",
+    "domain": "prealgebra",
+    "subdomain": "prealgebra.ratios",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ratio.ops.proportion"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
     "id": "ratio.ops.scale",
     "label": "Scale drawings and maps",
     "domain": "prealgebra",

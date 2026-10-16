@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 661,
+  "concept_count": 666,
   "unit_count": 91,
   "units": [
     {
@@ -161,6 +161,7 @@
         "alg.eq.multi_step",
         "alg.eq.rational",
         "alg.eq.vars_both_sides",
+        "alg.eq.vars_both_sides.word",
         "alg.factor.gcf",
         "alg.factor.trinomial",
         "alg.func.concept",
@@ -169,6 +170,7 @@
         "alg.ineq.interval",
         "alg.ineq.irrational",
         "alg.ineq.multi_step",
+        "alg.ineq.multi_step.word",
         "alg.ineq.rational",
         "alg.ineq.sign_analysis",
         "alg.ineq.systems",
@@ -185,7 +187,7 @@
         "alg.systems.gaussian",
         "alg.systems.substitution"
       ],
-      "concept_count": 31
+      "concept_count": 33
     },
     {
       "id": "algebra.b7",
@@ -1135,9 +1137,10 @@
         "geo.coord.midpoint",
         "geo.solid.surface_area",
         "geo.solid.volume_rect",
-        "geo.triangle.pythagorean"
+        "geo.triangle.pythagorean",
+        "geo.triangle.pythagorean.word"
       ],
-      "concept_count": 6
+      "concept_count": 7
     },
     {
       "id": "geometry.b4",
@@ -1639,10 +1642,12 @@
         "prealg.real.properties",
         "prealg.var.concept",
         "ratio.ops.proportion",
+        "ratio.ops.proportion.word",
         "ratio.ops.rate",
+        "ratio.ops.rate.word",
         "ratio.ops.scale"
       ],
-      "concept_count": 13
+      "concept_count": 15
     },
     {
       "id": "prealgebra.b5",

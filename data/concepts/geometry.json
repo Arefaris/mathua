@@ -128,6 +128,20 @@
   }
  },
  {
+  "id": "geo.triangle.pythagorean.word",
+  "label": "Pythagorean word problems",
+  "domain": "geometry",
+  "subdomain": "geometry.triangles",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.triangle.pythagorean"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 25.0
+  }
+ },
+ {
   "id": "geo.quad.types",
   "label": "Types of quadrilaterals",
   "domain": "geometry",

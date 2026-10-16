@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 661 |
+| Total concepts | 666 |
 | Total units | 91 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -38,7 +38,7 @@ exists to make concrete.
 | `abstract_algebra.b9` | abstract_algebra | 9 | 9 | 4 | 27–29 |
 | `abstract_algebra.b10` | abstract_algebra | 10 | 2 | 1 | 30–31 |
 | `algebra.b5` | algebra | 5 | 4 | 1 | 16–17 |
-| `algebra.b6` | algebra | 6 | 31 | 7 | 18–20 |
+| `algebra.b6` | algebra | 6 | 33 | 7 | 18–20 |
 | `algebra.b7` | algebra | 7 | 27 | 7 | 21–23 |
 | `algebra.b8` | algebra | 8 | 22 | 9 | 24–26 |
 | `algebra.b9` | algebra | 9 | 3 | 3 | 27–28 |
@@ -75,7 +75,7 @@ exists to make concrete.
 | `geometry.b0` | geometry | 0 | 7 | 5 | 0–2 |
 | `geometry.b1` | geometry | 1 | 4 | 3 | 3–4 |
 | `geometry.b2` | geometry | 2 | 2 | 2 | 8–8 |
-| `geometry.b3` | geometry | 3 | 6 | 4 | 9–11 |
+| `geometry.b3` | geometry | 3 | 7 | 4 | 9–11 |
 | `geometry.b4` | geometry | 4 | 2 | 2 | 12–12 |
 | `geometry.b6` | geometry | 6 | 1 | 1 | 20–20 |
 | `linear_algebra.b0` | linear_algebra | 0 | 1 | 1 | 2–2 |
@@ -101,7 +101,7 @@ exists to make concrete.
 | `prealgebra.b0` | prealgebra | 0 | 1 | 1 | 1–1 |
 | `prealgebra.b2` | prealgebra | 2 | 1 | 1 | 8–8 |
 | `prealgebra.b3` | prealgebra | 3 | 21 | 6 | 9–11 |
-| `prealgebra.b4` | prealgebra | 4 | 13 | 5 | 12–14 |
+| `prealgebra.b4` | prealgebra | 4 | 15 | 5 | 12–14 |
 | `prealgebra.b5` | prealgebra | 5 | 6 | 3 | 15–17 |
 | `prealgebra.b6` | prealgebra | 6 | 2 | 2 | 18–18 |
 | `precalculus.b4` | precalculus | 4 | 5 | 2 | 12–14 |
@@ -140,9 +140,9 @@ at every width.
 | 2 | 117 | 4 | 33 | 19 | 54 | 3 | 0 |
 | 3 | 91 | 5 | 48 | 18 | 38 | 4 | 0 |
 | 4 | 73 | 6 | 48 | 8 | 26 | 3 | 0 |
-| 5 | 64 | 7 | 63 | 8 | 19 | 4 | 0 |
+| 5 | 64 | 8 | 63 | 8 | 19 | 4 | 0 |
 | 6 | 58 | 8 | 81 | 4 | 14 | 3 | 0 |
-| 8 | 47 | 10 | 71 | 4 | 11 | 6 | 0 |
+| 8 | 47 | 11 | 71 | 4 | 11 | 6 | 0 |
 | 10 | 42 | 12 | 104 | 5 | 10 | 6 | 0 |
 | 12 | 40 | 13 | 105 | 1 | 7 | 3 | 0 |
 | 15 | 32 | 16 | 104 | 3 | 7 | 7 | 0 |
@@ -248,7 +248,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 661
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 666
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

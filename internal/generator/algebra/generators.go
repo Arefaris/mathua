@@ -19,8 +19,10 @@ func Register(reg *generator.Registry) {
 
 	reg.Register("alg.eq.multi_step", &multiStepEqGen{})
 	reg.Register("alg.eq.vars_both_sides", &varsBothSidesGen{})
+	reg.Register("alg.eq.vars_both_sides.word", &varsBothSidesWordGen{})
 	reg.Register("alg.eq.literal", &literalEqGen{})
 	reg.Register("alg.ineq.multi_step", &multiStepIneqGen{})
+	reg.Register("alg.ineq.multi_step.word", &ineqWordGen{})
 	reg.Register("alg.ineq.compound", &compoundIneqGen{})
 
 	reg.Register("alg.systems.substitution", &sysSubstitutionGen{})
@@ -295,6 +297,89 @@ func (g *varsBothSidesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		Answer:      fmt.Sprintf("%d", x),
 		Explanation: fmt.Sprintf("\\(%dx + %d = %dx + %d\\) → \\(%dx = %d\\) → \\(x = %d\\)", a, b, c, d, a-c, d-b, x),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "d": strconv.Itoa(d), "diff": strconv.Itoa(a - c), "rhs": strconv.Itoa(d - b), "x": strconv.Itoa(x)},
+	}
+}
+
+type varsBothSidesWordGen struct{}
+
+// A story whose two offers meet at one number of uses. The meeting point is
+// chosen first and the second flat fee is derived from it, so the number the
+// learner has to find is an exact integer and the pool discriminates.
+func (g *varsBothSidesWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	maxPer, maxUses := 9, 8
+	if ctx.Difficulty >= 0.45 {
+		maxPer, maxUses = 13, 12
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxPer, maxUses = 18, 20
+	}
+	perA := rand.Intn(maxPer) + 6     // 6..maxPer+5
+	perB := perA - (rand.Intn(3) + 1) // 1..3 cheaper per use
+	uses := rand.Intn(maxUses) + 3    // 3..maxUses+2
+	joinA := rand.Intn(25) + 8        // 8..32
+	joinB := joinA + (perA-perB)*uses // B is dearer to join, to compensate
+	pairs := []struct{ a, b, unit, plural, thing string }{
+		{"Gym A", "Gym B", "visit", "visits", "gym"},
+		{"Plan A", "Plan B", "month", "months", "phone plan"},
+		{"Studio A", "Studio B", "class", "classes", "studio"},
+		{"Club A", "Club B", "round", "rounds", "golf club"},
+	}
+	p := pairs[rand.Intn(len(pairs))]
+	return generator.Problem{
+		Question: fmt.Sprintf("%s charges $%d to join and $%d per %s. %s charges $%d to join and $%d per %s. After how many %s do the two %ss cost the same?",
+			p.a, joinA, perA, p.unit, p.b, joinB, perB, p.unit, p.plural, p.thing),
+		Answer: strconv.Itoa(uses),
+		Explanation: fmt.Sprintf("\\(%d + %dn = %d + %dn\\) → \\(%dn = %d\\) → \\(n = %d\\).",
+			joinA, perA, joinB, perB, perA-perB, joinB-joinA, uses),
+		Facts: map[string]string{
+			"a": p.a, "b": p.b, "unit": p.unit, "thing": p.thing,
+			"joinA": strconv.Itoa(joinA), "perA": strconv.Itoa(perA),
+			"joinB": strconv.Itoa(joinB), "perB": strconv.Itoa(perB),
+			"diff": strconv.Itoa(perA - perB), "gap": strconv.Itoa(joinB - joinA),
+			"uses": strconv.Itoa(uses),
+		},
+	}
+}
+
+// ineqWordGen: a budget story answered by the greatest whole number that fits.
+// The budget is deliberately off the boundary, so "at most" has one integer
+// answer instead of sitting exactly on a step.
+type ineqWordGen struct{}
+
+func (g *ineqWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	maxPer, maxCount := 5, 8
+	if ctx.Difficulty >= 0.45 {
+		maxPer, maxCount = 9, 12
+	}
+	if ctx.Difficulty >= 0.7 {
+		maxPer, maxCount = 15, 20
+	}
+	base := rand.Intn(15) + 5        // flat fee 5..19
+	per := rand.Intn(maxPer-1) + 2   // 2..maxPer
+	count := rand.Intn(maxCount) + 3 // 3..maxCount+2
+	slack := rand.Intn(per)          // < per, so the answer is unique
+	budget := base + per*count + slack
+	room := budget - base // per*count + slack
+	stories := []struct{ service, unit string }{
+		{"taxi", "mile"},
+		{"delivery van", "kilometre"},
+		{"moving van", "mile"},
+		{"caterer", "guest"},
+	}
+	s := stories[rand.Intn(len(stories))]
+	return generator.Problem{
+		Question: fmt.Sprintf("A %s charges $%d plus $%d per %s. You can spend at most $%d. What is the greatest whole number of %ss you can pay for?",
+			s.service, base, per, s.unit, budget, s.unit),
+		Answer: strconv.Itoa(count),
+		Explanation: fmt.Sprintf("\\(%d + %dm \\le %d\\) → \\(%dm \\le %d\\) → \\(m \\le %d\\), and \\(%d\\) %ss would cost \\(%d\\), more than the budget allows, so \\(m = %d\\).",
+			base, per, budget, per, room, room/per, count+1, s.unit, base+per*(count+1), count),
+		Facts: map[string]string{
+			"service": s.service, "unit": s.unit, "base": strconv.Itoa(base),
+			"per": strconv.Itoa(per), "budget": strconv.Itoa(budget),
+			"room": strconv.Itoa(room), "quotient": strconv.Itoa(room / per),
+			"next": strconv.Itoa(count + 1), "next_cost": strconv.Itoa(base + per*(count+1)),
+			"count": strconv.Itoa(count),
+		},
 	}
 }
 

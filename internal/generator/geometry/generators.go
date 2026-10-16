@@ -20,6 +20,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("geo.triangle.angles", &triangleAnglesGen{})
 	reg.Register("geo.triangle.area", &triangleAreaGen{})
 	reg.Register("geo.triangle.pythagorean", &pythagoreanGen{})
+	reg.Register("geo.triangle.pythagorean.word", &pythagoreanWordGen{})
 	reg.Register("geo.quad.types", &quadTypesGen{})
 	reg.Register("geo.quad.area", &quadAreaGen{})
 	reg.Register("geo.quad.perimeter", &quadPerimGen{})
@@ -261,6 +262,57 @@ func (g *pythagoreanGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		Answer:      fmt.Sprintf("%d", t.c),
 		Explanation: fmt.Sprintf("\\(c^{2} = %d^{2} + %d^{2} = %d + %d = %d\\), so \\(c = \\sqrt{%d} = %d\\).", t.a, t.b, t.a*t.a, t.b*t.b, t.c*t.c, t.c*t.c, t.c),
 		Facts:       map[string]string{"a": strconv.Itoa(t.a), "b": strconv.Itoa(t.b), "c": strconv.Itoa(t.c), "a_sq": strconv.Itoa(t.a * t.a), "b_sq": strconv.Itoa(t.b * t.b), "c_sq": strconv.Itoa(t.c * t.c)},
+	}
+}
+
+// pythagoreanWordGen: the theorem as a story. The numbers come from the same
+// triples the parent uses, so every square root is exact and the answer is an
+// integer. The two flavours -- missing hypotenuse, missing leg -- publish the
+// same facts, so one authored solution schema covers both.
+type pythagoreanWordGen struct{}
+
+func (g *pythagoreanWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	type triple struct{ a, b, c int }
+	triples := []triple{{3, 4, 5}, {6, 8, 10}, {5, 12, 13}, {9, 12, 15}}
+	if ctx.Difficulty >= 0.45 {
+		triples = append(triples, triple{8, 15, 17}, triple{7, 24, 25})
+	}
+	if ctx.Difficulty >= 0.7 {
+		triples = append(triples, triple{20, 21, 29}, triple{12, 16, 20})
+	}
+	t := triples[rand.Intn(len(triples))]
+	leg, other, hyp := t.a, t.b, t.c
+	if rand.Intn(2) == 0 {
+		// The ladder's foot and the height it reaches are the two legs.
+		return generator.Problem{
+			Question: fmt.Sprintf("A ladder leans against a wall. Its foot is %d feet from the wall and it reaches %d feet up the wall. How long is the ladder?",
+				leg, other),
+			Answer: strconv.Itoa(hyp),
+			Explanation: fmt.Sprintf("\\(%d^2 + %d^2 = %d + %d = %d\\), so the ladder is \\(\\sqrt{%d} = %d\\) feet long.",
+				leg, other, leg*leg, other*other, hyp*hyp, hyp*hyp, hyp),
+			Facts: map[string]string{
+				"story":   "A ladder leans against a wall.",
+				"rule":    "the square of the hypotenuse is the sum of the squares of the legs",
+				"known":   fmt.Sprintf("the two legs, %d feet and %d feet", leg, other),
+				"side":    "ladder (the hypotenuse)",
+				"unknown": strconv.Itoa(hyp),
+			},
+		}
+	}
+	// The ladder's length is the hypotenuse and its foot distance is one leg.
+	return generator.Problem{
+		Question: fmt.Sprintf("A ladder %d feet long leans against a wall. Its foot is %d feet from the wall. How far up the wall does it reach?",
+			hyp, leg),
+		Answer: strconv.Itoa(other),
+		Explanation: fmt.Sprintf("\\(%d^2 - %d^2 = %d - %d = %d\\), so the height is \\(\\sqrt{%d} = %d\\) feet.",
+			hyp, leg, hyp*hyp, leg*leg, other*other, other*other, other),
+		Facts: map[string]string{
+			"story":   "A ladder leans against a wall.",
+			"rule":    "a leg is the square root of the hypotenuse squared minus the other leg squared",
+			"known":   fmt.Sprintf("the hypotenuse, %d feet, and one leg, %d feet", hyp, leg),
+			"side":    "height reached on the wall (a leg)",
+			"unknown": strconv.Itoa(other),
+		},
 	}
 }
 

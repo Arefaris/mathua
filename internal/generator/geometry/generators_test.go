@@ -18,28 +18,29 @@ func fuzzGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestPointsLinesGen(t *testing.T)    { fuzzGen(t, &pointsLinesGen{}) }
-func TestAngleTypesGen(t *testing.T)     { fuzzGen(t, &angleTypesGen{}) }
-func TestAngleMeasureGen(t *testing.T)   { fuzzGen(t, &angleMeasureGen{}) }
-func TestComplementaryGen(t *testing.T)  { fuzzGen(t, &complementaryGen{}) }
-func TestVerticalAnglesGen(t *testing.T) { fuzzGen(t, &verticalAnglesGen{}) }
-func TestTriangleTypesGen(t *testing.T)  { fuzzGen(t, &triangleTypesGen{}) }
-func TestTriangleAnglesGen(t *testing.T) { fuzzGen(t, &triangleAnglesGen{}) }
-func TestTriangleAreaGen(t *testing.T)   { fuzzGen(t, &triangleAreaGen{}) }
-func TestPythagoreanGen(t *testing.T)    { fuzzGen(t, &pythagoreanGen{}) }
-func TestQuadTypesGen(t *testing.T)      { fuzzGen(t, &quadTypesGen{}) }
-func TestQuadAreaGen(t *testing.T)       { fuzzGen(t, &quadAreaGen{}) }
-func TestQuadPerimGen(t *testing.T)      { fuzzGen(t, &quadPerimGen{}) }
-func TestCirclePartsGen(t *testing.T)    { fuzzGen(t, &circlePartsGen{}) }
-func TestCircumferenceGen(t *testing.T)  { fuzzGen(t, &circumferenceGen{}) }
-func TestCircleAreaGen(t *testing.T)     { fuzzGen(t, &circleAreaGen{}) }
-func TestCoordPlotGen(t *testing.T)      { fuzzGen(t, &coordPlotGen{}) }
-func TestCoordDistanceGen(t *testing.T)  { fuzzGen(t, &coordDistanceGen{}) }
-func TestCoordMidpointGen(t *testing.T)  { fuzzGen(t, &coordMidpointGen{}) }
-func TestVolumeGen(t *testing.T)         { fuzzGen(t, &volumeGen{}) }
-func TestSurfaceAreaGen(t *testing.T)    { fuzzGen(t, &surfaceAreaGen{}) }
-func TestCoordLinesGen(t *testing.T)     { fuzzGen(t, &coordLinesGen{}) }
-func TestCoordPolarGen(t *testing.T)     { fuzzGen(t, &coordPolarGen{}) }
+func TestPointsLinesGen(t *testing.T)     { fuzzGen(t, &pointsLinesGen{}) }
+func TestAngleTypesGen(t *testing.T)      { fuzzGen(t, &angleTypesGen{}) }
+func TestAngleMeasureGen(t *testing.T)    { fuzzGen(t, &angleMeasureGen{}) }
+func TestComplementaryGen(t *testing.T)   { fuzzGen(t, &complementaryGen{}) }
+func TestVerticalAnglesGen(t *testing.T)  { fuzzGen(t, &verticalAnglesGen{}) }
+func TestTriangleTypesGen(t *testing.T)   { fuzzGen(t, &triangleTypesGen{}) }
+func TestTriangleAnglesGen(t *testing.T)  { fuzzGen(t, &triangleAnglesGen{}) }
+func TestTriangleAreaGen(t *testing.T)    { fuzzGen(t, &triangleAreaGen{}) }
+func TestPythagoreanGen(t *testing.T)     { fuzzGen(t, &pythagoreanGen{}) }
+func TestPythagoreanWordGen(t *testing.T) { fuzzGen(t, &pythagoreanWordGen{}) }
+func TestQuadTypesGen(t *testing.T)       { fuzzGen(t, &quadTypesGen{}) }
+func TestQuadAreaGen(t *testing.T)        { fuzzGen(t, &quadAreaGen{}) }
+func TestQuadPerimGen(t *testing.T)       { fuzzGen(t, &quadPerimGen{}) }
+func TestCirclePartsGen(t *testing.T)     { fuzzGen(t, &circlePartsGen{}) }
+func TestCircumferenceGen(t *testing.T)   { fuzzGen(t, &circumferenceGen{}) }
+func TestCircleAreaGen(t *testing.T)      { fuzzGen(t, &circleAreaGen{}) }
+func TestCoordPlotGen(t *testing.T)       { fuzzGen(t, &coordPlotGen{}) }
+func TestCoordDistanceGen(t *testing.T)   { fuzzGen(t, &coordDistanceGen{}) }
+func TestCoordMidpointGen(t *testing.T)   { fuzzGen(t, &coordMidpointGen{}) }
+func TestVolumeGen(t *testing.T)          { fuzzGen(t, &volumeGen{}) }
+func TestSurfaceAreaGen(t *testing.T)     { fuzzGen(t, &surfaceAreaGen{}) }
+func TestCoordLinesGen(t *testing.T)      { fuzzGen(t, &coordLinesGen{}) }
+func TestCoordPolarGen(t *testing.T)      { fuzzGen(t, &coordPolarGen{}) }
 
 func TestFuzz(t *testing.T) {
 	reg := generator.NewRegistry()
