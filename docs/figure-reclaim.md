@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-228 paragraphs across 100 lessons read as a caption whose image was dropped:
-124 certain, 33 strong and 71 likely. Every one sits
+227 paragraphs across 100 lessons read as a caption whose image was dropped:
+123 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 124 rows and 54 distinct figures
+## 3. The captions are 123 rows and 53 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **54 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **53 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 5 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 4 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed forty-eight.
+again to 53 and 44, of which section 7 has since landed forty-nine.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,7 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.31 | (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lbrack... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.32 | (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -1035,6 +1034,36 @@ That caption held one row: the report went from 229 to 228, and the certain tier
 Distinct figures go from 55 to 54 and redraws from 6 to 5. The lesson keeps six other orphan
 captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
 follows, to 228.
+
+**Figure 6.31** (the region Q to the left of `g(y) = 2 sqrt(y)` and the solid it sweeps about the
+x-axis) landed on 2026-10-16 in `calc.integral.volume`, as `calculus/paraboloid-hole-solid.svg`.
+
+**The tree's oblique projection is one projection, with the depth drawn along either of the other
+two axes.** A y-axis solid's circular ends are horizontal circles, so the depth is drawn vertically
+and an end comes out as an ellipse 7 wide to 2 tall; 6.25 to 6.30 all read that way. An x-axis
+solid's ends are vertical circles, so the depth is drawn horizontally and the same end comes out 2
+wide to 7 tall -- the same projection, rotated with the axis it belongs to. Without that, a circle
+perpendicular to x projects to a vertical segment, which is why a horizontal cylinder cannot be
+drawn at all in the first reading, and 6.31(b) is the tree's first figure with a horizontal axis.
+
+**The hole's whole silhouette is filled white, and the far end's disc with it.** The hole is the
+paraboloid of radius `x^2/4`: it closes at `x = 0`, where the inner radius is 0, and its radius at
+`x = 4` equals the cylinder's, so the far end is a knife ring whose disc is the hole's mouth and not
+material, while the near end is a full disc and stays grey. The two silhouette curves are
+`y = +-x^2/4`; upstream dashes the upper and strokes the lower, and that is kept -- the upper is the
+hole's far edge and the lower its near edge.
+
+**Both panels keep equal scales, so the canvas is 400 wide and not 580.** The region is a 4 by 4
+square, and a parabola drawn with unequal scales is a different parabola; the solid's diameter is
+twice its length, and with a panel filled it would read as a long cylinder rather than a squat one.
+The style doc sizes a canvas to its content and the calculus figures already range from 210 to 780
+wide, so 400 is the honest width here and not 580 with 118px of margin on each side.
+
+The caption is terse -- it says `$g(y)$` and not the function -- so the alt says "the function
+g(y)" and the figure's own curve label carries `g(y) = 2` and a root. That caption held one row:
+the report went from 228 to 227, and the certain tier from 124 to 123. Distinct figures go from 54
+to 53 and redraws from 5 to 4. The lesson keeps five other orphan captions, so the lesson count
+stays at 100, and the ceiling in `internal/lessons/assets_test.go` follows, to 227.
 
 ## 8. Order of work
 
