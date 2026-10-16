@@ -461,5 +461,91 @@
       "streak": 7,
       "avg_time_seconds": 16.0
     }
+    },
+  {
+    "id": "frac.add.three",
+    "label": "Adding three fractions",
+    "domain": "fractions",
+    "subdomain": "fractions.addition",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.add.diff"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.of_fraction",
+    "label": "A fraction of a fraction",
+    "domain": "fractions",
+    "subdomain": "fractions.multiplication",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.mult"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.lcd",
+    "label": "The least common denominator",
+    "domain": "fractions",
+    "subdomain": "fractions.equivalence",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.basics.equivalent",
+      "frac.add.diff"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.unit_decompose",
+    "label": "Unit fractions",
+    "domain": "fractions",
+    "subdomain": "fractions.concept",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.reciprocal"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.mult.cancel",
+    "label": "Cancelling before multiplying",
+    "domain": "fractions",
+    "subdomain": "fractions.multiplication",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.mult"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.mixed.div",
+    "label": "Dividing mixed numbers",
+    "domain": "fractions",
+    "subdomain": "fractions.mixed",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.div",
+      "frac.mixed.convert"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
   }
 ]

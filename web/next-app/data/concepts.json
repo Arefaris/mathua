@@ -6410,6 +6410,92 @@
     "subdomain": "fractions.division"
   },
   {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.add.three",
+    "label": "Adding three fractions",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.add.diff"
+    ],
+    "subdomain": "fractions.addition"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.of_fraction",
+    "label": "A fraction of a fraction",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.mult"
+    ],
+    "subdomain": "fractions.multiplication"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.lcd",
+    "label": "The least common denominator",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.basics.equivalent",
+      "frac.add.diff"
+    ],
+    "subdomain": "fractions.equivalence"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.unit_decompose",
+    "label": "Unit fractions",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.reciprocal"
+    ],
+    "subdomain": "fractions.concept"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.mult.cancel",
+    "label": "Cancelling before multiplying",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.mult"
+    ],
+    "subdomain": "fractions.multiplication"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.mixed.div",
+    "label": "Dividing mixed numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.div",
+      "frac.mixed.convert"
+    ],
+    "subdomain": "fractions.mixed"
+  },
+  {
     "domain": "geometry",
     "grading_type": "multiple_choice",
     "id": "geo.basic.points_lines",

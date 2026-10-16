@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 770 |
+| Total concepts | 776 |
 | Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -71,8 +71,8 @@ exists to make concrete.
 | `discrete_math.b8` | discrete_math | 8 | 1 | 1 | 26–26 |
 | `discrete_math.b9` | discrete_math | 9 | 4 | 3 | 27–29 |
 | `fractions.b2` | fractions | 2 | 7 | 4 | 6–8 |
-| `fractions.b3` | fractions | 3 | 16 | 8 | 9–11 |
-| `fractions.b4` | fractions | 4 | 8 | 6 | 12–14 |
+| `fractions.b3` | fractions | 3 | 19 | 8 | 9–11 |
+| `fractions.b4` | fractions | 4 | 11 | 6 | 12–14 |
 | `fractions.b5` | fractions | 5 | 1 | 1 | 15–15 |
 | `geometry.b0` | geometry | 0 | 8 | 5 | 0–2 |
 | `geometry.b1` | geometry | 1 | 15 | 7 | 3–4 |
@@ -145,13 +145,13 @@ at every width.
 | 3 | 95 | 5 | 50 | 19 | 35 | 5 | 0 |
 | 4 | 76 | 7 | 63 | 8 | 23 | 4 | 0 |
 | 5 | 65 | 8 | 72 | 6 | 17 | 4 | 0 |
-| 6 | 61 | 9 | 96 | 5 | 13 | 4 | 0 |
+| 6 | 61 | 9 | 96 | 5 | 13 | 5 | 0 |
 | 8 | 48 | 12 | 101 | 3 | 9 | 7 | 0 |
 | 10 | 43 | 12 | 134 | 3 | 11 | 8 | 0 |
-| 12 | 42 | 15 | 120 | 2 | 6 | 6 | 0 |
+| 12 | 42 | 15 | 120 | 2 | 6 | 7 | 0 |
 | 15 | 32 | 16 | 134 | 2 | 5 | 11 | 0 |
 | 20 | 29 | 23 | 158 | 2 | 5 | 12 | 0 |
-| 45 | 17 | 34 | 158 | 0 | 0 | 15 | 0 |
+| 45 | 17 | 37 | 158 | 0 | 0 | 15 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -292,7 +292,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 770
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 776
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

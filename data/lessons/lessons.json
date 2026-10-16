@@ -3078,5 +3078,29 @@
   {
     "concept_id": "frac.how_many",
     "source": "authored/frac.how_many.md"
+  },
+  {
+    "concept_id": "frac.add.three",
+    "source": "authored/frac.add.three.md"
+  },
+  {
+    "concept_id": "frac.of_fraction",
+    "source": "authored/frac.of_fraction.md"
+  },
+  {
+    "concept_id": "frac.lcd",
+    "source": "authored/frac.lcd.md"
+  },
+  {
+    "concept_id": "frac.unit_decompose",
+    "source": "authored/frac.unit_decompose.md"
+  },
+  {
+    "concept_id": "frac.mult.cancel",
+    "source": "authored/frac.mult.cancel.md"
+  },
+  {
+    "concept_id": "frac.mixed.div",
+    "source": "authored/frac.mixed.div.md"
   }
 ]
