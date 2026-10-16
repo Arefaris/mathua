@@ -1836,5 +1836,107 @@
     "streak": 3,
     "avg_time_seconds": 120
    }
+    },
+  {
+   "id": "calc.vec.parametric_derivative",
+   "label": "The derivative of a parametrised curve",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.chain_rule"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.arc_length",
+   "label": "Arc length of a parametrised curve",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.parametric_derivative",
+    "calc.integral.arc_length"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.curvature",
+   "label": "Curvature",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.parametric_derivative",
+    "calc.deriv.higher_order"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.line_integral",
+   "label": "Line integrals",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.integral.definite",
+    "calc.vec.parametric_derivative"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.jacobian_value",
+   "label": "The Jacobian as a change of measure",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.jacobian"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.double_integral_rect",
+   "label": "Double integrals over a rectangle",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.integral.definite",
+    "calc.deriv.partial"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.triple_integral_box",
+   "label": "Triple integrals over a box",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.multi.double_integral_rect"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
   }
 ]

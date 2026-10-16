@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 672 concepts, and there are 672 KP shard files
-holding 2016 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 679 concepts, and there are 679 KP shard files
+holding 2037 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -53,11 +53,11 @@ leaves the learner a placeholder instead of a worked example, and the audit refu
 All four content guards pass on the current corpus:
 
 ```
-OK: 672 concepts across 17 domains                    scripts/validate_graph.go
-OK: 672 concepts mapped, 672 entries, 571 sources,
-    672 kp files, 2016 KPs, kp shards resolved,
+OK: 679 concepts across 17 domains                    scripts/validate_graph.go
+OK: 679 concepts mapped, 679 entries, 578 sources,
+    679 kp files, 2037 KPs, kp shards resolved,
     0 issues                                          scripts/audit_lessons.py
-counts ok: 672 concepts, 672 KP files, 22 courses     scripts/counts.py --check
+counts ok: 679 concepts, 679 KP files, 23 courses     scripts/counts.py --check
 OK: docs agree with the code and the corpus           scripts/check_docs.py
 ```
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 254 of the 672 concepts
+### 4.1 The course catalog reaches 265 of the 679 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 22 courses those closures reach
-254 of the 672 concepts: 418 of them have a node, a generator, a lesson and three KP shards and
+265 of the 679 concepts: 414 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -81,7 +81,7 @@ The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 128 | 100 |
+| calculus | 135 | 96 |
 | algebra | 89 | 53 |
 | topology | 30 | 27 |
 | statistics | 37 | 24 |

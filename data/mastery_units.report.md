@@ -12,14 +12,14 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 672 |
+| Total concepts | 679 |
 | Total units | 93 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
 | Maximum unit size | 48 |
 | Singleton units | 19 |
 | Units with <= 3 concepts | 38 |
-| Units with > 25 concepts | 4 |
+| Units with > 25 concepts | 5 |
 | Units with > 50 concepts | 0 |
 | Cross-unit prerequisite edges (derived) | 204 |
 | Backward band edges | 0 |
@@ -49,8 +49,8 @@ exists to make concrete.
 | `calculus.b8` | calculus | 8 | 1 | 1 | 26–26 |
 | `calculus.b9` | calculus | 9 | 23 | 4 | 27–29 |
 | `calculus.b10` | calculus | 10 | 48 | 5 | 30–32 |
-| `calculus.b11` | calculus | 11 | 33 | 3 | 33–35 |
-| `calculus.b12` | calculus | 12 | 23 | 3 | 36–37 |
+| `calculus.b11` | calculus | 11 | 36 | 4 | 33–35 |
+| `calculus.b12` | calculus | 12 | 27 | 4 | 36–37 |
 | `complex_numbers.b3` | complex_numbers | 3 | 3 | 2 | 10–11 |
 | `complex_numbers.b6` | complex_numbers | 6 | 1 | 1 | 20–20 |
 | `complex_numbers.b7` | complex_numbers | 7 | 5 | 2 | 21–23 |
@@ -139,17 +139,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 120 | 4 | 33 | 22 | 57 | 3 | 0 |
-| 3 | 93 | 5 | 48 | 19 | 38 | 4 | 0 |
-| 4 | 75 | 6 | 48 | 9 | 28 | 3 | 0 |
-| 5 | 65 | 6 | 63 | 8 | 19 | 4 | 0 |
-| 6 | 60 | 7 | 81 | 5 | 16 | 3 | 0 |
-| 8 | 48 | 11 | 71 | 4 | 12 | 6 | 0 |
-| 10 | 43 | 11 | 104 | 5 | 11 | 6 | 0 |
-| 12 | 41 | 13 | 105 | 1 | 8 | 3 | 0 |
-| 15 | 32 | 16 | 104 | 3 | 6 | 7 | 0 |
-| 20 | 29 | 18 | 128 | 3 | 6 | 8 | 0 |
-| 45 | 17 | 30 | 128 | 0 | 0 | 12 | 0 |
+| 2 | 120 | 4 | 33 | 22 | 57 | 4 | 0 |
+| 3 | 93 | 5 | 48 | 19 | 38 | 5 | 0 |
+| 4 | 75 | 6 | 51 | 9 | 28 | 4 | 0 |
+| 5 | 65 | 6 | 64 | 8 | 19 | 4 | 0 |
+| 6 | 60 | 7 | 84 | 5 | 16 | 4 | 0 |
+| 8 | 48 | 11 | 78 | 4 | 12 | 6 | 0 |
+| 10 | 43 | 11 | 111 | 5 | 11 | 6 | 0 |
+| 12 | 41 | 13 | 108 | 1 | 8 | 4 | 0 |
+| 15 | 32 | 16 | 111 | 3 | 6 | 7 | 0 |
+| 20 | 29 | 18 | 135 | 3 | 6 | 8 | 0 |
+| 45 | 17 | 30 | 135 | 0 | 0 | 12 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -166,7 +166,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**60 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**61 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -185,72 +185,74 @@ Unresolvable subdomains:
 `arithmetic.addition` 
 `calculus.limits` 
 
+`calculus.multivariable` 
 `calculus.sequences` 
 `calculus.series` 
 `complex_numbers.advanced` 
-`complex_numbers.topology` 
 
+`complex_numbers.topology` 
 `differential_equations.basics` 
 `differential_equations.boundary` 
 `differential_equations.first_order` 
-`differential_equations.integral` 
 
+`differential_equations.integral` 
 `differential_equations.nonlinear` 
 `differential_equations.numerical` 
 `differential_equations.pde` 
-`differential_equations.second_order` 
 
+`differential_equations.second_order` 
 `differential_equations.stability` 
 `differential_equations.systems` 
 `differential_equations.transforms` 
-`discrete_math.recurrence` 
 
+`discrete_math.recurrence` 
 `geometry.basics` 
 `linear_algebra.decompositions` 
 `linear_algebra.determinants` 
-`linear_algebra.eigenvalues` 
 
+`linear_algebra.eigenvalues` 
 `linear_algebra.inner_product` 
 `linear_algebra.matrices` 
 `linear_algebra.systems` 
-`linear_algebra.transformations` 
 
+`linear_algebra.transformations` 
 `machine_learning.nlp` 
 `machine_learning.reinforcement` 
 `number_theory.applications` 
-`precalculus.analytic` 
 
+`precalculus.analytic` 
 `precalculus.conics` 
 `precalculus.discrete` 
 `precalculus.functions` 
-`precalculus.parametric` 
 
+`precalculus.parametric` 
 `precalculus.polar` 
 `precalculus.sequences` 
 `precalculus.systems` 
-`precalculus.vectors` 
 
+`precalculus.vectors` 
 `statistics.inference` 
 `topology.algebraic` 
 `topology.basics` 
-`topology.compact` 
 
+`topology.compact` 
 `topology.connected` 
 `topology.constructions` 
 `topology.covering` 
-`topology.dimension` 
 
+`topology.dimension` 
 `topology.knot` 
 `topology.manifolds` 
 `topology.metrization` 
-`topology.separation` 
 
+`topology.separation` 
 `trigonometry.functions` 
 `trigonometry.graphs` 
 `trigonometry.hyperbolic` 
+
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 672
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 679
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

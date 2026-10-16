@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 672,
+  "concept_count": 679,
   "unit_count": 93,
   "units": [
     {
@@ -549,7 +549,8 @@
       "subdomains": [
         "calculus.advanced",
         "calculus.derivatives",
-        "calculus.integrals"
+        "calculus.integrals",
+        "calculus.multivariable"
       ],
       "concept_ids": [
         "calc.deriv.cauchy_mvt",
@@ -584,9 +585,12 @@
         "calc.integral.substitution",
         "calc.integral.trig_integrals",
         "calc.integral.washer",
-        "calc.integral.work"
+        "calc.integral.work",
+        "calc.multi.double_integral_rect",
+        "calc.vec.jacobian_value",
+        "calc.vec.parametric_derivative"
       ],
-      "concept_count": 33
+      "concept_count": 36
     },
     {
       "id": "calculus.b12",
@@ -598,7 +602,8 @@
       "subdomains": [
         "calculus.advanced",
         "calculus.derivatives",
-        "calculus.integrals"
+        "calculus.integrals",
+        "calculus.multivariable"
       ],
       "concept_ids": [
         "calc.deriv.chain_power",
@@ -623,9 +628,13 @@
         "calc.integral.trig_substitution",
         "calc.integral.variable_limits",
         "calc.integral.volume",
-        "calc.integral.weierstrass_sub"
+        "calc.integral.weierstrass_sub",
+        "calc.multi.triple_integral_box",
+        "calc.vec.arc_length",
+        "calc.vec.curvature",
+        "calc.vec.line_integral"
       ],
-      "concept_count": 23
+      "concept_count": 27
     },
     {
       "id": "complex_numbers.b3",

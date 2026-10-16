@@ -84,6 +84,13 @@
     "targets": ["calc.integral.parts", "calc.integral.trig_substitution", "calc.integral.partial_fractions", "calc.series.concept", "calc.series.taylor", "calc.integral.disc", "calc.integral.washer", "calc.integral.shell"]
   },
   {
+    "id": "calc3",
+    "name": "Calculus III",
+    "grade": "college",
+    "description": "Multivariable and vector calculus: parametrised curves, curvature, line integrals, multiple integrals and the Jacobian.",
+    "targets": ["calc.vec.arc_length", "calc.vec.curvature", "calc.vec.line_integral", "calc.vec.jacobian_value", "calc.multi.triple_integral_box"]
+  },
+  {
     "id": "linalg",
     "name": "Linear Algebra",
     "grade": "college",

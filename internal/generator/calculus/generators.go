@@ -142,6 +142,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("calc.integral.irrational", &irrationalIntegralGen{})
 	reg.Register("calc.integral.strategy", &strategyGen{})
 	reg.Register("calc.integral.reduction", &reductionGen{})
+	registerMultivariable(reg)
 }
 
 type limitConceptGen struct{}

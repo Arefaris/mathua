@@ -16,14 +16,14 @@
 [![Go](https://img.shields.io/badge/Go-1.26+-00ADD8?style=flat-square&logo=go&logoColor=white)](https://golang.org)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![License](https://img.shields.io/badge/license-MIT-c8a96e?style=flat-square)](LICENSE)
-[![Concepts](https://img.shields.io/badge/concepts-672-a8a0f0?style=flat-square)](#content)
+[![Concepts](https://img.shields.io/badge/concepts-679-a8a0f0?style=flat-square)](#content)
 [![Domains](https://img.shields.io/badge/domains-17-c8a96e?style=flat-square)](#content)
 
 </div>
 
 ---
 
-Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 672 atomic concepts and 22 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 2016 worked examples (672 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
+Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 679 atomic concepts and 23 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 2037 worked examples (679 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
 
 ---
 
@@ -88,7 +88,7 @@ One administrator can demote nobody, including themselves. Promote a second admi
 
 All math knowledge in Mathua is a directed acyclic graph. Each node is an atomic concept — something small enough to fail independently. Each edge is a prerequisite relationship.
 
-The graph contains **672 concepts** across **17 domains** (672 KP shard files × 3 = 2016 KPs). The scheduler reads your progress and the graph structure to decide what to show next — it will never surface a concept whose prerequisites you have not mastered.
+The graph contains **679 concepts** across **17 domains** (679 KP shard files × 3 = 2037 KPs). The scheduler reads your progress and the graph structure to decide what to show next — it will never surface a concept whose prerequisites you have not mastered.
 
 ### Mastery gating
 
@@ -132,7 +132,7 @@ When a concept reaches MASTERED, Mathua schedules its next review using SM-2 sca
 | Geometry | 23 |
 | Trigonometry | 32 |
 | Precalculus | 25 |
-| Calculus | 128 |
+| Calculus | 135 |
 | Statistics | 37 |
 | Linear Algebra | 26 |
 | Discrete Math | 31 |
@@ -142,7 +142,7 @@ When a concept reaches MASTERED, Mathua schedules its next review using SM-2 sca
 | Abstract Algebra | 32 |
 | Machine Learning | 25 |
 | Topology | 30 |
-| **Total** | **672** |
+| **Total** | **679** |
 
 ---
 
@@ -160,7 +160,7 @@ The five-layer architecture — UI, API, Core Engine, Grading, Storage — is fu
 
 ## Courses and transcripts
 
-22 courses from 4th grade to university are wired through the DAG — including Calculus I/II, Linear Algebra, Discrete Math I/II, Probability & Statistics, Differential Equations, Abstract Algebra I/II, Topology and Machine Learning. Each course shows mastered/total, percent and an estimate of days remaining at your daily XP goal. Transcripts export as CSV via `GET /api/transcript?format=csv` and the read-only share link (Settings → Share) lets a parent or teacher follow along.
+23 courses from 4th grade to university are wired through the DAG — including Calculus I/II, Linear Algebra, Discrete Math I/II, Probability & Statistics, Differential Equations, Abstract Algebra I/II, Topology and Machine Learning. Each course shows mastered/total, percent and an estimate of days remaining at your daily XP goal. Transcripts export as CSV via `GET /api/transcript?format=csv` and the read-only share link (Settings → Share) lets a parent or teacher follow along.
 
 ## Contributing
 
@@ -176,7 +176,7 @@ go test ./...
 
 # Validate the concept graph (no cycles, no orphans)
 go run scripts/validate_graph.go
-python3 scripts/audit_lessons.py  # lessons + KP shards + diagrams + course targets (672 files ×3 =2016 KPs)
+python3 scripts/audit_lessons.py  # lessons + KP shards + diagrams + course targets (679 files ×3 =2037 KPs)
 python3 scripts/counts.py --check # docs counts match the data (run --write after a content wave)
 
 # Generator fuzz — 1000 local (make fuzz), 100 lightweight in CI (.github/workflows/ci.yml:27)

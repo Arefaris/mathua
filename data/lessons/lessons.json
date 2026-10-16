@@ -2686,5 +2686,33 @@
   {
     "concept_id": "discrete.combinatorics.catalan",
     "source": "authored/discrete.combinatorics.catalan.md"
+  },
+  {
+    "concept_id": "calc.vec.parametric_derivative",
+    "source": "authored/calc.vec.parametric_derivative.md"
+  },
+  {
+    "concept_id": "calc.vec.arc_length",
+    "source": "authored/calc.vec.arc_length.md"
+  },
+  {
+    "concept_id": "calc.vec.curvature",
+    "source": "authored/calc.vec.curvature.md"
+  },
+  {
+    "concept_id": "calc.vec.line_integral",
+    "source": "authored/calc.vec.line_integral.md"
+  },
+  {
+    "concept_id": "calc.vec.jacobian_value",
+    "source": "authored/calc.vec.jacobian_value.md"
+  },
+  {
+    "concept_id": "calc.multi.double_integral_rect",
+    "source": "authored/calc.multi.double_integral_rect.md"
+  },
+  {
+    "concept_id": "calc.multi.triple_integral_box",
+    "source": "authored/calc.multi.triple_integral_box.md"
   }
 ]
