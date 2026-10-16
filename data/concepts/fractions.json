@@ -376,5 +376,90 @@
       "streak": 7,
       "avg_time_seconds": 16.0
     }
+    },
+  {
+    "id": "frac.reciprocal",
+    "label": "Reciprocals",
+    "domain": "fractions",
+    "subdomain": "fractions.equivalence",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.simplify"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.of_number",
+    "label": "A fraction of a whole number",
+    "domain": "fractions",
+    "subdomain": "fractions.multiplication",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.mult"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.complex",
+    "label": "Complex fractions",
+    "domain": "fractions",
+    "subdomain": "fractions.division",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.div"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.order_ops",
+    "label": "Order of operations with fractions",
+    "domain": "fractions",
+    "subdomain": "fractions.concept",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.add.diff",
+      "frac.ops.mult"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.compare.cross",
+    "label": "Comparing fractions by cross-multiplication",
+    "domain": "fractions",
+    "subdomain": "fractions.equivalence",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.compare"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
+  },
+  {
+    "id": "frac.how_many",
+    "label": "How many fractions fit into a whole",
+    "domain": "fractions",
+    "subdomain": "fractions.division",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "frac.ops.div"
+    ],
+    "mastery_threshold": {
+      "streak": 7,
+      "avg_time_seconds": 16.0
+    }
   }
 ]

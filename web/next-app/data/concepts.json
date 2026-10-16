@@ -6325,6 +6325,91 @@
     "subdomain": "frac.compare"
   },
   {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.reciprocal",
+    "label": "Reciprocals",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.simplify"
+    ],
+    "subdomain": "fractions.equivalence"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.of_number",
+    "label": "A fraction of a whole number",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.mult"
+    ],
+    "subdomain": "fractions.multiplication"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.complex",
+    "label": "Complex fractions",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.div"
+    ],
+    "subdomain": "fractions.division"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.order_ops",
+    "label": "Order of operations with fractions",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.add.diff",
+      "frac.ops.mult"
+    ],
+    "subdomain": "fractions.concept"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.compare.cross",
+    "label": "Comparing fractions by cross-multiplication",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.compare"
+    ],
+    "subdomain": "fractions.equivalence"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.how_many",
+    "label": "How many fractions fit into a whole",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.div"
+    ],
+    "subdomain": "fractions.division"
+  },
+  {
     "domain": "geometry",
     "grading_type": "multiple_choice",
     "id": "geo.basic.points_lines",

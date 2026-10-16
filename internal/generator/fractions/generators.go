@@ -38,6 +38,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("frac.div.word", &fracDivWordGen{})
 	reg.Register("frac.mixed.word", &fracMixedWordGen{})
 	reg.Register("frac.compare.word", &fracCompareWordGen{})
+	registerFoundations(reg)
 }
 
 func fracStr(num, den int) string { return fmt.Sprintf("%d/%d", num, den) }

@@ -3054,5 +3054,29 @@
   {
     "concept_id": "linalg.transform.det_scale",
     "source": "authored/linalg.transform.det_scale.md"
+  },
+  {
+    "concept_id": "frac.reciprocal",
+    "source": "authored/frac.reciprocal.md"
+  },
+  {
+    "concept_id": "frac.of_number",
+    "source": "authored/frac.of_number.md"
+  },
+  {
+    "concept_id": "frac.complex",
+    "source": "authored/frac.complex.md"
+  },
+  {
+    "concept_id": "frac.order_ops",
+    "source": "authored/frac.order_ops.md"
+  },
+  {
+    "concept_id": "frac.compare.cross",
+    "source": "authored/frac.compare.cross.md"
+  },
+  {
+    "concept_id": "frac.how_many",
+    "source": "authored/frac.how_many.md"
   }
 ]

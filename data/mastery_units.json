@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 764,
+  "concept_count": 770,
   "unit_count": 95,
   "units": [
     {
@@ -1084,20 +1084,24 @@
         "fractions.subtraction"
       ],
       "concept_ids": [
+        "frac.compare.cross",
         "frac.compare.word",
+        "frac.complex",
         "frac.div.whole",
         "frac.div.word",
+        "frac.how_many",
         "frac.mixed.convert",
         "frac.mixed.mult",
         "frac.mult.whole",
         "frac.mult.word",
+        "frac.of_number",
         "frac.ops.benchmark",
         "frac.ops.compare",
         "frac.ops.div",
         "frac.ops.simplify",
         "frac.sub.same"
       ],
-      "concept_count": 12
+      "concept_count": 16
     },
     {
       "id": "fractions.b4",
@@ -1109,6 +1113,8 @@
       "subdomains": [
         "frac.sub",
         "fractions.addition",
+        "fractions.concept",
+        "fractions.equivalence",
         "fractions.mixed",
         "fractions.subtraction"
       ],
@@ -1117,10 +1123,12 @@
         "frac.add.word",
         "frac.mixed.add",
         "frac.mixed.sub",
+        "frac.order_ops",
+        "frac.reciprocal",
         "frac.sub.diff",
         "frac.sub.word"
       ],
-      "concept_count": 6
+      "concept_count": 8
     },
     {
       "id": "fractions.b5",
