@@ -218,6 +218,59 @@ The gap in section 4.1 has three plausible policies.
 None of the three is safe to apply silently. All three change the size of a course, and course
 size drives the mastered/total figure and the days-remaining estimate a learner sees.
 
+**What the two cover-the-domain policies do, measured.** Both were applied to the real DAG and the
+real targets. A *sink* here is a concept that no other concept **in its own domain** depends on (296
+of 666), and "the band a course occupies" is `floor(conceptDepth / 3)`, the shape `cmd/masteryunits`
+uses:
+
+| Course | Now | A: domain sinks | B: band sinks, same domains |
+|---|---:|---:|---:|
+| 4th Grade Math | 17 | 107 | 40 |
+| 5th Grade Math | 31 | 143 | 98 |
+| 6th Grade Math | 33 | 118 | 107 |
+| 7th Grade Math | 40 | 121 | 114 |
+| 8th Grade Math | 41 | 121 | 115 |
+| Prealgebra | 35 | 209 | 147 |
+| Algebra I | 49 | 209 | 181 |
+| Geometry | 34 | 121 | 109 |
+| Algebra II | 66 | 263 | 263 |
+| Precalculus | 90 | 481 | 311 |
+| Calculus I | 67 | 342 | 305 |
+| Calculus II | 70 | 342 | 342 |
+| Linear Algebra | 58 | 235 | 223 |
+| Discrete Math | 56 | 293 | 293 |
+| Discrete Math II | 62 | 293 | 293 |
+| Probability & Statistics | 47 | 268 | 262 |
+| Number Theory | 28 | 83 | 51 |
+| Differential Equations | 77 | 376 | 356 |
+| Abstract Algebra | 58 | 296 | 237 |
+| Abstract Algebra II | 73 | 296 | 292 |
+| Topology | 48 | 405 | 298 |
+| Machine Learning | 62 | 452 | 407 |
+
+Three things follow, and together they decide the first two policies.
+
+- **A makes the catalog exhaustive.** The union of the 22 closures goes from 247 to **666**: every
+  concept in the corpus becomes reachable. That is the end of a sampled path — the catalog and the
+  corpus become the same set — and it leaves the diagnostic and a free-choice goal nothing to do.
+- **Both policies collapse the staged pairs.** `calc1` and `calc2` are 67 and 70 concepts now and 342
+  and 342 under A; `discrete`/`discrete2` become 293/293, and `abstract`/`abstract2` 296/296. Two
+  stages that reach the same set are one stage.
+- **B needs the domain filter, and even with it inflates.** Unfiltered, `floor(depth / 3)` alone
+  hands 4th Grade Math 36 statistics concepts and 22 geometry concepts, because a sink at the same
+  depth in an unrelated domain passes the test. Filtered to the domains a course already reaches,
+  every course is still 2.5x to 6x its current size.
+
+**So the answer to the first two is "sample more".** The third is separate and additive: a course for
+`complex_numbers`, whose 12 sinks close over 113 nodes and reach all 26 of the domain's, of which
+20 are reached by no course path today. The union reach goes from 247 to 273 and the course count
+from 22 to 23, which the README quotes.
+
+**What "sample more" still needs is a number.** Widening the sample has no new invariant to satisfy,
+so the decision left is how far: it is a target size for the catalog, and the two measurements above
+are the boundary that number has to stay clear of. Section 6's first step is that decision, and it is
+also the gate on a new domain (section 5.4), because a domain with no course target is unreachable.
+
 ### 5.2 Producing an answer in a multiple-choice domain
 
 This is the highest-value per-concept change and it needs no catalog decision. It is a generator
@@ -232,18 +285,50 @@ name three different headings in it, which is where the placeholder risk lives. 
 writing the body first and regenerating the shards second, because the shard sections resolve
 against the body.
 
+### 5.4 What adding a domain costs, itemized from the one we have
+
+The plan's last step adds a domain, with topology as the copy target. Measured off topology, which is
+the only domain added since the corpus was built:
+
+| What | Topology | Where |
+|---|---:|---|
+| Concepts | 30, in 11 subdomains | `data/concepts/topology.json`, 12 KB |
+| Generator | 2 files, 52 KB | `internal/generator/topology/` — the package and its test — registered in `internal/generator/all/all.go` and exercised by the pool ratchet in `internal/generator/pools_test.go` |
+| KP shards | 30 | `data/lessons/kp/topo.*.json`, three per concept |
+| Solution schemas | 1 | `data/lessons/solutions/`, one, because 29 of the 30 are `multiple_choice` and their explanation is a fixed string |
+| Course | 1, three targets | `data/courses.json` |
+| Domain label | 1 | `DOMAIN_LABELS` in `scripts/counts.py` |
+| Regenerated | | `data/mastery_units.json`, `data/lessons/lessons.json`, `data/lessons/mapping.json`, `data/lessons/figure-audit.json`, `scripts/verify_report.json`, the concept graph |
+
+That is six hand-edited things and six regenerated ones per domain, and the count of concepts it adds
+is the size of its concept file: the 30 above, or whatever the new domain's is.
+
+**Which of the three counts a domain moves is not the same question as which concepts move.**
+`domains` and `courses` are read from the data — `len(by_domain)` over the concepts' own `domain`
+field and `len(data/courses.json)` — so a domain added *inside* an existing domain's namespace leaves
+the domain count at 17 and only the concept count moves. A genuinely new domain takes it to 18, and a
+course for `complex_numbers` (section 5.1) takes the course count to 23 without touching the domain
+count, because that domain exists already.
+
+**Nothing checked that a domain was labeled until now.** `DOMAIN_LABELS` holds 17 entries and the
+data holds 17 domains, but the two were kept in step by hand, and the failure was silent: the
+README's domain table iterates the label list, so an unlabeled domain is absent from the table while
+`counts.py` still counts it. `counts.py --check` fails on that mismatch now, in both directions,
+because the change this section prepares for is the one that would have tripped it.
+
 ## 6. A sequenced plan
 
-1. Decide the course-wiring policy in section 5.1, then apply it with `TestAllCoursesResolve`
-   as the guard and `scripts/counts.py --write` for the README.
+1. Decide the course-wiring policy in section 5.1, then apply it with `TestAllCoursesResolve` as the
+   guard and `scripts/counts.py --write` for the README. The measurements are in 5.1; what is missing
+   is the target size, and the decision gates step 5.
 2. Convert one `multiple_choice` concept in an upper domain to a produced answer, as the worked
    example that proves the generator and schema path there. Done: `topo.dimension`, section 4.2.
-3. Fill the seven sub-1 KB lessons, regenerating each shard after its body grows.
-4. Reclaim the `certain` dropped figures from `docs/lesson-media.md` into
-   `data/diagrams/meta.json`, one at a time.
-5. Add a domain only after 1 to 4, using the topology addition as the copy target, because a
-   domain costs a concept file, a generator package, a registration, lessons, shards, a course
-   target and the domain label in `scripts/counts.py`.
+3. Fill the seven sub-1 KB lessons, regenerating each shard after its body grows. Open.
+4. Reclaim the dropped figures. Done: all 102 landed on 2026-10-15 and 2026-10-16 as lesson figures
+   under `web/next-app/public/diagrams/`, which need no `meta.json` entry, so the `certain` tier is
+   empty and the remainder is measured by section 4.4.
+5. Add a domain only after 1 to 4, using the topology addition as the copy target, because a domain
+   costs six hand-edited files, a course target and six regenerated ones (section 5.4).
 
 ## 7. Method
 
