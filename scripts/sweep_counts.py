@@ -18,6 +18,15 @@ script is written to prevent:
     `--blob-only` builds a blob from HEAD plus the substitution and stages it with `update-index`,
     which leaves the working tree alone.
 
+One trap is a committing habit rather than a rule, and this tool can only name it: `npm run
+graph:build` writes **two** files under `web/next-app/public/data/` -- `concepts.graph.json` (the node
+and edge list) and `concepts.positions.json` (the quantized poster layout). A batch commit that staged
+the first and not the second left the committed position map at the corpus of 666 concepts while the
+node list moved on, so `scripts/build-og.mjs` and the landing-page poster laid out a graph that had no
+position for anything added since. **Stage both, or neither.** The same applies to
+`web/next-app/data/flow.positions.json`, which `npm run flow:build` writes and which the flow view
+reads.
+
 A class this tool does not repair, and can only report: **line citations**. Editing a file that an
 ADR cites by `path:line` moves every symbol below the edit, and `scripts/check_docs.py` fails on a
 citation that lands on a blank line. It caught exactly that when this file's own author added a
