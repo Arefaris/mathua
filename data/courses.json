@@ -88,7 +88,7 @@
     "name": "Calculus III",
     "grade": "college",
     "description": "Multivariable and vector calculus: parametrised curves, curvature, line integrals, multiple integrals and the Jacobian.",
-    "targets": ["calc.vec.arc_length", "calc.vec.curvature", "calc.vec.line_integral", "calc.vec.jacobian_value", "calc.multi.triple_integral_box", "calc.vec.divergence", "calc.vec.conservative_test", "calc.vec.greens_theorem", "calc.multi.transform_jacobian", "calc.multi.double_integral_region", "calc.multi.saddle_test", "calc.multi.lagrange"]
+    "targets": ["calc.vec.arc_length", "calc.vec.curvature", "calc.vec.line_integral", "calc.vec.jacobian_value", "calc.multi.triple_integral_box", "calc.vec.divergence", "calc.vec.conservative_test", "calc.vec.greens_theorem", "calc.multi.transform_jacobian", "calc.multi.double_integral_region", "calc.multi.saddle_test", "calc.multi.lagrange", "calc.vec.divergence_theorem", "calc.vec.flux_uniform", "calc.vec.potential_value", "calc.multi.coordinates_jacobian"]
   },
   {
     "id": "linalg",

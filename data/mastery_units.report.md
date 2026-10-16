@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 687 |
+| Total concepts | 691 |
 | Total units | 93 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -49,8 +49,8 @@ exists to make concrete.
 | `calculus.b8` | calculus | 8 | 1 | 1 | 26–26 |
 | `calculus.b9` | calculus | 9 | 23 | 4 | 27–29 |
 | `calculus.b10` | calculus | 10 | 50 | 6 | 30–32 |
-| `calculus.b11` | calculus | 11 | 39 | 4 | 33–35 |
-| `calculus.b12` | calculus | 12 | 30 | 5 | 36–37 |
+| `calculus.b11` | calculus | 11 | 40 | 4 | 33–35 |
+| `calculus.b12` | calculus | 12 | 33 | 5 | 36–38 |
 | `complex_numbers.b3` | complex_numbers | 3 | 3 | 2 | 10–11 |
 | `complex_numbers.b6` | complex_numbers | 6 | 1 | 1 | 20–20 |
 | `complex_numbers.b7` | complex_numbers | 7 | 5 | 2 | 21–23 |
@@ -139,17 +139,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 120 | 4 | 33 | 22 | 57 | 5 | 0 |
+| 2 | 121 | 4 | 33 | 23 | 58 | 5 | 0 |
 | 3 | 93 | 5 | 50 | 19 | 38 | 5 | 0 |
-| 4 | 75 | 6 | 56 | 9 | 28 | 4 | 0 |
+| 4 | 75 | 6 | 57 | 9 | 28 | 4 | 0 |
 | 5 | 65 | 6 | 69 | 8 | 19 | 4 | 0 |
-| 6 | 60 | 7 | 89 | 5 | 16 | 4 | 0 |
-| 8 | 48 | 11 | 86 | 4 | 12 | 6 | 0 |
-| 10 | 43 | 11 | 119 | 5 | 11 | 6 | 0 |
-| 12 | 41 | 13 | 113 | 1 | 8 | 4 | 0 |
-| 15 | 32 | 16 | 119 | 3 | 6 | 7 | 0 |
-| 20 | 29 | 18 | 143 | 3 | 6 | 8 | 0 |
-| 45 | 17 | 30 | 143 | 0 | 0 | 12 | 0 |
+| 6 | 60 | 7 | 90 | 5 | 16 | 4 | 0 |
+| 8 | 48 | 11 | 90 | 4 | 12 | 6 | 0 |
+| 10 | 43 | 11 | 123 | 5 | 11 | 6 | 0 |
+| 12 | 41 | 13 | 114 | 1 | 8 | 4 | 0 |
+| 15 | 32 | 16 | 123 | 3 | 6 | 7 | 0 |
+| 20 | 29 | 18 | 147 | 3 | 6 | 8 | 0 |
+| 45 | 17 | 30 | 147 | 0 | 0 | 12 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -253,7 +253,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 687
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 691
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

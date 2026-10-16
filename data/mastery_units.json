@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 687,
+  "concept_count": 691,
   "unit_count": 93,
   "units": [
     {
@@ -589,6 +589,7 @@
         "calc.integral.trig_integrals",
         "calc.integral.washer",
         "calc.integral.work",
+        "calc.multi.coordinates_jacobian",
         "calc.multi.double_integral_rect",
         "calc.multi.lagrange",
         "calc.multi.saddle_test",
@@ -596,7 +597,7 @@
         "calc.vec.jacobian_value",
         "calc.vec.parametric_derivative"
       ],
-      "concept_count": 39
+      "concept_count": 40
     },
     {
       "id": "calculus.b12",
@@ -604,7 +605,7 @@
       "domain": "calculus",
       "band": 12,
       "depth_min": 36,
-      "depth_max": 37,
+      "depth_max": 38,
       "subdomains": [
         "calculus.advanced",
         "calculus.derivatives",
@@ -641,10 +642,13 @@
         "calc.vec.arc_length",
         "calc.vec.conservative_test",
         "calc.vec.curvature",
+        "calc.vec.divergence_theorem",
+        "calc.vec.flux_uniform",
         "calc.vec.greens_theorem",
-        "calc.vec.line_integral"
+        "calc.vec.line_integral",
+        "calc.vec.potential_value"
       ],
-      "concept_count": 30
+      "concept_count": 33
     },
     {
       "id": "complex_numbers.b3",

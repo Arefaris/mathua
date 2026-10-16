@@ -144,6 +144,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("calc.integral.reduction", &reductionGen{})
 	registerMultivariable(reg)
 	registerVector(reg)
+	registerVector3D(reg)
 }
 
 type limitConceptGen struct{}

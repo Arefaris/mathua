@@ -2053,5 +2053,62 @@
     "streak": 10,
     "avg_time_seconds": 22.0
    }
+    },
+  {
+   "id": "calc.vec.divergence_theorem",
+   "label": "The divergence theorem",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.divergence",
+    "calc.multi.triple_integral_box"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.flux_uniform",
+   "label": "Flux through a surface",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.multi.double_integral_region"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.potential_value",
+   "label": "Evaluating a potential",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.conservative_test"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.coordinates_jacobian",
+   "label": "Volume elements in cylindrical and spherical coordinates",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.multi.transform_jacobian"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
   }
 ]

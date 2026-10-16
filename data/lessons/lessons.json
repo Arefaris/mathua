@@ -2746,5 +2746,21 @@
   {
     "concept_id": "calc.multi.lagrange",
     "source": "authored/calc.multi.lagrange.md"
+  },
+  {
+    "concept_id": "calc.vec.divergence_theorem",
+    "source": "authored/calc.vec.divergence_theorem.md"
+  },
+  {
+    "concept_id": "calc.vec.flux_uniform",
+    "source": "authored/calc.vec.flux_uniform.md"
+  },
+  {
+    "concept_id": "calc.vec.potential_value",
+    "source": "authored/calc.vec.potential_value.md"
+  },
+  {
+    "concept_id": "calc.multi.coordinates_jacobian",
+    "source": "authored/calc.multi.coordinates_jacobian.md"
   }
 ]

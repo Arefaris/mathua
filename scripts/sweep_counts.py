@@ -182,8 +182,17 @@ def rules(f: dict) -> list:
         ("docs/content-expansion.md", r"\| discrete_math \| \d+ \| \d+ \|",
          f"| discrete_math | {f['discrete']} | {f['discrete_unreachable']} |", 1,
          ("### 4.1", "### 4.2")),
-        # The two Go tests that pin a size rather than reading it.
-        ("internal/concepts/concepts_test.go", r"\b\d{3}\b", str(f["concepts"]), 4),
+        # The two Go tests that pin a size rather than reading it. The patterns name each site,
+        # because a bare \d{3} also matches the `064` in this file's temp-file mode.
+        ("internal/concepts/concepts_test.go", r"if d\.Count\(\) != \d{3} \{",
+         f"if d.Count() != {f['concepts']} {{", 1),
+        ("internal/concepts/concepts_test.go", r't\.Errorf\("expected \d{3} concepts, got %d", d\.Count\(\)\)',
+         f't.Errorf("expected {f["concepts"]} concepts, got %d", d.Count())', 1),
+        ("internal/concepts/concepts_test.go", r"if len\(d\.Order\(\)\) != \d{3} \{",
+         f"if len(d.Order()) != {f['concepts']} {{", 1),
+        ("internal/concepts/concepts_test.go",
+         r't\.Errorf\("expected \d{3} in topo order, got %d", len\(d\.Order\(\)\)\)',
+         f't.Errorf("expected {f["concepts"]} in topo order, got %d", len(d.Order()))', 1),
         ("internal/planning/planner_test.go", r"expected \d+ courses, got", f"expected {f['courses']} courses, got", 1),
         # The app copy a learner reads, and the test that guards it.
         ("web/next-app/app/how-it-works/sections.tsx", r"contains \d{3} concepts",
@@ -273,11 +282,36 @@ def main() -> int:
         print(f"\n{changed} file(s) would change")
         return 0
     print(f"\n{changed} file(s) rewritten")
+
     print("\nverifying:")
+    failures = []
     for cmd in (["python3", "scripts/check_docs.py"], ["python3", "scripts/counts.py", "--check"],
                 ["python3", "scripts/audit_lessons.py"], ["go", "run", "scripts/validate_graph.go"],
                 ["go", "run", "./cmd/validate-mastery-units"]):
-        run(cmd)
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode == 0:
+            run(cmd)
+            continue
+        # A blob-only file's working-tree copy is deliberately stale -- it still holds the other
+        # writer's text plus the previous batch's numbers -- so check_docs reports it until the
+        # commit lands. Those lines are expected; every other failure is not.
+        expected, real = [], []
+        for line in (r.stdout + r.stderr).splitlines():
+            if not line.startswith("ERROR"):
+                # The "FAIL: N inconsistencies" summary counts the expected ones too, so it is
+                # only meaningful when an ERROR line is real.
+                continue
+            (expected if any(path in line for path in BLOB_ONLY) else real).append(line)
+        if real:
+            failures.append((cmd, real))
+            print(f"  $ {' '.join(cmd)}  FAILED")
+        else:
+            print(f"  $ {' '.join(cmd)}  ok ({len(expected)} staged-only line(s) not yet in the "
+                  f"working tree)")
+    if failures:
+        for cmd, lines in failures:
+            sys.stderr.write(f"\n{' '.join(cmd)}:\n" + "\n".join(lines[:10]) + "\n")
+        return 1
     print("sweep ok")
     return 0
 
