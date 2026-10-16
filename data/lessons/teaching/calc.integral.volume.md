@@ -19,6 +19,8 @@ Again, we are working with a solid of revolution. As before, we define a region 
 
 As we have done many times before, partition the interval $\left\lbrack {a,b} \right\rbrack$ using a regular partition, $P = \left\{ {x_{0},x_{1}\text{,…},x_{n}} \right\}$ and, for $i = 1,2\text{,…},n,$ choose a point $x_{i}^{*} \in \left\lbrack {x_{i - 1},x_{i}} \right\rbrack.$ Then, construct a rectangle over the interval $\left\lbrack {x_{i - 1},x_{i}} \right\rbrack$ of height $f(x_{i}^{*})$ and width $\text{Δ}x.$ A representative rectangle is shown in Figure 6.26(a). When that rectangle is revolved around the *y*-axis, instead of a disk or a washer, we get a cylindrical shell, as shown in the following figure.
 
+![(a) A representative rectangle. (b) When this rectangle is revolved around the y-axis, the result is a cylindrical shell. (c) When we put all the shells together, we get an approximation of the original solid.](/diagrams/calculus/shell-approximation.svg)
+
 *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y\text{-axis},$ the result is a cylindrical shell. (c) When we put all the shells together, we get an approximation of the original solid.*
 
 To calculate the volume of this shell, consider Figure 6.27.

@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-232 paragraphs across 100 lessons read as a caption whose image was dropped:
-128 certain, 33 strong and 71 likely. Every one sits
+231 paragraphs across 100 lessons read as a caption whose image was dropped:
+127 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 128 rows and 58 distinct figures
+## 3. The captions are 127 rows and 57 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **58 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **57 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 9 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 8 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed forty-four.
+again to 53 and 44, of which section 7 has since landed forty-five.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,7 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.26 | (a) A representative rectangle. (b) When this rectangle is revolved around the $y\tex... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.28 | (a) Make a vertical cut in a representative shell. (b) Open the shell up to form a fl... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.29 | (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.30 | (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -948,6 +947,35 @@ also draws no ticks: its two ends are named `x_(i-1)` and `x_i`, so there are no
 Those two captions held two rows: the report went from 234 to 232, and the certain tier from 130 to
 128. The lesson keeps twelve other orphan captions, so the lesson count stays at 100, and the
 ceiling in `internal/lessons/assets_test.go` follows, to 232.
+
+**Figure 6.26** (the rectangle, the shell it sweeps, and all the shells together) landed on
+2026-10-16 in `calc.integral.volume` as `calculus/shell-approximation.svg`, and it adds the tree's
+second rule for a solid.
+
+**A tube's hole is white, and the inner wall between its two ellipses is not filled.** Upstream
+distinguishes the inner wall from the body with a shade, and the dialect has no shade: a grey inner
+wall is indistinguishable from a grey body, so the tube stops reading as hollow, which contradicts
+its own alt text ("a cylindrical shell, hollow in the middle"). So the hole is the inner cylinder's
+whole silhouette filled white -- not just the rim ellipse, because the region between the inner
+rim's near arc and the inner base's near arc is part of the hole -- and two ellipses are drawn in
+it: the inner rim in ink, because it is the edge of the hole, and the inner base in annotation grey,
+because it is the bottom opening seen through the hole. So (b) is the outer silhouette, one white
+fill, and two ellipses.
+
+**A panel label moves to row 172 when the panel holds a solid.** `two-limits.svg` puts `(a)` and
+`(b)` on row 158, and that is right for a figure made of curves. A solid's base is a near arc that
+reaches `cy_base + ry`, which at `cy_base = 140` is row 158, so the label lands on the arc. The same
+defect was in Figure 6.25 and is fixed alongside this one. The rule is about the arc and not the
+row: 158 stays free for a figure with nothing drawn below its axis.
+
+**Panel (c) is stepped, not flat.** Each shell of radius `r_k` has height `f(r_k)`, so the stack's
+top is a staircase descending inward, which is what the caption means by "an approximation of the
+original solid". Upstream's own (c) is hard to read at this size and may draw its rings level; the
+caption decides it.
+
+That caption held one row: the report went from 232 to 231, and the certain tier from 128 to 127.
+The lesson keeps eleven other orphan captions, so the lesson count stays at 100, and the ceiling in
+`internal/lessons/assets_test.go` follows, to 231.
 
 ## 8. Order of work
 
