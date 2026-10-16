@@ -22,7 +22,7 @@ $$
 
 which are shown in Figure 2.12. In particular, let’s focus our attention on the behavior of each graph at and around $x = 2.$
 
-![These graphs show the behavior of three different functions around x = 2.](/diagrams/calculus/limit-behaviour.svg)
+![These graphs show the behavior of three different functions around x = 2.](/diagrams/calculus/limit-behavior.svg)
 
 *Figure 2.12 These graphs show the behavior of three different functions around $x = 2.$*
 

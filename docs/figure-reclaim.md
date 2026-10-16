@@ -488,7 +488,7 @@ Those five captions held five rows, and the regenerated audit dropped all of the
 **Figure 2.12** (three graphs of three functions at `x = 2`: a line with a hole where its denominator
 vanishes, the half-lines `y = 1` and `y = -1` whose ends are both holes, and `1/(x - 2)^2` running off
 the top either side of the asymptote) landed on 2026-10-16 in `calc.limit.numeric`, as
-`calculus/limit-behaviour.svg`. It is the first graph and the first y axis in the local set, and the
+`calculus/limit-behavior.svg`. It is the first graph and the first y axis in the local set, and the
 first figure under the calculus directory.
 
 The dialect had what a graph needs. Axes and their arrowheads are `#BABABA` at 1.5, their unit ticks
