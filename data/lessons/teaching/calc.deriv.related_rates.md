@@ -92,6 +92,8 @@ An airplane is flying overhead at a constant elevation of $4000\ \text{ft}.$ A m
 
 Step 1. Draw a picture, introducing variables to represent the different quantities involved.
 
+![An airplane is flying at a constant height of 4000 ft. The distance between the person and the airplane and the person and the place on the ground directly below the airplane are changing. We denote those quantities with the variables s and x, respectively.](/diagrams/calculus/airplane-triangle.svg)
+
 *Figure 4.3 An airplane is flying at a constant height of 4000 ft. The distance between the person and the airplane and the person and the place on the ground directly below the airplane are changing. We denote those quantities with the variables $s$ and $x,$ respectively.*
 
 As shown, $x$ denotes the distance between the man and the position on the ground directly below the airplane. The variable $s$ denotes the distance between the man and the plane. Note that both $x$ and $s$ are functions of time. We do not introduce a variable for the height of the plane because it remains at a constant elevation of $4000\ \text{ft}.$ Since an object’s height above the ground is measured as the shortest distance between the object and the ground, the line segment of length 4000 ft is perpendicular to the line segment of length $x$ feet, creating a right triangle.

@@ -75,6 +75,8 @@ The significance of the net change theorem lies in the results. Net change can b
 
 We looked at a simple example of this in The Definite Integral. Suppose a car is moving due north (the positive direction) at 40 mph between 2 p.m. and 4 p.m., then the car moves south at 30 mph between 4 p.m. and 5 p.m. We can graph this motion as shown in Figure 5.32.
 
+![The graph shows speed versus time for the given motion of a car.](/diagrams/calculus/speed-time-areas.svg)
+
 *Figure 5.32 The graph shows speed versus time for the given motion of a car.*
 
 Just as we did before, we can use definite integrals to calculate the net displacement as well as the total distance traveled. The net displacement is given by
@@ -125,6 +127,8 @@ $$
 $$
 
 The net displacement is $- \frac{3}{2}$ m (Figure 5.33).
+
+![The graph shows velocity versus time for a particle moving with a linear velocity function.](/diagrams/calculus/linear-velocity-areas.svg)
 
 *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.*
 

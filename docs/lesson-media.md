@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-239 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **135 certain**, **33 strong**, **71 likely**.
+236 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **132 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -137,19 +137,16 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.quotient_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.quotient_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.related_rates.md` | 23 | certain | *Figure 4.2 As the balloon is being filled with air, both the radius and the volume are increa...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 95 | certain | *Figure 4.3 An airplane is flying at a constant height of 4000 ft. The distance between the pe...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 161 | certain | *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 169 | certain | *Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of th...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 243 | certain | *Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the ...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.related_rates.md` | 163 | certain | *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)* | auto-numbered figure/table label |
+| `teaching/calc.deriv.related_rates.md` | 171 | certain | *Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of th...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.related_rates.md` | 245 | certain | *Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 78 | certain | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 129 | certain | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity...* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 197 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 298 | certain | *Figure 5.35 Graph (a) shows the positive area between the curve and the *x*-axis, whereas gra...* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 322 | certain | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* | auto-numbered figure/table label |
+| `teaching/calc.integral.power_rule.md` | 201 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
+| `teaching/calc.integral.power_rule.md` | 302 | certain | *Figure 5.35 Graph (a) shows the positive area between the curve and the *x*-axis, whereas gra...* | auto-numbered figure/table label |
+| `teaching/calc.integral.power_rule.md` | 326 | certain | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 16 | certain | *Figure 6.25 (a) A region bounded by the graph of a function of $x.$ (b) The solid of revoluti...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 20 | certain | *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 24 | certain | *Figure 6.27 Calculating the volume of the shell.* | auto-numbered figure/table label |
@@ -274,9 +271,9 @@ so the tiers below do not treat it as evidence either way.
 | `algebrica/series/integral-test-for-series-convergence.md` | 21 | The graph illustrates | The graph illustrates the connection between a series and an improper integral as stated by the Integral Test. |
 | `teaching/arith.factor.lcm.md` | 77 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168466026521" data-label="" data-summary="The figure shows multiple factor trees with the number 48 at the top. In the first tree two branches are sp |
 | `teaching/arith.factor.lcm.md` | 126 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168467446629" data-label="" data-summary="The figure shows two factor trees with the number 84 at the top. In the first tree two branches are splitti |
-| `teaching/calc.integral.power_rule.md` | 78 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
-| `teaching/calc.integral.power_rule.md` | 129 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
-| `teaching/calc.integral.power_rule.md` | 322 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
+| `teaching/calc.integral.power_rule.md` | 80 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
+| `teaching/calc.integral.power_rule.md` | 133 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
+| `teaching/calc.integral.power_rule.md` | 326 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
 | `teaching/calc.limit.numeric.md` | 521 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -302,8 +299,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-627 diagrams ship, 126 URLs are referenced by lesson bodies, and
-**520 content diagrams are referenced by nothing** (site chrome
+630 diagrams ship, 128 URLs are referenced by lesson bodies, and
+**521 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today
@@ -410,7 +407,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.order_ops.nested.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.sci_notation.ops.md` | no | — | `big-o-notation-1.png`, `big-o-notation-1.svg` |
 | `teaching/arith.sqrt.perfect.md` | no | — | `sqrt-perfect.svg`, `sqrt-simplify.svg` |
-| `teaching/calc.integral.power_rule.md` | no | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
 | `teaching/calc.integral.volume.md` | no | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
 | `teaching/complex.analytic.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
 | `teaching/complex.argument.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
@@ -607,6 +603,7 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.round.hundreds.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.tens.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.thousands.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
+| `teaching/calc.integral.power_rule.md` | yes | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
 | `teaching/calc.limit.infinity.md` | yes | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/calc.limit.numeric.md` | yes | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/frac.mult.whole.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
