@@ -115,22 +115,36 @@ on `vitest` while six Playwright tests failed.
 
 #### A red e2e run is not always your change
 
-Some Playwright tests wait for an element that the browser renders after it runs
-the JavaScript bundle. On a loaded runner the bundle can arrive late. The test
-then clicks a button before the page is interactive. The click reaches nothing
-and the element never appears. The cause is not yet confirmed.
+Two different things look the same in a CI log. One is a genuine break. The
+other is a test that passes on its own and fails in the full shard.
 
-You can tell this class from a real break. The failing tests vary between runs,
-and each one passes on its own:
+Start with the build. Build the way CI builds it:
 
 ```bash
 cd web/next-app
-PW_WORKERS=1 CI=1 npx playwright test --shard=1/2                 # the full shard, about 4 minutes
-npx playwright test e2e/admin.spec.ts:300 --project=chromium      # one of them alone, passes in 1 second
+env -u NEXT_PUBLIC_API_URL npx next build
 ```
 
-The first command reproduces the failures on a developer machine. The second
-command passes against the same commit. Do not change a test to make it pass.
+Do not set `NEXT_PUBLIC_API_URL`. A build that points at a local API makes the
+admin tests fail. Their stubs cover some endpoints and the rest reach an API that
+is not running. That failure belongs to the build and not to the commit.
+
+Then run one test on its own:
+
+```bash
+npx playwright test e2e/admin.spec.ts:300 --project=chromium
+```
+
+A test that passes here and fails in the shard is load-dependent. The full shard
+command reproduces that class on a developer machine:
+
+```bash
+PW_WORKERS=1 CI=1 npx playwright test --shard=1/2
+```
+
+It takes about five minutes. Every test in that class waits for an element that
+the browser renders after it runs the JavaScript bundle, and the cause is not
+confirmed. Do not change a test to make it pass.
 
 
 ### 4. (Optional) Write a lesson
