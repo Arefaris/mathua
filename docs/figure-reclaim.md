@@ -798,6 +798,15 @@ Those three captions held three rows: the report went from 247 to 244, and the c
 143 to 140. The lesson keeps sixteen other orphan captions, so the lesson count stays at 100, and
 the ceiling in `internal/lessons/assets_test.go` follows, to 244.
 
+**Both frames ended on a labeled tick, and the last label ran into the axis name.** 4.50's and
+4.51's x axes were drawn over `[-5, 5]` with every integer labeled, so the last label sat on the
+frame's right edge, centred under the arrowhead, and the axis's own `x` -- 3px past the arrow --
+landed on it. At 600% the render reads `5x`, one word. The rule the 3.25-3.33 batch derived is that
+the frame runs past its last tick label, and 4.40 and 4.42 obey it: their frames reach `+-9` and
+`31.5` while their labels stop at `+-8` and `30`. Both figures now label `-4` to `4` and leave
+`+-5` unlabeled, which is 4.40's shape. Nothing else moved; the range, the scale and the label
+stack are as recorded above.
+
 ## 8. Order of work
 
 The list is three tiers now rather than four: the `unidentified` tier used to lead here as its own
