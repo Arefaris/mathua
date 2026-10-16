@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-226 paragraphs across 100 lessons read as a caption whose image was dropped:
-122 certain, 33 strong and 71 likely. Every one sits
+225 paragraphs across 100 lessons read as a caption whose image was dropped:
+121 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 122 rows and 52 distinct figures
+## 3. The captions are 121 rows and 51 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **52 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **51 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 3 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 2 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed fifty.
+again to 53 and 44, of which section 7 has since landed fifty-one.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,7 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.36 | (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of revolu... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 1.11 | (none) | Prealgebra | 1 Multiply Whole Numbers | 6 | illustration, fetch |
@@ -1091,6 +1090,33 @@ That caption held one row: the report went from 227 to 226, and the certain tier
 Distinct figures go from 53 to 52 and redraws from 4 to 3. The lesson keeps four other orphan
 captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
 follows, to 226.
+
+**Figure 6.33** (R between `f(x) = sqrt(x)` and `g(x) = 1/x` over [1, 4], revolved about the
+y-axis) landed on 2026-10-16 in `calc.integral.volume`, as
+`calculus/two-curve-waisted-solid.svg`.
+
+**A cavity bounded by two functions is a waisted silhouette, not a funnel.** The region's right edge
+is `x = 4` at every height, so the outer surface is a plain cylinder of radius 4 and both ends are
+knife edges: the inner radius reaches the outer wall at `y = 1/4` and again at `y = 2`. The inner
+radius is `max(1/y, y^2)`, which is `1/y` below `y = 1` and `y^2` above it, so the cavity is widest
+at both ends and narrowest at the waist, and the material is two wings that are widest at the waist.
+There is no floor and no inner rim to draw: the void's whole silhouette is one white closed path
+bounded by the two cavity curves, the rim's far arc and the base's near arc. This is the figure
+6.26 and 6.30 had no counterpart for, because their voids were a straight hole and a funnel that
+closes at a point.
+
+**The white fill goes in after the hidden far base arc and before the near base arc and the rim.**
+The void's silhouette meets the rim's ellipse and the base's near arc exactly, so a white fill drawn
+last shaves half the stroke off each and they read thin. Drawing the hidden far base arc first keeps
+the void's white over it, which is what hides it.
+
+Both panels keep equal scales, because panel (a) is read against its axes and panel (b) is 8 units
+across and 1 3/4 tall, which a filled panel would redraw as a tall shell.
+
+That caption held one row: the report went from 226 to 225, and the certain tier from 122 to 121.
+Distinct figures go from 52 to 51 and redraws from 3 to 2. The lesson keeps three other orphan
+captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
+follows, to 225.
 
 ## 8. Order of work
 

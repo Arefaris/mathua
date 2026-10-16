@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-226 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **122 certain**, **33 strong**, **71 likely**.
+225 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **121 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -145,10 +145,9 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 201 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 263 | certain | *Figure 6.33 (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the i...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 283 | certain | *Figure 6.34* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 300 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 320 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 285 | certain | *Figure 6.34* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 302 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 322 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 58 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 83 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.44 This function crosses its horizontal asymptote multiple times.* | auto-numbered figure/table label |
@@ -289,7 +288,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-640 diagrams ship, 334 URLs are referenced by lesson bodies, and
+641 diagrams ship, 335 URLs are referenced by lesson bodies, and
 **286 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
