@@ -2762,5 +2762,37 @@
   {
     "concept_id": "calc.multi.coordinates_jacobian",
     "source": "authored/calc.multi.coordinates_jacobian.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.vandermonde",
+    "source": "authored/discrete.combinatorics.vandermonde.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.double_counting",
+    "source": "authored/discrete.combinatorics.double_counting.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.surjections",
+    "source": "authored/discrete.combinatorics.surjections.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.stirling_second",
+    "source": "authored/discrete.combinatorics.stirling_second.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.bell",
+    "source": "authored/discrete.combinatorics.bell.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.compositions",
+    "source": "authored/discrete.combinatorics.compositions.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.integer_partitions",
+    "source": "authored/discrete.combinatorics.integer_partitions.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.lattice_paths",
+    "source": "authored/discrete.combinatorics.lattice_paths.md"
   }
 ]

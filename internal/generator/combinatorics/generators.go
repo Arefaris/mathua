@@ -23,6 +23,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("discrete.combinatorics.circular", &circularGen{})
 	reg.Register("discrete.combinatorics.derangement", &derangementGen{})
 	reg.Register("discrete.combinatorics.catalan", &catalanGen{})
+	registerCountingTechniques(reg)
 }
 
 // pick returns a random int in [0, n) and never panics on n < 1, so a difficulty of 0 (which the

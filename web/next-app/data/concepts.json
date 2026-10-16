@@ -5675,6 +5675,119 @@
     "subdomain": "discrete_math.combinatorics"
   },
   {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.vandermonde",
+    "label": "Vandermonde's identity",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.combinations"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.double_counting",
+    "label": "Counting the same set two ways",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.combinations"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.surjections",
+    "label": "Counting onto functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.sets.inclusion_exclusion",
+      "discrete.combinatorics.combinations"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.stirling_second",
+    "label": "Stirling numbers of the second kind",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.surjections"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.bell",
+    "label": "Bell numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.stirling_second"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.compositions",
+    "label": "Compositions of an integer",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.stars_bars"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.integer_partitions",
+    "label": "Integer partitions",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.compositions"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.lattice_paths",
+    "label": "Lattice paths",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.combinations"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
     "domain": "fractions",
     "grading_type": "numeric",
     "id": "frac.basics.concept",

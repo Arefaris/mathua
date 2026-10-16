@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 691 concepts, and there are 691 KP shard files
-holding 2073 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 699 concepts, and there are 699 KP shard files
+holding 2097 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 278 of the 691 concepts
+### 4.1 The course catalog reaches 287 of the 699 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
-`internal/planning/planner.go:64` (`collectChain`). Across the 22 courses those closures reach
-278 of the 691 concepts: 413 of them have a node, a generator, a lesson and three KP shards and
+`internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
+287 of the 699 concepts: 412 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -96,7 +96,7 @@ The count of unreachable concepts by domain:
 | arithmetic | 46 | 14 |
 | linear_algebra | 26 | 12 |
 | abstract_algebra | 32 | 11 |
-| discrete_math | 31 | 6 |
+| discrete_math | 39 | 5 |
 | geometry | 23 | 7 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
@@ -116,7 +116,7 @@ entirely `multiple_choice`:
 | topology | 30 | 29 |
 | differential_equations | 25 | 24 |
 | machine_learning | 25 | 24 |
-| discrete_math | 31 | 19 |
+| discrete_math | 39 | 19 |
 | number_theory | 25 | 17 |
 | complex_numbers | 26 | 14 |
 
@@ -250,7 +250,7 @@ uses:
 
 Three things follow, and together they decide the first two policies.
 
-- **A makes the catalog exhaustive.** The union of the 22 closures goes from 247 to **666**: every
+- **A makes the catalog exhaustive.** The union of the 23 closures goes from 247 to **666**: every
   concept in the corpus becomes reachable. That is the end of a sampled path — the catalog and the
   corpus become the same set — and it leaves the diagnostic and a free-choice goal nothing to do.
 - **Both policies collapse the staged pairs.** `calc1` and `calc2` are 67 and 70 concepts now and 342

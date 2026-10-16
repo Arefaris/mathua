@@ -98,6 +98,8 @@ def facts() -> dict:
             stack += list(prereq[c])
         return seen
 
+    mc = collections.Counter(v["domain"] for c, v in concepts.items()
+                            if v.get("grading_type") == "multiple_choice")
     courses = json.load(open("data/courses.json", encoding="utf-8"))
     reach = set()
     for co in courses:
@@ -136,6 +138,7 @@ def facts() -> dict:
         "calculus": len([c for c in concepts if domain[c] == "calculus"]),
         "calculus_unreachable": unreachable["calculus"],
         "discrete": len([c for c in concepts if domain[c] == "discrete_math"]),
+        "discrete_mc": mc["discrete_math"],
         "discrete_unreachable": unreachable["discrete_math"],
     }
 
@@ -171,6 +174,18 @@ def rules(f: dict) -> list:
          f"**{f['units']} units, all {f['concepts']} concepts covered exactly once**", 1),
         ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
          r"\(\d{3}/\d{3}, max \d+\)", f"({f['concepts']}/{f['concepts']}, max {f['max_depth']})", 1),
+        # The course count appears in prose four times and in a table twice, across three files,
+        # so it is a fact like the others -- and a stale one is invisible to check_docs, which
+        # matches numbers against corpus-count nouns rather than against a word.
+        ("docs/content-expansion.md", r"Across the \d+ courses", f"Across the {f['courses']} courses", 1),
+        ("docs/content-expansion.md", r"The union of the \d+ closures", f"The union of the {f['courses']} closures", 1),
+        ("docs/system-design.md", r"\(\d+ courses\)", f"({f['courses']} courses)", 1),
+        ("docs/wasc-uc-ag-research.md", r"\d+ courses from `data/courses.json:1`",
+         f"{f['courses']} courses from `data/courses.json:1`", 1),
+        ("docs/wasc-uc-ag-research.md", r"\d+ courses from 4th grade",
+         f"{f['courses']} courses from 4th grade", 1),
+        ("docs/wasc-uc-ag-research.md", r"`data/courses.json:1` — \d+ courses",
+         f"`data/courses.json:1` — {f['courses']} courses", 1),
         # content-expansion.md is the owner of the reach measurement.
         ("docs/content-expansion.md", r"There are \d{3} concepts, and there are \d{3} KP shard files",
          f"There are {f['concepts']} concepts, and there are {f['kp_files']} KP shard files", 1),
@@ -187,6 +202,11 @@ def rules(f: dict) -> list:
         ("docs/content-expansion.md", r"\| discrete_math \| \d+ \| \d+ \|",
          f"| discrete_math | {f['discrete']} | {f['discrete_unreachable']} |", 1,
          ("### 4.1", "### 4.2")),
+        # Section 4.2's row for the same domain: the same shape, a different table, which is why
+        # the region matters. The second column there is the multiple-choice count.
+        ("docs/content-expansion.md", r"\| discrete_math \| \d+ \| \d+ \|",
+         f"| discrete_math | {f['discrete']} | {f['discrete_mc']} |", 1,
+         ("### 4.2", "## 5.")),
         # The two Go tests that pin a size rather than reading it. The patterns name each site,
         # because a bare \d{3} also matches the `064` in this file's temp-file mode.
         ("internal/concepts/concepts_test.go", r"if d\.Count\(\) != \d{3} \{",
