@@ -117,7 +117,7 @@ export interface OverallCounts extends DomainCounts {
   /**
    * Concepts whose prerequisites are all met — reachable now or soon. The
    * complement of locked, and more meaningful than a percentage of the whole
-   * catalogue: 657 concepts spanning topology and abstract algebra is not a
+   * catalogue: a count spanning topology and abstract algebra is not a
    * denominator a learner can act on.
    */
   unlocked: number

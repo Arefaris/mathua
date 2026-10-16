@@ -31,9 +31,9 @@ export const domainOrder = [...DOMAIN_ORDER]
 export const domainLabels = DOMAIN_LABELS
 
 // Ranges are derived from the corpus size, because the hand-written ladder was a snapshot.
-// It stopped at "256–284" for a catalogue of 657, so the top four levels a learner could
-// actually reach were not on the page. ADR-013's rule for corpus counts applies verbatim:
-// a number that describes the corpus must be computed from the corpus.
+// It stopped at "256–284" for the 657-concept catalogue it was written against, so the top
+// four levels a learner could actually reach were not on the page. ADR-013's rule for corpus
+// counts applies verbatim: a number that describes the corpus must be computed from the corpus.
 const LEVEL_NAMES = [
   'Novice',
   'Apprentice',

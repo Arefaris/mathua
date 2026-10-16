@@ -1,6 +1,12 @@
 package xp
 
-import "testing"
+import (
+	"sort"
+	"testing"
+
+	"github.com/chuma-beep/mathua/internal/concepts"
+	"github.com/chuma-beep/mathua/internal/mastery"
+)
 
 // Effort calibration: threshold seconds scaled by difficulty, 1-5 XP.
 func TestEffortBase(t *testing.T) {
@@ -149,4 +155,42 @@ func TestDailyGoalImpliedCadence(t *testing.T) {
 	if DefaultDailyGoal <= lesson {
 		t.Errorf("DefaultDailyGoal %d is not greater than one lesson (%d XP)", DefaultDailyGoal, lesson)
 	}
+}
+
+// The EffortBase doc comment quotes what the 1-XP floor does to the real corpus, so the
+// corpus is where those figures come from. This test reports the distribution rather than
+// asserting it: the share at the floor is a content statistic that a new concept changes,
+// and a test that pinned it would fail on every content wave for a number nobody decided.
+// What it does assert is the clamp, which is policy, and that the corpus was read at all --
+// a guard that reads nothing reports nothing, including a save of the comment above.
+func TestEffortBaseOverTheCorpus(t *testing.T) {
+	d, err := concepts.LoadDir("../../data/concepts")
+	if err != nil {
+		t.Fatalf("loading the corpus: %v", err)
+	}
+	if d.Count() == 0 {
+		t.Fatal("no concepts read; every figure below would be empty")
+	}
+	byBase := map[int]int{}
+	var minutes, total float64
+	for _, c := range d.Order() {
+		sec := c.MasteryThreshold.AvgTimeSeconds
+		base := EffortBase(sec, mastery.NeutralDifficulty)
+		if base < 1 || base > 5 {
+			t.Errorf("%s prices at %d XP, outside the 1-5 clamp", c.ID, base)
+		}
+		byBase[base]++
+		minutes += sec / 60
+		total += float64(base)
+	}
+	keys := make([]int, 0, len(byBase))
+	for k := range byBase {
+		keys = append(keys, k)
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(keys))) // from the top of the clamp down
+	for _, k := range keys {
+		t.Logf("%d XP: %d of %d concepts", k, byBase[k], d.Count())
+	}
+	t.Logf("%.1f expected minutes priced at %.0f XP = %.2f XP per real minute",
+		minutes, total, total/minutes)
 }

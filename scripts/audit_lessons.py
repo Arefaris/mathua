@@ -162,7 +162,7 @@ def main():
                         kp_orphans.append(f"{name}: glued element id in subgoal {sg!r}")
         if kp_orphans:
             errors.append(f"kp shard problems ({len(kp_orphans)}):\n  " + "\n  ".join(kp_orphans))
-        # Validate shard file count and total KPs (641 files ×3 =1923)
+        # Validate shard file count and total KPs (one shard per concept, 3 KPs each)
         if kp_files != len(dag_ids):
             errors.append(f"kp shard count mismatch: {kp_files} files vs {len(dag_ids)} concepts")
         if kp_total != len(dag_ids) * 3:

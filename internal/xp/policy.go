@@ -89,12 +89,13 @@ const RushSeconds = 2.0
 // threshold seconds scaled by difficulty, rounded and clamped to 1-5 XP.
 //
 // 1 XP ~ 1 minute is an approximation, and the clamp is why: rounding plus the 1-XP floor
-// compresses the bottom end hard. Measured across the corpus at the difficulty the engine
-// actually serves with no learner information (0.55), **481 of 657 concepts price at 1 XP**
-// and only 174 at 2 XP, so the corpus's 509 expected minutes are priced at 835 XP — 1.64 XP
-// per real minute rather than 1. The worst are 6-second concepts such as arith.mult.tables
-// at a 10x over-price. That is a deliberate floor: sub-minute questions still count as work,
-// and a fractional XP economy would make every answer round to nothing.
+// compresses the bottom end hard. TestEffortBaseOverTheCorpus measures it over the corpus at
+// mastery.NeutralDifficulty, the difficulty the engine serves with no learner information:
+// **490 of 666 concepts price at 1 XP** and the other 176 at 2 XP, so the corpus's 511.8
+// expected minutes are priced at 842 XP — 1.65 XP per real minute rather than 1. The worst are
+// 6-second concepts such as arith.mult.tables at a 10x over-price. That is a deliberate floor:
+// sub-minute questions still count as work, and a fractional XP economy would make every
+// answer round to nothing.
 func EffortBase(thresholdSec, difficulty float64) int {
 	if thresholdSec <= 0 {
 		thresholdSec = 10
