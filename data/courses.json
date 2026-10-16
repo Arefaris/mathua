@@ -39,7 +39,7 @@
     "name": "Prealgebra",
     "grade": "8th-9th",
     "description": "Variables, linear equations and inequalities, systems of equations, expressions, ratios, and the distributive property.",
-    "targets": ["prealg.ineq.two_step", "alg.systems.substitution", "prealg.expr.distribute", "alg.linear.slope_intercept", "frac.reciprocal", "frac.of_number", "frac.complex", "frac.order_ops", "frac.compare.cross", "frac.how_many", "frac.add.three", "frac.of_fraction", "frac.lcd", "frac.unit_decompose", "frac.mult.cancel", "frac.mixed.div"]
+    "targets": ["prealg.ineq.two_step", "alg.systems.substitution", "prealg.expr.distribute", "alg.linear.slope_intercept", "frac.reciprocal", "frac.of_number", "frac.complex", "frac.order_ops", "frac.compare.cross", "frac.how_many", "frac.add.three", "frac.of_fraction", "frac.lcd", "frac.unit_decompose", "frac.mult.cancel", "frac.mixed.div", "frac.sub.whole", "frac.as_division", "frac.order.half", "frac.of_unit", "frac.recipe.scale", "frac.remaining", "frac.equivalent.scale"]
   },
   {
     "id": "a1",

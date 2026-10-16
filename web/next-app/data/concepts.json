@@ -6496,6 +6496,104 @@
     "subdomain": "fractions.mixed"
   },
   {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.sub.whole",
+    "label": "Subtracting a fraction from a whole number",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.sub.diff"
+    ],
+    "subdomain": "fractions.subtraction"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.as_division",
+    "label": "A fraction as a division",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.basics.concept"
+    ],
+    "subdomain": "fractions.concept"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.order.half",
+    "label": "Comparing to one half",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.ops.benchmark"
+    ],
+    "subdomain": "fractions.equivalence"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.of_unit",
+    "label": "Fractions of a unit of measure",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.basics.equivalent"
+    ],
+    "subdomain": "fractions.concept"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.recipe.scale",
+    "label": "Scaling a recipe",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.of_number"
+    ],
+    "subdomain": "fractions.multiplication"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.remaining",
+    "label": "The fraction remaining",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.sub.whole"
+    ],
+    "subdomain": "fractions.subtraction"
+  },
+  {
+    "domain": "fractions",
+    "grading_type": "numeric",
+    "id": "frac.equivalent.scale",
+    "label": "Equivalent fractions by scaling",
+    "mastery_threshold": {
+      "avg_time_seconds": 16,
+      "streak": 7
+    },
+    "prerequisites": [
+      "frac.basics.equivalent"
+    ],
+    "subdomain": "fractions.equivalence"
+  },
+  {
     "domain": "geometry",
     "grading_type": "multiple_choice",
     "id": "geo.basic.points_lines",

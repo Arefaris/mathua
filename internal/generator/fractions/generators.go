@@ -40,6 +40,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("frac.compare.word", &fracCompareWordGen{})
 	registerFoundations(reg)
 	registerSkills(reg)
+	registerApplications(reg)
 }
 
 func fracStr(num, den int) string { return fmt.Sprintf("%d/%d", num, den) }

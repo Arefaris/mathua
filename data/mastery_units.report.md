@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 776 |
+| Total concepts | 783 |
 | Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -70,9 +70,9 @@ exists to make concrete.
 | `discrete_math.b7` | discrete_math | 7 | 3 | 1 | 21–22 |
 | `discrete_math.b8` | discrete_math | 8 | 1 | 1 | 26–26 |
 | `discrete_math.b9` | discrete_math | 9 | 4 | 3 | 27–29 |
-| `fractions.b2` | fractions | 2 | 7 | 4 | 6–8 |
-| `fractions.b3` | fractions | 3 | 19 | 8 | 9–11 |
-| `fractions.b4` | fractions | 4 | 11 | 6 | 12–14 |
+| `fractions.b2` | fractions | 2 | 8 | 4 | 6–8 |
+| `fractions.b3` | fractions | 3 | 23 | 9 | 9–11 |
+| `fractions.b4` | fractions | 4 | 13 | 6 | 12–14 |
 | `fractions.b5` | fractions | 5 | 1 | 1 | 15–15 |
 | `geometry.b0` | geometry | 0 | 8 | 5 | 0–2 |
 | `geometry.b1` | geometry | 1 | 15 | 7 | 3–4 |
@@ -143,11 +143,11 @@ at every width.
 |---|---|---|---|---|---|---|---|
 | 2 | 123 | 4 | 36 | 20 | 52 | 5 | 0 |
 | 3 | 95 | 5 | 50 | 19 | 35 | 5 | 0 |
-| 4 | 76 | 7 | 63 | 8 | 23 | 4 | 0 |
-| 5 | 65 | 8 | 72 | 6 | 17 | 4 | 0 |
+| 4 | 76 | 7 | 63 | 8 | 23 | 5 | 0 |
+| 5 | 65 | 8 | 72 | 6 | 17 | 5 | 0 |
 | 6 | 61 | 9 | 96 | 5 | 13 | 5 | 0 |
 | 8 | 48 | 12 | 101 | 3 | 9 | 7 | 0 |
-| 10 | 43 | 12 | 134 | 3 | 11 | 8 | 0 |
+| 10 | 43 | 12 | 134 | 3 | 11 | 9 | 0 |
 | 12 | 42 | 15 | 120 | 2 | 6 | 7 | 0 |
 | 15 | 32 | 16 | 134 | 2 | 5 | 11 | 0 |
 | 20 | 29 | 23 | 158 | 2 | 5 | 12 | 0 |
@@ -292,7 +292,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 776
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 783
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

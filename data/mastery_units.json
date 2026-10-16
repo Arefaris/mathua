@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 776,
+  "concept_count": 783,
   "unit_count": 95,
   "units": [
     {
@@ -1057,6 +1057,7 @@
       ],
       "concept_ids": [
         "frac.add.same",
+        "frac.as_division",
         "frac.basics.concept",
         "frac.basics.equivalent",
         "frac.basics.number_line",
@@ -1064,7 +1065,7 @@
         "frac.ops.mult",
         "frac.ops.to_decimal"
       ],
-      "concept_count": 7
+      "concept_count": 8
     },
     {
       "id": "fractions.b3",
@@ -1077,6 +1078,7 @@
         "frac.compare",
         "frac.div",
         "frac.mult",
+        "fractions.concept",
         "fractions.division",
         "fractions.equivalence",
         "fractions.mixed",
@@ -1089,6 +1091,7 @@
         "frac.complex",
         "frac.div.whole",
         "frac.div.word",
+        "frac.equivalent.scale",
         "frac.how_many",
         "frac.mixed.convert",
         "frac.mixed.div",
@@ -1098,13 +1101,16 @@
         "frac.mult.word",
         "frac.of_fraction",
         "frac.of_number",
+        "frac.of_unit",
         "frac.ops.benchmark",
         "frac.ops.compare",
         "frac.ops.div",
         "frac.ops.simplify",
+        "frac.order.half",
+        "frac.recipe.scale",
         "frac.sub.same"
       ],
-      "concept_count": 19
+      "concept_count": 23
     },
     {
       "id": "fractions.b4",
@@ -1130,11 +1136,13 @@
         "frac.mixed.sub",
         "frac.order_ops",
         "frac.reciprocal",
+        "frac.remaining",
         "frac.sub.diff",
+        "frac.sub.whole",
         "frac.sub.word",
         "frac.unit_decompose"
       ],
-      "concept_count": 11
+      "concept_count": 13
     },
     {
       "id": "fractions.b5",

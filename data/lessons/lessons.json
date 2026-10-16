@@ -3102,5 +3102,33 @@
   {
     "concept_id": "frac.mixed.div",
     "source": "authored/frac.mixed.div.md"
+  },
+  {
+    "concept_id": "frac.sub.whole",
+    "source": "authored/frac.sub.whole.md"
+  },
+  {
+    "concept_id": "frac.as_division",
+    "source": "authored/frac.as_division.md"
+  },
+  {
+    "concept_id": "frac.order.half",
+    "source": "authored/frac.order.half.md"
+  },
+  {
+    "concept_id": "frac.of_unit",
+    "source": "authored/frac.of_unit.md"
+  },
+  {
+    "concept_id": "frac.recipe.scale",
+    "source": "authored/frac.recipe.scale.md"
+  },
+  {
+    "concept_id": "frac.remaining",
+    "source": "authored/frac.remaining.md"
+  },
+  {
+    "concept_id": "frac.equivalent.scale",
+    "source": "authored/frac.equivalent.scale.md"
   }
 ]
