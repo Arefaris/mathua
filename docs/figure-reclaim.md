@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-324 paragraphs across 113 lessons read as a caption whose image was dropped:
-220 certain, 33 strong and 71 likely. Every one sits
+306 paragraphs across 113 lessons read as a caption whose image was dropped:
+202 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 220 rows and 102 distinct figures
+## 3. The captions are 202 rows and 99 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **102 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **99 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 53 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 50 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -55,8 +55,8 @@ of a number line is an illustration. Opening Prealgebra 1.1 shows all three are 
 number line as Figure 1.2 under a different mark, which makes them schematics. They were redrawn
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
-the caption alone had suggested 35 and 38, and the classification below has moved those counts on
-again to 53 and 44.
+the caption alone had suggested 35 and 38, and the classification below moved those counts on
+again to 53 and 44, of which section 7 has since landed three.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -148,9 +148,10 @@ corpus-wide doubled-token test is not usable: it reports 1009 legitimately repea
 **One measurement it moved.** The repaired captions that gained inner `*x*` emphasis — OpenStax
 marks a variable with `<em>` — stopped matching `audit_lesson_media.py`'s standalone-emphasis test,
 which removed eight imageless captions from this plan. The test now allows a balanced inner span
-and still rejects a thematic break (`* * *`); the report is back at 324 candidates and 220 certain
-once the two reclaims in section 7 have removed eighteen rows and the label exemption in section 4
-has restored twenty-four.
+and still rejects a thematic break (`* * *`); the report stood at 324 rows and 220 in the
+certain tier on 2026-10-15, after two reclaims in section 7 had removed eighteen rows and the label
+exemption in section 4 had restored twenty-four. The 1.4, 1.5 and 1.6 batch removes eighteen more,
+to 306 and 202.
 
 **One glyph normalisation, in the same text.** OpenStax marks the parts of a two-part example with
 circled letters (`ⓐ` … `ⓔ`), and the ingester copied the codepoint through. At lesson size `ⓐ` is an
@@ -183,9 +184,6 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 1.12 | The area of a rectangle is the product of its length and its width, or 6 square feet. | Prealgebra | 1 Multiply Whole Numbers | 6 | schematic, redraw |
-| 1.4 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
-| 1.5 | We use place value notation to show the value of the number 138. | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
-| 1.6 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
 | 2.12 | These graphs show the behavior of three different functions around $x = 2.$ | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.13 | The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.14 | The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
@@ -310,6 +308,29 @@ Those three captions held eighteen rows, and the regenerated audit dropped all o
 candidates to 300, and 214 in the certain tier to 196. They were the first batch drawn from a
 disposition that had been assigned by reading a caption, and the reading was wrong — section 4
 records the correction.
+
+**Figures 1.4, 1.5 and 1.6** (the base-10 vocabulary, then 138 modeled with it, then 5,278,194 in a
+place value chart) landed on 2026-10-16 as one batch, in those six lessons, as
+`base-ten-blocks.svg`, `base-ten-138.svg` and `place-value-chart.svg`. 1.5 and 1.6 had been
+`schematic, redraw` since the plan was written, read out of their upstream `alt`; 1.4 was one of the
+seventeen that section 4 classified, and the three are one subject, so they land together. 1.4 and
+1.5 share a cell size of 9px, which is what makes a rod ten cubes and a flat ten rods by
+construction rather than by three separate drawings that happen to agree.
+
+The upstream 1.4 stacks its three items vertically with each label beside its item, and the lesson
+figure is bounded to 180px tall (section 3 of the style doc), so the batch is landscape and each
+label sits under its item in two lines instead. That is a transposition of the layout and not of the
+content: the same three blocks, the same three labels.
+
+The alt text differs by figure, and the difference is the point. 1.5 has a caption, so its alt is
+the caption minus its `Figure 1.5 ` label, the rule Figure 1.2 follows. 1.4 and 1.6 have only the
+bare label upstream, so there is nothing of the author's to reuse except the `alt` itself: both
+carry upstream's `data-alt` verbatim, which is the same document's accessibility text and not a
+paraphrase of it.
+
+Those three captions held eighteen rows, and the regenerated audit dropped all of them: 324
+candidates to 306, and 220 in the certain tier to 202. The ceiling for orphan captions in
+`internal/lessons/assets_test.go` ratchets down with it, to 306.
 
 ## 8. Order of work
 

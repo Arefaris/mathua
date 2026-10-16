@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-324 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **220 certain**, **33 strong**, **71 likely**.
+306 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **202 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -121,29 +121,11 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.neg.order_ops.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.order_ops.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.place.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
-| `teaching/arith.place.hundreds.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.place.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
-| `teaching/arith.place.tens.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.place.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
-| `teaching/arith.place.thousands.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.round.hundreds.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
-| `teaching/arith.round.hundreds.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.round.tens.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
-| `teaching/arith.round.tens.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.round.thousands.md` | 85 | certain | *Figure 1.3* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 91 | certain | *Figure 1.4* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 95 | certain | *Figure 1.5 We use place value notation to show the value of the number 138.* | auto-numbered figure/table label |
-| `teaching/arith.round.thousands.md` | 145 | certain | *Figure 1.6* | auto-numbered figure/table label |
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -387,7 +369,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-590 diagrams ship, 283 URLs are referenced by lesson bodies, and
+593 diagrams ship, 286 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

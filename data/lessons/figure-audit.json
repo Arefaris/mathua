@@ -701,51 +701,9 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/arith.place.hundreds.md",
-      "line": 91,
-      "text": "Figure 1.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.hundreds.md",
-      "line": 95,
-      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.hundreds.md",
-      "line": 145,
-      "text": "Figure 1.6",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.place.tens.md",
       "line": 85,
       "text": "Figure 1.3",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.tens.md",
-      "line": 91,
-      "text": "Figure 1.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.tens.md",
-      "line": 95,
-      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.tens.md",
-      "line": 145,
-      "text": "Figure 1.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -757,51 +715,9 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/arith.place.thousands.md",
-      "line": 91,
-      "text": "Figure 1.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.thousands.md",
-      "line": 95,
-      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.place.thousands.md",
-      "line": 145,
-      "text": "Figure 1.6",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.round.hundreds.md",
       "line": 85,
       "text": "Figure 1.3",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.hundreds.md",
-      "line": 91,
-      "text": "Figure 1.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.hundreds.md",
-      "line": 95,
-      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.hundreds.md",
-      "line": 145,
-      "text": "Figure 1.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -813,51 +729,9 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/arith.round.tens.md",
-      "line": 91,
-      "text": "Figure 1.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.tens.md",
-      "line": 95,
-      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.tens.md",
-      "line": 145,
-      "text": "Figure 1.6",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.round.thousands.md",
       "line": 85,
       "text": "Figure 1.3",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.thousands.md",
-      "line": 91,
-      "text": "Figure 1.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.thousands.md",
-      "line": 95,
-      "text": "Figure 1.5 We use place value notation to show the value of the number 138.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.round.thousands.md",
-      "line": 145,
-      "text": "Figure 1.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -2464,8 +2338,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 283,
-    "shipped": 590,
+    "referenced": 286,
+    "shipped": 593,
     "unreferenced_content": 287,
     "candidates": [
       {

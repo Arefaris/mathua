@@ -44,8 +44,8 @@ const CASES = [
   // A reclaimed OpenStax figure, and the reason the selector below is `/diagrams/` rather than
   // `/diagrams/algebrica/`: it was vendored-only, so it counted nothing in this directory and a
   // figure that failed to draw here would have been reported as a lesson with no figures at all.
-  // Four, not one: this body also carries Figure 1.2.
-  { concept: 'arith.round.tens', file: 'teaching/arith.round.tens.md', expectFigures: 4 },
+  // Seven, not one: this body carries Figures 1.2 and 1.4-1.9, the arithmetic reclaims.
+  { concept: 'arith.round.tens', file: 'teaching/arith.round.tens.md', expectFigures: 7 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

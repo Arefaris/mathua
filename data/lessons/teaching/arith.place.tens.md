@@ -88,9 +88,13 @@ Find the total value of each kind of bill, and then add to find the total. The w
 
 Base-10 blocks provide another way to model place value, as shown in Figure 1.4. The blocks can be used to represent hundreds, tens, and ones. Notice that the tens rod is made up of 10 ones, and the hundreds square is made of 10 tens, or 100 ones.
 
+![An image with three items. The first item is a single block with the label “A single block represents 1”. The second item is a horizontal rod consisting of 10 blocks, with the label “A rod represents 10”. The third item is a square consisting of 100 blocks, with the label “A square represents 100”. The square is 10 blocks tall and 10 blocks wide.](/diagrams/arithmetic/base-ten-blocks.svg)
+
 *Figure 1.4*
 
 Figure 1.5 shows the number 138 modeled with $\text{base-10}$ blocks.
+
+![We use place value notation to show the value of the number 138.](/diagrams/arithmetic/base-ten-138.svg)
 
 *Figure 1.5 We use place value notation to show the value of the number 138.*
 
@@ -141,6 +145,8 @@ By looking at money and $\text{base-10}$ blocks, we saw that each place in a num
 Just as with the $\text{base-10}$ blocks, where the value of the tens rod is ten times the value of the ones block and the value of the hundreds square is ten times the tens rod, the value of each place in the place-value chart is ten times the value of the place to the right of it.
 
 Figure 1.6 shows how the number 5,278,194 is written in a place value chart.
+
+![A chart titled 'Place Value' with fifteen columns and 4 rows, with the columns broken down into five groups of three. The header row shows Trillions, Billions, Millions, Thousands, and Ones. The next row has the values 'Hundred trillions', 'Ten trillions', 'trillions', 'hundred billions', 'ten billions', 'billions', 'hundred millions', 'ten millions', 'millions', 'hundred thousands', 'ten thousands', 'thousands', 'hundreds', 'tens', and 'ones'. The first 8 values in the next row are blank. Starting with the ninth column, the values are '5', '2', '7', '8', '1', '9', and '4'.](/diagrams/arithmetic/place-value-chart.svg)
 
 *Figure 1.6*
 
