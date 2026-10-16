@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-112 paragraphs across 52 lessons read as a caption whose image was dropped:
-8 certain, 33 strong and 71 likely. Every one sits
+109 paragraphs across 49 lessons read as a caption whose image was dropped:
+5 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -23,9 +23,10 @@ Every teaching lesson opens with a credit line naming its source, for example:
 > Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY 4.0
 ```
 
-Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (3 captions) and
-**OpenStax Prealgebra** (5). Both are CC BY 4.0, which permits reuse and adaptation with
-attribution, and the attribution is already the lesson's own header line.
+Two books account for every `certain` caption: **OpenStax Prealgebra** (5) and
+**OpenStax Calculus Volume 1** (0, its last three having landed on 2026-10-16). Both are CC BY 4.0,
+which permits reuse and adaptation with attribution, and the attribution is already the lesson's own
+header line.
 
 That changes what "a direct look-alike" means for these figures. Their *drawing* is upstream's, not
 Mathua's: they are fetched rather than redrawn, so the line work, the labels and the layout are
@@ -40,7 +41,7 @@ fetched asset is converted at fetch time — grey, its tone stretched to the ful
 then mapped onto the greys that section 4 of `docs/diagram-style.md` fixes. The drawing survives; the
 saturated color was the only part of it that never belonged on the page.
 
-## 3. The captions are 8 rows and 5 distinct figures
+## 3. The captions are 5 rows and 2 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 6.4` is the caption in three of them, and `Figure 6.8` in two. Deduplicating on the pair
@@ -54,7 +55,7 @@ the method.
 | schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 0 | Empty since 2026-10-16, in three batches. Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
-| photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
+| photo, third-party credit | 2 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
 
 **One correction the first batch forced.** Figures 1.7, 1.8 and 1.9 were assigned
 `illustration, fetch` when this table was drawn, because the assignment read the caption and
@@ -64,7 +65,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed ninety-seven.
+again to 53 and 44, of which section 7 has since landed one hundred.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -191,9 +192,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.22 | (credit: NASA) | Calculus Volume 1 | 2 The Limit of a Function | 1 | photo, third-party credit |
-| 4.4 | (credit: modification of work by Steve Jurvetson, Wikimedia Commons) | Calculus Volume 1 | 4 Related Rates | 1 | photo, third-party credit |
-| 5.34 | (credit: modification of work by Carter Brown, Flickr) | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | photo, third-party credit |
 | 6.4 | (credit: Riles32807, Wikimedia Commons) | Prealgebra | 6 Understand Percent | 3 | photo, third-party credit |
 | 6.8 | Applications of discounts are common in everyday life. (credit: Charleston's TheDigit... | Prealgebra | 6 Solve Sales Tax, Commission, and Discount Applications | 2 | photo, third-party credit |
 
@@ -1244,6 +1242,28 @@ seven of the nine lessons no longer carry an orphan, and `calc.limit.numeric` an
 `calc.deriv.related_rates` still carry the photo captions 2.22 and 4.4. The ceiling in
 `internal/lessons/assets_test.go` follows, to 112, and the e2e case counts to eleven and twelve,
 because Figure 2.20 landed in `calc.limit.numeric` and Figure 6.34 in `calc.integral.volume`.
+
+**Three Calculus photographs** (2.22, `credit: NASA`; 4.4, Steve Jurvetson; 5.34, Carter Brown)
+landed on 2026-10-16 in three lessons, as `web/next-app/public/diagrams/calculus/<number>.png`,
+duotoned like every other fetched asset.
+
+**A caption that is only a credit is not a description, so the alt is upstream's.** None of the
+three says anything about its picture — `Figure 2.22 (credit: NASA)` — and the fourth one, 6.4, is
+the same. So the alt rule has three branches rather than two, and this is the third: a bare label, a
+sentence, and a credit. Upstream's own `data-alt` is then the only description that exists ("A
+picture of a futuristic spaceship speeding through deep space"), and `plain` is not run on it,
+because it is the author's words rather than the caption's mathematics.
+
+**The credit stays in the caption, and nothing is added to the lesson.** The credit line is
+upstream's own attribution and it travels with the figure, inside the caption a reader already sees.
+Where a global third-party notice belongs is not decided here; section 8's item 3 keeps the per
+figure question open, and this is the decision it was waiting for on the fetch side.
+
+The three captions held 3 rows across three lessons: the report went from 112 to 109, the certain
+tier from 8 to 5, and the audit's shipped and referenced counts from 687 to 690 and 381 to 384. All
+three lessons lose their last orphan, so the lesson count drops from 52 to 49. The ceiling in
+`internal/lessons/assets_test.go` follows, to 109, and `calc.limit.numeric`'s e2e count to twelve,
+because Figure 2.22 is the only fetched photograph in the corpus so far.
 
 ## 8. Order of work
 

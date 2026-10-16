@@ -539,6 +539,8 @@ Evaluate $\underset{x\rightarrow 1}{\text{lim}}f(x)$ for $f(x)$ shown here:
 
 #### Chapter Opener: Einstein’s Equation
 
+![A picture of a futuristic spaceship speeding through deep space.](/diagrams/calculus/2.22.png)
+
 *Figure 2.22 (credit: NASA)*
 
 In the chapter opener we mentioned briefly how Albert Einstein showed that a limit exists to how fast any object can travel. Given Einstein’s equation for the mass of a moving object, what is the value of this bound?

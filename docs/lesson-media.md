@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-112 paragraphs across 52 lessons look like a figure caption whose image
-was dropped while its text was kept: **8 certain**, **33 strong**, **71 likely**.
+109 paragraphs across 49 lessons look like a figure caption whose image
+was dropped while its text was kept: **5 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -73,9 +73,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/calc.deriv.related_rates.md` | 165 | certain | *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 201 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 542 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/geo.basic.angle_measure.md` | 30 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angle_measure.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angles.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
@@ -149,7 +146,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.factor.lcm.md` | 126 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168467446629" data-label="" data-summary="The figure shows two factor trees with the number 84 at the top. In the first tree two branches are splitti |
 | `teaching/calc.integral.power_rule.md` | 80 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
 | `teaching/calc.integral.power_rule.md` | 133 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
-| `teaching/calc.integral.power_rule.md` | 330 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
+| `teaching/calc.integral.power_rule.md` | 332 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
 | `teaching/calc.limit.numeric.md` | 523 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -175,7 +172,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-687 diagrams ship, 381 URLs are referenced by lesson bodies, and
+690 diagrams ship, 384 URLs are referenced by lesson bodies, and
 **286 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

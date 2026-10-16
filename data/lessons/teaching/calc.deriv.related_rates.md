@@ -162,6 +162,8 @@ We now return to the problem involving the rocket launch from the beginning of t
 
 #### Chapter Opener: A Rocket Launch
 
+![A photo of a rocket lifting off.](/diagrams/calculus/4.4.png)
+
 *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)*
 
 A rocket is launched so that it rises vertically. A camera is positioned $5000\ \text{ft}$ from the launch pad. When the rocket is $1000\ \text{ft}$ above the launch pad, its velocity is $600\ \text{ft/sec}.$ Find the necessary rate of change of the camera’s angle as a function of time so that it stays focused on the rocket.

@@ -198,6 +198,8 @@ Thus, the motorboat uses 9.6 gal of gas in 2 hours.
 
 #### Chapter Opener: Iceboats
 
+![An image of an iceboat in action.](/diagrams/calculus/5.34.png)
+
 *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)*
 
 As we saw at the beginning of the chapter, top iceboat racers (Figure 5.1) can attain speeds of up to five times the wind speed. Andrew is an intermediate iceboater, though, so he attains speeds equal to only twice the wind speed. Suppose Andrew takes his iceboat out one morning when a light 5-mph breeze has been blowing all morning. As Andrew gets his iceboat set up, though, the wind begins to pick up. During his first half hour of iceboating, the wind speed increases according to the function $v(t) = 20t + 5.$ For the second half hour of Andrew’s outing, the wind remains steady at 15 mph. In other words, the wind speed is given by
