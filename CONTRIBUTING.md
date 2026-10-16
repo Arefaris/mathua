@@ -133,10 +133,20 @@ npx playwright test e2e/admin.spec.ts:300 --project=chromium
 PW_WORKERS=1 CI=1 npx playwright test --shard=1/2     # about three minutes
 ```
 
-A shard that passes here can still fail in CI. One CI run failed four admin and
-profile tests. This exact command passed 124 of 124 locally. The same tests also
-passed in the CI runs before and after that one. Treat a failure of that shape as
-unexplained, and read the uploaded Playwright report before changing anything.
+A shard that passes here can still fail in CI, and the uploaded report is what
+resolves it. One CI run failed four admin and profile tests. Its report showed the
+page rendering fully, with the elements simply absent. Both missing elements come
+from one endpoint: `/api/auth/me` supplies the role that draws the Admin entry and
+the placement that draws the diagnostic call to action.
+
+The tests that failed do not stub that path. `admin.spec.ts` has a `stubAccount`
+helper for it, and its comment records the same trap from an earlier fix. A test
+that leaves the path unstubbed takes its role from whatever the environment
+answers, so the same commit passes or fails with the server.
+
+Stub the path in any test that asserts something the role or the placement draws.
+An attempt to do that while writing this note still failed locally, so treat the
+dependency as mapped but not closed.
 
 
 ### 4. (Optional) Write a lesson
