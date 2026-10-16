@@ -368,5 +368,117 @@
     "streak": 3,
     "avg_time_seconds": 120
    }
+    },
+  {
+   "id": "precalc.poly.remainder_theorem",
+   "label": "The remainder and factor theorems",
+   "domain": "precalculus",
+   "subdomain": "precalculus.polynomials",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "alg.poly.special"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.poly.rational_roots",
+   "label": "The rational-root theorem",
+   "domain": "precalculus",
+   "subdomain": "precalculus.polynomials",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.poly.remainder_theorem"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.rational.asymptote",
+   "label": "Asymptotes of a rational function",
+   "domain": "precalculus",
+   "subdomain": "precalculus.rational",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.poly.rational_roots"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.exp.equation",
+   "label": "Solving exponential equations",
+   "domain": "precalculus",
+   "subdomain": "precalculus.exponential",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "alg.exp.concept"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.log.evaluate",
+   "label": "Evaluating logarithms",
+   "domain": "precalculus",
+   "subdomain": "precalculus.exponential",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "alg.log.concept"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.exp.growth_model",
+   "label": "Exponential growth and decay models",
+   "domain": "precalculus",
+   "subdomain": "precalculus.exponential",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.exp.equation"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.func.inverse_value",
+   "label": "Inverse functions",
+   "domain": "precalculus",
+   "subdomain": "precalculus.functions",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.func.transformations"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.conic.circle_radius",
+   "label": "The circle in general form",
+   "domain": "precalculus",
+   "subdomain": "precalculus.conics",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "alg.poly.special"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
   }
 ]

@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 703,
+  "concept_count": 711,
   "unit_count": 93,
   "units": [
     {
@@ -1804,16 +1804,24 @@
       "depth_max": 23,
       "subdomains": [
         "precalculus.analytic",
-        "precalculus.functions"
+        "precalculus.conics",
+        "precalculus.functions",
+        "precalculus.polynomials",
+        "precalculus.rational"
       ],
       "concept_ids": [
+        "precalc.conic.circle_radius",
         "precalc.func.arith_combine",
         "precalc.func.floor_ceiling",
+        "precalc.func.inverse_value",
         "precalc.func.piecewise",
         "precalc.func.transformations",
-        "precalc.partial_fractions"
+        "precalc.partial_fractions",
+        "precalc.poly.rational_roots",
+        "precalc.poly.remainder_theorem",
+        "precalc.rational.asymptote"
       ],
-      "concept_count": 5
+      "concept_count": 10
     },
     {
       "id": "precalculus.b8",
@@ -1825,6 +1833,7 @@
       "subdomains": [
         "precalculus.conics",
         "precalculus.discrete",
+        "precalculus.exponential",
         "precalculus.functions",
         "precalculus.parametric",
         "precalculus.sequences",
@@ -1834,8 +1843,11 @@
         "precalc.conic.ellipse",
         "precalc.conic.hyperbola",
         "precalc.conic.parabola",
+        "precalc.exp.equation",
+        "precalc.exp.growth_model",
         "precalc.func.heaviside",
         "precalc.induction",
+        "precalc.log.evaluate",
         "precalc.parametric.equations",
         "precalc.parametric.graph",
         "precalc.seq.arithmetic",
@@ -1845,7 +1857,7 @@
         "precalc.series.geometric",
         "precalc.systems.nonlinear"
       ],
-      "concept_count": 13
+      "concept_count": 16
     },
     {
       "id": "precalculus.b9",

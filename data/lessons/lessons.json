@@ -2810,5 +2810,37 @@
   {
     "concept_id": "calc.vec.work",
     "source": "authored/calc.vec.work.md"
+  },
+  {
+    "concept_id": "precalc.poly.remainder_theorem",
+    "source": "authored/precalc.poly.remainder_theorem.md"
+  },
+  {
+    "concept_id": "precalc.poly.rational_roots",
+    "source": "authored/precalc.poly.rational_roots.md"
+  },
+  {
+    "concept_id": "precalc.rational.asymptote",
+    "source": "authored/precalc.rational.asymptote.md"
+  },
+  {
+    "concept_id": "precalc.exp.equation",
+    "source": "authored/precalc.exp.equation.md"
+  },
+  {
+    "concept_id": "precalc.log.evaluate",
+    "source": "authored/precalc.log.evaluate.md"
+  },
+  {
+    "concept_id": "precalc.exp.growth_model",
+    "source": "authored/precalc.exp.growth_model.md"
+  },
+  {
+    "concept_id": "precalc.func.inverse_value",
+    "source": "authored/precalc.func.inverse_value.md"
+  },
+  {
+    "concept_id": "precalc.conic.circle_radius",
+    "source": "authored/precalc.conic.circle_radius.md"
   }
 ]

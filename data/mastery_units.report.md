@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 703 |
+| Total concepts | 711 |
 | Total units | 93 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -108,8 +108,8 @@ exists to make concrete.
 | `prealgebra.b6` | prealgebra | 6 | 2 | 2 | 18–18 |
 | `precalculus.b4` | precalculus | 4 | 5 | 2 | 12–14 |
 | `precalculus.b6` | precalculus | 6 | 1 | 1 | 20–20 |
-| `precalculus.b7` | precalculus | 7 | 5 | 2 | 21–23 |
-| `precalculus.b8` | precalculus | 8 | 13 | 6 | 24–26 |
+| `precalculus.b7` | precalculus | 7 | 10 | 5 | 21–23 |
+| `precalculus.b8` | precalculus | 8 | 16 | 7 | 24–26 |
 | `precalculus.b9` | precalculus | 9 | 1 | 1 | 27–27 |
 | `statistics.b0` | statistics | 0 | 2 | 1 | 1–2 |
 | `statistics.b1` | statistics | 1 | 1 | 1 | 3–3 |
@@ -139,17 +139,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 122 | 4 | 34 | 23 | 58 | 5 | 0 |
+| 2 | 122 | 4 | 34 | 23 | 57 | 5 | 0 |
 | 3 | 93 | 5 | 50 | 18 | 38 | 5 | 0 |
 | 4 | 75 | 6 | 58 | 9 | 27 | 4 | 0 |
 | 5 | 65 | 6 | 70 | 8 | 18 | 4 | 0 |
-| 6 | 60 | 7 | 91 | 5 | 16 | 4 | 0 |
+| 6 | 60 | 8 | 91 | 5 | 16 | 4 | 0 |
 | 8 | 48 | 11 | 94 | 4 | 12 | 6 | 0 |
-| 10 | 43 | 11 | 127 | 5 | 11 | 6 | 0 |
+| 10 | 43 | 11 | 127 | 5 | 11 | 7 | 0 |
 | 12 | 41 | 13 | 115 | 1 | 8 | 5 | 0 |
-| 15 | 32 | 16 | 127 | 3 | 6 | 8 | 0 |
-| 20 | 29 | 18 | 151 | 3 | 6 | 9 | 0 |
-| 45 | 17 | 30 | 151 | 0 | 0 | 12 | 0 |
+| 15 | 32 | 16 | 127 | 3 | 6 | 9 | 0 |
+| 20 | 29 | 18 | 151 | 3 | 6 | 10 | 0 |
+| 45 | 17 | 32 | 151 | 0 | 0 | 13 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 18 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -166,7 +166,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**62 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**65 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -225,35 +225,39 @@ Unresolvable subdomains:
 `precalculus.conics` 
 `precalculus.discrete` 
 
+`precalculus.exponential` 
 `precalculus.functions` 
 `precalculus.parametric` 
 `precalculus.polar` 
-`precalculus.sequences` 
 
+`precalculus.polynomials` 
+`precalculus.rational` 
+`precalculus.sequences` 
 `precalculus.systems` 
+
 `precalculus.vectors` 
 `statistics.inference` 
 `topology.algebraic` 
-
 `topology.basics` 
+
 `topology.compact` 
 `topology.connected` 
 `topology.constructions` 
-
 `topology.covering` 
+
 `topology.dimension` 
 `topology.knot` 
 `topology.manifolds` 
-
 `topology.metrization` 
+
 `topology.separation` 
 `trigonometry.functions` 
 `trigonometry.graphs` 
-
 `trigonometry.hyperbolic` 
+
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 703
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 711
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

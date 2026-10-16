@@ -186,6 +186,11 @@ def rules(f: dict) -> list:
          f"{f['courses']} courses from 4th grade", 1),
         ("docs/wasc-uc-ag-research.md", r"`data/courses.json:1` — \d+ courses",
          f"`data/courses.json:1` — {f['courses']} courses", 1),
+        # The section 5.5 target table's own introduction names the current size, so it is a fact
+        # too -- and it was written by hand, which is how it went stale within the same batch that
+        # added it. The tool's verification caught it.
+        ("docs/content-expansion.md", r"The catalog holds \d+ concepts",
+         f"The catalog holds {f['concepts']} concepts", 1),
         # content-expansion.md is the owner of the reach measurement.
         ("docs/content-expansion.md", r"There are \d{3} concepts, and there are \d{3} KP shard files",
          f"There are {f['concepts']} concepts, and there are {f['kp_files']} KP shard files", 1),

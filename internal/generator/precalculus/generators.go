@@ -23,6 +23,14 @@ var all = []struct {
 	gen generator.Generator
 }{
 	{"precalc.vector.basics", &vectorBasicsGen{}},
+	{"precalc.poly.remainder_theorem", &remainderTheoremGen{}},
+	{"precalc.poly.rational_roots", &rationalRootsGen{}},
+	{"precalc.rational.asymptote", &rationalAsymptoteGen{}},
+	{"precalc.exp.equation", &expEquationGen{}},
+	{"precalc.log.evaluate", &logEvaluateGen{}},
+	{"precalc.exp.growth_model", &growthModelGen{}},
+	{"precalc.func.inverse_value", &inverseValueGen{}},
+	{"precalc.conic.circle_radius", &circleRadiusGen{}},
 	{"precalc.vector.ops", &vectorOpsGen{}},
 	{"precalc.vector.dot", &vectorDotGen{}},
 	{"precalc.polar.coordinates", &polarCoordsGen{}},
