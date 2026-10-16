@@ -20,6 +20,8 @@ In many real-world applications, related quantities are changing with respect to
 
 A spherical balloon is being filled with air at the constant rate of $2{\ \text{cm}}^{3}\text{/}\text{sec}$ (Figure 4.2). How fast is the radius increasing when the radius is $3\ \text{cm}?$
 
+![As the balloon is being filled with air, both the radius and the volume are increasing with respect to time.](/diagrams/calculus/4.2.png)
+
 *Figure 4.2 As the balloon is being filled with air, both the radius and the volume are increasing with respect to time.*
 
 #### Solution
@@ -168,6 +170,8 @@ A rocket is launched so that it rises vertically. A camera is positioned $5000\ 
 
 Step 1. Draw a picture introducing the variables.
 
+![A camera is positioned 5000 ft from the launch pad of the rocket. The height of the rocket and the angle of the camera are changing with respect to time. We denote those quantities with the variables h and θ, respectively.](/diagrams/calculus/4.5.png)
+
 *Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of the rocket and the angle of the camera are changing with respect to time. We denote those quantities with the variables $h$ and $\theta,$ respectively.*
 
 Let $h$ denote the height of the rocket above the launch pad and $\theta$ be the angle between the camera lens and the ground.
@@ -241,6 +245,8 @@ Water is draining from the bottom of a cone-shaped funnel at the rate of $0.0{3\
 #### Solution
 
 Step 1: Draw a picture introducing the variables.
+
+![Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the water and the radius of water are changing over time. We denote these quantities with the variables h and r, respectively.](/diagrams/calculus/4.6.png)
 
 *Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the water and the radius of water are changing over time. We denote these quantities with the variables $h$ and $r,$ respectively.*
 

@@ -72,6 +72,8 @@ The evidence from the table suggests that $2.7182 < e < 2.7183.$
 
 The graph of $E(x) = e^{x}$ together with the line $y = x + 1$ are shown in Figure 3.34. This line is tangent to the graph of $E(x) = e^{x}$ at $x = 0.$
 
+![The tangent line to E(x) = e^x at x = 0 has slope 1.](/diagrams/calculus/3.34.png)
+
 *Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.*
 
 Now that we have laid out our basic assumptions, we begin our investigation by exploring the derivative of $B(x) = b^{x},b > 0.$ Recall that we have assumed that $B'(0)$ exists. By applying the limit definition to the derivative we conclude that
@@ -237,6 +239,8 @@ $$
 □
 
 The graph of $y = \text{ln} x$ and its derivative $\frac{dy}{dx} = \frac{1}{x}$ are shown in Figure 3.35.
+
+![The function y = ln x is increasing on (0,+∞). Its derivative y' = 1/x is greater than zero on (0,+∞).](/diagrams/calculus/3.35.png)
 
 *Figure 3.35 $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its derivative $y' = \frac{1}{x}$ is greater than zero on $(0,\text{+}\infty).$*
 

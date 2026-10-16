@@ -55,6 +55,8 @@ If the values $f(x)$ are getting arbitrarily close to some finite value $L$ as $
 
 If $\underset{x\rightarrow\infty}{\text{lim}}f(x) = L$ or $\underset{x\rightarrow\text{-}\infty}{\text{lim}}f(x) = L,$ we say the line $y = L$ is a horizontal asymptote of $f.$
 
+![(a) As x → ∞, the values of f are getting arbitrarily close to L. The line y = L is a horizontal asymptote of f. (b) As x → -∞, the values of f are getting arbitrarily close to M. The line y = M is a horizontal asymptote of f.](/diagrams/calculus/4.41.png)
+
 *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $L.$ The line $y = L$ is a horizontal asymptote of $f.$ (b) As $x\rightarrow\text{-}\infty,$ the values of $f$ are getting arbitrarily close to $M.$ The line $y = M$ is a horizontal asymptote of $f.$*
 
 A function cannot cross a vertical asymptote because the graph must approach infinity (or $\text{-}\infty)$ from at least one direction as $x$ approaches the vertical asymptote. However, a function may cross a horizontal asymptote. In fact, a function may cross a horizontal asymptote an unlimited number of times. For example, the function ${f(x) = \frac{\left( {\text{cos} x} \right)}{x}} + 1$ shown in Figure 4.42 intersects the horizontal asymptote $y = 1$ an infinite number of times as it oscillates around the asymptote with ever-decreasing amplitude.
@@ -80,6 +82,8 @@ For each of the following functions $f,$ evaluate $\underset{x\rightarrow\infty}
 1.  Using the algebraic limit laws, we have $\underset{x\rightarrow\infty}{\text{lim}}\left( {5 - \frac{2}{x^{2}}} \right) = \underset{x\rightarrow\infty}{\text{lim}}5 - 2\left( {\underset{x\rightarrow\infty}{\text{lim}}\frac{1}{x}} \right).\left( {\underset{x\rightarrow\infty}{\text{lim}}\frac{1}{x}} \right) = 5 - 2 \cdot 0 = 5.$  
     Similarly, $\underset{x\rightarrow - \infty}{\text{lim}}f(x) = 5.$ Therefore, $f(x) = 5 - \frac{2}{x^{2}}$ has a horizontal asymptote of $y = 5$ and $f$ approaches this horizontal asymptote as $x\rightarrow\text{\pm}\infty$ as shown in the following graph.  
 
+    ![This function approaches a horizontal asymptote as x → ±∞.](/diagrams/calculus/4.43.png)
+
     *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$*
 
 2.  Since $-1 \leq \text{sin} x \leq 1$ for all $x,$ we have  
@@ -103,6 +107,8 @@ For each of the following functions $f,$ evaluate $\underset{x\rightarrow\infty}
     ```
       
     Thus, $f(x) = \frac{\text{sin} x}{x}$ has a horizontal asymptote of $y = 0$ and $f(x)$ approaches this horizontal asymptote as $x\rightarrow\text{\pm}\infty$ as shown in the following graph.  
+
+    ![This function crosses its horizontal asymptote multiple times.](/diagrams/calculus/4.44.png)
 
     *Figure 4.44 This function crosses its horizontal asymptote multiple times.*
 
@@ -138,6 +144,8 @@ $$
 
 As a result, $y = \frac{\pi}{2}$ and $y = - \frac{\pi}{2}$ are horizontal asymptotes of $f(x) = \text{tan}^{-1}(x)$ as shown in the following graph.
 
+![This function has two horizontal asymptotes.](/diagrams/calculus/4.46.png)
+
 *Figure 4.46 This function has two horizontal asymptotes.*
 
 ### Checkpoint 4.20
@@ -158,6 +166,8 @@ For example, consider the function $f(x) = x^{3}.$ As seen in Table 4.3 and Figu
 | **$x^{3}$** | $-1000$ | $-8000$ | $-125,000$ | $-1,000,000$ | $-1,000,000,000$ |
 
 Table 4.3 Values of a power function as $x\rightarrow\text{\pm}\infty$
+
+![For this function, the functional values approach infinity as x → ±∞.](/diagrams/calculus/4.47.png)
 
 *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{\pm}\infty.$*
 
@@ -208,6 +218,8 @@ for all $x < N.$ In that case, we write
 $$
 \underset{x\rightarrow\text{−}\infty}{\text{lim}}f(x) = L.
 $$
+
+![For a function with a limit at infinity, for all x > N, | f(x) - L | < ε.](/diagrams/calculus/4.48.png)
 
 *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left| {f(x) - L} \right| < \varepsilon.$*
 
@@ -264,6 +276,8 @@ $$
 for all $x > N.$
 
 Similarly we can define limits as $x\rightarrow\text{-}\infty.$
+
+![For a function with an infinite limit at infinity, for all x > N, f(x) > M.](/diagrams/calculus/4.49.png)
 
 *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$*
 
@@ -441,6 +455,8 @@ For each of the following functions, determine the limits as $x\rightarrow\infty
       
     As $x\rightarrow\text{\pm}\infty,$ the denominator approaches 1. As $x\rightarrow\infty,$ the numerator approaches $+ \infty.$ As $x\rightarrow\text{-}\infty,$ the numerator approaches $\text{-}\infty.$ Therefore $\underset{x\rightarrow\infty}{\text{lim}}f(x) = \infty,$ whereas $\underset{x\rightarrow\text{-}\infty}{\text{lim}}f(x) = \text{-}\infty$ as shown in the following figure.  
 
+    ![As x → ∞, the values f(x) → ∞. As x → -∞, the values f(x) → -∞.](/diagrams/calculus/4.55.png)
+
     *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\text{-}\infty,$ the values $f(x)\rightarrow\text{-}\infty.$*
 
 ### Checkpoint 4.24
@@ -512,6 +528,8 @@ $$
 
 Therefore, $f(x)$ approaches the horizontal asymptote $y = \frac{3}{2}$ as $x\rightarrow\infty$ and the horizontal asymptote $y = - \frac{3}{2}$ as $x\rightarrow\text{-}\infty$ as shown in the following graph.
 
+![This function has two horizontal asymptotes and it crosses one of the asymptotes.](/diagrams/calculus/4.57.png)
+
 *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.*
 
 ### Checkpoint 4.25
@@ -539,6 +557,8 @@ Recall that for any base $b > 0,b \neq 1,$ the function $y = b^{x}$ is an expone
 
 Table 4.5 End behavior of the natural exponential function
 
+![The exponential function approaches zero as x → -∞ and approaches ∞ as x → ∞.](/diagrams/calculus/4.60.png)
+
 *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and approaches $\infty$ as $x\rightarrow\infty.$*
 
 Recall that the natural logarithm function $f(x) = \text{ln}(x)$ is the inverse of the natural exponential function $y = e^{x}.$ Therefore, the domain of $f(x) = \text{ln}(x)$ is $\left( {0,\infty} \right)$ and the range is $\left( {\text{-}\infty,\infty} \right).$ The graph of $f(x) = \text{ln}(x)$ is the reflection of the graph of $y = e^{x}$ about the line $y = x.$ Therefore, $\text{ln}(x)\rightarrow\text{-}\infty$ as $x\rightarrow 0^{+}$ and $\text{ln}(x)\rightarrow\infty$ as $x\rightarrow\infty$ as shown in Figure 4.61 and Table 4.6.
@@ -549,6 +569,8 @@ Recall that the natural logarithm function $f(x) = \text{ln}(x)$ is the inverse 
 | **$\text{ln}(x)$** | $-4.605$ | $-2.303$ | 0 | 2.303 | 4.605 |
 
 Table 4.6 End behavior of the natural logarithm function
+
+![The natural logarithm function approaches ∞ as x → ∞.](/diagrams/calculus/4.61.png)
 
 *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$*
 

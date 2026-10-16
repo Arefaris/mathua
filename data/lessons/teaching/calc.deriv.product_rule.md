@@ -307,6 +307,8 @@ $$
 
 Since $f(x) = x^{2}$ has derivative $f'(x) = 2x,$ we see that the derivative of $g(x)$ is 3 times the derivative of $f(x).$ This relationship is illustrated in Figure 3.18.
 
+![The derivative of g(x) is 3 times the derivative of f(x).](/diagrams/calculus/3.18.png)
+
 *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$*
 
 ### Example 3.21
@@ -677,6 +679,8 @@ $$
 
 we must solve $\left( {3x - 2} \right)\left( {x - 4} \right) = 0.$ Thus we see that the function has horizontal tangent lines at $x = \frac{2}{3}$ and $x = 4$ as shown in the following graph.
 
+![This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.](/diagrams/calculus/3.19.png)
+
 *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.*
 
 ### Example 3.32
@@ -705,6 +709,8 @@ Find the values of $x$ for which the graph of $f(x) = 4x^{2} - 3x + 2$ has a tan
 
 Formula One car races can be very exciting to watch and attract a lot of spectators. Formula One track designers have to ensure sufficient grandstand space is available around the track to accommodate these viewers. However, car racing can be dangerous, and safety considerations are paramount. The grandstands must be placed where spectators will not be in danger should a driver lose control of a car (Figure 3.20).
 
+![The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.](/diagrams/calculus/3.20.png)
+
 *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.*
 
 **********
@@ -712,6 +718,8 @@ Formula One car races can be very exciting to watch and attract a lot of spectat
 Safety is especially a concern on turns. If a driver does not slow down enough before entering the turn, the car may slide off the racetrack. Normally, this just results in a wider turn, which slows the driver down. But if the driver loses control completely, the car may fly off the track entirely, on a path tangent to the curve of the racetrack.
 
 Suppose you are designing a new Formula One track. One section of the track can be modeled by the function $f(x) = x^{3} + 3x^{2} + x$ (Figure 3.21). The current plan calls for grandstands to be built along the first straightaway and around a portion of the first curve. The plans call for the front corner of the grandstand to be located at the point $\left( {-1.9,2.8} \right).$ We want to determine whether this location puts the spectators in danger if a driver loses control of the car.
+
+![(a) One section of the racetrack can be modeled by the function f(x) = x^3 + 3x^2 + x. (b) The front corner of the grandstand is located at (-1.9,2.8).](/diagrams/calculus/3.21.png)
 
 *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\left( {-1.9,2.8} \right).$*
 

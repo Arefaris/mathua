@@ -365,149 +365,9 @@
       "reason": "teaching corpus: standalone emphasis is the dropped-figure shape"
     },
     {
-      "lesson": "teaching/calc.deriv.exp_log.md",
-      "line": 75,
-      "text": "Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.exp_log.md",
-      "line": 241,
-      "text": "Figure 3.35 $\\text{The function}\\ y = \\text{ln} x$ is increasing on $(0,\\text{+}\\infty).$ Its derivative $y' = \\frac{1}{x}$ is greater than zero on $(0,\\text{+}\\infty).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.implicit.md",
-      "line": 25,
-      "text": "Figure 3.30 The equation $x^{2} + y^{2} = 25$ defines many functions implicitly.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.implicit.md",
-      "line": 159,
-      "text": "Figure 3.31 The line $y = \\frac{3}{4}x - \\frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at the point (3, \u22124).",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.implicit.md",
-      "line": 167,
-      "text": "Figure 3.32 Finding the tangent line to the folium of Descartes at $\\left( {\\frac{3}{2},\\frac{3}{2}} \\right).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.product_rule.md",
-      "line": 310,
-      "text": "Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.product_rule.md",
-      "line": 680,
-      "text": "Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.product_rule.md",
-      "line": 708,
-      "text": "Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.product_rule.md",
-      "line": 716,
-      "text": "Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\\left( {-1.9,2.8} \\right).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.quotient_rule.md",
-      "line": 310,
-      "text": "Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.quotient_rule.md",
-      "line": 680,
-      "text": "Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.quotient_rule.md",
-      "line": 708,
-      "text": "Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.quotient_rule.md",
-      "line": 716,
-      "text": "Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\\left( {-1.9,2.8} \\right).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/calc.deriv.related_rates.md",
-      "line": 23,
-      "text": "Figure 4.2 As the balloon is being filled with air, both the radius and the volume are increasing with respect to time.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.related_rates.md",
-      "line": 163,
+      "line": 165,
       "text": "Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.related_rates.md",
-      "line": 171,
-      "text": "Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of the rocket and the angle of the camera are changing with respect to time. We denote those quantities with the variables $h$ and $\\theta,$ respectively.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.related_rates.md",
-      "line": 245,
-      "text": "Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the water and the radius of water are changing over time. We denote these quantities with the variables $h$ and $r,$ respectively.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.sum_rule.md",
-      "line": 310,
-      "text": "Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.sum_rule.md",
-      "line": 680,
-      "text": "Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.sum_rule.md",
-      "line": 708,
-      "text": "Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race track, located where the spectators are not in danger.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.sum_rule.md",
-      "line": 716,
-      "text": "Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\\left( {-1.9,2.8} \\right).$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -519,99 +379,8 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/calc.integral.volume.md",
-      "line": 285,
-      "text": "Figure 6.34",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 58,
-      "text": "Figure 4.41 (a) As $x\\rightarrow\\infty,$ the values of $f$ are getting arbitrarily close to $L.$ The line $y = L$ is a horizontal asymptote of $f.$ (b) As $x\\rightarrow\\text{-}\\infty,$ the values of $f$ are getting arbitrarily close to $M.$ The line $y = M$ is a horizontal asymptote of $f.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 83,
-      "text": "Figure 4.43 This function approaches a horizontal asymptote as $x\\rightarrow\\text{\\pm}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 107,
-      "text": "Figure 4.44 This function crosses its horizontal asymptote multiple times.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 141,
-      "text": "Figure 4.46 This function has two horizontal asymptotes.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 162,
-      "text": "Figure 4.47 For this function, the functional values approach infinity as $x\\rightarrow\\text{\\pm}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 212,
-      "text": "Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\\left| {f(x) - L} \\right| < \\varepsilon.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 268,
-      "text": "Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 444,
-      "text": "Figure 4.55 As $x\\rightarrow\\infty,$ the values $f(x)\\rightarrow\\infty.$ As $x\\rightarrow\\text{-}\\infty,$ the values $f(x)\\rightarrow\\text{-}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 515,
-      "text": "Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
+      "lesson": "teaching/calc.limit.numeric.md",
       "line": 542,
-      "text": "Figure 4.60 The exponential function approaches zero as $x\\rightarrow\\text{-}\\infty$ and approaches $\\infty$ as $x\\rightarrow\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 553,
-      "text": "Figure 4.61 The natural logarithm function approaches $\\infty$ as $x\\rightarrow\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 439,
-      "text": "Figure 2.20 The function $f(x) = {1\\text{/}\\left( {x - a} \\right)^{n}}$ has infinite limits at *a*.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 540,
       "text": "Figure 2.22 (credit: NASA)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1079,7 +848,7 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 521,
+      "line": 523,
       "phrase": "The graph shows",
       "context": "*Figure 2.21 The graph shows $f(x).$*"
     },
@@ -1211,8 +980,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 356,
-    "shipped": 662,
+    "referenced": 381,
+    "shipped": 687,
     "unreferenced_content": 286,
     "candidates": [
       {

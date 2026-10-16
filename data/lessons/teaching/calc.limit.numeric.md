@@ -436,6 +436,8 @@ Evaluate each of the following limits, if possible. Use a table of functional va
 
 It is useful to point out that functions of the form $f(x) = {1\text{/}\left( {x - a} \right)^{n}},$ where *n* is a positive integer, have infinite limits as *x* approaches *a* from either the left or right (Figure 2.20). These limits are summarized in Infinite Limits from Positive Integers.
 
+![The function f(x) = 1/(x - a)^n has infinite limits at *a*.](/diagrams/calculus/2.20.png)
+
 *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits at *a*.*
 
 ### Theorem 2.3

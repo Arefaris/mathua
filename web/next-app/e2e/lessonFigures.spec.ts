@@ -36,7 +36,7 @@ const ROOT = resolve(__dirname, '../../..')
 
 /**
  * Real bodies, chosen because they now carry figures and because one does not. Together they cover
- * bodies with one, two, three, six, eight, ten and eleven figures.
+ * bodies with one, two, three, six, eight, eleven and twelve figures.
  */
 const CASES = [
   { concept: 'discrete.sets.operations', file: 'algebrica/sets-and-numbers/sets.md', expectFigures: 6 },
@@ -74,21 +74,24 @@ const CASES = [
   // `Circumference` is thirteen `<text>` elements carrying a `transform`, so this asserts a
   // figure reaches the page at all when its labels are placed by rotation and not by `x`/`y`.
   { concept: 'frac.ops.to_decimal', file: 'teaching/frac.ops.to_decimal.md', expectFigures: 1 },
-  // Ten, and the only case with a graph: Figures 2.12 to 2.23 carry y axes, tick labels —
+  // Eleven, and the only case with a graph: Figures 2.12 to 2.23 carry y axes, tick labels —
   // including two axes named for the quantity, `v/c` and `m/m0` — and twelve markers between
   // them, eleven of those drawn as `fill="white"` circles and one as a filled dot, so this
   // asserts that a figure whose points are holes rather than values keeps its markers through
   // the sanitizer. It also carries the heaviest figure here, Figure 2.17, whose band is 1,500
   // points per branch of path data and so is the one that would time out first if inlining a
-  // figure ever stopped working. The count is the lesson's, and it has moved four times:
-  // three, then five, then eight, then ten.
-  { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 10 },
-  // Eleven, and the only case whose figures are solids of revolution: a circular end is an ellipse,
+  // figure ever stopped working. The count is the lesson's, and it has moved five times:
+  // three, then five, then eight, then ten, then eleven, when Figure 2.20 landed with the
+  // Calculus fetch batch and put a fetched PNG among the drawings.
+  { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 11 },
+  // Twelve, and the only case whose figures are solids of revolution: a circular end is an ellipse,
   // the hidden half of a base is a dashed annotation arc, and a hole is a white-filled silhouette,
   // so this asserts that a figure the sanitizer keeps is one whose shape is a sampled arc rather
-  // than a line or a rect. The count is the lesson's, and it has moved eight times: two, then
-  // three, then five, then six, then seven, then eight, then nine, then eleven.
-  { concept: 'calc.integral.volume', file: 'teaching/calc.integral.volume.md', expectFigures: 11 },
+  // than a line or a rect. The count is the lesson's, and it has moved nine times: two, then
+  // three, then five, then six, then seven, then eight, then nine, then eleven, then twelve, when
+  // Figure 6.34 — upstream's own comparison table of the three methods — landed with the Calculus
+  // fetch batch.
+  { concept: 'calc.integral.volume', file: 'teaching/calc.integral.volume.md', expectFigures: 12 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

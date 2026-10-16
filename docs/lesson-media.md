@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-145 paragraphs across 59 lessons look like a figure caption whose image
-was dropped while its text was kept: **41 certain**, **33 strong**, **71 likely**.
+112 paragraphs across 52 lessons look like a figure caption whose image
+was dropped while its text was kept: **8 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -73,42 +73,9 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/calc.deriv.exp_log.md` | 75 | certain | *Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.exp_log.md` | 241 | certain | *Figure 3.35 $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.implicit.md` | 25 | certain | *Figure 3.30 The equation $x^{2} + y^{2} = 25$ defines many functions implicitly.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.implicit.md` | 159 | certain | *Figure 3.31 The line $y = \frac{3}{4}x - \frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.implicit.md` | 167 | certain | *Figure 3.32 Finding the tangent line to the folium of Descartes at $\left( {\frac{3}{2},\frac...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.product_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.quotient_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 23 | certain | *Figure 4.2 As the balloon is being filled with air, both the radius and the volume are increa...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 163 | certain | *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 171 | certain | *Figure 4.5 A camera is positioned 5000 ft from the launch pad of the rocket. The height of th...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.related_rates.md` | 245 | certain | *Figure 4.6 Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 310 | certain | *Figure 3.18 The derivative of $g(x)$ is 3 times the derivative of $f(x).$* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.related_rates.md` | 165 | certain | *Figure 4.4 (credit: modification of work by Steve Jurvetson, Wikimedia Commons)* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 201 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 285 | certain | *Figure 6.34* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 58 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 83 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.44 This function crosses its horizontal asymptote multiple times.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 141 | certain | *Figure 4.46 This function has two horizontal asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 162 | certain | *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 212 | certain | *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \ri...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 268 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 444 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 515 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 542 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 553 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 439 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 540 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 542 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/geo.basic.angle_measure.md` | 30 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angle_measure.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angles.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
@@ -183,7 +150,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.integral.power_rule.md` | 80 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
 | `teaching/calc.integral.power_rule.md` | 133 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
 | `teaching/calc.integral.power_rule.md` | 330 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
-| `teaching/calc.limit.numeric.md` | 521 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
+| `teaching/calc.limit.numeric.md` | 523 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.number_line.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -208,7 +175,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-662 diagrams ship, 356 URLs are referenced by lesson bodies, and
+687 diagrams ship, 381 URLs are referenced by lesson bodies, and
 **286 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

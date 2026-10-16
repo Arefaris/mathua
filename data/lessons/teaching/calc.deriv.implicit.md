@@ -22,6 +22,8 @@ ${y = \sqrt{25 - x^{2}}}{,~y = - \sqrt{25 - x^{2}},}$ and \$y = \left\{ \begin{m
 {\text{−}\sqrt{25 - x^{2}}\ \text{if}\ 0 < x < 25}
 \end{matrix} \right.,$ which are illustrated in Figure 3.30, are just three of the many functions defined implicitly by the equation $x^{2} + y^{2} = 25.\$
 
+![The equation x^2 + y^2 = 25 defines many functions implicitly.](/diagrams/calculus/3.30.png)
+
 *Figure 3.30 The equation $x^{2} + y^{2} = 25$ defines many functions implicitly.*
 
 If we want to find the slope of the line tangent to the graph of $x^{2} + y^{2} = 25$ at the point $\left( {3,4} \right),$ we could evaluate the derivative of the function $y = \sqrt{25 - x^{2}}$ at $x = 3.$ On the other hand, if we want the slope of the tangent line at the point $\left( {3,-4} \right),$ we could use the derivative of $y = \text{-}\sqrt{25 - x^{2}}.$ However, it is not always easy to solve for a function defined implicitly by an equation. Fortunately, the technique of implicit differentiation allows us to find the derivative of an implicitly defined function without ever solving for the function explicitly. The process of finding $\frac{dy}{dx}$ using implicit differentiation is described in the following problem-solving strategy.
@@ -156,6 +158,8 @@ $$\frac{dy}{dx}\left| \begin{array}{l}
 
 Using the point $\left( {3,-4} \right)$ and the slope $\frac{3}{4}$ in the point-slope equation of the line, we obtain the equation $y = \frac{3}{4}x - \frac{25}{4}$ (Figure 3.31).
 
+![The line y = 3/4x - 25/4 is tangent to x^2 + y^2 = 25 at the point (3, −4).](/diagrams/calculus/3.31.png)
+
 *Figure 3.31 The line $y = \frac{3}{4}x - \frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at the point (3, −4).*
 
 ### Example 3.72
@@ -163,6 +167,8 @@ Using the point $\left( {3,-4} \right)$ and the slope $\frac{3}{4}$ in the point
 #### Finding the Equation of the Tangent Line to a Curve
 
 Find an equation of the line tangent to the graph of $y^{3} + x^{3} - 3xy = 0$ at the point $\left( {\frac{3}{2},\frac{3}{2}} \right)$ (Figure 3.32). This curve is known as the folium (or leaf) of Descartes.
+
+![Finding the tangent line to the folium of Descartes at (3/2,3/2).](/diagrams/calculus/3.32.png)
 
 *Figure 3.32 Finding the tangent line to the folium of Descartes at $\left( {\frac{3}{2},\frac{3}{2}} \right).$*
 

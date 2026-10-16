@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-145 paragraphs across 59 lessons read as a caption whose image was dropped:
-41 certain, 33 strong and 71 likely. Every one sits
+112 paragraphs across 52 lessons read as a caption whose image was dropped:
+8 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -23,7 +23,7 @@ Every teaching lesson opens with a credit line naming its source, for example:
 > Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY 4.0
 ```
 
-Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (36 captions) and
+Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (3 captions) and
 **OpenStax Prealgebra** (5). Both are CC BY 4.0, which permits reuse and adaptation with
 attribution, and the attribution is already the lesson's own header line.
 
@@ -40,11 +40,11 @@ fetched asset is converted at fetch time — grey, its tone stretched to the ful
 then mapped onto the greys that section 4 of `docs/diagram-style.md` fixes. The drawing survives; the
 saturated color was the only part of it that never belonged on the page.
 
-## 3. The captions are 41 rows and 30 distinct figures
+## 3. The captions are 8 rows and 5 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
-`Figure 3.18` is the caption in three of them, and `Figure 6.8` in two. Deduplicating on the pair
-(figure number, caption) leaves **30 distinct figures** still to reclaim. Section 6 gives
+`Figure 6.4` is the caption in three of them, and `Figure 6.8` in two. Deduplicating on the pair
+(figure number, caption) leaves **5 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
@@ -52,7 +52,7 @@ the method.
 | Disposition | Figures | Action |
 | --- | --- | --- |
 | schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 25 | Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| illustration, fetch | 0 | Empty since 2026-10-16, in three batches. Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
 
@@ -64,7 +64,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed seventy-two.
+again to 53 and 44, of which section 7 has since landed ninety-seven.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -191,31 +191,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.20 | The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits at *a... | Calculus Volume 1 | 2 The Limit of a Function | 1 | illustration, fetch |
-| 3.18 | The derivative of $g(x)$ is 3 times the derivative of $f(x).$ | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
-| 3.19 | This function has horizontal tangent lines at *x* = 2/3 and *x* = 4. | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
-| 3.20 | The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race trac... | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
-| 3.21 | (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2... | Calculus Volume 1 | 3 Differentiation Rules | 3 | illustration, fetch |
-| 3.30 | The equation $x^{2} + y^{2} = 25$ defines many functions implicitly. | Calculus Volume 1 | 3 Implicit Differentiation | 1 | illustration, fetch |
-| 3.31 | The line $y = \frac{3}{4}x - \frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at the ... | Calculus Volume 1 | 3 Implicit Differentiation | 1 | illustration, fetch |
-| 3.32 | Finding the tangent line to the folium of Descartes at $\left( {\frac{3}{2},\frac{3}{... | Calculus Volume 1 | 3 Implicit Differentiation | 1 | illustration, fetch |
-| 3.34 | The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1. | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | illustration, fetch |
-| 3.35 | $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its der... | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | illustration, fetch |
-| 4.2 | As the balloon is being filled with air, both the radius and the volume are increasin... | Calculus Volume 1 | 4 Related Rates | 1 | illustration, fetch |
-| 4.41 | (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $L.$ ... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.43 | This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.44 | This function crosses its horizontal asymptote multiple times. | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.46 | This function has two horizontal asymptotes. | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.47 | For this function, the functional values approach infinity as $x\rightarrow\text{\pm}... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.48 | For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \right\| ... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.49 | For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.5 | A camera is positioned 5000 ft from the launch pad of the rocket. The height of the r... | Calculus Volume 1 | 4 Related Rates | 1 | illustration, fetch |
-| 4.55 | As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\text{-}... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.57 | This function has two horizontal asymptotes and it crosses one of the asymptotes. | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.6 | Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the wat... | Calculus Volume 1 | 4 Related Rates | 1 | illustration, fetch |
-| 4.60 | The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and approach... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.61 | The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 6.34 | (none) | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | illustration, fetch |
 | 2.22 | (credit: NASA) | Calculus Volume 1 | 2 The Limit of a Function | 1 | photo, third-party credit |
 | 4.4 | (credit: modification of work by Steve Jurvetson, Wikimedia Commons) | Calculus Volume 1 | 4 Related Rates | 1 | photo, third-party credit |
 | 5.34 | (credit: modification of work by Carter Brown, Flickr) | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | photo, third-party credit |
@@ -1229,6 +1204,46 @@ JPEG as black with red rules while a plain `magick in.png out.png` converts it c
 renders 16-bit grayscale PNGs as blank white. Montages are therefore built from 8-bit sRGB copies,
 and Chromium — which drew the CMYK originals correctly, and is why the first batch looked right in
 the app the whole time — stays the authority on what a figure looks like.
+
+**Twenty-five Calculus Volume 1 illustrations** (2.20; 3.18, 3.19, 3.20, 3.21; 3.30, 3.31, 3.32;
+3.34, 3.35; 4.2, 4.5, 4.6; 4.41, 4.43, 4.44, 4.46, 4.47, 4.48, 4.49, 4.55, 4.57, 4.60, 4.61; and
+6.34) landed on 2026-10-16 in nine lessons, as
+`web/next-app/public/diagrams/calculus/<number>.png`. That empties the fetch tier, which section 4
+records, and leaves only the five photo captions.
+
+**Two captions carry emphasis, so the caption paragraph is matched by its whole line.** Figure 2.20
+ends "has infinite limits at *a*" and Figure 3.19 reads "horizontal tangent lines at *x* = 2/3 and
+*x* = 4", so the Prealgebra rule — a run of characters containing no asterisk — matches neither. The
+emphasis markers stay in the alt, which is what the four redrawn figures whose captions carry them
+already do.
+
+**The `\|` this batch was told to add to `plain` does not exist.** Section 6 renders Figure 4.48's
+caption as `$\left\| {f(x) - L} \right\| < \varepsilon$`, and that `\|` is the table escaping its own
+column separator: the caption in the lesson is `$\left| {f(x) - L} \right| < \varepsilon$`, a single
+bar, which `\left` and `\right` already skip. What the caption did need is `\varepsilon`, and Figure
+4.5's needs `\theta`; the assertion on an unknown macro is what found both.
+
+**The CDN generates the `f=png` transform on demand, and twenty-five cold assets need more patience
+than one asset's.** `fetch_png`'s six retries were written for the Prealgebra repair, where an asset
+warmed after a request or two. Asking for Figure 2.20 six times spends the whole wait on it while the
+other twenty-four transforms have not been requested at all, so the batch fetcher asks for every
+asset first and then re-asks every asset still cold each round. That converges — 21 cold after round
+one, 16 by round six, 3 by round ten — but it took two runs of the script to land all twenty-five,
+and the transform was still cold for all twenty-five at the first request.
+
+**A batch is fetched before any lesson is written.** The fetcher runs after every alt has been read
+and validated and before the first lesson is edited, so a fetch that fails leaves the corpus
+untouched rather than half-wired, which is what let the first attempt fail on Figure 2.20 with no
+lesson changed.
+
+The twenty-five captions held 33 rows across nine lessons: the report went from 145 to 112, the
+certain tier from 41 to 8, distinct figures from 30 to 5, and the fetch tier from 25 to 0. The
+audit's shipped count moves by twenty-five, to 687, and the referenced count by the same twenty-five
+distinct URLs, to 381, because 33 rows reference 25 files. The lesson count drops from 59 to 52:
+seven of the nine lessons no longer carry an orphan, and `calc.limit.numeric` and
+`calc.deriv.related_rates` still carry the photo captions 2.22 and 4.4. The ceiling in
+`internal/lessons/assets_test.go` follows, to 112, and the e2e case counts to eleven and twelve,
+because Figure 2.20 landed in `calc.limit.numeric` and Figure 6.34 in `calc.integral.volume`.
 
 ## 8. Order of work
 
