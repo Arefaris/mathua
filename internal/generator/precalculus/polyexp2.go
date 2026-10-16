@@ -14,6 +14,7 @@ package precalculus
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 
 	"github.com/chuma-beep/mathua/internal/generator"
 )
@@ -72,14 +73,18 @@ func (g *descartesGen) Generate(ctx generator.GeneratorContext) generator.Proble
 			poly = append(poly, fmt.Sprintf("%dx^%d", c, deg))
 		}
 	}
-	joined := poly[0]
+	// Join the terms rather than accumulating into a string: appending inside a loop is quadratic in
+	// the number of terms, which internal/lint flags, and there is no reason to pay it here.
+	terms := make([]string, 0, len(poly))
+	terms = append(terms, poly[0])
 	for _, p := range poly[1:] {
 		if p[0] == '-' {
-			joined += " - " + p[1:]
+			terms = append(terms, "- "+p[1:])
 		} else {
-			joined += " + " + p
+			terms = append(terms, "+ "+p)
 		}
 	}
+	joined := strings.Join(terms, " ")
 	return generator.Problem{
 		Question: fmt.Sprintf("Descartes' rule of signs counts the sign changes in the coefficients of \\(p(x)\\). For \\(p(x) = %s\\), how many sign changes are there?", joined),
 		Answer:   fmt.Sprintf("%d", changes),
