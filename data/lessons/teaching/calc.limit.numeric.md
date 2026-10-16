@@ -22,6 +22,8 @@ $$
 
 which are shown in Figure 2.12. In particular, let’s focus our attention on the behavior of each graph at and around $x = 2.$
 
+![These graphs show the behavior of three different functions around x = 2.](/diagrams/calculus/limit-behaviour.svg)
+
 *Figure 2.12 These graphs show the behavior of three different functions around $x = 2.$*
 
 Each of the three functions is undefined at $x = 2,$ but if we make this statement and no other, we give a very incomplete picture of how each function behaves in the vicinity of $x = 2.$ To express the behavior of each graph in the vicinity of 2 more completely, we need to introduce the concept of a limit.

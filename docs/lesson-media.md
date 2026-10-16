@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-264 paragraphs across 101 lessons look like a figure caption whose image
-was dropped while its text was kept: **160 certain**, **33 strong**, **71 likely**.
+263 paragraphs across 101 lessons look like a figure caption whose image
+was dropped while its text was kept: **159 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -188,18 +188,17 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.infinity.md` | 509 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 520 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 531 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 25 | certain | *Figure 2.12 These graphs show the behavior of three different functions around $x = 2.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 94 | certain | *Figure 2.13 The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Tabl...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 118 | certain | *Figure 2.14 The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 132 | certain | *Figure 2.15 The graph of $g(x)$ includes one value not on a smooth curve.* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 144 | certain | *Figure 2.16* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 220 | certain | *Figure 2.17 The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 an...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 293 | certain | *Figure 2.18 The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} -...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 411 | certain | *Figure 2.19 The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 do...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 423 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 503 | certain | *Figure 2.21 The graph shows $f(x).$* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 522 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
-| `teaching/calc.limit.numeric.md` | 536 | certain | *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Eins...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 96 | certain | *Figure 2.13 The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Tabl...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 120 | certain | *Figure 2.14 The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 134 | certain | *Figure 2.15 The graph of $g(x)$ includes one value not on a smooth curve.* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 146 | certain | *Figure 2.16* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 222 | certain | *Figure 2.17 The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 an...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 295 | certain | *Figure 2.18 The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} -...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 413 | certain | *Figure 2.19 The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 do...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 425 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 505 | certain | *Figure 2.21 The graph shows $f(x).$* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 524 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
+| `teaching/calc.limit.numeric.md` | 538 | certain | *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Eins...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
@@ -302,7 +301,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.integral.power_rule.md` | 78 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
 | `teaching/calc.integral.power_rule.md` | 129 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
 | `teaching/calc.integral.power_rule.md` | 322 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
-| `teaching/calc.limit.numeric.md` | 503 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
+| `teaching/calc.limit.numeric.md` | 505 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.number_line.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -327,7 +326,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-602 diagrams ship, 295 URLs are referenced by lesson bodies, and
+603 diagrams ship, 296 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

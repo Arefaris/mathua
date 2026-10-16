@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-264 paragraphs across 101 lessons read as a caption whose image was dropped:
-160 certain, 33 strong and 71 likely. Every one sits
+263 paragraphs across 101 lessons read as a caption whose image was dropped:
+159 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 160 rows and 90 distinct figures
+## 3. The captions are 159 rows and 89 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **90 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **89 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 41 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 40 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed twelve.
+again to 53 and 44, of which section 7 has since landed thirteen.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,7 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.12 | These graphs show the behavior of three different functions around $x = 2.$ | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.13 | The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.14 | The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.15 | The graph of $g(x)$ includes one value not on a smooth curve. | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
@@ -487,6 +486,37 @@ Its alt text is upstream's `data-alt` verbatim, read out of the scrape with its 
 Those five captions held five rows, and the regenerated audit dropped all of them: 269 to 264, and
 160 in the certain tier. Five lessons leave the orphan list, so the report's lesson count goes 106 to
 101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 264.
+
+**Figure 2.12** (three graphs of three functions at `x = 2`: a line with a hole where its denominator
+vanishes, the half-lines `y = 1` and `y = -1` whose ends are both holes, and `1/(x - 2)^2` running off
+the top either side of the asymptote) landed on 2026-10-16 in `calc.limit.numeric`, as
+`calculus/limit-behaviour.svg`. It is the first graph and the first y axis in the local set, and the
+first figure under the calculus directory.
+
+The dialect had what a graph needs. Axes and their arrowheads are `#BABABA` at 1.5, their unit ticks
+belong to the axis so they are the same color, the curve is ink at 2, and the hollow marker is a
+`fill="white"` circle with an ink stroke -- the shape the vendored set already uses for a point that
+is not on the graph, and the one place a figure carries white inside itself.
+
+Three things upstream does not settle, and the choices are visible. The three panels share one y
+range, so their x axes land on one row and they read as small multiples of a single question. Each
+panel's x range is its own, because panel (b) has to carry the segment out to `x = 4` without leaving
+its hole at the frame's edge, and panel (c) has nothing to show left of `x = -2.5`. And no tick
+carries a number: the caption names the functions, the holes are drawn where they are, and nine
+labeled ticks in a 153px panel would be a table rather than a picture.
+
+This figure has a caption, so its alt is that caption minus its `Figure 2.12 ` label, the rule Figures
+1.2 and 1.5 follow. Upstream's `data-alt` also exists, is longer, and is wrong in a way that matters:
+it puts the second graph's holes at `(2, 1)` and `(-2, 1)`, and the second of those is not a point of
+that graph, whose lower half-line is `y = -1`. Figures 5.5 and 6.5 record the same disagreement
+between a drawing and its own description and resolve it toward the description, because there the
+description was a figure that could be drawn. Here it cannot: no hole belongs at `(-2, 1)`. The
+drawing follows the mathematics and the alt is the author's other sentence about it.
+
+That one caption held one row, and the regenerated audit dropped it: 264 to 263, and 159 in the
+certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
+the ceiling for orphan captions in `internal/lessons/assets_test.go` follows the certain tier, to
+263.
 
 ## 8. Order of work
 
