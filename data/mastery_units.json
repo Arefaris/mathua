@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 727,
+  "concept_count": 731,
   "unit_count": 94,
   "units": [
     {
@@ -1175,12 +1175,14 @@
         "geo.polygon.exterior_angle",
         "geo.polygon.interior_angles",
         "geo.quad.perimeter",
+        "geo.similar.area_ratio",
         "geo.similar.missing_side",
         "geo.similar.ratio",
         "geo.transform.dilation",
-        "geo.triangle.angles"
+        "geo.triangle.angles",
+        "geo.triangle.inequality"
       ],
-      "concept_count": 9
+      "concept_count": 11
     },
     {
       "id": "geometry.b2",
@@ -1217,13 +1219,14 @@
         "geo.circle.circumference",
         "geo.coord.distance",
         "geo.coord.midpoint",
+        "geo.solid.pyramid_volume",
         "geo.solid.surface_area",
         "geo.solid.volume_rect",
         "geo.triangle.pythagorean",
         "geo.triangle.pythagorean.word",
         "geo.triangle.special_right"
       ],
-      "concept_count": 9
+      "concept_count": 10
     },
     {
       "id": "geometry.b4",
@@ -1238,9 +1241,10 @@
       ],
       "concept_ids": [
         "geo.circle.area",
+        "geo.circle.tangent_length",
         "geo.coord.polar"
       ],
-      "concept_count": 2
+      "concept_count": 3
     },
     {
       "id": "geometry.b6",

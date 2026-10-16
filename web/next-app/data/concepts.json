@@ -6668,6 +6668,63 @@
     "subdomain": "geometry.triangles"
   },
   {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.triangle.inequality",
+    "label": "The triangle inequality",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.triangle.types"
+    ],
+    "subdomain": "geometry.triangles"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.similar.area_ratio",
+    "label": "Areas of similar figures",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.similar.ratio"
+    ],
+    "subdomain": "geometry.similar"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.circle.tangent_length",
+    "label": "Tangent lines from a point",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.triangle.pythagorean",
+      "geo.circle.chord"
+    ],
+    "subdomain": "geometry.circles"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.solid.pyramid_volume",
+    "label": "The volume of a pyramid",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.solid.volume_rect"
+    ],
+    "subdomain": "geometry.solid"
+  },
+  {
     "domain": "linear_algebra",
     "grading_type": "numeric",
     "id": "linalg.vector.concept",

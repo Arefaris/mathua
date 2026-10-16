@@ -2906,5 +2906,21 @@
   {
     "concept_id": "geo.triangle.special_right",
     "source": "authored/geo.triangle.special_right.md"
+  },
+  {
+    "concept_id": "geo.triangle.inequality",
+    "source": "authored/geo.triangle.inequality.md"
+  },
+  {
+    "concept_id": "geo.similar.area_ratio",
+    "source": "authored/geo.similar.area_ratio.md"
+  },
+  {
+    "concept_id": "geo.circle.tangent_length",
+    "source": "authored/geo.circle.tangent_length.md"
+  },
+  {
+    "concept_id": "geo.solid.pyramid_volume",
+    "source": "authored/geo.solid.pyramid_volume.md"
   }
 ]
