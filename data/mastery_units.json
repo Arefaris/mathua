@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 790,
+  "concept_count": 797,
   "unit_count": 95,
   "units": [
     {
@@ -462,16 +462,19 @@
         "calc.limit.sine_limit",
         "calc.limit.squeeze",
         "calc.limit.supremum",
+        "calc.seq.arithmetic_sum",
         "calc.seq.bounded",
         "calc.seq.cauchy",
         "calc.seq.concept",
         "calc.seq.convergence",
         "calc.seq.euler",
         "calc.seq.function_sequences",
+        "calc.seq.limit_value",
         "calc.seq.monotone",
+        "calc.seq.recursive_value",
         "calc.series.concept"
       ],
-      "concept_count": 23
+      "concept_count": 26
     },
     {
       "id": "calculus.b10",
@@ -584,6 +587,7 @@
         "calc.integral.exp_integral",
         "calc.integral.ftc",
         "calc.integral.improper",
+        "calc.integral.mass_density",
         "calc.integral.mvt",
         "calc.integral.numerical",
         "calc.integral.power_rule",
@@ -605,7 +609,7 @@
         "calc.vec.jacobian_value",
         "calc.vec.parametric_derivative"
       ],
-      "concept_count": 46
+      "concept_count": 47
     },
     {
       "id": "calculus.b12",
@@ -625,6 +629,7 @@
       "concept_ids": [
         "calc.deriv.chain_power",
         "calc.deriv.general_exp",
+        "calc.deriv.higher_order_value",
         "calc.deriv.implicit_second",
         "calc.deriv.inverse_trig",
         "calc.deriv.log_diff",
@@ -640,6 +645,7 @@
         "calc.integral.reduction",
         "calc.integral.simpson",
         "calc.integral.strategy",
+        "calc.integral.substitution_value",
         "calc.integral.surface_area",
         "calc.integral.trapezoid",
         "calc.integral.trig_substitution",
@@ -648,6 +654,7 @@
         "calc.integral.weierstrass_sub",
         "calc.multi.change_order",
         "calc.multi.double_integral_region",
+        "calc.multi.mass_lamina",
         "calc.multi.triple_integral_box",
         "calc.polar.slope",
         "calc.vec.arc_length",
@@ -662,7 +669,7 @@
         "calc.vec.surface_area",
         "calc.vec.work"
       ],
-      "concept_count": 38
+      "concept_count": 41
     },
     {
       "id": "complex_numbers.b3",

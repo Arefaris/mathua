@@ -3158,5 +3158,33 @@
   {
     "concept_id": "stat.prob.conditional",
     "source": "authored/stat.prob.conditional.md"
+  },
+  {
+    "concept_id": "calc.seq.limit_value",
+    "source": "authored/calc.seq.limit_value.md"
+  },
+  {
+    "concept_id": "calc.seq.recursive_value",
+    "source": "authored/calc.seq.recursive_value.md"
+  },
+  {
+    "concept_id": "calc.seq.arithmetic_sum",
+    "source": "authored/calc.seq.arithmetic_sum.md"
+  },
+  {
+    "concept_id": "calc.multi.mass_lamina",
+    "source": "authored/calc.multi.mass_lamina.md"
+  },
+  {
+    "concept_id": "calc.integral.substitution_value",
+    "source": "authored/calc.integral.substitution_value.md"
+  },
+  {
+    "concept_id": "calc.integral.mass_density",
+    "source": "authored/calc.integral.mass_density.md"
+  },
+  {
+    "concept_id": "calc.deriv.higher_order_value",
+    "source": "authored/calc.deriv.higher_order_value.md"
   }
 ]

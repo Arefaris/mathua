@@ -4655,6 +4655,105 @@
     "subdomain": "calculus.polar"
   },
   {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.seq.limit_value",
+    "label": "The limit of a rational sequence",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.seq.convergence"
+    ],
+    "subdomain": "calculus.sequences"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.seq.recursive_value",
+    "label": "Recursive sequences",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.seq.concept"
+    ],
+    "subdomain": "calculus.sequences"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.seq.arithmetic_sum",
+    "label": "The sum of an arithmetic sequence",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.seq.concept"
+    ],
+    "subdomain": "calculus.sequences"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.mass_lamina",
+    "label": "The mass of a lamina",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.double_integral_rect"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.substitution_value",
+    "label": "A definite integral by substitution",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.substitution",
+      "calc.integral.definite"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.mass_density",
+    "label": "Mass from a variable density",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.definite"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.deriv.higher_order_value",
+    "label": "Evaluating a higher-order derivative",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.higher_order"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
     "domain": "complex_numbers",
     "grading_type": "complex",
     "id": "complex.basics.concept",
