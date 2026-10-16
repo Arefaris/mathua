@@ -8,12 +8,14 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-109 paragraphs across 49 lessons read as a caption whose image was dropped:
-5 certain, 33 strong and 71 likely. Every one sits
-in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
-all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
-auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
-drops the image, so it needs no judgement.
+104 paragraphs across 44 lessons read as a caption whose image was dropped: 33 `strong` and 71
+`likely`, and nothing `certain`. Every one sits
+in `data/lessons/teaching/`. The `certain` tier — the one that opened with an
+auto-numbered `Figure 3.2` label, which the PreTeXt conversion emits for a figure and keeps when it
+drops the image, so that it needed no judgement — is empty, and sections 3 and 6 record the batches
+that emptied it. What remains is counted by weaker evidence: `strong` describes a picture or
+is duplicated in its lesson, and `likely` is the teaching corpus, where a standalone italic paragraph
+is the ingestion pipeline's own signature.
 
 ## 2. The upstream is OpenStax, and the palette is still the dialect
 
@@ -23,10 +25,10 @@ Every teaching lesson opens with a credit line naming its source, for example:
 > Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY 4.0
 ```
 
-Two books account for every `certain` caption: **OpenStax Prealgebra** (5) and
-**OpenStax Calculus Volume 1** (0, its last three having landed on 2026-10-16). Both are CC BY 4.0,
-which permits reuse and adaptation with attribution, and the attribution is already the lesson's own
-header line.
+Two books accounted for every `certain` caption: **OpenStax Prealgebra** (36) and
+**OpenStax Calculus Volume 1** (36). All seventy-two have landed, as section 7 records. Both are
+CC BY 4.0, which permits reuse and adaptation with
+attribution, and the attribution is already the lesson's own header line.
 
 That changes what "a direct look-alike" means for these figures. Their *drawing* is upstream's, not
 Mathua's: they are fetched rather than redrawn, so the line work, the labels and the layout are
@@ -41,12 +43,14 @@ fetched asset is converted at fetch time — grey, its tone stretched to the ful
 then mapped onto the greys that section 4 of `docs/diagram-style.md` fixes. The drawing survives; the
 saturated color was the only part of it that never belonged on the page.
 
-## 3. The captions are 5 rows and 2 distinct figures
+## 3. The certain tier is empty
 
-Teaching lessons share source sections, so one figure appears in several concept lessons: the same
-`Figure 6.4` is the caption in three of them, and `Figure 6.8` in two. Deduplicating on the pair
-(figure number, caption) leaves **5 distinct figures** still to reclaim. Section 6 gives
-the method.
+Every caption that opened with an auto-numbered label has landed. The tier stood at 119 rows over 49
+distinct figures when the fetch batches began, and it went 119 to 72 to 41 to 8 to 5 to 0, one batch
+at a time, which section 7 records. What is left in section 1 is the 33 `strong` and 71 `likely`
+paragraphs, which no batch has touched: they are candidates rather than figures this document says
+must be restored, and section 6's table is empty because a disposition was only ever assigned to a
+`certain` caption.
 
 ## 4. Dispositions
 
@@ -55,7 +59,7 @@ the method.
 | schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 0 | Empty since 2026-10-16, in three batches. Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
-| photo, third-party credit | 2 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
+| photo, third-party credit | 0 | Empty since 2026-10-16: all five were fetched, each under the credit line its caption already carries. The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar), and a photograph cannot be redrawn as a line figure, so a replacement was never the alternative. |
 
 **One correction the first batch forced.** Figures 1.7, 1.8 and 1.9 were assigned
 `illustration, fetch` when this table was drawn, because the assignment read the caption and
@@ -65,7 +69,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed one hundred.
+again to 53 and 44, of which section 7 has since landed one hundred and two.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,17 +187,20 @@ rather than repair them. That is a content decision and this record leaves it op
 
 ## 6. The figures
 
-Sorted by disposition, then figure number compared as text, which is why 1.12 comes before 1.5 and
-2.10 before 2.6. `Lessons` is how many concept lessons carry the
-caption; one figure is restored once and every lesson that cites it gains the image. The caption is
-the text as repaired in section 5, truncated at 85 characters, so it is what the figure will carry
-when it lands. A figure that has landed leaves this table and is recorded in section 7 instead, so
-every count here is work still to do.
+**The table is empty.** It held one row per figure with a disposition — the `schematic, redraw`,
+`illustration, fetch`, `unidentified` and `photo, third-party credit` captions section 4 defines —
+and every row has landed, so each now lives in section 7's record of its batch instead. `Lessons` was
+how many concept lessons carried the caption, because one figure is restored once and every lesson
+that cites it gains the image; the caption was the text as repaired in section 5, truncated, so it is
+what the figure carries now.
+
+An empty table is the point of it: there is no caption left that this document says must be restored.
+The 104 paragraphs of section 1 are not listed here because no disposition was ever assigned to them.
+A `strong` or `likely` candidate is judged one instance at a time — matched to an asset that already
+exists or removed — and that measurement belongs to `scripts/audit_lesson_media.py`.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.4 | (credit: Riles32807, Wikimedia Commons) | Prealgebra | 6 Understand Percent | 3 | photo, third-party credit |
-| 6.8 | Applications of discounts are common in everyday life. (credit: Charleston's TheDigit... | Prealgebra | 6 Solve Sales Tax, Commission, and Discount Applications | 2 | photo, third-party credit |
 
 ## 7. Progress
 
@@ -1265,17 +1272,45 @@ three lessons lose their last orphan, so the lesson count drops from 52 to 49. T
 `internal/lessons/assets_test.go` follows, to 109, and `calc.limit.numeric`'s e2e count to twelve,
 because Figure 2.22 is the only fetched photograph in the corpus so far.
 
+**Two Prealgebra photographs** (6.4, `credit: Riles32807`; 6.8, `credit: Charleston's TheDigitel`)
+landed on 2026-10-16 in five lessons, as `web/next-app/public/diagrams/prealgebra/<number>.png`,
+duotoned like every other fetched asset. Figure 6.8's caption is the tier's second shape — it
+describes its picture ("Applications of discounts are common in everyday life") and carries a credit
+after it — so its alt is the caption's own words, where 6.4's is upstream's `data-alt`, because its
+caption is a credit and nothing else.
+
+**That empties the `certain` tier, and with it sections 3 and 6.** The audit's report no longer names
+a certain tier at all: 104 paragraphs across 44 lessons is now 33 `strong` and 71 `likely`, and
+nothing else. The table in section 6 is empty because a disposition was only ever assigned to a
+certain caption, and section 3 is the record of a tier that is gone rather than a count of work left.
+What remains is a different kind of task — a `strong` or `likely` candidate is matched to an asset
+that already exists or removed — and it is measured rather than planned here.
+
+The two captions held 5 rows across five lessons: the report went from 109 to 104, the certain tier
+from 5 to 0, and the audit's shipped and referenced counts from 690 to 692 and 384 to 386. All five
+lessons lose their last orphan, so the lesson count drops from 49 to 44, and the ceiling in
+`internal/lessons/assets_test.go` follows, to 104. `pct.convert.to_dec`'s e2e count moves to four.
+
+**The ceiling's first bucket is empty too.** The comment above `TestOrphanCaptionsDoNotGrow` used to
+give three reasons for keeping an orphan, and the first was that the lesson's prose cites the figure,
+by number or by position. No row is kept for that reason now, because every caption a lesson cites by
+number is a caption with an auto-numbered label and those have all landed, so the 104 split as 74 (no
+picture vocabulary) and 30 (bare section labels).
+
 ## 8. Order of work
 
-The list is three tiers now rather than four: the `unidentified` tier used to lead here as its own
-step, and section 4 records that it was emptied on 2026-10-16, so those seventeen figures sit inside
-items 1 and 2 by their new dispositions.
+**Every item below is done as of 2026-10-16**, and the list stays because it is the order a future
+figure follows. It is three tiers now rather than four: the `unidentified` tier used to lead here as
+its own step, and section 4 records that it was emptied on 2026-10-16, so those seventeen figures sit
+inside items 1 and 2 by their new dispositions.
 
 1. **The schematics.** Highest value and no license question: they are redrawn as Mathua's own
    work, in the dialect the style doc fixes, and they land under `source: local`.
 2. **The illustrations.** Fetch, put on the dialect's greys (section 2) and credit.
 3. **The photos.** Decide per figure between a licensed fetch and a replacement, because a
-   photograph cannot be redrawn as a line figure.
+   photograph cannot be redrawn as a line figure. All five were fetched, which section 7 records, so
+   a licensed fetch was both possible and faithful every time; the credit line the caption already
+   carries is what made the decision easy.
 
 Each figure is wired by the paths in section 5 of `docs/diagram-style.md`, and the published
 `web/next-app/public/diagrams/meta.json` copy is refreshed before the change is called done.

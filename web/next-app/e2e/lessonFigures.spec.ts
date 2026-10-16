@@ -36,7 +36,7 @@ const ROOT = resolve(__dirname, '../../..')
 
 /**
  * Real bodies, chosen because they now carry figures and because one does not. Together they cover
- * bodies with one, two, three, six, eight and twelve figures.
+ * bodies with one, two, three, four, six, eight and twelve figures.
  */
 const CASES = [
   { concept: 'discrete.sets.operations', file: 'algebrica/sets-and-numbers/sets.md', expectFigures: 6 },
@@ -59,13 +59,14 @@ const CASES = [
   // beside the drawn SVGs a learner already reads here. The count is the lesson's, and it has
   // moved once: two, then three.
   { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 3 },
-  // The other kind of three: the percent pair is a table rather than a drawing, so this case
+  // Four: the percent pair is a table rather than a drawing, so this case
   // proves a reclaimed figure that is ruled cells and text renders, which the lines, blocks and
   // bars above cannot show, and Figure 6.2 — a grid of 100 students — landed in the same body
-  // with the second fetch batch. It is also the batch where upstream shipped one image for both
+  // with the second fetch batch, then Figure 6.4, a photograph of a hand holding ten cards, with
+  // the photo batch. 6.2 is also the batch where upstream shipped one image for both
   // figures, so what is measured here is the figure the lesson needs and not the one upstream
   // linked twice.
-  { concept: 'pct.convert.to_dec', file: 'teaching/pct.convert.to_dec.md', expectFigures: 3 },
+  { concept: 'pct.convert.to_dec', file: 'teaching/pct.convert.to_dec.md', expectFigures: 4 },
   // One, and the one primitive the cases above do not carry: Figure 5.5's measurement bracket
   // is an unfilled path with turned-down ends, so this asserts that a reclaimed figure made of
   // paths draws at all and not only figures made of lines, rects and text.

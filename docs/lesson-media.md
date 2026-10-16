@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-109 paragraphs across 49 lessons look like a figure caption whose image
-was dropped while its text was kept: **5 certain**, **33 strong**, **71 likely**.
+104 paragraphs across 44 lessons look like a figure caption whose image
+was dropped while its text was kept: **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -106,11 +106,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/geo.triangle.area.md` | 32 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 34 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 46 | strong | *Solution* | duplicated 2x in this lesson |
-| `teaching/pct.basics.concept.md` | 310 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 310 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 310 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.ops.discount.md` | 259 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
-| `teaching/pct.ops.tax_tip.md` | 259 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
 | `teaching/prealg.eq.one_step_add.md` | 43 | likely | *Add 2 to mystery number to get 6, or subtract 2 from 6 to get mystery number* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/prealg.eq.one_step_add.md` | 59 | likely | *Multiply mystery number by 2 to get 6, or divide 6 by 2 to get mystery number* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/prealg.eq.one_step_add.md` | 75 | likely | *Balance scale representing $x+2=6$, and the solution after taking away 2 from each side* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -172,7 +167,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-690 diagrams ship, 384 URLs are referenced by lesson bodies, and
+692 diagrams ship, 386 URLs are referenced by lesson bodies, and
 **286 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

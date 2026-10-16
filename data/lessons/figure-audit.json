@@ -596,41 +596,6 @@
       "reason": "duplicated 2x in this lesson"
     },
     {
-      "lesson": "teaching/pct.basics.concept.md",
-      "line": 310,
-      "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.from_dec.md",
-      "line": 310,
-      "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.to_dec.md",
-      "line": 310,
-      "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.ops.discount.md",
-      "line": 259,
-      "text": "Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDigitel, Flickr)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.ops.tax_tip.md",
-      "line": 259,
-      "text": "Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDigitel, Flickr)",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/prealg.eq.one_step_add.md",
       "line": 43,
       "text": "Add 2 to mystery number to get 6, or subtract 2 from 6 to get mystery number",
@@ -959,8 +924,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 384,
-    "shipped": 690,
+    "referenced": 386,
+    "shipped": 692,
     "unreferenced_content": 286,
     "candidates": [
       {

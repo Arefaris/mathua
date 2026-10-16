@@ -256,6 +256,8 @@ Bernice earned $\text{\$451}$ commission when she sold an $\text{\$8,200}$ livin
 
 Applications of discount are very common in retail settings Figure 6.8. When you buy an item on sale, the **original price** of the item has been reduced by some dollar amount. The **discount rate**, usually given as a percent, is used to determine the amount of the discount. To determine the **amount of discount**, we multiply the discount rate by the original price. We summarize the discount model in the box below.
 
+![Applications of discounts are common in everyday life. (credit: Charleston's TheDigitel, Flickr)](/diagrams/prealgebra/6.8.png)
+
 *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDigitel, Flickr)*
 
 ### Discount

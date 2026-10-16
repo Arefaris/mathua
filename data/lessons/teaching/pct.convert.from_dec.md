@@ -307,6 +307,8 @@ There are four suits of cards in a deck of cards—hearts, diamonds, clubs, and 
 1.  (a) a fraction
 2.  (b) a decimal
 
+![The figure shows someone holding a deck of cards.](/diagrams/prealgebra/6.4.png)
+
 *Figure 6.4 (credit: Riles32807, Wikimedia Commons)*
 
 #### Solution
