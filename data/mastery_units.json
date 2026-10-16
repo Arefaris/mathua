@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 679,
+  "concept_count": 687,
   "unit_count": 93,
   "units": [
     {
@@ -485,7 +485,8 @@
         "calculus.derivatives",
         "calculus.integrals",
         "calculus.limits",
-        "calculus.series"
+        "calculus.series",
+        "calculus.vector"
       ],
       "concept_ids": [
         "calc.deriv.applications",
@@ -535,9 +536,11 @@
         "calc.series.remainder",
         "calc.series.root_test",
         "calc.series.taylor",
-        "calc.series.telescoping"
+        "calc.series.telescoping",
+        "calc.vec.curl",
+        "calc.vec.divergence"
       ],
-      "concept_count": 48
+      "concept_count": 50
     },
     {
       "id": "calculus.b11",
@@ -587,10 +590,13 @@
         "calc.integral.washer",
         "calc.integral.work",
         "calc.multi.double_integral_rect",
+        "calc.multi.lagrange",
+        "calc.multi.saddle_test",
+        "calc.multi.transform_jacobian",
         "calc.vec.jacobian_value",
         "calc.vec.parametric_derivative"
       ],
-      "concept_count": 36
+      "concept_count": 39
     },
     {
       "id": "calculus.b12",
@@ -603,7 +609,8 @@
         "calculus.advanced",
         "calculus.derivatives",
         "calculus.integrals",
-        "calculus.multivariable"
+        "calculus.multivariable",
+        "calculus.vector"
       ],
       "concept_ids": [
         "calc.deriv.chain_power",
@@ -629,12 +636,15 @@
         "calc.integral.variable_limits",
         "calc.integral.volume",
         "calc.integral.weierstrass_sub",
+        "calc.multi.double_integral_region",
         "calc.multi.triple_integral_box",
         "calc.vec.arc_length",
+        "calc.vec.conservative_test",
         "calc.vec.curvature",
+        "calc.vec.greens_theorem",
         "calc.vec.line_integral"
       ],
-      "concept_count": 27
+      "concept_count": 30
     },
     {
       "id": "complex_numbers.b3",

@@ -2714,5 +2714,37 @@
   {
     "concept_id": "calc.multi.triple_integral_box",
     "source": "authored/calc.multi.triple_integral_box.md"
+  },
+  {
+    "concept_id": "calc.vec.curl",
+    "source": "authored/calc.vec.curl.md"
+  },
+  {
+    "concept_id": "calc.vec.divergence",
+    "source": "authored/calc.vec.divergence.md"
+  },
+  {
+    "concept_id": "calc.vec.conservative_test",
+    "source": "authored/calc.vec.conservative_test.md"
+  },
+  {
+    "concept_id": "calc.vec.greens_theorem",
+    "source": "authored/calc.vec.greens_theorem.md"
+  },
+  {
+    "concept_id": "calc.multi.transform_jacobian",
+    "source": "authored/calc.multi.transform_jacobian.md"
+  },
+  {
+    "concept_id": "calc.multi.double_integral_region",
+    "source": "authored/calc.multi.double_integral_region.md"
+  },
+  {
+    "concept_id": "calc.multi.saddle_test",
+    "source": "authored/calc.multi.saddle_test.md"
+  },
+  {
+    "concept_id": "calc.multi.lagrange",
+    "source": "authored/calc.multi.lagrange.md"
   }
 ]

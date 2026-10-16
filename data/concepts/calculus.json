@@ -1938,5 +1938,120 @@
     "streak": 10,
     "avg_time_seconds": 22.0
    }
+    },
+  {
+   "id": "calc.vec.curl",
+   "label": "The curl of a planar field",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.partial"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.divergence",
+   "label": "Divergence",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.partial"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.conservative_test",
+   "label": "Testing a field for a potential",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.curl",
+    "calc.vec.line_integral"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.vec.greens_theorem",
+   "label": "Green's theorem",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.line_integral",
+    "calc.multi.double_integral_rect"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.transform_jacobian",
+   "label": "The Jacobian of a linear change of variables",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.jacobian_value"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.double_integral_region",
+   "label": "Double integrals over a general region",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.multi.double_integral_rect"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.saddle_test",
+   "label": "The second-derivative test in two variables",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.partial_higher"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.multi.lagrange",
+   "label": "Lagrange multipliers",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.partial",
+    "calc.deriv.optimization"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
   }
 ]
