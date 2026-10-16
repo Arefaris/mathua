@@ -69,10 +69,11 @@ const CASES = [
   // `Circumference` is thirteen `<text>` elements carrying a `transform`, so this asserts a
   // figure reaches the page at all when its labels are placed by rotation and not by `x`/`y`.
   { concept: 'frac.ops.to_decimal', file: 'teaching/frac.ops.to_decimal.md', expectFigures: 1 },
-  // One, and the first graph: Figure 2.12 carries a y axis and four markers drawn as
-  // `fill="white"` circles, so this asserts that a figure whose points are holes rather than
-  // filled dots keeps its markers through the sanitizer.
-  { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 1 },
+  // Three, and the only case with a graph: Figures 2.12, 2.13 and 2.14 carry y axes, tick
+  // labels and five markers between them, drawn as `fill="white"` circles, so this asserts that
+  // a figure whose points are holes rather than filled dots keeps its markers through the
+  // sanitizer. The count is the lesson's, so it moves when the next section-2 figure lands.
+  { concept: 'calc.limit.numeric', file: 'teaching/calc.limit.numeric.md', expectFigures: 3 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }
