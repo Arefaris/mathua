@@ -130,7 +130,7 @@
     "name": "Differential Equations",
     "grade": "college",
     "description": "First and second order ODEs, systems, and the Laplace transform.",
-    "targets": ["ode.first_order.separable", "ode.first_order.linear", "ode.second_order.homogeneous", "ode.transforms.laplace"]
+    "targets": ["ode.first_order.separable", "ode.first_order.linear", "ode.second_order.homogeneous", "ode.transforms.laplace", "ode.ivp.evaluate", "ode.characteristic.sum", "ode.equilibrium.nonzero", "ode.wronskian", "ode.numerical.steps", "ode.laplace.value", "ode.pde.discriminant"]
   },
   {
     "id": "abstract",

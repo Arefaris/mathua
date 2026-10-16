@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 804 |
+| Total concepts | 811 |
 | Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -59,9 +59,9 @@ exists to make concrete.
 | `complex_numbers.b11` | complex_numbers | 11 | 9 | 1 | 33–35 |
 | `complex_numbers.b12` | complex_numbers | 12 | 2 | 1 | 36–37 |
 | `differential_equations.b11` | differential_equations | 11 | 3 | 2 | 33–35 |
-| `differential_equations.b12` | differential_equations | 12 | 8 | 4 | 36–38 |
-| `differential_equations.b13` | differential_equations | 13 | 8 | 4 | 39–41 |
-| `differential_equations.b14` | differential_equations | 14 | 6 | 4 | 42–44 |
+| `differential_equations.b12` | differential_equations | 12 | 11 | 4 | 36–38 |
+| `differential_equations.b13` | differential_equations | 13 | 11 | 4 | 39–41 |
+| `differential_equations.b14` | differential_equations | 14 | 7 | 5 | 42–44 |
 | `discrete_math.b1` | discrete_math | 1 | 1 | 1 | 5–5 |
 | `discrete_math.b2` | discrete_math | 2 | 2 | 1 | 7–8 |
 | `discrete_math.b4` | discrete_math | 4 | 4 | 2 | 13–14 |
@@ -146,12 +146,12 @@ at every width.
 | 4 | 76 | 7 | 64 | 8 | 23 | 5 | 0 |
 | 5 | 65 | 8 | 72 | 6 | 16 | 7 | 0 |
 | 6 | 61 | 9 | 97 | 5 | 13 | 6 | 0 |
-| 8 | 48 | 12 | 105 | 3 | 9 | 8 | 0 |
+| 8 | 48 | 13 | 105 | 3 | 9 | 8 | 0 |
 | 10 | 43 | 13 | 138 | 3 | 10 | 11 | 0 |
-| 12 | 42 | 15 | 124 | 2 | 6 | 8 | 0 |
-| 15 | 32 | 18 | 138 | 2 | 5 | 12 | 0 |
+| 12 | 42 | 15 | 124 | 2 | 6 | 9 | 0 |
+| 15 | 32 | 18 | 138 | 2 | 5 | 13 | 0 |
 | 20 | 29 | 23 | 165 | 2 | 5 | 13 | 0 |
-| 45 | 17 | 39 | 165 | 0 | 0 | 16 | 0 |
+| 45 | 17 | 39 | 165 | 0 | 0 | 17 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -291,7 +291,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 804
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 811
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

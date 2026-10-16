@@ -33,6 +33,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("ode.nonlinear.lyapunov", &lyapunovGen{})
 	reg.Register("ode.pde.laplace_eq", &laplaceEqGen{})
 	reg.Register("ode.integral.volterra", &volterraGen{})
+	registerNumeric(reg)
 }
 
 type conceptGen struct{}

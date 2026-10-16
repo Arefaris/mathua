@@ -357,5 +357,103 @@
       "streak": 10,
       "avg_time_seconds": 26.0
     }
+    },
+  {
+    "id": "ode.ivp.evaluate",
+    "label": "Solving an initial value problem",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.first_order",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.first_order.separable"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ode.characteristic.sum",
+    "label": "The roots of the characteristic equation",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.second_order",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.second_order.homogeneous"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ode.equilibrium.nonzero",
+    "label": "Equilibrium points",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.stability",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.stability"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ode.wronskian",
+    "label": "The Wronskian",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.second_order",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.second_order.homogeneous"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ode.numerical.steps",
+    "label": "Stepping through an interval",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.numerical",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.numerical.euler"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ode.laplace.value",
+    "label": "Evaluating a Laplace transform",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.transforms",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.transforms.laplace"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ode.pde.discriminant",
+    "label": "Classifying a second-order PDE",
+    "domain": "differential_equations",
+    "subdomain": "differential_equations.pde",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ode.pde.heat"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
   }
 ]

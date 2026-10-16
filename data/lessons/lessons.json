@@ -3214,5 +3214,33 @@
   {
     "concept_id": "nt.base.convert",
     "source": "authored/nt.base.convert.md"
+  },
+  {
+    "concept_id": "ode.ivp.evaluate",
+    "source": "authored/ode.ivp.evaluate.md"
+  },
+  {
+    "concept_id": "ode.characteristic.sum",
+    "source": "authored/ode.characteristic.sum.md"
+  },
+  {
+    "concept_id": "ode.equilibrium.nonzero",
+    "source": "authored/ode.equilibrium.nonzero.md"
+  },
+  {
+    "concept_id": "ode.wronskian",
+    "source": "authored/ode.wronskian.md"
+  },
+  {
+    "concept_id": "ode.numerical.steps",
+    "source": "authored/ode.numerical.steps.md"
+  },
+  {
+    "concept_id": "ode.laplace.value",
+    "source": "authored/ode.laplace.value.md"
+  },
+  {
+    "concept_id": "ode.pde.discriminant",
+    "source": "authored/ode.pde.discriminant.md"
   }
 ]

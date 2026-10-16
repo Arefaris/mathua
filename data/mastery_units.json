@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 804,
+  "concept_count": 811,
   "unit_count": 95,
   "units": [
     {
@@ -832,13 +832,16 @@
         "ode.first_order.exact",
         "ode.first_order.linear",
         "ode.first_order.separable",
+        "ode.ivp.evaluate",
         "ode.numerical.euler",
         "ode.numerical.rk4",
+        "ode.numerical.steps",
+        "ode.pde.discriminant",
         "ode.pde.heat",
         "ode.pde.laplace_eq",
         "ode.second_order.homogeneous"
       ],
-      "concept_count": 8
+      "concept_count": 11
     },
     {
       "id": "differential_equations.b13",
@@ -855,15 +858,18 @@
       ],
       "concept_ids": [
         "ode.adv.systems",
+        "ode.characteristic.sum",
+        "ode.laplace.value",
         "ode.second_order.nonhomogeneous",
         "ode.second_order.variation_params",
         "ode.stability",
         "ode.sturm_liouville",
         "ode.systems.linear_phase",
         "ode.transforms.convolution",
-        "ode.transforms.laplace"
+        "ode.transforms.laplace",
+        "ode.wronskian"
       ],
-      "concept_count": 8
+      "concept_count": 11
     },
     {
       "id": "differential_equations.b14",
@@ -876,17 +882,19 @@
         "differential_equations.boundary",
         "differential_equations.integral",
         "differential_equations.nonlinear",
+        "differential_equations.stability",
         "differential_equations.transforms"
       ],
       "concept_ids": [
         "ode.boundary_value",
+        "ode.equilibrium.nonzero",
         "ode.green.function",
         "ode.integral.volterra",
         "ode.nonlinear.bifurcation",
         "ode.nonlinear.lyapunov",
         "ode.transforms.fourier"
       ],
-      "concept_count": 6
+      "concept_count": 7
     },
     {
       "id": "discrete_math.b1",

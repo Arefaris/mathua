@@ -5485,6 +5485,104 @@
     "subdomain": "differential_equations.integral"
   },
   {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.ivp.evaluate",
+    "label": "Solving an initial value problem",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.first_order.separable"
+    ],
+    "subdomain": "differential_equations.first_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.characteristic.sum",
+    "label": "The roots of the characteristic equation",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.second_order.homogeneous"
+    ],
+    "subdomain": "differential_equations.second_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.equilibrium.nonzero",
+    "label": "Equilibrium points",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.stability"
+    ],
+    "subdomain": "differential_equations.stability"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.wronskian",
+    "label": "The Wronskian",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.second_order.homogeneous"
+    ],
+    "subdomain": "differential_equations.second_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.numerical.steps",
+    "label": "Stepping through an interval",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.numerical.euler"
+    ],
+    "subdomain": "differential_equations.numerical"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.laplace.value",
+    "label": "Evaluating a Laplace transform",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.transforms.laplace"
+    ],
+    "subdomain": "differential_equations.transforms"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.pde.discriminant",
+    "label": "Classifying a second-order PDE",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.pde.heat"
+    ],
+    "subdomain": "differential_equations.pde"
+  },
+  {
     "domain": "discrete_math",
     "grading_type": "multiple_choice",
     "id": "discrete.logic.propositions",
