@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-225 paragraphs across 100 lessons read as a caption whose image was dropped:
-121 certain, 33 strong and 71 likely. Every one sits
+223 paragraphs across 100 lessons read as a caption whose image was dropped:
+119 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 121 rows and 51 distinct figures
+## 3. The captions are 119 rows and 49 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **51 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **49 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 2 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed fifty-one.
+again to 53 and 44, of which section 7 has since landed fifty-three.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,8 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
-| 6.36 | (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of revolu... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 1.11 | (none) | Prealgebra | 1 Multiply Whole Numbers | 6 | illustration, fetch |
 | 1.13 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
 | 1.14 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
@@ -1117,6 +1115,35 @@ That caption held one row: the report went from 226 to 225, and the certain tier
 Distinct figures go from 52 to 51 and redraws from 3 to 2. The lesson keeps three other orphan
 captions, so the lesson count stays at 100, and the ceiling in `internal/lessons/assets_test.go`
 follows, to 225.
+
+**Figures 6.35 and 6.36** (6.35: the region between `y = x` and `y = 2 - x`, a triangle whose apexes
+lie on the axis; 6.36: the region between `y = 4x - x^2` and the x-axis over [0, 4]) landed on
+2026-10-16 in `calc.integral.volume`, as `calculus/bicone-x-axis-solid.svg` and
+`calculus/lens-x-axis-solid.svg`.
+
+**An x-axis solid is the region and its mirror.** Neither region has an end of non-zero radius, so
+neither solid has an end ellipse: 6.35's triangle has two apexes on the axis, and 6.36's lens comes
+to a point at each end. The silhouette is therefore one closed filled path, the region's profile and
+its reflection below the axis, and the axis of revolution is the x-axis, drawn solid outside the
+solid and dashed inside it. Both panels keep equal scales, because 6.36's solid is 4 wide and 8
+tall, which a filled panel would redraw as a squat lens.
+
+**The bicone is the one solid here with a circle to draw.** Its surface turns at `x = 1`, so that
+cross-section's circle is drawn: a vertical circle of radius 1 projects to an ellipse with
+`rx = (2/7) s` and `ry = s`, its near half is the left half on screen and stays ink, and its far half
+is inside the solid and goes dashed in annotation grey. 6.36's lens has no such turn, so it has no
+cross-section to draw.
+
+**6.35 (a) needed a taller frame below the axis than above.** The two lines cross at (1, 1) and their
+labels belong at the lines' ends, but a frame centred on the region put the lower label on the tick
+and the axis name. The frame runs `y` from -1.2 to 2, which keeps equal scales and leaves room below
+the axis for the second label, and the `y` axis name moves clear of the upper line's end at the top
+of the frame.
+
+The two captions held one row each: the report went from 225 to 223, the certain tier from 121 to
+119, distinct figures from 51 to 49 and redraws from 2 to 0, which empties the tier. The lesson
+keeps one other orphan caption, so the lesson count stays at 100, and the ceiling in
+`internal/lessons/assets_test.go` follows, to 223. The lesson's e2e case count moves to eleven.
 
 ## 8. Order of work
 
