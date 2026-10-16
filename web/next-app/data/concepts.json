@@ -10333,6 +10333,106 @@
     "subdomain": "statistics.distributions"
   },
   {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.spread.mad",
+    "label": "The mean absolute deviation",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.data.mean"
+    ],
+    "subdomain": "statistics.advanced"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.spread.iqr",
+    "label": "The interquartile range",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.data.median"
+    ],
+    "subdomain": "statistics.central_tendency"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.quartile.value",
+    "label": "Quartiles",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.data.median"
+    ],
+    "subdomain": "statistics.central_tendency"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.zscore.value",
+    "label": "The z-score",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.data.mean"
+    ],
+    "subdomain": "statistics.advanced"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.sampling.se",
+    "label": "The standard error",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.sampling",
+      "stat.data.mean"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.infer.margin",
+    "label": "The margin of error",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.confidence"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.prob.conditional",
+    "label": "Conditional probability",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.prob.basic",
+      "stat.prob.compound"
+    ],
+    "subdomain": "statistics.probability"
+  },
+  {
     "domain": "topology",
     "grading_type": "multiple_choice",
     "id": "topo.basics.metric",

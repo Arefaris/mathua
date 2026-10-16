@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 783 |
+| Total concepts | 790 |
 | Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -21,7 +21,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 | Units with <= 3 concepts | 35 |
 | Units with > 25 concepts | 5 |
 | Units with > 50 concepts | 0 |
-| Cross-unit prerequisite edges (derived) | 214 |
+| Cross-unit prerequisite edges (derived) | 215 |
 | Backward band edges | 0 |
 
 If the learner is assessed once per unit, then 95 assessments cover the corpus, and the
@@ -116,8 +116,8 @@ exists to make concrete.
 | `statistics.b0` | statistics | 0 | 2 | 1 | 1–2 |
 | `statistics.b1` | statistics | 1 | 1 | 1 | 3–3 |
 | `statistics.b2` | statistics | 2 | 1 | 1 | 8–8 |
-| `statistics.b3` | statistics | 3 | 20 | 4 | 9–11 |
-| `statistics.b4` | statistics | 4 | 12 | 3 | 12–13 |
+| `statistics.b3` | statistics | 3 | 24 | 4 | 9–11 |
+| `statistics.b4` | statistics | 4 | 15 | 3 | 12–14 |
 | `statistics.b8` | statistics | 8 | 1 | 1 | 24–24 |
 | `topology.b10` | topology | 10 | 5 | 3 | 30–32 |
 | `topology.b11` | topology | 11 | 14 | 8 | 33–35 |
@@ -141,17 +141,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 123 | 4 | 36 | 20 | 52 | 5 | 0 |
+| 2 | 124 | 4 | 36 | 21 | 53 | 5 | 0 |
 | 3 | 95 | 5 | 50 | 19 | 35 | 5 | 0 |
 | 4 | 76 | 7 | 63 | 8 | 23 | 5 | 0 |
-| 5 | 65 | 8 | 72 | 6 | 17 | 5 | 0 |
+| 5 | 65 | 8 | 72 | 6 | 17 | 6 | 0 |
 | 6 | 61 | 9 | 96 | 5 | 13 | 5 | 0 |
 | 8 | 48 | 12 | 101 | 3 | 9 | 7 | 0 |
-| 10 | 43 | 12 | 134 | 3 | 11 | 9 | 0 |
-| 12 | 42 | 15 | 120 | 2 | 6 | 7 | 0 |
+| 10 | 43 | 13 | 134 | 3 | 11 | 10 | 0 |
+| 12 | 42 | 15 | 120 | 2 | 6 | 8 | 0 |
 | 15 | 32 | 16 | 134 | 2 | 5 | 11 | 0 |
 | 20 | 29 | 23 | 158 | 2 | 5 | 12 | 0 |
-| 45 | 17 | 37 | 158 | 0 | 0 | 15 | 0 |
+| 45 | 17 | 39 | 158 | 0 | 0 | 15 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -168,7 +168,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**92 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**91 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -270,29 +270,28 @@ Unresolvable subdomains:
 `precalculus.systems` 
 `precalculus.vectors` 
 `statistics.distributions` 
-`statistics.inference` 
-
 `topology.algebraic` 
+
 `topology.basics` 
 `topology.compact` 
 `topology.connected` 
-
 `topology.constructions` 
+
 `topology.covering` 
 `topology.dimension` 
 `topology.knot` 
-
 `topology.manifolds` 
+
 `topology.metrization` 
 `topology.separation` 
 `trigonometry.advanced` 
-
 `trigonometry.functions` 
+
 `trigonometry.graphs` 
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 783
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 790
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

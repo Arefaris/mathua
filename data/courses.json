@@ -116,7 +116,7 @@
     "name": "Probability & Statistics",
     "grade": "college",
     "description": "Descriptive statistics, probability, distributions, and inference.",
-    "targets": ["stat.data.mean", "stat.prob.compound", "stat.dist.binomial", "stat.dist.normal", "stat.func.gaussian", "stat.infer.confidence"]
+    "targets": ["stat.data.mean", "stat.prob.compound", "stat.dist.binomial", "stat.dist.normal", "stat.func.gaussian", "stat.infer.confidence", "stat.spread.mad", "stat.spread.iqr", "stat.quartile.value", "stat.zscore.value", "stat.sampling.se", "stat.infer.margin", "stat.prob.conditional"]
   },
   {
     "id": "nt",

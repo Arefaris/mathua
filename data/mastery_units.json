@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 783,
+  "concept_count": 790,
   "unit_count": 95,
   "units": [
     {
@@ -2072,9 +2072,13 @@
         "stat.prob.continuous_rv",
         "stat.prob.discrete_rv",
         "stat.prob.expected_value",
-        "stat.prob.sample_space"
+        "stat.prob.sample_space",
+        "stat.quartile.value",
+        "stat.spread.iqr",
+        "stat.spread.mad",
+        "stat.zscore.value"
       ],
-      "concept_count": 20
+      "concept_count": 24
     },
     {
       "id": "statistics.b4",
@@ -2082,7 +2086,7 @@
       "domain": "statistics",
       "band": 4,
       "depth_min": 12,
-      "depth_max": 13,
+      "depth_max": 14,
       "subdomains": [
         "statistics.distributions",
         "statistics.inference",
@@ -2099,10 +2103,13 @@
         "stat.dist.student_t",
         "stat.dist.z_table",
         "stat.infer.confidence",
+        "stat.infer.margin",
         "stat.infer.sampling",
-        "stat.prob.counting"
+        "stat.prob.conditional",
+        "stat.prob.counting",
+        "stat.sampling.se"
       ],
-      "concept_count": 12
+      "concept_count": 15
     },
     {
       "id": "statistics.b8",

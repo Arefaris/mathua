@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 783 concepts, and there are 783 KP shard files
-holding 2349 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 790 concepts, and there are 790 KP shard files
+holding 2370 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 392 of the 783 concepts
+### 4.1 The course catalog reaches 400 of the 790 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-392 of the 783 concepts: 391 of them have a node, a generator, a lesson and three KP shards and
+400 of the 790 concepts: 390 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -84,7 +84,7 @@ The count of unreachable concepts by domain:
 | calculus | 158 | 93 |
 | algebra | 89 | 53 |
 | topology | 30 | 27 |
-| statistics | 37 | 24 |
+| statistics | 44 | 23 |
 | precalculus | 41 | 20 |
 | fractions | 45 | 13 |
 | machine_learning | 33 | 16 |
@@ -325,7 +325,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 783 concepts. Reaching a thousand means adding 297, and this is the table that says
+The catalog holds 790 concepts. Reaching a thousand means adding 297, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision.
 
 | Domain | Tier | Now | Target | Add |

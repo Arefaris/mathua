@@ -51,6 +51,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("stat.prob.continuous_rv", &continuousRVGen{})
 	reg.Register("stat.prob.discrete_rv", &discreteRVGen{})
 	reg.Register("stat.prob.expected_value", &expectedValueGen{})
+	registerNumeric(reg)
 }
 
 type readTableGen struct{}

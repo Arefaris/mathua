@@ -519,5 +519,105 @@
     "streak": 3,
     "avg_time_seconds": 120
    }
+    },
+  {
+   "id": "stat.spread.mad",
+   "label": "The mean absolute deviation",
+   "domain": "statistics",
+   "subdomain": "statistics.advanced",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.data.mean"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.spread.iqr",
+   "label": "The interquartile range",
+   "domain": "statistics",
+   "subdomain": "statistics.central_tendency",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.data.median"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.quartile.value",
+   "label": "Quartiles",
+   "domain": "statistics",
+   "subdomain": "statistics.central_tendency",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.data.median"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.zscore.value",
+   "label": "The z-score",
+   "domain": "statistics",
+   "subdomain": "statistics.advanced",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.data.mean"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.sampling.se",
+   "label": "The standard error",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.infer.sampling",
+   "stat.data.mean"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.infer.margin",
+   "label": "The margin of error",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.infer.confidence"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.prob.conditional",
+   "label": "Conditional probability",
+   "domain": "statistics",
+   "subdomain": "statistics.probability",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.prob.basic",
+   "stat.prob.compound"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
   }
 ]

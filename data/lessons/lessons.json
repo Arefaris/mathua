@@ -3130,5 +3130,33 @@
   {
     "concept_id": "frac.equivalent.scale",
     "source": "authored/frac.equivalent.scale.md"
+  },
+  {
+    "concept_id": "stat.spread.mad",
+    "source": "authored/stat.spread.mad.md"
+  },
+  {
+    "concept_id": "stat.spread.iqr",
+    "source": "authored/stat.spread.iqr.md"
+  },
+  {
+    "concept_id": "stat.quartile.value",
+    "source": "authored/stat.quartile.value.md"
+  },
+  {
+    "concept_id": "stat.zscore.value",
+    "source": "authored/stat.zscore.value.md"
+  },
+  {
+    "concept_id": "stat.sampling.se",
+    "source": "authored/stat.sampling.se.md"
+  },
+  {
+    "concept_id": "stat.infer.margin",
+    "source": "authored/stat.infer.margin.md"
+  },
+  {
+    "concept_id": "stat.prob.conditional",
+    "source": "authored/stat.prob.conditional.md"
   }
 ]
