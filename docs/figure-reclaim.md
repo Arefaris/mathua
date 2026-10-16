@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-241 paragraphs across 100 lessons read as a caption whose image was dropped:
-137 certain, 33 strong and 71 likely. Every one sits
+239 paragraphs across 100 lessons read as a caption whose image was dropped:
+135 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 137 rows and 67 distinct figures
+## 3. The captions are 135 rows and 65 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **67 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **65 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 18 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 16 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed thirty-five.
+again to 53 and 44, of which section 7 has since landed thirty-seven.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -184,8 +184,6 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
-| 4.58 | The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\right... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.59 | The function $f(x) = \text{tan} x$ does not approach a limit and does not approach $\... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 5.32 | The graph shows speed versus time for the given motion of a car. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.33 | The graph shows velocity versus time for a particle moving with a linear velocity fun... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
@@ -842,6 +840,35 @@ rather than derived.
 Those three captions held three rows: the report went from 244 to 241, and the certain tier from
 140 to 137. The lesson keeps thirteen other orphan captions, so the lesson count stays at 100, and
 the ceiling in `internal/lessons/assets_test.go` follows, to 241.
+
+**Figures 4.58 and 4.59** (sine over a little more than two periods; tangent over
+`[-3pi/2, 3pi/2]`, where the limit fails) landed on 2026-10-16 in `calc.limit.infinity`, as
+`calculus/sine-wave.svg` and `calculus/tangent-periodic.svg`.
+
+**4.59's x tick labels are stacked fractions, and that is a layout decision rather than
+decoration.** Upstream writes `-3pi/2` as a fraction with a bar, and inline it is five characters.
+The frame has to stop at about `+-4.93`: left of `-4.931` the branch before `-3pi/2` is above the
+frame, and right of `5.093` the branch after `3pi/2` is below it, so a wider frame shows a fourth
+branch that upstream's figure does not have. At that width a five-character label on the last tick
+runs into the axis's own `x`. Stacked, the widest numerator is `3pi` plus its sign, and the bar is
+as wide as the numerator plus a little, which is how upstream's bars look. The single-line labels
+`-pi`, `pi` and `0` sit on the fraction bars' row, which is also how upstream aligns them.
+
+**4.59 draws no asymptote guides.** A full-height guide at `pi/2` runs through the stacked label
+that names it, and the branches' own vertical runs already mark the asymptotes; upstream draws none
+either. 4.45, the lesson's other tangent figure, does draw them, and the difference is not
+inconsistency: its tick labels are integers, so its guides are clear, and its caption is about the
+asymptotes where this one is about the limit.
+
+**4.58 labels the axes in `pi`, not in integers.** Upstream labels `-4` to `4` under a sine of
+period `2pi`, which reads as a period of six. `sine-and-cosine.svg`, the tree's other sine figure,
+labels `pi` and `2pi`, and this figure is more useful agreeing with it.
+
+Both captions carry `\ ` and neither ends in a full stop, so neither alt does either.
+
+Those two captions held two rows: the report went from 241 to 239, and the certain tier from 137 to
+135. The lesson keeps eleven other orphan captions, so the lesson count stays at 100, and the
+ceiling in `internal/lessons/assets_test.go` follows, to 239.
 
 ## 8. Order of work
 

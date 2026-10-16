@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-241 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **137 certain**, **33 strong**, **71 likely**.
+239 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **135 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -171,10 +171,8 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.infinity.md` | 268 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 444 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 515 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 525 | certain | *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\r...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 527 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 538 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 549 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 542 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 553 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 439 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 540 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
@@ -304,8 +302,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-625 diagrams ship, 126 URLs are referenced by lesson bodies, and
-**518 content diagrams are referenced by nothing** (site chrome
+627 diagrams ship, 126 URLs are referenced by lesson bodies, and
+**520 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today
@@ -353,7 +351,7 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/limits/remarkable-limits.md` | no | — | `limits-1.png`, `limits-1.svg`, `limits-2.png`, `limits-2.svg`, `limits-3.png`, `limits-3.svg`, `two-limits.svg` |
 | `algebrica/linear-systems/cramers-rule.md` | no | — | `exp-power-rule.svg`, `exp-product-rule.svg`, `exp-quotient-rule.svg` |
 | `algebrica/linear-systems/rouche-capelli-theorem.md` | no | — | `cauchy-theorem-1.svg`, `darboux-theorem-1.svg`, `fermat-theorem-1.svg`, `fermat-theorem-2.svg`, `fermat-theorem-3.svg`, `fermath-theorem-4.png`, `fundamental-theorem-of-calculus-2.svg`, `intermediate-value-theorem-1.svg` |
-| `algebrica/linear-systems/solving-linear-systems-using-gaussian-elimination.md` | no | — | `gaussian-function-1.svg`, `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg` |
+| `algebrica/linear-systems/solving-linear-systems-using-gaussian-elimination.md` | no | — | `gaussian-function-1.svg`, `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
 | `algebrica/linear-systems/systems-of-linear-equations.md` | no | — | `differential-equations-1-1.png`, `exponential-equations-1.svg`, `geometric-interpretation-quadratic-equations-1.svg`, `geometric-interpretation-quadratic-equations-2.svg`, `geometric-interpretation-quadratic-equations-3.svg`, `linear-equations-1.svg`, `quadratic-equations-params-6.png`, `separable-differential-equations-1.svg` |
 | `algebrica/polynomials/adding-and-subtracting-polynomials.md` | no | — | `polynomials-1.svg`, `polynomials-3.svg` |
 | `algebrica/polynomials/factoring-polynomials-ac-method.md` | no | — | `polynomials-1.svg`, `polynomials-3.svg`, `the-disk-method-1.svg`, `the-disk-method-2.svg`, `the-shell-method-1.svg`, `the-shell-method-2.svg`, `the-washer-method-1.svg`, `the-washer-method-2.svg` |
@@ -394,10 +392,10 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/alg.factor.gcf.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/alg.ineq.compound.md` | no | — | `irr-ineq-1.png` |
 | `teaching/alg.ineq.two_var.md` | no | — | `irr-ineq-1.png` |
-| `teaching/alg.linear.graph.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg` |
-| `teaching/alg.linear.parallel_perp.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg` |
-| `teaching/alg.linear.slope.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg` |
-| `teaching/alg.linear.standard_form.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg` |
+| `teaching/alg.linear.graph.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.parallel_perp.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.slope.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.standard_form.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
 | `teaching/alg.quad.discriminant.md` | no | — | `quad-eq-complex-roots.png` |
 | `teaching/alg.systems.substitution.md` | no | — | `systems-of-linear-equations-in-two-variables-1.svg` |
 | `teaching/alg.systems.word.md` | no | — | `systems-of-linear-equations-in-two-variables-1.svg` |
@@ -596,7 +594,7 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/series/cauchy-convergence-criterion-series.md` | yes | — | `cauchy-sequence-1.png`, `cauchy-sequence-1.svg`, `cauchy-theorem-1.svg`, `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg` |
 | `algebrica/sets-and-numbers/intervals.md` | yes | — | `confidence-intervals.png` |
 | `algebrica/trigonometry/pythagorean-identity.md` | yes | — | `pythagorean-theorem-1.svg`, `pythagorean-theorem-2.svg`, `pythagorean-theorem-3.svg` |
-| `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg` |
+| `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
 | `teaching/arith.mult.2_5_10.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.mult.concept.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.mult.double.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |

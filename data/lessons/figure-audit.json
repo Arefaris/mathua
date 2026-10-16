@@ -1052,28 +1052,14 @@
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 525,
-      "text": "Figure 4.58 The function $f(x) = \\text{sin} x$ oscillates between $1\\ \\text{and}\\ -1$ as $x\\rightarrow\\text{\\pm}\\infty$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 527,
-      "text": "Figure 4.59 The function $f(x) = \\text{tan} x$ does not approach a limit and does not approach $\\text{\\pm}\\infty$ as $x\\rightarrow\\text{\\pm}\\infty$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 538,
+      "line": 542,
       "text": "Figure 4.60 The exponential function approaches zero as $x\\rightarrow\\text{-}\\infty$ and approaches $\\infty$ as $x\\rightarrow\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 549,
+      "line": 553,
       "text": "Figure 4.61 The natural logarithm function approaches $\\infty$ as $x\\rightarrow\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1884,8 +1870,8 @@
   ],
   "unreferenced_diagrams": {
     "referenced": 126,
-    "shipped": 625,
-    "unreferenced_content": 518,
+    "shipped": 627,
+    "unreferenced_content": 520,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -2413,7 +2399,8 @@
           "/diagrams/algebrica/gaussian-function-1.svg",
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
-          "/diagrams/calculus/linear-over-linear.svg"
+          "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
       {
@@ -2923,7 +2910,8 @@
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
-          "/diagrams/calculus/linear-over-linear.svg"
+          "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
       {
@@ -2933,7 +2921,8 @@
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
-          "/diagrams/calculus/linear-over-linear.svg"
+          "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
       {
@@ -2943,7 +2932,8 @@
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
-          "/diagrams/calculus/linear-over-linear.svg"
+          "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
       {
@@ -2953,7 +2943,8 @@
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
-          "/diagrams/calculus/linear-over-linear.svg"
+          "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
       {
@@ -5070,7 +5061,8 @@
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
-          "/diagrams/calculus/linear-over-linear.svg"
+          "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
       {
@@ -5773,9 +5765,11 @@
       "/diagrams/calculus/power-even.svg",
       "/diagrams/calculus/power-odd.svg",
       "/diagrams/calculus/quadratic-over-cubic.svg",
+      "/diagrams/calculus/quadratic-over-linear.svg",
       "/diagrams/calculus/radical-over-x.svg",
       "/diagrams/calculus/reciprocal.svg",
       "/diagrams/calculus/sine-over-x.svg",
+      "/diagrams/calculus/sine-wave.svg",
       "/diagrams/calculus/tangent-asymptotes.svg",
       "/diagrams/calculus/two-limits.svg"
     ]

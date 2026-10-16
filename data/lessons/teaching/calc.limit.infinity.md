@@ -522,7 +522,11 @@ Evaluate $\underset{x\rightarrow\infty}{\text{lim}}\frac{\sqrt{3x^{2} + 4}}{x + 
 
 The six basic trigonometric functions are periodic and do not approach a finite limit as $x\rightarrow\text{\pm}\infty.$ For example, $\text{sin} x$ oscillates between $1\ \text{and}\ -1$ (Figure 4.58). The tangent function, $\text{tan}(x)$, has an infinite number of vertical asymptotes as $x\rightarrow\text{\pm}\infty;$ therefore, it does not approach a finite limit nor does it approach $\text{\pm}\infty$ as $x\rightarrow\text{\pm}\infty$ as shown in Figure 4.59.
 
+![The function f(x) = sin x oscillates between 1 and -1 as x → ±∞](/diagrams/calculus/sine-wave.svg)
+
 *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\rightarrow\text{\pm}\infty$*
+
+![The function f(x) = tan x does not approach a limit and does not approach ±∞ as x → ±∞](/diagrams/calculus/tangent-periodic.svg)
 
 *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approach $\text{\pm}\infty$ as $x\rightarrow\text{\pm}\infty$*
 
