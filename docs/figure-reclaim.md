@@ -43,9 +43,9 @@ the method.
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 43 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 37 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
-| unidentified | 17 | The caption is a bare `Figure 1.13` with no description, so the upstream section has to be opened to find out what the figure is before anything can be drawn or fetched. |
+| schematic, redraw | 53 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
 
 **One correction the first batch forced.** Figures 1.7, 1.8 and 1.9 were assigned
@@ -54,7 +54,9 @@ nothing else: *76 is closer to 80 than to 70* describes a picture of a number li
 of a number line is an illustration. Opening Prealgebra 1.1 shows all three are the same 70..80
 number line as Figure 1.2 under a different mark, which makes them schematics. They were redrawn
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
-row lost three: the counts above are 43 and 37 where the caption alone suggested 35 and 38.
+row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
+the caption alone had suggested 35 and 38, and the classification below has moved those counts on
+again to 53 and 44.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -62,7 +64,35 @@ the argument the picture supports: Figure 1.7's caption is a sentence about roun
 alt is *An image of a number line from 70 to 80 with increments of one*. That is how Figure 1.6 was
 placed here as a `schematic, redraw` even though its caption is a bare `Figure 1.6` — Prealgebra
 1.1 gives it an alt of *A chart titled 'Place value' with fifteen columns and 4 rows* — and it is
-how the seventeen `unidentified` rows below can be classified without drawing anything.
+how the seventeen `unidentified` rows were classified on 2026-10-16.
+
+**The seventeen were read twice, and the first reading was not enough.** The disposition is a
+reading of the description, so the description has to be the whole one: the scrape behind this plan
+truncated every alt at 110 characters, and the 23 upstream sections were re-fetched to read
+`data-alt` in full (Figure 6.34's is 1,244 characters). The text alone still does not settle it,
+because an alt describes a picture in words and the words can hide the shape: Figure 1.4 opens *An
+image with three items* and the three items are a cube, a rod and a flat, which is what the lesson
+calls base-10 blocks, and nothing in *An image of 28 cookies placed at random* says whether that is
+a drawing or a photograph. So each of the seventeen images was downloaded and looked at, and the
+disposition below is the reading of the picture with the alt as its check.
+
+**Where the line falls: ten redraw, seven fetch.** A figure is a schematic when its content is a
+number line, a graph, a geometric block, tile, circle or region, or a table of words and numbers —
+a redraw of that is faithful and is Mathua's own work. It is an illustration when the subject is a
+photograph (three stacks of dollar bills, 24 pennies, 28 cookies in three of the figures, two
+pizzas) or when it is a table whose cells are formulas and small plots (6.34), which an SVG cannot
+typeset. Two calls are worth recording because a later reader will meet them again: Figure 5.7 is a
+calendar page with seven distances written on it, which is a table of words and numbers and is
+therefore a redraw even though the upstream image is a picture of a calendar; and 1.3 is a
+photograph of currency with no credit line, so it is `illustration, fetch` and not the
+`photo, third-party credit` row, which exists for a third party whose name must travel with the
+image rather than for every photograph.
+
+**What lands with them.** All seventeen keep `(none)` in the Caption column, because upstream's
+`figcaption` holds only the label for these figures — the alt is the only description there is. It
+is also what a landed figure will carry: the rule that a lesson figure's alt is its caption's
+words, never a paraphrase, has nothing to copy here, and the same document's alt is still the
+author's words.
 
 **Ten of the figures below were invisible until 2026-10-15**, because of a defect in this plan's own
 measurement rather than in the corpus. `section_a_candidates` skipped any standalone-italic
@@ -101,8 +131,8 @@ dollar amounts were doubled in the same way.
 Two things the repair had to know:
 
 - **A bare caption is not damage.** `Figure 1.3`, `1.4` and `1.6` have no caption upstream either —
-  their `figcaption` holds only the label — so they stay `unidentified` in section 6 and are reclaim
-  targets, not repair targets.
+  their `figcaption` holds only the label — so they are reclaim targets rather than repair targets,
+  and section 4 records what each of them turned out to be.
 - **One caption needed a hand.** `Figure 2.18` carries a piecewise function as an inline MathML
   table. Pandoc renders it with literal newlines, and the line-scoped dollar balancing then escapes
   the span's opener, so the ingester cannot emit it correctly today; the text in the lesson is the
@@ -153,12 +183,14 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 1.12 | The area of a rectangle is the product of its length and its width, or 6 square feet. | Prealgebra | 1 Multiply Whole Numbers | 6 | schematic, redraw |
+| 1.4 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
 | 1.5 | We use place value notation to show the value of the number 138. | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
 | 1.6 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | schematic, redraw |
 | 2.12 | These graphs show the behavior of three different functions around $x = 2.$ | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.13 | The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.14 | The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.15 | The graph of $g(x)$ includes one value not on a smooth curve. | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
+| 2.16 | (none) | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.17 | The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 and 1 ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.18 | The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} - 4\ ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.19 | The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 does n... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
@@ -168,10 +200,13 @@ every count here is work still to do.
 | 3.26 | These graphs show two important limits needed to establish the derivative formulas fo... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
 | 3.27 | Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $f(x)... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
 | 3.33 | The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$ | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | schematic, redraw |
+| 4.2 | (none) | Prealgebra | 4 Visualize Fractions | 7 | schematic, redraw |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
+| 4.3 | (none) | Prealgebra | 4 Visualize Fractions | 7 | schematic, redraw |
 | 4.40 | The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.42 | The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its horizont... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.45 | The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
+| 4.5 | (none) | Prealgebra | 4 Multiply and Divide Fractions | 4 | schematic, redraw |
 | 4.50 | For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{\tex... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.51 | For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\text... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.52 | The end behavior of a polynomial is determined by the behavior of the term with the l... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
@@ -184,17 +219,27 @@ every count here is work still to do.
 | 5.33 | The graph shows velocity versus time for a particle moving with a linear velocity fun... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.36 | The graph shows areas between a curve and the *x*-axis for an odd function. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
+| 5.5 | (none) | Prealgebra | 5 Decimal Operations | 4 | schematic, redraw |
+| 5.6 | (none) | Prealgebra | 5 Decimals and Fractions | 3 | schematic, redraw |
+| 5.7 | (none) | Prealgebra | 5 Averages and Probability | 5 | schematic, redraw |
 | 6.25 | (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution f... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.26 | (a) A representative rectangle. (b) When this rectangle is revolved around the $y\tex... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.27 | Calculating the volume of the shell. | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.28 | (a) Make a vertical cut in a representative shell. (b) Open the shell up to form a fl... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.29 | (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
+| 6.3 | (none) | Prealgebra | 6 Understand Percent | 3 | schematic, redraw |
 | 6.30 | (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.31 | (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lbrack... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.32 | (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.33 | (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the inter... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.35 | (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of rev... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.36 | (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of revolu... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
+| 6.5 | (none) | Prealgebra | 6 Understand Percent | 3 | schematic, redraw |
+| 1.11 | (none) | Prealgebra | 1 Multiply Whole Numbers | 6 | illustration, fetch |
+| 1.13 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
+| 1.14 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
+| 1.15 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | illustration, fetch |
+| 1.3 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | illustration, fetch |
 | 2.10 | Factors of the counting numbers from 2 through 20, with prime numbers highlighted | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
 | 2.20 | The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits at *a... | Calculus Volume 1 | 2 The Limit of a Function | 1 | illustration, fetch |
 | 2.6 | Multiples of 2 between 1 and 50 | Prealgebra | 2 Find Multiples and Factors | 4 | illustration, fetch |
@@ -211,6 +256,7 @@ every count here is work still to do.
 | 3.34 | The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1. | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | illustration, fetch |
 | 3.35 | $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its der... | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | illustration, fetch |
 | 4.2 | As the balloon is being filled with air, both the radius and the volume are increasin... | Calculus Volume 1 | 4 Related Rates | 1 | illustration, fetch |
+| 4.4 | (none) | Prealgebra | 4 Visualize Fractions | 7 | illustration, fetch |
 | 4.41 | (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $L.$ ... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.43 | This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.44 | This function crosses its horizontal asymptote multiple times. | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
@@ -230,25 +276,9 @@ every count here is work still to do.
 | 5.3 | When we write a check, we write the amount as a decimal number as well as in words. T... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
 | 5.4 | (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole ... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
 | 6.2 | Among every 100 community college students, 57 are female. | Prealgebra | 6 Understand Percent | 3 | illustration, fetch |
+| 6.34 | (none) | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | illustration, fetch |
 | 6.6 | A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$ | Prealgebra | 6 Solve General Applications of Percent | 3 | illustration, fetch |
 | 6.7 | The sales tax is calculated as a percent of the purchase price. | Prealgebra | 6 Solve Sales Tax, Commission, and Discount Applications | 2 | illustration, fetch |
-| 1.11 | (none) | Prealgebra | 1 Multiply Whole Numbers | 6 | unidentified |
-| 1.13 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | unidentified |
-| 1.14 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | unidentified |
-| 1.15 | (none) | Prealgebra | 1 Divide Whole Numbers | 5 | unidentified |
-| 1.3 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | unidentified |
-| 1.4 | (none) | Prealgebra | 1 Introduction to Whole Numbers | 6 | unidentified |
-| 2.16 | (none) | Calculus Volume 1 | 2 The Limit of a Function | 1 | unidentified |
-| 4.2 | (none) | Prealgebra | 4 Visualize Fractions | 7 | unidentified |
-| 4.3 | (none) | Prealgebra | 4 Visualize Fractions | 7 | unidentified |
-| 4.4 | (none) | Prealgebra | 4 Visualize Fractions | 7 | unidentified |
-| 4.5 | (none) | Prealgebra | 4 Multiply and Divide Fractions | 4 | unidentified |
-| 5.5 | (none) | Prealgebra | 5 Decimal Operations | 4 | unidentified |
-| 5.6 | (none) | Prealgebra | 5 Decimals and Fractions | 3 | unidentified |
-| 5.7 | (none) | Prealgebra | 5 Averages and Probability | 5 | unidentified |
-| 6.3 | (none) | Prealgebra | 6 Understand Percent | 3 | unidentified |
-| 6.34 | (none) | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | unidentified |
-| 6.5 | (none) | Prealgebra | 6 Understand Percent | 3 | unidentified |
 | 2.22 | (credit: NASA) | Calculus Volume 1 | 2 The Limit of a Function | 1 | photo, third-party credit |
 | 4.4 | (credit: modification of work by Steve Jurvetson, Wikimedia Commons) | Calculus Volume 1 | 4 Related Rates | 1 | photo, third-party credit |
 | 5.34 | (credit: modification of work by Carter Brown, Flickr) | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | photo, third-party credit |
@@ -283,12 +313,14 @@ records the correction.
 
 ## 8. Order of work
 
+The list is three tiers now rather than four: the `unidentified` tier used to lead here as its own
+step, and section 4 records that it was emptied on 2026-10-16, so those seventeen figures sit inside
+items 1 and 2 by their new dispositions.
+
 1. **The schematics.** Highest value and no license question: they are redrawn as Mathua's own
    work, in the dialect the style doc fixes, and they land under `source: local`.
 2. **The illustrations.** Fetch, credit and record the upstream link in the metadata entry.
-3. **The unidentified.** Open the upstream section named in the table and identify each one
-   first; they then fall into one of the other dispositions.
-4. **The photos.** Decide per figure between a licensed fetch and a replacement, because a
+3. **The photos.** Decide per figure between a licensed fetch and a replacement, because a
    photograph cannot be redrawn as a line figure.
 
 Each figure is wired by the paths in section 5 of `docs/diagram-style.md`, and the published
