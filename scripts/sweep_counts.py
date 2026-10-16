@@ -24,6 +24,12 @@ citation that lands on a blank line. It caught exactly that when this file's own
 registration line to `internal/generator/geometry/generators.go`; the fix is to re-point the citation
 at the symbol's new line, which needs a human to know which symbol was meant.
 
+**It recurs by design, so expect it once per batch that adds a registration.** Any line inserted into
+a Go file moves every symbol below it, and registrations are inserted into files that ADRs cite -- so
+`check_docs` will keep reporting one citation per batch until the citations are anchored to something
+that does not move. Fixing it is one line: find the symbol's new line with `grep -n` and update the
+citation. It has happened twice, on ADR-041's citation of `internal/generator/geometry/generators.go`.
+
 Usage:
     python3 scripts/sweep_counts.py             # regenerate, rewrite, verify
     python3 scripts/sweep_counts.py --no-regen  # rewrite only, from the corpus as it stands
