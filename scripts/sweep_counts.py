@@ -48,6 +48,12 @@ BLOB_ONLY = (
     "docs/system-design-slides.md",
 )
 
+# Files that counts.py already renders in full (badge, prose, domain table, command comments).
+# They are rewritten by calling that renderer rather than by patterns: a pattern that patched only
+# the badge left README's body a batch behind, and the corpus-count check caught it.
+RENDERED = ("README.md",)
+
+
 # The regeneration chain. Order matters: the mastery units read the DAG, the web copy reads the
 # concept files, and the counts read everything.
 REGEN = (
@@ -148,7 +154,6 @@ def rules(f: dict) -> list:
         ("docs/system-design.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
         ("docs/system-design.md", r"\b\d{3} KP shards\b", f"{f['concepts']} KP shards", 1),
         ("docs/system-design-slides.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
-        ("README.md", r"badge/concepts-\d+-", f"badge/concepts-{f['concepts']}-", 1),
         # AGENTS.md and CONTRIBUTING.md quote the shards and the knowledge points.
         ("AGENTS.md", r"all \d{3} shards", f"all {f['kp_files']} shards", 1),
         ("CONTRIBUTING.md", r"All \d{3} shards", f"All {f['kp_files']} shards", 1),
@@ -210,6 +215,13 @@ def rules(f: dict) -> list:
     ]
 
 
+def counts_render(text: str) -> str:
+    """Apply scripts/counts.py's own renderer, so the sweep and the generator cannot disagree."""
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
+    import counts  # noqa: E402  (imported here: it reads the corpus at import time)
+    return counts.render(text, counts.compute())
+
+
 def content_of(path: str) -> str:
     """HEAD's content for a blob-only path, the working tree's otherwise."""
     if path in BLOB_ONLY:
@@ -240,6 +252,8 @@ def main() -> int:
         path, pattern, repl, at_least = rule[:4]
         region = rule[4] if len(rule) > 4 else None
         grouped[path].append((pattern, repl, at_least, region))
+    for path in RENDERED:
+        grouped.setdefault(path, [])  # rendered files may have no pattern rules of their own
 
     def replace(text, pattern, repl, at_least, region):
         """Apply one rule, honouring its region, and return the new text and the match count."""
@@ -257,10 +271,14 @@ def main() -> int:
     for path, subs in grouped.items():
         text = content_of(path)
         original = text
+        if path in RENDERED:
+            subs = []
         for pattern, repl, at_least, region in subs:
             text, n = replace(text, pattern, repl, at_least, region)
             if n < at_least:
                 raise SystemExit(f"{path}: /{pattern}/ matched {n} times, expected at least {at_least}")
+        if path in RENDERED:
+            text = counts_render(text)
         here = sum(1 for a, b in zip(original.split("\n"), text.split("\n")) if a != b)
         if text == original:
             print(f"  current  {path}")

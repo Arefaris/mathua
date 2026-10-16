@@ -23,7 +23,7 @@
 
 ---
 
-Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 687 atomic concepts and 23 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 2061 worked examples (687 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
+Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 691 atomic concepts and 23 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 2073 worked examples (691 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
 
 ---
 
@@ -88,7 +88,7 @@ One administrator can demote nobody, including themselves. Promote a second admi
 
 All math knowledge in Mathua is a directed acyclic graph. Each node is an atomic concept — something small enough to fail independently. Each edge is a prerequisite relationship.
 
-The graph contains **687 concepts** across **17 domains** (687 KP shard files × 3 = 2061 KPs). The scheduler reads your progress and the graph structure to decide what to show next — it will never surface a concept whose prerequisites you have not mastered.
+The graph contains **691 concepts** across **17 domains** (691 KP shard files × 3 = 2073 KPs). The scheduler reads your progress and the graph structure to decide what to show next — it will never surface a concept whose prerequisites you have not mastered.
 
 ### Mastery gating
 
@@ -132,7 +132,7 @@ When a concept reaches MASTERED, Mathua schedules its next review using SM-2 sca
 | Geometry | 23 |
 | Trigonometry | 32 |
 | Precalculus | 25 |
-| Calculus | 143 |
+| Calculus | 147 |
 | Statistics | 37 |
 | Linear Algebra | 26 |
 | Discrete Math | 31 |
@@ -142,7 +142,7 @@ When a concept reaches MASTERED, Mathua schedules its next review using SM-2 sca
 | Abstract Algebra | 32 |
 | Machine Learning | 25 |
 | Topology | 30 |
-| **Total** | **687** |
+| **Total** | **691** |
 
 ---
 
@@ -176,7 +176,7 @@ go test ./...
 
 # Validate the concept graph (no cycles, no orphans)
 go run scripts/validate_graph.go
-python3 scripts/audit_lessons.py  # lessons + KP shards + diagrams + course targets (687 files ×3 =2061 KPs)
+python3 scripts/audit_lessons.py  # lessons + KP shards + diagrams + course targets (691 files ×3 =2073 KPs)
 python3 scripts/counts.py --check # docs counts match the data (run --write after a content wave)
 
 # Generator fuzz — 1000 local (make fuzz), 100 lightweight in CI (.github/workflows/ci.yml:27)
