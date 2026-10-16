@@ -286,6 +286,8 @@ The properties of circles have been studied for over 2,000 years. All circles ha
 
 The size of a circle can be measured in two ways. The distance around a circle is called its circumference.
 
+![A circle is shown. A dotted line running through the widest portion of the circle is labeled as a diameter. A dotted line from the center of the circle to a point on the circle is labeled as a radius. Along the edge of the circle is the circumference.](/diagrams/arithmetic/circle-parts.svg)
+
 *Figure 5.6*
 
 Archimedes discovered that for circles of all different sizes, dividing the circumference by the diameter always gives the same number. The value of this number is pi, symbolized by Greek letter $\pi$ (pronounced pie). However, the exact value of $\pi$ cannot be calculated since the decimal never ends or repeats (we will learn more about numbers like this in The Properties of Real Numbers.)

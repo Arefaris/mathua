@@ -1275,20 +1275,6 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/dec.convert.from_frac.md",
-      "line": 289,
-      "text": "Figure 5.6",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.convert.to_frac.md",
-      "line": 289,
-      "text": "Figure 5.6",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/dec.ops.round.md",
       "line": 49,
       "text": "Figure 5.2 This chart illustrates place values to the left and right of the decimal point.",
@@ -1397,13 +1383,6 @@
       "lesson": "teaching/frac.ops.simplify.md",
       "line": 458,
       "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.ops.to_decimal.md",
-      "line": 289,
-      "text": "Figure 5.6",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -2100,8 +2079,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 293,
-    "shipped": 600,
+    "referenced": 294,
+    "shipped": 601,
     "unreferenced_content": 287,
     "candidates": [
       {

@@ -65,6 +65,10 @@ const CASES = [
   // is an unfilled path with turned-down ends, so this asserts that a reclaimed figure made of
   // paths draws at all and not only figures made of lines, rects and text.
   { concept: 'dec.ops.sub', file: 'teaching/dec.ops.sub.md', expectFigures: 1 },
+  // One, with the other primitive that needs a sanitizer to be generous: Figure 5.6's
+  // `Circumference` is thirteen `<text>` elements carrying a `transform`, so this asserts a
+  // figure reaches the page at all when its labels are placed by rotation and not by `x`/`y`.
+  { concept: 'frac.ops.to_decimal', file: 'teaching/frac.ops.to_decimal.md', expectFigures: 1 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

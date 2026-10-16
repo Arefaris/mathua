@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-272 paragraphs across 109 lessons read as a caption whose image was dropped:
-168 certain, 33 strong and 71 likely. Every one sits
+269 paragraphs across 106 lessons read as a caption whose image was dropped:
+165 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 168 rows and 92 distinct figures
+## 3. The captions are 165 rows and 91 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **92 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **91 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 43 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 42 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed ten.
+again to 53 and 44, of which section 7 has since landed eleven.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -213,7 +213,6 @@ every count here is work still to do.
 | 5.33 | The graph shows velocity versus time for a particle moving with a linear velocity fun... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.36 | The graph shows areas between a curve and the *x*-axis for an odd function. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
-| 5.6 | (none) | Prealgebra | 5 Decimals and Fractions | 3 | schematic, redraw |
 | 5.7 | (none) | Prealgebra | 5 Averages and Probability | 5 | schematic, redraw |
 | 6.25 | (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution f... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.26 | (a) A representative rectangle. (b) When this rectangle is revolved around the $y\tex... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -439,6 +438,30 @@ Its alt text is upstream's `data-alt` verbatim, read out of the scrape with its 
 Those four captions held four rows, and the regenerated audit dropped all of them: 276 to 272, and
 168 in the certain tier. The ceiling for orphan captions in `internal/lessons/assets_test.go`
 follows, to 272.
+
+**Figure 5.6** (a circle with the three parts named: a dashed diameter across the widest portion, a
+dashed radius from the center to the rim, and the circumference along the edge) landed on 2026-10-16
+in the three lessons that cite it, as `circle-parts.svg`. Two decisions are worth naming because
+both are places the dialect did not already have an answer.
+
+The dashed lines are ink at `stroke-dasharray="4"`. The style doc ties dashes to guides, and a guide
+is `#BABABA`; the Algebrica set also uses an ink dashed line for an annotation that is not
+scaffolding, which is what these two are -- they are what the words point at, so drawing them in the
+guide color would make the two labeled objects the faintest thing in the figure.
+
+`Circumference` is drawn one glyph at a time: thirteen `<text>` elements, each positioned on a
+radius-76 arc under the circle and rotated to that arc's tangent. The word is placed *along* the
+edge, and that is what along means. `<textPath>` would do it in one element, but it needs an `href`
+to a path `id`, and an `href` on a text element is exactly the kind of reference a sanitizer drops --
+the failure mode would be a figure with no such word in it at all, not a figure with a straight one.
+The host font is monospace and every advance is the same 7.8px, so thirteen positions computed on an
+arc are the layout rather than an approximation of the layout. The canvas is `220x180`: a lone
+circle, sized to itself, with the height the renderer's bound allows.
+
+Its alt text is upstream's `data-alt` verbatim, read out of the scrape with its encoding inverted.
+Those three captions held three rows, and the regenerated audit dropped all of them: 272 to 269, and
+165 in the certain tier. Three lessons leave the orphan list, so the report's lesson count goes 109
+to 106, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 269.
 
 ## 8. Order of work
 

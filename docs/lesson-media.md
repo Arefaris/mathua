@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-272 paragraphs across 109 lessons look like a figure caption whose image
-was dropped while its text was kept: **168 certain**, **33 strong**, **71 likely**.
+269 paragraphs across 106 lessons look like a figure caption whose image
+was dropped while its text was kept: **165 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -203,8 +203,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
-| `teaching/dec.convert.from_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
-| `teaching/dec.convert.to_frac.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
 | `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
@@ -221,7 +219,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/frac.ops.div.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
 | `teaching/frac.ops.mult.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
 | `teaching/frac.ops.simplify.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.ops.to_decimal.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/frac.sub.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/geo.basic.angle_measure.md` | 30 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angle_measure.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
@@ -335,7 +332,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-600 diagrams ship, 293 URLs are referenced by lesson bodies, and
+601 diagrams ship, 294 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
