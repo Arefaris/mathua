@@ -44,8 +44,18 @@ DIAGRAMS = os.path.join(PUBLIC, "diagrams")
 
 # Mirrors imageRe in internal/lessons/assets.go, including its tolerance for a figure
 # embedded mid-paragraph and for alt text wrapped over lines.
-IMAGE_RE = re.compile(r"!\[((?:[^\]\\]|\\.)*)\]\(\s*([^)\s]+)\s*\)")
-IMAGE_OPEN_RE = re.compile(r"!\[[^\]]*\]\(")
+#
+# The `\]` alternative is imageRe's answer to alt text that contains a bracket of its own:
+# `numerical-integration.md` carries "The interval [a, b] has been divided into 6 subintervals"
+# and `calc.limit.numeric.md` carries "over [-2.5, 5]", and a pattern that stops at the first
+# `]` is a parser that disagrees with the renderer it describes, which is what CommonMark does
+# here -- the closing delimiter is the `]` that is followed by `(`. This file was the last
+# place still without it, and the disagreement was measurable: on 2026-10-16 the Go test
+# counted 259 orphan captions and this audit counted 260, on the same corpus, because Figure
+# 2.16's caption sat under an image this pattern could not see. Section 1 of
+# docs/figure-reclaim.md quotes the audit, so the report was wrong by that one row too.
+IMAGE_RE = re.compile(r"!\[((?:[^\]\\]|\\.|\])*)\]\(\s*([^)\s]+)\s*\)")
+IMAGE_OPEN_RE = re.compile(r"!\[(?:[^\]\\]|\\.|\])*\]\(")
 
 # Textual markers that a paragraph is describing a picture. Used only to *rank* candidates,
 # never to delete: absence of a marker is not evidence of absence.

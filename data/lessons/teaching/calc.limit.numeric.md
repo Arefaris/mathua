@@ -135,6 +135,8 @@ At this point, we see from Example 2.4 and Example 2.5 that it may be just as ea
 
 For $g(x)$ shown in Figure 2.15, evaluate $\underset{x\rightarrow-1}{\text{lim}}g(x).$
 
+![The graph of g(x) includes one value not on a smooth curve.](/diagrams/calculus/one-value-off-the-curve.svg)
+
 *Figure 2.15 The graph of $g(x)$ includes one value not on a smooth curve.*
 
 #### Solution
@@ -146,6 +148,8 @@ Based on Example 2.6, we make the following observation: It is possible for the 
 ### Checkpoint 2.5
 
 Use the graph of $h(x)$ in Figure 2.16 to evaluate $\underset{x\rightarrow 2}{\text{lim}}h(x),$ if possible.
+
+![A graph of the function h(x), which is a parabola graphed over [-2.5, 5]. There is an open circle where the vertex should be at the point (2,-1).](/diagrams/calculus/missing-vertex.svg)
 
 *Figure 2.16*
 

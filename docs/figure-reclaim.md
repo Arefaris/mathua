@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-261 paragraphs across 101 lessons read as a caption whose image was dropped:
-157 certain, 33 strong and 71 likely. Every one sits
+259 paragraphs across 101 lessons read as a caption whose image was dropped:
+155 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 157 rows and 87 distinct figures
+## 3. The captions are 155 rows and 85 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **87 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **85 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 38 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 36 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed fifteen.
+again to 53 and 44, of which section 7 has since landed seventeen.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,8 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.15 | The graph of $g(x)$ includes one value not on a smooth curve. | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
-| 2.16 | (none) | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.17 | The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 and 1 ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.18 | The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} - 4\ ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.19 | The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 does n... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
@@ -542,6 +540,42 @@ paraphrase. 2.13's alt reads "The graph of f(x) = (sin x)/x confirms the estimat
 Those two captions held two rows, and the regenerated audit dropped both: 263 to 261, and 157 in the
 certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
 the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 261.
+
+**Figures 2.15 and 2.16** (a curve whose value at `x = -1` is 4 while the curve itself passes through
+3 there, drawn as a filled marker one unit above a hollow one; and a parabola whose vertex at
+`(2, -1)` is the one point missing from it) landed on 2026-10-16 in `calc.limit.numeric`, as
+`calculus/one-value-off-the-curve.svg` and `calculus/missing-vertex.svg`.
+
+Neither caption gives a formula, which is the release to draw the shape the caption describes rather
+than a function it does not name. 2.15's curve is therefore points chosen by hand and smoothed as a
+Catmull-Rom chain -- steep out of the lower left, flat through the marker pair, steep again to the
+upper right, which is the shape upstream's has -- and 2.16's is `0.25(x - 2)^2 - 1`, a parabola wide
+enough that both arms and the vertex are inside a frame 180px tall. They are the first local figures
+with a filled marker beside a hollow one, and their widths are set by the ratio the curve wants, 300
+and 330, because a curve that rises five units over five units of x should not be drawn 3:1 wide.
+
+**The batch's finding is that the audit could not see 2.16.** Its alt is upstream's `data-alt`
+verbatim and that text contains "over [-2.5, 5]"; `IMAGE_OPEN_RE` in
+`scripts/audit_lesson_media.py` stopped at the first `]`, so the audit did not read the line above
+the caption as an image and counted the caption as an orphan anyway. `imageRe` in
+`internal/lessons/assets.go` has carried a `\]` alternative since it was written -- its comment names
+`numerical-integration.md`'s "The interval [a, b]" and `[n, n+1)`, whose bracket is never closed at
+all -- so the Go test counted the same caption as wired. The two owners of one number disagreed by
+one: 259 there and 260 here, on the same corpus. Section 1 quotes the audit, so the report was the
+wrong one. The pattern now mirrors `imageRe` in both `IMAGE_RE` and `IMAGE_OPEN_RE`, and the four
+vendored bracketed alts move no count at all: none of their captions is a row that a bracket is the
+reason for. That the drift was invisible is the other half of the finding -- the ceiling is an upper
+bound, so 259 and 260 both pass it, and the disagreement was only found by recomputing both plans
+while adding a figure.
+
+2.15 has a caption, so its alt is that caption minus its `Figure 2.15 ` label, with the `$g(x)$`
+rendered as plain text by the converter 2.13 and 2.14 needed. 2.16 has the bare label upstream, so
+its alt is upstream's `data-alt` verbatim, brackets and all.
+
+Those two captions held two rows, and with the pattern fixed the regenerated audit drops both: 261 to
+259, and 155 in the certain tier. The lesson keeps other orphan captions, so the report's lesson
+count stays at 101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows,
+to 259.
 
 ## 8. Order of work
 
