@@ -2942,5 +2942,25 @@
   {
     "concept_id": "geo.solid.prism_volume",
     "source": "authored/geo.solid.prism_volume.md"
+  },
+  {
+    "concept_id": "geo.coord.slope",
+    "source": "authored/geo.coord.slope.md"
+  },
+  {
+    "concept_id": "geo.coord.distance_3d",
+    "source": "authored/geo.coord.distance_3d.md"
+  },
+  {
+    "concept_id": "geo.quad.trapezoid_area",
+    "source": "authored/geo.quad.trapezoid_area.md"
+  },
+  {
+    "concept_id": "geo.solid.similar_volume",
+    "source": "authored/geo.solid.similar_volume.md"
+  },
+  {
+    "concept_id": "geo.circle.tangent_chord",
+    "source": "authored/geo.circle.tangent_chord.md"
   }
 ]

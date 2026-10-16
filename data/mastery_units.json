@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 736,
-  "unit_count": 94,
+  "concept_count": 741,
+  "unit_count": 95,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -1216,6 +1216,7 @@
       "subdomains": [
         "geometry.circles",
         "geometry.coordinate",
+        "geometry.shapes",
         "geometry.solid",
         "geometry.triangles"
       ],
@@ -1224,15 +1225,17 @@
         "geo.circle.circumference",
         "geo.coord.distance",
         "geo.coord.midpoint",
+        "geo.quad.trapezoid_area",
         "geo.solid.prism_volume",
         "geo.solid.pyramid_volume",
+        "geo.solid.similar_volume",
         "geo.solid.surface_area",
         "geo.solid.volume_rect",
         "geo.triangle.pythagorean",
         "geo.triangle.pythagorean.word",
         "geo.triangle.special_right"
       ],
-      "concept_count": 11
+      "concept_count": 13
     },
     {
       "id": "geometry.b4",
@@ -1240,17 +1243,19 @@
       "domain": "geometry",
       "band": 4,
       "depth_min": 12,
-      "depth_max": 12,
+      "depth_max": 13,
       "subdomains": [
         "geometry.circles",
         "geometry.coordinate"
       ],
       "concept_ids": [
         "geo.circle.area",
+        "geo.circle.tangent_chord",
         "geo.circle.tangent_length",
+        "geo.coord.distance_3d",
         "geo.coord.polar"
       ],
-      "concept_count": 3
+      "concept_count": 5
     },
     {
       "id": "geometry.b6",
@@ -1264,6 +1269,21 @@
       ],
       "concept_ids": [
         "geo.coord.lines"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "geometry.b7",
+      "title": "Geometry · Stage 8",
+      "domain": "geometry",
+      "band": 7,
+      "depth_min": 21,
+      "depth_max": 21,
+      "subdomains": [
+        "geometry.coordinate"
+      ],
+      "concept_ids": [
+        "geo.coord.slope"
       ],
       "concept_count": 1
     },

@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 736 concepts, and there are 736 KP shard files
-holding 2208 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 741 concepts, and there are 741 KP shard files
+holding 2223 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 325 of the 736 concepts
+### 4.1 The course catalog reaches 331 of the 741 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-325 of the 736 concepts: 411 of them have a node, a generator, a lesson and three KP shards and
+331 of the 741 concepts: 410 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -97,7 +97,7 @@ The count of unreachable concepts by domain:
 | linear_algebra | 26 | 12 |
 | abstract_algebra | 32 | 11 |
 | discrete_math | 39 | 5 |
-| geometry | 40 | 7 |
+| geometry | 45 | 6 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
 cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
@@ -325,7 +325,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 736 concepts. Reaching a thousand means adding 297, and this is the table that says
+The catalog holds 741 concepts. Reaching a thousand means adding 297, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision.
 
 | Domain | Tier | Now | Target | Add |

@@ -12,19 +12,19 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 736 |
-| Total units | 94 |
+| Total concepts | 741 |
+| Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
 | Maximum unit size | 50 |
-| Singleton units | 18 |
+| Singleton units | 19 |
 | Units with <= 3 concepts | 39 |
 | Units with > 25 concepts | 5 |
 | Units with > 50 concepts | 0 |
-| Cross-unit prerequisite edges (derived) | 208 |
+| Cross-unit prerequisite edges (derived) | 211 |
 | Backward band edges | 0 |
 
-If the learner is assessed once per unit, then 94 assessments cover the corpus, and the
+If the learner is assessed once per unit, then 95 assessments cover the corpus, and the
 median is one assessment per 5 concepts. That is the frequency question this report
 exists to make concrete.
 
@@ -77,9 +77,10 @@ exists to make concrete.
 | `geometry.b0` | geometry | 0 | 8 | 5 | 0–2 |
 | `geometry.b1` | geometry | 1 | 15 | 7 | 3–4 |
 | `geometry.b2` | geometry | 2 | 2 | 2 | 8–8 |
-| `geometry.b3` | geometry | 3 | 11 | 4 | 9–11 |
-| `geometry.b4` | geometry | 4 | 3 | 2 | 12–12 |
+| `geometry.b3` | geometry | 3 | 13 | 5 | 9–11 |
+| `geometry.b4` | geometry | 4 | 5 | 2 | 12–13 |
 | `geometry.b6` | geometry | 6 | 1 | 1 | 20–20 |
+| `geometry.b7` | geometry | 7 | 1 | 1 | 21–21 |
 | `linear_algebra.b0` | linear_algebra | 0 | 1 | 1 | 2–2 |
 | `linear_algebra.b1` | linear_algebra | 1 | 4 | 2 | 3–5 |
 | `linear_algebra.b2` | linear_algebra | 2 | 1 | 1 | 8–8 |
@@ -140,19 +141,19 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 123 | 4 | 34 | 23 | 56 | 5 | 0 |
-| 3 | 94 | 5 | 50 | 18 | 39 | 5 | 0 |
-| 4 | 76 | 6 | 58 | 9 | 27 | 4 | 0 |
-| 5 | 65 | 6 | 70 | 8 | 17 | 4 | 0 |
-| 6 | 61 | 7 | 91 | 6 | 17 | 4 | 0 |
-| 8 | 48 | 12 | 94 | 4 | 12 | 6 | 0 |
-| 10 | 43 | 12 | 127 | 5 | 11 | 8 | 0 |
+| 2 | 123 | 4 | 34 | 22 | 55 | 5 | 0 |
+| 3 | 95 | 5 | 50 | 19 | 39 | 5 | 0 |
+| 4 | 76 | 6 | 58 | 8 | 26 | 4 | 0 |
+| 5 | 65 | 6 | 70 | 7 | 17 | 4 | 0 |
+| 6 | 61 | 7 | 91 | 5 | 16 | 4 | 0 |
+| 8 | 48 | 12 | 94 | 3 | 12 | 6 | 0 |
+| 10 | 43 | 12 | 127 | 4 | 11 | 8 | 0 |
 | 12 | 42 | 13 | 115 | 2 | 8 | 6 | 0 |
-| 15 | 32 | 16 | 127 | 3 | 6 | 10 | 0 |
-| 20 | 29 | 18 | 151 | 3 | 6 | 11 | 0 |
+| 15 | 32 | 16 | 127 | 2 | 6 | 10 | 0 |
+| 20 | 29 | 18 | 151 | 2 | 6 | 11 | 0 |
 | 45 | 17 | 32 | 151 | 0 | 0 | 14 | 0 |
 
-**No width is clean.** Small widths fragment — at 3 there are 18 singleton units, which is a
+**No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
 units too large to assess: at 45 the partition is just the 17 domains themselves, whose
 largest is 128 concepts. The usable widths trade fragmentation against size rather than
@@ -263,12 +264,12 @@ Unresolvable subdomains:
 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 736
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 741
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
 
-- **anomaly** `singleton_units`: 18 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
+- **anomaly** `singleton_units`: 19 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
 
 ## Not decided here
 

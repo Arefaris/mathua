@@ -38,6 +38,7 @@ func Register(reg *generator.Registry) {
 	registerSimilarity(reg)
 	registerTriangles(reg)
 	registerAngleFacts(reg)
+	registerFinal(reg)
 }
 
 type pointsLinesGen struct{}

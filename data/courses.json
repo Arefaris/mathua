@@ -53,7 +53,7 @@
     "name": "Geometry",
     "grade": "10th",
     "description": "Length, area, and volume. Relationships between angles and side lengths in right triangles. Coordinate geometry.",
-    "targets": ["geo.circle.area", "geo.solid.surface_area", "geo.triangle.pythagorean", "geo.coord.distance", "geo.similar.missing_side", "geo.transform.dilation", "geo.polygon.exterior_angle", "geo.circle.inscribed_angle", "geo.circle.chord", "geo.triangle.special_right", "geo.triangle.inequality", "geo.similar.area_ratio", "geo.circle.tangent_length", "geo.solid.pyramid_volume", "geo.triangle.exterior_angle", "geo.triangle.midsegment", "geo.triangle.isosceles", "geo.circle.cyclic_quad", "geo.solid.prism_volume"]
+    "targets": ["geo.circle.area", "geo.solid.surface_area", "geo.triangle.pythagorean", "geo.coord.distance", "geo.similar.missing_side", "geo.transform.dilation", "geo.polygon.exterior_angle", "geo.circle.inscribed_angle", "geo.circle.chord", "geo.triangle.special_right", "geo.triangle.inequality", "geo.similar.area_ratio", "geo.circle.tangent_length", "geo.solid.pyramid_volume", "geo.triangle.exterior_angle", "geo.triangle.midsegment", "geo.triangle.isosceles", "geo.circle.cyclic_quad", "geo.solid.prism_volume", "geo.coord.slope", "geo.coord.distance_3d", "geo.quad.trapezoid_area", "geo.solid.similar_volume", "geo.circle.tangent_chord"]
   },
   {
     "id": "a2",

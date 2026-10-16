@@ -569,5 +569,77 @@
    "streak": 10,
    "avg_time_seconds": 20.0
   }
+  },
+ {
+  "id": "geo.coord.slope",
+  "label": "Slope from two points",
+  "domain": "geometry",
+  "subdomain": "geometry.coordinate",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.coord.lines"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.coord.distance_3d",
+  "label": "Distance in three dimensions",
+  "domain": "geometry",
+  "subdomain": "geometry.coordinate",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.coord.distance"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.quad.trapezoid_area",
+  "label": "The area of a trapezoid",
+  "domain": "geometry",
+  "subdomain": "geometry.shapes",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.quad.area"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.solid.similar_volume",
+  "label": "Volumes of similar solids",
+  "domain": "geometry",
+  "subdomain": "geometry.solid",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.solid.prism_volume",
+   "geo.similar.ratio"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.circle.tangent_chord",
+  "label": "The tangent-chord angle",
+  "domain": "geometry",
+  "subdomain": "geometry.circles",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.circle.tangent_length",
+   "geo.circle.inscribed_angle"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
  }
 ]
