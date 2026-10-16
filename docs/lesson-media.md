@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-269 paragraphs across 106 lessons look like a figure caption whose image
-was dropped while its text was kept: **165 certain**, **33 strong**, **71 likely**.
+264 paragraphs across 101 lessons look like a figure caption whose image
+was dropped while its text was kept: **160 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -285,11 +285,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/stat.data.range.md` | 119 | likely | *Share of all income held by the top 1%, United States, 20002021* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/stat.data.read_table.md` | 13 | likely | *Share of all income held by the top 1% of wage earners* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/stat.data.read_table.md` | 119 | likely | *Share of all income held by the top 1%, United States, 20002021* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/stat.prob.basic.md` | 227 | certain | *Figure 5.7* | auto-numbered figure/table label |
-| `teaching/stat.prob.complement.md` | 227 | certain | *Figure 5.7* | auto-numbered figure/table label |
-| `teaching/stat.prob.compound.md` | 227 | certain | *Figure 5.7* | auto-numbered figure/table label |
-| `teaching/stat.prob.counting.md` | 227 | certain | *Figure 5.7* | auto-numbered figure/table label |
-| `teaching/stat.prob.sample_space.md` | 227 | certain | *Figure 5.7* | auto-numbered figure/table label |
 
 ## B. Prose that promises a figure
 
@@ -332,7 +327,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-601 diagrams ship, 294 URLs are referenced by lesson bodies, and
+602 diagrams ship, 295 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

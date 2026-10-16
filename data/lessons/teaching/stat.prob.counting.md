@@ -224,6 +224,8 @@ The mode of a set of numbers is the number with the highest frequency.
 
 Suppose Jolene kept track of the number of miles she ran since the start of the month, as shown in Figure 5.7.
 
+![An image of a calendar is shown. On Thursday the first, labeled New Year's Day, is written 2 mi. On Saturday the third is written 15 mi. On the 4th, 8 mi. On the 6th, 3 mi. On the 7th, 8 mi. On the 9th, 5 mi. On the 10th, 8 mi.](/diagrams/statistics/calendar-distances.svg)
+
 *Figure 5.7*
 
 If we list the numbers in order it is easier to identify the one with the highest frequency.

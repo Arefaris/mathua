@@ -1847,41 +1847,6 @@
       "text": "Share of all income held by the top 1%, United States, 20002021",
       "confidence": "likely",
       "reason": "teaching corpus: standalone emphasis is the dropped-figure shape"
-    },
-    {
-      "lesson": "teaching/stat.prob.basic.md",
-      "line": 227,
-      "text": "Figure 5.7",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/stat.prob.complement.md",
-      "line": 227,
-      "text": "Figure 5.7",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/stat.prob.compound.md",
-      "line": 227,
-      "text": "Figure 5.7",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/stat.prob.counting.md",
-      "line": 227,
-      "text": "Figure 5.7",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/stat.prob.sample_space.md",
-      "line": 227,
-      "text": "Figure 5.7",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
     }
   ],
   "figure_promising_prose": [
@@ -2079,8 +2044,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 294,
-    "shipped": 601,
+    "referenced": 295,
+    "shipped": 602,
     "unreferenced_content": 287,
     "candidates": [
       {

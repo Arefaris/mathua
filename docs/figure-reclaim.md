@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-269 paragraphs across 106 lessons read as a caption whose image was dropped:
-165 certain, 33 strong and 71 likely. Every one sits
+264 paragraphs across 101 lessons read as a caption whose image was dropped:
+160 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 165 rows and 91 distinct figures
+## 3. The captions are 160 rows and 90 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **91 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **90 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 42 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 41 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed eleven.
+again to 53 and 44, of which section 7 has since landed twelve.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -213,7 +213,6 @@ every count here is work still to do.
 | 5.33 | The graph shows velocity versus time for a particle moving with a linear velocity fun... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 5.36 | The graph shows areas between a curve and the *x*-axis for an odd function. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
-| 5.7 | (none) | Prealgebra | 5 Averages and Probability | 5 | schematic, redraw |
 | 6.25 | (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution f... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.26 | (a) A representative rectangle. (b) When this rectangle is revolved around the $y\tex... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.27 | Calculating the volume of the shell. | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -462,6 +461,32 @@ Its alt text is upstream's `data-alt` verbatim, read out of the scrape with its 
 Those three captions held three rows, and the regenerated audit dropped all of them: 272 to 269, and
 165 in the certain tier. Three lessons leave the orphan list, so the report's lesson count goes 109
 to 106, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 269.
+
+**Figure 5.7** (a page of a January calendar with the week's distances written into the days: 2, 15,
+8, 3, 8, 5 and 8 miles) landed on 2026-10-16 in the five `stat.prob.*` lessons, as
+`statistics/calendar-distances.svg`. It is the first reclaim outside the arithmetic directory, and
+that is the only part of the wiring that is new: a lesson figure is a markdown image on an absolute
+path, so a subject directory costs nothing and the figure lands where a reader looking for it would
+look.
+
+Upstream's calendar is blue-ruled, its header row is the darker of two shades and its distances are
+grey italic. The house has one fill, so the header takes `#e6e6e6` and the body stays white, which is
+the division the percent tables landed with -- the relationship survives (the header is the darker
+strip) without a second fill. The distances are ink italic rather than grey, because they are what
+the lesson is about: the mean of those seven numbers is the exercise, and the dates are scaffolding
+the page around them. `New Year's day` is the one `#636363` label, because it names a day rather than
+contributing a value.
+
+The canvas is `460x170`, and the width decides the layout. Seven columns of 64 hold `Wednesday` at
+the 11px the stylesheet forces (59.4px of a monospace advance), and the tallest row is the first,
+which carries a date, a distance and the event name. That name is set on two lines -- `New Year's`
+and `day` -- because at 8.5px it needs 76 of the 64 columns available, and a label that overflows its
+cell in a calendar is a label a reader has to guess at.
+
+Its alt text is upstream's `data-alt` verbatim, read out of the scrape with its encoding inverted.
+Those five captions held five rows, and the regenerated audit dropped all of them: 269 to 264, and
+160 in the certain tier. Five lessons leave the orphan list, so the report's lesson count goes 106 to
+101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 264.
 
 ## 8. Order of work
 
