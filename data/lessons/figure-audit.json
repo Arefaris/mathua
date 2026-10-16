@@ -1171,49 +1171,28 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 230,
-      "text": "Figure 2.17 The graph of $f(x) = \\text{sin}({1\\text{/}{x)}}$ oscillates rapidly between \u22121 and 1 as *x* approaches 0.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 303,
-      "text": "Figure 2.18 The graph of $f(x) = \\left\\{ \\begin{matrix} {x + 1\\ \\text{if}\\ x < 2} \\\\ {x^{2} - 4\\ \\text{if}\\ x \\geq 2} \\end{matrix} \\right.$ has a break at $x = 2.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 421,
-      "text": "Figure 2.19 The graph of $f(x) = {1\\text{/}x}$ confirms that the limit as *x* approaches 0 does not exist.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 433,
+      "line": 439,
       "text": "Figure 2.20 The function $f(x) = {1\\text{/}\\left( {x - a} \\right)^{n}}$ has infinite limits at *a*.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 513,
+      "line": 519,
       "text": "Figure 2.21 The graph shows $f(x).$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 532,
+      "line": 538,
       "text": "Figure 2.22 (credit: NASA)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 546,
+      "line": 552,
       "text": "Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Einstein\u2019s equation for the mass of a moving object.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1877,7 +1856,7 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 513,
+      "line": 519,
       "phrase": "The graph shows",
       "context": "*Figure 2.21 The graph shows $f(x).$*"
     },
@@ -2010,8 +1989,8 @@
   ],
   "unreferenced_diagrams": {
     "referenced": 123,
-    "shipped": 607,
-    "unreferenced_content": 503,
+    "shipped": 610,
+    "unreferenced_content": 506,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -5876,7 +5855,10 @@
       "/diagrams/arithmetic/sub-single.svg",
       "/diagrams/arithmetic/sub-word.svg",
       "/diagrams/calculus/limit-behavior.svg",
+      "/diagrams/calculus/missing-vertex.svg",
       "/diagrams/calculus/one-value-off-the-curve.svg",
+      "/diagrams/calculus/oscillation.svg",
+      "/diagrams/calculus/piecewise-jump.svg",
       "/diagrams/calculus/radical-over-x.svg",
       "/diagrams/calculus/sine-over-x.svg"
     ]

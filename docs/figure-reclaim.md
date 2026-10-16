@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-259 paragraphs across 101 lessons read as a caption whose image was dropped:
-155 certain, 33 strong and 71 likely. Every one sits
+256 paragraphs across 101 lessons read as a caption whose image was dropped:
+152 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 155 rows and 85 distinct figures
+## 3. The captions are 152 rows and 82 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **85 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **82 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 36 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 33 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed seventeen.
+again to 53 and 44, of which section 7 has since landed twenty.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,9 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.17 | The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 and 1 ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
-| 2.18 | The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} - 4\ ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
-| 2.19 | The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 does n... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.21 | The graph shows $f(x).$ | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.23 | This graph shows the ratio of masses as a function of the ratio of speeds in Einstein... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 3.25 | The graph of the function $D(x)$ looks a lot like a cosine curve. | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
@@ -576,6 +573,44 @@ Those two captions held two rows, and with the pattern fixed the regenerated aud
 259, and 155 in the certain tier. The lesson keeps other orphan captions, so the report's lesson
 count stays at 101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows,
 to 259.
+
+**Figures 2.17, 2.18 and 2.19** (the last three graphs of the section: `sin(1/x)`, which oscillates
+without settling as `x` approaches 0; a piecewise function with a break at `x = 2`, whose first piece
+ends at an open circle at `(2, 3)` and whose second starts at a filled dot at `(2, 0)`; and `1/x` in
+two branches) landed on 2026-10-16 in `calc.limit.numeric`, as `calculus/oscillation.svg`,
+`calculus/piecewise-jump.svg` and `calculus/reciprocal.svg`.
+
+The helper had to grow for them, and the growth is the reason they are one batch: this is the first
+group needing ticks at tenths with labels at fifths (2.17), no labels at all (2.18, which upstream
+also leaves unnumbered), and labels on both axes (2.19). The axes primitives take a tick list now
+instead of looping over integers.
+
+2.17 is the one with a method in it. `sin(1/x)` has no last oscillation, so sampling uniformly in `x`
+spends its points where the curve is already smooth and starves the band. It is sampled uniformly in
+`1/x` from 2 to 500 instead: every oscillation gets the same number of samples, the band closes into
+the solid block upstream's has, and `x` down to 0.002 is as far in as a 280px frame shows anything
+but a block. The count is 1,500 points per branch rather than 4,000 because the figure is inlined
+into the lesson page — 4,000 was 124KB of path data and 1,500 is 47KB for the same picture. 2.18
+draws its two pieces as two paths and marks both endpoints, which is the whole content of its
+caption: the formula with the break is not at the left piece's end and is at the right piece's start.
+2.19's branches leave the frame at `y = ±3.6` instead of being clipped into a chord, the same trick
+2.12's third panel used.
+
+The alts split three ways here, and the third way is new. 2.17 and 2.19 have captions that are prose
+with a formula in them, so their alts are the caption minus the label with the formula rendered by
+the converter 2.13 and 2.14 needed; the `*x*` stays, because the emphasis is the author's and the
+renderer flattens it in the attribute. 2.18's caption is not prose at all: it is
+`f(x) = \left\{ ... \right.`, a piecewise definition inside a matrix, and the converter refuses a
+`\begin` rather than inventing words for a formula, which is the assert doing what it was written to
+do. So 2.18 takes upstream's `data-alt` verbatim, and that alt describes the figure rather than
+restating it: "The first piece is f(x) = x+1 if x < 2. ... There is an open circle at (2,3), where the
+endpoint would be." The rule that follows is that a caption is a source for an alt while it is a
+sentence about the figure; when the caption *is* the figure's formula, the `data-alt` is the sentence
+and the caption is not.
+
+Those three captions held three rows, and the regenerated audit drops all three: 259 to 256, and 152
+in the certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at
+101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 256.
 
 ## 8. Order of work
 

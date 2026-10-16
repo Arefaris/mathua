@@ -227,6 +227,8 @@ $$
 
 At this point we can indeed conclude that $\underset{x\rightarrow 0}{\text{lim}}\text{sin}\left( {1\text{/}\textit{x}} \right)$ does not exist. (Mathematicians frequently abbreviate “does not exist” as DNE. Thus, we would write $\underset{x\rightarrow 0}{\text{lim}}\text{sin}\left( {1\text{/}\textit{x}} \right)$ DNE.) The graph of $f(x) = \text{sin}\left( {1\text{/}x} \right)$ is shown in Figure 2.17 and it gives a clearer picture of the behavior of $\text{sin}({1\text{/}{x)}}$ as *x* approaches 0. You can see that $\text{sin}({1\text{/}{\textit{x})}}$ oscillates ever more wildly between −1 and 1 as *x* approaches 0.
 
+![The graph of f(x) = sin(1/x) oscillates rapidly between −1 and 1 as *x* approaches 0.](/diagrams/calculus/oscillation.svg)
+
 *Figure 2.17 The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 and 1 as *x* approaches 0.*
 
 ### Checkpoint 2.6
@@ -299,6 +301,8 @@ Table 2.6 Table of Functional Values for \$f(x) = \left\{ \begin{array}{l}
 \end{array} \right.\$
 
 Based on this table, we can conclude that a. $\underset{x\rightarrow 2^{-}}{\text{lim}}f(x) = 3$ and b. $\underset{x\rightarrow 2^{+}}{\text{lim}}f(x) = 0.$ Therefore, the (two-sided) limit of $f(x)$ does not exist at $x = 2.$ Figure 2.18 shows a graph of $f(x)$ and reinforces our conclusion about these limits.
+
+![The graph of the given piecewise function. The first piece is f(x) = x+1 if x < 2. The second piece is x^2 – 4 if x >= 2. The first piece is a line with x intercept at (-1, 0) and y intercept at (0,1). There is an open circle at (2,3), where the endpoint would be. The second piece is the right half of a parabola opening upward. The vertex at (2,0) is a solid circle.](/diagrams/calculus/piecewise-jump.svg)
 
 *Figure 2.18 The graph of $f(x) = \left\{ \begin{matrix} {x + 1\ \text{if}\ x < 2} \\ {x^{2} - 4\ \text{if}\ x \geq 2} \end{matrix} \right.$ has a break at $x = 2.$*
 
@@ -417,6 +421,8 @@ Table 2.7 Table of Functional Values for $f(x) = \frac{1}{x}$
     ```
 
 The graph of $f(x) = {1\text{/}x}$ in Figure 2.19 confirms these conclusions.
+
+![The graph of f(x) = 1/x confirms that the limit as *x* approaches 0 does not exist.](/diagrams/calculus/reciprocal.svg)
 
 *Figure 2.19 The graph of $f(x) = {1\text{/}x}$ confirms that the limit as *x* approaches 0 does not exist.*
 
