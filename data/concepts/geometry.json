@@ -499,5 +499,75 @@
    "streak": 10,
    "avg_time_seconds": 20.0
   }
+  },
+ {
+  "id": "geo.triangle.exterior_angle",
+  "label": "The exterior angle theorem",
+  "domain": "geometry",
+  "subdomain": "geometry.triangles",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.triangle.angles"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.triangle.midsegment",
+  "label": "Midsegments",
+  "domain": "geometry",
+  "subdomain": "geometry.triangles",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.similar.ratio"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.triangle.isosceles",
+  "label": "Isosceles triangles",
+  "domain": "geometry",
+  "subdomain": "geometry.triangles",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.triangle.angles"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.circle.cyclic_quad",
+  "label": "Cyclic quadrilaterals",
+  "domain": "geometry",
+  "subdomain": "geometry.circles",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.circle.inscribed_angle"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
+ },
+ {
+  "id": "geo.solid.prism_volume",
+  "label": "The volume of a prism",
+  "domain": "geometry",
+  "subdomain": "geometry.solid",
+  "grading_type": "numeric",
+  "prerequisites": [
+   "geo.quad.area"
+  ],
+  "mastery_threshold": {
+   "streak": 10,
+   "avg_time_seconds": 20.0
+  }
  }
 ]

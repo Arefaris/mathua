@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 731,
+  "concept_count": 736,
   "unit_count": 94,
   "units": [
     {
@@ -1163,6 +1163,7 @@
       "depth_max": 4,
       "subdomains": [
         "geometry.basics",
+        "geometry.circles",
         "geometry.polygons",
         "geometry.shapes",
         "geometry.similar",
@@ -1172,6 +1173,7 @@
       "concept_ids": [
         "geo.basic.complementary",
         "geo.basic.vertical",
+        "geo.circle.cyclic_quad",
         "geo.polygon.exterior_angle",
         "geo.polygon.interior_angles",
         "geo.quad.perimeter",
@@ -1180,9 +1182,12 @@
         "geo.similar.ratio",
         "geo.transform.dilation",
         "geo.triangle.angles",
-        "geo.triangle.inequality"
+        "geo.triangle.exterior_angle",
+        "geo.triangle.inequality",
+        "geo.triangle.isosceles",
+        "geo.triangle.midsegment"
       ],
-      "concept_count": 11
+      "concept_count": 15
     },
     {
       "id": "geometry.b2",
@@ -1219,6 +1224,7 @@
         "geo.circle.circumference",
         "geo.coord.distance",
         "geo.coord.midpoint",
+        "geo.solid.prism_volume",
         "geo.solid.pyramid_volume",
         "geo.solid.surface_area",
         "geo.solid.volume_rect",
@@ -1226,7 +1232,7 @@
         "geo.triangle.pythagorean.word",
         "geo.triangle.special_right"
       ],
-      "concept_count": 10
+      "concept_count": 11
     },
     {
       "id": "geometry.b4",

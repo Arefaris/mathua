@@ -37,6 +37,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("geo.coord.polar", &coordPolarGen{})
 	registerSimilarity(reg)
 	registerTriangles(reg)
+	registerAngleFacts(reg)
 }
 
 type pointsLinesGen struct{}

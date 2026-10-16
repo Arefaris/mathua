@@ -2922,5 +2922,25 @@
   {
     "concept_id": "geo.solid.pyramid_volume",
     "source": "authored/geo.solid.pyramid_volume.md"
+  },
+  {
+    "concept_id": "geo.triangle.exterior_angle",
+    "source": "authored/geo.triangle.exterior_angle.md"
+  },
+  {
+    "concept_id": "geo.triangle.midsegment",
+    "source": "authored/geo.triangle.midsegment.md"
+  },
+  {
+    "concept_id": "geo.triangle.isosceles",
+    "source": "authored/geo.triangle.isosceles.md"
+  },
+  {
+    "concept_id": "geo.circle.cyclic_quad",
+    "source": "authored/geo.circle.cyclic_quad.md"
+  },
+  {
+    "concept_id": "geo.solid.prism_volume",
+    "source": "authored/geo.solid.prism_volume.md"
   }
 ]

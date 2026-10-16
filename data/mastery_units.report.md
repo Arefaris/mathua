@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 731 |
+| Total concepts | 736 |
 | Total units | 94 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
@@ -75,9 +75,9 @@ exists to make concrete.
 | `fractions.b4` | fractions | 4 | 6 | 4 | 12–14 |
 | `fractions.b5` | fractions | 5 | 1 | 1 | 15–15 |
 | `geometry.b0` | geometry | 0 | 8 | 5 | 0–2 |
-| `geometry.b1` | geometry | 1 | 11 | 6 | 3–4 |
+| `geometry.b1` | geometry | 1 | 15 | 7 | 3–4 |
 | `geometry.b2` | geometry | 2 | 2 | 2 | 8–8 |
-| `geometry.b3` | geometry | 3 | 10 | 4 | 9–11 |
+| `geometry.b3` | geometry | 3 | 11 | 4 | 9–11 |
 | `geometry.b4` | geometry | 4 | 3 | 2 | 12–12 |
 | `geometry.b6` | geometry | 6 | 1 | 1 | 20–20 |
 | `linear_algebra.b0` | linear_algebra | 0 | 1 | 1 | 2–2 |
@@ -140,13 +140,13 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 123 | 4 | 34 | 23 | 57 | 5 | 0 |
+| 2 | 123 | 4 | 34 | 23 | 56 | 5 | 0 |
 | 3 | 94 | 5 | 50 | 18 | 39 | 5 | 0 |
 | 4 | 76 | 6 | 58 | 9 | 27 | 4 | 0 |
-| 5 | 65 | 6 | 70 | 8 | 18 | 4 | 0 |
+| 5 | 65 | 6 | 70 | 8 | 17 | 4 | 0 |
 | 6 | 61 | 7 | 91 | 6 | 17 | 4 | 0 |
 | 8 | 48 | 12 | 94 | 4 | 12 | 6 | 0 |
-| 10 | 43 | 12 | 127 | 5 | 11 | 7 | 0 |
+| 10 | 43 | 12 | 127 | 5 | 11 | 8 | 0 |
 | 12 | 42 | 13 | 115 | 2 | 8 | 6 | 0 |
 | 15 | 32 | 16 | 127 | 3 | 6 | 10 | 0 |
 | 20 | 29 | 18 | 151 | 3 | 6 | 11 | 0 |
@@ -167,7 +167,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**64 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**69 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -179,36 +179,41 @@ Unresolvable subdomains:
 `abstract_algebra.fields` 
 `abstract_algebra.rings` 
 `abstract_algebra.structures` 
-`algebra.logarithms` 
+`algebra.conics` 
 
+`algebra.logarithms` 
 `algebra.sequences` 
 `algebra.systems` 
 `arithmetic.addition` 
-`calculus.limits` 
 
+`calculus.integrals` 
+`calculus.limits` 
 `calculus.multivariable` 
 `calculus.sequences` 
+
 `calculus.series` 
 `calculus.vector` 
-
 `complex_numbers.advanced` 
 `complex_numbers.topology` 
+
 `differential_equations.basics` 
 `differential_equations.boundary` 
-
 `differential_equations.first_order` 
 `differential_equations.integral` 
+
 `differential_equations.nonlinear` 
 `differential_equations.numerical` 
-
 `differential_equations.pde` 
 `differential_equations.second_order` 
+
 `differential_equations.stability` 
 `differential_equations.systems` 
-
 `differential_equations.transforms` 
 `discrete_math.recurrence` 
+
 `geometry.basics` 
+`geometry.similar` 
+`geometry.transform` 
 `linear_algebra.decompositions` 
 
 `linear_algebra.determinants` 
@@ -251,12 +256,14 @@ Unresolvable subdomains:
 `topology.metrization` 
 `topology.separation` 
 
+`trigonometry.advanced` 
 `trigonometry.functions` 
 `trigonometry.graphs` 
 `trigonometry.hyperbolic` 
+
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 731
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 736
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
