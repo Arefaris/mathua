@@ -142,6 +142,13 @@ jobs:
     name: Deploy to Fly.io
     needs: [test, web, docker, postgres]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.DEPLOY_ENABLED == 'true'
+    # One deploy at a time. Two pushes in quick succession each trigger a deploy, and two flyctl
+    # deploys race for the same machine's lease: the loser dies with "Failed to acquire lease for
+    # VM ... lease currently held by ...", which reads as a red run on a commit whose tests all
+    # passed. Queuing rather than cancelling keeps the newer commit as the one left running.
+    concurrency:
+      group: fly-deploy
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
