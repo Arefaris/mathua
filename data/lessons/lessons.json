@@ -2794,5 +2794,21 @@
   {
     "concept_id": "discrete.combinatorics.lattice_paths",
     "source": "authored/discrete.combinatorics.lattice_paths.md"
+  },
+  {
+    "concept_id": "calc.vec.surface_area",
+    "source": "authored/calc.vec.surface_area.md"
+  },
+  {
+    "concept_id": "calc.vec.curl_3d",
+    "source": "authored/calc.vec.curl_3d.md"
+  },
+  {
+    "concept_id": "calc.vec.stokes",
+    "source": "authored/calc.vec.stokes.md"
+  },
+  {
+    "concept_id": "calc.vec.work",
+    "source": "authored/calc.vec.work.md"
   }
 ]

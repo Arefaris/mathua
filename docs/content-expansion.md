@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 699 concepts, and there are 699 KP shard files
-holding 2097 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 703 concepts, and there are 703 KP shard files
+holding 2109 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 287 of the 699 concepts
+### 4.1 The course catalog reaches 291 of the 703 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-287 of the 699 concepts: 412 of them have a node, a generator, a lesson and three KP shards and
+291 of the 703 concepts: 412 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -81,7 +81,7 @@ The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 147 | 95 |
+| calculus | 151 | 95 |
 | algebra | 89 | 53 |
 | topology | 30 | 27 |
 | statistics | 37 | 24 |

@@ -145,6 +145,7 @@ func Register(reg *generator.Registry) {
 	registerMultivariable(reg)
 	registerVector(reg)
 	registerVector3D(reg)
+	registerSurface(reg)
 }
 
 type limitConceptGen struct{}

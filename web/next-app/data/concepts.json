@@ -4496,6 +4496,64 @@
     "subdomain": "calculus.multivariable"
   },
   {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.surface_area",
+    "label": "Surface area of a graph",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.double_integral_region",
+      "calc.deriv.partial"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.curl_3d",
+    "label": "The curl in three dimensions",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.curl"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.stokes",
+    "label": "Stokes' theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.greens_theorem",
+      "calc.vec.curl_3d"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.work",
+    "label": "Work as a line integral",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.line_integral"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
     "domain": "complex_numbers",
     "grading_type": "complex",
     "id": "complex.basics.concept",

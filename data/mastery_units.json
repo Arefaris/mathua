@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 699,
+  "concept_count": 703,
   "unit_count": 93,
   "units": [
     {
@@ -553,7 +553,8 @@
         "calculus.advanced",
         "calculus.derivatives",
         "calculus.integrals",
-        "calculus.multivariable"
+        "calculus.multivariable",
+        "calculus.vector"
       ],
       "concept_ids": [
         "calc.deriv.cauchy_mvt",
@@ -594,10 +595,11 @@
         "calc.multi.lagrange",
         "calc.multi.saddle_test",
         "calc.multi.transform_jacobian",
+        "calc.vec.curl_3d",
         "calc.vec.jacobian_value",
         "calc.vec.parametric_derivative"
       ],
-      "concept_count": 40
+      "concept_count": 41
     },
     {
       "id": "calculus.b12",
@@ -646,9 +648,12 @@
         "calc.vec.flux_uniform",
         "calc.vec.greens_theorem",
         "calc.vec.line_integral",
-        "calc.vec.potential_value"
+        "calc.vec.potential_value",
+        "calc.vec.stokes",
+        "calc.vec.surface_area",
+        "calc.vec.work"
       ],
-      "concept_count": 33
+      "concept_count": 36
     },
     {
       "id": "complex_numbers.b3",
