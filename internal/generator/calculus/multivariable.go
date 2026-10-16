@@ -63,8 +63,10 @@ func (g *parametricDerivativeGen) Generate(ctx generator.GeneratorContext) gener
 type arcLengthParametricGen struct{}
 
 func (g *arcLengthParametricGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	easy := [][3]int{{3, 4, 5}, {6, 8, 10}}
-	hard := [][3]int{{5, 12, 13}, {8, 15, 17}, {9, 12, 15}}
+	// Three directions at every difficulty: the practice feed asks for three questions, so a
+	// bank of two cannot fill one request.
+	easy := [][3]int{{3, 4, 5}, {6, 8, 10}, {9, 12, 15}}
+	hard := [][3]int{{5, 12, 13}, {8, 15, 17}, {7, 24, 25}}
 	triples := hard
 	if ctx.Difficulty < 0.45 {
 		triples = easy
@@ -85,7 +87,7 @@ func (g *arcLengthParametricGen) Generate(ctx generator.GeneratorContext) genera
 type curvatureGen struct{}
 
 func (g *curvatureGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	a := 1 + pickMV(scaleMV(ctx.Difficulty, 2, 3))
+	a := 1 + pickMV(scaleMV(ctx.Difficulty, 3, 3))
 	return generator.Problem{
 		Question: fmt.Sprintf("Find the curvature of \\(y = %dx^2\\) at \\(x = 0\\).", a),
 		Answer:   fmt.Sprintf("%d", 2*a),
