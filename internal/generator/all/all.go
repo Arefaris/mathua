@@ -19,6 +19,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/generator/algebra"
 	"github.com/chuma-beep/mathua/internal/generator/arithmetic"
 	"github.com/chuma-beep/mathua/internal/generator/calculus"
+	"github.com/chuma-beep/mathua/internal/generator/combinatorics"
 	"github.com/chuma-beep/mathua/internal/generator/complex"
 	"github.com/chuma-beep/mathua/internal/generator/discrete"
 	"github.com/chuma-beep/mathua/internal/generator/fractions"
@@ -56,6 +57,7 @@ func Register(reg *generator.Registry) {
 	odes.Register(reg)
 	abstract.Register(reg)
 	topology.Register(reg)
+	combinatorics.Register(reg)
 }
 
 // Registry returns a registry with every generator registered.

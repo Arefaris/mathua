@@ -2662,5 +2662,29 @@
   {
     "concept_id": "stat.func.gaussian",
     "source": "algebrica/functions/gaussian-function.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.counting_principle",
+    "source": "authored/discrete.combinatorics.counting_principle.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.factorial",
+    "source": "authored/discrete.combinatorics.factorial.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.multinomial",
+    "source": "authored/discrete.combinatorics.multinomial.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.circular",
+    "source": "authored/discrete.combinatorics.circular.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.derangement",
+    "source": "authored/discrete.combinatorics.derangement.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.catalan",
+    "source": "authored/discrete.combinatorics.catalan.md"
   }
 ]

@@ -19,6 +19,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/generator/algebra"
 	"github.com/chuma-beep/mathua/internal/generator/arithmetic"
 	"github.com/chuma-beep/mathua/internal/generator/calculus"
+	"github.com/chuma-beep/mathua/internal/generator/combinatorics"
 	"github.com/chuma-beep/mathua/internal/generator/complex"
 	"github.com/chuma-beep/mathua/internal/generator/discrete"
 	"github.com/chuma-beep/mathua/internal/generator/fractions"
@@ -39,6 +40,7 @@ func registerAllDomains(reg *generator.Registry) {
 	algebra.Register(reg)
 	arithmetic.Register(reg)
 	calculus.Register(reg)
+	combinatorics.Register(reg)
 	complex.Register(reg)
 	discrete.Register(reg)
 	fractions.Register(reg)

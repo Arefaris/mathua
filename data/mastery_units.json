@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 666,
-  "unit_count": 91,
+  "concept_count": 672,
+  "unit_count": 93,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -845,6 +845,37 @@
       "concept_count": 6
     },
     {
+      "id": "discrete_math.b1",
+      "title": "Discrete Math · Stage 2",
+      "domain": "discrete_math",
+      "band": 1,
+      "depth_min": 5,
+      "depth_max": 5,
+      "subdomains": [
+        "discrete_math.combinatorics"
+      ],
+      "concept_ids": [
+        "discrete.combinatorics.counting_principle"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "discrete_math.b2",
+      "title": "Discrete Math · Stage 3",
+      "domain": "discrete_math",
+      "band": 2,
+      "depth_min": 7,
+      "depth_max": 8,
+      "subdomains": [
+        "discrete_math.combinatorics"
+      ],
+      "concept_ids": [
+        "discrete.combinatorics.circular",
+        "discrete.combinatorics.factorial"
+      ],
+      "concept_count": 2
+    },
+    {
       "id": "discrete_math.b4",
       "title": "Discrete Math · Stage 5",
       "domain": "discrete_math",
@@ -857,10 +888,11 @@
       ],
       "concept_ids": [
         "discrete.combinatorics.combinations",
+        "discrete.combinatorics.multinomial",
         "discrete.combinatorics.permutations",
         "discrete.logic.propositions"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "discrete_math.b5",
@@ -897,12 +929,14 @@
       "depth_min": 18,
       "depth_max": 20,
       "subdomains": [
+        "discrete_math.combinatorics",
         "discrete_math.graph_theory",
         "discrete_math.logic",
         "discrete_math.proof",
         "discrete_math.sets"
       ],
       "concept_ids": [
+        "discrete.combinatorics.derangement",
         "discrete.graphs.coloring",
         "discrete.graphs.eulerian",
         "discrete.graphs.trees",
@@ -911,7 +945,7 @@
         "discrete.sets.inclusion_exclusion",
         "discrete.sets.relations"
       ],
-      "concept_count": 7
+      "concept_count": 8
     },
     {
       "id": "discrete_math.b7",
@@ -951,15 +985,17 @@
       "depth_min": 27,
       "depth_max": 29,
       "subdomains": [
+        "discrete_math.combinatorics",
         "discrete_math.proof",
         "discrete_math.recurrence"
       ],
       "concept_ids": [
+        "discrete.combinatorics.catalan",
         "discrete.proof.induction",
         "discrete.proof.strong_induction",
         "discrete.sequences.generating_functions"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "fractions.b2",

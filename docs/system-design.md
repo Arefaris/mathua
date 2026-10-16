@@ -188,7 +188,7 @@ The engine is the central orchestrator. It holds references to every subsystem a
 | **Weakness Propagation** | In engine `engine.go:1575` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
 | **Diagnostic** | `internal/diagnostic/` (`cat.go:1`, `report.go:11`) | Compressed covering set + info-gain CAT with `±0.3` evidence propagation, per-concept `KnowledgeConfidence 0–1`, frontier at max belief drop, supplemental when `<0.7` |
 | **Planner** | `internal/planning/` | Course paths loaded from `data/courses.json` (22 courses) |
-| **Lessons** | `internal/lessons/` | Markdown lesson content from `data/lessons/` + 666 KP shards `data/lessons/kp/*.json` ×3 `audit_lessons.py:191` |
+| **Lessons** | `internal/lessons/` | Markdown lesson content from `data/lessons/` + 672 KP shards `data/lessons/kp/*.json` ×3 `audit_lessons.py:191` |
 
 ### DAG (Concept Graph)
 
@@ -505,7 +505,7 @@ Total latency target: under 100ms for numeric grading, under 500ms for SymPy-bas
 
 ## 10. Computerized Adaptive Testing (CAT)
 
-Mathua implements a compressed-covering + info-gain CAT to locate a student's knowledge frontier quickly. Instead of testing all 666 concepts, the diagnostic asks two probes per concept in the covering set, bounded above by `maxTotalQuestions=45`. A wide scope reaches `minTotalQuestions=25`; a narrow one runs out of cover first and ends below it.
+Mathua implements a compressed-covering + info-gain CAT to locate a student's knowledge frontier quickly. Instead of testing all 672 concepts, the diagnostic asks two probes per concept in the covering set, bounded above by `maxTotalQuestions=45`. A wide scope reaches `minTotalQuestions=25`; a narrow one runs out of cover first and ends below it.
 
 ![CAT Diagnostic](diagrams/system-design-cat-diagnostic-dark.svg)
 
@@ -602,5 +602,5 @@ The Go binary serves the Next.js static export directly. This means:
 
 ## Summary
 
-Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:19` / `storage/sqlite.go:1`, same `Repository` `store.go:127`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 17 domain registries (666 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
+Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:19` / `storage/sqlite.go:1`, same `Repository` `store.go:127`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 17 domain registries (672 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
 

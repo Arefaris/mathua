@@ -5312,6 +5312,95 @@
     "subdomain": "discrete_math.recurrence"
   },
   {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.counting_principle",
+    "label": "The product and sum rules for counting",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.mult.concept",
+      "arith.add.single"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.factorial",
+    "label": "Factorials",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.mult.tables",
+      "discrete.combinatorics.counting_principle"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.multinomial",
+    "label": "Arrangements of a multiset",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.factorial",
+      "discrete.combinatorics.permutations"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.circular",
+    "label": "Circular arrangements",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.factorial"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.derangement",
+    "label": "Derangements",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.factorial",
+      "discrete.sets.inclusion_exclusion"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
+    "domain": "discrete_math",
+    "grading_type": "numeric",
+    "id": "discrete.combinatorics.catalan",
+    "label": "Catalan numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "discrete.combinatorics.combinations",
+      "discrete.sequences.recurrence"
+    ],
+    "subdomain": "discrete_math.combinatorics"
+  },
+  {
     "domain": "fractions",
     "grading_type": "numeric",
     "id": "frac.basics.concept",
