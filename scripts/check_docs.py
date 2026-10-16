@@ -195,6 +195,28 @@ def sentences(text: str) -> list[tuple[int, str]]:
     return out
 
 
+def prose_sentences(text: str) -> list[tuple[int, str]]:
+    """Sentences for a rule that reads a fact out of prose, bullet items included.
+
+    `sentences` skips a line that begins with a list marker, which is right for a rule about
+    spelling or a link: a bullet there is usually a name or a path. A corpus count is what a
+    bullet most often states, though, and three counts this file is meant to check had drifted
+    where it could not look -- a CONTRIBUTING bullet, a line of `docs/architecture.md` that
+    began with an inline code span, and an ADR. A guard that reads nothing reports nothing, so
+    the count rules read bullets and blank inline code first, because a count inside `backticks`
+    is an identifier rather than a claim.
+    """
+    out = []
+    for i, line in enumerate(strip_code(text).split("\n"), 1):
+        s = re.sub(r"^[-\*\+]\s+|^\d+[.)]\s+", "", line.strip())
+        if not s or s.startswith(("|", "#", ">")):
+            continue
+        for part in re.split(r"(?<=[.!?:])\s+", s):
+            if part.strip():
+                out.append((i, part.strip()))
+    return out
+
+
 def check_kp_rule(rep: Report) -> None:
     """The per-concept KP rule must match the corpus, and must be stated one way in the docs."""
     counts: dict[int, int] = {}
@@ -221,7 +243,7 @@ def check_kp_rule(rep: Report) -> None:
                        re.I)
     scoped = re.compile(r"\bper\s+(?:concept|shard|lesson|topic)\b|\bexactly\b", re.I)
     for doc in ("README.md", "CONTRIBUTING.md"):
-        for line_no, sent in sentences(read(doc)):
+        for line_no, sent in prose_sentences(read(doc)):
             if not scoped.search(sent):
                 continue
             for m in claim.finditer(sent):
@@ -267,12 +289,18 @@ def check_corpus_figures(rep: Report) -> None:
     # total. Only a sentence that scopes the claim to the whole corpus is checked, because a
     # subset count is legitimate and cannot be verified without knowing which subset is meant.
     scope = re.compile(r"\b(?:corpus|graph|catalogue|catalog|total|all|across|every|whole)\b", re.I)
+    # A doc may also quote the size the corpus had when it measured something, and then it has to
+    # say so where the number is. "459 of the 657 the corpus then held" is a record of 2026-10-05
+    # and not a claim about today; ADR-038, ADR-040 and ADR-041 already write it that way. The
+    # window is 40 characters, the proximity the XP gate rule above uses, because one of these
+    # sentences runs past 1,000 characters and a marker anywhere inside it is not on this number.
+    historical = re.compile(r"\bthen held\b|\bat the time\b", re.I)
     for doc in DOCS:
         p = ROOT / doc
         if not p.is_file():
             continue
-        for line_no, sent in sentences(read(doc)):
-            if sent.startswith("|") or not scope.search(sent):
+        for line_no, sent in prose_sentences(read(doc)):
+            if not scope.search(sent):
                 continue
             for m in pat.finditer(sent):
                 n = int(m.group(1).replace(",", ""))
@@ -282,7 +310,7 @@ def check_corpus_figures(rep: Report) -> None:
                 key = ("shards" if "shard" in noun
                        else "kps" if noun.startswith("kp") or "knowledge" in noun
                        else "courses" if noun.startswith("course") else "concepts")
-                if n != facts[key]:
+                if n != facts[key] and not historical.search(sent[m.end():m.end() + 40]):
                     rep.error(f"{doc}:{line_no}", "corpus-count",
                               f'"{m.group(0)}" but the corpus has {facts[key]} {key}')
 
