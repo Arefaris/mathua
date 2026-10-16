@@ -1038,63 +1038,42 @@
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 422,
-      "text": "Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\\rightarrow\\text{\\pm}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 431,
-      "text": "Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x\\rightarrow\\text{\\pm}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 440,
+      "line": 444,
       "text": "Figure 4.55 As $x\\rightarrow\\infty,$ the values $f(x)\\rightarrow\\infty.$ As $x\\rightarrow\\text{-}\\infty,$ the values $f(x)\\rightarrow\\text{-}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 460,
-      "text": "Figure 4.56 The graph of the rational function $f(x) = \\left( {3x^{2} + 4x} \\right)\\text{/}\\left( {x + 2} \\right)$ approaches the oblique asymptote $y = 3x - 2\\ \\text{as}\\ x\\rightarrow\\text{\\pm}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 509,
+      "line": 515,
       "text": "Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 519,
+      "line": 525,
       "text": "Figure 4.58 The function $f(x) = \\text{sin} x$ oscillates between $1\\ \\text{and}\\ -1$ as $x\\rightarrow\\text{\\pm}\\infty$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 521,
+      "line": 527,
       "text": "Figure 4.59 The function $f(x) = \\text{tan} x$ does not approach a limit and does not approach $\\text{\\pm}\\infty$ as $x\\rightarrow\\text{\\pm}\\infty$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 532,
+      "line": 538,
       "text": "Figure 4.60 The exponential function approaches zero as $x\\rightarrow\\text{-}\\infty$ and approaches $\\infty$ as $x\\rightarrow\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 543,
+      "line": 549,
       "text": "Figure 4.61 The natural logarithm function approaches $\\infty$ as $x\\rightarrow\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1905,8 +1884,8 @@
   ],
   "unreferenced_diagrams": {
     "referenced": 126,
-    "shipped": 622,
-    "unreferenced_content": 515,
+    "shipped": 625,
+    "unreferenced_content": 518,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -2433,7 +2412,8 @@
         "topic_word_match": [
           "/diagrams/algebrica/gaussian-function-1.svg",
           "/diagrams/algebrica/linear-equations-1.svg",
-          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
+          "/diagrams/calculus/linear-over-linear.svg"
         ]
       },
       {
@@ -2494,7 +2474,8 @@
           "/diagrams/algebrica/polynomial-function-3.svg",
           "/diagrams/algebrica/roots-of-a-polynomial-1.svg",
           "/diagrams/algebrica/roots-of-a-polynomial-2.svg",
-          "/diagrams/algebrica/roots-of-a-polynomial-3.svg"
+          "/diagrams/algebrica/roots-of-a-polynomial-3.svg",
+          "/diagrams/calculus/polynomial-leading-term.svg"
         ]
       },
       {
@@ -2941,7 +2922,8 @@
         "exact_stem_match": [],
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
-          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
+          "/diagrams/calculus/linear-over-linear.svg"
         ]
       },
       {
@@ -2950,7 +2932,8 @@
         "exact_stem_match": [],
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
-          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
+          "/diagrams/calculus/linear-over-linear.svg"
         ]
       },
       {
@@ -2959,7 +2942,8 @@
         "exact_stem_match": [],
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
-          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
+          "/diagrams/calculus/linear-over-linear.svg"
         ]
       },
       {
@@ -2968,7 +2952,8 @@
         "exact_stem_match": [],
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
-          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
+          "/diagrams/calculus/linear-over-linear.svg"
         ]
       },
       {
@@ -5084,7 +5069,8 @@
         "exact_stem_match": [],
         "topic_word_match": [
           "/diagrams/algebrica/linear-equations-1.svg",
-          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg"
+          "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
+          "/diagrams/calculus/linear-over-linear.svg"
         ]
       },
       {
@@ -5778,12 +5764,15 @@
       "/diagrams/calculus/horizontal-asymptote.svg",
       "/diagrams/calculus/interrupted-curve.svg",
       "/diagrams/calculus/limit-behavior.svg",
+      "/diagrams/calculus/linear-over-linear.svg",
       "/diagrams/calculus/missing-vertex.svg",
       "/diagrams/calculus/one-value-off-the-curve.svg",
       "/diagrams/calculus/oscillation.svg",
       "/diagrams/calculus/piecewise-jump.svg",
+      "/diagrams/calculus/polynomial-leading-term.svg",
       "/diagrams/calculus/power-even.svg",
       "/diagrams/calculus/power-odd.svg",
+      "/diagrams/calculus/quadratic-over-cubic.svg",
       "/diagrams/calculus/radical-over-x.svg",
       "/diagrams/calculus/reciprocal.svg",
       "/diagrams/calculus/sine-over-x.svg",

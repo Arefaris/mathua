@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-244 paragraphs across 100 lessons read as a caption whose image was dropped:
-140 certain, 33 strong and 71 likely. Every one sits
+241 paragraphs across 100 lessons read as a caption whose image was dropped:
+137 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 140 rows and 70 distinct figures
+## 3. The captions are 137 rows and 67 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **70 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **67 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 21 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 18 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed thirty-two.
+again to 53 and 44, of which section 7 has since landed thirty-five.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -184,9 +184,6 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
-| 4.53 | The graph of this rational function approaches a horizontal asymptote as $x\rightarro... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.54 | The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.56 | The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\left(... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.58 | The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\right... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.59 | The function $f(x) = \text{tan} x$ does not approach a limit and does not approach $\... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 5.32 | The graph shows speed versus time for the given motion of a car. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
@@ -806,6 +803,45 @@ the frame runs past its last tick label, and 4.40 and 4.42 obey it: their frames
 `31.5` while their labels stop at `+-8` and `30`. Both figures now label `-4` to `4` and leave
 `+-5` unlabeled, which is 4.40's shape. Nothing else moved; the range, the scale and the label
 stack are as recorded above.
+
+**Figures 4.53, 4.54 and 4.56** (a linear over linear with a horizontal asymptote; a quadratic over
+a cubic whose asymptote is the axis itself; a quadratic over a linear with an oblique asymptote)
+landed on 2026-10-16 in `calc.limit.infinity`, as `calculus/linear-over-linear.svg`,
+`calculus/quadratic-over-cubic.svg` and `calculus/quadratic-over-linear.svg`.
+
+**Two of the three sit inside a numbered list, and the insertion keeps the indent.** Upstream's
+Example 4.25 numbers three functions and puts each figure inside its item, so 4.53's and 4.54's
+captions are indented four spaces and their images are too. That is 4.45's case again, and the rule
+is the same: the indent is read off the caption line and written back, never assumed.
+
+**4.54 carries no guide, because its asymptote is the x axis.** The caption says the asymptote is
+`y = 0`, and a dashed line drawn on the axis would be a second line drawn on the first. Upstream
+draws none either. The curve's visible features are the pole at the cubic's only real root (about
+`-1.546`), where the left branch leaves the bottom and the right branch leaves the top, and a hump
+of about `0.85` at `x = 1`.
+
+**4.56 is the first asymptote here that is not axis-aligned**, so its guide is a dashed path along
+`y = 3x - 2` between the rows it leaves the frame rather than `guide_h` or `guide_v`. Its label is
+ink, as 4.40's `y = 2` and 4.45's `x = pi/2` are; only the guide itself is annotation grey. The
+label sits right of both exits rather than in the wedge between the curve and the line, and that is
+a measurement: the gap is `4/(x + 2)`, which is 6px at `x = 0` and 3px at `x = 3` at this y scale.
+The scale is small because the figure's point is that the curve hugs the line far out, so the frame
+reaches `+-28`. Upstream's canvas is 347px tall and this one is 180, and the 6px wedge is what that
+costs.
+
+**One analytic domain was wrong first, and the generator caught it rather than the eye.** 4.56's
+right branch does not leave the bottom: `4/(x + 2)` is positive there, so the branch enters the
+frame at the top just right of the pole and leaves it at the top again, one U-shaped path rather
+than two branches. The first attempt bisected an interval that crossed the pole and divided by zero.
+
+**The converter learned one macro, `\ `, a control space.** 4.56's caption reads
+`... 2\ \text{as}\ x ...`, and the unknown-macro assert fired on it before any alt was written. It
+renders as a space, which cannot change an alt that is already shipped, because those are written
+rather than derived.
+
+Those three captions held three rows: the report went from 244 to 241, and the certain tier from
+140 to 137. The lesson keeps thirteen other orphan captions, so the lesson count stays at 100, and
+the ceiling in `internal/lessons/assets_test.go` follows, to 241.
 
 ## 8. Order of work
 

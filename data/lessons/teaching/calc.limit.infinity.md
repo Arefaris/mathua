@@ -419,6 +419,8 @@ For each of the following functions, determine the limits as $x\rightarrow\infty
       
     Since $\underset{x\rightarrow\text{\pm}\infty}{\text{lim}}f(x) = \frac{3}{2},$ we know that $y = \frac{3}{2}$ is a horizontal asymptote for this function as shown in the following graph.  
 
+    ![The graph of this rational function approaches a horizontal asymptote as x → ±∞.](/diagrams/calculus/linear-over-linear.svg)
+
     *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$*
 
 2.  Since the largest power of $x$ appearing in the denominator is $x^{3},$ divide the numerator and denominator by $x^{3}.$ After doing so and applying algebraic limit laws, we obtain  
@@ -427,6 +429,8 @@ For each of the following functions, determine the limits as $x\rightarrow\infty
     ```
       
     Therefore $f$ has a horizontal asymptote of $y = 0$ as shown in the following graph.  
+
+    ![The graph of this rational function approaches the horizontal asymptote y = 0 as x → ±∞.](/diagrams/calculus/quadratic-over-cubic.svg)
 
     *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x\rightarrow\text{\pm}\infty.$*
 
@@ -456,6 +460,8 @@ $$
 $$
 
 Therefore, the graph of $f$ approaches the line $y = 3x - 2$ as $x\rightarrow\text{\pm}\infty.$ This line is known as an oblique asymptote for $f$ (Figure 4.56).
+
+![The graph of the rational function f(x) = (3x^2 + 4x)/(x + 2) approaches the oblique asymptote y = 3x - 2 as x → ±∞.](/diagrams/calculus/quadratic-over-linear.svg)
 
 *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\left( {x + 2} \right)$ approaches the oblique asymptote $y = 3x - 2\ \text{as}\ x\rightarrow\text{\pm}\infty.$*
 
