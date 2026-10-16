@@ -469,13 +469,13 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 
 // Figure captions left behind by a dropped image may not grow.
 //
-// 211 paragraphs in the teaching corpus are a figure caption with no figure beside it: the
+// 180 paragraphs in the teaching corpus are a figure caption with no figure beside it: the
 // shape `ingest_pretext.mjs` emits for a `<figure>` when it keeps the caption and drops the
 // image. `scripts/prune_orphan_captions.py` removed the 35 that nothing refers to. The other
-// 176 are kept on purpose, and the reasons are recorded here because the number looks
+// 145 are kept on purpose, and the reasons are recorded here because the number looks
 // indefensible without them:
 //
-//	 72  the lesson's prose cites a figure — by number ("as shown in Figure 1.2") or by
+//	 41  the lesson's prose cites a figure — by number ("as shown in Figure 1.2") or by
 //	     position ("the graph above illustrates"). Removing the caption would leave the prose
 //	     pointing at nothing, which is worse than an orphaned caption.
 //	 74  no picture vocabulary, so the text could as readily be emphasis. Several are real
@@ -486,7 +486,7 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 //	     worked answers has two of them, so a tier-based rule deletes a heading from 15
 //	     geometry lessons.
 //
-// The figure is not the same set of rows it was. Fifty-nine moves have changed it: reclaiming
+// The figure is not the same set of rows it was. Sixty-eight moves have changed it: reclaiming
 // Figures 1.2 and then 1.7-1.9 removed 24 rows from the first bucket, and exempting
 // auto-numbered labels from the list/table/quote edge test in `orphanCaptions` put back 24 that
 // had been hidden for sitting above a table or a bullet list, so the total stayed at 324 while
@@ -503,13 +503,13 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 // 6.26 removed 1 more, to 231, Figures 6.28 and 6.29 removed 2 more, to 229, Figure 6.30
 // removed 1 more, to 228, Figure 6.31 removed 1 more, to 227, Figure 6.32 removed 1 more, to 226,
 // Figure 6.33 removed 1 more, to 225, and Figures 6.35 and 6.36 removed 2 more, to 223, which
-// empties the redraw tier, and ten fetched Prealgebra drawings removed 47 more, to 176. The
-// audit's
-// tiers -- 72 `certain`, 33 `strong`, 71 `likely` on
+// empties the redraw tier, and ten fetched Prealgebra drawings removed 47 more, to 176, and nine
+// more fetched Prealgebra drawings removed 31 more, to 145. The audit's tiers -- 41 `certain`, 33
+// `strong`, 71 `likely` on
 // 2026-10-16 -- are the measurement,
 // and this ceiling is only a ratchet on it, so it moves down with each batch and never up.
 //
-// This is a ceiling on a known, explained remainder, not an assertion that 176 is correct.
+// This is a ceiling on a known, explained remainder, not an assertion that 145 is correct.
 // The audit is the tool for that judgement — see docs/lesson-media.md — and it is a report,
 // because the remaining cases are per instance.
 func TestOrphanCaptionsDoNotGrow(t *testing.T) {
@@ -517,7 +517,7 @@ func TestOrphanCaptionsDoNotGrow(t *testing.T) {
 	if _, err := os.Stat(root); err != nil {
 		t.Skipf("lesson corpus not present: %v", err)
 	}
-	const known = 176
+	const known = 145
 
 	var files, total int
 	var worst []string

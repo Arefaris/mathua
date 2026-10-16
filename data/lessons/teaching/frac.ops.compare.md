@@ -455,6 +455,8 @@ We used fraction tiles to show that there are many fractions equivalent to $\fra
 
 We can show this with pizzas, too. Figure 4.4(a) shows a single pizza, cut into two equal pieces with $\frac{1}{2}$ shaded. Figure 4.4(b) shows a second pizza of the same size, cut into eight pieces with $\frac{4}{8}$ shaded.
 
+![Two pizzas are shown. The pizza on the left is divided into 2 equal pieces. 1 piece is shaded. The pizza on the right is divided into 8 equal pieces. 4 pieces are shaded.](/diagrams/prealgebra/4.4.png)
+
 *Figure 4.4*
 
 This is another way to show that $\frac{1}{2}$ is equivalent to $\frac{4}{8}.$

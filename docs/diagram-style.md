@@ -89,6 +89,13 @@ A new figure matches by following these, read off the vendored set and the local
 - **Background.** An opaque `<rect fill="white">` the size of the viewBox, as every local figure
   has, so the figure is legible on the dark panel (section 3). This is the one place a local figure
   deliberately differs from a vendored one.
+- **A fetched raster is converted onto these greys, because the renderer applies nothing.** A
+  lesson figure reaches the page as a plain `<img>` with no filter, so a tone that is not baked into
+  the asset does not exist, and an OpenStax drawing arrives in saturated teal and orange beside line
+  art. The conversion is grey, the tone stretched to the full range, then a lookup onto the four
+  greys above plus white — which is a dialect color too: it is the fill of 40 vendored shapes and
+  the `<rect>` every local figure carries, so the paper stays white rather than becoming a grey card.
+  `docs/figure-reclaim.md` section 2 records why, and section 7 the recipe and its measurements.
 
 ## 5. Where a new figure is wired
 

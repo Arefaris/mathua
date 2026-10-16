@@ -260,27 +260,6 @@
       "reason": "teaching corpus: standalone emphasis is the dropped-figure shape"
     },
     {
-      "lesson": "teaching/arith.dec.intro.md",
-      "line": 49,
-      "text": "Figure 5.2 This chart illustrates place values to the left and right of the decimal point.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.dec.intro.md",
-      "line": 60,
-      "text": "Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/arith.dec.intro.md",
-      "line": 673,
-      "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/arith.neg.add_sub.md",
       "line": 13,
       "text": "Number line with interesting Celsius temperatures",
@@ -638,146 +617,6 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/dec.basics.compare.md",
-      "line": 49,
-      "text": "Figure 5.2 This chart illustrates place values to the left and right of the decimal point.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.basics.compare.md",
-      "line": 60,
-      "text": "Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.basics.compare.md",
-      "line": 673,
-      "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.ops.round.md",
-      "line": 49,
-      "text": "Figure 5.2 This chart illustrates place values to the left and right of the decimal point.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.ops.round.md",
-      "line": 60,
-      "text": "Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/dec.ops.round.md",
-      "line": 673,
-      "text": "Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.add.diff.md",
-      "line": 22,
-      "text": "Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\\frac{35}{100}$ of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.add.word.md",
-      "line": 22,
-      "text": "Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\\frac{35}{100}$ of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.basics.concept.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.basics.equivalent.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.basics.number_line.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.basics.parts.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.div.whole.md",
-      "line": 602,
-      "text": "Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.mult.whole.md",
-      "line": 602,
-      "text": "Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.ops.benchmark.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.ops.compare.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.ops.div.md",
-      "line": 602,
-      "text": "Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.ops.mult.md",
-      "line": 602,
-      "text": "Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.ops.simplify.md",
-      "line": 458,
-      "text": "Figure 4.4",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/frac.sub.diff.md",
-      "line": 22,
-      "text": "Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\\frac{35}{100}$ of a dollar.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/geo.basic.angle_measure.md",
       "line": 30,
       "text": "Solution",
@@ -1010,91 +849,35 @@
     },
     {
       "lesson": "teaching/pct.basics.concept.md",
-      "line": 23,
-      "text": "Figure 6.2 Among every 100 community college students, 57 are female.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.basics.concept.md",
-      "line": 308,
+      "line": 310,
       "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/pct.convert.from_dec.md",
-      "line": 23,
-      "text": "Figure 6.2 Among every 100 community college students, 57 are female.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.from_dec.md",
-      "line": 308,
+      "line": 310,
       "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/pct.convert.to_dec.md",
-      "line": 23,
-      "text": "Figure 6.2 Among every 100 community college students, 57 are female.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.convert.to_dec.md",
-      "line": 308,
+      "line": 310,
       "text": "Figure 6.4 (credit: Riles32807, Wikimedia Commons)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/pct.ops.discount.md",
-      "line": 35,
-      "text": "Figure 6.7 The sales tax is calculated as a percent of the purchase price.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.ops.discount.md",
-      "line": 257,
+      "line": 259,
       "text": "Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDigitel, Flickr)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/pct.ops.find_rate.md",
-      "line": 23,
-      "text": "Figure 6.6 A $\\text{20\\%}$ tip for an $\\text{\\$80}$ restaurant bill comes out to $\\text{\\$16}.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.ops.increase.md",
-      "line": 23,
-      "text": "Figure 6.6 A $\\text{20\\%}$ tip for an $\\text{\\$80}$ restaurant bill comes out to $\\text{\\$16}.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.ops.of_number.md",
-      "line": 23,
-      "text": "Figure 6.6 A $\\text{20\\%}$ tip for an $\\text{\\$80}$ restaurant bill comes out to $\\text{\\$16}.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/pct.ops.tax_tip.md",
-      "line": 35,
-      "text": "Figure 6.7 The sales tax is calculated as a percent of the purchase price.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/pct.ops.tax_tip.md",
-      "line": 257,
+      "line": 259,
       "text": "Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDigitel, Flickr)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1356,43 +1139,43 @@
     },
     {
       "lesson": "teaching/pct.ops.discount.md",
-      "line": 95,
+      "line": 97,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168466580474\" data-label=\"\" data-summary=\"The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find"
     },
     {
       "lesson": "teaching/pct.ops.discount.md",
-      "line": 195,
+      "line": 197,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168468542255\" data-label=\"\" data-summary=\"The figure shows the steps to solving the problem. It shows nine steps. Identify what are asked to find: Wh"
     },
     {
       "lesson": "teaching/pct.ops.find_rate.md",
-      "line": 181,
+      "line": 183,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168468710061\" data-label=\"\" data-summary=\"The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is"
     },
     {
       "lesson": "teaching/pct.ops.increase.md",
-      "line": 181,
+      "line": 183,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168468710061\" data-label=\"\" data-summary=\"The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is"
     },
     {
       "lesson": "teaching/pct.ops.of_number.md",
-      "line": 181,
+      "line": 183,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168468710061\" data-label=\"\" data-summary=\"The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is"
     },
     {
       "lesson": "teaching/pct.ops.tax_tip.md",
-      "line": 95,
+      "line": 97,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168466580474\" data-label=\"\" data-summary=\"The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find"
     },
     {
       "lesson": "teaching/pct.ops.tax_tip.md",
-      "line": 195,
+      "line": 197,
       "phrase": "The figure shows",
       "context": "<table class=\"unnumbered unstyled\" data-id=\"eip-id1168468542255\" data-label=\"\" data-summary=\"The figure shows the steps to solving the problem. It shows nine steps. Identify what are asked to find: Wh"
     },
@@ -1428,8 +1211,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 347,
-    "shipped": 653,
+    "referenced": 356,
+    "shipped": 662,
     "unreferenced_content": 286,
     "candidates": [
       {

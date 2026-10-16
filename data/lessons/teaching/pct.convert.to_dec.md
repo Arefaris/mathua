@@ -20,6 +20,8 @@ A percent is a ratio whose denominator is 100.
 
 According to data from the American Association of Community Colleges $(2015)\text{,}$ about $\text{57\%}$ of community college students are female. This means 57 out of every 100 community college students are female, as Figure 6.2 shows. Out of the 100 squares on the grid, 57 are shaded, which we write as the ratio $\frac{57}{100}.$
 
+![Among every 100 community college students, 57 are female.](/diagrams/prealgebra/6.2.png)
+
 *Figure 6.2 Among every 100 community college students, 57 are female.*
 
 Similarly, $\text{25\%}$ means a ratio of ${\frac{25}{100},}\text{3\%}$ means a ratio of $\frac{3}{100}$ and $\text{100\%}$ means a ratio of $\frac{100}{100}.$ In words, "one hundred percent" means the total $\text{100\%}$ is $\frac{100}{100},$ and since $\frac{100}{100} = 1,$ we see that $\text{100\%}$ means 1 whole.

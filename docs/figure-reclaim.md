@@ -8,14 +8,14 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-176 paragraphs across 79 lessons read as a caption whose image was dropped:
-72 certain, 33 strong and 71 likely. Every one sits
+145 paragraphs across 59 lessons read as a caption whose image was dropped:
+41 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
 drops the image, so it needs no judgement.
 
-## 2. The upstream is OpenStax, not Algebrica
+## 2. The upstream is OpenStax, and the palette is still the dialect
 
 Every teaching lesson opens with a credit line naming its source, for example:
 
@@ -24,19 +24,27 @@ Every teaching lesson opens with a credit line naming its source, for example:
 ```
 
 Two books account for every `certain` caption: **OpenStax Calculus Volume 1** (36 captions) and
-**OpenStax Prealgebra** (36). Both are CC BY 4.0, which permits reuse and adaptation with
+**OpenStax Prealgebra** (5). Both are CC BY 4.0, which permits reuse and adaptation with
 attribution, and the attribution is already the lesson's own header line.
 
-That changes what "a direct look-alike" means for these figures. Their visual target is their own
-upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applies when a figure is
-redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
-match Algebrica.
+That changes what "a direct look-alike" means for these figures. Their *drawing* is upstream's, not
+Mathua's: they are fetched rather than redrawn, so the line work, the labels and the layout are
+OpenStax's and none of it is a redraw.
 
-## 3. The captions are 72 rows and 39 distinct figures
+**Their color, though, goes, and this reverses an earlier decision.** The paragraph that stood here
+said a re-fetched figure keeps the OpenStax look and does not need to match Algebrica. That was
+wrong for the reason the style doc already gives about redrawn figures: a lesson page shows several
+figures from the same source, and one figure that does not match its neighbours is worse than no
+figure at all. A full-color raster beside greyscale line art is exactly that outlier, so every
+fetched asset is converted at fetch time — grey, its tone stretched to the full ink-to-paper range,
+then mapped onto the greys that section 4 of `docs/diagram-style.md` fixes. The drawing survives; the
+saturated color was the only part of it that never belonged on the page.
+
+## 3. The captions are 41 rows and 30 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
-`Figure 4.4` is the caption in eight of them, and `Figure 4.6` in five. Deduplicating on the pair
-(figure number, caption) leaves **39 distinct figures** still to reclaim. Section 6 gives
+`Figure 3.18` is the caption in three of them, and `Figure 6.8` in two. Deduplicating on the pair
+(figure number, caption) leaves **30 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
@@ -44,7 +52,7 @@ the method.
 | Disposition | Figures | Action |
 | --- | --- | --- |
 | schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 34 | Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/`. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| illustration, fetch | 25 | Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
 
@@ -56,7 +64,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed sixty-three.
+again to 53 and 44, of which section 7 has since landed seventy-two.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -194,7 +202,6 @@ every count here is work still to do.
 | 3.34 | The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1. | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | illustration, fetch |
 | 3.35 | $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its der... | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | illustration, fetch |
 | 4.2 | As the balloon is being filled with air, both the radius and the volume are increasin... | Calculus Volume 1 | 4 Related Rates | 1 | illustration, fetch |
-| 4.4 | (none) | Prealgebra | 4 Visualize Fractions | 7 | illustration, fetch |
 | 4.41 | (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $L.$ ... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.43 | This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.44 | This function crosses its horizontal asymptote multiple times. | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
@@ -206,17 +213,9 @@ every count here is work still to do.
 | 4.55 | As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\text{-}... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.57 | This function has two horizontal asymptotes and it crosses one of the asymptotes. | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.6 | Water is draining from a funnel of height 2 ft and radius 1 ft. The height of the wat... | Calculus Volume 1 | 4 Related Rates | 1 | illustration, fetch |
-| 4.6 | The U.S. coin called a quarter is worth one-fourth of a dollar. | Prealgebra | 4 Multiply and Divide Fractions | 4 | illustration, fetch |
 | 4.60 | The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and approach... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
 | 4.61 | The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | illustration, fetch |
-| 4.7 | Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar. | Prealgebra | 4 Add and Subtract Fractions with Different Denominators | 3 | illustration, fetch |
-| 5.2 | This chart illustrates place values to the left and right of the decimal point. | Prealgebra | 5 Decimals | 3 | illustration, fetch |
-| 5.3 | When we write a check, we write the amount as a decimal number as well as in words. T... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
-| 5.4 | (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole ... | Prealgebra | 5 Decimals | 3 | illustration, fetch |
-| 6.2 | Among every 100 community college students, 57 are female. | Prealgebra | 6 Understand Percent | 3 | illustration, fetch |
 | 6.34 | (none) | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | illustration, fetch |
-| 6.6 | A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$ | Prealgebra | 6 Solve General Applications of Percent | 3 | illustration, fetch |
-| 6.7 | The sales tax is calculated as a percent of the purchase price. | Prealgebra | 6 Solve Sales Tax, Commission, and Discount Applications | 2 | illustration, fetch |
 | 2.22 | (credit: NASA) | Calculus Volume 1 | 2 The Limit of a Function | 1 | photo, third-party credit |
 | 4.4 | (credit: modification of work by Steve Jurvetson, Wikimedia Commons) | Calculus Volume 1 | 4 Related Rates | 1 | photo, third-party credit |
 | 5.34 | (credit: modification of work by Carter Brown, Flickr) | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | photo, third-party credit |
@@ -1165,6 +1164,51 @@ referenced counts both move by ten, to 653 and 347, because the figures are file
 twenty-one lessons no longer carry an orphan. The ceiling in `internal/lessons/assets_test.go`
 follows, to 176, and the e2e case counts move to eight and two.
 
+**Nine more Prealgebra upstream drawings** (Figures 4.4, 4.6, 4.7, 5.2, 5.3, 5.4, 6.2, 6.6 and 6.7)
+landed on 2026-10-16 in twenty-five lessons, as
+`web/next-app/public/diagrams/prealgebra/<number>.png`.
+
+**The disposition follows the caption, not the picture.** Figure 6.6 is a receipt and a fan of
+five-dollar bills rather than a mathematical object, and 5.2 is a chart of column headings, but both
+are `illustration, fetch`: no caption in this batch names a photographer or an agency, which is the
+only signal that separates the photo tier, and none of the nine is a number line, a graph or a
+region that a redraw would have had to determine.
+
+**Figure 4.7's caption is the reason the caption in the lesson is the source of truth.** Upstream's
+copy of it loses the fraction and the escaped dollars that the lesson's repaired text carries, and
+upstream's copy of Figure 5.4 is mojibake, so an alt read off upstream would have disagreed with the
+caption printed above the image. Every lesson sharing a figure carries the same caption, and the
+fetch script asserts that rather than trusting the first one it reads.
+
+The nine captions held 31 rows between them: the report went from 176 to 145, the certain tier from
+72 to 41, distinct figures from 39 to 30 and the fetch tier from 34 to 25. The audit's shipped and
+referenced counts both move by nine, to 662 and 356. The lesson count drops from 79 to 59, since
+twenty of the twenty-five lessons no longer carry an orphan and the five percent lessons still
+carry another. The ceiling in `internal/lessons/assets_test.go` follows, to 145, and the e2e case
+counts move to three and three, because Figure 4.4 landed in `frac.basics.parts` and Figure 6.2 in
+`pct.convert.to_dec`, which are two of the spec's cases.
+
+Section 2 records that a fetched figure is put on the dialect's greys, and these nine are converted
+as they land.
+
+**The conversion is applied at fetch time, because the renderer applies nothing.** A lesson figure
+reaches the page as a plain `<img>` with no filter (`KatexContent.tsx:208`), so a tone that is not
+baked into the asset does not exist. Each fetched asset is flattened to `sRGB`, dropped to grey,
+stretched with `-auto-level`, and mapped through a 256x1 lookup table of the dialect's five levels —
+`#333333`, `#636363`, `#BABABA`, `#E6E6E6` and white, which is a dialect color too.
+
+**The stretch is not decoration.** Five of the nineteen fetched assets bottom out at a mid grey: the
+micrograph at 1.11 at 0.48, the quarter at 4.6 at 0.43, the three cell-counting sets at 0.27 and the
+hundredths grid at 6.2 at 0.22. Without the stretch they map entirely into the light half of the
+ramp, so they carry no ink at all and read as washed out rather than as line art. The other fourteen
+bottom out at 0.14, which is close enough to black that the stretch barely moves them.
+
+**The paper stays white.** Mapping white to `#E6E6E6` instead would put every fetched figure on a
+grey card that nothing else on the page shares.
+
+The ten drawings that landed before this batch are still in OpenStax's color, and the commit that
+follows converts them; that is also where the format the CDN actually serves is recorded.
+
 ## 8. Order of work
 
 The list is three tiers now rather than four: the `unidentified` tier used to lead here as its own
@@ -1173,7 +1217,7 @@ items 1 and 2 by their new dispositions.
 
 1. **The schematics.** Highest value and no license question: they are redrawn as Mathua's own
    work, in the dialect the style doc fixes, and they land under `source: local`.
-2. **The illustrations.** Fetch, credit and record the upstream link in the metadata entry.
+2. **The illustrations.** Fetch, put on the dialect's greys (section 2) and credit.
 3. **The photos.** Decide per figure between a licensed fetch and a replacement, because a
    photograph cannot be redrawn as a line figure.
 

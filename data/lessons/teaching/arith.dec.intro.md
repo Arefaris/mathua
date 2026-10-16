@@ -46,6 +46,8 @@ Table 5.2
 
 When we name a whole number, the name corresponds to the place value based on the powers of ten. In Whole Numbers, we learned to read 10,000 as *ten thousand*. Likewise, the names of the decimal places correspond to their fraction values. Notice how the place value names in Figure 5.2 relate to the names of the fractions from Table 5.2.
 
+![This chart illustrates place values to the left and right of the decimal point.](/diagrams/prealgebra/5.2.png)
+
 *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.*
 
 Notice two important facts shown in Figure 5.2.
@@ -56,6 +58,8 @@ Notice two important facts shown in Figure 5.2.
 Remember that $\text{\$5}.03$ lunch? We read $\text{\$5.03}$ as *five dollars and three cents*. Naming decimals (those that don’t represent money) is done in a similar way. We read the number 5.03 as *five and three hundredths*.
 
 We sometimes need to translate a number written in decimal notation into words. As shown in Figure 5.3, we write the amount on a check in both words and numbers.
+
+![When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.](/diagrams/prealgebra/5.3.png)
 
 *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words. The bank looks at the check to make sure both numbers match. This helps prevent errors.*
 
@@ -669,6 +673,8 @@ $-0.6\;\;\_-0.7$
 ### Round Decimals
 
 In the United States, gasoline prices are usually written with the decimal part as thousandths of a dollar. For example, a gas station might post the price of unleaded gas at $\text{\$3.279}$ per gallon. But if you were to buy exactly one gallon of gas at this price, you would pay $\text{\$3.28}$, because the final price would be rounded to the nearest cent. In Whole Numbers, we saw that we round numbers to get an approximate value when the exact value is not needed. Suppose we wanted to round $\text{\$2.72}$ to the nearest dollar. Is it closer to $\text{\$2}$ or to $\text{\$3}?$ What if we wanted to round $\text{\$2.72}$ to the nearest ten cents; is it closer to $\text{\$2.70}$ or to $\text{\$2.80}?$ The number lines in Figure 5.4 can help us answer those questions.
+
+![(a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.](/diagrams/prealgebra/5.4.png)
 
 *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest whole number is 3. (b) We see that 2.72 is closer to 2.70 than 2.80. So we say that 2.72 rounded to the nearest tenth is 2.7.*
 

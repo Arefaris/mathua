@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-176 paragraphs across 79 lessons look like a figure caption whose image
-was dropped while its text was kept: **72 certain**, **33 strong**, **71 likely**.
+145 paragraphs across 59 lessons look like a figure caption whose image
+was dropped while its text was kept: **41 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -58,9 +58,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/alg.seq.sum_arith.md` | 33 | likely | *Values of $\operatorname{sqrt}(x)$* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/alg.seq.sum_arith.md` | 195 | likely | *Unemployment in the United States* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/alg.systems.word.md` | 45 | likely | *Amount in Savings Account* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/arith.dec.intro.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/arith.dec.intro.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
-| `teaching/arith.dec.intro.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
 | `teaching/arith.neg.add_sub.md` | 13 | likely | *Number line with interesting Celsius temperatures* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 193 | likely | *Viewing $3\cdot(-7)$ as repeated addition* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.neg.add_sub.md` | 199 | likely | *Viewing $-3\cdot(-7)$ as repeated subtraction* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -112,26 +109,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.infinity.md` | 553 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 439 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 540 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
-| `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/dec.basics.compare.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
-| `teaching/dec.basics.compare.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
-| `teaching/dec.ops.round.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
-| `teaching/dec.ops.round.md` | 60 | certain | *Figure 5.3 When we write a check, we write the amount as a decimal number as well as in words...* | auto-numbered figure/table label |
-| `teaching/dec.ops.round.md` | 673 | certain | *Figure 5.4 (a) We see that 2.72 is closer to 3 than to 2. So, 2.72 rounded to the nearest who...* | auto-numbered figure/table label |
-| `teaching/frac.add.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.add.word.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.basics.concept.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.basics.equivalent.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.basics.number_line.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.basics.parts.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.div.whole.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.mult.whole.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.ops.benchmark.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.ops.compare.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.ops.div.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.ops.mult.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.ops.simplify.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.sub.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/geo.basic.angle_measure.md` | 30 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angle_measure.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.basic.angles.md` | 38 | strong | *Solution* | duplicated 2x in this lesson |
@@ -165,19 +142,11 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/geo.triangle.area.md` | 32 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 34 | strong | *Solution* | duplicated 2x in this lesson |
 | `teaching/geo.triangle.types.md` | 46 | strong | *Solution* | duplicated 2x in this lesson |
-| `teaching/pct.basics.concept.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
-| `teaching/pct.basics.concept.md` | 308 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
-| `teaching/pct.convert.from_dec.md` | 308 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 23 | certain | *Figure 6.2 Among every 100 community college students, 57 are female.* | auto-numbered figure/table label |
-| `teaching/pct.convert.to_dec.md` | 308 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
-| `teaching/pct.ops.discount.md` | 35 | certain | *Figure 6.7 The sales tax is calculated as a percent of the purchase price.* | auto-numbered figure/table label |
-| `teaching/pct.ops.discount.md` | 257 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
-| `teaching/pct.ops.find_rate.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
-| `teaching/pct.ops.increase.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
-| `teaching/pct.ops.of_number.md` | 23 | certain | *Figure 6.6 A $\text{20\%}$ tip for an $\text{\$80}$ restaurant bill comes out to $\text{\$16}.$* | auto-numbered figure/table label |
-| `teaching/pct.ops.tax_tip.md` | 35 | certain | *Figure 6.7 The sales tax is calculated as a percent of the purchase price.* | auto-numbered figure/table label |
-| `teaching/pct.ops.tax_tip.md` | 257 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
+| `teaching/pct.basics.concept.md` | 310 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
+| `teaching/pct.convert.from_dec.md` | 310 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
+| `teaching/pct.convert.to_dec.md` | 310 | certain | *Figure 6.4 (credit: Riles32807, Wikimedia Commons)* | auto-numbered figure/table label |
+| `teaching/pct.ops.discount.md` | 259 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
+| `teaching/pct.ops.tax_tip.md` | 259 | certain | *Figure 6.8 Applications of discounts are common in everyday life. (credit: Charleston's TheDi...* | auto-numbered figure/table label |
 | `teaching/prealg.eq.one_step_add.md` | 43 | likely | *Add 2 to mystery number to get 6, or subtract 2 from 6 to get mystery number* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/prealg.eq.one_step_add.md` | 59 | likely | *Multiply mystery number by 2 to get 6, or divide 6 by 2 to get mystery number* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/prealg.eq.one_step_add.md` | 75 | likely | *Balance scale representing $x+2=6$, and the solution after taking away 2 from each side* | teaching corpus: standalone emphasis is the dropped-figure shape |
@@ -224,13 +193,13 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/frac.ops.simplify.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/ode.bifurcation.md` | 3 | The picture above | **Bifurcation:** a qualitative change in the phase portrait as a parameter $\mu$ crosses a critical value — the number or stability of equilibria changes. The picture above the threshold is not a cont |
 | `teaching/ode.bifurcation.md` | 3 | the picture below | **Bifurcation:** a qualitative change in the phase portrait as a parameter $\mu$ crosses a critical value — the number or stability of equilibria changes. The picture above the threshold is not a cont |
-| `teaching/pct.ops.discount.md` | 95 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168466580474" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find |
-| `teaching/pct.ops.discount.md` | 195 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468542255" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what are asked to find: Wh |
-| `teaching/pct.ops.find_rate.md` | 181 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468710061" data-label="" data-summary="The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is |
-| `teaching/pct.ops.increase.md` | 181 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468710061" data-label="" data-summary="The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is |
-| `teaching/pct.ops.of_number.md` | 181 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468710061" data-label="" data-summary="The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is |
-| `teaching/pct.ops.tax_tip.md` | 95 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168466580474" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find |
-| `teaching/pct.ops.tax_tip.md` | 195 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468542255" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what are asked to find: Wh |
+| `teaching/pct.ops.discount.md` | 97 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168466580474" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find |
+| `teaching/pct.ops.discount.md` | 197 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468542255" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what are asked to find: Wh |
+| `teaching/pct.ops.find_rate.md` | 183 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468710061" data-label="" data-summary="The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is |
+| `teaching/pct.ops.increase.md` | 183 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468710061" data-label="" data-summary="The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is |
+| `teaching/pct.ops.of_number.md` | 183 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468710061" data-label="" data-summary="The figure shows the steps to translate the question &#39;144 is what percent of 96?&#39; The first step is |
+| `teaching/pct.ops.tax_tip.md` | 97 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168466580474" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find |
+| `teaching/pct.ops.tax_tip.md` | 197 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468542255" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what are asked to find: Wh |
 | `teaching/ratio.ops.proportion.md` | 96 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468703669" data-label="" data-summary="The figure shows the steps to finding the cross products of the proportion 4 is to 9 as 12 is to 28. The cr |
 | `teaching/ratio.ops.proportion.md` | 120 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168469699712" data-label="" data-summary="The figure shows the steps to finding the cross products of the proportion 17.5 is to 37.5 as 7 is to 15. T |
 | `teaching/ratio.ops.scale.md` | 96 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468703669" data-label="" data-summary="The figure shows the steps to finding the cross products of the proportion 4 is to 9 as 12 is to 28. The cr |
@@ -239,7 +208,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-653 diagrams ship, 347 URLs are referenced by lesson bodies, and
+662 diagrams ship, 356 URLs are referenced by lesson bodies, and
 **286 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 

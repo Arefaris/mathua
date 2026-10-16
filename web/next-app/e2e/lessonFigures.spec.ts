@@ -34,7 +34,10 @@ import { resolve } from 'node:path'
 
 const ROOT = resolve(__dirname, '../../..')
 
-/** Real bodies, chosen because they now carry figures and because one does not. */
+/**
+ * Real bodies, chosen because they now carry figures and because one does not. Together they cover
+ * bodies with one, two, three, six, eight, ten and eleven figures.
+ */
 const CASES = [
   { concept: 'discrete.sets.operations', file: 'algebrica/sets-and-numbers/sets.md', expectFigures: 6 },
   { concept: 'alg.log.concept', file: 'algebrica/powers-radicals-logarithms/logarithms.md', expectFigures: 3 },
@@ -51,17 +54,18 @@ const CASES = [
   // 1.11 was fetched from OpenStax and Figure 1.12 was drawn into the same lesson, so this is the
   // case that would catch the two tiers disagreeing about how a figure is written into a body.
   { concept: 'arith.mult.tables', file: 'teaching/arith.mult.tables.md', expectFigures: 2 },
-  // Two, the one count the cases above miss, and the count the fraction reclaims produce: 4.2
-  // and 4.3 are cited by the same seven lessons, so this is a body with two reclaimed figures
-  // and nothing else. Together the cases now cover one, two, three, six, eight, ten and eleven
-  // figures.
-  { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 2 },
-  // The other kind of two: the percent pair is a table rather than a drawing, so this case
+  // Three: the two reclaims are 4.2 and 4.3, cited by the same seven lessons, and Figure 4.4
+  // landed in this body with the second fetch batch, so it is the case that puts a fetched PNG
+  // beside the drawn SVGs a learner already reads here. The count is the lesson's, and it has
+  // moved once: two, then three.
+  { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 3 },
+  // The other kind of three: the percent pair is a table rather than a drawing, so this case
   // proves a reclaimed figure that is ruled cells and text renders, which the lines, blocks and
-  // bars above cannot show. It is also the batch where upstream shipped one image for both
+  // bars above cannot show, and Figure 6.2 — a grid of 100 students — landed in the same body
+  // with the second fetch batch. It is also the batch where upstream shipped one image for both
   // figures, so what is measured here is the figure the lesson needs and not the one upstream
   // linked twice.
-  { concept: 'pct.convert.to_dec', file: 'teaching/pct.convert.to_dec.md', expectFigures: 2 },
+  { concept: 'pct.convert.to_dec', file: 'teaching/pct.convert.to_dec.md', expectFigures: 3 },
   // One, and the one primitive the cases above do not carry: Figure 5.5's measurement bracket
   // is an unfilled path with turned-down ends, so this asserts that a reclaimed figure made of
   // paths draws at all and not only figures made of lines, rects and text.

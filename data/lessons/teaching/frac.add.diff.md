@@ -19,6 +19,8 @@ In the previous section, we explained how to add and subtract fractions with a c
 
 Let’s think about coins again. Can you add one quarter and one dime? You could say there are two coins, but that’s not very useful. To find the total value of one quarter plus one dime, you change them to the same kind of unit—cents. One quarter equals 25 cents and one dime equals 10 cents, so the sum is 35 cents. See Figure 4.7.
 
+![Together, a quarter and a dime are worth 35 cents, or 35/100 of a dollar.](/diagrams/prealgebra/4.7.png)
+
 *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.*
 
 Similarly, when we add fractions with different denominators we have to convert them to equivalent fractions with a common denominator. With the coins, when we convert to cents, the denominator is 100. Since there are 100 cents in one dollar, 25 cents is $\frac{25}{100}$ and 10 cents is $\frac{10}{100}.$ So we add $\frac{25}{100} + \frac{10}{100}$ to get $\frac{35}{100},$ which is 35 cents.

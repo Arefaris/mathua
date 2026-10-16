@@ -599,6 +599,8 @@ Model: $3 \div \frac{1}{2}$
 
 Let’s use money to model $2 \div \frac{1}{4}$ in another way. We often read $\frac{1}{4}$ as a ‘quarter’, and we know that a quarter is one-fourth of a dollar as shown in Figure 4.6. So we can think of $2 \div \frac{1}{4}$ as, “How many quarters are there in two dollars?” One dollar is 4 quarters, so 2 dollars would be 8 quarters. So again, $2 \div \frac{1}{4} = 8.$
 
+![The U.S. coin called a quarter is worth one-fourth of a dollar.](/diagrams/prealgebra/4.6.png)
+
 *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.*
 
 Using fraction tiles, we showed that $\frac{1}{2} \div \frac{1}{6} = 3.$ Notice that $\frac{1}{2} \cdot \frac{6}{1} = 3$ also. How are $\frac{1}{6}$ and $\frac{6}{1}$ related? They are reciprocals. This leads us to the procedure for fraction division.
