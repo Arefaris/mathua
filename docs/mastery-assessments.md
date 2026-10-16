@@ -88,7 +88,7 @@ Carry into the ADR: the count of stored unit states, currently two.
 
 **Blocks:** D4 (you cannot set a pass threshold for an undefined unit), and everything.
 
-**Measured 2026-10-06 and re-measured 2026-10-07, over all 666 concepts.** The corpus was
+**Measured 2026-10-06 and re-measured 2026-10-07, over all 666 concepts the corpus then held.** The corpus was
 assumed to have no block structure. The first measurement said it had usable ones; that
 measurement was **wrong**, and correcting it is the substance of this entry.
 
@@ -145,7 +145,7 @@ are, they cannot be "one per domain" or "one per subdomain" and still inherit th
 
 ### What is committed
 
-`data/mastery_units.json` is the width-3 draft: 91 units, all 666 concepts covered exactly once,
+`data/mastery_units.json` is the width-3 draft: 93 units, all 672 concepts covered exactly once,
 no authored prerequisite edges, band width recorded in the file rather than in a constant.
 `data/mastery_units.report.md` carries the table above and the unit list.
 `go run ./cmd/masteryunits -band N` regenerates at any width; `make validate` checks coverage,
