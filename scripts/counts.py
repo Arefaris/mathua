@@ -139,6 +139,28 @@ def render(readme: str, c: dict) -> str:
     return readme
 
 
+def check_domain_labels(c: dict) -> list:
+    """Every domain in the data has a label, and every label a domain.
+
+    The README's domain table is rendered from DOMAIN_LABELS (see `render`), while the `domains`
+    count is taken from the concepts themselves, so the two are only kept in step by hand: a new
+    domain with no label is silently absent from the table while `counts.py` still counts it. That
+    is a foot-gun for the one change this file's neighbourhood prepares for -- adding a domain --
+    and it is invisible in the output, which is why the check exists rather than a comment.
+    """
+    labelled = [k for k, _ in DOMAIN_LABELS]
+    problems = []
+    for domain in sorted(set(c["by_domain"]) - set(labelled)):
+        problems.append(
+            f"domain {domain!r} has {c['by_domain'][domain]} concepts and no DOMAIN_LABELS entry, "
+            f"so the README domain table omits it")
+    for domain in sorted(set(labelled) - set(c["by_domain"])):
+        problems.append(f"DOMAIN_LABELS names {domain!r}, which has no concepts")
+    if len(labelled) != len(set(labelled)):
+        problems.append("DOMAIN_LABELS lists a domain twice")
+    return problems
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--write", action="store_true")
@@ -164,6 +186,7 @@ def main() -> int:
 
     # --check
     problems = []
+    problems += check_domain_labels(c)
     if rendered != original:
         problems.append("README.md counts are stale (run: python3 scripts/counts.py --write)")
     for rel in DOCS_TO_SCAN:
