@@ -1,0 +1,286 @@
+"""Sweep every number the docs, the tests and the app copy pin, from the corpus that owns them.
+
+A content batch moves the concept count, and eleven files quote it: three docs quote the reach and
+the unreachable remainder, a mastery ADR quotes the unit count, AGENTS.md and CONTRIBUTING.md quote
+the shards and the knowledge points, three published docs quote the concept count, two Go tests
+assert it, and four strings in the app copy advertise it. Regenerating the derived artifacts is a
+separate five-command chain.
+
+Doing that by hand cost a turn per batch and produced two classes of mistake, both of which this
+script is written to prevent:
+
+  * **Replacing a literal that had already moved.** `text.replace("666 concepts", "679 concepts")`
+    matches nothing on a file that now says 672, and `str.replace` reports nothing. Every rule here
+    is a *pattern* with a required match count, so a rule that finds nothing is an error rather than
+    a silent no-op.
+  * **Publishing someone else's work.** A second writer has uncommitted edits in four of these
+    files, so editing them in the working tree and `git add`-ing them would commit that work too.
+    `--blob-only` builds a blob from HEAD plus the substitution and stages it with `update-index`,
+    which leaves the working tree alone.
+
+Usage:
+    python3 scripts/sweep_counts.py             # regenerate, rewrite, verify
+    python3 scripts/sweep_counts.py --no-regen  # rewrite only, from the corpus as it stands
+    python3 scripts/sweep_counts.py --check     # report what would change; write nothing
+
+Exit code 0 means every rule matched and every gate passed.
+"""
+from __future__ import annotations
+
+import argparse
+import collections
+import glob
+import json
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(ROOT)
+
+# Files another writer has uncommitted edits in. They are staged as blobs built from HEAD so their
+# working trees stay untouched; drop a path from this list once the tree is clean again.
+BLOB_ONLY = (
+    "README.md",
+    "docs/architecture.md",
+    "docs/system-design.md",
+    "docs/system-design-slides.md",
+)
+
+# The regeneration chain. Order matters: the mastery units read the DAG, the web copy reads the
+# concept files, and the counts read everything.
+REGEN = (
+    ["make", "mastery-units"],
+    ["go", "run", "./scripts/merge_concepts"],
+    ["npm", "run", "graph:build"],
+    ["npm", "run", "flow:build"],
+    ["python3", "scripts/counts.py", "--write"],
+)
+WEB = os.path.join("web", "next-app")
+
+
+def run(cmd, cwd=None):
+    print(f"  $ {' '.join(cmd)}")
+    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    if r.returncode != 0:
+        sys.stderr.write(r.stdout + r.stderr)
+        raise SystemExit(f"command failed: {' '.join(cmd)}")
+    tail = [l for l in r.stdout.splitlines() if l.strip()][-1:] or [""]
+    print(f"    {tail[0][:110]}")
+
+
+def facts() -> dict:
+    """Read every number from its owner: the concept files, the shards, the courses, the partition."""
+    concepts = {}
+    for path in sorted(glob.glob("data/concepts/*.json")):
+        if path.endswith("enrichment.json"):
+            continue
+        for c in json.load(open(path, encoding="utf-8")):
+            if "id" in c:
+                concepts[c["id"]] = c
+    prereq = {c: set(v.get("prerequisites") or []) for c, v in concepts.items()}
+    domain = {c: v["domain"] for c, v in concepts.items()}
+
+    def closure(ids):
+        seen, stack = set(), list(ids)
+        while stack:
+            c = stack.pop()
+            if c in seen or c not in prereq:
+                continue
+            seen.add(c)
+            stack += list(prereq[c])
+        return seen
+
+    courses = json.load(open("data/courses.json", encoding="utf-8"))
+    reach = set()
+    for co in courses:
+        reach |= closure(co.get("targets", []))
+    unreachable = collections.Counter(domain[c] for c in set(concepts) - reach)
+
+    dep = collections.defaultdict(set)
+    for c, ps in prereq.items():
+        for p in ps:
+            dep[p].add(c)
+    indeg = {c: len(prereq[c]) for c in concepts}
+    depth = {c: 0 for c in concepts}
+    stack = [c for c in concepts if indeg[c] == 0]
+    while stack:
+        c = stack.pop()
+        for d in dep[c]:
+            depth[d] = max(depth[d], depth[c] + 1)
+            indeg[d] -= 1
+            if indeg[d] == 0:
+                stack.append(d)
+
+    kp_files = glob.glob(os.path.join("data/lessons", "kp", "*.json"))
+    kps = sum(len(json.load(open(f, encoding="utf-8"))) for f in kp_files)
+    units = json.load(open("data/mastery_units.json", encoding="utf-8"))
+    unit_list = units.get("units") if isinstance(units, dict) else units
+    return {
+        "concepts": len(concepts),
+        "domains": len(set(domain.values())),
+        "courses": len(courses),
+        "kp_files": len(kp_files),
+        "kps": kps,
+        "reach": len(reach),
+        "unreachable": len(concepts) - len(reach),
+        "max_depth": max(depth.values()),
+        "units": len(unit_list),
+        "calculus": len([c for c in concepts if domain[c] == "calculus"]),
+        "calculus_unreachable": unreachable["calculus"],
+        "discrete": len([c for c in concepts if domain[c] == "discrete_math"]),
+        "discrete_unreachable": unreachable["discrete_math"],
+    }
+
+
+def rules(f: dict) -> list:
+    """(path, pattern, replacement, minimum matches[, region]) — a pattern that matches nothing is an
+    error rather than a silent no-op, and a region restricts the rule to one part of a file.
+
+    The region matters for the two table rows below: `| discrete_math | 31 | N |` appears in both
+    section 4.1 (the unreachable count) and section 4.2 (the multiple-choice count), so an
+    unanchored pattern rewrites the wrong table. That bug was in this script's first version.
+    """
+    return [
+        # The published engineering docs that quote the corpus size.
+        ("docs/architecture.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
+        ("docs/system-design.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
+        ("docs/system-design.md", r"\b\d{3} KP shards\b", f"{f['concepts']} KP shards", 1),
+        ("docs/system-design-slides.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
+        ("README.md", r"badge/concepts-\d+-", f"badge/concepts-{f['concepts']}-", 1),
+        # AGENTS.md and CONTRIBUTING.md quote the shards and the knowledge points.
+        ("AGENTS.md", r"all \d{3} shards", f"all {f['kp_files']} shards", 1),
+        ("CONTRIBUTING.md", r"All \d{3} shards", f"All {f['kp_files']} shards", 1),
+        ("CONTRIBUTING.md", r"all \d{3} shard files × 3 = \d{4} KPs",
+         f"all {f['kp_files']} shard files × 3 = {f['kps']} KPs", 1),
+        # The mastery docs and the ADR that describe the partition.
+        ("docs/mastery-assessments.md", r"\d{2,3} units, all \d{3} concepts",
+         f"{f['units']} units, all {f['concepts']} concepts", 1),
+        ("docs/mastery-semantics.md", r"\(\d{3} concepts, all with a threshold\)",
+         f"({f['concepts']} concepts, all with a threshold)", 1),
+        ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
+         r"the authoring of \d{3} concepts", f"the authoring of {f['concepts']} concepts", 1),
+        ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
+         r"\*\*\d{2,3} units, all \d{3} concepts covered exactly once\*\*",
+         f"**{f['units']} units, all {f['concepts']} concepts covered exactly once**", 1),
+        ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
+         r"\(\d{3}/\d{3}, max \d+\)", f"({f['concepts']}/{f['concepts']}, max {f['max_depth']})", 1),
+        # content-expansion.md is the owner of the reach measurement.
+        ("docs/content-expansion.md", r"There are \d{3} concepts, and there are \d{3} KP shard files",
+         f"There are {f['concepts']} concepts, and there are {f['kp_files']} KP shard files", 1),
+        ("docs/content-expansion.md", r"holding \d{4} knowledge points",
+         f"holding {f['kps']} knowledge points", 1),
+        ("docs/content-expansion.md", r"### 4.1 The course catalog reaches \d+ of the \d{3} concepts",
+         f"### 4.1 The course catalog reaches {f['reach']} of the {f['concepts']} concepts", 1),
+        ("docs/content-expansion.md", r"those closures reach\n\d+ of the \d{3} concepts: \d+ of them",
+         f"those closures reach\n{f['reach']} of the {f['concepts']} concepts: "
+         f"{f['unreachable']} of them", 1),
+        ("docs/content-expansion.md", r"\| calculus \| \d+ \| \d+ \|",
+         f"| calculus | {f['calculus']} | {f['calculus_unreachable']} |", 1,
+         ("### 4.1", "### 4.2")),
+        ("docs/content-expansion.md", r"\| discrete_math \| \d+ \| \d+ \|",
+         f"| discrete_math | {f['discrete']} | {f['discrete_unreachable']} |", 1,
+         ("### 4.1", "### 4.2")),
+        # The two Go tests that pin a size rather than reading it.
+        ("internal/concepts/concepts_test.go", r"\b\d{3}\b", str(f["concepts"]), 4),
+        ("internal/planning/planner_test.go", r"expected \d+ courses, got", f"expected {f['courses']} courses, got", 1),
+        # The app copy a learner reads, and the test that guards it.
+        ("web/next-app/app/how-it-works/sections.tsx", r"contains \d{3} concepts",
+         f"contains {f['concepts']} concepts", 1),
+        ("web/next-app/app/how-it-works/sections.tsx", r"assessment of \d{3} concepts would require up to \d{3} questions",
+         f"assessment of {f['concepts']} concepts would require up to {f['concepts']} questions", 1),
+        ("web/next-app/app/layout.tsx", r"Mastery-gated, \d{3} concepts",
+         f"Mastery-gated, {f['concepts']} concepts", 1),
+        ("web/next-app/app/layout.tsx", r"Open-source, \d{3} concepts, spaced repetition, 50 XP mastery checks",
+         f"Open-source, {f['concepts']} concepts, spaced repetition, 50 XP mastery checks", 1),
+        ("web/next-app/app/layout.tsx", r"Open-source, \d{3} concepts, spaced repetition\.",
+         f"Open-source, {f['concepts']} concepts, spaced repetition.", 1),
+        ("web/next-app/test/copyTruth.test.ts", r"the graph holds \d{3}",
+         f"the graph holds {f['concepts']}", 1),
+    ]
+
+
+def content_of(path: str) -> str:
+    """HEAD's content for a blob-only path, the working tree's otherwise."""
+    if path in BLOB_ONLY:
+        return subprocess.run(["git", "show", f"HEAD:{path}"], capture_output=True, text=True,
+                              check=True).stdout
+    return open(path, encoding="utf-8").read()
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--no-regen", action="store_true", help="skip the regeneration chain")
+    ap.add_argument("--check", action="store_true", help="report changes; write nothing")
+    args = ap.parse_args()
+
+    if not args.no_regen and not args.check:
+        print("regenerating the derived artifacts:")
+        for cmd in REGEN:
+            cwd = WEB if cmd[0] == "npm" else None
+            run(cmd, cwd=cwd)
+    elif args.check:
+        print("check mode: no regeneration, no writes")
+
+    f = facts()
+    print("\ncorpus facts: " + json.dumps(f, sort_keys=True))
+
+    grouped = collections.defaultdict(list)
+    for rule in rules(f):
+        path, pattern, repl, at_least = rule[:4]
+        region = rule[4] if len(rule) > 4 else None
+        grouped[path].append((pattern, repl, at_least, region))
+
+    def replace(text, pattern, repl, at_least, region):
+        """Apply one rule, honouring its region, and return the new text and the match count."""
+        if region is None:
+            return re.subn(pattern, repl, text)
+        start = text.find(region[0])
+        end = text.find(region[1], start + 1) if start >= 0 else -1
+        if start < 0 or end < 0:
+            raise SystemExit(f"region markers {region} not found")
+        head, body, tail = text[:start], text[start:end], text[end:]
+        body, n = re.subn(pattern, repl, body)
+        return head + body + tail, n
+
+    changed = 0
+    for path, subs in grouped.items():
+        text = content_of(path)
+        original = text
+        for pattern, repl, at_least, region in subs:
+            text, n = replace(text, pattern, repl, at_least, region)
+            if n < at_least:
+                raise SystemExit(f"{path}: /{pattern}/ matched {n} times, expected at least {at_least}")
+        here = sum(1 for a, b in zip(original.split("\n"), text.split("\n")) if a != b)
+        if text == original:
+            print(f"  current  {path}")
+            continue
+        changed += 1
+        if args.check:
+            print(f"  would change {path} ({here} line(s))")
+            continue
+        if path in BLOB_ONLY:
+            blob = subprocess.run(["git", "hash-object", "-w", "--stdin"], input=text.encode(),
+                                  capture_output=True, check=True).stdout.decode().strip()
+            subprocess.run(["git", "update-index", "--cacheinfo", f"100644,{blob},{path}"], check=True)
+            print(f"  staged    {path} ({here} line(s), blob from HEAD — working tree untouched)")
+        else:
+            open(path, "w", encoding="utf-8").write(text)
+            print(f"  rewrote   {path} ({here} line(s))")
+
+    if args.check:
+        print(f"\n{changed} file(s) would change")
+        return 0
+    print(f"\n{changed} file(s) rewritten")
+    print("\nverifying:")
+    for cmd in (["python3", "scripts/check_docs.py"], ["python3", "scripts/counts.py", "--check"],
+                ["python3", "scripts/audit_lessons.py"], ["go", "run", "scripts/validate_graph.go"],
+                ["go", "run", "./cmd/validate-mastery-units"]):
+        run(cmd)
+    print("sweep ok")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
