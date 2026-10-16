@@ -51,6 +51,10 @@ const CASES = [
   // else in it — the arithmetic case above cannot show this, since it counts figures that have
   // been drawing alongside each other since before this case existed.
   { concept: 'arith.mult.tables', file: 'teaching/arith.mult.tables.md', expectFigures: 1 },
+  // Two, the one count the cases above miss, and the count the fraction reclaims produce: 4.2
+  // and 4.3 are cited by the same seven lessons, so this is a body with two reclaimed figures
+  // and nothing else. Together the cases now cover one, two, three, six and seven figures.
+  { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 2 },
 ]
 
 const FIGURELESS = { concept: 'arith.add.word', file: 'teaching/arith.add.word.md' }

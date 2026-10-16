@@ -551,6 +551,8 @@ There are 4 groups of 3 counters. In other words, there are four $3\text{s}$ in 
 
 What about dividing fractions? Suppose we want to find the quotient: $\frac{1}{2} \div \frac{1}{6}.$ We need to figure out how many $\frac{1}{6}\text{s}$ there are in $\frac{1}{2}.$ We can use fraction tiles to model this division. We start by lining up the half and sixth fraction tiles as shown in Figure 4.5. Notice, there are three $\frac{1}{6}$ tiles in $\frac{1}{2},$ so $\frac{1}{2} \div \frac{1}{6} = 3.$
 
+![A rectangle is shown, labeled as one half. Below it is an identical rectangle split into three equal pieces, each labeled as one sixth.](/diagrams/arithmetic/fraction-sixths.svg)
+
 *Figure 4.5*
 
 ### Manipulative Mathematics

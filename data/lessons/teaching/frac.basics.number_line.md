@@ -32,6 +32,8 @@ A fraction is a way to represent parts of a whole. The denominator $b$ represent
 
 In Figure 4.2, the circle has been divided into three parts of equal size. Each part represents $\frac{1}{3}$ of the circle. This type of model is called a fraction circle. Other shapes, such as rectangles, can also be used to model fractions.
 
+![A circle is divided into three equal wedges. Each piece is labeled as one third.](/diagrams/arithmetic/fraction-circle.svg)
+
 *Figure 4.2*
 
 ### Manipulative Mathematics
@@ -93,6 +95,8 @@ Shade $\frac{6}{8}$ of the circle.
 Shade $\frac{2}{5}$ of the rectangle.
 
 In Example 4.1 and Example 4.2, we used circles and rectangles to model fractions. Fractions can also be modeled as manipulatives called fraction tiles, as shown in Figure 4.3. Here, the whole is modeled as one long, undivided rectangular tile. Beneath it are tiles of equal length divided into different numbers of equally sized parts.
+
+![One long, undivided rectangular tile is shown, labeled “1”. Below it is a rectangular tile of the same size and shape that has been divided vertically into two equal pieces, each labeled as one half. Below that is another rectangular tile that has been divided into three equal pieces, each labeled as one third. Below that is another rectangular tile that has been divided into four equal pieces, each labeled as one fourth. Below that is another rectangular tile that has been divided into six pieces, each labeled as one sixth.](/diagrams/arithmetic/fraction-tiles.svg)
 
 *Figure 4.3*
 

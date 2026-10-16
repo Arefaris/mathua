@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-300 paragraphs across 113 lessons look like a figure caption whose image
-was dropped while its text was kept: **196 certain**, **33 strong**, **71 likely**.
+282 paragraphs across 113 lessons look like a figure caption whose image
+was dropped while its text was kept: **178 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -214,35 +214,17 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/dec.ops.sub.md` | 374 | certain | *Figure 5.5* | auto-numbered figure/table label |
 | `teaching/frac.add.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/frac.add.word.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.basics.concept.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.basics.concept.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.basics.concept.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.basics.equivalent.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.basics.equivalent.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.basics.equivalent.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.basics.number_line.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.basics.number_line.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.basics.number_line.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.basics.parts.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.basics.parts.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.basics.parts.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.div.whole.md` | 554 | certain | *Figure 4.5* | auto-numbered figure/table label |
-| `teaching/frac.div.whole.md` | 600 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.mult.whole.md` | 554 | certain | *Figure 4.5* | auto-numbered figure/table label |
-| `teaching/frac.mult.whole.md` | 600 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.ops.benchmark.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.ops.benchmark.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.ops.benchmark.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.ops.compare.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.ops.compare.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.ops.compare.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
-| `teaching/frac.ops.div.md` | 554 | certain | *Figure 4.5* | auto-numbered figure/table label |
-| `teaching/frac.ops.div.md` | 600 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.ops.mult.md` | 554 | certain | *Figure 4.5* | auto-numbered figure/table label |
-| `teaching/frac.ops.mult.md` | 600 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
-| `teaching/frac.ops.simplify.md` | 35 | certain | *Figure 4.2* | auto-numbered figure/table label |
-| `teaching/frac.ops.simplify.md` | 97 | certain | *Figure 4.3* | auto-numbered figure/table label |
-| `teaching/frac.ops.simplify.md` | 454 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.basics.concept.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.basics.equivalent.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.basics.number_line.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.basics.parts.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.div.whole.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.mult.whole.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.ops.benchmark.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.ops.compare.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
+| `teaching/frac.ops.div.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.ops.mult.md` | 602 | certain | *Figure 4.6 The U.S. coin called a quarter is worth one-fourth of a dollar.* | auto-numbered figure/table label |
+| `teaching/frac.ops.simplify.md` | 458 | certain | *Figure 4.4* | auto-numbered figure/table label |
 | `teaching/frac.ops.to_decimal.md` | 289 | certain | *Figure 5.6* | auto-numbered figure/table label |
 | `teaching/frac.sub.diff.md` | 22 | certain | *Figure 4.7 Together, a quarter and a dime are worth 35 cents, or $\frac{35}{100}$ of a dollar.* | auto-numbered figure/table label |
 | `teaching/geo.basic.angle_measure.md` | 30 | strong | *Solution* | duplicated 2x in this lesson |
@@ -339,13 +321,13 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.integral.power_rule.md` | 129 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
 | `teaching/calc.integral.power_rule.md` | 322 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
 | `teaching/calc.limit.numeric.md` | 503 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
-| `teaching/frac.basics.concept.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
-| `teaching/frac.basics.equivalent.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
-| `teaching/frac.basics.number_line.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
-| `teaching/frac.basics.parts.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
-| `teaching/frac.ops.benchmark.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
-| `teaching/frac.ops.compare.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
-| `teaching/frac.ops.simplify.md` | 199 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.basics.number_line.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.basics.parts.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.ops.benchmark.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.ops.compare.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
+| `teaching/frac.ops.simplify.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/ode.bifurcation.md` | 3 | The picture above | **Bifurcation:** a qualitative change in the phase portrait as a parameter $\mu$ crosses a critical value — the number or stability of equilibria changes. The picture above the threshold is not a cont |
 | `teaching/ode.bifurcation.md` | 3 | the picture below | **Bifurcation:** a qualitative change in the phase portrait as a parameter $\mu$ crosses a critical value — the number or stability of equilibria changes. The picture above the threshold is not a cont |
 | `teaching/pct.ops.discount.md` | 95 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168466580474" data-label="" data-summary="The figure shows the steps to solving the problem. It shows nine steps. Identify what you are asked to find |
@@ -363,7 +345,7 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-594 diagrams ship, 287 URLs are referenced by lesson bodies, and
+597 diagrams ship, 290 URLs are referenced by lesson bodies, and
 **287 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
@@ -482,7 +464,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/complex.riemann_sphere.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg` |
 | `teaching/complex.schwarz.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg` |
 | `teaching/discrete.sequences.recurrence.md` | no | — | `convergent-and-divergent-sequences-1.svg`, `convergent-and-divergent-sequences-2.svg`, `convergent-and-divergent-sequences-3.svg`, `sequences-of-functions-1.svg` |
-| `teaching/frac.mult.whole.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/fractions/comparison-word.md` | no | — | `add-word.svg`, `div-word.svg`, `mult-word.svg`, `sub-word.svg` |
 | `teaching/fractions/division-word.md` | no | — | `add-word.svg`, `div-word.svg`, `mult-word.svg`, `sub-word.svg` |
 | `teaching/fractions/mixed-word.md` | no | — | `add-word.svg`, `div-word.svg`, `mult-word.svg`, `sub-word.svg` |
@@ -636,5 +617,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.round.hundreds.md` | yes | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.tens.md` | yes | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.thousands.md` | yes | — | `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
+| `teaching/frac.mult.whole.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 
 wrote data/lessons/figure-audit.json
