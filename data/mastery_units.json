@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 741,
+  "concept_count": 748,
   "unit_count": 95,
   "units": [
     {
@@ -554,6 +554,7 @@
         "calculus.derivatives",
         "calculus.integrals",
         "calculus.multivariable",
+        "calculus.polar",
         "calculus.vector"
       ],
       "concept_ids": [
@@ -575,7 +576,9 @@
         "calc.deriv.trig",
         "calc.integral.arc_length",
         "calc.integral.area_between",
+        "calc.integral.average_value",
         "calc.integral.center_mass",
+        "calc.integral.cross_section_volume",
         "calc.integral.definite",
         "calc.integral.disc",
         "calc.integral.exp_integral",
@@ -590,16 +593,19 @@
         "calc.integral.trig_integrals",
         "calc.integral.washer",
         "calc.integral.work",
+        "calc.multi.closed_extrema",
         "calc.multi.coordinates_jacobian",
         "calc.multi.double_integral_rect",
         "calc.multi.lagrange",
         "calc.multi.saddle_test",
+        "calc.multi.tangent_plane",
         "calc.multi.transform_jacobian",
+        "calc.polar.area",
         "calc.vec.curl_3d",
         "calc.vec.jacobian_value",
         "calc.vec.parametric_derivative"
       ],
-      "concept_count": 41
+      "concept_count": 46
     },
     {
       "id": "calculus.b12",
@@ -613,6 +619,7 @@
         "calculus.derivatives",
         "calculus.integrals",
         "calculus.multivariable",
+        "calculus.polar",
         "calculus.vector"
       ],
       "concept_ids": [
@@ -639,8 +646,10 @@
         "calc.integral.variable_limits",
         "calc.integral.volume",
         "calc.integral.weierstrass_sub",
+        "calc.multi.change_order",
         "calc.multi.double_integral_region",
         "calc.multi.triple_integral_box",
+        "calc.polar.slope",
         "calc.vec.arc_length",
         "calc.vec.conservative_test",
         "calc.vec.curvature",
@@ -653,7 +662,7 @@
         "calc.vec.surface_area",
         "calc.vec.work"
       ],
-      "concept_count": 36
+      "concept_count": 38
     },
     {
       "id": "complex_numbers.b3",

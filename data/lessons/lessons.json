@@ -2962,5 +2962,33 @@
   {
     "concept_id": "geo.circle.tangent_chord",
     "source": "authored/geo.circle.tangent_chord.md"
+  },
+  {
+    "concept_id": "calc.integral.average_value",
+    "source": "authored/calc.integral.average_value.md"
+  },
+  {
+    "concept_id": "calc.integral.cross_section_volume",
+    "source": "authored/calc.integral.cross_section_volume.md"
+  },
+  {
+    "concept_id": "calc.multi.change_order",
+    "source": "authored/calc.multi.change_order.md"
+  },
+  {
+    "concept_id": "calc.multi.tangent_plane",
+    "source": "authored/calc.multi.tangent_plane.md"
+  },
+  {
+    "concept_id": "calc.multi.closed_extrema",
+    "source": "authored/calc.multi.closed_extrema.md"
+  },
+  {
+    "concept_id": "calc.polar.area",
+    "source": "authored/calc.polar.area.md"
+  },
+  {
+    "concept_id": "calc.polar.slope",
+    "source": "authored/calc.polar.slope.md"
   }
 ]

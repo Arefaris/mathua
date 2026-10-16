@@ -4554,6 +4554,107 @@
     "subdomain": "calculus.vector"
   },
   {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.average_value",
+    "label": "The average value of a function",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.definite"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.cross_section_volume",
+    "label": "Volumes from known cross-sections",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.definite"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.change_order",
+    "label": "Changing the order of integration",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.double_integral_region"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.tangent_plane",
+    "label": "The tangent plane and linear approximation",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.partial",
+      "calc.deriv.linear_approx"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.closed_extrema",
+    "label": "Extrema on a closed region",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.saddle_test"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.polar.area",
+    "label": "Area in polar coordinates",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.definite",
+      "precalc.polar.coordinates"
+    ],
+    "subdomain": "calculus.polar"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.polar.slope",
+    "label": "The slope of a polar curve",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.parametric_derivative",
+      "precalc.polar.coordinates"
+    ],
+    "subdomain": "calculus.polar"
+  },
+  {
     "domain": "complex_numbers",
     "grading_type": "complex",
     "id": "complex.basics.concept",

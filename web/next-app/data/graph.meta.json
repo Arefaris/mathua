@@ -1,13 +1,13 @@
 {
   "quizGateXP": 50,
-  "conceptCount": 741,
-  "connectionCount": 979,
+  "conceptCount": 748,
+  "connectionCount": 989,
   "domainCount": 17,
   "domainCounts": {
     "abstract_algebra": 32,
     "algebra": 89,
     "arithmetic": 46,
-    "calculus": 151,
+    "calculus": 158,
     "complex_numbers": 26,
     "differential_equations": 25,
     "discrete_math": 39,
