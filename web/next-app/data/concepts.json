@@ -6555,6 +6555,119 @@
     "subdomain": "geometry.coordinate"
   },
   {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.similar.ratio",
+    "label": "Similar figures and scale factors",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.triangle.types"
+    ],
+    "subdomain": "geometry.similar"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.similar.missing_side",
+    "label": "Finding a missing side by proportionality",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.similar.ratio"
+    ],
+    "subdomain": "geometry.similar"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.transform.dilation",
+    "label": "Dilations",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.similar.ratio"
+    ],
+    "subdomain": "geometry.transform"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.polygon.interior_angles",
+    "label": "The interior-angle sum of a polygon",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.quad.types"
+    ],
+    "subdomain": "geometry.polygons"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.polygon.exterior_angle",
+    "label": "Exterior angles of a regular polygon",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.polygon.interior_angles"
+    ],
+    "subdomain": "geometry.polygons"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.circle.inscribed_angle",
+    "label": "Inscribed and central angles",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.basic.angles"
+    ],
+    "subdomain": "geometry.circles"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.circle.chord",
+    "label": "Chords and the perpendicular from the centre",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.triangle.pythagorean",
+      "geo.circle.parts"
+    ],
+    "subdomain": "geometry.circles"
+  },
+  {
+    "domain": "geometry",
+    "grading_type": "numeric",
+    "id": "geo.triangle.special_right",
+    "label": "The 30-60-90 triangle",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "geo.triangle.pythagorean"
+    ],
+    "subdomain": "geometry.triangles"
+  },
+  {
     "domain": "linear_algebra",
     "grading_type": "numeric",
     "id": "linalg.vector.concept",

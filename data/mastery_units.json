@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 719,
+  "concept_count": 727,
   "unit_count": 94,
   "units": [
     {
@@ -1146,12 +1146,13 @@
         "geo.basic.angle_measure",
         "geo.basic.angles",
         "geo.basic.points_lines",
+        "geo.circle.inscribed_angle",
         "geo.circle.parts",
         "geo.coord.plot",
         "geo.quad.types",
         "geo.triangle.types"
       ],
-      "concept_count": 7
+      "concept_count": 8
     },
     {
       "id": "geometry.b1",
@@ -1162,16 +1163,24 @@
       "depth_max": 4,
       "subdomains": [
         "geometry.basics",
+        "geometry.polygons",
         "geometry.shapes",
+        "geometry.similar",
+        "geometry.transform",
         "geometry.triangles"
       ],
       "concept_ids": [
         "geo.basic.complementary",
         "geo.basic.vertical",
+        "geo.polygon.exterior_angle",
+        "geo.polygon.interior_angles",
         "geo.quad.perimeter",
+        "geo.similar.missing_side",
+        "geo.similar.ratio",
+        "geo.transform.dilation",
         "geo.triangle.angles"
       ],
-      "concept_count": 4
+      "concept_count": 9
     },
     {
       "id": "geometry.b2",
@@ -1204,15 +1213,17 @@
         "geometry.triangles"
       ],
       "concept_ids": [
+        "geo.circle.chord",
         "geo.circle.circumference",
         "geo.coord.distance",
         "geo.coord.midpoint",
         "geo.solid.surface_area",
         "geo.solid.volume_rect",
         "geo.triangle.pythagorean",
-        "geo.triangle.pythagorean.word"
+        "geo.triangle.pythagorean.word",
+        "geo.triangle.special_right"
       ],
-      "concept_count": 7
+      "concept_count": 9
     },
     {
       "id": "geometry.b4",

@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 719 concepts, and there are 719 KP shard files
-holding 2157 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 727 concepts, and there are 727 KP shard files
+holding 2181 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 308 of the 719 concepts
+### 4.1 The course catalog reaches 316 of the 727 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-308 of the 719 concepts: 411 of them have a node, a generator, a lesson and three KP shards and
+316 of the 727 concepts: 411 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -85,7 +85,7 @@ The count of unreachable concepts by domain:
 | algebra | 89 | 53 |
 | topology | 30 | 27 |
 | statistics | 37 | 24 |
-| precalculus | 25 | 22 |
+| precalculus | 41 | 21 |
 | fractions | 26 | 22 |
 | machine_learning | 25 | 21 |
 | complex_numbers | 26 | 20 |
@@ -97,7 +97,7 @@ The count of unreachable concepts by domain:
 | linear_algebra | 26 | 12 |
 | abstract_algebra | 32 | 11 |
 | discrete_math | 39 | 5 |
-| geometry | 23 | 7 |
+| geometry | 31 | 7 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
 cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
@@ -325,7 +325,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 719 concepts. Reaching a thousand means adding 297, and this is the table that says
+The catalog holds 727 concepts. Reaching a thousand means adding 297, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision.
 
 | Domain | Tier | Now | Target | Add |

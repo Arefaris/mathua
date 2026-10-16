@@ -18,6 +18,12 @@ script is written to prevent:
     `--blob-only` builds a blob from HEAD plus the substitution and stages it with `update-index`,
     which leaves the working tree alone.
 
+A class this tool does not repair, and can only report: **line citations**. Editing a file that an
+ADR cites by `path:line` moves every symbol below the edit, and `scripts/check_docs.py` fails on a
+citation that lands on a blank line. It caught exactly that when this file's own author added a
+registration line to `internal/generator/geometry/generators.go`; the fix is to re-point the citation
+at the symbol's new line, which needs a human to know which symbol was meant.
+
 Usage:
     python3 scripts/sweep_counts.py             # regenerate, rewrite, verify
     python3 scripts/sweep_counts.py --no-regen  # rewrite only, from the corpus as it stands
@@ -135,10 +141,8 @@ def facts() -> dict:
         "unreachable": len(concepts) - len(reach),
         "max_depth": max(depth.values()),
         "units": len(unit_list),
-        "calculus": len([c for c in concepts if domain[c] == "calculus"]),
-        "calculus_unreachable": unreachable["calculus"],
-        "discrete": len([c for c in concepts if domain[c] == "discrete_math"]),
-        "discrete_mc": mc["discrete_math"],
+        "by_domain": {d: (len([c for c in concepts if domain[c] == d]),
+                      unreachable.get(d, 0), mc.get(d, 0)) for d in set(domain.values())},
         "discrete_unreachable": unreachable["discrete_math"],
     }
 
@@ -201,17 +205,18 @@ def rules(f: dict) -> list:
         ("docs/content-expansion.md", r"those closures reach\n\d+ of the \d{3} concepts: \d+ of them",
          f"those closures reach\n{f['reach']} of the {f['concepts']} concepts: "
          f"{f['unreachable']} of them", 1),
-        ("docs/content-expansion.md", r"\| calculus \| \d+ \| \d+ \|",
-         f"| calculus | {f['calculus']} | {f['calculus_unreachable']} |", 1,
-         ("### 4.1", "### 4.2")),
-        ("docs/content-expansion.md", r"\| discrete_math \| \d+ \| \d+ \|",
-         f"| discrete_math | {f['discrete']} | {f['discrete_unreachable']} |", 1,
-         ("### 4.1", "### 4.2")),
-        # Section 4.2's row for the same domain: the same shape, a different table, which is why
-        # the region matters. The second column there is the multiple-choice count.
-        ("docs/content-expansion.md", r"\| discrete_math \| \d+ \| \d+ \|",
-         f"| discrete_math | {f['discrete']} | {f['discrete_mc']} |", 1,
-         ("### 4.2", "## 5.")),
+        # Section 4.1's table has a row per domain, and every row's two numbers move when the
+        # corpus does -- so every row needs a rule, not just the domain a batch happened to touch.
+        # The rows keep the document's own order; only the numbers are rewritten.
+        *[("docs/content-expansion.md", rf"\| {d} \| \d+ \| \d+ \|",
+           f"| {d} | {f['by_domain'][d][0]} | {f['by_domain'][d][1]} |", 1, ("### 4.1", "### 4.2"))
+          for d in sorted(f["by_domain"])],
+        # Section 4.2's table is the same shape with the multiple-choice count, and it lists only
+        # the domains that are mostly recognition.
+        *[("docs/content-expansion.md", rf"\| {d} \| \d+ \| \d+ \|",
+           f"| {d} | {f['by_domain'][d][0]} | {f['by_domain'][d][2]} |", 1, ("### 4.2", "## 5."))
+          for d in ("abstract_algebra", "topology", "differential_equations", "machine_learning",
+                    "discrete_math", "number_theory", "complex_numbers")],
         # The two Go tests that pin a size rather than reading it. The patterns name each site,
         # because a bare \d{3} also matches the `064` in this file's temp-file mode.
         ("internal/concepts/concepts_test.go", r"if d\.Count\(\) != \d{3} \{",

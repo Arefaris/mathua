@@ -2874,5 +2874,37 @@
   {
     "concept_id": "precalc.analytic.distance",
     "source": "authored/precalc.analytic.distance.md"
+  },
+  {
+    "concept_id": "geo.similar.ratio",
+    "source": "authored/geo.similar.ratio.md"
+  },
+  {
+    "concept_id": "geo.similar.missing_side",
+    "source": "authored/geo.similar.missing_side.md"
+  },
+  {
+    "concept_id": "geo.transform.dilation",
+    "source": "authored/geo.transform.dilation.md"
+  },
+  {
+    "concept_id": "geo.polygon.interior_angles",
+    "source": "authored/geo.polygon.interior_angles.md"
+  },
+  {
+    "concept_id": "geo.polygon.exterior_angle",
+    "source": "authored/geo.polygon.exterior_angle.md"
+  },
+  {
+    "concept_id": "geo.circle.inscribed_angle",
+    "source": "authored/geo.circle.inscribed_angle.md"
+  },
+  {
+    "concept_id": "geo.circle.chord",
+    "source": "authored/geo.circle.chord.md"
+  },
+  {
+    "concept_id": "geo.triangle.special_right",
+    "source": "authored/geo.triangle.special_right.md"
   }
 ]
