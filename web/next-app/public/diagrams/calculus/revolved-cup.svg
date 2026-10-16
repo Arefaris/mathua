@@ -32,6 +32,6 @@
 <text x="424" y="23" font-size="12" fill="#333333" text-anchor="start">y</text>
 <text x="569" y="153" font-size="12" fill="#333333" text-anchor="start">x</text>
 <text x="473.9" y="34" font-size="11" fill="#333333" text-anchor="middle">y = f(x)</text>
-<text x="145" y="158" font-size="11" fill="#333333" text-anchor="middle">(a)</text>
-<text x="420" y="158" font-size="11" fill="#333333" text-anchor="middle">(b)</text>
+<text x="145" y="172" font-size="11" fill="#333333" text-anchor="middle">(a)</text>
+<text x="420" y="172" font-size="11" fill="#333333" text-anchor="middle">(b)</text>
 </svg>
