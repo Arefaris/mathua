@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-234 paragraphs across 100 lessons read as a caption whose image was dropped:
-130 certain, 33 strong and 71 likely. Every one sits
+232 paragraphs across 100 lessons read as a caption whose image was dropped:
+128 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 130 rows and 60 distinct figures
+## 3. The captions are 128 rows and 58 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **60 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **58 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 11 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 9 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed forty-two.
+again to 53 and 44, of which section 7 has since landed forty-four.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,9 +183,7 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 6.25 | (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution f... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.26 | (a) A representative rectangle. (b) When this rectangle is revolved around the $y\tex... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
-| 6.27 | Calculating the volume of the shell. | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.28 | (a) Make a vertical cut in a representative shell. (b) Open the shell up to form a fl... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.29 | (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.30 | (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\left\lb... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -920,6 +918,36 @@ over upstream's `4x^2` in its alt text.
 Those two captions held two rows: the report went from 236 to 234, and the certain tier from 132 to
 130. The lesson keeps one other orphan caption, so the lesson count stays at 100, and the ceiling
 in `internal/lessons/assets_test.go` follows, to 234.
+
+**Figures 6.25 and 6.27** (the region and the solid it sweeps, and the strip that generates one
+shell) landed on 2026-10-16 in `calc.integral.volume`, as `calculus/revolved-cup.svg` and
+`calculus/shell-strip.svg`. They are the first figures in the tree whose second panel is a solid
+rather than a graph, so they establish the tree's 3D idiom.
+
+**A solid of revolution is drawn in axonometric, in the same dialect as a flat shape.** Its circular
+ends are ellipses with a fixed `rx:ry` ratio of 7:2. The rim is a full ellipse, because we look down
+into the solid; the base is a near arc stroked in ink with the far arc dashed `#636363`, because the
+far half is hidden. The silhouette is one closed path filled `#E6E6E6`, the same grey as every other
+filled shape in the tree, and there is no gradient and no shading.
+
+**A curved top surface is a bowl, and a bowl is nested level ellipses.** The curve `y = f(x)`
+revolved about the y-axis gives the surface `y = f(r)`, so the circle of radius `r` sits at height
+`f(r)`: its ellipse is centered at `row(f(r))` with both radii scaled by `r/b`. Two interior levels
+are enough. They nest because both their centers descend and their radii shrink, and a smaller
+level's near arc can fall below the rim's near arc, which is correct for a bowl and is how the depth
+reads.
+
+**6.25's `a` is 3.0, not 1.6.** `a` is where the curve starts on the y-axis, so it is the depth of
+the bowl: at 1.6 the revolved top surface was a deep cup, and upstream's is a shallow dimple.
+
+**6.27's strip is filled and stroked, where the area figures' regions are fill-only.** Its top edge
+is the sample height `f(x_i*)` and not the curve, so it is a named rectangle rather than an area
+under a curve. 5.32's rectangles stay fill-only because their top edges *are* the function. 6.27
+also draws no ticks: its two ends are named `x_(i-1)` and `x_i`, so there are no numbers to place.
+
+Those two captions held two rows: the report went from 234 to 232, and the certain tier from 130 to
+128. The lesson keeps twelve other orphan captions, so the lesson count stays at 100, and the
+ceiling in `internal/lessons/assets_test.go` follows, to 232.
 
 ## 8. Order of work
 

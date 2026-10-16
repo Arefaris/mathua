@@ -13,6 +13,8 @@ In this section, we examine the method of cylindrical shells, the final method f
 
 Again, we are working with a solid of revolution. As before, we define a region $R,$ bounded above by the graph of a function $y = f(x),$ below by the $x\text{-axis,}$ and on the left and right by the lines $x = a$ and $x = b,$ respectively, as shown in Figure 6.25(a). We then revolve this region around the *y*-axis, as shown in Figure 6.25(b). Note that this is different from what we have done before. Previously, regions defined in terms of functions of $x$ were revolved around the $x\text{-axis}$ or a line parallel to it.
 
+![(a) A region bounded by the graph of a function of x. (b) The solid of revolution formed when the region is revolved around the y-axis.](/diagrams/calculus/revolved-cup.svg)
+
 *Figure 6.25 (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution formed when the region is revolved around the $y\text{-axis}\text{.}$*
 
 As we have done many times before, partition the interval $\left\lbrack {a,b} \right\rbrack$ using a regular partition, $P = \left\{ {x_{0},x_{1}\text{,…},x_{n}} \right\}$ and, for $i = 1,2\text{,…},n,$ choose a point $x_{i}^{*} \in \left\lbrack {x_{i - 1},x_{i}} \right\rbrack.$ Then, construct a rectangle over the interval $\left\lbrack {x_{i - 1},x_{i}} \right\rbrack$ of height $f(x_{i}^{*})$ and width $\text{Δ}x.$ A representative rectangle is shown in Figure 6.26(a). When that rectangle is revolved around the *y*-axis, instead of a disk or a washer, we get a cylindrical shell, as shown in the following figure.
@@ -20,6 +22,8 @@ As we have done many times before, partition the interval $\left\lbrack {a,b} \r
 *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y\text{-axis},$ the result is a cylindrical shell. (c) When we put all the shells together, we get an approximation of the original solid.*
 
 To calculate the volume of this shell, consider Figure 6.27.
+
+![Calculating the volume of the shell.](/diagrams/calculus/shell-strip.svg)
 
 *Figure 6.27 Calculating the volume of the shell.*
 

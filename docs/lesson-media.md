@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-234 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **130 certain**, **33 strong**, **71 likely**.
+232 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **128 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -145,18 +145,16 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 201 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 16 | certain | *Figure 6.25 (a) A region bounded by the graph of a function of $x.$ (b) The solid of revoluti...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 20 | certain | *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 24 | certain | *Figure 6.27 Calculating the volume of the shell.* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 51 | certain | *Figure 6.28 (a) Make a vertical cut in a representative shell. (b) Open the shell up to form ...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 97 | certain | *Figure 6.29 (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\lef...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 123 | certain | *Figure 6.30 (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\lef...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 159 | certain | *Figure 6.31 (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lb...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 219 | certain | *Figure 6.32 (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the i...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 247 | certain | *Figure 6.33 (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the i...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 267 | certain | *Figure 6.34* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 284 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
-| `teaching/calc.integral.volume.md` | 304 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 22 | certain | *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 55 | certain | *Figure 6.28 (a) Make a vertical cut in a representative shell. (b) Open the shell up to form ...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 101 | certain | *Figure 6.29 (a) The region $R$ under the graph of $f(x) = 1\text{/}x$ over the interval $\lef...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 127 | certain | *Figure 6.30 (a) The region $R$ under the graph of $f(x) = 2x - x^{2}$ over the interval $\lef...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 163 | certain | *Figure 6.31 (a) The region $Q$ to the left of the function $g(y)$ over the interval $\left\lb...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 223 | certain | *Figure 6.32 (a) The region $R$ between the graph of $f(x)$ and the $x\text{-axis}$ over the i...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 251 | certain | *Figure 6.33 (a) The region $R$ between the graph of $f(x)$ and the graph of $g(x)$ over the i...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 271 | certain | *Figure 6.34* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 288 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
+| `teaching/calc.integral.volume.md` | 308 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 58 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 83 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.44 This function crosses its horizontal asymptote multiple times.* | auto-numbered figure/table label |
@@ -297,8 +295,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-632 diagrams ship, 128 URLs are referenced by lesson bodies, and
-**523 content diagrams are referenced by nothing** (site chrome
+634 diagrams ship, 129 URLs are referenced by lesson bodies, and
+**524 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today
@@ -405,7 +403,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.order_ops.nested.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `teaching/arith.sci_notation.ops.md` | no | — | `big-o-notation-1.png`, `big-o-notation-1.svg` |
 | `teaching/arith.sqrt.perfect.md` | no | — | `sqrt-perfect.svg`, `sqrt-simplify.svg` |
-| `teaching/calc.integral.volume.md` | no | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
 | `teaching/complex.analytic.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
 | `teaching/complex.argument.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
 | `teaching/complex.cauchy_goursat.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
@@ -602,6 +599,7 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.round.tens.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.thousands.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/calc.integral.power_rule.md` | yes | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
+| `teaching/calc.integral.volume.md` | yes | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
 | `teaching/calc.limit.infinity.md` | yes | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/calc.limit.numeric.md` | yes | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/frac.mult.whole.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
