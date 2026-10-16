@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-247 paragraphs across 100 lessons read as a caption whose image was dropped:
-143 certain, 33 strong and 71 likely. Every one sits
+244 paragraphs across 100 lessons read as a caption whose image was dropped:
+140 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 143 rows and 73 distinct figures
+## 3. The captions are 140 rows and 70 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **73 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **70 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 24 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 21 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed twenty-nine.
+again to 53 and 44, of which section 7 has since landed thirty-two.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -184,9 +184,6 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
-| 4.50 | For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{\tex... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.51 | For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\text... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.52 | The end behavior of a polynomial is determined by the behavior of the term with the l... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.53 | The graph of this rational function approaches a horizontal asymptote as $x\rightarro... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.54 | The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.56 | The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\left(... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
@@ -755,6 +752,51 @@ to be rewritten to match today's corpus.
 Those three captions held three rows: the report went from 250 to 247, and the certain tier from
 146 to 143. The lesson keeps nineteen other orphan captions, so the lesson count stays at 100, and
 the ceiling in `internal/lessons/assets_test.go` follows, to 247.
+
+**Figures 4.50, 4.51 and 4.52** (the even powers `x^2`, `x^4` and `x^6`; the odd powers `x`, `x^3`
+and `x^5`; and a polynomial over its leading term) landed on 2026-10-16 in `calc.limit.infinity`,
+as `calculus/power-even.svg`, `calculus/power-odd.svg` and `calculus/polynomial-leading-term.svg`.
+
+**4.50 and 4.51 are the first local figures to use the accents for something that is not
+trigonometric.** Section 4 of the style doc gives the rule's scope as "where a function is compared
+across a family" and names the three colors after the functions that first needed them. This batch
+needs them for a measured reason: at the frame's top edge 4.50's `x^4` and `x^6` curves exit 12px
+apart, and they are closer at every row below it, so no set of positional labels can identify them —
+and their left-to-right order flips at `x = +-1`, so a stacked set cannot either. 3.33 manages four
+exponential curves without color because its labels sit in the right margin, each at the height
+where its own curve leaves the frame; these curves all leave through the top. Upstream encodes the
+same three curves by color, and the vendored set colors text as well as strokes (`gen-diagrams.py`
+writes `#2980b9` labels), so here the label and its curve carry the same accent.
+
+**4.52 takes no accent, and that is the same rule read the other way.** Its two curves coincide at
+both ends — that is the caption's statement — so they are told apart by the ladder
+`exponential-family.svg` uses: `#333333` at width 2 for `f(x) = 5x^3 - 3x^2 + 4`, and `#636363` at
+1.5 for `g(x) = 5x^3`, the term it behaves like. A reader who cannot see the color still has two
+labels, and each label says which function it belongs to.
+
+**The pair shares one x scale, and that is what buys the labels their room.** Both frames are 420px
+wide over `[-5, 5]`, or 36.6px per unit against upstream's 38.4. 4.51 needed it: at `y = 10` the
+`x^5` curve's right branch is 58px from the y axis, so a 46px label fits beside it, where at a
+360px canvas the gap was 45px and the label had to overlap the axis's own name. 4.50's three labels
+are stacked in the bottom-right wedge instead of upstream's top-right corner, by the same kind of
+measurement: that corner has 14px between the `x^2` curve's exit and the frame's edge, and the wedge
+has 35px at the top row of the stack. One more row moved after looking at the render, which is the
+only way this class of defect shows up: 4.51's `y = x^5` label sat at baseline 27, on the rows the y
+axis's own name and arrowhead occupy, and it is at 34 now.
+
+**The converter learned two macros, and one of them was silently wrong first.** 4.50 and 4.51 state
+their end behavior in OpenStax's display notation, `\underset{x\rightarrow\infty}{\text{lim}}x^{n}`.
+`\underset{A}{B}` renders as `B(A)`: dropping A would lose which limit is meant, and appending it
+bare reads as `lim x -> oo x^n`, ambiguous about where the argument starts. `\rightarrow` renders as
+` -> ` with LaTeX's own relation spacing, which the captions do not write. The first attempt put the
+`\rightarrow` branch after the `\left`/`\right` branch, and since `\rightarrow` starts with
+`\right`, that branch ate it and produced `xarrowoo` in all three alts. The wire script asserts the
+three expected strings rather than printing them, which is why the defect did not reach the corpus;
+that assert is the unknown-macro assert one level up.
+
+Those three captions held three rows: the report went from 247 to 244, and the certain tier from
+143 to 140. The lesson keeps sixteen other orphan captions, so the lesson count stays at 100, and
+the ceiling in `internal/lessons/assets_test.go` follows, to 244.
 
 ## 8. Order of work
 

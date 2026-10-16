@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-247 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **143 certain**, **33 strong**, **71 likely**.
+244 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **140 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -169,18 +169,15 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.limit.infinity.md` | 162 | certain | *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 212 | certain | *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \ri...* | auto-numbered figure/table label |
 | `teaching/calc.limit.infinity.md` | 268 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 319 | certain | *Figure 4.50 For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 321 | certain | *Figure 4.51 For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 375 | certain | *Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with t...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 416 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\right...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 425 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ a...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 434 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 454 | certain | *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\l...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 503 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 513 | certain | *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\r...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 515 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 526 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 537 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 422 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\right...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 431 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ a...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 440 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 460 | certain | *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\l...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 509 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 519 | certain | *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\r...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 521 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 532 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 543 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 439 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 540 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
@@ -310,8 +307,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-619 diagrams ship, 126 URLs are referenced by lesson bodies, and
-**512 content diagrams are referenced by nothing** (site chrome
+622 diagrams ship, 126 URLs are referenced by lesson bodies, and
+**515 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today

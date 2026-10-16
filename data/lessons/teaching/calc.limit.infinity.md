@@ -316,7 +316,11 @@ $$
 \end{array}.} \right.
 $$
 
+![For power functions with an even exponent of n, lim(x → ∞) x^n = ∞ = lim(x → -∞) x^n.](/diagrams/calculus/power-even.svg)
+
 *Figure 4.50 For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{\text{lim}}x^{n} = \infty = \underset{x\rightarrow\text{-}\infty}{\text{lim}}x^{n}.$*
+
+![For power functions with an odd exponent of n, lim(x → ∞) x^n = ∞ and lim(x → -∞) x^n = -∞.](/diagrams/calculus/power-odd.svg)
 
 *Figure 4.51 For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\text{lim}}x^{n} = \infty$ and $\underset{x\rightarrow\text{-}\infty}{\text{lim}}x^{n} = \text{-}\infty.$*
 
@@ -371,6 +375,8 @@ $$
 $$
 
 For example, the function $f(x) = 5x^{3} - 3x^{2} + 4$ behaves like $g(x) = 5x^{3}$ as $x\rightarrow\text{\pm}\infty$ as shown in Figure 4.52 and Table 4.4.
+
+![The end behavior of a polynomial is determined by the behavior of the term with the largest exponent.](/diagrams/calculus/polynomial-leading-term.svg)
 
 *Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with the largest exponent.*
 
