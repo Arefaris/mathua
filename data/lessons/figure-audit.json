@@ -869,20 +869,6 @@
       "reason": "auto-numbered figure/table label"
     },
     {
-      "lesson": "teaching/calc.integral.power_rule.md",
-      "line": 302,
-      "text": "Figure 5.35 Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (b) shows the negative area between the curve and the *x*-axis. Both views show the symmetry about the *y*-axis.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.integral.power_rule.md",
-      "line": 326,
-      "text": "Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
       "lesson": "teaching/calc.integral.volume.md",
       "line": 16,
       "text": "Figure 6.25 (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution formed when the region is revolved around the $y\\text{-axis}\\text{.}$",
@@ -1710,7 +1696,7 @@
     },
     {
       "lesson": "teaching/calc.integral.power_rule.md",
-      "line": 326,
+      "line": 330,
       "phrase": "The graph shows",
       "context": "*Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.*"
     },
@@ -1849,8 +1835,8 @@
   ],
   "unreferenced_diagrams": {
     "referenced": 128,
-    "shipped": 630,
-    "unreferenced_content": 521,
+    "shipped": 632,
+    "unreferenced_content": 523,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -2379,6 +2365,7 @@
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
           "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/linear-velocity-areas.svg",
           "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
@@ -2740,7 +2727,8 @@
           "/diagrams/algebrica/integral-test-for-series-convergence-1.svg",
           "/diagrams/algebrica/integral-test-series-1.png",
           "/diagrams/algebrica/power-series-1.svg",
-          "/diagrams/algebrica/series-cauchy-1.png"
+          "/diagrams/algebrica/series-cauchy-1.png",
+          "/diagrams/calculus/power-positive-negative.svg"
         ]
       },
       {
@@ -2890,6 +2878,7 @@
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
           "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/linear-velocity-areas.svg",
           "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
@@ -2901,6 +2890,7 @@
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
           "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/linear-velocity-areas.svg",
           "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
@@ -2912,6 +2902,7 @@
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
           "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/linear-velocity-areas.svg",
           "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
@@ -2923,6 +2914,7 @@
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
           "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/linear-velocity-areas.svg",
           "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
@@ -5032,6 +5024,7 @@
           "/diagrams/algebrica/linear-equations-1.svg",
           "/diagrams/algebrica/systems-of-linear-equations-in-two-variables-1.svg",
           "/diagrams/calculus/linear-over-linear.svg",
+          "/diagrams/calculus/linear-velocity-areas.svg",
           "/diagrams/calculus/quadratic-over-linear.svg"
         ]
       },
@@ -5736,6 +5729,7 @@
       "/diagrams/calculus/interrupted-curve.svg",
       "/diagrams/calculus/limit-behavior.svg",
       "/diagrams/calculus/linear-over-linear.svg",
+      "/diagrams/calculus/linear-velocity-areas.svg",
       "/diagrams/calculus/missing-vertex.svg",
       "/diagrams/calculus/one-value-off-the-curve.svg",
       "/diagrams/calculus/oscillation.svg",
@@ -5743,6 +5737,7 @@
       "/diagrams/calculus/polynomial-leading-term.svg",
       "/diagrams/calculus/power-even.svg",
       "/diagrams/calculus/power-odd.svg",
+      "/diagrams/calculus/power-positive-negative.svg",
       "/diagrams/calculus/quadratic-over-cubic.svg",
       "/diagrams/calculus/quadratic-over-linear.svg",
       "/diagrams/calculus/radical-over-x.svg",

@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-236 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **132 certain**, **33 strong**, **71 likely**.
+234 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **130 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -145,8 +145,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 201 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 302 | certain | *Figure 5.35 Graph (a) shows the positive area between the curve and the *x*-axis, whereas gra...* | auto-numbered figure/table label |
-| `teaching/calc.integral.power_rule.md` | 326 | certain | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 16 | certain | *Figure 6.25 (a) A region bounded by the graph of a function of $x.$ (b) The solid of revoluti...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 20 | certain | *Figure 6.26 (a) A representative rectangle. (b) When this rectangle is revolved around the $y...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 24 | certain | *Figure 6.27 Calculating the volume of the shell.* | auto-numbered figure/table label |
@@ -273,7 +271,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.factor.lcm.md` | 126 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168467446629" data-label="" data-summary="The figure shows two factor trees with the number 84 at the top. In the first tree two branches are splitti |
 | `teaching/calc.integral.power_rule.md` | 80 | The graph shows | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* |
 | `teaching/calc.integral.power_rule.md` | 133 | The graph shows | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity function.* |
-| `teaching/calc.integral.power_rule.md` | 326 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
+| `teaching/calc.integral.power_rule.md` | 330 | The graph shows | *Figure 5.36 The graph shows areas between a curve and the *x*-axis for an odd function.* |
 | `teaching/calc.limit.numeric.md` | 521 | The graph shows | *Figure 2.21 The graph shows $f(x).$* |
 | `teaching/frac.basics.concept.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
 | `teaching/frac.basics.equivalent.md` | 203 | The figure shows | Each circle is divided into three pieces, so each piece is $\frac{1}{3}$ of the circle. There are four pieces shaded, so there are four thirds or $\frac{4}{3}.$ The figure shows that we also have one  |
@@ -299,8 +297,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-630 diagrams ship, 128 URLs are referenced by lesson bodies, and
-**521 content diagrams are referenced by nothing** (site chrome
+632 diagrams ship, 128 URLs are referenced by lesson bodies, and
+**523 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today
@@ -348,7 +346,7 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/limits/remarkable-limits.md` | no | — | `limits-1.png`, `limits-1.svg`, `limits-2.png`, `limits-2.svg`, `limits-3.png`, `limits-3.svg`, `two-limits.svg` |
 | `algebrica/linear-systems/cramers-rule.md` | no | — | `exp-power-rule.svg`, `exp-product-rule.svg`, `exp-quotient-rule.svg` |
 | `algebrica/linear-systems/rouche-capelli-theorem.md` | no | — | `cauchy-theorem-1.svg`, `darboux-theorem-1.svg`, `fermat-theorem-1.svg`, `fermat-theorem-2.svg`, `fermat-theorem-3.svg`, `fermath-theorem-4.png`, `fundamental-theorem-of-calculus-2.svg`, `intermediate-value-theorem-1.svg` |
-| `algebrica/linear-systems/solving-linear-systems-using-gaussian-elimination.md` | no | — | `gaussian-function-1.svg`, `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
+| `algebrica/linear-systems/solving-linear-systems-using-gaussian-elimination.md` | no | — | `gaussian-function-1.svg`, `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `linear-velocity-areas.svg`, `quadratic-over-linear.svg` |
 | `algebrica/linear-systems/systems-of-linear-equations.md` | no | — | `differential-equations-1-1.png`, `exponential-equations-1.svg`, `geometric-interpretation-quadratic-equations-1.svg`, `geometric-interpretation-quadratic-equations-2.svg`, `geometric-interpretation-quadratic-equations-3.svg`, `linear-equations-1.svg`, `quadratic-equations-params-6.png`, `separable-differential-equations-1.svg` |
 | `algebrica/polynomials/adding-and-subtracting-polynomials.md` | no | — | `polynomials-1.svg`, `polynomials-3.svg` |
 | `algebrica/polynomials/factoring-polynomials-ac-method.md` | no | — | `polynomials-1.svg`, `polynomials-3.svg`, `the-disk-method-1.svg`, `the-disk-method-2.svg`, `the-shell-method-1.svg`, `the-shell-method-2.svg`, `the-washer-method-1.svg`, `the-washer-method-2.svg` |
@@ -376,7 +374,7 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/series/function-series.md` | no | — | `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg`, `series-cauchy-1.png` |
 | `algebrica/series/geometric-series.md` | no | — | `geometric-interpretation-quadratic-equations-1.svg`, `geometric-interpretation-quadratic-equations-2.svg`, `geometric-interpretation-quadratic-equations-3.svg`, `geometric-interpretation-quadratic-inequalities-1.svg`, `geometric-interpretation-quadratic-inequalities-2.svg`, `geometric-sequence-1.svg`, `geometric-sequence-2.svg`, `geometric-sequence-3.svg` |
 | `algebrica/series/root-test-for-series-convergence.md` | no | — | `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg`, `series-cauchy-1.png` |
-| `algebrica/series/series-with-positive-terms.md` | no | — | `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg`, `series-cauchy-1.png` |
+| `algebrica/series/series-with-positive-terms.md` | no | — | `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg`, `series-cauchy-1.png`, `power-positive-negative.svg` |
 | `algebrica/series/series.md` | no | — | `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg`, `series-cauchy-1.png` |
 | `algebrica/series/taylor-series.md` | no | — | `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg`, `series-cauchy-1.png` |
 | `algebrica/sets-and-numbers/natural-numbers.md` | no | — | `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `real-numbers-1.svg`, `types-of-numbers-1.svg` |
@@ -389,10 +387,10 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/alg.factor.gcf.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/alg.ineq.compound.md` | no | — | `irr-ineq-1.png` |
 | `teaching/alg.ineq.two_var.md` | no | — | `irr-ineq-1.png` |
-| `teaching/alg.linear.graph.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
-| `teaching/alg.linear.parallel_perp.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
-| `teaching/alg.linear.slope.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
-| `teaching/alg.linear.standard_form.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.graph.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `linear-velocity-areas.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.parallel_perp.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `linear-velocity-areas.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.slope.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `linear-velocity-areas.svg`, `quadratic-over-linear.svg` |
+| `teaching/alg.linear.standard_form.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `linear-velocity-areas.svg`, `quadratic-over-linear.svg` |
 | `teaching/alg.quad.discriminant.md` | no | — | `quad-eq-complex-roots.png` |
 | `teaching/alg.systems.substitution.md` | no | — | `systems-of-linear-equations-in-two-variables-1.svg` |
 | `teaching/alg.systems.word.md` | no | — | `systems-of-linear-equations-in-two-variables-1.svg` |
@@ -590,7 +588,7 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/series/cauchy-convergence-criterion-series.md` | yes | — | `cauchy-sequence-1.png`, `cauchy-sequence-1.svg`, `cauchy-theorem-1.svg`, `harmonic-series-1-2.png`, `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png`, `power-series-1.svg` |
 | `algebrica/sets-and-numbers/intervals.md` | yes | — | `confidence-intervals.png` |
 | `algebrica/trigonometry/pythagorean-identity.md` | yes | — | `pythagorean-theorem-1.svg`, `pythagorean-theorem-2.svg`, `pythagorean-theorem-3.svg` |
-| `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `quadratic-over-linear.svg` |
+| `algebrica/vectors-and-matrices/linear-combinations.md` | yes | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg`, `linear-over-linear.svg`, `linear-velocity-areas.svg`, `quadratic-over-linear.svg` |
 | `teaching/arith.mult.2_5_10.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.mult.concept.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `teaching/arith.mult.double.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |

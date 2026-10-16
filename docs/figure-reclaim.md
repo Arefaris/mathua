@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-236 paragraphs across 100 lessons read as a caption whose image was dropped:
-132 certain, 33 strong and 71 likely. Every one sits
+234 paragraphs across 100 lessons read as a caption whose image was dropped:
+130 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 132 rows and 62 distinct figures
+## 3. The captions are 130 rows and 60 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **62 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **60 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 13 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 11 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed forty.
+again to 53 and 44, of which section 7 has since landed forty-two.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,8 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 5.35 | Graph (a) shows the positive area between the curve and the *x*-axis, whereas graph (... | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
-| 5.36 | The graph shows areas between a curve and the *x*-axis for an odd function. | Calculus Volume 1 | 5 Integration Formulas and the Net Change Theorem | 1 | schematic, redraw |
 | 6.25 | (a) A region bounded by the graph of a function of $x.$ (b) The solid of revolution f... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.26 | (a) A representative rectangle. (b) When this rectangle is revolved around the $y\tex... | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
 | 6.27 | Calculating the volume of the shell. | Calculus Volume 1 | 6 Volumes of Revolution: Cylindrical Shells | 1 | schematic, redraw |
@@ -895,6 +893,33 @@ Those three captions held three rows: the report went from 239 to 236, and the c
 to 132. Both lessons keep other orphan captions, four in the related-rates lesson and three in the
 power-rule lesson, so the lesson count stays at 100, and the ceiling in
 `internal/lessons/assets_test.go` follows, to 236.
+
+**Figures 5.35 and 5.36** (3x^8 - 2 at two scales, where the area is positive outside its roots and
+negative between them; 5 sin x over `[-pi, pi]`, whose areas cancel) landed on 2026-10-16 in
+`calc.integral.power_rule`, as `calculus/power-positive-negative.svg` and
+`calculus/odd-function-areas.svg`.
+
+**5.35 is the tree's second two-panel figure.** `two-limits.svg` set the layout: a 580-wide canvas,
+two panels, `(a)` and `(b)` centred under each at row 158. The curve is drawn only where it is
+inside each panel's frame, stopping at `y = 640` in (a) and `y = 5.6` in (b), because past those
+points it is off-frame and a path would paint over the margins. The panels show the same curve at
+two y scales, which is what makes the caption's claim about positive and negative area visible at
+once, and the dashed guides at `x = +-2` in (b) mark the interval (a) is drawn over.
+
+**5.35 carries one function label, in (a).** (b) has no room: its y tick labels march down the axis
+at 15.5px, the `y` name sits at 454, and the guides at `-2` and `2` leave 64px between them for a
+92px label. The label in (a) sits at row 44, which clears the `y` name above it and the curve's
+exit beside it, the curve reaching row 44 at `x = 1.89`.
+
+**5.36 draws 5 sin x, and upstream's figure is mirrored relative to the function its own label
+names.** Upstream's shaded positive area lies between `-pi` and 0, where 5 sin x is negative; the
+lesson computes the integral with 5 cos x as the antiderivative over `[-pi, pi]`, so the positive
+area is between 0 and `pi`. The figure follows the lesson, as 4.54 followed the lesson's `4x^3`
+over upstream's `4x^2` in its alt text.
+
+Those two captions held two rows: the report went from 236 to 234, and the certain tier from 132 to
+130. The lesson keeps one other orphan caption, so the lesson count stays at 100, and the ceiling
+in `internal/lessons/assets_test.go` follows, to 234.
 
 ## 8. Order of work
 
