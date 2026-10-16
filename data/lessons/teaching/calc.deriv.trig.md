@@ -26,6 +26,8 @@ $$
 
 By setting $D(x) = \frac{\text{sin}\left( {x + 0.01} \right) - \text{sin} x}{0.01}$ and using a graphing utility, we can get a graph of an approximation to the derivative of $\text{sin} x$ (Figure 3.25).
 
+![The graph of the function D(x) looks a lot like a cosine curve.](/diagrams/calculus/difference-quotient.svg)
+
 *Figure 3.25 The graph of the function $D(x)$ looks a lot like a cosine curve.*
 
 Upon inspection, the graph of $D(x)$ appears to be very close to the graph of the cosine function. Indeed, we will show that
@@ -67,6 +69,8 @@ $$
 
 The graphs of $y = \frac{\left( {\text{sin} h} \right)}{h}$ and $y = \frac{\left( {\text{cos} h - 1} \right)}{h}$ are shown in Figure 3.26.
 
+![These graphs show two important limits needed to establish the derivative formulas for the sine and cosine functions.](/diagrams/calculus/two-limits.svg)
+
 *Figure 3.26 These graphs show two important limits needed to establish the derivative formulas for the sine and cosine functions.*
 
 We also recall the following trigonometric identity for the sine of the sum of two angles:
@@ -91,6 +95,8 @@ $$
 □
 
 Figure 3.27 shows the relationship between the graph of $f(x) = \text{sin} x$ and its derivative $f'(x) = \text{cos} x.$ Notice that at the points where $f(x) = \text{sin} x$ has a horizontal tangent, its derivative $f'(x) = \text{cos} x$ takes on the value zero. We also see that where $f(x) = \text{sin} x$ is increasing, $f'(x) = \text{cos} x > 0$ and where $f(x) = \text{sin} x$ is decreasing, $f'(x) = \text{cos} x < 0.$
+
+![Where f(x) has a maximum or a minimum, f'(x) = 0 that is, f'(x) = 0 where f(x) has a horizontal tangent. These points are noted with dots on the graphs.](/diagrams/calculus/sine-and-cosine.svg)
 
 *Figure 3.27 Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $f(x)$ has a horizontal tangent. These points are noted with dots on the graphs.*
 

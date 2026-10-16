@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-254 paragraphs across 101 lessons look like a figure caption whose image
-was dropped while its text was kept: **150 certain**, **33 strong**, **71 likely**.
+250 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **146 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -123,9 +123,8 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/arith.sci_notation.ops.md` | 26 | likely | *Whole Number Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sci_notation.ops.md` | 84 | likely | *Negative Integer Powers of 10* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/arith.sqrt.perfect.md` | 15 | likely | *$\abs{2}$ and $\abs{-2}$* | teaching corpus: standalone emphasis is the dropped-figure shape |
-| `teaching/calc.deriv.exp_log.md` | 43 | certain | *Figure 3.33 The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$* | auto-numbered figure/table label |
-| `teaching/calc.deriv.exp_log.md` | 73 | certain | *Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.exp_log.md` | 239 | certain | *Figure 3.35 $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its...* | auto-numbered figure/table label |
+| `teaching/calc.deriv.exp_log.md` | 75 | certain | *Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.* | auto-numbered figure/table label |
+| `teaching/calc.deriv.exp_log.md` | 241 | certain | *Figure 3.35 $\text{The function}\ y = \text{ln} x$ is increasing on $(0,\text{+}\infty).$ Its...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.implicit.md` | 25 | certain | *Figure 3.30 The equation $x^{2} + y^{2} = 25$ defines many functions implicitly.* | auto-numbered figure/table label |
 | `teaching/calc.deriv.implicit.md` | 159 | certain | *Figure 3.31 The line $y = \frac{3}{4}x - \frac{25}{4}$ is tangent to $x^{2} + y^{2} = 25$ at ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.implicit.md` | 167 | certain | *Figure 3.32 Finding the tangent line to the folium of Descartes at $\left( {\frac{3}{2},\frac...* | auto-numbered figure/table label |
@@ -146,9 +145,6 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.deriv.sum_rule.md` | 680 | certain | *Figure 3.19 This function has horizontal tangent lines at *x* = 2/3 and *x* = 4.* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 708 | certain | *Figure 3.20 The grandstand next to a straightaway of the Circuit de Barcelona-Catalunya race ...* | auto-numbered figure/table label |
 | `teaching/calc.deriv.sum_rule.md` | 716 | certain | *Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.trig.md` | 29 | certain | *Figure 3.25 The graph of the function $D(x)$ looks a lot like a cosine curve.* | auto-numbered figure/table label |
-| `teaching/calc.deriv.trig.md` | 70 | certain | *Figure 3.26 These graphs show two important limits needed to establish the derivative formula...* | auto-numbered figure/table label |
-| `teaching/calc.deriv.trig.md` | 95 | certain | *Figure 3.27 Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 78 | certain | *Figure 5.32 The graph shows speed versus time for the given motion of a car.* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 129 | certain | *Figure 5.33 The graph shows velocity versus time for a particle moving with a linear velocity...* | auto-numbered figure/table label |
 | `teaching/calc.integral.power_rule.md` | 197 | certain | *Figure 5.34 (credit: modification of work by Carter Brown, Flickr)* | auto-numbered figure/table label |
@@ -317,8 +313,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-612 diagrams ship, 123 URLs are referenced by lesson bodies, and
-**508 content diagrams are referenced by nothing** (site chrome
+616 diagrams ship, 125 URLs are referenced by lesson bodies, and
+**510 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today
@@ -362,8 +358,8 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/integrals/integration-strategies.md` | no | — | `finding-areas-by-integration-1.svg`, `finding-areas-by-integration-2.svg`, `numerical-integration-1.svg`, `numerical-integration-2.svg` |
 | `algebrica/integrals/reduction-formulas-for-integrals.md` | no | — | `definite-integrals-1.svg`, `definite-integrals-2.svg`, `definite-integrals-3.svg`, `definite-integrals-4.svg`, `definite-integrals-5.png`, `definite-integrals-5.svg`, `definite-integrals-6.png`, `improper-integrals-1.svg` |
 | `algebrica/integrals/the-weierstrass-substitution.md` | no | — | `trigonometric-substitution-for-integrals-1.svg`, `weierstrass-theorem-1.png`, `weierstrass-theorem-1.svg`, `weierstrass-theorem-2.png` |
-| `algebrica/limits/algebra-of-limits.md` | no | — | `limits-1.png`, `limits-1.svg`, `limits-2.png`, `limits-2.svg`, `limits-3.png`, `limits-3.svg` |
-| `algebrica/limits/remarkable-limits.md` | no | — | `limits-1.png`, `limits-1.svg`, `limits-2.png`, `limits-2.svg`, `limits-3.png`, `limits-3.svg` |
+| `algebrica/limits/algebra-of-limits.md` | no | — | `limits-1.png`, `limits-1.svg`, `limits-2.png`, `limits-2.svg`, `limits-3.png`, `limits-3.svg`, `two-limits.svg` |
+| `algebrica/limits/remarkable-limits.md` | no | — | `limits-1.png`, `limits-1.svg`, `limits-2.png`, `limits-2.svg`, `limits-3.png`, `limits-3.svg`, `two-limits.svg` |
 | `algebrica/linear-systems/cramers-rule.md` | no | — | `exp-power-rule.svg`, `exp-product-rule.svg`, `exp-quotient-rule.svg` |
 | `algebrica/linear-systems/rouche-capelli-theorem.md` | no | — | `cauchy-theorem-1.svg`, `darboux-theorem-1.svg`, `fermat-theorem-1.svg`, `fermat-theorem-2.svg`, `fermat-theorem-3.svg`, `fermath-theorem-4.png`, `fundamental-theorem-of-calculus-2.svg`, `intermediate-value-theorem-1.svg` |
 | `algebrica/linear-systems/solving-linear-systems-using-gaussian-elimination.md` | no | — | `gaussian-function-1.svg`, `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg` |
@@ -473,7 +469,7 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/complex-numbers/complex-numbers.md` | yes | `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg` | — |
 | `algebrica/complex-numbers/euler-formula.md` | yes | `euler-formula-1.svg` | — |
 | `algebrica/derivatives/derivatives.md` | yes | `derivatives-1.png`, `derivatives-1.svg` | — |
-| `algebrica/derivatives/difference-quotient.md` | yes | `difference-quotient-1.svg`, `difference-quotient-2.png` | — |
+| `algebrica/derivatives/difference-quotient.md` | yes | `difference-quotient-1.svg`, `difference-quotient-2.png`, `difference-quotient.svg` | — |
 | `algebrica/derivatives/differential-of-a-function.md` | yes | `differential-of-a-function-1.svg` | — |
 | `algebrica/derivatives/maximum-minimum-and-inflection-points.md` | yes | `maximum-minimum-inflection-points-1.svg`, `maximum-minimum-inflection-points-2.svg`, `maximum-minimum-inflection-points-3.svg`, `maximum-minimum-inflection-points-4.svg`, `maximum-minimum-inflection-points-5.svg`, `maximum-minimum-inflection-points-6.svg`, `maximum-minimum-inflection-points-7.svg`, `maximum-minimum-inflection-points-8.svg` | — |
 | `algebrica/derivatives/partial-derivatives.md` | yes | `partial-derivatives-1.png` | — |

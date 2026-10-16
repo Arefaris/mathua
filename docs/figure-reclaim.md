@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-254 paragraphs across 101 lessons read as a caption whose image was dropped:
-150 certain, 33 strong and 71 likely. Every one sits
+250 paragraphs across 100 lessons read as a caption whose image was dropped:
+146 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 150 rows and 80 distinct figures
+## 3. The captions are 146 rows and 76 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **80 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **76 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 31 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 27 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed twenty-two.
+again to 53 and 44, of which section 7 has since landed twenty-six.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,10 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 3.25 | The graph of the function $D(x)$ looks a lot like a cosine curve. | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
-| 3.26 | These graphs show two important limits needed to establish the derivative formulas fo... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
-| 3.27 | Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $f(x)... | Calculus Volume 1 | 3 Derivatives of Trigonometric Functions | 1 | schematic, redraw |
-| 3.33 | The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$ | Calculus Volume 1 | 3 Derivatives of Exponential and Logarithmic Functions | 1 | schematic, redraw |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
 | 4.40 | The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.42 | The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its horizont... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
@@ -641,6 +637,60 @@ certain tier. The lesson keeps other orphan captions, so the report's lesson cou
 the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 254. With 2.23
 landed, every redrawable figure in Calculus 2.2 is drawn: 2.12 through 2.19 and 2.21, with 2.20 and
 2.22 remaining as fetched illustrations and a photograph.
+
+**Figures 3.25, 3.26, 3.27 and 3.33** (the difference quotient the sine rule is guessed from; the
+two limits its proof needs; sine and cosine in one frame with dots where the tangent is
+horizontal; and the family `2^x`, `2.7^x`, `2.8^x`, `3^x` that places e) landed on 2026-10-16 in
+`calc.deriv.trig` and `calc.deriv.exp_log`, as `calculus/difference-quotient.svg`,
+`calculus/two-limits.svg`, `calculus/sine-and-cosine.svg` and `calculus/exponential-family.svg`.
+They are the first figures outside section 2, and the first two lessons here to gain a figure at
+all.
+
+Three of the four needed the same layout fix, which makes it a rule: the frame has to run past its
+last tick label, or the label, the arrowhead and the axis name pile up on top of each other. 3.25
+runs to `2pi + 0.7`, 3.27 to `2pi + 0.55` and 3.33 to `0.72`.
+
+3.25 draws `D(x) = (sin(x + 0.01) - sin x)/0.01` over `[-2pi, 2pi]`, and repeats the formula below
+the frame rather than inside it, because the lesson writes it as a display equation and upstream
+prints it under the plot.
+
+3.26 is two panels with one curve each. Upstream gives each panel its own y range; this gives them
+one, `[-0.85, 1.05]`, so that their x axes land in one row and the two limits can be read against
+each other, which is the only reason to show them together. The cost is real and worth naming:
+`(cos h - 1)/h` has amplitude 0.73 and is drawn at 82% of the size its own range would give it, and
+the shared range then holds labels every 0.5 instead of upstream's every 0.2. The alt says the two
+curves "have discontinuities on the y-axis", which is what the two hollow markers at `(0, 1)` and
+`(0, 0)` are.
+
+3.27 is the first local figure to use the trig accents section 4 of the style doc reserves for a
+function family, `#2980b9` for the sine and `#e74c3c` for the cosine: two curves that cross four
+times in one frame cannot be told apart by weight alone. The dots are the caption's statement --
+the two extrema of the sine and the two zeros of the cosine at those same x values -- plus the
+cosine's maxima at `x = 0` and `x = 2pi`, which are upstream's and are kept because a look-alike is
+the goal. Upstream's dot set is not symmetric, and this record says so rather than inventing a dot
+at `(pi, -1)` to match: there is no dot there.
+
+3.33 has the x axis on the frame's bottom edge instead of at `y = 0`, because its y range starts at
+0.5, and the y axis carries a break glyph to say so -- the glyph 2.14 introduced for a two-piece
+scale, here for one that simply starts above zero. Its four curves all end at the right edge so
+each label sits at its own curve's end, and the two the caption names (`2^x` and `3^x`) are ink at
+width 2 while the pair that brackets e is annotation grey at 1.5. The labels read `3^x`, not a
+raised superscript, for the same reason 2.23's `m0` is a plain zero.
+
+**No new e2e case.** None of the four introduces a primitive the sanitizer has not already been
+shown to pass: a colored stroke is the same `stroke` attribute the ink curves carry, and the break
+glyph and the bottom x axis are shapes 2.14 and 2.12 already draw. The screenshot check carries
+them, and `calc.deriv.trig` is a lesson that had no figure before today, which the
+`arith.mult.tables` case already covers as a pattern.
+
+**The lesson count moved, not only the row count.** Figure 3.33 was `calc.deriv.exp_log`'s only
+orphan caption, so with it wired that lesson leaves the report entirely: **101 lessons to 100**.
+Every earlier batch took rows off the list and left the lesson count alone, so this is the first
+time the third number in section 1 has moved, and the first batch where the Go test's own log line
+and the audit disagree with the docs unless all three are updated together.
+
+Those four captions held four rows: 254 to 250 candidates, and 146 in the certain tier. The
+ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 250.
 
 ## 8. Order of work
 

@@ -716,21 +716,14 @@
     },
     {
       "lesson": "teaching/calc.deriv.exp_log.md",
-      "line": 43,
-      "text": "Figure 3.33 The graph of $E(x) = e^{x}$ is between $y = 2^{x}$ and $y = 3^{x}.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.exp_log.md",
-      "line": 73,
+      "line": 75,
       "text": "Figure 3.34 The tangent line to $E(x) = e^{x}$ at $x = 0$ has slope 1.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.deriv.exp_log.md",
-      "line": 239,
+      "line": 241,
       "text": "Figure 3.35 $\\text{The function}\\ y = \\text{ln} x$ is increasing on $(0,\\text{+}\\infty).$ Its derivative $y' = \\frac{1}{x}$ is greater than zero on $(0,\\text{+}\\infty).$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -872,27 +865,6 @@
       "lesson": "teaching/calc.deriv.sum_rule.md",
       "line": 716,
       "text": "Figure 3.21 (a) One section of the racetrack can be modeled by the function $f(x) = x^{3} + 3x^{2} + x.$ (b) The front corner of the grandstand is located at $\\left( {-1.9,2.8} \\right).$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.trig.md",
-      "line": 29,
-      "text": "Figure 3.25 The graph of the function $D(x)$ looks a lot like a cosine curve.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.trig.md",
-      "line": 70,
-      "text": "Figure 3.26 These graphs show two important limits needed to establish the derivative formulas for the sine and cosine functions.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.deriv.trig.md",
-      "line": 95,
-      "text": "Figure 3.27 Where $f(x)$ has a maximum or a minimum, $f'(x) = 0$ that is, $f'(x) = 0$ where $f(x)$ has a horizontal tangent. These points are noted with dots on the graphs.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
@@ -1974,9 +1946,9 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 123,
-    "shipped": 612,
-    "unreferenced_content": 508,
+    "referenced": 125,
+    "shipped": 616,
+    "unreferenced_content": 510,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -2453,7 +2425,8 @@
           "/diagrams/algebrica/limits-2.png",
           "/diagrams/algebrica/limits-2.svg",
           "/diagrams/algebrica/limits-3.png",
-          "/diagrams/algebrica/limits-3.svg"
+          "/diagrams/algebrica/limits-3.svg",
+          "/diagrams/calculus/two-limits.svg"
         ]
       },
       {
@@ -2466,7 +2439,8 @@
           "/diagrams/algebrica/limits-2.png",
           "/diagrams/algebrica/limits-2.svg",
           "/diagrams/algebrica/limits-3.png",
-          "/diagrams/algebrica/limits-3.svg"
+          "/diagrams/algebrica/limits-3.svg",
+          "/diagrams/calculus/two-limits.svg"
         ]
       },
       {
@@ -3744,7 +3718,8 @@
         "figures_referenced": true,
         "exact_stem_match": [
           "/diagrams/algebrica/difference-quotient-1.svg",
-          "/diagrams/algebrica/difference-quotient-2.png"
+          "/diagrams/algebrica/difference-quotient-2.png",
+          "/diagrams/calculus/difference-quotient.svg"
         ],
         "topic_word_match": []
       },
@@ -5840,6 +5815,7 @@
       "/diagrams/arithmetic/sub-double.svg",
       "/diagrams/arithmetic/sub-single.svg",
       "/diagrams/arithmetic/sub-word.svg",
+      "/diagrams/calculus/difference-quotient.svg",
       "/diagrams/calculus/interrupted-curve.svg",
       "/diagrams/calculus/limit-behavior.svg",
       "/diagrams/calculus/missing-vertex.svg",
@@ -5848,7 +5824,8 @@
       "/diagrams/calculus/piecewise-jump.svg",
       "/diagrams/calculus/radical-over-x.svg",
       "/diagrams/calculus/reciprocal.svg",
-      "/diagrams/calculus/sine-over-x.svg"
+      "/diagrams/calculus/sine-over-x.svg",
+      "/diagrams/calculus/two-limits.svg"
     ]
   }
 }
