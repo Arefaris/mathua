@@ -1171,77 +1171,63 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 96,
-      "text": "Figure 2.13 The graph of $f(x) = {{(\\text{sin} x)}\\text{/}x}$ confirms the estimate from Table 2.2.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 120,
-      "text": "Figure 2.14 The graph of $f(x) = \\frac{\\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.numeric.md",
-      "line": 134,
+      "line": 138,
       "text": "Figure 2.15 The graph of $g(x)$ includes one value not on a smooth curve.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 146,
+      "line": 150,
       "text": "Figure 2.16",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 222,
+      "line": 226,
       "text": "Figure 2.17 The graph of $f(x) = \\text{sin}({1\\text{/}{x)}}$ oscillates rapidly between \u22121 and 1 as *x* approaches 0.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 295,
+      "line": 299,
       "text": "Figure 2.18 The graph of $f(x) = \\left\\{ \\begin{matrix} {x + 1\\ \\text{if}\\ x < 2} \\\\ {x^{2} - 4\\ \\text{if}\\ x \\geq 2} \\end{matrix} \\right.$ has a break at $x = 2.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 413,
+      "line": 417,
       "text": "Figure 2.19 The graph of $f(x) = {1\\text{/}x}$ confirms that the limit as *x* approaches 0 does not exist.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 425,
+      "line": 429,
       "text": "Figure 2.20 The function $f(x) = {1\\text{/}\\left( {x - a} \\right)^{n}}$ has infinite limits at *a*.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 505,
+      "line": 509,
       "text": "Figure 2.21 The graph shows $f(x).$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 524,
+      "line": 528,
       "text": "Figure 2.22 (credit: NASA)",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 538,
+      "line": 542,
       "text": "Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Einstein\u2019s equation for the mass of a moving object.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1905,7 +1891,7 @@
     },
     {
       "lesson": "teaching/calc.limit.numeric.md",
-      "line": 505,
+      "line": 509,
       "phrase": "The graph shows",
       "context": "*Figure 2.21 The graph shows $f(x).$*"
     },
@@ -2037,8 +2023,8 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 296,
-    "shipped": 603,
+    "referenced": 298,
+    "shipped": 605,
     "unreferenced_content": 287,
     "candidates": [
       {

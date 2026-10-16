@@ -93,6 +93,8 @@ Table 2.2 Table of Functional Values for $\underset{x\rightarrow 0}{\text{lim}}\
 
 As we read down each $\frac{\left( {\text{sin} x} \right)}{x}$ column, we see that the values in each column appear to be approaching one. Thus, it is fairly reasonable to conclude that $\underset{x\rightarrow 0}{\text{lim}}\frac{\text{sin} x}{x} = 1.$ A calculator or computer-generated graph of $f(x) = \frac{\left( {\text{sin} x} \right)}{x}$ would be similar to that shown in Figure 2.13, and it confirms our estimate.
 
+![The graph of f(x) = (sin x)/x confirms the estimate from Table 2.2.](/diagrams/calculus/sine-over-x.svg)
+
 *Figure 2.13 The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.2.*
 
 ### Example 2.5
@@ -116,6 +118,8 @@ As before, we use a table—in this case, Table 2.3—to list the values of the 
 Table 2.3 Table of Functional Values for $\underset{x\rightarrow 4}{\text{lim}}\frac{\sqrt{x} - 2}{x - 4}$
 
 After inspecting this table, we see that the functional values less than 4 appear to be decreasing toward 0.25 whereas the functional values greater than 4 appear to be increasing toward 0.25. We conclude that $\underset{x\rightarrow 4}{\text{lim}}\frac{\sqrt{x} - 2}{x - 4} = 0.25.$ We confirm this estimate using the graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ shown in Figure 2.14.
+
+![The graph of f(x) = (sqrt(x) - 2)/(x - 4) confirms the estimate from Table 2.3.](/diagrams/calculus/radical-over-x.svg)
 
 *Figure 2.14 The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3.*
 

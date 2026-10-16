@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-263 paragraphs across 101 lessons read as a caption whose image was dropped:
-159 certain, 33 strong and 71 likely. Every one sits
+261 paragraphs across 101 lessons read as a caption whose image was dropped:
+157 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 159 rows and 89 distinct figures
+## 3. The captions are 157 rows and 87 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **89 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **87 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 40 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 38 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed thirteen.
+again to 53 and 44, of which section 7 has since landed fifteen.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -183,8 +183,6 @@ every count here is work still to do.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
-| 2.13 | The graph of $f(x) = {{(\text{sin} x)}\text{/}x}$ confirms the estimate from Table 2.... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
-| 2.14 | The graph of $f(x) = \frac{\sqrt{x} - 2}{x - 4}$ confirms the estimate from Table 2.3... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.15 | The graph of $g(x)$ includes one value not on a smooth curve. | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.16 | (none) | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
 | 2.17 | The graph of $f(x) = \text{sin}({1\text{/}{x)}}$ oscillates rapidly between −1 and 1 ... | Calculus Volume 1 | 2 The Limit of a Function | 1 | schematic, redraw |
@@ -517,6 +515,33 @@ That one caption held one row, and the regenerated audit dropped it: 264 to 263,
 certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
 the ceiling for orphan captions in `internal/lessons/assets_test.go` follows the certain tier, to
 263.
+
+**Figures 2.13 and 2.14** (the two graphs whose captions say they confirm the table estimates:
+`sin(x)/x` over `[-6, 6]`, empty at the origin because the function is not defined there and 1 is the
+value it approaches; and `(sqrt(x) - 2)/(x - 4)` over `[0, 8]`, empty at `(4, 0.25)` for the same
+reason) landed on 2026-10-16 in `calc.limit.numeric`, as `calculus/sine-over-x.svg` and
+`calculus/radical-over-x.svg`. They are the first local figures whose ticks carry numbers, so the
+labels are the only new thing the dialect needed: 11px, ink, every even integer on the x axis and
+every twentieth on the y axis of 2.13.
+
+The break in 2.14's y axis is the figure's real decision. Upstream runs 0.25 to 0.50 through about
+two thirds of the frame, jogs under a zigzag, and gives the last thirteenth to 0.25 down to 0; the
+curve is drawn through the same two-piece mapping, 364px per unit above the break and 72 below it.
+The alternative, one linear axis from 0 to 0.5, puts the whole curve in the top sixth of an empty
+frame and hides the flat tail -- which is the part that says the limit is 0. A break says the scale
+changes here, which is true, and the zigzag is where it says it.
+
+Both captions are mostly math, and an alt is plain text, so the caption's math is rendered into the
+words it is made of by a small converter: `\frac{a}{b}` becomes `(a)/(b)`, `\sqrt{x}` becomes
+`sqrt(x)`, `\text{sin}` becomes `sin`, and grouping braces and `$` come off. The converter asserts
+on a macro it does not know, so no caption reaches a lesson as a backslash. For 2.14 the result is
+`(sqrt(x) - 2)/(x - 4)`, which is how upstream's own `data-alt` writes that same function, and an
+independent rendering that agrees with the author's is the check that this is a rendering and not a
+paraphrase. 2.13's alt reads "The graph of f(x) = (sin x)/x confirms the estimate from Table 2.2."
+
+Those two captions held two rows, and the regenerated audit dropped both: 263 to 261, and 157 in the
+certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
+the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 261.
 
 ## 8. Order of work
 
