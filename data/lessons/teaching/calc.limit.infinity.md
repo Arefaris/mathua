@@ -20,6 +20,8 @@ We begin by examining what it means for a function to have a finite limit at inf
 
 Recall that $\underset{x\rightarrow a}{\text{lim}}f(x) = L$ means $f(x)$ becomes arbitrarily close to $L$ as long as $x$ is sufficiently close to $a.$ We can extend this idea to limits at infinity. For example, consider the function $f(x) = 2 + \frac{1}{x}.$ As can be seen graphically in Figure 4.40 and numerically in Table 4.2, as the values of $x$ get larger, the values of $f(x)$ approach 2. We say the limit as $x$ approaches $\infty$ of $f(x)$ is 2 and write $\underset{x\rightarrow\infty}{\text{lim}}f(x) = 2.$ Similarly, for $x < 0,$ as the values $|x|$ get larger, the values of $f(x)$ approaches 2. We say the limit as $x$ approaches $\text{-}\infty$ of $f(x)$ is 2 and write $\underset{x\rightarrow - \infty}{\text{lim}}f(x) = 2.$
 
+![The function approaches the asymptote y = 2 as x approaches ±∞.](/diagrams/calculus/horizontal-asymptote.svg)
+
 *Figure 4.40 The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$*
 
 |                         |         |          |           |             |
@@ -56,6 +58,8 @@ If $\underset{x\rightarrow\infty}{\text{lim}}f(x) = L$ or $\underset{x\rightarro
 *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $L.$ The line $y = L$ is a horizontal asymptote of $f.$ (b) As $x\rightarrow\text{-}\infty,$ the values of $f$ are getting arbitrarily close to $M.$ The line $y = M$ is a horizontal asymptote of $f.$*
 
 A function cannot cross a vertical asymptote because the graph must approach infinity (or $\text{-}\infty)$ from at least one direction as $x$ approaches the vertical asymptote. However, a function may cross a horizontal asymptote. In fact, a function may cross a horizontal asymptote an unlimited number of times. For example, the function ${f(x) = \frac{\left( {\text{cos} x} \right)}{x}} + 1$ shown in Figure 4.42 intersects the horizontal asymptote $y = 1$ an infinite number of times as it oscillates around the asymptote with ever-decreasing amplitude.
+
+![The graph of f(x) = (cos x)/x + 1 crosses its horizontal asymptote y = 1 an infinite number of times.](/diagrams/calculus/crossing-asymptote.svg)
 
 *Figure 4.42 The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its horizontal asymptote $y = 1$ an infinite number of times.*
 
@@ -103,6 +107,8 @@ For each of the following functions $f,$ evaluate $\underset{x\rightarrow\infty}
     *Figure 4.44 This function crosses its horizontal asymptote multiple times.*
 
 3.  To evaluate $\underset{x\rightarrow\infty}{\text{lim}}\text{tan}^{-1}(x)$ and $\underset{x\rightarrow\text{-}\infty}{\text{lim}}\text{tan}^{-1}(x),$ we first consider the graph of $y = \text{tan}(x)$ over the interval $\left( {\text{-}\pi\text{/}2,\pi\text{/}2} \right)$ as shown in the following graph.  
+
+    ![The graph of tan x has vertical asymptotes at x = ±π/2](/diagrams/calculus/tangent-asymptotes.svg)
 
     *Figure 4.45 The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$*
 

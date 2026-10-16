@@ -8,8 +8,8 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-250 paragraphs across 100 lessons read as a caption whose image was dropped:
-146 certain, 33 strong and 71 likely. Every one sits
+247 paragraphs across 100 lessons read as a caption whose image was dropped:
+143 certain, 33 strong and 71 likely. Every one sits
 in `data/lessons/teaching/`, and until the first reclaim below those lessons contained no image at
 all, so the caption was the only remaining trace of the figure. The `certain` tier opens with an
 auto-numbered `Figure 3.2` label that the PreTeXt conversion emits for a figure and keeps when it
@@ -32,18 +32,18 @@ upstream, not Algebrica. The Algebrica dialect in `docs/diagram-style.md` applie
 redrawn by hand; a figure re-fetched from OpenStax keeps the OpenStax look and does not need to
 match Algebrica.
 
-## 3. The captions are 146 rows and 76 distinct figures
+## 3. The captions are 143 rows and 73 distinct figures
 
 Teaching lessons share source sections, so one figure appears in several concept lessons: the same
 `Figure 1.13` is the caption in five of them, and `Figure 1.11` in six. Deduplicating on the pair
-(figure number, caption) leaves **76 distinct figures** still to reclaim. Section 6 gives
+(figure number, caption) leaves **73 distinct figures** still to reclaim. Section 6 gives
 the method.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 27 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| schematic, redraw | 24 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
 | illustration, fetch | 44 | Fetch the OpenStax original. The license is CC BY 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 5 | The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar). These cannot be redrawn; each needs a licensed fetch or a replacement. |
@@ -56,7 +56,7 @@ number line as Figure 1.2 under a different mark, which makes them schematics. T
 (section 7), so the redraw row gained three figures and then lost the same three, and the fetch
 row lost three: when that batch landed the table above read 43 redraw and 37 fetch, where reading
 the caption alone had suggested 35 and 38, and the classification below moved those counts on
-again to 53 and 44, of which section 7 has since landed twenty-six.
+again to 53 and 44, of which section 7 has since landed twenty-nine.
 
 **The column is a guess until someone opens upstream, and the caption is the wrong thing to
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
@@ -184,9 +184,6 @@ every count here is work still to do.
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
 | 4.3 | An airplane is flying at a constant height of 4000 ft. The distance between the perso... | Calculus Volume 1 | 4 Related Rates | 1 | schematic, redraw |
-| 4.40 | The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.42 | The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its horizont... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
-| 4.45 | The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$ | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.50 | For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{\tex... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.51 | For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\text... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
 | 4.52 | The end behavior of a polynomial is determined by the behavior of the term with the l... | Calculus Volume 1 | 4 Limits at Infinity and Asymptotes | 1 | schematic, redraw |
@@ -689,8 +686,75 @@ Every earlier batch took rows off the list and left the lesson count alone, so t
 time the third number in section 1 has moved, and the first batch where the Go test's own log line
 and the audit disagree with the docs unless all three are updated together.
 
-Those four captions held four rows: 254 to 250 candidates, and 146 in the certain tier. The
-ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 250.
+Those four captions held four rows: the report went from 254 to 250, and the certain tier from
+150 to 146. The ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to
+250. (The numbers are written in this order rather than as one live claim because the checker
+reads a count followed by the word it counts: a dated record must not look like today's
+measurement, or every later batch has to rewrite history to keep the checker quiet.)
+
+**Figures 4.40, 4.42 and 4.45** (a curve approaching the horizontal asymptote `y = 2`; a curve that
+crosses its horizontal asymptote an infinite number of times; and `tan x` with vertical asymptotes
+at `x = +-pi/2`) landed on 2026-10-16 in `calc.limit.infinity`, as
+`calculus/horizontal-asymptote.svg`, `calculus/crossing-asymptote.svg` and
+`calculus/tangent-asymptotes.svg`. This is the first batch whose subject is the asymptote itself,
+and the first whose third figure goes into a numbered list item rather than a paragraph.
+
+**The dashed guide is new to the local set, and already proven.** No local calculus figure used
+`stroke-dasharray` before today; the vendored Algebrica set does, and three of the lessons the e2e
+list already checks carry one (`alg.log.concept`, `calc.deriv.cauchy_mvt`, `calc.seq.euler`), so the
+attribute is one the sanitizer has been shown to pass for months. That is why this batch adds no
+e2e case: the new shape is new *here* and not new to the sanitizer, which is the distinction the
+rule was written for. The guides themselves are annotation grey `#636363` rather than the axes'
+`#BABABA`: a labeled asymptote is an annotation, not an axis.
+
+**4.40's caption does not name its function, and the figure still had to be drawable.** "The
+function approaches the asymptote `y = 2` as `x` approaches `+-oo`" is prose about a curve, so the
+alt is that sentence and the curve has to come from somewhere else: the lesson's own prose later in
+the section ("we used graphical evidence in Figure 4.40 and numerical evidence in Table 4.2 to
+conclude that `lim (2 + 1/x) = 2`) and upstream's `data-alt`, which reads "The function f(x) 2 +
+1/x is graphed". Taking the function from the lesson rather than the caption is a decision, and it
+is the reason this row was classified redraw while its neighbour 4.43, whose caption names no
+function *and* whose prose names it only in the surrounding paragraph, was classified fetch.
+
+**Both 4.40 and 4.42 draw one path per branch, from analytic domains, with no clip path.** The
+right branch of `2 + 1/x` starts where the curve leaves the top of the frame, at `x = 1/3`, and the
+left branch ends where it leaves the bottom, at `x = -1/7`; 4.42's branches end where the curve
+leaves the frame at `y = 2.2` and `y = -1.4`, found by bisection. That is how `reciprocal.svg` drew
+`1/x` and it means no path ever leaves the box, which is visible rather than merely contained.
+4.40 also needed a wider x range than its ticks: labels every 2 instead of upstream's every 1,
+because at 14.4px per unit a two-character label does not fit between two ticks. 4.26's record
+already made that trade; this is the second time.
+
+**4.45 is the first figure in the set that a numbered list item carries.** Its caption is indented
+four spaces upstream, so the insertion preserves the indentation; an image at column 0 would have
+ended the list item and left the caption orphaned in the markdown in a way the audit would still
+count as wired. The label placement is worth recording too: `y = tan x` sits *left* of the y axis
+between the two asymptotes, not right of it as upstream has it, because at 45.9px per unit the free
+span right of the axis ends where the curve crosses the label's own row, and the label is 59px
+wide. The `x = pi/2` label had to drop below the x axis for the same reason in reverse: at row 97 it
+landed on the "2" and "3" tick labels, which sit at row+15.
+
+**Three new macros and one rule in the alt converter.** 4.40's caption ends
+`$\text{\pm}\infty$` and 4.45's reads `$x = \text{\pm}\frac{\pi}{2}$`, so the converter now
+renders `\pm`, `\infty` and `\pi` instead of asserting on them, and it no longer brackets a
+fraction whose numerator and denominator are each a single token: 4.45's alt reads `x = +-pi/2`,
+not `x = +-(pi)/(2)`. A part with an operator inside keeps its parentheses, so 2.14's committed alt
+is unchanged and the wire script checks that against the string in the lesson rather than against a
+comment. One further fix came out of the same caption: upstream writes `\left( {\text{cos} x}`,
+and the space after the opening parenthesis leaked into 4.42's alt as `( cos x )/x`, so the
+converter now closes up whitespace inside parentheses.
+
+**The checker caught a stale count in the previous record, which is worth writing down.** After
+this batch's numbers moved, `scripts/check_docs.py` failed on the 3.25-3.33 record, which ended its
+row count with the number 250 and the word "candidates" straight after it: the checker reads any
+count followed by the word it counts as a live claim, and a dated record is not one. The fix was
+to phrase the history as a sequence ("went from 254 to 250") rather than as a measurement, and then
+to write this paragraph so that it did not re-create the pattern while describing it. Every later batch has to keep that distinction, or the records have
+to be rewritten to match today's corpus.
+
+Those three captions held three rows: the report went from 250 to 247, and the certain tier from
+146 to 143. The lesson keeps nineteen other orphan captions, so the lesson count stays at 100, and
+the ceiling in `internal/lessons/assets_test.go` follows, to 247.
 
 ## 8. Order of work
 

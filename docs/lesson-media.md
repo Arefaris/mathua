@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-250 paragraphs across 100 lessons look like a figure caption whose image
-was dropped while its text was kept: **146 certain**, **33 strong**, **71 likely**.
+247 paragraphs across 100 lessons look like a figure caption whose image
+was dropped while its text was kept: **143 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -162,28 +162,25 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/calc.integral.volume.md` | 267 | certain | *Figure 6.34* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 284 | certain | *Figure 6.35 (a) The region $R$ bounded by two lines and the $x\text{-axis}.$ (b) The solid of...* | auto-numbered figure/table label |
 | `teaching/calc.integral.volume.md` | 304 | certain | *Figure 6.36 (a) The region $R$ between the curve and the $x\text{-axis}.$ (b) The solid of re...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 23 | certain | *Figure 4.40 The function approaches the asymptote $y = 2$ as $x$ approaches $\text{\pm}\infty.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 56 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 60 | certain | *Figure 4.42 The graph of $f(x) = \left( {\text{cos} x} \right)\text{/}x + 1$ crosses its hori...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 79 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 103 | certain | *Figure 4.44 This function crosses its horizontal asymptote multiple times.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.45 The graph of $\text{tan} x$ has vertical asymptotes at $x = \text{\pm}\frac{\pi}{2}$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 135 | certain | *Figure 4.46 This function has two horizontal asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 156 | certain | *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 206 | certain | *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \ri...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 262 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 313 | certain | *Figure 4.50 For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 315 | certain | *Figure 4.51 For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 369 | certain | *Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with t...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 410 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\right...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 419 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ a...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 428 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 448 | certain | *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\l...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 497 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 507 | certain | *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\r...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 509 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 520 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
-| `teaching/calc.limit.infinity.md` | 531 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 58 | certain | *Figure 4.41 (a) As $x\rightarrow\infty,$ the values of $f$ are getting arbitrarily close to $...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 83 | certain | *Figure 4.43 This function approaches a horizontal asymptote as $x\rightarrow\text{\pm}\infty.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 107 | certain | *Figure 4.44 This function crosses its horizontal asymptote multiple times.* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 141 | certain | *Figure 4.46 This function has two horizontal asymptotes.* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 162 | certain | *Figure 4.47 For this function, the functional values approach infinity as $x\rightarrow\text{...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 212 | certain | *Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\left\| {f(x) - L} \ri...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 268 | certain | *Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 319 | certain | *Figure 4.50 For power functions with an even exponent of $n,$ $\underset{x\rightarrow\infty}{...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 321 | certain | *Figure 4.51 For power functions with an odd exponent of $n,$ $\underset{x\rightarrow\infty}{\...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 375 | certain | *Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with t...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 416 | certain | *Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\right...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 425 | certain | *Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ a...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 434 | certain | *Figure 4.55 As $x\rightarrow\infty,$ the values $f(x)\rightarrow\infty.$ As $x\rightarrow\tex...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 454 | certain | *Figure 4.56 The graph of the rational function $f(x) = \left( {3x^{2} + 4x} \right)\text{/}\l...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 503 | certain | *Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 513 | certain | *Figure 4.58 The function $f(x) = \text{sin} x$ oscillates between $1\ \text{and}\ -1$ as $x\r...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 515 | certain | *Figure 4.59 The function $f(x) = \text{tan} x$ does not approach a limit and does not approac...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 526 | certain | *Figure 4.60 The exponential function approaches zero as $x\rightarrow\text{-}\infty$ and appr...* | auto-numbered figure/table label |
+| `teaching/calc.limit.infinity.md` | 537 | certain | *Figure 4.61 The natural logarithm function approaches $\infty$ as $x\rightarrow\infty.$* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 439 | certain | *Figure 2.20 The function $f(x) = {1\text{/}\left( {x - a} \right)^{n}}$ has infinite limits a...* | auto-numbered figure/table label |
 | `teaching/calc.limit.numeric.md` | 540 | certain | *Figure 2.22 (credit: NASA)* | auto-numbered figure/table label |
 | `teaching/dec.basics.compare.md` | 49 | certain | *Figure 5.2 This chart illustrates place values to the left and right of the decimal point.* | auto-numbered figure/table label |
@@ -313,8 +310,8 @@ so the tiers below do not treat it as evidence either way.
 
 ## C. Shipped but unreferenced
 
-616 diagrams ship, 125 URLs are referenced by lesson bodies, and
-**510 content diagrams are referenced by nothing** (site chrome
+619 diagrams ship, 126 URLs are referenced by lesson bodies, and
+**512 content diagrams are referenced by nothing** (site chrome
 with dark/light variants is excluded — components reference those).
 
 These already exist and are already served, so a teaching figure that is missing today
@@ -423,7 +420,6 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.sqrt.perfect.md` | no | — | `sqrt-perfect.svg`, `sqrt-simplify.svg` |
 | `teaching/calc.integral.power_rule.md` | no | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
 | `teaching/calc.integral.volume.md` | no | — | `integral-test-for-series-convergence-1.svg`, `integral-test-series-1.png` |
-| `teaching/calc.limit.infinity.md` | no | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/complex.analytic.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
 | `teaching/complex.argument.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
 | `teaching/complex.cauchy_goursat.md` | no | — | `complex-number-operations-1.svg`, `complex-numbers-1.svg`, `complex-numbers-2.svg`, `complex-numbers-3.svg`, `complex-numbers-exponential-form-1.svg`, `complex-numbers-trigonometric-form-1.svg`, `quad-eq-complex-roots.png` |
@@ -619,6 +615,7 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/arith.round.hundreds.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.tens.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
 | `teaching/arith.round.thousands.md` | yes | — | `number-line-round-72.svg`, `number-line-round-76.svg`, `round-hundreds.svg`, `round-tens.svg`, `round-thousands.svg` |
+| `teaching/calc.limit.infinity.md` | yes | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/calc.limit.numeric.md` | yes | — | `euler-number-limit-sequence-1.svg`, `limit-behavior.svg` |
 | `teaching/frac.mult.whole.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 

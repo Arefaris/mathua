@@ -989,154 +989,133 @@
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 23,
-      "text": "Figure 4.40 The function approaches the asymptote $y = 2$ as $x$ approaches $\\text{\\pm}\\infty.$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 56,
+      "line": 58,
       "text": "Figure 4.41 (a) As $x\\rightarrow\\infty,$ the values of $f$ are getting arbitrarily close to $L.$ The line $y = L$ is a horizontal asymptote of $f.$ (b) As $x\\rightarrow\\text{-}\\infty,$ the values of $f$ are getting arbitrarily close to $M.$ The line $y = M$ is a horizontal asymptote of $f.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 60,
-      "text": "Figure 4.42 The graph of $f(x) = \\left( {\\text{cos} x} \\right)\\text{/}x + 1$ crosses its horizontal asymptote $y = 1$ an infinite number of times.",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 79,
+      "line": 83,
       "text": "Figure 4.43 This function approaches a horizontal asymptote as $x\\rightarrow\\text{\\pm}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 103,
+      "line": 107,
       "text": "Figure 4.44 This function crosses its horizontal asymptote multiple times.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 107,
-      "text": "Figure 4.45 The graph of $\\text{tan} x$ has vertical asymptotes at $x = \\text{\\pm}\\frac{\\pi}{2}$",
-      "confidence": "certain",
-      "reason": "auto-numbered figure/table label"
-    },
-    {
-      "lesson": "teaching/calc.limit.infinity.md",
-      "line": 135,
+      "line": 141,
       "text": "Figure 4.46 This function has two horizontal asymptotes.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 156,
+      "line": 162,
       "text": "Figure 4.47 For this function, the functional values approach infinity as $x\\rightarrow\\text{\\pm}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 206,
+      "line": 212,
       "text": "Figure 4.48 For a function with a limit at infinity, for all $x > N,$ $\\left| {f(x) - L} \\right| < \\varepsilon.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 262,
+      "line": 268,
       "text": "Figure 4.49 For a function with an infinite limit at infinity, for all $x > N,$ $f(x) > M.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 313,
+      "line": 319,
       "text": "Figure 4.50 For power functions with an even exponent of $n,$ $\\underset{x\\rightarrow\\infty}{\\text{lim}}x^{n} = \\infty = \\underset{x\\rightarrow\\text{-}\\infty}{\\text{lim}}x^{n}.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 315,
+      "line": 321,
       "text": "Figure 4.51 For power functions with an odd exponent of $n,$ $\\underset{x\\rightarrow\\infty}{\\text{lim}}x^{n} = \\infty$ and $\\underset{x\\rightarrow\\text{-}\\infty}{\\text{lim}}x^{n} = \\text{-}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 369,
+      "line": 375,
       "text": "Figure 4.52 The end behavior of a polynomial is determined by the behavior of the term with the largest exponent.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 410,
+      "line": 416,
       "text": "Figure 4.53 The graph of this rational function approaches a horizontal asymptote as $x\\rightarrow\\text{\\pm}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 419,
+      "line": 425,
       "text": "Figure 4.54 The graph of this rational function approaches the horizontal asymptote $y = 0$ as $x\\rightarrow\\text{\\pm}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 428,
+      "line": 434,
       "text": "Figure 4.55 As $x\\rightarrow\\infty,$ the values $f(x)\\rightarrow\\infty.$ As $x\\rightarrow\\text{-}\\infty,$ the values $f(x)\\rightarrow\\text{-}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 448,
+      "line": 454,
       "text": "Figure 4.56 The graph of the rational function $f(x) = \\left( {3x^{2} + 4x} \\right)\\text{/}\\left( {x + 2} \\right)$ approaches the oblique asymptote $y = 3x - 2\\ \\text{as}\\ x\\rightarrow\\text{\\pm}\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 497,
+      "line": 503,
       "text": "Figure 4.57 This function has two horizontal asymptotes and it crosses one of the asymptotes.",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 507,
+      "line": 513,
       "text": "Figure 4.58 The function $f(x) = \\text{sin} x$ oscillates between $1\\ \\text{and}\\ -1$ as $x\\rightarrow\\text{\\pm}\\infty$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 509,
+      "line": 515,
       "text": "Figure 4.59 The function $f(x) = \\text{tan} x$ does not approach a limit and does not approach $\\text{\\pm}\\infty$ as $x\\rightarrow\\text{\\pm}\\infty$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 520,
+      "line": 526,
       "text": "Figure 4.60 The exponential function approaches zero as $x\\rightarrow\\text{-}\\infty$ and approaches $\\infty$ as $x\\rightarrow\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
     },
     {
       "lesson": "teaching/calc.limit.infinity.md",
-      "line": 531,
+      "line": 537,
       "text": "Figure 4.61 The natural logarithm function approaches $\\infty$ as $x\\rightarrow\\infty.$",
       "confidence": "certain",
       "reason": "auto-numbered figure/table label"
@@ -1946,9 +1925,9 @@
     }
   ],
   "unreferenced_diagrams": {
-    "referenced": 125,
-    "shipped": 616,
-    "unreferenced_content": 510,
+    "referenced": 126,
+    "shipped": 619,
+    "unreferenced_content": 512,
     "candidates": [
       {
         "lesson": "algebrica/complex-numbers/complex-logarithm.md",
@@ -3179,15 +3158,6 @@
         "topic_word_match": [
           "/diagrams/algebrica/integral-test-for-series-convergence-1.svg",
           "/diagrams/algebrica/integral-test-series-1.png"
-        ]
-      },
-      {
-        "lesson": "teaching/calc.limit.infinity.md",
-        "figures_referenced": false,
-        "exact_stem_match": [],
-        "topic_word_match": [
-          "/diagrams/algebrica/euler-number-limit-sequence-1.svg",
-          "/diagrams/calculus/limit-behavior.svg"
         ]
       },
       {
@@ -5292,6 +5262,15 @@
         ]
       },
       {
+        "lesson": "teaching/calc.limit.infinity.md",
+        "figures_referenced": true,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/euler-number-limit-sequence-1.svg",
+          "/diagrams/calculus/limit-behavior.svg"
+        ]
+      },
+      {
         "lesson": "teaching/calc.limit.numeric.md",
         "figures_referenced": true,
         "exact_stem_match": [],
@@ -5815,7 +5794,9 @@
       "/diagrams/arithmetic/sub-double.svg",
       "/diagrams/arithmetic/sub-single.svg",
       "/diagrams/arithmetic/sub-word.svg",
+      "/diagrams/calculus/crossing-asymptote.svg",
       "/diagrams/calculus/difference-quotient.svg",
+      "/diagrams/calculus/horizontal-asymptote.svg",
       "/diagrams/calculus/interrupted-curve.svg",
       "/diagrams/calculus/limit-behavior.svg",
       "/diagrams/calculus/missing-vertex.svg",
