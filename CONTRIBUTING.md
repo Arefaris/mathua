@@ -115,10 +115,7 @@ on `vitest` while six Playwright tests failed.
 
 #### A red e2e run is not always your change
 
-Two different things look the same in a CI log. One is a genuine break. The
-other is a test that passes on its own and fails in the full shard.
-
-Start with the build. Build the way CI builds it:
+Check the build first. Build the way CI builds it:
 
 ```bash
 cd web/next-app
@@ -129,22 +126,17 @@ Do not set `NEXT_PUBLIC_API_URL`. A build that points at a local API makes the
 admin tests fail. Their stubs cover some endpoints and the rest reach an API that
 is not running. That failure belongs to the build and not to the commit.
 
-Then run one test on its own:
+Then run one test on its own, and then the whole shard:
 
 ```bash
 npx playwright test e2e/admin.spec.ts:300 --project=chromium
+PW_WORKERS=1 CI=1 npx playwright test --shard=1/2     # about three minutes
 ```
 
-A test that passes here and fails in the shard is load-dependent. The full shard
-command reproduces that class on a developer machine:
-
-```bash
-PW_WORKERS=1 CI=1 npx playwright test --shard=1/2
-```
-
-It takes about five minutes. Every test in that class waits for an element that
-the browser renders after it runs the JavaScript bundle, and the cause is not
-confirmed. Do not change a test to make it pass.
+A shard that passes here can still fail in CI. One CI run failed four admin and
+profile tests. This exact command passed 124 of 124 locally. The same tests also
+passed in the CI runs before and after that one. Treat a failure of that shape as
+unexplained, and read the uploaded Playwright report before changing anything.
 
 
 ### 4. (Optional) Write a lesson
