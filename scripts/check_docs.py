@@ -493,6 +493,85 @@ def check_figure_dispositions(rep: Report) -> None:
                       f"section 4 counts {n} {name} and section 6 has no such row")
 
 
+def check_thin_lessons(rep: Report) -> None:
+    """Section 4.3's sub-1 KB table must be the corpus's own list, sizes and count.
+
+    The table was kept by hand and drifted in both directions: four rows stayed in it after those
+    lessons had grown past the threshold, and three authored lessons entered the corpus without a
+    row at all, so the sentence above it under-reported the work. The sizes belong to files the
+    corpus registers, so they are read from `data/lessons/lessons.json` and `os.stat` rather than
+    pinned here; only the 1 KB threshold is this checker's own, because that is the threshold the
+    table's heading names.
+    """
+    doc = "docs/content-expansion.md"
+    path = ROOT / doc
+    if not path.is_file():
+        rep.error(doc, "thin-lessons", "the document that holds section 4.3 no longer exists")
+        return
+
+    thin: dict[str, tuple[str, int]] = {}
+    for e in json.loads((ROOT / "data/lessons/lessons.json").read_text(encoding="utf-8")):
+        p = ROOT / "data/lessons" / e["source"]
+        if p.is_file() and p.stat().st_size < 1024:
+            thin[e["concept_id"]] = (str(p.relative_to(ROOT)), p.stat().st_size)
+    if not thin:
+        rep.error("data/lessons", "thin-lessons",
+                  "no lesson is under 1 KB; the table cannot be checked against an empty set")
+        return
+
+    lines = path.read_text(encoding="utf-8").split("\n")
+    start = next((i for i, l in enumerate(lines) if l.startswith("### 4.3 ")), -1)
+    end = next((i for i in range(start + 1, len(lines)) if lines[i].startswith("### ")), len(lines))
+    if start < 0:
+        rep.error(doc, "thin-lessons", "section 4.3 is gone; a check that reads nothing reports nothing")
+        return
+
+    row = re.compile(r"^\|\s*`([\w.]+)`\s*\|\s*`([^`]+)`\s*\|\s*(\d+)\s*\|\s*$")
+    listed: dict[str, tuple[str, int]] = {}
+    for i in range(start, end):
+        m = row.match(lines[i])
+        if not m:
+            continue
+        listed[m.group(1)] = (m.group(2), int(m.group(3)))
+        if m.group(1) not in thin:
+            rep.error(f"{doc}:{i + 1}", "thin-lessons",
+                      f"the table lists {m.group(1)}, which is not under 1 KB")
+        else:
+            path_now, size_now = thin[m.group(1)]
+            if int(m.group(3)) != size_now:
+                rep.error(f"{doc}:{i + 1}", "thin-lessons",
+                          f"{m.group(1)} is {size_now} bytes and the table says {m.group(3)}")
+            if m.group(2) != path_now:
+                rep.error(f"{doc}:{i + 1}", "thin-lessons",
+                          f"{m.group(1)} lives at {path_now} and the table says {m.group(2)}")
+    if not listed:
+        rep.error(doc, "thin-lessons", "the table has no rows; a check that reads nothing reports nothing")
+        return
+
+    for cid in sorted(thin):
+        if cid not in listed:
+            rep.error(doc, "thin-lessons",
+                      f"{cid} is {thin[cid][1]} bytes and the table has no row for it")
+
+    # The prose writes small counts as words ("six lessons are under 1 KB"), so both forms count.
+    words = {w: i for i, w in enumerate(
+        "zero one two three four five six seven eight nine ten eleven twelve".split())}
+    claim = re.compile(
+        r"(\d[\d,]*|" + "|".join(w for w in words if w != "zero") + r") lessons are under 1 KB")
+    found = 0
+    for line_no, line in enumerate(lines, 1):
+        for m in claim.finditer(line):
+            found += 1
+            raw = m.group(1).replace(",", "")
+            said = int(raw) if raw.isdigit() else words[raw]
+            if said != len(thin):
+                rep.error(f"{doc}:{line_no}", "thin-lessons",
+                          f'"{m.group(0)}" but the corpus has {len(thin)}')
+    if found == 0:
+        rep.error(doc, "thin-lessons",
+                  "the sentence above the table no longer states the count")
+
+
 def check_target_table(rep: Report) -> None:
     """Section 5.5's target table must agree with the corpus, and its columns must add up.
 
@@ -1169,6 +1248,7 @@ def main() -> int:
     check_course_reach(rep)
     check_media_candidates(rep)
     check_figure_dispositions(rep)
+    check_thin_lessons(rep)
     check_target_table(rep)
     check_adr_refs(rep)
     check_links(rep)
@@ -1195,7 +1275,7 @@ def main() -> int:
         return 1
     print("OK: docs agree with the code and the corpus "
           "(XP gate, KP rule, corpus counts, course reach, media candidates, figure "
-          "dispositions, target table, "
+          "dispositions, thin lessons, target table, "
           "ADR refs, links, spelling, tables, "
           "roles, daily goal, removed XP terms, grading timeout, diagnostic bounds, "
           "citations, stub claims, route counts, toolchain, SM-2 intervals, "

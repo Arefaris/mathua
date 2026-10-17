@@ -140,20 +140,28 @@ the schema.
 ### 4.3 Lesson depth is thin at the bottom
 
 Lessons come from three places. The `teaching/` tree holds 329 mappings, the Algebrica import
-holds 328, and 9 are authored. The median lesson is 8648 bytes, and seven lessons are under 1 KB:
+holds 328, and 170 are authored. The median lesson is 5,901 bytes, and six lessons are under 1 KB:
 
 | Concept | Lesson | Bytes |
 |---|---|---|
 | `calc.series.ratio_test` | `data/lessons/authored/calc.series.ratio.md` | 671 |
-| `nt.basics.crt` | `data/lessons/teaching/nt.crt.md` | 853 |
-| `nt.adv.wilson` | `data/lessons/teaching/nt.wilson.md` | 865 |
-| `nt.basics.bezout` | `data/lessons/teaching/nt.bezout.md` | 878 |
-| `nt.basics.prime_inf` | `data/lessons/teaching/nt.prime_inf.md` | 920 |
 | `abstract.group.order` | `data/lessons/teaching/abstract.group.order.md` | 960 |
+| `discrete.combinatorics.surjections` | `data/lessons/authored/discrete.combinatorics.surjections.md` | 987 |
+| `precalc.func.inverse_value` | `data/lessons/authored/precalc.func.inverse_value.md` | 1006 |
+| `calc.vec.divergence` | `data/lessons/authored/calc.vec.divergence.md` | 1011 |
 | `linalg.decomp.lu` | `data/lessons/teaching/linalg.lu.md` | 1018 |
 
-Four of the seven sit in `number_theory`, the same domain whose course reaches 5 of its 25
-concepts.
+**The four `number_theory` lessons in the first version of this table were filled on 2026-10-17.**
+`nt.basics.crt`, `nt.adv.wilson`, `nt.basics.bezout` and `nt.basics.prime_inf` went from 853-920
+bytes to 3.7-4.7 KB inside the three headings their knowledge-point shards already named, so no shard
+needed regenerating and `scripts/audit_lessons.py` still resolves all three per concept.
+
+The count falls from seven to six rather than to three for a reason worth recording: three authored
+lessons written since the table was first measured are also under 1 KB, so the list gained rows while
+it lost them. The three that remain from the original seven are `calc.series.ratio_test`,
+`abstract.group.order` and `linalg.decomp.lu`. `scripts/check_docs.py` now reads this table from the
+corpus, because a hand-kept list of the corpus's own sizes is the drift this document already
+records twice.
 
 ### 4.4 Ingestion dropped figures and kept their captions
 
@@ -392,7 +400,10 @@ also where the produced-answer conversions of section 5.2 get their room.
    is the target size, and the decision gates step 5.
 2. Convert one `multiple_choice` concept in an upper domain to a produced answer, as the worked
    example that proves the generator and schema path there. Done: `topo.dimension`, section 4.2.
-3. Fill the seven sub-1 KB lessons, regenerating each shard after its body grows. Open.
+3. Fill the sub-1 KB lessons, regenerating each shard after its body grows. Partly done: the four
+   `number_theory` lessons were filled on 2026-10-17, and six remain — three from the original seven
+   (`calc.series.ratio_test`, `abstract.group.order`, `linalg.decomp.lu`) and three authored lessons
+   that entered the corpus after section 4.3 was measured.
 4. Reclaim the dropped figures. Done: all 102 landed on 2026-10-15 and 2026-10-16 as lesson figures
    under `web/next-app/public/diagrams/`, which need no `meta.json` entry, so the `certain` tier is
    empty and the remainder is measured by section 4.4.
