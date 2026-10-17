@@ -418,6 +418,94 @@ def check_media_candidates(rep: Report) -> None:
                       "nothing")
 
 
+def check_target_table(rep: Report) -> None:
+    """Section 5.5's target table must agree with the corpus, and its columns must add up.
+
+    The table is the roadmap for the thousand: one row per domain, the concepts it holds now, the
+    size the curriculum decided on, and the difference. Only `Target` is a decision — `Now` is read
+    from `data/concepts/`, as the sentence above the table says — and that is the column that drifted.
+    The table was drawn when the corpus held 703 concepts; `scripts/sweep_counts.py` keeps the
+    sentence above it current, because its size is a pattern rule, but it has no rule for the rows,
+    so ten of the seventeen sat at their 703-era values while the corpus grew to 819. The roadmap
+    therefore named deficits larger than the work left, and two domains that had reached their
+    targets read as though they had not.
+
+    Four things are read rather than pinned: each row's `Now` against the corpus, each row's `Add`
+    against `Target - Now`, a row for every domain the corpus holds, and the sentence above the table
+    against the sum of the two columns. A checker that pins its own copy of a target goes stale in
+    exactly the way this one was written to prevent, so the targets stay the document's.
+    """
+    doc = "docs/content-expansion.md"
+    path = ROOT / doc
+    if not path.is_file():
+        rep.error(doc, "target-table", "the doc that holds the target table no longer exists")
+        return
+
+    held: dict[str, int] = {}
+    for f in sorted((ROOT / "data/concepts").glob("*.json")):
+        if f.name == "enrichment.json":
+            continue
+        for c in json.loads(f.read_text(encoding="utf-8")):
+            if "id" in c:
+                held[c["domain"]] = held.get(c["domain"], 0) + 1
+    if not held:
+        rep.error("data/concepts", "target-table", "no concepts read; cannot verify the table")
+        return
+
+    lines = path.read_text(encoding="utf-8").split("\n")
+    header = "| Domain | Tier | Now | Target | Add |"
+    start = next((i for i, l in enumerate(lines) if l.strip() == header), -1)
+    if start < 0:
+        rep.error(doc, "target-table",
+                  "the target table is gone; a check that reads nothing reports nothing")
+        return
+
+    row = re.compile(r"^\|\s*(\w+)\s*\|\s*(\w+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*\+(\d+)\s*\|\s*$")
+    seen: dict[str, tuple[int, int, int]] = {}
+    n = 0
+    for i in range(start + 2, len(lines)):
+        m = row.match(lines[i])
+        if not m:
+            break
+        n += 1
+        dom, now, target, add = m.group(1), int(m.group(3)), int(m.group(4)), int(m.group(5))
+        seen[dom] = (now, target, add)
+        if now != held.get(dom, 0):
+            rep.error(f"{doc}:{i + 1}", "target-table",
+                      f"Now says {now} for {dom} but the corpus holds {held.get(dom, 0)}")
+        if add != target - now:
+            rep.error(f"{doc}:{i + 1}", "target-table",
+                      f"{dom} says Target {target} minus Now {now}, which is {target - now}, and "
+                      f"writes +{add}")
+    if n == 0:
+        rep.error(doc, "target-table",
+                  "the target table has no rows; a check that reads nothing reports nothing")
+        return
+
+    for dom in sorted(held):
+        if dom not in seen:
+            rep.error(doc, "target-table",
+                      f"the corpus holds {held[dom]} {dom} concepts and the table has no row")
+    for dom in sorted(seen):
+        if dom not in held:
+            rep.error(doc, "target-table",
+                      f"the table has a row for {dom}, which the corpus does not have")
+
+    want = sum(t - w for w, t, _ in seen.values())
+    claim = re.compile(r"Reaching a thousand means adding (\d[\d,]*)")
+    found = 0
+    for line_no, line in enumerate(lines, 1):
+        for m in claim.finditer(line):
+            found += 1
+            if int(m.group(1).replace(",", "")) != want:
+                rep.error(f"{doc}:{line_no}", "target-table",
+                          f'"{m.group(0)}" but the targets minus the corpus leave {want}')
+    if found == 0:
+        rep.error(doc, "target-table",
+                  "the sentence stating what is left to add is gone; a check that reads nothing "
+                  "reports nothing")
+
+
 def defined_adrs() -> set:
     """Every ADR, read from docs/adr/ one file each.
 
@@ -1005,6 +1093,7 @@ def main() -> int:
     check_corpus_figures(rep)
     check_course_reach(rep)
     check_media_candidates(rep)
+    check_target_table(rep)
     check_adr_refs(rep)
     check_links(rep)
     check_spelling(rep)
@@ -1029,8 +1118,8 @@ def main() -> int:
               file=sys.stderr)
         return 1
     print("OK: docs agree with the code and the corpus "
-          "(XP gate, KP rule, corpus counts, course reach, media candidates, ADR refs, links, "
-          "spelling, tables, "
+          "(XP gate, KP rule, corpus counts, course reach, media candidates, target table, "
+          "ADR refs, links, spelling, tables, "
           "roles, daily goal, removed XP terms, grading timeout, diagnostic bounds, "
           "citations, stub claims, route counts, toolchain, SM-2 intervals, "
           "diagram citations, design tokens)")

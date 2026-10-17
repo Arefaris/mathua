@@ -326,28 +326,41 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 819 concepts. Reaching a thousand means adding 297, and this is the table that says
-where. `Now` is read from the corpus; `Target` is the decision.
+The catalog holds 819 concepts. Reaching a thousand means adding 181, and this is the table that says
+where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
+section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| precalculus | bridge | 25 | 50 | +25 |
-| calculus | bridge | 151 | 175 | +24 |
-| geometry | school | 23 | 45 | +22 |
-| machine_learning | university | 25 | 45 | +20 |
-| fractions | school | 26 | 45 | +19 |
-| linear_algebra | university | 26 | 45 | +19 |
-| statistics | bridge | 37 | 55 | +18 |
-| number_theory | university | 25 | 42 | +17 |
-| differential_equations | university | 25 | 42 | +17 |
-| trigonometry | school | 32 | 48 | +16 |
 | discrete_math | university | 39 | 55 | +16 |
 | complex_numbers | university | 26 | 42 | +16 |
 | algebra | school | 89 | 104 | +15 |
 | arithmetic | school | 46 | 60 | +14 |
 | prealgebra | school | 46 | 60 | +14 |
 | abstract_algebra | university | 32 | 45 | +13 |
+| machine_learning | university | 33 | 45 | +12 |
 | topology | university | 30 | 42 | +12 |
+| linear_algebra | university | 34 | 45 | +11 |
+| statistics | bridge | 44 | 55 | +11 |
+| calculus | bridge | 165 | 175 | +10 |
+| number_theory | university | 32 | 42 | +10 |
+| differential_equations | university | 32 | 42 | +10 |
+| precalculus | bridge | 41 | 50 | +9 |
+| trigonometry | school | 40 | 48 | +8 |
+| geometry | school | 45 | 45 | +0 |
+| fractions | school | 45 | 45 | +0 |
+
+**The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
+703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
+above the table current, because its size is a pattern rule, but it has no rule for the rows — so ten
+of the seventeen stayed at their 703-era values while the corpus moved, and the roadmap they publish
+named deficits that were larger than the work left: trigonometry read as 16 concepts behind where it
+was 8, and calculus as 24 where it is 10. Two domains, geometry and fractions, had in fact reached
+their targets and read as though they had not. The remainder is 181 rather than 297, which is the same
+seventeen targets measured from a larger starting corpus, and the rows are re-sorted so that "largest
+deficit first" still names the largest deficit. `check_docs.py` now reads each `Now` from
+`data/concepts/`, each `Add` from `Target - Now`, and the sentence above the table from the two, so the
+next drift fails instead of being published.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still
