@@ -5,6 +5,11 @@ Fetches the page, isolates the content module, unwraps presentation-only
 div/span wrappers, then delegates conversion to pandoc (whose AST carries
 math as typed nodes; its MathML->TeX reader replaces hand-rolled converters).
 
+Usage: ingest_openstax.py [book ...]   -- with no book, every book in BOOKS.
+The raw page output still carries OpenStax back matter (its Media and Section
+Exercises headings), which the corpus strips per lesson; see rule 12 of
+scripts/audit_lessons.py.
+
 The Prealgebra attribution reads CC BY-NC-SA 4.0, and it read CC BY 4.0 until
 2026-10-17. The book's Citation/Attribution panel states the terms as
 non-commercial reuse with a share-alike obligation on derivative works, and the
@@ -23,6 +28,7 @@ from bs4 import BeautifulSoup
 OUTPUT_DIR = Path("data/lessons/teaching")
 ROOT = Path(__file__).resolve().parents[2]
 MAPPING_PATH = ROOT / "data/lessons/mapping.json"
+LESSONS_JSON = ROOT / "data/lessons/lessons.json"
 
 # source -> (book slug, base URL, attribution header)
 BOOKS = {
@@ -42,6 +48,30 @@ BOOKS = {
             "by Gilbert Strang & Edwin \"Jed\" Herman — CC BY-NC-SA 4.0\n"
         ),
     },
+    # Precalculus 2e does not serve <book>/pages/1-introduction, so the
+    # attribution links the book's landing page instead of a 404 chapter stub.
+    "openstax_precalc": {
+        "base": "https://openstax.org/books/precalculus-2e/pages",
+        "attribution": (
+            "> Content sourced from [OpenStax Precalculus 2e]"
+            "(https://openstax.org/details/books/precalculus-2e) "
+            "by Jay Abramson — CC BY-NC-SA 4.0\n"
+        ),
+    },
+}
+
+# Circled Latin letters, Ⓐ..ⓩ. OpenStax marks the parts of a two-part example
+# with them and the codepoint cannot survive: at lesson size ⓐ is an "a" inside
+# a circle, which is what @ is, and no theme font carries it, so the browser
+# substitutes a face at a different size and baseline. AGENTS.md section 1 and
+# rule 17 of scripts/audit_lessons.py require "(a)" instead. Only the Latin
+# range is mapped: any other enclosed alphanumeric is one the corpus has never
+# seen and should surface as an audit failure, not be silently rewritten.
+_ENCLOSED_LATIN = {
+    chr(start + i): ch
+    for start, letters in ((0x24B6, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+                           (0x24D0, "abcdefghijklmnopqrstuvwxyz"))
+    for i, ch in enumerate(letters)
 }
 
 
@@ -134,6 +164,74 @@ def fix_math_ops(md: str) -> str:
     return re.sub(r"\$[^$\n]+\$", inner, md)
 
 
+def _table_pipes(out: list[str]) -> int:
+    """Pipe count of the table the current row belongs to.
+
+    A gfm table row opens and closes with a pipe and has one more pipe than it
+    has columns, so the pipe count of the last complete row is the shape a
+    split row has to grow back into.
+    """
+    for prev in reversed(out):
+        s = prev.strip()
+        if s.startswith("|") and s.endswith("|"):
+            return s.count("|")
+    return 0
+
+
+def fold_table_math(md: str) -> str:
+    """Fold display math back into the table row that pandoc tore apart.
+
+    A MathML table cell that pandoc renders as display math begins the next
+    line with a ``` math fence, and the fence's closing line carries the rest
+    of the row (```` | ...`). The row stops being a row, and worse: the fence
+    pass below turns that fence into a `$$` pair whose closing line is not a
+    `$$` line of its own, so the display-block pass stays open past it and
+    strips every inline `$` in the document until the next real `$$`. Signals
+    the page's tables were the only thing damaged; prose across the page lost
+    its math delimiters. Fold each such cell back in as inline math, before
+    either pass runs.
+    """
+    lines = md.split("\n")
+    out: list[str] = []
+    i = 0
+    while i < len(lines):
+        ln = lines[i]
+        target = _table_pipes(out)
+        next_is_fence = (i + 1 < len(lines)
+                         and re.fullmatch(r"\s*```\s*math\s*", lines[i + 1]) is not None)
+        if ln.strip().startswith("|") and ln.count("|") < target and next_is_fence:
+            row = ln.rstrip()
+            pipes = ln.count("|")
+            i += 1
+            while pipes < target and i < len(lines):
+                nxt = lines[i]
+                if not nxt.strip():
+                    break
+                if re.fullmatch(r"\s*```\s*math\s*", nxt):
+                    body: list[str] = []
+                    i += 1
+                    while i < len(lines) and not re.match(r"^\s*```", lines[i]):
+                        body.append(lines[i].strip())
+                        i += 1
+                    tail = ""
+                    if i < len(lines):
+                        tail = re.sub(r"^\s*```", "", lines[i]).strip()
+                        i += 1
+                    row = row.rstrip() + " $" + " ".join(body) + "$"
+                    if tail:
+                        row += " " + tail
+                        pipes += tail.count("|")
+                    continue
+                row = row.rstrip() + " " + nxt.strip()
+                pipes += nxt.count("|")
+                i += 1
+            out.append(row)
+            continue
+        out.append(ln)
+        i += 1
+    return "\n".join(out)
+
+
 def to_markdown(html: str) -> str:
     out = subprocess.run(
         [PANDOC, "-f", "html", "-t", "gfm+tex_math_dollars", "--wrap=none"],
@@ -144,6 +242,9 @@ def to_markdown(html: str) -> str:
     md = out.stdout.decode("utf-8")
     # gfm math uses $`...`$; our renderer speaks plain $...$.
     md = md.replace("$`", "$").replace("`$", "$")
+    # Table cells pandoc rendered as display math have to be inline again
+    # before the fence pass below, or they take the rest of the page with them.
+    md = fold_table_math(md)
     # gfm renders display math as ```math fences; our renderer speaks $$.
     # Line-anchored: a plain ``` code fence must not close a math fence.
     lines = md.split("\n")
@@ -175,6 +276,8 @@ def to_markdown(html: str) -> str:
     md = re.sub(r"[\u00a0\u2000-\u200a\u202f\u2005]", " ", md)
     # Spacing-only \operatorname wrappers: keep the spacing, drop the wrapper.
     md = re.sub(r"\\operatorname\{((?:\\;|\\_|\\,|\s)*)\}", r"\1", md)
+    # Circled part markers -> "(a)".." (see _ENCLOSED_LATIN).
+    md = re.sub(r"[\u24B6-\u24E9]", lambda m: f"({_ENCLOSED_LATIN[m.group(0)]})", md)
 
     def balance_line(ln):
         positions = [mm.start() for mm in re.finditer(r"(?<!\\)\$", ln)]
@@ -224,6 +327,21 @@ def to_markdown(html: str) -> str:
     return md
 
 
+def lesson_path(cid: str, registry: dict[str, str]) -> Path:
+    """Where one concept's lesson file belongs.
+
+    lessons.json is the registry the app reads, and it does not always name a
+    lesson after its concept: teaching/trig.period.md serves trig.graph.period,
+    and one file can serve two concepts. Resolving through it keeps a re-ingest
+    idempotent; writing <concept-id>.md instead adds a second, orphaned file
+    beside the one the app actually serves.
+    """
+    source = registry.get(cid, "")
+    if source.startswith("teaching/"):
+        return OUTPUT_DIR / Path(source).relative_to("teaching")
+    return OUTPUT_DIR / f"{cid}.md"
+
+
 def main() -> int:
     global PANDOC
     PANDOC = "/usr/bin/pandoc"
@@ -235,12 +353,26 @@ def main() -> int:
         print("pandoc not found", file=sys.stderr)
         return 1
 
+    # Optional book filter: re-ingesting one book must not rewrite the other
+    # books' lessons, whose text has since been curated (back matter stripped,
+    # figures placed) and would be replaced by raw page output.
+    wanted = set(sys.argv[1:])
+    unknown = wanted - set(BOOKS)
+    if unknown:
+        print("unknown source(s): " + ", ".join(sorted(unknown)), file=sys.stderr)
+        return 1
+
     mapping = json.loads(MAPPING_PATH.read_text())
+    registry: dict[str, str] = {}
+    if LESSONS_JSON.exists():
+        for ent in json.loads(LESSONS_JSON.read_text()):
+            registry.setdefault(ent["concept_id"], ent["source"])
+
     # Group by (source, slug) so each book's pages and attribution are used.
     sections: dict[tuple[str, str], list[str]] = {}
     for cid, info in mapping.items():
         src = info.get("source")
-        if src in BOOKS:
+        if src in BOOKS and (not wanted or src in wanted):
             sections.setdefault((src, info["slug"]), []).append(cid)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -256,7 +388,9 @@ def main() -> int:
             md = re.sub(r"\n{3,}", "\n\n", md).strip() + "\n"
             body = book["attribution"] + "\n" + md
             for cid in concept_ids:
-                (OUTPUT_DIR / f"{cid}.md").write_text(body)
+                path = lesson_path(cid, registry)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(body)
             print(f"ok {src}:{slug} ({len(concept_ids)})")
         except Exception as exc:  # noqa: BLE001 - report and continue
             failures += 1
