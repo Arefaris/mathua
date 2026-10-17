@@ -183,6 +183,38 @@ AI offerings without OpenStax's prior written permission." The ingest scripts th
 read OpenStax are still in `scripts/`, so the clause is recorded here for whoever
 runs them.
 
+### ORCCA — CC BY 4.0
+
+Forty-seven lessons are adapted from ORCCA, *Open Resources for Community College Algebra*
+(Portland Community College), <https://pcc.edu/orcca>, used under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The lesson headers say so, and
+`scripts/extract_orcca.py` writes them.
+
+**ORCCA states the attribution it requires, and the wording is part of the grant.** Its
+Licensing section requires a redistributor to include, "in every digital format page view
+(including but not limited to EPUB, PDF, and HTML) and on every physical printed page", this
+attribution:
+
+> Original source material, products with readable and accessible math content, and other
+> information are freely available at [pcc.edu/orcca](https://www.pcc.edu/orcca).
+
+The same section requires the math content to be reproduced "in a readable manner" and offered
+"in at least one web-accessible manner": Mathua renders it as KaTeX with the source retained,
+and the static site is the web-accessible copy. It also reserves the Portland Community College
+and ORCCA names and logos — "not subject to the Creative Commons license and may not be
+reproduced without the prior and express written consent" — which is why a credit here cites the
+site rather than the marks.
+
+**The page-view sentence is not on the pages, and this entry records the gap rather than closing
+it.** CC BY 4.0 section 3(a)(1) requires attribution *in the manner specified by the licensor*,
+and ORCCA's Licensing section is that specification, so the sentence above is a licence term and
+not a courtesy. The lesson headers carry the source, author and licence, which is a generic CC BY
+credit; they do not carry the fixed sentence, and no page renders it. Where it should render is
+the open question, because it belongs on every view of an ORCCA lesson and the same placement
+question is open for a third-party photograph's credit line, which `docs/figure-reclaim.md`
+section 6 records. Until that is answered, 47 lessons are credited in the header and not in the
+manner the book asks for.
+
 ### MIT OpenCourseWare and Art of Problem Solving
 
 Referenced for curriculum structure and problem quality. No content is taken from
