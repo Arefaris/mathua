@@ -172,14 +172,27 @@ function signIn(page: Page, role: Role) {
 const LEARNER_API: [string, unknown][] = [
   ['**/api/scores/**', { lifetime_points: 100, weekly_score: 10, speed_bonus: 0, concepts_mastered: 1, current_streak: 2, level: 'Novice', xp_total: 10, xp_today: 10, daily_xp_goal: 30 }],
   ['**/api/progress/**', {}],
-  ['**/api/activity', []],
+  ['**/api/curriculum/domains**', { domains: [] }],
+  ['**/api/activity**', []],
   ['**/api/weaknesses', { by_domain: {} }],
   ['**/api/reviews/due', { count: 3 }],
   ['**/api/efficacy', { concepts_touched: 0, first_pass_rate: 0, second_pass_rate: 0, avg_attempts_per_concept: 0, total_attempts: 0 }],
   ['**/api/settings', {}],
-  ['**/api/next', { done: false, next: null, total: 0, message: 'Nothing to review' }],
+  ['**/api/next**', { done: false, next: null, total: 0, message: 'Nothing to review' }],
 ]
 
+/**
+ * The learner surfaces a staff member still uses.
+ *
+ * The list has to cover every endpoint these pages read, because the browser
+ * bundle is built against a real API (`web/next-app/.env.production`) and an
+ * endpoint that no stub claims is answered by that API instead. Two patterns
+ * here ended in a bare name while the app requests the same path with a query
+ * string (`/api/activity?days=365`, `/api/next?student_id=…`), so the request
+ * escaped to production. When production answered, the test passed; when it was
+ * slow, `/profile` stayed on its loading skeleton and four tests failed with no
+ * local change to blame. The trailing `**` is what keeps the stub on the path.
+ */
 function stubLearnerApi(page: Page) {
   for (const [pattern, body] of LEARNER_API) {
     page.route(pattern, (route) => {

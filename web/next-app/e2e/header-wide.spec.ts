@@ -53,11 +53,11 @@ test('the profile menu opens beside its trigger, not at the window edge', async 
     ['**/api/auth/me', { student_id: 's1', name: 'Nelson', has_password: true, role: 'admin' }],
     ['**/api/scores/**', { lifetime_points: 100, weekly_score: 10, speed_bonus: 0, concepts_mastered: 1, current_streak: 1, level: 'Novice', xp_total: 10, xp_today: 10, daily_xp_goal: 30 }],
     ['**/api/progress/**', {}],
-    ['**/api/activity', []],
+    ['**/api/activity**', []],
     ['**/api/weaknesses', { by_domain: {} }],
     ['**/api/reviews/due', { count: 0 }],
     ['**/api/settings', {}],
-    ['**/api/next', { done: false, next: null, total: 0, message: '' }],
+    ['**/api/next**', { done: false, next: null, total: 0, message: '' }],
   ] as [string, unknown][]) {
     page.route(pattern, r => r.fulfill({ json: body }))
   }

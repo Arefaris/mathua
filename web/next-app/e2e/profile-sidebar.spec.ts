@@ -10,6 +10,15 @@ test.beforeEach(async ({ context }) => {
   await context.route('**/api/reviews/due**', route => route.fulfill({ json: { count: 3 } }))
   await context.route('**/api/efficacy**', route => route.fulfill({ json: { concepts_touched: 0, first_pass_rate: 0, second_pass_rate: 0, avg_attempts_per_concept: 0, total_attempts: 0 } }))
   await context.route('**/api/settings**', route => route.fulfill({ json: {} }))
+  // The diagnostic call to action is drawn from the placement, and the placement
+  // is the server's record, read from `/api/auth/me`. A test that leaves the path
+  // unstubbed reads whatever the environment answers for a fake token: when that
+  // answered, the CTA never appeared and the test failed with the page rendered
+  // and nothing visibly wrong. `diagnostic_completed: false` is the brand-new
+  // learner the test is about.
+  await context.route('**/api/auth/me**', route =>
+    route.fulfill({ json: { student_id: 's1', name: 'Tester', diagnostic_completed: false } }),
+  )
 })
 
 async function loginAs(page: Page) {

@@ -21,6 +21,16 @@ e2e:
 	cd web/next-app && rm -rf out && npx next build
 	cd web/next-app && npx playwright test
 
+# Prove the browser suite does not depend on a real API. The bundle is normally
+# built against the deployed API (web/next-app/.env.production), so an endpoint no
+# stub claims is answered by production, and a page that waits for that answer can
+# pass on a fast reply and hang on a slow one. This build points every request at
+# 192.0.2.1, a documentation address that never answers, so a stub that misses its
+# URL is a failure here rather than a flake in CI. See CONTRIBUTING.md.
+e2e-hermetic:
+	cd web/next-app && rm -rf out && NEXT_PUBLIC_API_URL=http://192.0.2.1:9099 npx next build
+	cd web/next-app && npx playwright test
+
 validate:
 	go run scripts/validate_graph.go
 	go run ./cmd/validate-mastery-units

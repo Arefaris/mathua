@@ -114,7 +114,7 @@ test('/study renders a concept reference without losing the way into practice', 
 test('/study with no concept forwards to the learn entry', async ({ page }) => {
   // Without a concept there is nothing to show, so it forwards rather than presenting an index.
   await stubLearn(page)
-  await page.route('**/api/next', route =>
+  await page.route('**/api/next**', route =>
     route.fulfill({
       json: {
         primary: {
@@ -183,7 +183,7 @@ test('a locked prerequisite is openable for study, and Back returns to the targe
     if (url.includes('/body')) return route.fulfill({ json: { title: 'A', body: '', assets: [] } })
     return route.fulfill({ json: { lessons: {} } })
   })
-  await page.route('**/api/next', r => r.fulfill({ json: { primary: null, alternatives: [], generatedAt: '' } }))
+  await page.route('**/api/next**', r => r.fulfill({ json: { primary: null, alternatives: [], generatedAt: '' } }))
   await page.route('**/api/progress/**', r => r.fulfill({ json: {} }))
   await page.route('**/api/activity**', r => r.fulfill({ json: [] }))
   await page.route('**/api/scores/**', r => r.fulfill({ json: {} }))

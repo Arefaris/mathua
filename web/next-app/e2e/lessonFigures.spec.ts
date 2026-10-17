@@ -121,7 +121,7 @@ async function stubLesson(page: import('@playwright/test').Page, concept: string
   await page.route('**/api/lessons/body*', route =>
     route.fulfill({ json: { title, body, source: file.split('/')[0], assets: [] } }),
   )
-  await page.route('**/api/lessons', route =>
+  await page.route('**/api/lessons*', route =>
     route.fulfill({ json: { lessons: { [file.split('/')[0]]: [{ title, body: '', concepts: [concept] }] } } }),
   )
   await page.route('**/api/lessons/*/kp*', route =>

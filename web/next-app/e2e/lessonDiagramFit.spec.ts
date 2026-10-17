@@ -32,7 +32,7 @@ async function stubStep(page: import('@playwright/test').Page, diagram: string) 
   await page.route('**/api/lessons/body*', route =>
     route.fulfill({ json: { title, body, source: 'teaching', assets: [] } }),
   )
-  await page.route('**/api/lessons', route =>
+  await page.route('**/api/lessons*', route =>
     route.fulfill({ json: { lessons: { teaching: [{ title, body: '', concepts: [CONCEPT] }] } } }),
   )
   // The concept's diagram rides on its first step, which is the box under test.
