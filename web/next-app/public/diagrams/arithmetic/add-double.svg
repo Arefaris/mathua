@@ -9,6 +9,6 @@
   <g font-size="12" fill="#8a8f98" text-anchor="middle">
     <text x="150" y="45">tens</text><text x="185" y="45">ones</text>
   </g>
-  <text x="260" y="110" font-size="14" fill="#BABABA">24 + 31 = 55</text>
+  <text x="250" y="110" font-size="14" fill="#BABABA">24 + 31 = 55</text>
   <text x="180" y="192" font-size="12" fill="#8a8f98" text-anchor="middle">add each column: 2+3, 4+1</text>
 </svg>

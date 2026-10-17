@@ -8,5 +8,5 @@
   </g>
   <text x="180" y="100" font-size="13" fill="#8a8f98">4 rows</text>
   <text x="180" y="120" font-size="13" fill="#8a8f98">of 3</text>
-  <text x="78" y="192" font-size="12" fill="#8a8f98" text-anchor="middle">multiplication counts equal groups</text>
+  <text x="180" y="192" font-size="12" fill="#8a8f98" text-anchor="middle">multiplication counts equal groups</text>
 </svg>

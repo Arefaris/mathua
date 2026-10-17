@@ -149,6 +149,23 @@ its upstream, and Mathua-authored diagrams are not Algebrica's to license.
 measures the reference panel, where the article renders through `KatexContent` as a plain `<img>`,
 and an `<img>` does scale under `max-height`. Only the inlined-SVG renderer clipped.
 
+**The text-box guard.** `web/next-app/e2e/diagramTextBoxes.spec.ts` measures every `source: local`
+figure and fails when a label's rendered box leaves the `viewBox`, because an inline `<svg>` clips to
+its viewport and a figure is drawn to the pixel in its own coordinate system. Twelve of the seventy
+local figures were clipping their own text when it was written, and each looked like a mistake rather
+than a crop: the place-value row read `1,247 = 1 thousand + 2 hundreds + 4 ten`, the resultant
+vector's `u+v` sat at x=410 in a 400-wide canvas, `linear-equation-graph.svg` carried its `-4` tick
+24px below a 300-tall one, and `inverse-trig-graphs.svg` had three labels left behind by an earlier
+edit, one of them a duplicate `-π/2` at y=284.
+
+The measurement is the rendered `getBBox()` rather than an estimate from character counts, and the
+two agree because the host face is monospace: JetBrains Mono advances 0.6 em per glyph, as does the
+fallback beside it. The spec asserts that ratio before it measures anything, so a machine whose
+monospace is narrower fails as a broken harness instead of passing a corpus that clips on the web.
+Its negative control draws a label past a 100-wide canvas and requires the measurement to report it;
+restoring the old `vector-addition.svg` makes the real case fail by the 35.2px it was wrong by. Only
+the local set is measured, for the reason section 7 gives.
+
 ## 7. Open items
 
 - The 24 relabeled assets still sit under `diagrams/algebrica/`, which is now a partly false
@@ -160,3 +177,13 @@ and an `<img>` does scale under `max-height`. Only the inlined-SVG renderer clip
   figure carries its own white background, and the vendored cool and warm figures stay transparent
   and so stay dark-on-dark on the dark panel. Repainting the panel or migrating the vendored set
   are the larger options that remain open.
+- **Forty-one of the fifty-seven vendored SVGs clip their own commentary.** Most of the Algebrica
+  figures carry a `<text>` paragraph — the author's description of the figure, in annotation grey at
+  the top of the canvas — and in 41 of them that paragraph is wider than the `viewBox`:
+  `heaviside-function-1.svg` runs 111.6px past a 313-wide canvas, so the sentence is cut mid-word
+  ("...jumps from 0 to 1 at the origin. The filled" and then nothing). The cause is the face, not the
+  file: section 3's rule forces every inlined figure's text to JetBrains Mono at 0.6 em, while the
+  files were drawn for a narrower face and their canvases were sized to the drawing rather than to
+  the prose. Two options and neither is taken here — widen each canvas, which shrinks the drawing
+  under the 180px bound, or drop the commentary, which is the author's voice and not ours to remove.
+  The local set is measured and guarded (section 6); this one needs the decision first.

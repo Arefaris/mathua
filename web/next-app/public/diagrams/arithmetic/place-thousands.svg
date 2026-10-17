@@ -1,5 +1,6 @@
 <svg width="360" height="200" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="30" y="28" font-size="14" fill="#BABABA">1,247 = 1 thousand + 2 hundreds + 4 tens + 7 ones</text>
+  <text x="30" y="22" font-size="14" fill="#BABABA">1,247 = 1 thousand + 2 hundreds</text>
+  <text x="30" y="40" font-size="14" fill="#BABABA">+ 4 tens + 7 ones</text>
   <g font-size="13" fill="#BABABA" text-anchor="middle" font-family="monospace">
     <rect x="30" y="55" width="60" height="60" fill="none" stroke="#BABABA" stroke-width="2"/>
     <text x="60" y="90">1000</text>

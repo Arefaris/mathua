@@ -13,9 +13,9 @@
 <line x1="80" y1="260" x2="260" y2="200" stroke="#e74c3c" stroke-width="2.5" stroke-linecap="round"/>
 <polygon points="260,200 252.02447940855532,200.62535693443164 253.99479768750322,194.71440209758788" fill="#e74c3c"/>
 <text x="270" y="205" font-size="14" font-family="serif" fill="#e74c3c">v</text>
-<line x1="220" y1="80" x2="400" y2="20" stroke="#BABABA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,4"/>
-<line x1="260" y1="200" x2="400" y2="20" stroke="#BABABA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,4"/>
-<line x1="80" y1="260" x2="400" y2="20" stroke="#333333" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="400,20 392.2360015953,18.071184619561514 395.9744176814631,13.086629838010788" fill="#333333"/>
-<text x="410" y="15" font-size="14" font-family="serif" fill="#333333">u+v</text>
+<line x1="220" y1="80" x2="385" y2="31" stroke="#BABABA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,4"/>
+<line x1="260" y1="200" x2="385" y2="31" stroke="#BABABA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,4"/>
+<line x1="80" y1="260" x2="385" y2="31" stroke="#333333" stroke-width="2.5" stroke-linecap="round"/>
+<polygon points="385,31 380.94,37.92 377.22,32.96" fill="#333333"/>
+<text x="395" y="50" font-size="14" font-family="serif" fill="#333333" text-anchor="end">u+v</text>
 </svg>
