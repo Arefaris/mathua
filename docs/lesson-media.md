@@ -302,6 +302,8 @@ figure already on disk could be dropped in without authoring anything.
 | `authored/calc.polar.area.md` | no | — | `polar-coordinates-1.svg`, `polar-coordinates-2.svg` |
 | `authored/calc.polar.slope.md` | no | — | `polar-coordinates-1.svg`, `polar-coordinates-2.svg` |
 | `authored/calc.series.ratio.md` | no | — | `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg` |
+| `authored/discrete.sequences.growth_rates.md` | no | — | `convergent-and-divergent-sequences-1.svg`, `convergent-and-divergent-sequences-2.svg`, `convergent-and-divergent-sequences-3.svg`, `sequences-of-functions-1.svg` |
+| `authored/discrete.sequences.linear_recurrence.md` | no | — | `convergent-and-divergent-sequences-1.svg`, `convergent-and-divergent-sequences-2.svg`, `convergent-and-divergent-sequences-3.svg`, `sequences-of-functions-1.svg` |
 | `authored/frac.mult.cancel.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
 | `authored/frac.order.half.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
 | `authored/geo.circle.chord.md` | no | — | `unit-circle-1.svg`, `unit-circle-2.svg`, `unit-circle-3.svg`, `unit-circle-4.svg` |

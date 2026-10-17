@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 827 concepts, and there are 827 KP shard files
-holding 2481 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 843 concepts, and there are 843 KP shard files
+holding 2529 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 430 of the 827 concepts
+### 4.1 The course catalog reaches 448 of the 843 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-430 of the 827 concepts: 397 of them have a node, a generator, a lesson and three KP shards and
+448 of the 843 concepts: 395 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -96,7 +96,7 @@ The count of unreachable concepts by domain:
 | arithmetic | 46 | 13 |
 | linear_algebra | 34 | 11 |
 | abstract_algebra | 32 | 11 |
-| discrete_math | 39 | 5 |
+| discrete_math | 55 | 3 |
 | geometry | 45 | 6 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
@@ -116,7 +116,7 @@ entirely `multiple_choice`:
 | topology | 30 | 29 |
 | differential_equations | 32 | 24 |
 | machine_learning | 33 | 24 |
-| discrete_math | 39 | 19 |
+| discrete_math | 55 | 26 |
 | number_theory | 32 | 17 |
 | complex_numbers | 26 | 14 |
 
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 827 concepts. Reaching a thousand means adding 173, and this is the table that says
+The catalog holds 843 concepts. Reaching a thousand means adding 157, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| discrete_math | university | 39 | 55 | +16 |
 | complex_numbers | university | 26 | 42 | +16 |
 | algebra | school | 89 | 104 | +15 |
 | arithmetic | school | 46 | 60 | +14 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | geometry | school | 45 | 45 | +0 |
 | fractions | school | 45 | 45 | +0 |
 | trigonometry | school | 48 | 48 | +0 |
+| discrete_math | university | 55 | 55 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -375,6 +375,16 @@ area from two sides and an included angle, a vector's length and its dot product
 phase shift — took the domain from 40 to 48, so its row reads +0 and now sits at the foot of the table
 with geometry and fractions. The remainder is 173, and the largest deficit left is discrete_math's
 sixteen.
+
+**Discrete mathematics reached its target on 2026-10-17.** Sixteen concepts — argument validity,
+nested quantifiers, tautology and contradiction, the contrapositive, disproof by counterexample,
+structural induction, power sets, partial orders, countable sets, counting by complement, bipartite
+matchings, Euler's formula for planar graphs, Cayley's formula, degree sequences, linear recurrences
+and growth rates — took the domain from 39 to 55, so its row reads +0 and sits at the foot of the
+table with geometry, fractions and trigonometry. Every one is a computed question: the
+counterexample concept scans for the first composite value rather than quoting one, the matching
+concept searches for a maximum matching, and the recurrence concept derives its closed form from the
+roots it chose. The remainder is 157, and the largest deficit left is complex_numbers' sixteen.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

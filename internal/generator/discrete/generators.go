@@ -36,6 +36,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("discrete.proof.contradiction", &contradictionGen{})
 	reg.Register("discrete.sets.inclusion_exclusion", &inclusionExclusionGen{})
 	reg.Register("discrete.sequences.generating_functions", &generatingFunctionsGen{})
+
+	registerBatch(reg)
 }
 
 // ----- 1. propositions -----

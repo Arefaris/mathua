@@ -559,5 +559,240 @@
       "streak": 10,
       "avg_time_seconds": 22.0
     }
+  },
+  {
+    "id": "discrete.logic.inference",
+    "label": "Valid argument forms and fallacies",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.logic",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.logic.equivalence"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25
+    }
+  },
+  {
+    "id": "discrete.logic.predicates",
+    "label": "Nested quantifiers and their negations",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.logic",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.logic.quantifiers",
+      "discrete.logic.equivalence"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "discrete.logic.satisfiability",
+    "label": "Tautologies, contradictions and contingencies",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.logic",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.logic.truth_tables",
+      "discrete.logic.equivalence"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25
+    }
+  },
+  {
+    "id": "discrete.proof.contrapositive",
+    "label": "Proof by contrapositive",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.proof",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.logic.equivalence",
+      "discrete.proof.contradiction"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "discrete.proof.counterexample",
+    "label": "Disproof by counterexample",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.proof",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.logic.quantifiers"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 40
+    }
+  },
+  {
+    "id": "discrete.proof.structural",
+    "label": "Structural induction",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.proof",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.proof.strong_induction",
+      "discrete.graphs.trees"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "discrete.sets.powerset",
+    "label": "Power sets and counting subsets",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.sets",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.sets.operations",
+      "discrete.combinatorics.combinations"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 35
+    }
+  },
+  {
+    "id": "discrete.sets.partial_order",
+    "label": "Partial orders and comparability",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.sets",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.sets.relations"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 45
+    }
+  },
+  {
+    "id": "discrete.sets.countable",
+    "label": "Countable and uncountable sets",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.sets",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.sets.relations",
+      "discrete.proof.contradiction"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "discrete.combinatorics.complement",
+    "label": "Counting by complement",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.combinatorics",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.combinatorics.counting_principle",
+      "discrete.sets.operations"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 35
+    }
+  },
+  {
+    "id": "discrete.graphs.bipartite",
+    "label": "Bipartite graphs and matchings",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.graph_theory",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.graphs.basics",
+      "discrete.graphs.coloring"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 45
+    }
+  },
+  {
+    "id": "discrete.graphs.planar",
+    "label": "Planar graphs and Euler's formula",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.graph_theory",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.graphs.basics",
+      "discrete.graphs.trees"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 35
+    }
+  },
+  {
+    "id": "discrete.graphs.cayley",
+    "label": "Labelled trees",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.graph_theory",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "discrete.graphs.trees"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "discrete.graphs.degree_sequence",
+    "label": "Degree sequences",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.graph_theory",
+    "grading_type": "tuple",
+    "prerequisites": [
+      "discrete.graphs.basics"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "discrete.sequences.linear_recurrence",
+    "label": "Solving linear recurrences",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.recurrence",
+    "grading_type": "symbolic",
+    "prerequisites": [
+      "discrete.sequences.recurrence",
+      "alg.quad.solve_factor"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 70
+    }
+  },
+  {
+    "id": "discrete.sequences.growth_rates",
+    "label": "Comparing growth rates",
+    "domain": "discrete_math",
+    "subdomain": "discrete_math.recurrence",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "discrete.combinatorics.factorial",
+      "discrete.sequences.recurrence"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25
+    }
   }
 ]

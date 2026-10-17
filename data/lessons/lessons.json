@@ -3306,5 +3306,69 @@
   {
     "concept_id": "trig.graph.phase_shift",
     "source": "authored/trig.graph.phase_shift.md"
+  },
+  {
+    "concept_id": "discrete.logic.inference",
+    "source": "authored/discrete.logic.inference.md"
+  },
+  {
+    "concept_id": "discrete.logic.predicates",
+    "source": "authored/discrete.logic.predicates.md"
+  },
+  {
+    "concept_id": "discrete.logic.satisfiability",
+    "source": "authored/discrete.logic.satisfiability.md"
+  },
+  {
+    "concept_id": "discrete.proof.contrapositive",
+    "source": "authored/discrete.proof.contrapositive.md"
+  },
+  {
+    "concept_id": "discrete.proof.counterexample",
+    "source": "authored/discrete.proof.counterexample.md"
+  },
+  {
+    "concept_id": "discrete.proof.structural",
+    "source": "authored/discrete.proof.structural.md"
+  },
+  {
+    "concept_id": "discrete.sets.powerset",
+    "source": "authored/discrete.sets.powerset.md"
+  },
+  {
+    "concept_id": "discrete.sets.partial_order",
+    "source": "authored/discrete.sets.partial_order.md"
+  },
+  {
+    "concept_id": "discrete.sets.countable",
+    "source": "authored/discrete.sets.countable.md"
+  },
+  {
+    "concept_id": "discrete.combinatorics.complement",
+    "source": "authored/discrete.combinatorics.complement.md"
+  },
+  {
+    "concept_id": "discrete.graphs.bipartite",
+    "source": "authored/discrete.graphs.bipartite.md"
+  },
+  {
+    "concept_id": "discrete.graphs.planar",
+    "source": "authored/discrete.graphs.planar.md"
+  },
+  {
+    "concept_id": "discrete.graphs.cayley",
+    "source": "authored/discrete.graphs.cayley.md"
+  },
+  {
+    "concept_id": "discrete.graphs.degree_sequence",
+    "source": "authored/discrete.graphs.degree_sequence.md"
+  },
+  {
+    "concept_id": "discrete.sequences.linear_recurrence",
+    "source": "authored/discrete.sequences.linear_recurrence.md"
+  },
+  {
+    "concept_id": "discrete.sequences.growth_rates",
+    "source": "authored/discrete.sequences.growth_rates.md"
   }
 ]

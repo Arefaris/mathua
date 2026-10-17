@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 827,
+  "concept_count": 843,
   "unit_count": 95,
   "units": [
     {
@@ -961,6 +961,7 @@
       ],
       "concept_ids": [
         "discrete.combinatorics.binomial_theorem",
+        "discrete.combinatorics.complement",
         "discrete.combinatorics.compositions",
         "discrete.combinatorics.double_counting",
         "discrete.combinatorics.lattice_paths",
@@ -968,14 +969,16 @@
         "discrete.combinatorics.stars_bars",
         "discrete.combinatorics.vandermonde",
         "discrete.graphs.basics",
+        "discrete.graphs.degree_sequence",
         "discrete.graphs.paths",
         "discrete.logic.connectives",
         "discrete.logic.quantifiers",
         "discrete.logic.truth_tables",
         "discrete.sets.operations",
+        "discrete.sets.powerset",
         "discrete.sets.venn"
       ],
-      "concept_count": 14
+      "concept_count": 17
     },
     {
       "id": "discrete_math.b6",
@@ -995,15 +998,24 @@
         "discrete.combinatorics.derangement",
         "discrete.combinatorics.integer_partitions",
         "discrete.combinatorics.surjections",
+        "discrete.graphs.cayley",
         "discrete.graphs.coloring",
         "discrete.graphs.eulerian",
+        "discrete.graphs.planar",
         "discrete.graphs.trees",
         "discrete.logic.equivalence",
+        "discrete.logic.inference",
+        "discrete.logic.predicates",
+        "discrete.logic.satisfiability",
         "discrete.proof.contradiction",
+        "discrete.proof.contrapositive",
+        "discrete.proof.counterexample",
+        "discrete.sets.countable",
         "discrete.sets.inclusion_exclusion",
+        "discrete.sets.partial_order",
         "discrete.sets.relations"
       ],
-      "concept_count": 10
+      "concept_count": 19
     },
     {
       "id": "discrete_math.b7",
@@ -1013,14 +1025,16 @@
       "depth_min": 21,
       "depth_max": 22,
       "subdomains": [
-        "discrete_math.combinatorics"
+        "discrete_math.combinatorics",
+        "discrete_math.graph_theory"
       ],
       "concept_ids": [
         "discrete.combinatorics.bell",
         "discrete.combinatorics.pascal",
-        "discrete.combinatorics.stirling_second"
+        "discrete.combinatorics.stirling_second",
+        "discrete.graphs.bipartite"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "discrete_math.b8",
@@ -1053,9 +1067,12 @@
         "discrete.combinatorics.catalan",
         "discrete.proof.induction",
         "discrete.proof.strong_induction",
-        "discrete.sequences.generating_functions"
+        "discrete.proof.structural",
+        "discrete.sequences.generating_functions",
+        "discrete.sequences.growth_rates",
+        "discrete.sequences.linear_recurrence"
       ],
-      "concept_count": 4
+      "concept_count": 7
     },
     {
       "id": "fractions.b2",

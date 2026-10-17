@@ -2144,6 +2144,28 @@
         ]
       },
       {
+        "lesson": "authored/discrete.sequences.growth_rates.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/convergent-and-divergent-sequences-1.svg",
+          "/diagrams/algebrica/convergent-and-divergent-sequences-2.svg",
+          "/diagrams/algebrica/convergent-and-divergent-sequences-3.svg",
+          "/diagrams/algebrica/sequences-of-functions-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/discrete.sequences.linear_recurrence.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/convergent-and-divergent-sequences-1.svg",
+          "/diagrams/algebrica/convergent-and-divergent-sequences-2.svg",
+          "/diagrams/algebrica/convergent-and-divergent-sequences-3.svg",
+          "/diagrams/algebrica/sequences-of-functions-1.svg"
+        ]
+      },
+      {
         "lesson": "authored/frac.mult.cancel.md",
         "figures_referenced": false,
         "exact_stem_match": [],
