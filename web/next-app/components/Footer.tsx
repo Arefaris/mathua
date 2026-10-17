@@ -36,6 +36,10 @@ interface FooterProps {
 // deliberately are not uniform: the portrait set ranges from 9:16 to 2:3, and
 // normalising it would mean cropping the two outliers.
 //
+// One desktop picture remains since 2026-10-17, when the greyscale landscape was
+// removed at the owner's request; each entry keeps its own portrait, so a phone
+// still rotates through six pictures while a desktop always shows the harbour.
+//
 // PROVENANCE: every file named below is shipped, and none of them has a recorded
 // author or licence. See the "Footer artwork" entry in THIRD_PARTY_NOTICES.md. The
 // contract `test/footerArt.test.tsx` enforces is about the files -- they exist,
@@ -63,7 +67,7 @@ export const FOOTER_ART: FooterArt[] = [
     mobile: { file: '/footer/mobile-coast.jpg', width: 675, height: 1200, tone: 'light' },
   },
   {
-    desktop: { file: '/footer/grey-mountains.jpg', width: 1920, height: 738, tone: 'light' },
+    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-field.jpg', width: 638, height: 1140, tone: 'dark' },
   },
   {
@@ -71,11 +75,11 @@ export const FOOTER_ART: FooterArt[] = [
     mobile: { file: '/footer/mobile-lighthouse.jpg', width: 816, height: 1456, tone: 'dark' },
   },
   {
-    desktop: { file: '/footer/grey-mountains.jpg', width: 1920, height: 738, tone: 'light' },
+    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-clouds.jpg', width: 1290, height: 2580, tone: 'light' },
   },
   {
-    desktop: { file: '/footer/grey-mountains.jpg', width: 1920, height: 738, tone: 'light' },
+    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-library.jpg', width: 723, height: 1076, tone: 'dark' },
   },
 ]

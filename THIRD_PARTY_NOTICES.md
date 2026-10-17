@@ -121,8 +121,8 @@ styles carry their own licences; see their
 
 ### Footer artwork — UNRESOLVED, do not ship without settling this
 
-The eight prints in `web/next-app/public/footer/` are shipped to every visitor: two
-desktop landscapes and six phone portraits, drawn full-bleed behind the footer.
+The seven prints in `web/next-app/public/footer/` are shipped to every visitor: one
+desktop landscape and six phone portraits, drawn full-bleed behind the footer.
 
 **Their provenance and licence are not established.** They were collected from image
 search without a recorded source, author, or licence, and nothing in the repository

@@ -505,7 +505,7 @@ footer .link-underline:hover {
    tone decide the desktop: an entry whose phone picture is a dark print set dark
    ink and a dark scrim on a desktop showing a pale landscape, so the footer
    changed appearance depending on which entry the random pick happened to land
-   on -- and the corner wash inherited the wrong colour with it. */
+   on. */
 .footer[data-tone-desktop='light'] {
   --footer-scrim: oklch(1 0 0);
   --footer-ink: oklch(0.18 0.01 264);
@@ -592,14 +592,8 @@ footer .link-underline:hover {
 .footer-scrim {
   grid-area: 1 / 1;
   pointer-events: none;
-  /* The gradients live in custom properties rather than inline in `background` so
-     the desktop rule can add a layer to the same stack instead of restating them. */
-  --footer-scrim-corner: radial-gradient(
-    95% 80% at 100% 0%,
-    color-mix(in srgb, var(--footer-scrim) 88%, transparent) 0%,
-    color-mix(in srgb, var(--footer-scrim) 55%, transparent) 40%,
-    transparent 72%
-  );
+  /* The two bands are custom properties rather than inline in `background` so the
+     stack reads as two named layers and each can be adjusted on its own. */
   --footer-scrim-top: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--footer-scrim) 82%, transparent) 0%,
@@ -615,36 +609,19 @@ footer .link-underline:hover {
   background: var(--footer-scrim-top), var(--footer-scrim-bottom);
 }
 
-/* The corner wash.
+/* The corner wash was removed with the picture that needed it.
 
-   The two bands are horizontal, and they assume the top of a print is uniformly
-   toned. It is not. From md up the nav sits in the top-right corner, and on
-   `grey-mountains` that corner is a black tree -- so the LEARN and RESOURCES
-   columns were drawn in dark ink over black foliage and two of the links could
-   not be read at all. No horizontal gradient can be strong over black bark and
-   weak over pale sky at the same time.
+   The two bands above are horizontal and assume a uniformly toned top edge. The
+   greyscale landscape broke that assumption: from md up the nav sits in the
+   top-right corner, and in that picture the corner was a black tree, so the LEARN
+   and RESOURCES columns were drawn in dark ink over black foliage. A radial wash
+   anchored to the corner fixed it -- a `to bottom left` gradient strong enough for
+   black bark also washed the wordmark to 3.8:1 while the nav sat at 1.05:1.
 
-   Radial, anchored to that corner, because the brand sits in the top-left of the
-   same band and a `to bottom left` gradient strong enough for black bark is also
-   strong over the wordmark -- measured, and the brand washed to 3.8:1 while the
-   nav sat at 1.05:1. A circle centred on the corner falls off on both axes, so it
-   is strong where the nav is and reaches nothing by the time it gets to the brand.
-   Sized 95% x 80% and transparent by 72% of that radius, so it dies well above the
-   bottom band carrying the credits and well before the dark cliff at the right
-   edge.
-
-   It is a background layer and not a pseudo-element on purpose. Positioning
-   `.footer-scrim` is what a `::after` needs, and a positioned box paints above the
-   static `.footer-content` sharing its grid cell -- so the wash veiled the words
-   instead of sitting behind them and the brand faded to 1.7:1. A plain background
-   layer keeps the original paint order, where the content follows the scrim in the
-   DOM and wins. Dark tone paints with --footer-scrim like everything else, so this
-   follows the artwork rather than the theme. */
-@media (min-width: 768px) {
-  .footer-scrim {
-    background: var(--footer-scrim-corner), var(--footer-scrim-top), var(--footer-scrim-bottom);
-  }
-}
+   That picture was removed on 2026-10-17 at the owner's request, and the corner
+   layer went with it rather than darkening the pale sky the remaining desktop
+   print has there. If the artwork set is replaced with something dark in that
+   corner, the measurement above is where to start. */
 
 .footer-credits {
   color: var(--footer-ink-muted);
