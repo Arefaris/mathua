@@ -577,5 +577,117 @@
       "streak": 10,
       "avg_time_seconds": 15
     }
+  },
+  {
+    "id": "trig.ident.sum_diff",
+    "label": "Sum and difference formulas",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.identities",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.ident.identities"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 35
+    }
+  },
+  {
+    "id": "trig.ident.half_angle",
+    "label": "Half-angle formulas",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.identities",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.ident.double_angle"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 35
+    }
+  },
+  {
+    "id": "trig.eq.quadratic",
+    "label": "Quadratic trigonometric equations",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.identities",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.eq.basic"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 40
+    }
+  },
+  {
+    "id": "trig.adv.ambiguous_case",
+    "label": "The ambiguous case",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.adv.law_sines"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 40
+    }
+  },
+  {
+    "id": "trig.adv.area_sas",
+    "label": "Area from two sides and an included angle",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.adv.law_sines"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "trig.adv.vector_magnitude",
+    "label": "Magnitude of a vector",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.basics.right_triangle"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 20
+    }
+  },
+  {
+    "id": "trig.adv.vector_dot",
+    "label": "Dot product",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.adv.vector_magnitude"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25
+    }
+  },
+  {
+    "id": "trig.graph.phase_shift",
+    "label": "Phase shift",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.graphs",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.graph.period"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
   }
 ]

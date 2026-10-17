@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 819,
+  "concept_count": 827,
   "unit_count": 95,
   "units": [
     {
@@ -2279,7 +2279,7 @@
       "domain": "trigonometry",
       "band": 4,
       "depth_min": 12,
-      "depth_max": 13,
+      "depth_max": 14,
       "subdomains": [
         "trigonometry.advanced",
         "trigonometry.basics",
@@ -2287,17 +2287,22 @@
         "trigonometry.identities"
       ],
       "concept_ids": [
+        "trig.adv.ambiguous_case",
+        "trig.adv.area_sas",
         "trig.adv.law_sines",
+        "trig.adv.vector_dot",
+        "trig.adv.vector_magnitude",
         "trig.basics.reciprocal",
         "trig.basics.right_triangle",
         "trig.basics.tan_def",
         "trig.eq.basic",
         "trig.eq.homogeneous",
+        "trig.eq.quadratic",
         "trig.hyperbolic.sinh_cosh",
         "trig.hyperbolic.tanh_coth",
         "trig.ineq.basic"
       ],
-      "concept_count": 9
+      "concept_count": 14
     },
     {
       "id": "trigonometry.b7",
@@ -2327,10 +2332,12 @@
         "trig.graph.period",
         "trig.graph.sin",
         "trig.ident.double_angle",
+        "trig.ident.half_angle",
         "trig.ident.identities",
-        "trig.ident.pythagorean"
+        "trig.ident.pythagorean",
+        "trig.ident.sum_diff"
       ],
-      "concept_count": 16
+      "concept_count": 18
     },
     {
       "id": "trigonometry.b8",
@@ -2341,16 +2348,18 @@
       "depth_max": 25,
       "subdomains": [
         "trigonometry.advanced",
-        "trigonometry.functions"
+        "trigonometry.functions",
+        "trigonometry.graphs"
       ],
       "concept_ids": [
         "trig.adv.heron_area",
         "trig.adv.law_cosines",
         "trig.func.arccosine",
         "trig.func.arccotangent",
-        "trig.func.arctangent"
+        "trig.func.arctangent",
+        "trig.graph.phase_shift"
       ],
-      "concept_count": 5
+      "concept_count": 6
     }
   ]
 }

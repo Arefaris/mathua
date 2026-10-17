@@ -3274,5 +3274,37 @@
   {
     "concept_id": "trig.graph.amplitude",
     "source": "authored/trig.graph.amplitude.md"
+  },
+  {
+    "concept_id": "trig.ident.sum_diff",
+    "source": "authored/trig.ident.sum_diff.md"
+  },
+  {
+    "concept_id": "trig.ident.half_angle",
+    "source": "authored/trig.ident.half_angle.md"
+  },
+  {
+    "concept_id": "trig.eq.quadratic",
+    "source": "authored/trig.eq.quadratic.md"
+  },
+  {
+    "concept_id": "trig.adv.ambiguous_case",
+    "source": "authored/trig.adv.ambiguous_case.md"
+  },
+  {
+    "concept_id": "trig.adv.area_sas",
+    "source": "authored/trig.adv.area_sas.md"
+  },
+  {
+    "concept_id": "trig.adv.vector_magnitude",
+    "source": "authored/trig.adv.vector_magnitude.md"
+  },
+  {
+    "concept_id": "trig.adv.vector_dot",
+    "source": "authored/trig.adv.vector_dot.md"
+  },
+  {
+    "concept_id": "trig.graph.phase_shift",
+    "source": "authored/trig.graph.phase_shift.md"
   }
 ]

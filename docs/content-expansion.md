@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 819 concepts, and there are 819 KP shard files
-holding 2457 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 827 concepts, and there are 827 KP shard files
+holding 2481 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 430 of the 819 concepts
+### 4.1 The course catalog reaches 430 of the 827 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-430 of the 819 concepts: 389 of them have a node, a generator, a lesson and three KP shards and
+430 of the 827 concepts: 397 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -92,7 +92,7 @@ The count of unreachable concepts by domain:
 | number_theory | 32 | 18 |
 | differential_equations | 32 | 12 |
 | prealgebra | 46 | 23 |
-| trigonometry | 40 | 25 |
+| trigonometry | 48 | 33 |
 | arithmetic | 46 | 13 |
 | linear_algebra | 34 | 11 |
 | abstract_algebra | 32 | 11 |
@@ -326,7 +326,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 819 concepts. Reaching a thousand means adding 181, and this is the table that says
+The catalog holds 827 concepts. Reaching a thousand means adding 173, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
@@ -346,9 +346,9 @@ section 6 reads them, largest deficit first.
 | number_theory | university | 32 | 42 | +10 |
 | differential_equations | university | 32 | 42 | +10 |
 | precalculus | bridge | 41 | 50 | +9 |
-| trigonometry | school | 40 | 48 | +8 |
 | geometry | school | 45 | 45 | +0 |
 | fractions | school | 45 | 45 | +0 |
+| trigonometry | school | 48 | 48 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -361,6 +361,13 @@ seventeen targets measured from a larger starting corpus, and the rows are re-so
 deficit first" still names the largest deficit. `check_docs.py` now reads each `Now` from
 `data/concepts/`, each `Add` from `Target - Now`, and the sentence above the table from the two, so the
 next drift fails instead of being published.
+
+**Trigonometry reached its target on 2026-10-17.** Eight computed concepts — the sum and difference
+formulas, the half-angle formulas, a quadratic in a ratio, the ambiguous case of the law of sines, an
+area from two sides and an included angle, a vector's length and its dot product, and a sinusoid's
+phase shift — took the domain from 40 to 48, so its row reads +0 and now sits at the foot of the table
+with geometry and fractions. The remainder is 173, and the largest deficit left is discrete_math's
+sixteen.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still
