@@ -25,7 +25,7 @@ export interface GlossarySource {
   label: string
   /** Stable source URL. Must resolve; never invent one. */
   url: string
-  /** Reuse terms as verified, e.g. "CC BY 4.0 (OpenStax); consulted, original wording". */
+  /** Reuse terms as verified, e.g. "CC BY-NC-SA 4.0 (openstax.org footer); consulted as reference, original wording, no text reused". */
   license: string
 }
 

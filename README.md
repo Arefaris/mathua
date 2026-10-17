@@ -221,9 +221,9 @@ It re-grades every incorrect attempt with the canonical grader (`Engine.GradeAns
 
 Mathua's sequencing philosophy is directly inspired by [Math Academy](https://mathacademy.com) — a commercial product that demonstrated what mastery-gated, dependency-aware math learning can achieve. Mathua uses none of their content or code — it is an independent open implementation of similar ideas, built openly.
 
-Content design references: [OpenStax](https://openstax.org) (open textbooks), [MIT OpenCourseWare](https://ocw.mit.edu) (curriculum structure), [Art of Problem Solving](https://artofproblemsolving.com) (problem quality).
+Lesson content and diagrams are adapted from [OpenStax](https://openstax.org) textbooks (Prealgebra, Precalculus 2e and Calculus Volume 1), used under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), and from [Algebrica](https://algebrica.org) by Antonio Lupetti, used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Algebrica provides a free, ad-free university-level mathematics knowledge base. Both licenses carry the NonCommercial term, so Mathua's MIT license does not extend to the adapted lesson content.
 
-Lesson content and diagrams sourced from [Algebrica](https://algebrica.org) by Antonio Lupetti — used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Algebrica provides a free, ad-free university-level mathematics knowledge base.
+[MIT OpenCourseWare](https://ocw.mit.edu) (curriculum structure) and [Art of Problem Solving](https://artofproblemsolving.com) (problem quality) were consulted as references; no content is taken from either.
 
 Profile characters served by [DiceBear](https://www.dicebear.com) (individual avatar styles carry their own licenses, see their [license overview](https://www.dicebear.com/licenses/)).
 

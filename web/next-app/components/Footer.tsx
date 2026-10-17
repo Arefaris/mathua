@@ -90,14 +90,16 @@ const linkClass = 'block opacity-80 transition-opacity hover:opacity-100'
 const headingClass = 'font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--footer-ink-muted)]'
 
 // The credits strip names each license the shipped content carries, not only the software.
-// Algebrica lesson content is CC BY-NC 4.0, which requires attribution, and the glossary draws
-// on OpenStax, DLMF and others. A short line cannot carry title, author, source and license for
-// every source, so the line names them and "Licenses" links to /licenses, which renders
-// THIRD_PARTY_NOTICES.md in full.
+// Lesson content is CC BY-NC 4.0 from Algebrica and CC BY-NC-SA 4.0 from OpenStax: both require
+// attribution, and neither is MIT, so each gets its own line. The glossary draws on OpenStax,
+// DLMF and others without reusing their text. A short line cannot carry title, author, source
+// and license for every source, so the line names them and "Licenses" links to /licenses, which
+// renders THIRD_PARTY_NOTICES.md in full.
 const CREDITS = [
   'MIT License',
   'Avatars by DiceBear',
   'Lesson content: Algebrica (CC BY-NC 4.0)',
+  'Lesson content: OpenStax (CC BY-NC-SA 4.0)',
   'Glossary: OpenStax, DLMF and others',
 ]
 

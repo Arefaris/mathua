@@ -149,9 +149,10 @@ export function TrustSection() {
       <div className="section-label">( 02 · Why it is trusted )</div>
       <div className="mt-5 grid gap-10 md:grid-cols-12 md:items-start">
         <p className="max-w-[52ch] text-sm leading-relaxed text-mathua-secondary md:col-span-7">
-          Open-source under MIT. Sequencing inspired by Math Academy, content shaped by
-          OpenStax, MIT OpenCourseWare and Art of Problem Solving. Lessons build on Algebrica
-          under CC BY-NC 4.0. No accounts to start, no paywall on the graph.
+          Open-source under MIT. Sequencing inspired by Math Academy, with MIT OpenCourseWare and
+          Art of Problem Solving consulted for curriculum structure and problem quality. Lessons
+          build on OpenStax (CC BY-NC-SA 4.0) and Algebrica (CC BY-NC 4.0). No accounts to start,
+          no paywall on the graph.
         </p>
         <div className="grid grid-cols-3 divide-x divide-mathua-division border border-mathua-border md:col-span-5">
           <div className="p-5">

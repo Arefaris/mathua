@@ -46,6 +46,11 @@ Fields:
 |---------|---------|------|----------------|
 | [MATH (hendrycks)](https://github.com/hendrycks/math) | MIT | 12,500 | Use `scripts/convert-math.py` |
 | [StackMathQA](https://huggingface.co/datasets/math-ai/StackMathQA) | CC BY-SA | 2M | Use HuggingFace `datasets` library |
-| [OpenStax](https://openstax.org/) | CC BY 4.0 | 1000s per book | Scrape exercises from book JSON |
+| [OpenStax](https://openstax.org/) | CC BY-NC-SA 4.0 | 1000s per book | Scrape exercises from book JSON |
+
+OpenStax exercises are non-commercial and share-alike, and each book's own panel forbids use "in
+the training of large language models or otherwise ... in generative AI offerings" without
+written permission. Read `THIRD_PARTY_NOTICES.md` before loading that row. It read CC BY 4.0 here
+until 2026-10-17, which is wrong for every title this project has read.
 
 Write a Python script that loads any of these, maps the subject tags to mathua concept IDs, and exports in the JSON format above.

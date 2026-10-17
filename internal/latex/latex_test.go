@@ -118,7 +118,7 @@ func TestValidateRowBreakThenRealDelimiter(t *testing.T) {
 }
 
 func TestForSourceRouting(t *testing.T) {
-	header := "> Content sourced from [OpenStax Prealgebra 1e](x) — CC BY 4.0\nbody"
+	header := "> Content sourced from [OpenStax Prealgebra 1e](x) — CC BY-NC-SA 4.0\nbody"
 	if a := ForSource("teaching/x.md", header); a.Name != "structured" {
 		t.Errorf("openstax sniff failed: %s", a.Name)
 	}

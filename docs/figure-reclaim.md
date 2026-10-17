@@ -22,13 +22,15 @@ is the ingestion pipeline's own signature.
 Every teaching lesson opens with a credit line naming its source, for example:
 
 ```
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY-NC-SA 4.0
 ```
 
 Two books accounted for every `certain` caption: **OpenStax Prealgebra** (36) and
 **OpenStax Calculus Volume 1** (36). All seventy-two have landed, as section 7 records. Both are
-CC BY 4.0, which permits reuse and adaptation with
-attribution, and the attribution is already the lesson's own header line.
+CC BY-NC-SA 4.0, which permits reuse and adaptation with attribution but carries the terms on to
+the adapted work, and the attribution is already the lesson's own header line. Both headers said
+CC BY 4.0 until 2026-10-17, which dropped the NonCommercial and ShareAlike terms from the record;
+`THIRD_PARTY_NOTICES.md` now quotes what each book's own panel says.
 
 That changes what "a direct look-alike" means for these figures. Their *drawing* is upstream's, not
 Mathua's: they are fetched rather than redrawn, so the line work, the labels and the layout are
@@ -57,7 +59,7 @@ must be restored, and section 6's table is empty because a disposition was only 
 | Disposition | Figures | Action |
 | --- | --- | --- |
 | schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 0 | Empty since 2026-10-16, in three batches. Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY 4.0 and the credit line is already in the lesson header. |
+| illustration, fetch | 0 | Empty since 2026-10-16, in three batches. Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY-NC-SA 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
 | photo, third-party credit | 0 | Empty since 2026-10-16: all five were fetched, each under the credit line its caption already carries. The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar), and a photograph cannot be redrawn as a line figure, so a replacement was never the alternative. |
 
