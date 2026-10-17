@@ -5151,6 +5151,239 @@
     "subdomain": "complex_numbers.advanced"
   },
   {
+    "domain": "complex_numbers",
+    "grading_type": "numeric",
+    "id": "complex.basics.parts",
+    "label": "Real and imaginary parts",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.basics.concept"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.basics.powers",
+    "label": "Powers of complex numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 45,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.mult"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.basics.reciprocal",
+    "label": "The reciprocal of a complex number",
+    "mastery_threshold": {
+      "avg_time_seconds": 50,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.divide"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "numeric",
+    "id": "complex.basics.geometry",
+    "label": "Distance in the complex plane",
+    "mastery_threshold": {
+      "avg_time_seconds": 35,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.modulus"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "multiple_choice",
+    "id": "complex.basics.loci",
+    "label": "Loci in the complex plane",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.modulus",
+      "alg.linear.parallel_perp"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "numeric",
+    "id": "complex.basics.arg_arithmetic",
+    "label": "Arguments under multiplication",
+    "mastery_threshold": {
+      "avg_time_seconds": 35,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.argument",
+      "complex.adv.polar"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.basics.equations",
+    "label": "Linear equations over the complex numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 50,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.divide",
+      "complex.ops.conjugate"
+    ],
+    "subdomain": "complex_numbers.basics"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "multiple_choice",
+    "id": "complex.adv.conjugate_roots",
+    "label": "Conjugate roots of real polynomials",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.conjugate",
+      "alg.poly.roots"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "multiple_choice",
+    "id": "complex.adv.trig_exponential",
+    "label": "Trigonometric functions from exponentials",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.adv.exponential",
+      "trig.ident.identities"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "multiple_choice",
+    "id": "complex.adv.hyperbolic",
+    "label": "Hyperbolic functions on imaginary arguments",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.adv.exponential"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.adv.geometric_series",
+    "label": "Complex geometric series",
+    "mastery_threshold": {
+      "avg_time_seconds": 50,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.divide",
+      "alg.seq.geometric"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.adv.mobius_fixed",
+    "label": "Fixed points of Moebius transformations",
+    "mastery_threshold": {
+      "avg_time_seconds": 60,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.adv.mobius",
+      "alg.quad.formula"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.adv.residue_simple",
+    "label": "Residues at simple poles",
+    "mastery_threshold": {
+      "avg_time_seconds": 55,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.adv.residue"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "complex",
+    "id": "complex.adv.cross_ratio",
+    "label": "The cross-ratio",
+    "mastery_threshold": {
+      "avg_time_seconds": 50,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.adv.mobius"
+    ],
+    "subdomain": "complex_numbers.advanced"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "multiple_choice",
+    "id": "complex.topology.open_sets",
+    "label": "Open and closed sets in the plane",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.ops.modulus",
+      "topo.basics.open_closed"
+    ],
+    "subdomain": "complex_numbers.topology"
+  },
+  {
+    "domain": "complex_numbers",
+    "grading_type": "multiple_choice",
+    "id": "complex.topology.domain",
+    "label": "Domains in the complex plane",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "complex.topology.open_sets",
+      "topo.connected"
+    ],
+    "subdomain": "complex_numbers.topology"
+  },
+  {
     "domain": "differential_equations",
     "grading_type": "multiple_choice",
     "id": "ode.basics.concept",

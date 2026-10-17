@@ -1,6 +1,7 @@
 package planning
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -111,8 +112,19 @@ func TestLoad_RealData(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load real data: %v", err)
 	}
-	if len(p.Courses()) != 23 {
-		t.Errorf("expected 23 courses, got %d", len(p.Courses()))
+	// The count is owned by data/courses.json, not by this test: pinning a literal here made every
+	// batch that adds a course fail with a message that contradicted its own condition. Reading the
+	// file still catches a Load that drops or duplicates one.
+	raw, err := os.ReadFile("../../data/courses.json")
+	if err != nil {
+		t.Fatalf("read courses: %v", err)
+	}
+	var entries []map[string]any
+	if err := json.Unmarshal(raw, &entries); err != nil {
+		t.Fatalf("parse courses: %v", err)
+	}
+	if got := len(p.Courses()); got != len(entries) {
+		t.Errorf("Load returned %d courses for %d in data/courses.json", got, len(entries))
 	}
 	// Check that 4th grade chain has reasonable size
 	path, err := p.PathForCourse("4")

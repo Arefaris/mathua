@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 843,
+  "concept_count": 859,
   "unit_count": 95,
   "units": [
     {
@@ -685,9 +685,10 @@
       "concept_ids": [
         "complex.adv.inequalities",
         "complex.basics.concept",
+        "complex.basics.parts",
         "complex.ops.add_sub"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "complex_numbers.b6",
@@ -717,12 +718,17 @@
       ],
       "concept_ids": [
         "complex.adv.polar",
+        "complex.basics.equations",
+        "complex.basics.geometry",
+        "complex.basics.loci",
+        "complex.basics.powers",
+        "complex.basics.reciprocal",
         "complex.ops.argument",
         "complex.ops.conjugate",
         "complex.ops.divide",
         "complex.ops.modulus"
       ],
-      "concept_count": 5
+      "concept_count": 10
     },
     {
       "id": "complex_numbers.b8",
@@ -730,18 +736,24 @@
       "domain": "complex_numbers",
       "band": 8,
       "depth_min": 24,
-      "depth_max": 25,
+      "depth_max": 26,
       "subdomains": [
-        "complex_numbers.advanced"
+        "complex_numbers.advanced",
+        "complex_numbers.basics"
       ],
       "concept_ids": [
+        "complex.adv.conjugate_roots",
         "complex.adv.de_moivre",
         "complex.adv.euler_identity",
         "complex.adv.exponential",
+        "complex.adv.geometric_series",
+        "complex.adv.hyperbolic",
         "complex.adv.logarithm",
-        "complex.adv.roots"
+        "complex.adv.roots",
+        "complex.adv.trig_exponential",
+        "complex.basics.arg_arithmetic"
       ],
-      "concept_count": 5
+      "concept_count": 10
     },
     {
       "id": "complex_numbers.b10",
@@ -751,12 +763,14 @@
       "depth_min": 32,
       "depth_max": 32,
       "subdomains": [
-        "complex_numbers.advanced"
+        "complex_numbers.advanced",
+        "complex_numbers.topology"
       ],
       "concept_ids": [
-        "complex.adv.cauchy_riemann"
+        "complex.adv.cauchy_riemann",
+        "complex.topology.open_sets"
       ],
-      "concept_count": 1
+      "concept_count": 2
     },
     {
       "id": "complex_numbers.b11",
@@ -766,20 +780,23 @@
       "depth_min": 33,
       "depth_max": 35,
       "subdomains": [
-        "complex_numbers.advanced"
+        "complex_numbers.advanced",
+        "complex_numbers.topology"
       ],
       "concept_ids": [
         "complex.adv.analytic",
         "complex.adv.conformal",
         "complex.adv.harmonic",
         "complex.adv.residue",
+        "complex.adv.residue_simple",
         "complex.adv.schwarz_lemma",
         "complex.integral.cauchy_goursat",
         "complex.integral.contour",
         "complex.series.laurent",
-        "complex.series.power"
+        "complex.series.power",
+        "complex.topology.domain"
       ],
-      "concept_count": 9
+      "concept_count": 11
     },
     {
       "id": "complex_numbers.b12",
@@ -787,15 +804,18 @@
       "domain": "complex_numbers",
       "band": 12,
       "depth_min": 36,
-      "depth_max": 37,
+      "depth_max": 38,
       "subdomains": [
+        "complex_numbers.advanced",
         "complex_numbers.topology"
       ],
       "concept_ids": [
+        "complex.adv.cross_ratio",
         "complex.adv.mobius",
+        "complex.adv.mobius_fixed",
         "complex.topology.riemann_sphere"
       ],
-      "concept_count": 2
+      "concept_count": 4
     },
     {
       "id": "differential_equations.b11",

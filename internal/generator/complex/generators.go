@@ -38,6 +38,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("complex.adv.mobius", &mobiusTransformGen{})
 	reg.Register("complex.adv.schwarz_lemma", &schwarzLemmaGen{})
 	reg.Register("complex.adv.logarithm", &logarithmGen{})
+
+	registerBatch(reg)
 }
 
 func fmtComplex(r, i int) string {

@@ -76,6 +76,35 @@ name this deviation alongside the two it already names. A test covering a concep
 
 **Impact.** Low. Affects only repair runs over concepts with a missing or zero threshold.
 
+## 3. `complex.adv.polar` answers are rounded to whole degrees
+
+**Location:** `internal/generator/complex/generators.go`, the `polarGen` generator.
+
+**What it does.** For a rectangular number built from a Pythagorean triple, the generator computes
+`arctan(b/a)` in degrees and rounds it to an integer before writing the polar answer:
+`5(cos 53° + i sin 53°)`. For the `(3, 4)` triple the exact argument is about 53.13°, so the
+answer states an approximate value as though it were exact.
+
+**Why it has not broken.** The `complex` grader converts the polar form with a regex that accepts
+integers only and then compares both sides in SymPy. Because expected and answer are both the rounded
+string, the comparison agrees with itself. A learner who types the accurate angle, `53.13°`, either
+fails the regex or is compared against the rounded value and is marked wrong.
+
+**Why it was not fixed here.** The fix would change the answer format of an existing concept — a
+generator and its grader — and that is outside the `complex_numbers` batch that found it. Choosing
+between exact integer arguments (only multiples of 30° and 45° have exact sines and cosines), a
+`±`-style tolerance in the answer, or dropping polar answers in favour of exponential form is a
+decision about the concept, not a repair.
+
+**Suggested fix.** Restrict `polarGen` to angles whose sine and cosine are exact — 30°, 45°, 60°,
+90°, 120°, 135°, 150°, 180° and the reflex ones — and pick radii so the rectangular form stays
+integral. `TestComplexAcceptsEquivalentForms` already covers the polar path with a whole-degree case,
+so a change there would be caught by the grader test.
+
+**Impact.** Low for grading (the generator and the grader agree), real for a learner: the concept
+teaches that a polar form is exact when the number it came from is a triple, and a learner who works
+out the true angle is marked wrong for being right.
+
 ## What this document is not
 
 Neither defect is a documentation error, and neither is fixed by the documentation sweep. They

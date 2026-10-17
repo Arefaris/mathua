@@ -12,16 +12,16 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 843 |
+| Total concepts | 859 |
 | Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
 | Maximum unit size | 50 |
-| Singleton units | 19 |
-| Units with <= 3 concepts | 32 |
+| Singleton units | 18 |
+| Units with <= 3 concepts | 30 |
 | Units with > 25 concepts | 6 |
 | Units with > 50 concepts | 0 |
-| Cross-unit prerequisite edges (derived) | 220 |
+| Cross-unit prerequisite edges (derived) | 226 |
 | Backward band edges | 0 |
 
 If the learner is assessed once per unit, then 95 assessments cover the corpus, and the
@@ -51,13 +51,13 @@ exists to make concrete.
 | `calculus.b10` | calculus | 10 | 50 | 6 | 30–32 |
 | `calculus.b11` | calculus | 11 | 47 | 6 | 33–35 |
 | `calculus.b12` | calculus | 12 | 41 | 6 | 36–38 |
-| `complex_numbers.b3` | complex_numbers | 3 | 3 | 2 | 10–11 |
+| `complex_numbers.b3` | complex_numbers | 3 | 4 | 2 | 10–11 |
 | `complex_numbers.b6` | complex_numbers | 6 | 1 | 1 | 20–20 |
-| `complex_numbers.b7` | complex_numbers | 7 | 5 | 2 | 21–23 |
-| `complex_numbers.b8` | complex_numbers | 8 | 5 | 1 | 24–25 |
-| `complex_numbers.b10` | complex_numbers | 10 | 1 | 1 | 32–32 |
-| `complex_numbers.b11` | complex_numbers | 11 | 9 | 1 | 33–35 |
-| `complex_numbers.b12` | complex_numbers | 12 | 2 | 1 | 36–37 |
+| `complex_numbers.b7` | complex_numbers | 7 | 10 | 2 | 21–23 |
+| `complex_numbers.b8` | complex_numbers | 8 | 10 | 2 | 24–26 |
+| `complex_numbers.b10` | complex_numbers | 10 | 2 | 2 | 32–32 |
+| `complex_numbers.b11` | complex_numbers | 11 | 11 | 2 | 33–35 |
+| `complex_numbers.b12` | complex_numbers | 12 | 4 | 2 | 36–38 |
 | `differential_equations.b11` | differential_equations | 11 | 3 | 2 | 33–35 |
 | `differential_equations.b12` | differential_equations | 12 | 11 | 4 | 36–38 |
 | `differential_equations.b13` | differential_equations | 13 | 11 | 4 | 39–41 |
@@ -141,19 +141,19 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 125 | 5 | 39 | 22 | 49 | 5 | 0 |
-| 3 | 95 | 6 | 50 | 19 | 32 | 6 | 0 |
-| 4 | 76 | 8 | 64 | 8 | 22 | 5 | 0 |
-| 5 | 65 | 8 | 72 | 5 | 15 | 8 | 0 |
-| 6 | 61 | 10 | 97 | 5 | 13 | 6 | 0 |
-| 8 | 48 | 13 | 105 | 3 | 9 | 9 | 0 |
-| 10 | 43 | 14 | 138 | 3 | 9 | 12 | 0 |
-| 12 | 42 | 15 | 124 | 2 | 6 | 10 | 0 |
-| 15 | 32 | 23 | 138 | 2 | 5 | 13 | 0 |
-| 20 | 29 | 24 | 165 | 2 | 5 | 13 | 0 |
+| 2 | 127 | 5 | 39 | 23 | 49 | 5 | 0 |
+| 3 | 95 | 6 | 50 | 18 | 30 | 6 | 0 |
+| 4 | 76 | 9 | 64 | 8 | 20 | 5 | 0 |
+| 5 | 65 | 8 | 72 | 5 | 13 | 8 | 0 |
+| 6 | 61 | 11 | 97 | 5 | 11 | 6 | 0 |
+| 8 | 48 | 14 | 105 | 3 | 8 | 9 | 0 |
+| 10 | 43 | 16 | 138 | 3 | 8 | 12 | 0 |
+| 12 | 42 | 16 | 124 | 2 | 4 | 10 | 0 |
+| 15 | 32 | 23 | 138 | 2 | 4 | 13 | 0 |
+| 20 | 29 | 24 | 165 | 2 | 4 | 14 | 0 |
 | 45 | 17 | 44 | 165 | 0 | 0 | 17 | 0 |
 
-**No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
+**No width is clean.** Small widths fragment — at 3 there are 18 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
 units too large to assess: at 45 the partition is just the 17 domains themselves, whose
 largest is 128 concepts. The usable widths trade fragmentation against size rather than
@@ -291,12 +291,12 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 843
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 859
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
 
-- **anomaly** `singleton_units`: 19 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
+- **anomaly** `singleton_units`: 18 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
 
 ## Not decided here
 

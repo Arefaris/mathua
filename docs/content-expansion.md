@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 843 concepts, and there are 843 KP shard files
-holding 2529 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 859 concepts, and there are 859 KP shard files
+holding 2577 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 448 of the 843 concepts
+### 4.1 The course catalog reaches 492 of the 859 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
-`internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-448 of the 843 concepts: 395 of them have a node, a generator, a lesson and three KP shards and
+`internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
+492 of the 859 concepts: 367 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -82,17 +82,17 @@ The count of unreachable concepts by domain:
 | Domain | Concepts | Unreachable |
 |---|---|---|
 | calculus | 165 | 93 |
-| algebra | 89 | 53 |
-| topology | 30 | 27 |
+| algebra | 89 | 52 |
+| topology | 30 | 22 |
 | statistics | 44 | 23 |
 | precalculus | 41 | 20 |
 | fractions | 45 | 13 |
 | machine_learning | 33 | 16 |
-| complex_numbers | 26 | 20 |
+| complex_numbers | 42 | 0 |
 | number_theory | 32 | 18 |
 | differential_equations | 32 | 12 |
 | prealgebra | 46 | 23 |
-| trigonometry | 48 | 33 |
+| trigonometry | 48 | 31 |
 | arithmetic | 46 | 13 |
 | linear_algebra | 34 | 11 |
 | abstract_algebra | 32 | 11 |
@@ -118,7 +118,7 @@ entirely `multiple_choice`:
 | machine_learning | 33 | 24 |
 | discrete_math | 55 | 26 |
 | number_theory | 32 | 17 |
-| complex_numbers | 26 | 14 |
+| complex_numbers | 42 | 20 |
 
 Against that, `calculus` carries 86 `symbolic` concepts and `algebra` carries 36. The pool
 ratchet in `internal/generator/pools_test.go` exists for exactly this surface: an easy pool that
@@ -258,7 +258,7 @@ uses:
 
 Three things follow, and together they decide the first two policies.
 
-- **A makes the catalog exhaustive.** The union of the 23 closures goes from 247 to **666**: every
+- **A makes the catalog exhaustive.** The union of the 24 closures goes from 247 to **666**: every
   concept in the corpus becomes reachable. That is the end of a sampled path — the catalog and the
   corpus become the same set — and it leaves the diagnostic and a free-choice goal nothing to do.
 - **Both policies collapse the staged pairs.** `calc1` and `calc2` are 67 and 70 concepts now and 342
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 843 concepts. Reaching a thousand means adding 157, and this is the table that says
+The catalog holds 859 concepts. Reaching a thousand means adding 141, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| complex_numbers | university | 26 | 42 | +16 |
 | algebra | school | 89 | 104 | +15 |
 | arithmetic | school | 46 | 60 | +14 |
 | prealgebra | school | 46 | 60 | +14 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | fractions | school | 45 | 45 | +0 |
 | trigonometry | school | 48 | 48 | +0 |
 | discrete_math | university | 55 | 55 | +0 |
+| complex_numbers | university | 42 | 42 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -384,7 +384,18 @@ and growth rates — took the domain from 39 to 55, so its row reads +0 and sits
 table with geometry, fractions and trigonometry. Every one is a computed question: the
 counterexample concept scans for the first composite value rather than quoting one, the matching
 concept searches for a maximum matching, and the recurrence concept derives its closed form from the
-roots it chose. The remainder is 157, and the largest deficit left is complex_numbers' sixteen.
+roots it chose. The remainder was 157 at that point.
+
+**Complex numbers reached their target on 2026-10-17.** Sixteen concepts — parts and equality,
+powers, reciprocals, plane distance, loci, argument arithmetic, complex linear equations, conjugate
+root pairs, trigonometric and hyperbolic identities from exponentials, complex geometric series,
+Möbius fixed points, residues at simple poles, the cross-ratio, open and closed sets, and domains —
+took the domain from 26 to 42, so its row reads +0. A new college course, `cx` "Complex Numbers and
+Analysis", targets all 42: the domain had been reachable only through `pc`'s single polar-form
+target, which left twenty of the twenty-six behind it outside every course. The batch also brought
+the `complex` grading path its first tests, which is how the polar rounding recorded in
+`docs/code-defects.md` came to be documented rather than guessed at. The remainder is 141, and the
+largest deficit left is algebra's fifteen.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

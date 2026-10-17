@@ -3370,5 +3370,69 @@
   {
     "concept_id": "discrete.sequences.growth_rates",
     "source": "authored/discrete.sequences.growth_rates.md"
+  },
+  {
+    "concept_id": "complex.basics.parts",
+    "source": "authored/complex.basics.parts.md"
+  },
+  {
+    "concept_id": "complex.basics.powers",
+    "source": "authored/complex.basics.powers.md"
+  },
+  {
+    "concept_id": "complex.basics.reciprocal",
+    "source": "authored/complex.basics.reciprocal.md"
+  },
+  {
+    "concept_id": "complex.basics.geometry",
+    "source": "authored/complex.basics.geometry.md"
+  },
+  {
+    "concept_id": "complex.basics.loci",
+    "source": "authored/complex.basics.loci.md"
+  },
+  {
+    "concept_id": "complex.basics.arg_arithmetic",
+    "source": "authored/complex.basics.arg_arithmetic.md"
+  },
+  {
+    "concept_id": "complex.basics.equations",
+    "source": "authored/complex.basics.equations.md"
+  },
+  {
+    "concept_id": "complex.adv.conjugate_roots",
+    "source": "authored/complex.adv.conjugate_roots.md"
+  },
+  {
+    "concept_id": "complex.adv.trig_exponential",
+    "source": "authored/complex.adv.trig_exponential.md"
+  },
+  {
+    "concept_id": "complex.adv.hyperbolic",
+    "source": "authored/complex.adv.hyperbolic.md"
+  },
+  {
+    "concept_id": "complex.adv.geometric_series",
+    "source": "authored/complex.adv.geometric_series.md"
+  },
+  {
+    "concept_id": "complex.adv.mobius_fixed",
+    "source": "authored/complex.adv.mobius_fixed.md"
+  },
+  {
+    "concept_id": "complex.adv.residue_simple",
+    "source": "authored/complex.adv.residue_simple.md"
+  },
+  {
+    "concept_id": "complex.adv.cross_ratio",
+    "source": "authored/complex.adv.cross_ratio.md"
+  },
+  {
+    "concept_id": "complex.topology.open_sets",
+    "source": "authored/complex.topology.open_sets.md"
+  },
+  {
+    "concept_id": "complex.topology.domain",
+    "source": "authored/complex.topology.domain.md"
   }
 ]

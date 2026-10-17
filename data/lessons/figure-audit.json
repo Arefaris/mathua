@@ -2144,6 +2144,214 @@
         ]
       },
       {
+        "lesson": "authored/complex.adv.conjugate_roots.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.adv.cross_ratio.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.adv.geometric_series.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.adv.hyperbolic.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.adv.mobius_fixed.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.adv.residue_simple.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.adv.trig_exponential.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.arg_arithmetic.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.equations.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.geometry.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.loci.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.parts.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.powers.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.basics.reciprocal.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.topology.domain.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/complex.topology.open_sets.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/complex-number-operations-1.svg",
+          "/diagrams/algebrica/complex-numbers-1.svg",
+          "/diagrams/algebrica/complex-numbers-2.svg",
+          "/diagrams/algebrica/complex-numbers-3.svg",
+          "/diagrams/algebrica/complex-numbers-exponential-form-1.svg",
+          "/diagrams/algebrica/complex-numbers-trigonometric-form-1.svg"
+        ]
+      },
+      {
         "lesson": "authored/discrete.sequences.growth_rates.md",
         "figures_referenced": false,
         "exact_stem_match": [],
