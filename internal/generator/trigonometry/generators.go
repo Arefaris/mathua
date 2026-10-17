@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"strconv"
+	"strings"
 
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/mathutil"
@@ -82,53 +83,74 @@ func (g *radiansGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 
 type unitCircleGen struct{}
 
+// The angle is stored as its degree value rather than as a ready-made label. The label carries
+// its own math delimiters because the solution schema quotes it in prose ("the angle [[label]] is
+// marked on the unit circle"), but the question and explanation put the angle *inside* a math
+// region, where a delimited label would nest one region in another -- `\(\sin(\(180^{\circ}\))\)`
+// -- and the canonicaliser rendered that as `$\sin((180^{\circ}$))`, a broken question. Building
+// the bare angle for the math and the delimited label for the schema keeps both correct.
 var unitCircleAngles = []struct {
-	label string
-	sin   string
-	cos   string
-	easy  bool
+	deg  int
+	sin  string
+	cos  string
+	easy bool
 }{
-	{"\\(0^{\\circ}\\)", "0", "1", true},
-	{"\\(30^{\\circ}\\)", "\\(1/2\\)", "\\(\\sqrt{3}/2\\)", true},
-	{"\\(45^{\\circ}\\)", "\\(\\sqrt{2}/2\\)", "\\(\\sqrt{2}/2\\)", true},
-	{"\\(60^{\\circ}\\)", "\\(\\sqrt{3}/2\\)", "\\(1/2\\)", true},
-	{"\\(90^{\\circ}\\)", "1", "0", true},
-	{"\\(180^{\\circ}\\)", "0", "-1", true},
-	{"\\(270^{\\circ}\\)", "-1", "0", true},
-	{"\\(360^{\\circ}\\)", "0", "1", true},
-	{"\\(120^{\\circ}\\)", "\\(\\sqrt{3}/2\\)", "\\(-1/2\\)", false},
-	{"\\(135^{\\circ}\\)", "\\(\\sqrt{2}/2\\)", "\\(-\\sqrt{2}/2\\)", false},
-	{"\\(150^{\\circ}\\)", "\\(1/2\\)", "\\(-\\sqrt{3}/2\\)", false},
-	{"\\(210^{\\circ}\\)", "\\(-1/2\\)", "\\(-\\sqrt{3}/2\\)", false},
-	{"\\(225^{\\circ}\\)", "\\(-\\sqrt{2}/2\\)", "\\(-\\sqrt{2}/2\\)", false},
-	{"\\(240^{\\circ}\\)", "\\(-\\sqrt{3}/2\\)", "\\(-1/2\\)", false},
-	{"\\(300^{\\circ}\\)", "\\(-\\sqrt{3}/2\\)", "\\(1/2\\)", false},
-	{"\\(315^{\\circ}\\)", "\\(-\\sqrt{2}/2\\)", "\\(\\sqrt{2}/2\\)", false},
-	{"\\(330^{\\circ}\\)", "\\(-1/2\\)", "\\(\\sqrt{3}/2\\)", false},
+	{0, "0", "1", true},
+	{30, "\\(1/2\\)", "\\(\\sqrt{3}/2\\)", true},
+	{45, "\\(\\sqrt{2}/2\\)", "\\(\\sqrt{2}/2\\)", true},
+	{60, "\\(\\sqrt{3}/2\\)", "\\(1/2\\)", true},
+	{90, "1", "0", true},
+	{180, "0", "-1", true},
+	{270, "-1", "0", true},
+	{360, "0", "1", true},
+	{120, "\\(\\sqrt{3}/2\\)", "\\(-1/2\\)", false},
+	{135, "\\(\\sqrt{2}/2\\)", "\\(-\\sqrt{2}/2\\)", false},
+	{150, "\\(1/2\\)", "\\(-\\sqrt{3}/2\\)", false},
+	{210, "\\(-1/2\\)", "\\(-\\sqrt{3}/2\\)", false},
+	{225, "\\(-\\sqrt{2}/2\\)", "\\(-\\sqrt{2}/2\\)", false},
+	{240, "\\(-\\sqrt{3}/2\\)", "\\(-1/2\\)", false},
+	{300, "\\(-\\sqrt{3}/2\\)", "\\(1/2\\)", false},
+	{315, "\\(-\\sqrt{2}/2\\)", "\\(\\sqrt{2}/2\\)", false},
+	{330, "\\(-1/2\\)", "\\(\\sqrt{3}/2\\)", false},
+}
+
+// bare strips a value's own math delimiters so it can be embedded inside another math region.
+// Some unit-circle values are written delimited ("\(\sqrt{2}/2\)") and some bare ("-1"); the
+// question and explanation put the value inside `\(...\)`, where a delimited one would nest.
+func bare(v string) string {
+	return strings.TrimSuffix(strings.TrimPrefix(v, "\\("), "\\)")
 }
 
 func (g *unitCircleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	// Easy → pick from quadrant 1 + axes; Hard → pick from any quadrant
-	var candidates []struct{ label, sin, cos string }
+	var candidates []struct {
+		deg      int
+		sin, cos string
+	}
 	for _, a := range unitCircleAngles {
 		if ctx.Difficulty > 0.4 || a.easy {
-			candidates = append(candidates, struct{ label, sin, cos string }{a.label, a.sin, a.cos})
+			candidates = append(candidates, struct {
+				deg      int
+				sin, cos string
+			}{a.deg, a.sin, a.cos})
 		}
 	}
 	a := candidates[rand.Intn(len(candidates))]
+	angle := fmt.Sprintf("%d^{\\circ}", a.deg)
+	label := fmt.Sprintf("\\(%s\\)", angle)
 	if rand.Intn(2) == 0 {
 		return generator.Problem{
-			Question:    fmt.Sprintf("What is \\(\\sin(%s)\\)?", a.label),
+			Question:    fmt.Sprintf("What is \\(\\sin(%s)\\)?", angle),
 			Answer:      a.sin,
-			Explanation: fmt.Sprintf("On the unit circle, \\(\\sin(%s) = %s\\).", a.label, a.sin),
-			Facts:       map[string]string{"label": a.label, "val": a.sin, "fn": "\\sin"},
+			Explanation: fmt.Sprintf("On the unit circle, \\(\\sin(%s) = %s\\).", angle, bare(a.sin)),
+			Facts:       map[string]string{"label": label, "val": a.sin, "fn": "\\sin"},
 		}
 	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("What is \\(\\cos(%s)\\)?", a.label),
+		Question:    fmt.Sprintf("What is \\(\\cos(%s)\\)?", angle),
 		Answer:      a.cos,
-		Explanation: fmt.Sprintf("On the unit circle, \\(\\cos(%s) = %s\\).", a.label, a.cos),
-		Facts:       map[string]string{"label": a.label, "val": a.cos, "fn": "\\cos"},
+		Explanation: fmt.Sprintf("On the unit circle, \\(\\cos(%s) = %s\\).", angle, bare(a.cos)),
+		Facts:       map[string]string{"label": label, "val": a.cos, "fn": "\\cos"},
 	}
 }
 
