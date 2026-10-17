@@ -11,6 +11,13 @@
 //   npm run docs:build    regenerate the module
 //   npm run docs:check    fail if the module is out of date (CI)
 //
+//   node scripts/build-docs.mjs --overrides <file.json>
+//     Read a doc source from the given map (`path -> text`) instead of the working tree. The
+//     count sweep uses this: it stages the new text of a doc another writer has dirty edits in
+//     without touching that file, so a build that read the working tree would embed the stale
+//     copy and the counts one batch behind. An override key the DOCS list does not name is
+//     ignored, so the caller can pass every staged path without knowing which are published.
+//
 // The output is committed, like web/next-app/data/concepts.json, because the type checker and
 // the unit tests import it and they run before a build. Committing generated content is only
 // safe with the check: `docs:check` regenerates in memory and diffs, so an edit to a repo doc
@@ -84,18 +91,19 @@ function withoutRepoToc(markdown) {
   return markdown.replace(/^##\s+Table of Contents[^\n]*\n[\s\S]*?(?=^##\s)/m, '')
 }
 
-export function build() {
+export function build(overrides = {}) {
   const out = {}
   const missing = []
   for (const doc of DOCS) {
     const path = join(repoRoot, doc.source)
-    if (!existsSync(path)) {
+    const overridden = Object.prototype.hasOwnProperty.call(overrides, doc.source)
+    if (!overridden && !existsSync(path)) {
       // A missing source is fatal, not skipped: a silently absent page is the failure this
       // whole arrangement exists to prevent.
       missing.push(doc.source)
       continue
     }
-    const raw = readFileSync(path, 'utf8')
+    const raw = overridden ? overrides[doc.source] : readFileSync(path, 'utf8')
     const body = withoutRepoToc(withoutTitle(raw)).trimEnd() + '\n'
     out[doc.slug] = {
       title: titleOf(raw, doc.slug),
@@ -119,7 +127,11 @@ function serialise(data) {
 }
 
 const check = process.argv.includes('--check')
-const next = serialise(build())
+const overridesArg = process.argv.indexOf('--overrides')
+const overrides = overridesArg >= 0
+  ? JSON.parse(readFileSync(process.argv[overridesArg + 1], 'utf8'))
+  : {}
+const next = serialise(build(overrides))
 
 if (check) {
   const current = existsSync(outFile) ? readFileSync(outFile, 'utf8') : ''

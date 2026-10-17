@@ -4,7 +4,7 @@ A content batch moves the concept count, and eleven files quote it: three docs q
 the unreachable remainder, a mastery ADR quotes the unit count, AGENTS.md and CONTRIBUTING.md quote
 the shards and the knowledge points, three published docs quote the concept count, two Go tests
 assert it, and four strings in the app copy advertise it. Regenerating the derived artifacts is a
-separate five-command chain.
+separate chain.
 
 Doing that by hand cost a turn per batch and produced two classes of mistake, both of which this
 script is written to prevent:
@@ -26,6 +26,14 @@ node list moved on, so `scripts/build-og.mjs` and the landing-page poster laid o
 position for anything added since. **Stage both, or neither.** The same applies to
 `web/next-app/data/flow.positions.json`, which `npm run flow:build` writes and which the flow view
 reads.
+
+A second trap is a build that reads the wrong copy. `web/next-app/content/docs.generated.json`
+embeds the full text of the docs the website publishes, and two of them are blob-only. Building it
+from the working tree embeds the other writer's copy with the previous batch's counts, so the
+batch that took the corpus to 811 shipped a stale bundle and `docs:check` went red in CI. The
+sweep now rebuilds the bundle after it stages the blobs, handing the staged text to
+`build-docs.mjs --overrides` so the bundle matches the commit rather than the tree, and then
+verifies with `docs:check`.
 
 A class this tool does not repair, and can only report: **line citations**. Editing a file that an
 ADR cites by `path:line` moves every symbol below the edit, and `scripts/check_docs.py` fails on a
@@ -56,6 +64,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
@@ -275,6 +284,34 @@ def content_of(path: str) -> str:
     return open(path, encoding="utf-8").read()
 
 
+def build_docs(overrides: dict[str, str], check: bool = False):
+    """Build (or check) the published-docs bundle from the sources as they will be committed.
+
+    `content/docs.generated.json` embeds the text of every doc the website publishes, and two of
+    them are blob-only: this sweep stages their new text without touching the working tree, so a
+    build that read the tree would embed the other writer's copy with the previous batch's
+    counts. Hand the staged text to `--overrides` so the bundle matches the commit instead. A key
+    the DOCS list does not name is ignored, so passing every staged path is safe.
+
+    With `check`, return the completed check process instead of raising, so the caller can report
+    it alongside the other gates.
+    """
+    tmpdir = tempfile.mkdtemp(prefix="mathua-docs-")
+    path = os.path.join(tmpdir, "overrides.json")
+    try:
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(overrides, fh)
+        cmd = ["node", "scripts/build-docs.mjs", "--overrides", path]
+        if check:
+            cmd.append("--check")
+            return subprocess.run(cmd, cwd=WEB, capture_output=True, text=True)
+        run(cmd, cwd=WEB)
+        return None
+    finally:
+        os.remove(path)
+        os.rmdir(tmpdir)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-regen", action="store_true", help="skip the regeneration chain")
@@ -313,6 +350,7 @@ def main() -> int:
         return head + body + tail, n
 
     changed = 0
+    overrides: dict[str, str] = {}
     for path, subs in grouped.items():
         text = content_of(path)
         original = text
@@ -325,6 +363,10 @@ def main() -> int:
         if path in RENDERED:
             text = counts_render(text)
         here = sum(1 for a, b in zip(original.split("\n"), text.split("\n")) if a != b)
+        if path in BLOB_ONLY:
+            # Always record the staged text, changed or not: the working-tree copy is the other
+            # writer's, so the docs bundle must read HEAD plus the substitution either way.
+            overrides[path] = text
         if text == original:
             print(f"  current  {path}")
             continue
@@ -346,6 +388,9 @@ def main() -> int:
         return 0
     print(f"\n{changed} file(s) rewritten")
 
+    print("\nrebuilding the published-docs bundle:")
+    build_docs(overrides)
+
     print("\nverifying:")
     failures = []
     for cmd in (["python3", "scripts/check_docs.py"], ["python3", "scripts/counts.py", "--check"],
@@ -355,9 +400,12 @@ def main() -> int:
         if r.returncode == 0:
             run(cmd)
             continue
-        # A blob-only file's working-tree copy is deliberately stale -- it still holds the other
-        # writer's text plus the previous batch's numbers -- so check_docs reports it until the
-        # commit lands. Those lines are expected; every other failure is not.
+        # Only check_docs.py earns the lenient path. A blob-only file's working-tree copy is
+        # deliberately stale -- it still holds the other writer's text plus the previous batch's
+        # numbers -- so check_docs reports it until the commit lands, and those lines are
+        # expected. Every other command's nonzero exit is a real failure, even when its output
+        # has no ERROR line to collect.
+        lenient = any("check_docs.py" in part for part in cmd)
         expected, real = [], []
         for line in (r.stdout + r.stderr).splitlines():
             if not line.startswith("ERROR"):
@@ -365,12 +413,23 @@ def main() -> int:
                 # only meaningful when an ERROR line is real.
                 continue
             (expected if any(path in line for path in BLOB_ONLY) else real).append(line)
+        if not lenient and not real:
+            real = (r.stdout + r.stderr).strip().splitlines()[-1:] or ["(no output)"]
         if real:
             failures.append((cmd, real))
             print(f"  $ {' '.join(cmd)}  FAILED")
         else:
             print(f"  $ {' '.join(cmd)}  ok ({len(expected)} staged-only line(s) not yet in the "
                   f"working tree)")
+    # The bundle is checked against the overrides rather than the working tree, because the
+    # published docs the sweep stages are blob-only: a plain `docs:check` would compare the
+    # bundle with the other writer's copy and fail for the wrong reason.
+    r = build_docs(overrides, check=True)
+    if r.returncode:
+        failures.append((["docs:check"], (r.stdout + r.stderr).strip().splitlines()[-2:]))
+        print("  $ docs:check  FAILED")
+    else:
+        print("  $ docs:check  ok")
     if failures:
         for cmd, lines in failures:
             sys.stderr.write(f"\n{' '.join(cmd)}:\n" + "\n".join(lines[:10]) + "\n")
