@@ -26,12 +26,13 @@ Every teaching lesson opens with a credit line naming its source, for example:
 > Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith - CC BY-NC-SA 4.0
 ```
 
-Two books accounted for every `certain` caption: **OpenStax Prealgebra** (36) and
-**OpenStax Calculus Volume 1** (36). All seventy-two have landed, as section 7 records. Both are
-CC BY-NC-SA 4.0, which permits reuse and adaptation with attribution but carries the terms on to
-the adapted work, and the attribution is already the lesson's own header line. Both headers said
-CC BY 4.0 until 2026-10-17, which dropped the NonCommercial and ShareAlike terms from the record;
-`THIRD_PARTY_NOTICES.md` now quotes what each book's own panel says.
+Three books account for every `certain` caption: **OpenStax Prealgebra** (36), **OpenStax Calculus
+Volume 1** (36) and, since 2026-10-17, **OpenStax Precalculus 2e** (49). The first seventy-two have
+landed, as section 7 records. All three are CC BY-NC-SA 4.0, which permits reuse and adaptation with
+attribution but carries the terms on to the adapted work, and the attribution is already the lesson's
+own header line. The first two headers said CC BY 4.0 until 2026-10-17, which dropped the
+NonCommercial and ShareAlike terms from the record; `THIRD_PARTY_NOTICES.md` now quotes what each
+book's own panel says.
 
 That changes what "a direct look-alike" means for these figures. Their *drawing* is upstream's, not
 Mathua's: they are fetched rather than redrawn, so the line work, the labels and the layout are
@@ -64,19 +65,19 @@ These 49 are work rather than a judgement, because a caption the lesson's prose 
 one that section 4 assigns a disposition to and section 6 lists, and every such caption before them
 was reclaimed rather than left standing. Both lessons cite figures by number throughout, and
 `scripts/prune_orphan_captions.py` keeps a caption in a lesson that cites a figure, so pruning them
-is closed off as well. What they need first is the disposition step section 4 describes: open the
+is closed off as well. What they needed first was the disposition step section 4 describes: open the
 upstream section and read the figure's `alt` text, because the caption is the wrong text to classify
-from — that is the correction the first fetch batch forced, and section 6 records why the
-classification is not done yet.
+from — that is the correction the first fetch batch forced. That step is done. Section 6 lists all
+forty-nine, and forty-seven of them are redraws.
 
 ## 4. Dispositions
 
 | Disposition | Figures | Action |
 | --- | --- | --- |
-| schematic, redraw | 0 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
-| illustration, fetch | 0 | Empty since 2026-10-16, in three batches. Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY-NC-SA 4.0 and the credit line is already in the lesson header. |
+| schematic, redraw | 47 | Draw in the Algebrica cool dialect from section 4 of the style doc. Graphs, number lines, regions and solids are fully determined by their captions, so no upstream fetch is needed and the result is Mathua's own work. |
+| illustration, fetch | 1 | Fetch the OpenStax original into `web/next-app/public/diagrams/<book>/` and put it on the dialect's greys. The license is CC BY-NC-SA 4.0 and the credit line is already in the lesson header. |
 | unidentified | 0 | Empty since 2026-10-16: every bare caption was classified by opening its upstream section and looking at the image, and each of the seventeen is a `schematic, redraw` or an `illustration, fetch` now. |
-| photo, third-party credit | 0 | Empty since 2026-10-16: all five were fetched, each under the credit line its caption already carries. The caption names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar), and a photograph cannot be redrawn as a line figure, so a replacement was never the alternative. |
+| photo, third-party credit | 1 | Fetch under the credit line the caption already carries, which names a photographer or agency (`credit: modification of work by Steve Jurvetson, Wikimedia Commons` and similar); a photograph cannot be redrawn as a line figure, so a replacement was never the alternative. The five rows it held were fetched by 2026-10-16, and section 6 records the open question that keeps the new row unlanded. |
 
 **One correction the first batch forced.** Figures 1.7, 1.8 and 1.9 were assigned
 `illustration, fetch` when this table was drawn, because the assignment read the caption and
@@ -223,24 +224,102 @@ restored their figure captions as well, which is the 49 `certain` rows section 3
 
 ## 6. The figures
 
-**The table is empty again, and 49 rows are waiting for it.** It held one row per figure with a
-disposition — the `schematic, redraw`, `illustration, fetch`, `unidentified` and `photo,
-third-party credit` captions section 4 defines — and every row that was in it has landed, so each
-now lives in section 7's record of its batch instead. `Lessons` was how many concept lessons carried
-the caption, because one figure is restored once and every lesson that cites it gains the image; the
-caption was the text as repaired in section 5, truncated, so it is what the figure carries now.
+**The table holds forty-nine rows, and they are the ones the 2026-10-17 re-ingest restored.** It has
+one row per figure with a disposition — the `schematic, redraw`, `illustration, fetch`,
+`unidentified` and `photo, third-party credit` captions section 4 defines — and every row that stood
+in it before had landed, so each of those now lives in section 7's record of its batch instead.
+`Lessons` is how many concept lessons carry the caption, because one figure is restored once and
+every lesson that cites it gains the image; the caption is the text as repaired in section 5,
+truncated, so it is what the figure carries now.
 
-The 49 `certain` rows section 3 records have no row here yet, and they are what this section is for:
-they are captions the document says must be restored. Giving each its disposition is the step
-pending, and it has to come from upstream — open the section and read the figure's `alt` text, which
-is reliable where the caption is not, because a caption can be a bare label (`Figure 5`) or carry a
-credit instead of a description. Section 1's other rows are not listed here because no disposition
-was ever assigned to them either: a `strong` or `likely` candidate is judged one instance at a time —
-matched to an asset that already exists, or removed — and that measurement belongs to
-`scripts/audit_lesson_media.py`.
+The forty-nine are the `certain` rows section 3 records: the captions the Precalculus 2e re-ingest
+restored, twenty-five in §6.1 Graphs of the Sine and Cosine Functions and twenty-four in §5.1 Angles.
+Each disposition was assigned from upstream rather than from the caption, which is the correction
+section 4 records: both sections were opened and every figure's `alt` attribute read in full, and the
+five whose alt named a photograph or an illustration rather than a graph — the rainbow, the lifted
+circle, the spring, the sprinkler and the water wheel — were downloaded and looked at. Section 1's
+other rows are not listed here because no disposition was ever assigned to them either: a `strong` or
+`likely` candidate is judged one instance at a time — matched to an asset that already exists, or
+removed — and that measurement belongs to `scripts/audit_lesson_media.py`.
+
+**The Figure column repeats itself because the book does.** Precalculus 2e's web pages number figures
+per section, so both §6.1 and §5.1 open at `Figure 1`, and the caption text the corpus carries uses
+the same page-local label. In print the book numbers them per chapter (`Figure 6.1`, `Figure 5.1`),
+which is the form to give a reader who wants the upstream image.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
+| Figure 1 | Light can be separated into colors because of its wavelike properties. (credit: "wonderferret"/ Flickr) | Precalculus 2e | §6.1 | 1 | photo, third-party credit |
+| Figure 2 | The sine function | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 3 | Plotting values of the sine function | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 4 | The cosine function | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 5 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 6 | Odd symmetry of the sine function | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 7 | Even symmetry of the cosine function | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 8 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 9 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 10 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 11 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 12 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 13 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 14 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 15 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 16 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 17 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 18 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 19 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 20 | A horizontally compressed, vertically stretched, and horizontally… | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 21 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 22 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 23 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 24 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 25 | (none) | Precalculus 2e | §6.1 | 1 | schematic, redraw |
+| Figure 1 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 2 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 3 | Angle theta, shown as ∠θ | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 4 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 5 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 6 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 7 | Quadrantal angles are angles in standard position whose terminal… | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 8 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 9 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 10 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 11 | The angle t sweeps out a measure of one radian. Note that the… | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 12 | (a) In an angle of 1 radian, the arc length s equals the radius… | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 13 | A 45° angle contains one-eighth of the circumference of a circle… | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 14 | Commonly encountered angles measured in degrees | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 15 | Commonly encountered angles measured in radians | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 16 | An angle of 140° and an angle of –220° are coterminal angles. | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 17 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 18 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 19 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 20 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 21 | (none) | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 22 | The area of the sector equals half the square of the radius times… | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 23 | The sprinkler sprays 20 ft within an arc of 30°. | Precalculus 2e | §5.1 | 1 | schematic, redraw |
+| Figure 24 | (none) | Precalculus 2e | §5.1 | 1 | illustration, fetch |
+
+**The tally is forty-seven redraws, one fetch and one third-party photograph, and no `unidentified`
+row.** Three of the calls are worth recording, because a later reader will meet them again:
+
+* **§5.1 Figure 24, the water wheel, is `illustration, fetch`** even though it is a drawing and not a
+  photograph, because its content is a specific object rather than a relation: the prose calls it *the
+  design of the 3rd century Roman water wheel in Hierapolis*, which the caption does not describe and
+  a redraw would have to invent. Section 4's line is that a redraw needs content fully determined by
+  its caption, and this one is not determined by anything but the picture.
+* **§6.1 Figure 25, the spring, is `schematic, redraw`** for the reason the water wheel is not: the
+  render is shaded and pictorial, but what it carries is one measured length, `y`, and the exercise
+  states the setup in prose — a weight on a spring hung from a board. A coil between two boards with a
+  dimension arrow is the entire content.
+* **§6.1 Figure 1 is the only `photo, third-party credit`**, and its caption already carries
+  `(credit: "wonderferret"/ Flickr)`. Where that credit renders is not settled: the decision of
+  2026-10-17 is that attribution for a third-party photograph does not sit on the lesson page until
+  the placement question is answered. The row is fetch-ready and placement-blocked, and it blocks
+  nothing else.
+
+Section 8's order applies to what is left as it did to the last four batches: the forty-seven
+schematics are one batch and come first, the water wheel is a fetch, and the photograph waits on the
+open question.
 
 ## 7. Progress
 
@@ -1321,10 +1400,10 @@ caption is a credit and nothing else.
 
 **That empties the `certain` tier, and with it sections 3 and 6.** The audit's report named no
 certain tier at all through that day: the 104 rows that remained were 33 `strong` and 71 `likely`, and
-nothing else. The table in section 6 is empty because a disposition was only ever assigned to a
-certain caption, and section 3 is the record of a tier that is gone rather than a count of work left.
-What remains is a different kind of task — a `strong` or `likely` candidate is matched to an asset
-that already exists or removed — and it is measured rather than planned here.
+nothing else. The table in section 6 was empty that day, because a disposition was only ever
+assigned to a certain caption, and section 3 recorded a tier that was gone rather than a count of
+work left. What remained was a different kind of task — a `strong` or `likely` candidate is matched
+to an asset that already exists or removed — and it is measured rather than planned here.
 
 The two captions held 5 rows across five lessons: the report went from 109 to 104, the certain tier
 from 5 to 0, and the audit's shipped and referenced counts from 690 to 692 and 384 to 386. All five
@@ -1333,9 +1412,10 @@ lessons lose their last orphan, so the lesson count drops from 49 to 44, and the
 
 **The ceiling's first bucket is empty too.** The comment above `TestOrphanCaptionsDoNotGrow` used to
 give three reasons for keeping an orphan, and the first was that the lesson's prose cites the figure,
-by number or by position. No row is kept for that reason now, because every caption a lesson cites by
-number is a caption with an auto-numbered label and those have all landed, so the 104 split as 74 (no
-picture vocabulary) and 30 (bare section labels).
+by number or by position. No row was kept for that reason in the 104, because every caption a lesson
+cites by number is a caption with an auto-numbered label and those had all landed, so the 104 split
+as 74 (no picture vocabulary) and 30 (bare section labels). The bucket filled again on 2026-10-17
+with the 49 rows section 3 records, and the comment now carries them as its first bullet.
 
 **The Precalculus 2e trigonometry re-ingest, 2026-10-17.** `trig.period` and `trig.radians` are the
 only two lessons the retired hand-rolled converter produced, and it dropped their figure captions
@@ -1346,22 +1426,29 @@ follows, to 153. That is the one movement of that ceiling which is up rather tha
 reason is a content decision rather than an ingestion accident: the record in section 5 says why the
 sections were replaced rather than repaired, and section 3 says why their captions are work and not a
 judgement. The row count also rises because the two lessons are longer than the mangled pair, so
-`docs/lesson-media.md`'s per-lesson line numbers and its lesson count move with it.
+`docs/lesson-media.md`'s per-lesson line numbers and its lesson count move with it. Section 6 assigns
+each of the forty-nine its disposition: forty-seven are `schematic, redraw`, the water wheel is
+`illustration, fetch`, and the chapter's rainbow photograph is the one `photo, third-party credit`,
+which waits on where a credit line renders rather than on the fetch.
 
 ## 8. Order of work
 
-**Every item below is done as of 2026-10-16**, and the list stays because it is the order a future
-figure follows. It is three tiers now rather than four: the `unidentified` tier used to lead here as
-its own step, and section 4 records that it was emptied on 2026-10-16, so those seventeen figures sit
-inside items 1 and 2 by their new dispositions.
+**Every item below was done as of 2026-10-16 and is owed again since 2026-10-17**, and the list stays
+because it is the order the 49 rows section 3 records will follow, in the same sequence the four
+earlier batches took. It is three tiers now rather than four: the `unidentified` tier used to lead
+here as its own step, and section 4 records that it was emptied on 2026-10-16, so those seventeen
+figures sit inside items 1 and 2 by their new dispositions.
 
 1. **The schematics.** Highest value and no license question: they are redrawn as Mathua's own
-   work, in the dialect the style doc fixes, and they land under `source: local`.
-2. **The illustrations.** Fetch, put on the dialect's greys (section 2) and credit.
+   work, in the dialect the style doc fixes, and they land under `source: local`. This is forty-seven
+   of the forty-nine.
+2. **The illustrations.** Fetch, put on the dialect's greys (section 2) and credit. This is the §5.1
+   water wheel.
 3. **The photos.** Decide per figure between a licensed fetch and a replacement, because a
-   photograph cannot be redrawn as a line figure. All five were fetched, which section 7 records, so
-   a licensed fetch was both possible and faithful every time; the credit line the caption already
-   carries is what made the decision easy.
+   photograph cannot be redrawn as a line figure. All five of the last batch were fetched, which
+   section 7 records, so a licensed fetch was both possible and faithful every time; the credit line
+   the caption already carries is what made the decision easy. The one waiting now, §6.1's rainbow,
+   is blocked on where that line renders rather than on the fetch.
 
 Each figure is wired by the paths in section 5 of `docs/diagram-style.md`, and the published
 `web/next-app/public/diagrams/meta.json` copy is refreshed before the change is called done.

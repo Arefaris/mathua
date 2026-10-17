@@ -418,6 +418,81 @@ def check_media_candidates(rep: Report) -> None:
                       "nothing")
 
 
+def check_figure_dispositions(rep: Report) -> None:
+    """Sections 4 and 6 of the figure plan must count the same rows, and the audit the same total.
+
+    `docs/figure-reclaim.md` section 6 holds one row per pending figure with the disposition that
+    section 4 defines, and section 4's table counts those rows by disposition. The counts have
+    drifted before: the first fetch batch landed while section 4 read 43 redraw and 37 fetch and the
+    rows below it said 53 and 44, and a reader planning work off the table was reading a plan that
+    had already been executed.
+
+    The number of rows is owned by the corpus, because `scripts/audit_lesson_media.py` decides which
+    paragraphs are orphaned captions, so it is read from there rather than pinned here. The
+    dispositions stay the document's decision: this compares the three counts it can see, and fails
+    on any disagreement, including a table that has gone empty without saying so.
+    """
+    doc = "docs/figure-reclaim.md"
+    path = ROOT / doc
+    if not path.is_file():
+        rep.error(doc, "figure-dispositions", "the figure plan no longer exists")
+        return
+    lines = path.read_text(encoding="utf-8").split("\n")
+
+    header = "| Figure | Caption (repaired) | Book | Section | Lessons | Disposition |"
+    start = next((i for i, l in enumerate(lines) if l.strip() == header), -1)
+    if start < 0:
+        rep.error(doc, "figure-dispositions",
+                  "section 6's table is gone; a check that reads nothing reports nothing")
+        return
+    pending: dict[str, int] = {}
+    for i in range(start + 2, len(lines)):
+        if not lines[i].startswith("|"):
+            break
+        cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+        if len(cells) != 6:
+            rep.error(f"{doc}:{i + 1}", "figure-dispositions",
+                      f"a row has {len(cells)} cells, not the 6 the header names")
+            continue
+        pending[cells[-1]] = pending.get(cells[-1], 0) + 1
+
+    counted: dict[str, int] = {}
+    section = next((i for i, l in enumerate(lines) if l.startswith("## 4. ")), -1)
+    if section < 0:
+        rep.error(doc, "figure-dispositions", "section 4 is gone, so there are no counts to read")
+        return
+    for i in range(section, len(lines)):
+        if lines[i].startswith("## 5. "):
+            break
+        m = re.match(r"^\|\s*([a-z][a-z, \-]*?)\s*\|\s*(\d+)\s*\|", lines[i])
+        if m and m.group(1) != "Disposition":
+            counted[m.group(1)] = int(m.group(2))
+    if not counted:
+        rep.error(doc, "figure-dispositions",
+                  "section 4's table has no rows; a check that reads nothing reports nothing")
+        return
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import audit_lesson_media as media
+
+    certain = sum(1 for row in media.section_a_candidates() if row["confidence"] == "certain")
+    total = sum(pending.values())
+    if total != certain:
+        rep.error(f"{doc}:{start + 1}", "figure-dispositions",
+                  f"section 6 lists {total} rows and the audit rates {certain} certain captions")
+    for name, n in sorted(pending.items()):
+        if name not in counted:
+            rep.error(f"{doc}:{start + 1}", "figure-dispositions",
+                      f"section 6 uses the disposition {name!r}, which section 4 does not define")
+        elif counted[name] != n:
+            rep.error(f"{doc}:{start + 1}", "figure-dispositions",
+                      f"section 4 counts {counted[name]} {name} and section 6 has {n} such rows")
+    for name, n in sorted(counted.items()):
+        if n and not pending.get(name):
+            rep.error(f"{doc}:{start + 1}", "figure-dispositions",
+                      f"section 4 counts {n} {name} and section 6 has no such row")
+
+
 def check_target_table(rep: Report) -> None:
     """Section 5.5's target table must agree with the corpus, and its columns must add up.
 
@@ -1093,6 +1168,7 @@ def main() -> int:
     check_corpus_figures(rep)
     check_course_reach(rep)
     check_media_candidates(rep)
+    check_figure_dispositions(rep)
     check_target_table(rep)
     check_adr_refs(rep)
     check_links(rep)
@@ -1118,7 +1194,8 @@ def main() -> int:
               file=sys.stderr)
         return 1
     print("OK: docs agree with the code and the corpus "
-          "(XP gate, KP rule, corpus counts, course reach, media candidates, target table, "
+          "(XP gate, KP rule, corpus counts, course reach, media candidates, figure "
+          "dispositions, target table, "
           "ADR refs, links, spelling, tables, "
           "roles, daily goal, removed XP terms, grading timeout, diagnostic bounds, "
           "citations, stub claims, route counts, toolchain, SM-2 intervals, "
