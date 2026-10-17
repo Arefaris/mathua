@@ -5,8 +5,8 @@ a report, because the remaining decisions are per instance.
 
 ## A. Orphan caption candidates
 
-104 paragraphs across 44 lessons look like a figure caption whose image
-was dropped while its text was kept: **33 strong**, **71 likely**.
+153 paragraphs across 46 lessons look like a figure caption whose image
+was dropped while its text was kept: **49 certain**, **33 strong**, **71 likely**.
 
 `certain` opens with an auto-numbered `Figure 3.2` / `Table 1.4` label, which PreTeXt
 generates for a figure or table and which survives ingestion — no judgement needed.
@@ -125,6 +125,55 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/stat.data.range.md` | 119 | likely | *Share of all income held by the top 1%, United States, 20002021* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/stat.data.read_table.md` | 13 | likely | *Share of all income held by the top 1% of wage earners* | teaching corpus: standalone emphasis is the dropped-figure shape |
 | `teaching/stat.data.read_table.md` | 119 | likely | *Share of all income held by the top 1%, United States, 20002021* | teaching corpus: standalone emphasis is the dropped-figure shape |
+| `teaching/trig.period.md` | 12 | certain | *Figure 1 Light can be separated into colors because of its wavelike properties. (credit: "won...* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 31 | certain | *Figure 2 The sine function* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 35 | certain | *Figure 3 Plotting values of the sine function* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 48 | certain | *Figure 4 The cosine function* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 54 | certain | *Figure 5* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 58 | certain | *Figure 6 Odd symmetry of the sine function* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 62 | certain | *Figure 7 Even symmetry of the cosine function* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 91 | certain | *Figure 8* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 144 | certain | *Figure 9* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 176 | certain | *Figure 10* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 196 | certain | *Figure 11* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 200 | certain | *Figure 12* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 204 | certain | *Figure 13* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 287 | certain | *Figure 14* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 299 | certain | *Figure 15* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 330 | certain | *Figure 16* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 338 | certain | *Figure 17* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 373 | certain | *Figure 18* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 428 | certain | *Figure 19* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 472 | certain | *Figure 20 A horizontally compressed, vertically stretched, and horizontally shifted sinusoid* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 502 | certain | *Figure 21* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 518 | certain | *Figure 22* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 534 | certain | *Figure 23* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 540 | certain | *Figure 24* | auto-numbered figure/table label |
+| `teaching/trig.period.md` | 556 | certain | *Figure 25* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 21 | certain | *Figure 1* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 25 | certain | *Figure 2* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 36 | certain | *Figure 3 Angle theta, shown as $\angle\theta$* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 40 | certain | *Figure 4* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 46 | certain | *Figure 5* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 52 | certain | *Figure 6* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 56 | certain | *Figure 7 Quadrantal angles are angles in standard position whose terminal side lies along an ...* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 92 | certain | *Figure 8* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 107 | certain | *Figure 9* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 119 | certain | *Figure 10* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 136 | certain | *Figure 11 The angle $t$ sweeps out a measure of one radian. Note that the length of the inter...* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 153 | certain | *Figure 12 (a) In an angle of 1 radian, the arc length $s$ equals the radius $r.$ (b) An angle...* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 157 | certain | *Figure 13 A 45° angle contains one-eighth of the circumference of a circle, regardless of the...* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 200 | certain | *Figure 14 Commonly encountered angles measured in degrees* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 204 | certain | *Figure 15 Commonly encountered angles measured in radians* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 353 | certain | *Figure 16 An angle of 140° and an angle of –220° are coterminal angles.* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 359 | certain | *Figure 17* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 387 | certain | *Figure 18* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 419 | certain | *Figure 19* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 465 | certain | *Figure 20* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 483 | certain | *Figure 21* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 555 | certain | *Figure 22 The area of the sector equals half the square of the radius times the central angle...* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 570 | certain | *Figure 23 The sprinkler sprays 20 ft within an arc of 30°.* | auto-numbered figure/table label |
+| `teaching/trig.radians.md` | 672 | certain | *Figure 24* | auto-numbered figure/table label |
 
 ## B. Prose that promises a figure
 
@@ -163,7 +212,7 @@ so the tiers below do not treat it as evidence either way.
 | `teaching/ratio.ops.proportion.md` | 120 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168469699712" data-label="" data-summary="The figure shows the steps to finding the cross products of the proportion 17.5 is to 37.5 as 7 is to 15. T |
 | `teaching/ratio.ops.scale.md` | 96 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168468703669" data-label="" data-summary="The figure shows the steps to finding the cross products of the proportion 4 is to 9 as 12 is to 28. The cr |
 | `teaching/ratio.ops.scale.md` | 120 | The figure shows | <table class="unnumbered unstyled" data-id="eip-id1168469699712" data-label="" data-summary="The figure shows the steps to finding the cross products of the proportion 17.5 is to 37.5 as 7 is to 15. T |
-| `teaching/trig.radians.md` | 505 | The image below | Water wheels have been used for thousands of years to transfer the power of flowing water to other devices. The image below depicts the design of the the 3rd century Roman water wheel in Hierapolis, a |
+| `teaching/trig.radians.md` | 664 | The image below | Water wheels have been used for thousands of years to transfer the power of flowing water to other devices. The image below depicts the design of the the 3rd century Roman water wheel in Hierapolis, a |
 
 ## C. Shipped but unreferenced
 
@@ -246,7 +295,27 @@ figure already on disk could be dropped in without authoring anything.
 | `algebrica/vectors-and-matrices/determinant-of-a-square-matrix.md` | no | — | `chi-square-distribution-1.svg`, `chi-square-distribution-2.svg`, `completing-the-square-1.svg` |
 | `algebrica/vectors-and-matrices/inverse-matrix.md` | no | — | `derivative-of-the-inverse-function-1.svg`, `inverse-function-1.svg` |
 | `authored/calc.integral.applied.md` | no | — | `integral-test-for-series-convergence-1.svg` |
+| `authored/calc.integral.average_value.md` | no | — | `integral-test-for-series-convergence-1.svg` |
+| `authored/calc.integral.cross_section_volume.md` | no | — | `integral-test-for-series-convergence-1.svg` |
+| `authored/calc.integral.mass_density.md` | no | — | `integral-test-for-series-convergence-1.svg` |
+| `authored/calc.integral.substitution_value.md` | no | — | `integral-test-for-series-convergence-1.svg` |
+| `authored/calc.polar.area.md` | no | — | `polar-coordinates-1.svg`, `polar-coordinates-2.svg` |
+| `authored/calc.polar.slope.md` | no | — | `polar-coordinates-1.svg`, `polar-coordinates-2.svg` |
 | `authored/calc.series.ratio.md` | no | — | `harmonic-series-1.svg`, `integral-test-for-series-convergence-1.svg` |
+| `authored/frac.mult.cancel.md` | no | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
+| `authored/frac.order.half.md` | no | — | `order-basic.svg`, `order-full.svg`, `order-nested.svg` |
+| `authored/geo.circle.chord.md` | no | — | `unit-circle-1.svg`, `unit-circle-2.svg`, `unit-circle-3.svg`, `unit-circle-4.svg` |
+| `authored/geo.circle.cyclic_quad.md` | no | — | `unit-circle-1.svg`, `unit-circle-2.svg`, `unit-circle-3.svg`, `unit-circle-4.svg` |
+| `authored/geo.circle.inscribed_angle.md` | no | — | `unit-circle-1.svg`, `unit-circle-2.svg`, `unit-circle-3.svg`, `unit-circle-4.svg` |
+| `authored/geo.circle.tangent_chord.md` | no | — | `unit-circle-1.svg`, `unit-circle-2.svg`, `unit-circle-3.svg`, `unit-circle-4.svg` |
+| `authored/geo.circle.tangent_length.md` | no | — | `unit-circle-1.svg`, `unit-circle-2.svg`, `unit-circle-3.svg`, `unit-circle-4.svg` |
+| `authored/geo.triangle.exterior_angle.md` | no | — | `right-triangle-trigonometry-1.svg`, `right-triangle-trigonometry-2.svg`, `right-triangle-trigonometry–3.svg`, `right-triangle-trigonometry–4.svg`, `right-triangle-trigonometry–5.svg` |
+| `authored/geo.triangle.inequality.md` | no | — | `right-triangle-trigonometry-1.svg`, `right-triangle-trigonometry-2.svg`, `right-triangle-trigonometry–3.svg`, `right-triangle-trigonometry–4.svg`, `right-triangle-trigonometry–5.svg` |
+| `authored/geo.triangle.isosceles.md` | no | — | `right-triangle-trigonometry-1.svg`, `right-triangle-trigonometry-2.svg`, `right-triangle-trigonometry–3.svg`, `right-triangle-trigonometry–4.svg`, `right-triangle-trigonometry–5.svg` |
+| `authored/geo.triangle.midsegment.md` | no | — | `right-triangle-trigonometry-1.svg`, `right-triangle-trigonometry-2.svg`, `right-triangle-trigonometry–3.svg`, `right-triangle-trigonometry–4.svg`, `right-triangle-trigonometry–5.svg` |
+| `authored/geo.triangle.special_right.md` | no | — | `right-triangle-trigonometry-1.svg`, `right-triangle-trigonometry-2.svg`, `right-triangle-trigonometry–3.svg`, `right-triangle-trigonometry–4.svg`, `right-triangle-trigonometry–5.svg` |
+| `authored/nt.prime.exponent.md` | no | — | `factor-prime-fact.svg`, `factor-prime.svg` |
+| `authored/nt.pythagorean.hypotenuse.md` | no | — | `pythagorean-theorem-1.svg`, `pythagorean-theorem-2.svg`, `pythagorean-theorem-3.svg` |
 | `teaching/alg.factor.diff_squares.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/alg.factor.gcf.md` | no | — | `factor-composite.svg`, `factor-find.svg`, `factor-gcf.svg`, `factor-lcm.svg`, `factor-prime-fact.svg`, `factor-prime.svg` |
 | `teaching/alg.linear.graph.md` | no | — | `linear-equations-1.svg`, `systems-of-linear-equations-in-two-variables-1.svg` |
@@ -435,5 +504,3 @@ figure already on disk could be dropped in without authoring anything.
 | `teaching/calc.integral.power_rule.md` | yes | — | `integral-test-for-series-convergence-1.svg` |
 | `teaching/calc.integral.volume.md` | yes | — | `integral-test-for-series-convergence-1.svg` |
 | `teaching/frac.mult.whole.md` | yes | — | `mult-2-5-10.svg`, `mult-concept.svg`, `mult-double.svg`, `mult-tables.svg`, `mult-triple.svg`, `mult-word.svg`, `neg-mult-div.svg` |
-
-wrote data/lessons/figure-audit.json

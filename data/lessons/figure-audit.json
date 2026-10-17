@@ -727,6 +727,349 @@
       "text": "Share of all income held by the top 1%, United States, 20002021",
       "confidence": "likely",
       "reason": "teaching corpus: standalone emphasis is the dropped-figure shape"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 12,
+      "text": "Figure 1 Light can be separated into colors because of its wavelike properties. (credit: \"wonderferret\"/ Flickr)",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 31,
+      "text": "Figure 2 The sine function",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 35,
+      "text": "Figure 3 Plotting values of the sine function",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 48,
+      "text": "Figure 4 The cosine function",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 54,
+      "text": "Figure 5",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 58,
+      "text": "Figure 6 Odd symmetry of the sine function",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 62,
+      "text": "Figure 7 Even symmetry of the cosine function",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 91,
+      "text": "Figure 8",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 144,
+      "text": "Figure 9",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 176,
+      "text": "Figure 10",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 196,
+      "text": "Figure 11",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 200,
+      "text": "Figure 12",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 204,
+      "text": "Figure 13",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 287,
+      "text": "Figure 14",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 299,
+      "text": "Figure 15",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 330,
+      "text": "Figure 16",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 338,
+      "text": "Figure 17",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 373,
+      "text": "Figure 18",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 428,
+      "text": "Figure 19",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 472,
+      "text": "Figure 20 A horizontally compressed, vertically stretched, and horizontally shifted sinusoid",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 502,
+      "text": "Figure 21",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 518,
+      "text": "Figure 22",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 534,
+      "text": "Figure 23",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 540,
+      "text": "Figure 24",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.period.md",
+      "line": 556,
+      "text": "Figure 25",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 21,
+      "text": "Figure 1",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 25,
+      "text": "Figure 2",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 36,
+      "text": "Figure 3 Angle theta, shown as $\\angle\\theta$",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 40,
+      "text": "Figure 4",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 46,
+      "text": "Figure 5",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 52,
+      "text": "Figure 6",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 56,
+      "text": "Figure 7 Quadrantal angles are angles in standard position whose terminal side lies along an axis. Examples are shown.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 92,
+      "text": "Figure 8",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 107,
+      "text": "Figure 9",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 119,
+      "text": "Figure 10",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 136,
+      "text": "Figure 11 The angle $t$ sweeps out a measure of one radian. Note that the length of the intercepted arc is the same as the length of the radius of the circle.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 153,
+      "text": "Figure 12 (a) In an angle of 1 radian, the arc length $s$ equals the radius $r.$ (b) An angle of 2 radians has an arc length $s = 2r.$ (c) A full revolution is $2\\pi$ or about 6.28 radians.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 157,
+      "text": "Figure 13 A 45\u00b0 angle contains one-eighth of the circumference of a circle, regardless of the radius.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 200,
+      "text": "Figure 14 Commonly encountered angles measured in degrees",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 204,
+      "text": "Figure 15 Commonly encountered angles measured in radians",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 353,
+      "text": "Figure 16 An angle of 140\u00b0 and an angle of \u2013220\u00b0 are coterminal angles.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 359,
+      "text": "Figure 17",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 387,
+      "text": "Figure 18",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 419,
+      "text": "Figure 19",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 465,
+      "text": "Figure 20",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 483,
+      "text": "Figure 21",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 555,
+      "text": "Figure 22 The area of the sector equals half the square of the radius times the central angle measured in radians.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 570,
+      "text": "Figure 23 The sprinkler sprays 20 ft within an arc of 30\u00b0.",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
+    },
+    {
+      "lesson": "teaching/trig.radians.md",
+      "line": 672,
+      "text": "Figure 24",
+      "confidence": "certain",
+      "reason": "auto-numbered figure/table label"
     }
   ],
   "figure_promising_prose": [
@@ -918,7 +1261,7 @@
     },
     {
       "lesson": "teaching/trig.radians.md",
-      "line": 505,
+      "line": 664,
       "phrase": "The image below",
       "context": "Water wheels have been used for thousands of years to transfer the power of flowing water to other devices. The image below depicts the design of the the 3rd century Roman water wheel in Hierapolis, a"
     }
@@ -1742,12 +2085,220 @@
         ]
       },
       {
+        "lesson": "authored/calc.integral.average_value.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/integral-test-for-series-convergence-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/calc.integral.cross_section_volume.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/integral-test-for-series-convergence-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/calc.integral.mass_density.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/integral-test-for-series-convergence-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/calc.integral.substitution_value.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/integral-test-for-series-convergence-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/calc.polar.area.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/polar-coordinates-1.svg",
+          "/diagrams/algebrica/polar-coordinates-2.svg"
+        ]
+      },
+      {
+        "lesson": "authored/calc.polar.slope.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/polar-coordinates-1.svg",
+          "/diagrams/algebrica/polar-coordinates-2.svg"
+        ]
+      },
+      {
         "lesson": "authored/calc.series.ratio.md",
         "figures_referenced": false,
         "exact_stem_match": [],
         "topic_word_match": [
           "/diagrams/algebrica/harmonic-series-1.svg",
           "/diagrams/algebrica/integral-test-for-series-convergence-1.svg"
+        ]
+      },
+      {
+        "lesson": "authored/frac.mult.cancel.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/mult-2-5-10.svg",
+          "/diagrams/arithmetic/mult-concept.svg",
+          "/diagrams/arithmetic/mult-double.svg",
+          "/diagrams/arithmetic/mult-tables.svg",
+          "/diagrams/arithmetic/mult-triple.svg",
+          "/diagrams/arithmetic/mult-word.svg",
+          "/diagrams/arithmetic/neg-mult-div.svg"
+        ]
+      },
+      {
+        "lesson": "authored/frac.order.half.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/order-basic.svg",
+          "/diagrams/arithmetic/order-full.svg",
+          "/diagrams/arithmetic/order-nested.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.circle.chord.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/unit-circle-1.svg",
+          "/diagrams/algebrica/unit-circle-2.svg",
+          "/diagrams/algebrica/unit-circle-3.svg",
+          "/diagrams/algebrica/unit-circle-4.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.circle.cyclic_quad.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/unit-circle-1.svg",
+          "/diagrams/algebrica/unit-circle-2.svg",
+          "/diagrams/algebrica/unit-circle-3.svg",
+          "/diagrams/algebrica/unit-circle-4.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.circle.inscribed_angle.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/unit-circle-1.svg",
+          "/diagrams/algebrica/unit-circle-2.svg",
+          "/diagrams/algebrica/unit-circle-3.svg",
+          "/diagrams/algebrica/unit-circle-4.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.circle.tangent_chord.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/unit-circle-1.svg",
+          "/diagrams/algebrica/unit-circle-2.svg",
+          "/diagrams/algebrica/unit-circle-3.svg",
+          "/diagrams/algebrica/unit-circle-4.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.circle.tangent_length.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/unit-circle-1.svg",
+          "/diagrams/algebrica/unit-circle-2.svg",
+          "/diagrams/algebrica/unit-circle-3.svg",
+          "/diagrams/algebrica/unit-circle-4.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.triangle.exterior_angle.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/right-triangle-trigonometry-1.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry-2.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20133.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20134.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20135.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.triangle.inequality.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/right-triangle-trigonometry-1.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry-2.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20133.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20134.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20135.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.triangle.isosceles.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/right-triangle-trigonometry-1.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry-2.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20133.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20134.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20135.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.triangle.midsegment.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/right-triangle-trigonometry-1.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry-2.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20133.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20134.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20135.svg"
+        ]
+      },
+      {
+        "lesson": "authored/geo.triangle.special_right.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/right-triangle-trigonometry-1.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry-2.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20133.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20134.svg",
+          "/diagrams/algebrica/right-triangle-trigonometry\u20135.svg"
+        ]
+      },
+      {
+        "lesson": "authored/nt.prime.exponent.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/arithmetic/factor-prime-fact.svg",
+          "/diagrams/arithmetic/factor-prime.svg"
+        ]
+      },
+      {
+        "lesson": "authored/nt.pythagorean.hypotenuse.md",
+        "figures_referenced": false,
+        "exact_stem_match": [],
+        "topic_word_match": [
+          "/diagrams/algebrica/pythagorean-theorem-1.svg",
+          "/diagrams/algebrica/pythagorean-theorem-2.svg",
+          "/diagrams/algebrica/pythagorean-theorem-3.svg"
         ]
       },
       {

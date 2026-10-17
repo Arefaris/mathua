@@ -8,12 +8,13 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 ## 1. What is missing
 
-104 paragraphs across 44 lessons read as a caption whose image was dropped: 33 `strong` and 71
-`likely`, and nothing `certain`. Every one sits
+153 paragraphs across 46 lessons read as a caption whose image was dropped: 49 `certain`, 33 `strong`
+and 71 `likely`. Every one sits
 in `data/lessons/teaching/`. The `certain` tier — the one that opened with an
 auto-numbered `Figure 3.2` label, which the PreTeXt conversion emits for a figure and keeps when it
-drops the image, so that it needed no judgement — is empty, and sections 3 and 6 record the batches
-that emptied it. What remains is counted by weaker evidence: `strong` describes a picture or
+drops the image, so that it needed no judgement — holds 49 rows again, every one of them restored by
+the Precalculus 2e re-ingest of 2026-10-17, and section 3 records that against the batches that had
+emptied it. The rest is counted by weaker evidence: `strong` describes a picture or
 is duplicated in its lesson, and `likely` is the teaching corpus, where a standalone italic paragraph
 is the ingestion pipeline's own signature.
 
@@ -45,14 +46,28 @@ fetched asset is converted at fetch time — grey, its tone stretched to the ful
 then mapped onto the greys that section 4 of `docs/diagram-style.md` fixes. The drawing survives; the
 saturated color was the only part of it that never belonged on the page.
 
-## 3. The certain tier is empty
+## 3. The certain tier was emptied, and the 2026-10-17 re-ingest put 49 rows back
 
-Every caption that opened with an auto-numbered label has landed. The tier stood at 119 rows over 49
-distinct figures when the fetch batches began, and it went 119 to 72 to 41 to 8 to 5 to 0, one batch
-at a time, which section 7 records. What is left in section 1 is the 33 `strong` and 71 `likely`
-paragraphs, which no batch has touched: they are candidates rather than figures this document says
-must be restored, and section 6's table is empty because a disposition was only ever assigned to a
-`certain` caption.
+Every caption that opened with an auto-numbered label had landed by 2026-10-16. The tier stood at
+119 rows over 49 distinct figures when the fetch batches began, and it went 119 to 72 to 41 to 8 to
+5 to 0, one batch at a time, which section 7 records.
+
+It holds 49 rows again, and they returned in one movement rather than one batch. Re-ingesting
+`trig.period` and `trig.radians` from OpenStax Precalculus 2e restored the two sections' figure
+captions along with their text: 25 in §6.1 Graphs of the Sine and Cosine Functions and 24 in §5.1
+Angles. They are all 49 of section 1's `certain` rows; the 33 `strong` and 71 `likely` rows beside
+them are the ones no batch has touched. The retired hand-rolled converter had dropped these lessons'
+captions, so the committed pair never carried them and the tier could be — and was — driven to zero
+without the loss showing.
+
+These 49 are work rather than a judgement, because a caption the lesson's prose cites by number is
+one that section 4 assigns a disposition to and section 6 lists, and every such caption before them
+was reclaimed rather than left standing. Both lessons cite figures by number throughout, and
+`scripts/prune_orphan_captions.py` keeps a caption in a lesson that cites a figure, so pruning them
+is closed off as well. What they need first is the disposition step section 4 describes: open the
+upstream section and read the figure's `alt` text, because the caption is the wrong text to classify
+from — that is the correction the first fetch batch forced, and section 6 records why the
+classification is not done yet.
 
 ## 4. Dispositions
 
@@ -178,28 +193,51 @@ as `(a)` … `(e)` on 2026-10-15. AGENTS.md section 1 records the reasoning and 
 `scripts/audit_lessons.py` enforces it; the captions in section 6 are the repaired text with that
 normalisation applied.
 
-**Not repaired, and a different fault.** `trig.period` and `trig.radians` are the only two lessons
-that came from the retired hand-rolled converter (`scripts/extract_openstax.py`), and their text is
-mangled rather than merely doubled: `_underline Send underline_ine` stands for `Sine`,
-`sin(t)= opposite hypotenuse` stands for $\sin t = \frac{\text{opposite}}{\text{hypotenuse}}$, and
-every expression appears twice. The modern pipeline renders both sections correctly, but it produces
-602 and 1071 lines against the committed 280 and 558: the committed files are curated, with back
+**Repaired on 2026-10-17, and a different fault.** `trig.period` and `trig.radians` were the only
+two lessons that came from the retired hand-rolled converter (`scripts/extract_openstax.py`), and
+their text was mangled rather than merely doubled: `_underline Send underline_ine` stood for `Sine`,
+`sin(t)= opposite hypotenuse` stood for $\sin t = \frac{\text{opposite}}{\text{hypotenuse}}$, and
+every expression appeared twice. The modern pipeline renders both sections correctly, but it produced
+844 and 1073 lines raw against the committed 279 and 557: the committed files were curated, with back
 matter stripped and the wiki-lesson fixes applied, so re-ingesting them would replace the lessons
-rather than repair them. That is a content decision and this record leaves it open.
+rather than repair them. That was a content decision, and it was taken rather than left open: the
+mangling is not mechanical, so re-authoring every expression by hand is the same work with more ways
+to be wrong, and both lessons were re-ingested instead. `trig.radians` comes from §5.1 Angles,
+unchanged. `trig.period` comes from §6.1 Graphs of the Sine and Cosine Functions, because that is the
+section carrying amplitude, period and phase shift; it had been mapped to §5.4 Right Triangle
+Trigonometry, whose lesson has none of the three, and `docs/content-expansion.md` is where the
+mapping target is recorded. Back matter was stripped at the first apparatus heading, as rule 12
+requires, and the circled part markers became `(a)` … `(e)` through the same normalisation the
+paragraph above records — this time written into the ingester, so every future run gets it.
+
+**The re-ingest found two faults in the ingester, and both are fixed.** A MathML table cell that
+pandoc renders as display math ends its row early: the cell continues on later lines as a fenced
+`math` block, whose closing line also carries the rest of the row, so the table loses its columns.
+The worse damage is a step later: the fence pass turns that block into a `$$` pair that never closes
+on a line of its own, so the display-block pass stays open past it and strips every inline `$` in the
+rest of the page. §6.1's prose after its two tables read `the range is \left\lbrack {- 1,1}
+\right\rbrack.` as literal text on that account. `fold_table_math` in
+`scripts/ingest/ingest_openstax.py` folds such a cell back into its row as inline math before either
+pass runs, and §6.1's two tables are the corpus's first exercise of it. Restoring the sections
+restored their figure captions as well, which is the 49 `certain` rows section 3 accounts for.
 
 ## 6. The figures
 
-**The table is empty.** It held one row per figure with a disposition — the `schematic, redraw`,
-`illustration, fetch`, `unidentified` and `photo, third-party credit` captions section 4 defines —
-and every row has landed, so each now lives in section 7's record of its batch instead. `Lessons` was
-how many concept lessons carried the caption, because one figure is restored once and every lesson
-that cites it gains the image; the caption was the text as repaired in section 5, truncated, so it is
-what the figure carries now.
+**The table is empty again, and 49 rows are waiting for it.** It held one row per figure with a
+disposition — the `schematic, redraw`, `illustration, fetch`, `unidentified` and `photo,
+third-party credit` captions section 4 defines — and every row that was in it has landed, so each
+now lives in section 7's record of its batch instead. `Lessons` was how many concept lessons carried
+the caption, because one figure is restored once and every lesson that cites it gains the image; the
+caption was the text as repaired in section 5, truncated, so it is what the figure carries now.
 
-An empty table is the point of it: there is no caption left that this document says must be restored.
-The 104 paragraphs of section 1 are not listed here because no disposition was ever assigned to them.
-A `strong` or `likely` candidate is judged one instance at a time — matched to an asset that already
-exists or removed — and that measurement belongs to `scripts/audit_lesson_media.py`.
+The 49 `certain` rows section 3 records have no row here yet, and they are what this section is for:
+they are captions the document says must be restored. Giving each its disposition is the step
+pending, and it has to come from upstream — open the section and read the figure's `alt` text, which
+is reliable where the caption is not, because a caption can be a bare label (`Figure 5`) or carry a
+credit instead of a description. Section 1's other rows are not listed here because no disposition
+was ever assigned to them either: a `strong` or `likely` candidate is judged one instance at a time —
+matched to an asset that already exists, or removed — and that measurement belongs to
+`scripts/audit_lesson_media.py`.
 
 | Figure | Caption (repaired) | Book | Section | Lessons | Disposition |
 | --- | --- | --- | --- | --- | --- |
@@ -1281,8 +1319,8 @@ describes its picture ("Applications of discounts are common in everyday life") 
 after it — so its alt is the caption's own words, where 6.4's is upstream's `data-alt`, because its
 caption is a credit and nothing else.
 
-**That empties the `certain` tier, and with it sections 3 and 6.** The audit's report no longer names
-a certain tier at all: 104 paragraphs across 44 lessons is now 33 `strong` and 71 `likely`, and
+**That empties the `certain` tier, and with it sections 3 and 6.** The audit's report named no
+certain tier at all through that day: the 104 rows that remained were 33 `strong` and 71 `likely`, and
 nothing else. The table in section 6 is empty because a disposition was only ever assigned to a
 certain caption, and section 3 is the record of a tier that is gone rather than a count of work left.
 What remains is a different kind of task — a `strong` or `likely` candidate is matched to an asset
@@ -1298,6 +1336,17 @@ give three reasons for keeping an orphan, and the first was that the lesson's pr
 by number or by position. No row is kept for that reason now, because every caption a lesson cites by
 number is a caption with an auto-numbered label and those have all landed, so the 104 split as 74 (no
 picture vocabulary) and 30 (bare section labels).
+
+**The Precalculus 2e trigonometry re-ingest, 2026-10-17.** `trig.period` and `trig.radians` are the
+only two lessons the retired hand-rolled converter produced, and it dropped their figure captions
+along with their images; re-ingesting both from the curated source restores both halves, so the
+captions came back with the text. The regenerated audit moved 104 rows to 153 and 0 in the certain
+tier to 49 — 25 from §6.1 and 24 from §5.1 — and the ceiling in `internal/lessons/assets_test.go`
+follows, to 153. That is the one movement of that ceiling which is up rather than down, and its
+reason is a content decision rather than an ingestion accident: the record in section 5 says why the
+sections were replaced rather than repaired, and section 3 says why their captions are work and not a
+judgement. The row count also rises because the two lessons are longer than the mangled pair, so
+`docs/lesson-media.md`'s per-lesson line numbers and its lesson count move with it.
 
 ## 8. Order of work
 

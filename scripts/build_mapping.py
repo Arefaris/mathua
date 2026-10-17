@@ -225,7 +225,11 @@ DISCRETE_MATH_SECTIONS = {
 
 OPENSTAX_PRECALC_SECTIONS = {
     "trig.radians": "5-1-angles",
-    "trig.period": "5-4-right-triangle-trigonometry",
+    # trig.graph.period is "Amplitude, period, and phase shift" and 5.4 Right
+    # Triangle Trigonometry contains neither amplitude nor phase shift (0
+    # mentions in the page against 121 in 6.1). 5.4 was a mis-mapping: the
+    # right-triangle material is trig.basics.right_triangle's, from Algebrica.
+    "trig.period": "6-1-graphs-of-the-sine-and-cosine-functions",
 }
 
 HEFFERON_LINALG_SECTIONS = {

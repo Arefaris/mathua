@@ -157,13 +157,14 @@ concepts.
 
 ### 4.4 Ingestion dropped figures and kept their captions
 
-`docs/lesson-media.md` is the owner of this measurement, and it reports 104 paragraphs across
-44 lessons that read as a caption whose image was dropped: 33 strong and 71 likely. Every `certain`
-case — one that opens with an auto-numbered `Figure 3.2` label, which the ingestion pipeline emits
-for a figure and which survives when the image does not — has been reclaimed, as
-`docs/figure-reclaim.md` records. `scripts/audit_lesson_media.py`
-regenerates the list, and the remaining work is per instance: each candidate is either matched to
-an existing asset in `data/diagrams/meta.json` or removed.
+`docs/lesson-media.md` is the owner of this measurement, and it reports 153 paragraphs across
+46 lessons that read as a caption whose image was dropped: 49 `certain`, 33 `strong` and 71 likely.
+The `certain` tier — captions that open with an auto-numbered `Figure 3.2` label, which the ingestion
+pipeline emits for a figure and which survives when the image does not — had been emptied by
+reclaiming every case, and the Precalculus 2e trigonometry re-ingest of 2026-10-17 restored 49 of
+them along with their lessons' text, as `docs/figure-reclaim.md` records.
+`scripts/audit_lesson_media.py` regenerates the list, and the remaining work is per instance: each
+candidate is either matched to an existing asset in `data/diagrams/meta.json` or removed.
 
 ### 4.5 Diagrams and solution schemas are complete against their own rules
 

@@ -469,12 +469,17 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 
 // Figure captions left behind by a dropped image may not grow.
 //
-// 139 paragraphs in the teaching corpus are a figure caption with no figure beside it: the
+// 153 paragraphs in the teaching corpus are a figure caption with no figure beside it: the
 // shape `ingest_pretext.mjs` emits for a `<figure>` when it keeps the caption and drops the
-// image. `scripts/prune_orphan_captions.py` removed the 35 that nothing refers to. The other
-// 104 are kept on purpose, and the reasons are recorded here because the number looks
+// image. `scripts/prune_orphan_captions.py` removed the 35 that nothing refers to. The 153 that
+// remain are kept on purpose, and the reasons are recorded here because the number looks
 // indefensible without them:
 //
+//	49  the lesson's prose cites the figure by number, so the caption cannot go without
+//	    leaving the prose pointing at nothing. These returned with the Precalculus 2e
+//	    re-ingest of 2026-10-17, which restored the two sections' captions along with their
+//	    text. They are work rather than a judgement: a cited caption is one to reclaim, and
+//	    `docs/figure-reclaim.md` section 3 is where they are tracked.
 //	74  no picture vocabulary, so the text could as readily be emphasis. Several are real
 //	    captions ("Share of all income held by the top 1%, United States") and the rule that
 //	    would catch them also catches content that must stay.
@@ -483,11 +488,12 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 //	    worked answers has two of them, so a tier-based rule deletes a heading from 15
 //	    geometry lessons.
 //
-// There was a third reason until 2026-10-16, and it no longer keeps any row: the lesson's prose
-// cites the figure — by number ("as shown in Figure 1.2") or by position ("the graph above
-// illustrates"), where removing the caption would leave the prose pointing at nothing. Every
-// caption a lesson cites by number is a caption with an auto-numbered label, and every one of
-// those has been reclaimed; see `docs/figure-reclaim.md`.
+// The third reason is the lesson's prose citing the figure — by number ("as shown in
+// Figure 1.2") or by position ("the graph above illustrates"), where removing the caption would
+// leave the prose pointing at nothing. It kept no row between 2026-10-16 and 2026-10-17,
+// because every caption a lesson cited by number had been reclaimed and the tier was empty; the
+// Precalculus 2e re-ingest then restored 49 such captions with the two trigonometry sections,
+// and they are the first bullet above. See `docs/figure-reclaim.md` section 3.
 //
 // The figure is not the same set of rows it was. Ninety-eight moves have changed it: reclaiming
 // Figures 1.2 and then 1.7-1.9 removed 24 rows from the first bucket, and exempting
@@ -509,12 +515,14 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 // empties the redraw tier, and ten fetched Prealgebra drawings removed 47 more, to 176, and nine
 // more fetched Prealgebra drawings removed 31 more, to 145, and twenty-five fetched Calculus
 // Volume 1 drawings removed 33 more, to 112, and three fetched Calculus photographs removed 3
-// more, to 109, and two fetched Prealgebra photographs removed 5 more, to 104. The audit's
-// tiers -- 33 `strong`, 71
-// `likely` on 2026-10-16 -- are the measurement, and this ceiling is only a ratchet on it, so it
-// moves down with each batch and never up.
+// more, to 109, and two fetched Prealgebra photographs removed 5 more, to 104. The Precalculus 2e
+// re-ingest of 2026-10-17 then restored 49 cited captions with the two trigonometry sections, to
+// 153. The audit's tiers -- 49 `certain`, 33 `strong`, 71 `likely` on 2026-10-17 -- are the
+// measurement, and this ceiling is only a ratchet on it, so it moves down with each batch. It
+// moved up once, by a deliberate re-ingest, and the sentence you are reading is the record of
+// that single movement.
 //
-// This is a ceiling on a known, explained remainder, not an assertion that 104 is correct.
+// This is a ceiling on a known, explained remainder, not an assertion that 153 is correct.
 // The audit is the tool for that judgement — see docs/lesson-media.md — and it is a report,
 // because the remaining cases are per instance.
 func TestOrphanCaptionsDoNotGrow(t *testing.T) {
@@ -522,7 +530,7 @@ func TestOrphanCaptionsDoNotGrow(t *testing.T) {
 	if _, err := os.Stat(root); err != nil {
 		t.Skipf("lesson corpus not present: %v", err)
 	}
-	const known = 104
+	const known = 153
 
 	var files, total int
 	var worst []string

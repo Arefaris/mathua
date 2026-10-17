@@ -1,29 +1,29 @@
 [
   {
-    "label": "5.4 Right Triangle Trigonometry",
-    "section": "5.4 Right Triangle Trigonometry",
+    "label": "Determining the Period of Sinusoidal Functions",
+    "section": "Determining the Period of Sinusoidal Functions",
     "subgoals": [
-      "Extend circle definitions to right-triangle ratios",
-      "Target 30, 45, 60 deg function values",
-      "Pair cofunctions of complementary angles"
+      "Read the coefficient B in y = A sin(Bx)",
+      "Divide 360 degrees by the absolute value of B",
+      "Count the x-distance from one peak to the next"
     ]
   },
   {
-    "label": "Using Right Triangles to Evaluate Trigonometric Functions",
-    "section": "Using Right Triangles to Evaluate Trigonometric Functions",
+    "label": "Determining Amplitude",
+    "section": "Determining Amplitude",
     "subgoals": [
-      "Drop a vertical from (x, y) to form the triangle",
-      "Name opposite, adjacent, hypotenuse around angle t",
-      "Read sin, cos, tan as side ratios"
+      "Read A as the factor in front of the sine or cosine",
+      "Drop the sign when A is negative",
+      "Halve the vertical distance between trough and peak"
     ]
   },
   {
-    "label": "Understanding Right Triangle Relationships",
-    "section": "Understanding Right Triangle Relationships",
+    "label": "Identifying the Phase Shift of a Function",
+    "section": "Identifying the Phase Shift of a Function",
     "subgoals": [
-      "Apply SOH-CAH-TOA to angle t",
-      "Compute sin = opposite/hypotenuse, cos = adjacent/hypotenuse",
-      "Divide opposite by adjacent for the tangent"
+      "Write the inside as Bx minus C, not as B times (x minus C)",
+      "Set Bx minus C to zero to find where one cycle starts",
+      "Shift right by C/B when C is positive"
     ]
   }
 ]
