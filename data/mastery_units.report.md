@@ -12,13 +12,13 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 811 |
+| Total concepts | 819 |
 | Total units | 95 |
 | Minimum unit size | 1 |
 | Median unit size | 5 |
 | Maximum unit size | 50 |
 | Singleton units | 19 |
-| Units with <= 3 concepts | 35 |
+| Units with <= 3 concepts | 33 |
 | Units with > 25 concepts | 6 |
 | Units with > 50 concepts | 0 |
 | Cross-unit prerequisite edges (derived) | 215 |
@@ -122,11 +122,11 @@ exists to make concrete.
 | `topology.b10` | topology | 10 | 5 | 3 | 30–32 |
 | `topology.b11` | topology | 11 | 14 | 8 | 33–35 |
 | `topology.b12` | topology | 12 | 11 | 6 | 36–38 |
-| `trigonometry.b2` | trigonometry | 2 | 2 | 1 | 7–8 |
-| `trigonometry.b3` | trigonometry | 3 | 3 | 1 | 9–11 |
+| `trigonometry.b2` | trigonometry | 2 | 4 | 1 | 7–8 |
+| `trigonometry.b3` | trigonometry | 3 | 6 | 2 | 9–11 |
 | `trigonometry.b4` | trigonometry | 4 | 9 | 4 | 12–13 |
-| `trigonometry.b7` | trigonometry | 7 | 14 | 4 | 21–23 |
-| `trigonometry.b8` | trigonometry | 8 | 4 | 2 | 24–25 |
+| `trigonometry.b7` | trigonometry | 7 | 16 | 4 | 21–23 |
+| `trigonometry.b8` | trigonometry | 8 | 5 | 2 | 24–25 |
 
 ## Backward band edges
 
@@ -141,17 +141,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 124 | 5 | 39 | 21 | 51 | 5 | 0 |
-| 3 | 95 | 5 | 50 | 19 | 35 | 6 | 0 |
-| 4 | 76 | 7 | 64 | 8 | 23 | 5 | 0 |
-| 5 | 65 | 8 | 72 | 6 | 16 | 7 | 0 |
-| 6 | 61 | 9 | 97 | 5 | 13 | 6 | 0 |
+| 2 | 124 | 5 | 39 | 21 | 49 | 5 | 0 |
+| 3 | 95 | 5 | 50 | 19 | 33 | 6 | 0 |
+| 4 | 76 | 8 | 64 | 8 | 23 | 5 | 0 |
+| 5 | 65 | 8 | 72 | 5 | 15 | 7 | 0 |
+| 6 | 61 | 10 | 97 | 5 | 13 | 6 | 0 |
 | 8 | 48 | 13 | 105 | 3 | 9 | 8 | 0 |
-| 10 | 43 | 13 | 138 | 3 | 10 | 11 | 0 |
+| 10 | 43 | 13 | 138 | 3 | 9 | 11 | 0 |
 | 12 | 42 | 15 | 124 | 2 | 6 | 9 | 0 |
-| 15 | 32 | 18 | 138 | 2 | 5 | 13 | 0 |
+| 15 | 32 | 21 | 138 | 2 | 5 | 13 | 0 |
 | 20 | 29 | 23 | 165 | 2 | 5 | 13 | 0 |
-| 45 | 17 | 39 | 165 | 0 | 0 | 17 | 0 |
+| 45 | 17 | 40 | 165 | 0 | 0 | 17 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -291,7 +291,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 811
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 819
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

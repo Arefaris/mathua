@@ -45,6 +45,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("trig.func.arccosine", &arccosineFuncGen{})
 	reg.Register("trig.func.arctangent", &arctangentFuncGen{})
 	reg.Register("trig.func.arccotangent", &arccotangentFuncGen{})
+
+	registerComputed(reg)
 }
 
 type radiansGen struct{}

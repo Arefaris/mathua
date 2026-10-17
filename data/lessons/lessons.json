@@ -3242,5 +3242,37 @@
   {
     "concept_id": "ode.pde.discriminant",
     "source": "authored/ode.pde.discriminant.md"
+  },
+  {
+    "concept_id": "trig.basics.coterminal",
+    "source": "authored/trig.basics.coterminal.md"
+  },
+  {
+    "concept_id": "trig.basics.quadrant",
+    "source": "authored/trig.basics.quadrant.md"
+  },
+  {
+    "concept_id": "trig.basics.arc_length",
+    "source": "authored/trig.basics.arc_length.md"
+  },
+  {
+    "concept_id": "trig.basics.sector_area",
+    "source": "authored/trig.basics.sector_area.md"
+  },
+  {
+    "concept_id": "trig.ident.double_angle",
+    "source": "authored/trig.ident.double_angle.md"
+  },
+  {
+    "concept_id": "trig.ident.cofunction",
+    "source": "authored/trig.ident.cofunction.md"
+  },
+  {
+    "concept_id": "trig.adv.heron_area",
+    "source": "authored/trig.adv.heron_area.md"
+  },
+  {
+    "concept_id": "trig.graph.amplitude",
+    "source": "authored/trig.graph.amplitude.md"
   }
 ]

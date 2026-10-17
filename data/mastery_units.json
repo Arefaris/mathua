@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 811,
+  "concept_count": 819,
   "unit_count": 95,
   "units": [
     {
@@ -2245,10 +2245,12 @@
         "trigonometry.basics"
       ],
       "concept_ids": [
+        "trig.basics.arc_length",
+        "trig.basics.coterminal",
         "trig.basics.radians",
         "trig.basics.unit_circle"
       ],
-      "concept_count": 2
+      "concept_count": 4
     },
     {
       "id": "trigonometry.b3",
@@ -2258,14 +2260,18 @@
       "depth_min": 9,
       "depth_max": 11,
       "subdomains": [
-        "trigonometry.basics"
+        "trigonometry.basics",
+        "trigonometry.identities"
       ],
       "concept_ids": [
+        "trig.basics.quadrant",
         "trig.basics.reference_angle",
+        "trig.basics.sector_area",
         "trig.basics.sin_cos_def",
-        "trig.basics.special_angles"
+        "trig.basics.special_angles",
+        "trig.ident.cofunction"
       ],
-      "concept_count": 3
+      "concept_count": 6
     },
     {
       "id": "trigonometry.b4",
@@ -2316,13 +2322,15 @@
         "trig.func.secant",
         "trig.func.sine",
         "trig.func.tangent",
+        "trig.graph.amplitude",
         "trig.graph.cos",
         "trig.graph.period",
         "trig.graph.sin",
+        "trig.ident.double_angle",
         "trig.ident.identities",
         "trig.ident.pythagorean"
       ],
-      "concept_count": 14
+      "concept_count": 16
     },
     {
       "id": "trigonometry.b8",
@@ -2336,12 +2344,13 @@
         "trigonometry.functions"
       ],
       "concept_ids": [
+        "trig.adv.heron_area",
         "trig.adv.law_cosines",
         "trig.func.arccosine",
         "trig.func.arccotangent",
         "trig.func.arctangent"
       ],
-      "concept_count": 4
+      "concept_count": 5
     }
   ]
 }

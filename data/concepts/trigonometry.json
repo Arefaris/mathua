@@ -465,5 +465,117 @@
       "streak": 10,
       "avg_time_seconds": 20.0
     }
+  },
+  {
+    "id": "trig.basics.coterminal",
+    "label": "Coterminal angles",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.basics",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.basics.radians"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 18
+    }
+  },
+  {
+    "id": "trig.basics.quadrant",
+    "label": "Quadrant of an angle",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.basics",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.basics.reference_angle"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 12
+    }
+  },
+  {
+    "id": "trig.basics.arc_length",
+    "label": "Arc length",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.basics",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.basics.radians"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 20
+    }
+  },
+  {
+    "id": "trig.basics.sector_area",
+    "label": "Sector area",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.basics",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.basics.arc_length"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24
+    }
+  },
+  {
+    "id": "trig.ident.double_angle",
+    "label": "The double-angle formula",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.identities",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.ident.pythagorean"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30
+    }
+  },
+  {
+    "id": "trig.ident.cofunction",
+    "label": "Cofunction identities",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.identities",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.basics.special_angles"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 15
+    }
+  },
+  {
+    "id": "trig.adv.heron_area",
+    "label": "Area from three sides",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.adv.law_cosines"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 35
+    }
+  },
+  {
+    "id": "trig.graph.amplitude",
+    "label": "Amplitude of a graph",
+    "domain": "trigonometry",
+    "subdomain": "trigonometry.graphs",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "trig.graph.sin"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 15
+    }
   }
 ]

@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 811 concepts, and there are 811 KP shard files
-holding 2433 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 819 concepts, and there are 819 KP shard files
+holding 2457 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 430 of the 811 concepts
+### 4.1 The course catalog reaches 430 of the 819 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 23 courses those closures reach
-430 of the 811 concepts: 381 of them have a node, a generator, a lesson and three KP shards and
+430 of the 819 concepts: 389 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -92,7 +92,7 @@ The count of unreachable concepts by domain:
 | number_theory | 32 | 18 |
 | differential_equations | 32 | 12 |
 | prealgebra | 46 | 23 |
-| trigonometry | 32 | 17 |
+| trigonometry | 40 | 25 |
 | arithmetic | 46 | 13 |
 | linear_algebra | 34 | 11 |
 | abstract_algebra | 32 | 11 |
@@ -325,7 +325,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 811 concepts. Reaching a thousand means adding 297, and this is the table that says
+The catalog holds 819 concepts. Reaching a thousand means adding 297, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision.
 
 | Domain | Tier | Now | Target | Add |
