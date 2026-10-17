@@ -1,4 +1,4 @@
-> Content adapted from [OpenStax Prealgebra §4.3 and §4.6](https://openstax.org/books/prealgebra/pages/4-3-multiply-and-divide-mixed-numbers-and-complex-fractions) by Marecek & Anthony-Smith — CC BY 4.0
+> Content adapted from [OpenStax Prealgebra §4.3 and §4.6](https://openstax.org/books/prealgebra/pages/4-3-multiply-and-divide-mixed-numbers-and-complex-fractions) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
 
 # Mixed Numbers in Word Problems
 

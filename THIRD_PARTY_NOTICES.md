@@ -144,10 +144,51 @@ To resolve this: record the author, source URL and licence for each print below,
 replace the set. Until one of those happens, treat every print in that directory as
 unlicensed.
 
-### OpenStax, MIT OpenCourseWare, Art of Problem Solving
+### OpenStax — CC BY-NC-SA 4.0
 
-Referenced for content design and curriculum structure. No code or content is taken
-from any of them. See the Acknowledgements section of `README.md`.
+Lesson content is adapted from three OpenStax titles. Their terms were read on each
+book's own Citation/Attribution panel and in the openstax.org page footer, on
+2026-10-17:
+
+- **Prealgebra**, by Marecek & Anthony-Smith —
+  <https://openstax.org/books/prealgebra/pages/1-introduction>
+- **Precalculus 2e**, by Abramson —
+  <https://openstax.org/books/precalculus-2e/pages/1-1-functions-and-function-notation>
+- **Calculus Volume 1**, by Strang & Herman —
+  <https://openstax.org/books/calculus-volume-1/pages/1-introduction>
+
+Every page of every title carries the same footer: "Except where otherwise noted,
+textbooks on this site are licensed under a Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 (CC BY NC-SA) license." Precalculus 2e
+names that licence in its own panel. Prealgebra's panel is headed "the Creative
+Commons Attribution License", which is the phrase the lesson headers were written
+from, but the terms it states are non-commercial reuse with a share-alike
+obligation on derivative works, and it names the book's components "CC-BY-NC-SA".
+
+The lesson corpus adapts this text, so those terms apply. Until 2026-10-17 the
+lesson headers said CC BY 4.0, which dropped both of them; they now say
+CC BY-NC-SA 4.0, and `scripts/extract_openstax.py` and
+`scripts/ingest/ingest_openstax.py` emit the corrected token. Two consequences are
+worth stating plainly, because the earlier version of this entry claimed no
+OpenStax content was taken at all:
+
+- The **NonCommercial** term reaches Mathua's own offering. Mathua's MIT licence
+  does not extend to the adapted lessons.
+- The **ShareAlike** term means an adapted lesson stays under CC BY-NC-SA 4.0
+  rather than becoming MIT, and the attribution travels with the text.
+
+Each panel also states: "This book may not be used in the training of large
+language models or otherwise be ingested into large language models or generative
+AI offerings without OpenStax's prior written permission." The ingest scripts that
+read OpenStax are still in `scripts/`, so the clause is recorded here for whoever
+runs them.
+
+### MIT OpenCourseWare and Art of Problem Solving
+
+Referenced for curriculum structure and problem quality. No content is taken from
+either. The `ocw.mit.edu` links in the corpus sit inside Algebrica's own source
+lists, not in material adapted for Mathua. See the Acknowledgements section of
+`README.md`.
 
 ### Mathematical glossary sources — consulted, original wording
 

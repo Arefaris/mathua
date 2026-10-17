@@ -1,4 +1,4 @@
-> Content adapted from [OpenStax Prealgebra §4.2](https://openstax.org/books/prealgebra/pages/4-2-multiply-and-divide-fractions) by Marecek & Anthony-Smith — CC BY 4.0
+> Content adapted from [OpenStax Prealgebra §4.2](https://openstax.org/books/prealgebra/pages/4-2-multiply-and-divide-fractions) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
 
 # Multiplying Fractions in Word Problems
 

@@ -4,6 +4,12 @@ Ingest OpenStax pages into CommonMark.
 Fetches the page, isolates the content module, unwraps presentation-only
 div/span wrappers, then delegates conversion to pandoc (whose AST carries
 math as typed nodes; its MathML->TeX reader replaces hand-rolled converters).
+
+The Prealgebra attribution reads CC BY-NC-SA 4.0, and it read CC BY 4.0 until
+2026-10-17. The book's Citation/Attribution panel states the terms as
+non-commercial reuse with a share-alike obligation on derivative works, and the
+site footer names "Attribution-NonCommercial-ShareAlike 4.0 (CC BY NC-SA)". See
+THIRD_PARTY_NOTICES.md.
 """
 import json
 import re
@@ -25,7 +31,7 @@ BOOKS = {
         "attribution": (
             "> Content sourced from [OpenStax Prealgebra]"
             "(https://openstax.org/books/prealgebra/pages/1-introduction) "
-            "by Marecek & Anthony-Smith — CC BY 4.0\n"
+            "by Marecek & Anthony-Smith — CC BY-NC-SA 4.0\n"
         ),
     },
     "openstax_calc": {

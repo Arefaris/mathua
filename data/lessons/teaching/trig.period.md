@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Precalculus 2e](https://openstax.org/books/precalculus-2e/pages/1-introduction) by Abramson — CC BY 4.0
+> Content sourced from [OpenStax Precalculus 2e](https://openstax.org/books/precalculus-2e/pages/1-introduction) by Abramson — CC BY-NC-SA 4.0
 ## 5.4 Right Triangle Trigonometry
 
 ### Learning Objectives

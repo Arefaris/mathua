@@ -1,5 +1,12 @@
 """
 Extract lesson content from OpenStax Prealgebra HTML pages.
+
+The attribution below reads CC BY-NC-SA 4.0, and it read CC BY 4.0 until
+2026-10-17. Prealgebra's own Citation/Attribution panel is headed "the Creative
+Commons Attribution License" but states the terms as non-commercial reuse with a
+share-alike obligation on derivative works, and the site footer on every page of
+the book names "Attribution-NonCommercial-ShareAlike 4.0 (CC BY NC-SA)". A header
+that says CC BY 4.0 drops both terms from the record. See THIRD_PARTY_NOTICES.md.
 """
 import json
 import re
@@ -293,7 +300,7 @@ def main():
             attribution = (
                 "> Content sourced from [OpenStax Prealgebra]"
                 "(https://openstax.org/books/prealgebra/pages/1-introduction) "
-                "by Marecek & Anthony-Smith — CC BY 4.0\n"
+                "by Marecek & Anthony-Smith — CC BY-NC-SA 4.0\n"
             )
             md = attribution + md
 
