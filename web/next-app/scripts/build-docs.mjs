@@ -34,9 +34,14 @@ const outFile = join(appRoot, 'content', 'docs.generated.json')
 
 // The docs the website publishes, and the metadata each page needs.
 //
-// This list is the boundary: a doc not named here does not reach the web. code-defects.md,
-// lesson-media.md, mastery-semantics.md and the mobile checklist stay in the repo because they
-// describe known defects, corpus audits and internal design, not the product.
+// This list is the boundary: a doc not named here does not reach the web. The docs that stay in
+// the repo are the ones a learner has no use for: the defect register (code-defects.md), the
+// corpus and content audits (content-expansion.md, figure-reclaim.md, lesson-media.md,
+// glossary-provenance.md, wasc-uc-ag-research.md), the scheduling and assessment design notes
+// (mastery-semantics.md, mastery-assessments.md), the figure and slide style notes
+// (diagram-style.md, system-design-slides.md) and the device checklist (mobile-device-checklist.md).
+// The list here was four names while eleven docs were outside it, so a reader could not tell which
+// side of the boundary the other seven were on.
 //
 // `description` is written here rather than derived, because a meta description is editorial
 // and the first sentence of an engineering doc is usually not one.
