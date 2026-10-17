@@ -7,6 +7,7 @@ import Header from '../../components/Header'
 import BottomTabs from '../../components/BottomTabs'
 import Footer from '../../components/Footer'
 import LearnStepper from '../../components/LearnStepper'
+import LessonCredits from '../../components/LessonCredits'
 import NextUpCard from '../../components/NextUpCard'
 import type { Shelf } from '../../lib/nextUp'
 import { fetchShelf } from '../../lib/recommendations'
@@ -61,6 +62,9 @@ function LearnContent() {
         <Link href="/profile" className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue">← Profile</Link>
       </div>
       <LearnStepper conceptId={concept} returnStack={returnStack} />
+      <div className="max-w-2xl mx-auto">
+        <LessonCredits conceptId={concept} />
+      </div>
     </div>
   )
 }

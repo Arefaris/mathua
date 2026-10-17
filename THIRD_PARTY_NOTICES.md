@@ -205,15 +205,19 @@ and ORCCA names and logos — "not subject to the Creative Commons license and m
 reproduced without the prior and express written consent" — which is why a credit here cites the
 site rather than the marks.
 
-**The page-view sentence is not on the pages, and this entry records the gap rather than closing
-it.** CC BY 4.0 section 3(a)(1) requires attribution *in the manner specified by the licensor*,
-and ORCCA's Licensing section is that specification, so the sentence above is a licence term and
-not a courtesy. The lesson headers carry the source, author and licence, which is a generic CC BY
-credit; they do not carry the fixed sentence, and no page renders it. Where it should render is
-the open question, because it belongs on every view of an ORCCA lesson and the same placement
-question is open for a third-party photograph's credit line, which `docs/figure-reclaim.md`
-section 6 records. Until that is answered, 47 lessons are credited in the header and not in the
-manner the book asks for.
+**The page-view sentence renders on the two surfaces that show ORCCA text.** CC BY 4.0 section
+3(a)(1) requires attribution *in the manner specified by the licensor*, and ORCCA's Licensing
+section is that specification, so the sentence above is a licence term and not a courtesy.
+`web/next-app/components/LessonCredits.tsx` renders it under the article in `/study` and under the
+step panel in `/learn` — the first shows the lesson body, the second the worked example lifted out
+of it, and both are page views of the book's content. The token that selects it comes from
+`data/lessons/mapping.json` through `scripts/merge_concepts`, so the 47 concepts with an ORCCA
+lesson carry it and a concept with no lesson carries none. `test/lessonCredits.test.tsx` asserts
+the sentence word for word, because a paraphrase would not satisfy the clause.
+
+The same per-content placement settles a third-party photograph's credit line: it sits beneath its
+figure, which is where the one fetched photograph's caption already puts it
+(`docs/figure-reclaim.md` section 6).
 
 ### MIT OpenCourseWare and Art of Problem Solving
 

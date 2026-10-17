@@ -11,6 +11,8 @@ export interface ConceptRecord {
   grading_type?: string
   prerequisites?: string[]
   mastery_threshold?: { streak: number; avg_time_seconds: number }
+  /** Set when the lesson's licence requires a fixed attribution on every page view. */
+  lesson_credit?: string
 }
 
 export const concepts = conceptsData as ConceptRecord[]

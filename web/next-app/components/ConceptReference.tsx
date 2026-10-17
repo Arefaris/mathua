@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react'
 import KatexContent from './KatexContent'
+import LessonCredits from './LessonCredits'
 import LessonDiagram from './LessonDiagram'
 import ReportMenu from './ReportMenu'
 import { getLessonBody, getLessonKPs, getLessons, type LessonKpsRes } from '../lib/api'
@@ -208,6 +209,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
           <div className="border border-mathua-border bg-mathua-code p-3 text-sm overflow-hidden">
             <KatexContent>{body}</KatexContent>
           </div>
+          <LessonCredits conceptId={conceptId} />
           <div className="mt-2 flex justify-end">
             <ReportMenu
               conceptId={conceptId}

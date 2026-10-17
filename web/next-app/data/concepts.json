@@ -466,6 +466,7 @@
     "grading_type": "numeric",
     "id": "alg.linear.slope",
     "label": "Slope of a line from two points",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -495,6 +496,7 @@
     "grading_type": "numeric",
     "id": "alg.linear.graph",
     "label": "Graph a linear equation",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 20,
       "streak": 10
@@ -509,6 +511,7 @@
     "grading_type": "multiple_choice",
     "id": "alg.linear.standard_form",
     "label": "Standard form of a linear equation Ax + By = C",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -523,6 +526,7 @@
     "grading_type": "numeric",
     "id": "alg.linear.parallel_perp",
     "label": "Parallel and perpendicular lines",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -552,6 +556,7 @@
     "grading_type": "numeric",
     "id": "alg.eq.vars_both_sides",
     "label": "Variables on both sides of an equation",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 20,
       "streak": 10
@@ -623,6 +628,7 @@
     "grading_type": "numeric",
     "id": "alg.ineq.compound",
     "label": "Compound inequalities",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 20,
       "streak": 10
@@ -637,6 +643,7 @@
     "grading_type": "multiple_choice",
     "id": "alg.ineq.two_var",
     "label": "Graph linear inequalities in two variables",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 20,
       "streak": 10
@@ -680,6 +687,7 @@
     "grading_type": "tuple",
     "id": "alg.systems.word",
     "label": "Systems of equations word problems",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 30,
       "streak": 10
@@ -722,6 +730,7 @@
     "grading_type": "polynomial",
     "id": "alg.poly.mult_mono",
     "label": "Multiply monomial by polynomial",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -765,6 +774,7 @@
     "grading_type": "expression",
     "id": "alg.factor.gcf",
     "label": "Factor out the greatest common factor",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -795,6 +805,7 @@
     "grading_type": "expression",
     "id": "alg.factor.diff_squares",
     "label": "Factor difference of two squares",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -868,6 +879,7 @@
     "grading_type": "multiple_choice",
     "id": "alg.quad.discriminant",
     "label": "Discriminant: number of real solutions",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -925,6 +937,7 @@
     "grading_type": "numeric",
     "id": "alg.func.notation",
     "label": "Function notation f(x)",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -939,6 +952,7 @@
     "grading_type": "numeric",
     "id": "alg.func.evaluate",
     "label": "Evaluate a function at a given value",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -953,6 +967,7 @@
     "grading_type": "multiple_choice",
     "id": "alg.func.linear",
     "label": "Linear functions and their graphs",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -998,6 +1013,7 @@
     "grading_type": "numeric",
     "id": "alg.exp.evaluate",
     "label": "Evaluate exponential expressions",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -1083,6 +1099,7 @@
     "grading_type": "numeric",
     "id": "alg.seq.sum_arith",
     "label": "Sum of arithmetic series",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -2146,6 +2163,7 @@
     "grading_type": "numeric",
     "id": "arith.factor.gcf",
     "label": "Greatest common factor",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -2258,6 +2276,7 @@
     "grading_type": "numeric",
     "id": "arith.sqrt.perfect",
     "label": "Square roots of perfect squares",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 10,
       "streak": 10
@@ -2287,6 +2306,7 @@
     "grading_type": "numeric",
     "id": "arith.neg.number_line",
     "label": "Negative numbers on number line",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 8,
       "streak": 10
@@ -2299,6 +2319,7 @@
     "grading_type": "numeric",
     "id": "arith.neg.add_sub",
     "label": "Add and subtract negative numbers",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -2314,6 +2335,7 @@
     "grading_type": "numeric",
     "id": "arith.neg.mult_div",
     "label": "Multiply and divide with negatives",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -2329,6 +2351,7 @@
     "grading_type": "numeric",
     "id": "arith.order_ops.basic",
     "label": "Order of operations without exponents",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -2344,6 +2367,7 @@
     "grading_type": "numeric",
     "id": "arith.order_ops.full",
     "label": "BODMAS with exponents",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -2359,6 +2383,7 @@
     "grading_type": "numeric",
     "id": "arith.order_ops.nested",
     "label": "Nested parentheses in order of operations",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -7025,6 +7050,7 @@
     "grading_type": "multiple_choice",
     "id": "geo.coord.plot",
     "label": "Plot points on the coordinate plane",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 10,
       "streak": 10
@@ -7039,6 +7065,7 @@
     "grading_type": "numeric",
     "id": "geo.coord.distance",
     "label": "Distance between two points",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -7054,6 +7081,7 @@
     "grading_type": "tuple",
     "id": "geo.coord.midpoint",
     "label": "Midpoint of a line segment",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -9160,6 +9188,7 @@
     "grading_type": "numeric",
     "id": "arith.neg.order_ops",
     "label": "Order of operations with negatives",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -9275,6 +9304,7 @@
     "grading_type": "numeric",
     "id": "arith.exp.neg",
     "label": "Negative exponents",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -9290,6 +9320,7 @@
     "grading_type": "numeric",
     "id": "arith.exp.zero",
     "label": "Zero exponent rule",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 6,
       "streak": 10
@@ -9319,6 +9350,7 @@
     "grading_type": "numeric",
     "id": "arith.sci_notation.ops",
     "label": "Operations with scientific notation",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -9333,6 +9365,7 @@
     "grading_type": "numeric",
     "id": "prealg.var.concept",
     "label": "What is a variable",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 10,
       "streak": 10
@@ -9347,6 +9380,7 @@
     "grading_type": "numeric",
     "id": "prealg.expr.evaluate",
     "label": "Evaluate expression at given value of x",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -9362,6 +9396,7 @@
     "grading_type": "polynomial",
     "id": "prealg.expr.like_terms",
     "label": "Identify and collect like terms",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -9376,6 +9411,7 @@
     "grading_type": "polynomial",
     "id": "prealg.expr.distribute",
     "label": "Distributive property",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -9390,6 +9426,7 @@
     "grading_type": "numeric",
     "id": "prealg.eq.one_step_add",
     "label": "Solve x + b = c",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -9404,6 +9441,7 @@
     "grading_type": "numeric",
     "id": "prealg.eq.one_step_mult",
     "label": "Solve ax = c",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -9418,6 +9456,7 @@
     "grading_type": "numeric",
     "id": "prealg.eq.two_step",
     "label": "Solve ax + b = c",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -9432,6 +9471,7 @@
     "grading_type": "numeric",
     "id": "prealg.eq.word",
     "label": "Write and solve equations from word problems",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 25,
       "streak": 10
@@ -9446,6 +9486,7 @@
     "grading_type": "numeric",
     "id": "prealg.ineq.one_step",
     "label": "Solve one-step inequalities",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 15,
       "streak": 10
@@ -9460,6 +9501,7 @@
     "grading_type": "numeric",
     "id": "prealg.ineq.two_step",
     "label": "Solve two-step inequalities",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 18,
       "streak": 10
@@ -10111,6 +10153,7 @@
     "grading_type": "numeric",
     "id": "stat.data.read_table",
     "label": "Read data from tables and charts",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 10,
       "streak": 10
@@ -10125,6 +10168,7 @@
     "grading_type": "multiple_choice",
     "id": "stat.data.bar_graph",
     "label": "Read and create bar graphs",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -10139,6 +10183,7 @@
     "grading_type": "numeric",
     "id": "stat.data.line_plot",
     "label": "Read and create line plots",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 12,
       "streak": 10
@@ -10182,6 +10227,7 @@
     "grading_type": "numeric",
     "id": "stat.data.mode",
     "label": "Find the mode",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 10,
       "streak": 10
@@ -10196,6 +10242,7 @@
     "grading_type": "numeric",
     "id": "stat.data.range",
     "label": "Find the range of a data set",
+    "lesson_credit": "orcca",
     "mastery_threshold": {
       "avg_time_seconds": 8,
       "streak": 10
