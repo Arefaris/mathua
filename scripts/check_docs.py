@@ -514,11 +514,6 @@ def check_thin_lessons(rep: Report) -> None:
         p = ROOT / "data/lessons" / e["source"]
         if p.is_file() and p.stat().st_size < 1024:
             thin[e["concept_id"]] = (str(p.relative_to(ROOT)), p.stat().st_size)
-    if not thin:
-        rep.error("data/lessons", "thin-lessons",
-                  "no lesson is under 1 KB; the table cannot be checked against an empty set")
-        return
-
     lines = path.read_text(encoding="utf-8").split("\n")
     start = next((i for i, l in enumerate(lines) if l.startswith("### 4.3 ")), -1)
     end = next((i for i in range(start + 1, len(lines)) if lines[i].startswith("### ")), len(lines))
@@ -544,10 +539,16 @@ def check_thin_lessons(rep: Report) -> None:
             if m.group(2) != path_now:
                 rep.error(f"{doc}:{i + 1}", "thin-lessons",
                           f"{m.group(1)} lives at {path_now} and the table says {m.group(2)}")
-    if not listed:
-        rep.error(doc, "thin-lessons", "the table has no rows; a check that reads nothing reports nothing")
+    if not thin:
+        # The corpus has no lesson under the threshold. That is the finished state, so the section
+        # has to say it and list nothing; a row here would be a stale claim about a lesson that grew.
+        zero = re.compile(r"no lessons? (?:is|are) under 1 KB")
+        if not any(zero.search(l) for l in lines[start:end]):
+            rep.error(doc, "thin-lessons",
+                      "no lesson is under 1 KB and section 4.3 does not say so")
         return
-
+    # Name every thin lesson the table misses. This is also the guard against a parse that found no
+    # rows at all: a parser failure then reports one error per lesson instead of passing silently.
     for cid in sorted(thin):
         if cid not in listed:
             rep.error(doc, "thin-lessons",

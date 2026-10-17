@@ -1,29 +1,29 @@
 [
   {
-    "label": "Ratio test statement",
-    "section": "Ratio test",
+    "label": "The ratio test",
+    "section": "The test",
     "subgoals": [
-      "Compute L = lim |a(n+1)/a(n)|",
-      "Read L < 1 as convergence",
-      "Read L > 1 as divergence"
+      "Form the ratio of consecutive terms",
+      "Take its limit and read L<1, L>1 or L=1",
+      "See why L<1 compares to a geometric series"
     ]
   },
   {
-    "label": "Factorial showcase",
-    "section": "Ratio test",
+    "label": "Worked examples",
+    "section": "Worked examples",
     "subgoals": [
-      "Simplify 1/(n+1) ratio to 0",
-      "Conclude ∑1/n! converges",
-      "Check n!/n^n gives 1/e"
+      "Cancel factorials and powers before limiting",
+      "Recognise the (1+1/n)^n limit as e",
+      "Watch the same terms diverge when the fraction inverts"
     ]
   },
   {
-    "label": "Inconclusive case",
-    "section": "Ratio test",
+    "label": "When it is inconclusive",
+    "section": "When it is inconclusive",
     "subgoals": [
-      "Recognize L = 1 dead end",
-      "Switch to comparison or integral",
-      "Note p-series always give L = 1"
+      "See why every p-series gives L=1",
+      "Reach for the root test when powers dominate",
+      "Know which comparisons no ratio can settle"
     ]
   }
 ]

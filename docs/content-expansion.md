@@ -137,31 +137,30 @@ is the four files it touched: `data/concepts/topology.json`,
 `internal/generator/topology/generators.go`, `internal/generator/topology/generators_test.go` and
 the schema.
 
-### 4.3 Lesson depth is thin at the bottom
+### 4.3 Lesson depth is no longer thin at the bottom
 
 Lessons come from three places. The `teaching/` tree holds 329 mappings, the Algebrica import
-holds 328, and 170 are authored. The median lesson is 5,901 bytes, and six lessons are under 1 KB:
+holds 328, and 170 are authored. The median lesson is 5,901 bytes, and no lesson is under 1 KB: the
+last six were filled on 2026-10-17.
 
-| Concept | Lesson | Bytes |
-|---|---|---|
-| `calc.series.ratio_test` | `data/lessons/authored/calc.series.ratio.md` | 671 |
-| `abstract.group.order` | `data/lessons/teaching/abstract.group.order.md` | 960 |
-| `discrete.combinatorics.surjections` | `data/lessons/authored/discrete.combinatorics.surjections.md` | 987 |
-| `precalc.func.inverse_value` | `data/lessons/authored/precalc.func.inverse_value.md` | 1006 |
-| `calc.vec.divergence` | `data/lessons/authored/calc.vec.divergence.md` | 1011 |
-| `linalg.decomp.lu` | `data/lessons/teaching/linalg.lu.md` | 1018 |
+Those six were `calc.series.ratio_test` (671 bytes), `abstract.group.order` (960), `linalg.decomp.lu`
+(1018), `discrete.combinatorics.surjections` (987), `precalc.func.inverse_value` (1,006) and
+`calc.vec.divergence` (1,011), and they are between 3.4 and 5.5 KB now. The first four of the
+`number_theory` batch — `nt.basics.crt`, `nt.adv.wilson`, `nt.basics.bezout` and
+`nt.basics.prime_inf` — went from 853-920 bytes to 3.7-4.7 KB the same day, inside the three
+headings their knowledge-point shards already named, so no shard needed regenerating and
+`scripts/audit_lessons.py` still resolves all three per concept.
 
-**The four `number_theory` lessons in the first version of this table were filled on 2026-10-17.**
-`nt.basics.crt`, `nt.adv.wilson`, `nt.basics.bezout` and `nt.basics.prime_inf` went from 853-920
-bytes to 3.7-4.7 KB inside the three headings their knowledge-point shards already named, so no shard
-needed regenerating and `scripts/audit_lessons.py` still resolves all three per concept.
+Two things are worth keeping from how the list behaved. It grew while it shrank: three authored
+lessons written after the table was first measured were also under 1 KB, so the same measurement
+found ten thin lessons where seven had been listed. And one of the six needed more than a longer
+body: `calc.series.ratio_test` had a single `##` section with three knowledge points pointing at it,
+which is the placeholder shape section 5.3 warns about, so it was restructured into three sections
+and its shard rewritten with them.
 
-The count falls from seven to six rather than to three for a reason worth recording: three authored
-lessons written since the table was first measured are also under 1 KB, so the list gained rows while
-it lost them. The three that remain from the original seven are `calc.series.ratio_test`,
-`abstract.group.order` and `linalg.decomp.lu`. `scripts/check_docs.py` now reads this table from the
-corpus, because a hand-kept list of the corpus's own sizes is the drift this document already
-records twice.
+`scripts/check_docs.py` reads this paragraph from the corpus rather than a copy: it counts the
+lessons actually under 1 KB, compares that with the sentence here, and fails on any row that names a
+lesson which has outgrown the threshold — the drift this document has now recorded three times.
 
 ### 4.4 Ingestion dropped figures and kept their captions
 
@@ -400,10 +399,10 @@ also where the produced-answer conversions of section 5.2 get their room.
    is the target size, and the decision gates step 5.
 2. Convert one `multiple_choice` concept in an upper domain to a produced answer, as the worked
    example that proves the generator and schema path there. Done: `topo.dimension`, section 4.2.
-3. Fill the sub-1 KB lessons, regenerating each shard after its body grows. Partly done: the four
-   `number_theory` lessons were filled on 2026-10-17, and six remain — three from the original seven
-   (`calc.series.ratio_test`, `abstract.group.order`, `linalg.decomp.lu`) and three authored lessons
-   that entered the corpus after section 4.3 was measured.
+3. Fill the sub-1 KB lessons, regenerating each shard after its body grows. Done: the last ten were
+   filled on 2026-10-17, four of them `number_theory` lessons already in section 4.3's table and six
+   that the same measurement found, and no lesson is under 1 KB now. `calc.series.ratio_test` also
+   needed three sections instead of one, so its shard was rewritten with it.
 4. Reclaim the dropped figures. Done: all 102 landed on 2026-10-15 and 2026-10-16 as lesson figures
    under `web/next-app/public/diagrams/`, which need no `meta.json` entry, so the `certain` tier is
    empty and the remainder is measured by section 4.4.
