@@ -3998,5 +3998,85 @@
   {
     "concept_id": "precalc.func.decomposition",
     "source": "teaching/precalc.func.decomposition.md"
+  },
+  {
+    "concept_id": "graph.isomorphism",
+    "source": "teaching/graph.isomorphism.md"
+  },
+  {
+    "concept_id": "graph.complement",
+    "source": "teaching/graph.complement.md"
+  },
+  {
+    "concept_id": "graph.subgraph",
+    "source": "teaching/graph.subgraph.md"
+  },
+  {
+    "concept_id": "graph.homomorphism",
+    "source": "teaching/graph.homomorphism.md"
+  },
+  {
+    "concept_id": "graph.product",
+    "source": "teaching/graph.product.md"
+  },
+  {
+    "concept_id": "graph.distance",
+    "source": "teaching/graph.distance.md"
+  },
+  {
+    "concept_id": "graph.cut_vertex",
+    "source": "teaching/graph.cut_vertex.md"
+  },
+  {
+    "concept_id": "graph.bridge",
+    "source": "teaching/graph.bridge.md"
+  },
+  {
+    "concept_id": "graph.connectivity",
+    "source": "teaching/graph.connectivity.md"
+  },
+  {
+    "concept_id": "graph.menger",
+    "source": "teaching/graph.menger.md"
+  },
+  {
+    "concept_id": "graph.matching",
+    "source": "teaching/graph.matching.md"
+  },
+  {
+    "concept_id": "graph.perfect_matching",
+    "source": "teaching/graph.perfect_matching.md"
+  },
+  {
+    "concept_id": "graph.tutte",
+    "source": "teaching/graph.tutte.md"
+  },
+  {
+    "concept_id": "graph.vertex_cover",
+    "source": "teaching/graph.vertex_cover.md"
+  },
+  {
+    "concept_id": "graph.independent_set",
+    "source": "teaching/graph.independent_set.md"
+  },
+  {
+    "concept_id": "graph.chromatic_polynomial",
+    "source": "teaching/graph.chromatic_polynomial.md"
+  },
+  {
+    "concept_id": "graph.brooks",
+    "source": "teaching/graph.brooks.md"
+  },
+  {
+    "concept_id": "graph.edge_coloring",
+    "source": "teaching/graph.edge_coloring.md"
+  },
+  {
+    "concept_id": "graph.perfect_graph",
+    "source": "teaching/graph.perfect_graph.md"
+  },
+  {
+    "concept_id": "graph.list_coloring",
+    "source": "teaching/graph.list_coloring.md"
   }
 ]

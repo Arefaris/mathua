@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1000,
-  "unit_count": 98,
+  "concept_count": 1020,
+  "unit_count": 102,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -1449,6 +1449,84 @@
       ],
       "concept_ids": [
         "geo.coord.slope"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "graph_theory.b5",
+      "title": "Graph Theory · Stage 6",
+      "domain": "graph_theory",
+      "band": 5,
+      "depth_min": 17,
+      "depth_max": 17,
+      "subdomains": [
+        "graph_theory.basics"
+      ],
+      "concept_ids": [
+        "graph.complement",
+        "graph.isomorphism",
+        "graph.subgraph"
+      ],
+      "concept_count": 3
+    },
+    {
+      "id": "graph_theory.b6",
+      "title": "Graph Theory · Stage 7",
+      "domain": "graph_theory",
+      "band": 6,
+      "depth_min": 18,
+      "depth_max": 20,
+      "subdomains": [
+        "graph_theory.basics",
+        "graph_theory.connectivity"
+      ],
+      "concept_ids": [
+        "graph.bridge",
+        "graph.connectivity",
+        "graph.cut_vertex",
+        "graph.distance",
+        "graph.homomorphism",
+        "graph.menger",
+        "graph.product"
+      ],
+      "concept_count": 7
+    },
+    {
+      "id": "graph_theory.b7",
+      "title": "Graph Theory · Stage 8",
+      "domain": "graph_theory",
+      "band": 7,
+      "depth_min": 21,
+      "depth_max": 23,
+      "subdomains": [
+        "graph_theory.coloring",
+        "graph_theory.matching"
+      ],
+      "concept_ids": [
+        "graph.brooks",
+        "graph.chromatic_polynomial",
+        "graph.edge_coloring",
+        "graph.independent_set",
+        "graph.list_coloring",
+        "graph.matching",
+        "graph.perfect_graph",
+        "graph.perfect_matching",
+        "graph.vertex_cover"
+      ],
+      "concept_count": 9
+    },
+    {
+      "id": "graph_theory.b8",
+      "title": "Graph Theory · Stage 9",
+      "domain": "graph_theory",
+      "band": 8,
+      "depth_min": 24,
+      "depth_max": 24,
+      "subdomains": [
+        "graph_theory.matching"
+      ],
+      "concept_ids": [
+        "graph.tutte"
       ],
       "concept_count": 1
     },

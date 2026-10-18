@@ -20,6 +20,7 @@ const DOMAIN_COLORS = {
   differential_equations:'#fdba74',
   abstract_algebra:     '#c4b5fd',
   topology:             '#f9a8d4',
+  graph_theory:         '#a3e635',
 } satisfies Record<string, string>
 
 const DOMAIN_COLORS_LIGHT = {
@@ -40,6 +41,7 @@ const DOMAIN_COLORS_LIGHT = {
   differential_equations:'#d09050',
   abstract_algebra:     '#a090d0',
   topology:             '#d080b0',
+  graph_theory:         '#6a9a18',
 } satisfies Record<string, string>
 
 export const DOMAIN_ORDER = [
@@ -60,6 +62,7 @@ export const DOMAIN_ORDER = [
   'differential_equations',
   'abstract_algebra',
   'topology',
+  'graph_theory',
 ] as const
 
 export const DOMAIN_LABELS = {
@@ -77,9 +80,10 @@ export const DOMAIN_LABELS = {
   machine_learning: 'Machine Learning',
   discrete_math: 'Discrete Math',
   number_theory: 'Number Theory',
-  differential_equations: 'Diff. Eqs.',
+  differential_equations: 'Differential Equations',
   abstract_algebra: 'Abstract Algebra',
   topology: 'Topology',
+  graph_theory: 'Graph Theory',
 } satisfies Record<string, string>
 
 const FALLBACK_COLOR = '#5a6577'

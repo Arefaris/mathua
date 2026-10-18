@@ -24,6 +24,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/generator/discrete"
 	"github.com/chuma-beep/mathua/internal/generator/fractions"
 	"github.com/chuma-beep/mathua/internal/generator/geometry"
+	"github.com/chuma-beep/mathua/internal/generator/graphtheory"
 	"github.com/chuma-beep/mathua/internal/generator/linalg"
 	"github.com/chuma-beep/mathua/internal/generator/machinelearning"
 	"github.com/chuma-beep/mathua/internal/generator/numtheory"
@@ -57,6 +58,7 @@ func Register(reg *generator.Registry) {
 	odes.Register(reg)
 	abstract.Register(reg)
 	topology.Register(reg)
+	graphtheory.Register(reg)
 	combinatorics.Register(reg)
 }
 

@@ -181,27 +181,27 @@ def rules(f: dict) -> list:
     """
     return [
         # The published engineering docs that quote the corpus size.
-        ("docs/architecture.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
-        ("docs/system-design.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
-        ("docs/system-design.md", r"\b\d{3} KP shards\b", f"{f['concepts']} KP shards", 1),
-        ("docs/system-design-slides.md", r"\b\d{3} concepts\b", f"{f['concepts']} concepts", 1),
+        ("docs/architecture.md", r"\b\d{3,4} concepts\b", f"{f['concepts']} concepts", 1),
+        ("docs/system-design.md", r"\b\d{3,4} concepts\b", f"{f['concepts']} concepts", 1),
+        ("docs/system-design.md", r"\b\d{3,4} KP shards\b", f"{f['concepts']} KP shards", 1),
+        ("docs/system-design-slides.md", r"\b\d{3,4} concepts\b", f"{f['concepts']} concepts", 1),
         # AGENTS.md and CONTRIBUTING.md quote the shards and the knowledge points.
-        ("AGENTS.md", r"all \d{3} shards", f"all {f['kp_files']} shards", 1),
-        ("CONTRIBUTING.md", r"All \d{3} shards", f"All {f['kp_files']} shards", 1),
-        ("CONTRIBUTING.md", r"all \d{3} shard files × 3 = \d{4} KPs",
+        ("AGENTS.md", r"all \d{3,4} shards", f"all {f['kp_files']} shards", 1),
+        ("CONTRIBUTING.md", r"All \d{3,4} shards", f"All {f['kp_files']} shards", 1),
+        ("CONTRIBUTING.md", r"all \d{3,4} shard files × 3 = \d{4} KPs",
          f"all {f['kp_files']} shard files × 3 = {f['kps']} KPs", 1),
         # The mastery docs and the ADR that describe the partition.
-        ("docs/mastery-assessments.md", r"\d{2,3} units, all \d{3} concepts",
+        ("docs/mastery-assessments.md", r"\d{2,3} units, all \d{3,4} concepts",
          f"{f['units']} units, all {f['concepts']} concepts", 1),
-        ("docs/mastery-semantics.md", r"\(\d{3} concepts, all with a threshold\)",
+        ("docs/mastery-semantics.md", r"\(\d{3,4} concepts, all with a threshold\)",
          f"({f['concepts']} concepts, all with a threshold)", 1),
         ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
-         r"the authoring of \d{3} concepts", f"the authoring of {f['concepts']} concepts", 1),
+         r"the authoring of \d{3,4} concepts", f"the authoring of {f['concepts']} concepts", 1),
         ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
-         r"\*\*\d{2,3} units, all \d{3} concepts covered exactly once\*\*",
+         r"\*\*\d{2,3} units, all \d{3,4} concepts covered exactly once\*\*",
          f"**{f['units']} units, all {f['concepts']} concepts covered exactly once**", 1),
         ("docs/adr/ADR-050-a-mastery-unit-is-a-named-partition.md",
-         r"\(\d{3}/\d{3}, max \d+\)", f"({f['concepts']}/{f['concepts']}, max {f['max_depth']})", 1),
+         r"\(\d{3,4}/\d{3,4}, max \d+\)", f"({f['concepts']}/{f['concepts']}, max {f['max_depth']})", 1),
         # The course count appears in prose four times and in a table twice, across three files,
         # so it is a fact like the others -- and a stale one is invisible to check_docs, which
         # matches numbers against corpus-count nouns rather than against a word.
@@ -220,13 +220,13 @@ def rules(f: dict) -> list:
         ("docs/content-expansion.md", r"The catalog holds \d+ concepts",
          f"The catalog holds {f['concepts']} concepts", 1),
         # content-expansion.md is the owner of the reach measurement.
-        ("docs/content-expansion.md", r"There are \d{3} concepts, and there are \d{3} KP shard files",
+        ("docs/content-expansion.md", r"There are \d{3,4} concepts, and there are \d{3,4} KP shard files",
          f"There are {f['concepts']} concepts, and there are {f['kp_files']} KP shard files", 1),
         ("docs/content-expansion.md", r"holding \d{4} knowledge points",
          f"holding {f['kps']} knowledge points", 1),
-        ("docs/content-expansion.md", r"### 4.1 The course catalog reaches \d+ of the \d{3} concepts",
+        ("docs/content-expansion.md", r"### 4.1 The course catalog reaches \d+ of the \d{3,4} concepts",
          f"### 4.1 The course catalog reaches {f['reach']} of the {f['concepts']} concepts", 1),
-        ("docs/content-expansion.md", r"those closures reach\n\d+ of the \d{3} concepts: \d+ of them",
+        ("docs/content-expansion.md", r"those closures reach\n\d+ of the \d{3,4} concepts: \d+ of them",
          f"those closures reach\n{f['reach']} of the {f['concepts']} concepts: "
          f"{f['unreachable']} of them", 1),
         # Section 4.1's table has a row per domain, and every row's two numbers move when the
@@ -242,32 +242,32 @@ def rules(f: dict) -> list:
           for d in ("abstract_algebra", "topology", "differential_equations", "machine_learning",
                     "discrete_math", "number_theory", "complex_numbers")],
         # The two Go tests that pin a size rather than reading it. The patterns name each site,
-        # because a bare \d{3} also matches the `064` in this file's temp-file mode.
-        ("internal/concepts/concepts_test.go", r"if d\.Count\(\) != \d{3} \{",
+        # because a bare \d{3,4} also matches the `064` in this file's temp-file mode.
+        ("internal/concepts/concepts_test.go", r"if d\.Count\(\) != \d{3,4} \{",
          f"if d.Count() != {f['concepts']} {{", 1),
-        ("internal/concepts/concepts_test.go", r't\.Errorf\("expected \d{3} concepts, got %d", d\.Count\(\)\)',
+        ("internal/concepts/concepts_test.go", r't\.Errorf\("expected \d{3,4} concepts, got %d", d\.Count\(\)\)',
          f't.Errorf("expected {f["concepts"]} concepts, got %d", d.Count())', 1),
-        ("internal/concepts/concepts_test.go", r"if len\(d\.Order\(\)\) != \d{3} \{",
+        ("internal/concepts/concepts_test.go", r"if len\(d\.Order\(\)\) != \d{3,4} \{",
          f"if len(d.Order()) != {f['concepts']} {{", 1),
         ("internal/concepts/concepts_test.go",
-         r't\.Errorf\("expected \d{3} in topo order, got %d", len\(d\.Order\(\)\)\)',
+         r't\.Errorf\("expected \d{3,4} in topo order, got %d", len\(d\.Order\(\)\)\)',
          f't.Errorf("expected {f["concepts"]} in topo order, got %d", len(d.Order()))', 1),
         # `internal/planning/planner_test.go` used to pin the course count with a literal. It now
         # reads `data/courses.json` and compares against the number it finds there, so there is no
         # site left to rewrite in this batch; a rule that matches nothing is an error, and the
         # test's own comment records why the literal must not come back.
         # The app copy a learner reads, and the test that guards it.
-        ("web/next-app/app/how-it-works/sections.tsx", r"contains \d{3} concepts",
+        ("web/next-app/app/how-it-works/sections.tsx", r"contains \d{3,4} concepts",
          f"contains {f['concepts']} concepts", 1),
-        ("web/next-app/app/how-it-works/sections.tsx", r"assessment of \d{3} concepts would require up to \d{3} questions",
+        ("web/next-app/app/how-it-works/sections.tsx", r"assessment of \d{3,4} concepts would require up to \d{3,4} questions",
          f"assessment of {f['concepts']} concepts would require up to {f['concepts']} questions", 1),
-        ("web/next-app/app/layout.tsx", r"Mastery-gated, \d{3} concepts",
+        ("web/next-app/app/layout.tsx", r"Mastery-gated, \d{3,4} concepts",
          f"Mastery-gated, {f['concepts']} concepts", 1),
-        ("web/next-app/app/layout.tsx", r"Open-source, \d{3} concepts, spaced repetition, 50 XP mastery checks",
+        ("web/next-app/app/layout.tsx", r"Open-source, \d{3,4} concepts, spaced repetition, 50 XP mastery checks",
          f"Open-source, {f['concepts']} concepts, spaced repetition, 50 XP mastery checks", 1),
-        ("web/next-app/app/layout.tsx", r"Open-source, \d{3} concepts, spaced repetition\.",
+        ("web/next-app/app/layout.tsx", r"Open-source, \d{3,4} concepts, spaced repetition\.",
          f"Open-source, {f['concepts']} concepts, spaced repetition.", 1),
-        ("web/next-app/test/copyTruth.test.ts", r"the graph holds \d{3}",
+        ("web/next-app/test/copyTruth.test.ts", r"the graph holds \d{3,4}",
          f"the graph holds {f['concepts']}", 1),
     ]
 

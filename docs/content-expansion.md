@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 1000 concepts, and there are 1000 KP shard files
-holding 3000 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1020 concepts, and there are 1020 KP shard files
+holding 3060 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 794 of the 1000 concepts
+### 4.1 The course catalog reaches 814 of the 1020 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
-`internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-794 of the 1000 concepts: 206 of them have a node, a generator, a lesson and three KP shards and
+`internal/planning/planner.go:64` (`collectChain`). Across the 25 courses those closures reach
+814 of the 1020 concepts: 206 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -98,6 +98,7 @@ The count of unreachable concepts by domain:
 | abstract_algebra | 45 | 0 |
 | discrete_math | 55 | 3 |
 | geometry | 45 | 6 |
+| graph_theory | 20 | 0 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
 cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
@@ -258,7 +259,7 @@ uses:
 
 Three things follow, and together they decide the first two policies.
 
-- **A makes the catalog exhaustive.** The union of the 24 closures goes from 247 to **666**: every
+- **A makes the catalog exhaustive.** The union of the 25 closures goes from 247 to **666**: every
   concept in the corpus becomes reachable. That is the end of a sampled path — the catalog and the
   corpus become the same set — and it leaves the diagnostic and a free-choice goal nothing to do.
 - **Both policies collapse the staged pairs.** `calc1` and `calc2` are 67 and 70 concepts now and 342
@@ -333,12 +334,14 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1000 concepts. Reaching a thousand means adding 0, and this is the table that says
-where: every domain is now at its target. `Now` is read from the corpus; `Target` is the decision. The
-rows keep the order step 6 of section 6 used, largest deficit first when there was one.
+The catalog holds 1020 concepts. The remaining per-domain targets add up to 20, and this is the table
+that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
+tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
+section 6 used, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
+| graph_theory | university | 20 | 40 | +20 |
 | algebra | school | 104 | 104 | +0 |
 | arithmetic | school | 60 | 60 | +0 |
 | geometry | school | 45 | 45 | +0 |
@@ -591,7 +594,16 @@ inverse lesson. Six of the nine are numeric, one is an expression, and two are m
 numeric generator publishes the facts its answers follow from, and the tests recompute the answer from
 them. All 50 precalculus concepts are reachable, so the corpus reaches 794 of 1000, with 206 left
 outside the named course paths — the enrichment section 4.1 measures, not a gap in a target. Every
-domain on the table is now at its target.
+domain on the table was at its target at that milestone.
+
+**The thousand-concept milestone is complete, and the next tranche is 1,250.** The target table is
+no longer the whole story: the corpus now exceeds a thousand, and the next phase adds four domains —
+real analysis, graph theory, numerical analysis and probability theory — and raises the targets of
+calculus, trigonometry and algebra by 70. Graph theory is first. Its 40 concepts split into two
+batches; the 20 added here cover isomorphism, complements and subgraphs, homomorphisms and products,
+distance and cuts, Menger's theorem, matchings and covers, Tutte's theorem, and chromatic, edge and
+list coloring. The `graph` course targets the 20, and the remaining 20 concepts (planarity, spectra,
+extremal graphs and flows) follow in the second batch.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

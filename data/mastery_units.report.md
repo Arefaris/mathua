@@ -12,19 +12,19 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 1000 |
-| Total units | 98 |
+| Total concepts | 1020 |
+| Total units | 102 |
 | Minimum unit size | 1 |
 | Median unit size | 7 |
 | Maximum unit size | 51 |
-| Singleton units | 19 |
-| Units with <= 3 concepts | 28 |
+| Singleton units | 20 |
+| Units with <= 3 concepts | 30 |
 | Units with > 25 concepts | 7 |
 | Units with > 50 concepts | 1 |
-| Cross-unit prerequisite edges (derived) | 253 |
+| Cross-unit prerequisite edges (derived) | 259 |
 | Backward band edges | 0 |
 
-If the learner is assessed once per unit, then 98 assessments cover the corpus, and the
+If the learner is assessed once per unit, then 102 assessments cover the corpus, and the
 median is one assessment per 7 concepts. That is the frequency question this report
 exists to make concrete.
 
@@ -82,6 +82,10 @@ exists to make concrete.
 | `geometry.b4` | geometry | 4 | 5 | 2 | 12–13 |
 | `geometry.b6` | geometry | 6 | 1 | 1 | 20–20 |
 | `geometry.b7` | geometry | 7 | 1 | 1 | 21–21 |
+| `graph_theory.b5` | graph_theory | 5 | 3 | 1 | 17–17 |
+| `graph_theory.b6` | graph_theory | 6 | 7 | 2 | 18–20 |
+| `graph_theory.b7` | graph_theory | 7 | 9 | 2 | 21–23 |
+| `graph_theory.b8` | graph_theory | 8 | 1 | 1 | 24–24 |
 | `linear_algebra.b0` | linear_algebra | 0 | 1 | 1 | 2–2 |
 | `linear_algebra.b1` | linear_algebra | 1 | 5 | 2 | 3–5 |
 | `linear_algebra.b2` | linear_algebra | 2 | 1 | 1 | 8–8 |
@@ -144,19 +148,19 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 131 | 5 | 46 | 22 | 44 | 5 | 0 |
-| 3 | 98 | 7 | 51 | 19 | 28 | 7 | 0 |
-| 4 | 79 | 9 | 66 | 8 | 22 | 9 | 0 |
-| 5 | 67 | 10 | 74 | 5 | 13 | 9 | 0 |
-| 6 | 63 | 12 | 99 | 6 | 12 | 14 | 0 |
-| 8 | 50 | 15 | 115 | 3 | 9 | 14 | 0 |
-| 10 | 43 | 17 | 148 | 3 | 7 | 13 | 0 |
-| 12 | 43 | 18 | 126 | 2 | 5 | 16 | 0 |
-| 15 | 33 | 24 | 148 | 1 | 4 | 15 | 0 |
-| 20 | 29 | 28 | 175 | 2 | 4 | 15 | 0 |
-| 45 | 17 | 45 | 175 | 0 | 0 | 17 | 0 |
+| 2 | 136 | 5 | 46 | 23 | 46 | 5 | 0 |
+| 3 | 102 | 7 | 51 | 20 | 30 | 7 | 0 |
+| 4 | 82 | 9 | 66 | 9 | 23 | 9 | 0 |
+| 5 | 69 | 10 | 74 | 5 | 13 | 9 | 0 |
+| 6 | 66 | 12 | 99 | 7 | 14 | 14 | 0 |
+| 8 | 52 | 15 | 115 | 4 | 10 | 14 | 0 |
+| 10 | 45 | 17 | 148 | 3 | 7 | 13 | 0 |
+| 12 | 45 | 18 | 126 | 3 | 6 | 16 | 0 |
+| 15 | 34 | 24 | 148 | 1 | 4 | 15 | 0 |
+| 20 | 31 | 24 | 175 | 2 | 4 | 15 | 0 |
+| 45 | 18 | 45 | 175 | 0 | 0 | 17 | 0 |
 
-**No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
+**No width is clean.** Small widths fragment — at 3 there are 20 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
 units too large to assess: at 45 the partition is just the 17 domains themselves, whose
 largest is 128 concepts. The usable widths trade fragmentation against size rather than
@@ -171,7 +175,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**91 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**95 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -241,6 +245,11 @@ Unresolvable subdomains:
 `geometry.similar` 
 
 `geometry.transform` 
+`graph_theory.basics` 
+`graph_theory.coloring` 
+`graph_theory.connectivity` 
+
+`graph_theory.matching` 
 `linear_algebra.decompositions` 
 `linear_algebra.determinants` 
 `linear_algebra.eigenvalues` 
@@ -294,12 +303,12 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1000
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1020
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
 
-- **anomaly** `singleton_units`: 19 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
+- **anomaly** `singleton_units`: 20 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
 
 ## Not decided here
 

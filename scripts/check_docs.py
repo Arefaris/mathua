@@ -647,7 +647,7 @@ def check_target_table(rep: Report) -> None:
                       f"the table has a row for {dom}, which the corpus does not have")
 
     want = sum(t - w for w, t, _ in seen.values())
-    claim = re.compile(r"Reaching a thousand means adding (\d[\d,]*)")
+    claim = re.compile(r"The remaining per-domain targets add up to (\d[\d,]*)")
     found = 0
     for line_no, line in enumerate(lines, 1):
         for m in claim.finditer(line):
@@ -657,8 +657,8 @@ def check_target_table(rep: Report) -> None:
                           f'"{m.group(0)}" but the targets minus the corpus leave {want}')
     if found == 0:
         rep.error(doc, "target-table",
-                  "the sentence stating what is left to add is gone; a check that reads nothing "
-                  "reports nothing")
+                  "the sentence stating the remaining target total is gone; a check that reads "
+                  "nothing reports nothing")
 
 
 def defined_adrs() -> set:

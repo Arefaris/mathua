@@ -709,5 +709,33 @@
       "complex.topology.open_sets",
       "complex.topology.domain"
     ]
+  },
+  {
+    "id": "graph",
+    "name": "Graph Theory",
+    "grade": "college",
+    "description": "Isomorphism, connectivity, matchings, coloring, planarity, spectra, extremal graphs, and flows.",
+    "targets": [
+      "graph.isomorphism",
+      "graph.complement",
+      "graph.subgraph",
+      "graph.homomorphism",
+      "graph.product",
+      "graph.distance",
+      "graph.cut_vertex",
+      "graph.bridge",
+      "graph.connectivity",
+      "graph.menger",
+      "graph.matching",
+      "graph.perfect_matching",
+      "graph.tutte",
+      "graph.vertex_cover",
+      "graph.independent_set",
+      "graph.chromatic_polynomial",
+      "graph.brooks",
+      "graph.edge_coloring",
+      "graph.perfect_graph",
+      "graph.list_coloring"
+    ]
   }
 ]
