@@ -1,12 +1,15 @@
 package storage
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/chuma-beep/mathua/internal/ai"
 )
 
 // Data types
@@ -514,6 +517,28 @@ type Repository interface {
 	GetServerSession(kind, key string) (value, expiresAt string, found bool, err error)
 	DeleteServerSession(kind, key string) error
 	SweepServerSessions() error
+	// ReserveAIUsage consumes one request from every daily limit in a single
+	// transaction, and commits only when every counter is within its ceiling.
+	//
+	// When any ceiling is reached the whole transaction rolls back, so a refused
+	// request spends no provider call and no budget. The check is on the
+	// post-increment value inside the transaction, never on a count read before
+	// it, so two concurrent requests can never both take the last free slot —
+	// which is the whole reason this is one call and not a read followed by a
+	// write. The limits are (identity, application-wide): the identity is the
+	// server's choice, a student id when authenticated and an IP for a guest,
+	// and the reserved global key bounds the shared free tier.
+	ReserveAIUsage(ctx context.Context, day string, limits []ai.AIUsageLimit) (allowed bool, err error)
+	// PruneAIUsage deletes counters for days before beforeDay (a YYYY-MM-DD
+	// string) and reports how many rows went. Counters are keyed by day, and a
+	// day that has passed can never be reserved again, so the rows are dead
+	// weight: without this, one row per identity per day accumulates forever.
+	// The current day is never a valid argument — callers pass a cutoff weeks
+	// back — because pruning it would refill every learner's budget.
+	PruneAIUsage(beforeDay string) (int64, error)
+	// AIUsage reads one counter without incrementing. Diagnostics only; it must
+	// never decide a reservation.
+	AIUsage(ctx context.Context, usageKey, day string) (int, error)
 	GetActiveSession(sessionID string) (*ActiveSession, error)
 	UpsertActiveSession(a *ActiveSession) error
 	DeleteActiveSession(sessionID string) error
@@ -525,12 +550,14 @@ type Repository interface {
 	// transaction: attempts, sessions, progress, topic speeds, quiz
 	// completions, study-scoped server sessions, plus XP, diagnostic flag,
 	// and league fields on the student row. Account, credentials,
-	// settings, avatar, course, and plan prefs survive.
+	// settings, avatar, course, and plan prefs survive. The AI usage counter
+	// also survives: a reset that refilled the daily AI budget would make the
+	// budget meaningless.
 	ResetProgress(studentID string) error
 	// DeleteAccount removes one student and every owned row in a single
 	// transaction: credential-adjacent tables, learning evidence, sessions,
-	// study plans and prefs, filed reports, and the student row itself.
-	// Irreversible; the caller confirms explicitly.
+	// study plans and prefs, filed reports, the AI usage counter, and the
+	// student row itself. Irreversible; the caller confirms explicitly.
 	DeleteAccount(studentID string) error
 	GetSessionAttempts(studentID, sessionID string) ([]AttemptEntry, error)
 	GetAttemptsForStudent(studentID string) ([]AttemptEntry, error)

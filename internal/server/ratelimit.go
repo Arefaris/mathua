@@ -1,7 +1,9 @@
 package server
 
 import (
+	"net"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -13,6 +15,10 @@ type rateLimiter struct {
 	rate     int
 	burst    int
 	interval time.Duration
+	// ipHeader is the header that carries the real client IP, or "" when no
+	// header is trusted and the socket address is used. See
+	// resolveTrustedIPHeader.
+	ipHeader string
 }
 
 type visitor struct {
@@ -20,12 +26,13 @@ type visitor struct {
 	lastCheck time.Time
 }
 
-func newRateLimiter(rate, burst int, interval time.Duration) *rateLimiter {
+func newRateLimiter(rate, burst int, interval time.Duration, ipHeader string) *rateLimiter {
 	rl := &rateLimiter{
 		visitors: make(map[string]*visitor),
 		rate:     rate,
 		burst:    burst,
 		interval: interval,
+		ipHeader: ipHeader,
 	}
 	go rl.cleanup()
 	return rl
@@ -72,19 +79,54 @@ func (rl *rateLimiter) allow(ip string) bool {
 
 func (rl *rateLimiter) middleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip := r.RemoteAddr
-		// X-Forwarded-For is "client, proxy1, proxy2" — the client is first.
-		// Using the full string as key would shard one client across buckets
-		// (and a spoofed header bypasses limiting); take the first entry.
-		if forwarded := r.Header.Get("X-Forwarded-For"); forwarded != "" {
-			if first, _, _ := strings.Cut(forwarded, ","); strings.TrimSpace(first) != "" {
-				ip = strings.TrimSpace(first)
-			}
-		}
-		if !rl.allow(ip) {
+		if !rl.allow(clientIP(r, rl.ipHeader)) {
 			http.Error(w, `{"error":"too many attempts — try again in a minute"}`, 429)
 			return
 		}
 		next(w, r)
 	}
+}
+
+// resolveTrustedIPHeader decides which request header, if any, carries the true
+// client IP.
+//
+// A header is only trustworthy when the edge that sets it also overwrites any
+// value the client supplied. Otherwise it is just another spoofable input, and
+// both the rate limiter and the guest AI quota are bypassed by setting it: a
+// caller sends `Fly-Client-IP: 1.2.3.4` and is limited under a key of their own
+// choosing, or, worse, spends somebody else's AI budget.
+//
+// Fly's edge sets Fly-Client-IP and overwrites it, and Fly puts FLY_APP_NAME in
+// the machine environment, so that header is trusted exactly when FLY_APP_NAME
+// is present. A deployment behind a different proxy sets AI_TRUSTED_IP_HEADER to
+// the header that proxy controls. With neither, the socket address is the only
+// untamperable signal, which is the correct answer for a directly exposed
+// process.
+func resolveTrustedIPHeader() string {
+	if h := strings.TrimSpace(os.Getenv("AI_TRUSTED_IP_HEADER")); h != "" {
+		return h
+	}
+	if os.Getenv("FLY_APP_NAME") != "" {
+		return "Fly-Client-IP"
+	}
+	return ""
+}
+
+// clientIP returns the caller's address for rate limiting and guest AI quotas.
+//
+// It reads trustedHeader only, never X-Forwarded-For: that header's first entry
+// is client-controlled, so a parse that trusted it was a rate-limit bypass for
+// anyone willing to set a header. When no header is trusted, or the trusted one
+// is absent, the socket address is used, so a request that never traversed the
+// edge is keyed by the address that actually connected.
+func clientIP(r *http.Request, trustedHeader string) string {
+	if trustedHeader != "" {
+		if ip := strings.TrimSpace(r.Header.Get(trustedHeader)); ip != "" {
+			return ip
+		}
+	}
+	if host, _, err := net.SplitHostPort(r.RemoteAddr); err == nil {
+		return host
+	}
+	return r.RemoteAddr
 }

@@ -15,6 +15,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/chuma-beep/mathua/internal/ai"
 	"github.com/chuma-beep/mathua/internal/auth"
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/engine"
@@ -296,7 +297,28 @@ func main() {
 		fmt.Print(" (no auth)")
 	}
 	fmt.Println()
-	srv := server.New(eng, repo, authSvc)
+	aiSettings, err := ai.FromEnv()
+	if err != nil {
+		log.Fatalf("ai configuration: %v", err)
+	}
+	var aiChain *ai.Chain
+	var aiQuota *ai.Quota
+	if aiSettings.Registry.Enabled() {
+		aiChain = ai.NewChain(aiSettings.Registry)
+		aiQuota = ai.NewQuota(repo, aiSettings.DailyUserCap, aiSettings.GlobalDailyCap)
+		fmt.Printf("ai enabled: %d provider(s), daily cap %d per identity, global cap %d\n",
+			len(aiSettings.Registry.IDs()), aiSettings.DailyUserCap, aiSettings.GlobalDailyCap)
+	} else if aiSettings.Registry != nil {
+		fmt.Println("ai enabled but no provider is configured")
+	} else if aiSettings.DisabledReason != "" {
+		fmt.Printf("ai disabled: %s\n", aiSettings.DisabledReason)
+	} else {
+		fmt.Println("ai disabled")
+	}
+	srv := server.New(eng, repo, authSvc, server.WithAI(aiChain, aiQuota, server.AILimits{
+		TutorMaxTokens: aiSettings.TutorMaxTokens,
+		GoalMaxTokens:  aiSettings.GoalMaxTokens,
+	}))
 	mux := http.NewServeMux()
 	srv.Register(mux)
 	if info, err := os.Stat("web/next-app/out"); err == nil && info.IsDir() {

@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/chuma-beep/mathua/internal/ai"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -986,6 +988,55 @@ func (s *SQLiteStore) DeleteServerSession(kind, key string) error {
 	return nil
 }
 
+// ReserveAIUsage consumes one request from every daily limit in one
+// transaction, committing only when every counter is within its ceiling.
+//
+// Returning "denied" rolls the transaction back instead of leaving the
+// increments in place, so a refused request costs nothing — and because the
+// comparison is against the post-increment value inside the same transaction,
+// two concurrent callers cannot both take the last free slot.
+func (s *SQLiteStore) ReserveAIUsage(ctx context.Context, day string, limits []ai.AIUsageLimit) (bool, error) {
+	if len(limits) == 0 {
+		return true, nil
+	}
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return false, fmt.Errorf("reserve ai usage: %w", err)
+	}
+	defer func() { _ = tx.Rollback() }()
+	for _, l := range limits {
+		var n int
+		err := tx.QueryRowContext(ctx, `
+			INSERT INTO ai_usage (usage_key, day, requests) VALUES (?, ?, 1)
+			ON CONFLICT(usage_key, day) DO UPDATE SET requests = requests + 1
+			RETURNING requests
+		`, l.Key, day).Scan(&n)
+		if err != nil {
+			return false, fmt.Errorf("reserve ai usage: %w", err)
+		}
+		if l.Cap > 0 && n > l.Cap {
+			return false, nil
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return false, fmt.Errorf("commit ai usage: %w", err)
+	}
+	return true, nil
+}
+
+// AIUsage reads the counter without incrementing. Diagnostics only.
+func (s *SQLiteStore) AIUsage(ctx context.Context, usageKey, day string) (int, error) {
+	var n int
+	err := s.db.QueryRowContext(ctx, "SELECT requests FROM ai_usage WHERE usage_key = ? AND day = ?", usageKey, day).Scan(&n)
+	if err == sql.ErrNoRows {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, fmt.Errorf("read ai usage: %w", err)
+	}
+	return n, nil
+}
+
 func (s *SQLiteStore) SweepServerSessions() error {
 	// expires_at is RFC3339 UTC written by callers — compare in Go, not SQL,
 	// so both dialects share one correct clock. Table stays tiny.
@@ -1016,6 +1067,23 @@ func (s *SQLiteStore) SweepServerSessions() error {
 		}
 	}
 	return nil
+}
+
+// PruneAIUsage deletes day-scoped counters that can never be reserved again.
+//
+// It is a plain range delete rather than a read-then-delete: `day` is a
+// zero-padded YYYY-MM-DD string, so lexicographic order is chronological order
+// in both dialects and the comparison needs no date parsing.
+func (s *SQLiteStore) PruneAIUsage(beforeDay string) (int64, error) {
+	res, err := s.db.Exec("DELETE FROM ai_usage WHERE day < ?", beforeDay)
+	if err != nil {
+		return 0, fmt.Errorf("prune ai usage: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("prune ai usage: %w", err)
+	}
+	return n, nil
 }
 
 func (s *SQLiteStore) GetActiveSession(sessionID string) (*ActiveSession, error) {
@@ -1157,6 +1225,7 @@ func (s *SQLiteStore) DeleteAccount(studentID string) error {
 		{"DELETE FROM quiz_completions WHERE student_id = ?", []interface{}{studentID}},
 		{"DELETE FROM server_sessions WHERE kind IN ('study_expected','study_plan','study_plan_prefs') AND (key = ? OR key LIKE ? || '|%')", []interface{}{studentID, studentID}},
 		{"DELETE FROM question_reports WHERE reporter_id = ?", []interface{}{studentID}},
+		{"DELETE FROM ai_usage WHERE usage_key = ?", []interface{}{studentID}},
 		{"DELETE FROM students WHERE id = ?", []interface{}{studentID}},
 	}
 	for _, st := range stmts {

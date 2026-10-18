@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/admin"
+	"github.com/chuma-beep/mathua/internal/ai"
 	"github.com/chuma-beep/mathua/internal/auth"
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/diagnostic"
@@ -151,32 +152,83 @@ type Server struct {
 	authLimiter  *rateLimiter
 	writeLimiter *rateLimiter
 	shareLimiter *rateLimiter
+	// aiChain and aiQuota are optional. When aiChain is nil the AI endpoints
+	// answer "unavailable" and every deterministic path is unchanged: AI is an
+	// enhancement, never a dependency.
+	aiChain *ai.Chain
+	aiQuota *ai.Quota
+	// aiTutorMaxTokens and aiGoalMaxTokens bound one completion each. They are
+	// fields rather than constants because the right budget depends on the
+	// provider's model: a reasoning model spends part of every budget on hidden
+	// reasoning tokens, which is how a 200-token goal-scope request came to
+	// spend 135 tokens on reasoning and then fail.
+	aiTutorMaxTokens int
+	aiGoalMaxTokens  int
+	// ipHeader is the trusted client-IP header, or "" to use the socket
+	// address. See resolveTrustedIPHeader.
+	ipHeader string
 }
 
-func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService) *Server {
+// AILimits are the per-request token budgets the AI handlers apply.
+type AILimits struct {
+	TutorMaxTokens int
+	GoalMaxTokens  int
+}
+
+// Option configures optional parts of a Server at construction.
+type Option func(*Server)
+
+// WithAI attaches the AI provider chain, quota and token budgets. Passing a nil
+// chain leaves the AI endpoints reporting unavailable. A non-positive budget
+// falls back to the package default.
+func WithAI(chain *ai.Chain, quota *ai.Quota, limits AILimits) Option {
+	return func(s *Server) {
+		s.aiChain = chain
+		s.aiQuota = quota
+		if limits.TutorMaxTokens > 0 {
+			s.aiTutorMaxTokens = limits.TutorMaxTokens
+		}
+		if limits.GoalMaxTokens > 0 {
+			s.aiGoalMaxTokens = limits.GoalMaxTokens
+		}
+	}
+}
+
+func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService, opts ...Option) *Server {
+	trustedHeader := resolveTrustedIPHeader()
 	s := &Server{
-		eng:          eng,
-		repo:         repo,
-		auth:         auth,
-		diagSessions: make(map[string]*diagnostic.Session),
-		diagCreated:  make(map[string]time.Time),
-		quizSessions: make(map[string]*quiz.Session),
-		quizCreated:  make(map[string]time.Time),
-		authLimiter:  newRateLimiter(5, 10, time.Minute),
-		writeLimiter: newRateLimiter(20, 20, 3*time.Second),
-		shareLimiter: newRateLimiter(10, 10, 6*time.Second),
+		eng:              eng,
+		repo:             repo,
+		auth:             auth,
+		diagSessions:     make(map[string]*diagnostic.Session),
+		diagCreated:      make(map[string]time.Time),
+		quizSessions:     make(map[string]*quiz.Session),
+		quizCreated:      make(map[string]time.Time),
+		authLimiter:      newRateLimiter(5, 10, time.Minute, trustedHeader),
+		writeLimiter:     newRateLimiter(20, 20, 3*time.Second, trustedHeader),
+		shareLimiter:     newRateLimiter(10, 10, 6*time.Second, trustedHeader),
+		aiTutorMaxTokens: ai.DefaultTutorMaxTokens,
+		aiGoalMaxTokens:  ai.DefaultGoalMaxTokens,
+		ipHeader:         trustedHeader,
 	}
 	// MATHUA_LOADTEST=1 relaxes rate limits so load generators measure the
 	// app and database instead of the limiter. Local/staging use only —
 	// never set in production.
 	if os.Getenv("MATHUA_LOADTEST") == "1" {
 		log.Print("loadtest mode: rate limits relaxed")
-		s.authLimiter = newRateLimiter(100000, 100000, time.Second)
-		s.writeLimiter = newRateLimiter(100000, 100000, time.Second)
-		s.shareLimiter = newRateLimiter(100000, 100000, time.Second)
+		s.authLimiter = newRateLimiter(100000, 100000, time.Second, trustedHeader)
+		s.writeLimiter = newRateLimiter(100000, 100000, time.Second, trustedHeader)
+		s.shareLimiter = newRateLimiter(100000, 100000, time.Second, trustedHeader)
+	}
+	// Options are applied before the janitor starts so the goroutine observes a
+	// fully built Server (its AI counters, for instance) with no synchronisation
+	// of its own.
+	for _, opt := range opts {
+		opt(s)
 	}
 	// Clean up abandoned diagnostic/quiz sessions older than 1 hour, plus
-	// expired durable server_sessions rows (admin logins, study anchors).
+	// expired durable server_sessions rows (admin logins, study anchors), plus
+	// AI counters whose day has passed.
 	//nolint:goroutinelint // process-lifetime janitor: runs until the process exits
 	go func() {
 		for {
@@ -199,9 +251,37 @@ func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService) *S
 			if err := s.repo.SweepServerSessions(); err != nil {
 				log.Printf("warning: sweep server sessions: %v", err)
 			}
+			// AI counters are day-scoped and a passed day can never be reserved
+			// again, so the rows are dead weight: without this, one row per
+			// identity per day accumulates forever. The cutoff is computed here
+			// rather than in SQL so both dialects age their counters on the same
+			// clock.
+			if n, err := s.repo.PruneAIUsage(aiUsageCutoff(time.Now())); err != nil {
+				log.Printf("warning: prune ai usage: %v", err)
+			} else if n > 0 {
+				log.Printf("pruned %d expired ai usage row(s)", n)
+			}
+			// One line of integers: the rate of failover and denial is the
+			// number that matters, and a counter cannot carry learner text.
+			if s.aiChain != nil {
+				log.Print(s.aiChain.Stats().Snapshot().Line())
+			}
 		}
 	}()
 	return s
+}
+
+// aiUsageRetention is how many days of AI counters are kept. Nothing reads a
+// counter older than today — a cap only ever consults the current day — so this
+// exists to bound the table, not to bound a query.
+const aiUsageRetention = 42
+
+// aiUsageCutoff returns the first day that is still kept, so everything strictly
+// before it can be deleted. It is computed from the clock rather than from a
+// request's day string so a server whose clock is a day behind cannot prune a
+// day another replica is still spending.
+func aiUsageCutoff(now time.Time) string {
+	return now.UTC().AddDate(0, 0, -aiUsageRetention).Format("2006-01-02")
 }
 
 // dropStudentLiveSessions evicts every in-memory diagnostic and quiz session
@@ -343,6 +423,14 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/efficacy", logRequest(cors(s.authMiddleware(s.handleEfficacy))))
 	mux.HandleFunc("/api/efficacy/all", logRequest(cors(s.shareLimiter.middleware(s.handleEfficacyAll))))
 	mux.HandleFunc("/api/efficacy/trend", logRequest(cors(s.shareLimiter.middleware(s.handleEfficacyTrend))))
+
+	// Optional AI augmentation. Both routes are write-limited as well as
+	// quota-capped, so a burst cannot spend the whole organisation's free tier
+	// before the per-identity cap applies. Neither is on any learning path: a
+	// disabled or failed call leaves grading, scheduling and onboarding exactly
+	// as they are.
+	mux.HandleFunc("/api/ai/tutor", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleAITutor)))))
+	mux.HandleFunc("/api/ai/goal-scope", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleAIGoalScope)))))
 }
 
 // GET /api/progress/{student_id}
@@ -423,6 +511,10 @@ func (s *Server) handleConfig(w http.ResponseWriter, r *http.Request) {
 		"auth_enabled": s.auth != nil,
 		"providers":    auth.ConfiguredProviders(),
 	}
+	// Only a boolean. The provider chain, model ids, keys and per-user quota are
+	// operational detail that a client has no use for and an attacker does, so
+	// none of them cross this boundary.
+	cfg["ai_enabled"] = s.aiChain != nil && s.aiChain.Enabled()
 	if v := os.Getenv("GOOGLE_CLIENT_ID"); v != "" {
 		cfg["google_client_id"] = v
 	} else if v := os.Getenv("GOOGLE_OAUTH_CLIENT_ID"); v != "" {

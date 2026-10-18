@@ -258,6 +258,25 @@ CREATE TABLE IF NOT EXISTS server_sessions (
 
 CREATE INDEX IF NOT EXISTS idx_server_sessions_expiry ON server_sessions(expires_at);
 
+-- Per-identity daily AI request counters.
+--
+-- A counter is a day-scoped row keyed by an opaque usage_key, not a column on
+-- students, for two reasons. A guest has no students row, and the guest's
+-- identity is an IP rather than an id, so the key can not be a foreign key. And
+-- a row per day lets the daily budget roll over without a reset job.
+--
+-- ResetProgress deliberately does not touch this table. A learner who could
+-- refill their AI budget by resetting progress would have no budget at all;
+-- DeleteAccount does clear it, because the account is gone.
+CREATE TABLE IF NOT EXISTS ai_usage (
+    usage_key TEXT NOT NULL,
+    day       TEXT NOT NULL,
+    requests  INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (usage_key, day)
+);
+
+CREATE INDEX IF NOT EXISTS idx_ai_usage_day ON ai_usage(day);
+
 -- Fix 7: version tracking for one-time data backfills. DDL stays
 -- idempotent (IF NOT EXISTS); data fixes below run exactly once.
 -- NOTE: no UNIQUE constraints are added here on purpose — legacy username

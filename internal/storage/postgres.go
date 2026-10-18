@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/chuma-beep/mathua/internal/ai"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -197,6 +199,17 @@ CREATE TABLE IF NOT EXISTS server_sessions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_server_sessions_expiry ON server_sessions(expires_at);
+
+-- Per-identity daily AI request counters. See the SQLite schema for why this is
+-- a day-scoped row keyed by an opaque usage_key rather than a students column.
+CREATE TABLE IF NOT EXISTS ai_usage (
+    usage_key TEXT NOT NULL,
+    day       TEXT NOT NULL,
+    requests  INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (usage_key, day)
+);
+
+CREATE INDEX IF NOT EXISTS idx_ai_usage_day ON ai_usage(day);
 
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version    INTEGER PRIMARY KEY,
@@ -1140,6 +1153,66 @@ func (s *PostgresStore) DeleteServerSession(kind, key string) error {
 	return nil
 }
 
+// ReserveAIUsage mirrors the SQLite twin: one transaction over every limit,
+// committed only when each counter is within its ceiling, so a denied request
+// leaves no increment behind and concurrent callers serialise on the row locks.
+func (s *PostgresStore) ReserveAIUsage(ctx context.Context, day string, limits []ai.AIUsageLimit) (bool, error) {
+	if len(limits) == 0 {
+		return true, nil
+	}
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return false, fmt.Errorf("reserve ai usage: %w", err)
+	}
+	defer func() { _ = tx.Rollback() }()
+	for _, l := range limits {
+		var n int
+		err := tx.QueryRowContext(ctx, `
+			INSERT INTO ai_usage (usage_key, day, requests) VALUES ($1, $2, 1)
+			ON CONFLICT (usage_key, day) DO UPDATE SET requests = ai_usage.requests + 1
+			RETURNING requests
+		`, l.Key, day).Scan(&n)
+		if err != nil {
+			return false, fmt.Errorf("reserve ai usage: %w", err)
+		}
+		if l.Cap > 0 && n > l.Cap {
+			return false, nil
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return false, fmt.Errorf("commit ai usage: %w", err)
+	}
+	return true, nil
+}
+
+// AIUsage reads the counter without incrementing. Diagnostics only.
+func (s *PostgresStore) AIUsage(ctx context.Context, usageKey, day string) (int, error) {
+	var n int
+	err := s.db.QueryRowContext(ctx, "SELECT requests FROM ai_usage WHERE usage_key = $1 AND day = $2", usageKey, day).Scan(&n)
+	if err == sql.ErrNoRows {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, fmt.Errorf("read ai usage: %w", err)
+	}
+	return n, nil
+}
+
+// PruneAIUsage mirrors the SQLite twin: a range delete over day-scoped counters
+// that have all passed. `day` is zero-padded YYYY-MM-DD, so the text comparison
+// is a chronological one.
+func (s *PostgresStore) PruneAIUsage(beforeDay string) (int64, error) {
+	res, err := s.db.Exec("DELETE FROM ai_usage WHERE day < $1", beforeDay)
+	if err != nil {
+		return 0, fmt.Errorf("prune ai usage: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("prune ai usage: %w", err)
+	}
+	return n, nil
+}
+
 func (s *PostgresStore) SweepServerSessions() error {
 	// expires_at is RFC3339 UTC — compare in Go (see sqlite twin).
 	rows, err := s.db.Query("SELECT kind, key, expires_at FROM server_sessions WHERE expires_at != ''")
@@ -1307,6 +1380,7 @@ func (s *PostgresStore) DeleteAccount(studentID string) error {
 		{"DELETE FROM quiz_completions WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM server_sessions WHERE kind IN ('study_expected','study_plan','study_plan_prefs') AND (key = $1 OR key LIKE $1 || '|%')", []interface{}{studentID}},
 		{"DELETE FROM question_reports WHERE reporter_id = $1", []interface{}{studentID}},
+		{"DELETE FROM ai_usage WHERE usage_key = $1", []interface{}{studentID}},
 		{"DELETE FROM students WHERE id = $1", []interface{}{studentID}},
 	}
 	for _, st := range stmts {
