@@ -3922,5 +3922,45 @@
   {
     "concept_id": "nt.adv.bertrand",
     "source": "teaching/nt.adv.bertrand.md"
+  },
+  {
+    "concept_id": "ode.first_order.bernoulli",
+    "source": "teaching/ode.first_order.bernoulli.md"
+  },
+  {
+    "concept_id": "ode.second_order.cauchy_euler",
+    "source": "teaching/ode.second_order.cauchy_euler.md"
+  },
+  {
+    "concept_id": "ode.second_order.reduction",
+    "source": "teaching/ode.second_order.reduction.md"
+  },
+  {
+    "concept_id": "ode.second_order.power_series",
+    "source": "teaching/ode.second_order.power_series.md"
+  },
+  {
+    "concept_id": "ode.systems.matrix_exp",
+    "source": "teaching/ode.systems.matrix_exp.md"
+  },
+  {
+    "concept_id": "ode.transforms.step",
+    "source": "teaching/ode.transforms.step.md"
+  },
+  {
+    "concept_id": "ode.second_order.spring",
+    "source": "teaching/ode.second_order.spring.md"
+  },
+  {
+    "concept_id": "ode.first_order.mixing",
+    "source": "teaching/ode.first_order.mixing.md"
+  },
+  {
+    "concept_id": "ode.systems.predator_prey",
+    "source": "teaching/ode.systems.predator_prey.md"
+  },
+  {
+    "concept_id": "ode.numerical.heun",
+    "source": "teaching/ode.numerical.heun.md"
   }
 ]

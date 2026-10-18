@@ -34,6 +34,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("ode.pde.laplace_eq", &laplaceEqGen{})
 	reg.Register("ode.integral.volterra", &volterraGen{})
 	registerNumeric(reg)
+	registerBatch(reg)
 }
 
 type conceptGen struct{}

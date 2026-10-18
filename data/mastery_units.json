@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 981,
+  "concept_count": 991,
   "unit_count": 98,
   "units": [
     {
@@ -921,11 +921,14 @@
         "differential_equations.second_order"
       ],
       "concept_ids": [
+        "ode.first_order.bernoulli",
         "ode.first_order.exact",
         "ode.first_order.linear",
+        "ode.first_order.mixing",
         "ode.first_order.separable",
         "ode.ivp.evaluate",
         "ode.numerical.euler",
+        "ode.numerical.heun",
         "ode.numerical.rk4",
         "ode.numerical.steps",
         "ode.pde.discriminant",
@@ -933,7 +936,7 @@
         "ode.pde.laplace_eq",
         "ode.second_order.homogeneous"
       ],
-      "concept_count": 11
+      "concept_count": 14
     },
     {
       "id": "differential_equations.b13",
@@ -952,16 +955,23 @@
         "ode.adv.systems",
         "ode.characteristic.sum",
         "ode.laplace.value",
+        "ode.second_order.cauchy_euler",
         "ode.second_order.nonhomogeneous",
+        "ode.second_order.power_series",
+        "ode.second_order.reduction",
+        "ode.second_order.spring",
         "ode.second_order.variation_params",
         "ode.stability",
         "ode.sturm_liouville",
         "ode.systems.linear_phase",
+        "ode.systems.matrix_exp",
+        "ode.systems.predator_prey",
         "ode.transforms.convolution",
         "ode.transforms.laplace",
+        "ode.transforms.step",
         "ode.wronskian"
       ],
-      "concept_count": 11
+      "concept_count": 18
     },
     {
       "id": "differential_equations.b14",

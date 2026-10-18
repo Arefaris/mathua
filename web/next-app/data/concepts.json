@@ -6616,6 +6616,149 @@
     "subdomain": "differential_equations.pde"
   },
   {
+    "domain": "differential_equations",
+    "grading_type": "multiple_choice",
+    "id": "ode.first_order.bernoulli",
+    "label": "Bernoulli equations",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.first_order.linear"
+    ],
+    "subdomain": "differential_equations.first_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.second_order.cauchy_euler",
+    "label": "Cauchy-Euler equations",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.second_order.homogeneous"
+    ],
+    "subdomain": "differential_equations.second_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "multiple_choice",
+    "id": "ode.second_order.reduction",
+    "label": "Reduction of order",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.second_order.homogeneous",
+      "calc.integral.substitution"
+    ],
+    "subdomain": "differential_equations.second_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.second_order.power_series",
+    "label": "Power-series solutions",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.power",
+      "ode.second_order.homogeneous"
+    ],
+    "subdomain": "differential_equations.second_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "multiple_choice",
+    "id": "ode.systems.matrix_exp",
+    "label": "The matrix exponential",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.adv.systems",
+      "linalg.eigen.diagonalization"
+    ],
+    "subdomain": "differential_equations.systems"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "multiple_choice",
+    "id": "ode.transforms.step",
+    "label": "Heaviside steps and impulses",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.transforms.laplace"
+    ],
+    "subdomain": "differential_equations.transforms"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.second_order.spring",
+    "label": "The spring-mass system",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.second_order.nonhomogeneous"
+    ],
+    "subdomain": "differential_equations.second_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.first_order.mixing",
+    "label": "Mixing problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.first_order.linear"
+    ],
+    "subdomain": "differential_equations.first_order"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.systems.predator_prey",
+    "label": "Predator-prey systems",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.adv.systems"
+    ],
+    "subdomain": "differential_equations.systems"
+  },
+  {
+    "domain": "differential_equations",
+    "grading_type": "numeric",
+    "id": "ode.numerical.heun",
+    "label": "Heun's method",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ode.numerical.euler"
+    ],
+    "subdomain": "differential_equations.numerical"
+  },
+  {
     "domain": "discrete_math",
     "grading_type": "multiple_choice",
     "id": "discrete.logic.propositions",

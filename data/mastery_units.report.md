@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 981 |
+| Total concepts | 991 |
 | Total units | 98 |
 | Minimum unit size | 1 |
 | Median unit size | 7 |
@@ -21,7 +21,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 | Units with <= 3 concepts | 29 |
 | Units with > 25 concepts | 7 |
 | Units with > 50 concepts | 1 |
-| Cross-unit prerequisite edges (derived) | 251 |
+| Cross-unit prerequisite edges (derived) | 253 |
 | Backward band edges | 0 |
 
 If the learner is assessed once per unit, then 98 assessments cover the corpus, and the
@@ -60,8 +60,8 @@ exists to make concrete.
 | `complex_numbers.b11` | complex_numbers | 11 | 11 | 2 | 33–35 |
 | `complex_numbers.b12` | complex_numbers | 12 | 4 | 2 | 36–38 |
 | `differential_equations.b11` | differential_equations | 11 | 3 | 2 | 33–35 |
-| `differential_equations.b12` | differential_equations | 12 | 11 | 4 | 36–38 |
-| `differential_equations.b13` | differential_equations | 13 | 11 | 4 | 39–41 |
+| `differential_equations.b12` | differential_equations | 12 | 14 | 4 | 36–38 |
+| `differential_equations.b13` | differential_equations | 13 | 18 | 4 | 39–41 |
 | `differential_equations.b14` | differential_equations | 14 | 7 | 5 | 42–44 |
 | `discrete_math.b1` | discrete_math | 1 | 1 | 1 | 5–5 |
 | `discrete_math.b2` | discrete_math | 2 | 2 | 1 | 7–8 |
@@ -148,7 +148,7 @@ at every width.
 | 3 | 98 | 7 | 51 | 19 | 29 | 7 | 0 |
 | 4 | 79 | 9 | 66 | 8 | 22 | 8 | 0 |
 | 5 | 67 | 10 | 74 | 5 | 13 | 9 | 0 |
-| 6 | 63 | 12 | 99 | 6 | 12 | 12 | 0 |
+| 6 | 63 | 12 | 99 | 6 | 12 | 13 | 0 |
 | 8 | 50 | 14 | 115 | 3 | 9 | 13 | 0 |
 | 10 | 43 | 17 | 148 | 3 | 7 | 13 | 0 |
 | 12 | 43 | 18 | 126 | 2 | 5 | 15 | 0 |
@@ -294,7 +294,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 981
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 991
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

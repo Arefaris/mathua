@@ -495,7 +495,7 @@
     "id": "diffeq",
     "name": "Differential Equations",
     "grade": "college",
-    "description": "First and second order ODEs, systems, and the Laplace transform.",
+    "description": "First and second order ODEs, series and numerical methods, systems, applications, and the Laplace transform.",
     "targets": [
       "ode.first_order.separable",
       "ode.first_order.linear",
@@ -507,7 +507,20 @@
       "ode.wronskian",
       "ode.numerical.steps",
       "ode.laplace.value",
-      "ode.pde.discriminant"
+      "ode.pde.discriminant",
+      "ode.first_order.bernoulli",
+      "ode.second_order.cauchy_euler",
+      "ode.second_order.reduction",
+      "ode.second_order.power_series",
+      "ode.systems.matrix_exp",
+      "ode.transforms.step",
+      "ode.second_order.spring",
+      "ode.first_order.mixing",
+      "ode.systems.predator_prey",
+      "ode.numerical.heun",
+      "ode.first_order.exact",
+      "ode.second_order.variation_params",
+      "ode.numerical.rk4"
     ]
   },
   {

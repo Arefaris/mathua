@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 981 concepts, and there are 981 KP shard files
-holding 2943 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 991 concepts, and there are 991 KP shard files
+holding 2973 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 750 of the 981 concepts
+### 4.1 The course catalog reaches 764 of the 991 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-750 of the 981 concepts: 231 of them have a node, a generator, a lesson and three KP shards and
+764 of the 991 concepts: 227 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -81,7 +81,7 @@ The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 175 | 89 |
+| calculus | 175 | 88 |
 | algebra | 104 | 45 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
@@ -90,7 +90,7 @@ The count of unreachable concepts by domain:
 | machine_learning | 45 | 0 |
 | complex_numbers | 42 | 0 |
 | number_theory | 42 | 9 |
-| differential_equations | 32 | 12 |
+| differential_equations | 42 | 9 |
 | prealgebra | 60 | 0 |
 | trigonometry | 48 | 31 |
 | arithmetic | 60 | 3 |
@@ -114,7 +114,7 @@ entirely `multiple_choice`:
 |---|---|---|
 | abstract_algebra | 45 | 43 |
 | topology | 42 | 35 |
-| differential_equations | 32 | 24 |
+| differential_equations | 42 | 28 |
 | machine_learning | 45 | 29 |
 | discrete_math | 55 | 26 |
 | number_theory | 42 | 19 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 981 concepts. Reaching a thousand means adding 19, and this is the table that says
+The catalog holds 991 concepts. Reaching a thousand means adding 9, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| differential_equations | university | 32 | 42 | +10 |
 | precalculus | bridge | 41 | 50 | +9 |
 | algebra | school | 104 | 104 | +0 |
 | arithmetic | school | 60 | 60 | +0 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | statistics | bridge | 55 | 55 | +0 |
 | calculus | bridge | 175 | 175 | +0 |
 | number_theory | university | 42 | 42 | +0 |
+| differential_equations | university | 42 | 42 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -558,7 +558,24 @@ course gains the ten new concepts together with `crypto` and `diophantine`, the 
 description already advertises. Number theory reads 33 of 42 reachable, with the nine analytic and
 graduate concepts (Möbius, PNT, zeta, Chebyshev, Dirichlet, elliptic curves, class numbers,
 quadratic reciprocity and the sieve) left as enrichment; the corpus reaches 750 of 981. The remainder
-is 19, and the largest deficit left is differential_equations' ten.
+is 19, and the largest deficit left was differential_equations' ten.
+
+**Differential equations reached its target on 2026-10-18.** Ten concepts — Bernoulli equations,
+Cauchy-Euler equations, reduction of order, power-series solutions, the matrix exponential, Heaviside
+steps and impulses, the spring-mass system, mixing problems, predator-prey systems, and Heun's method
+— took the domain from 32 to 42, so its row reads +0. The survey rejected the additions existing
+lessons already teach: integrating factors in the linear and exact lessons, the y = vx substitution in
+the homogeneous lesson, undetermined coefficients and the modification rule in the nonhomogeneous
+lesson, separation of variables and d'Alembert in the heat and wave lessons, linearization in the
+stability lesson, and Picard and Fredholm in the boundary and Volterra lessons. Five of the ten are
+numeric, and each numeric generator publishes the facts its answers follow from (the Cauchy-Euler
+coefficients, the series kind and rate, the spring constants and initial data, the tank volume and
+concentration, the Lotka-Volterra coefficients, and the Heun step) and the tests recompute the answer
+from them. The wiring is core: the `diffeq` course gains the ten new concepts together with
+`first_order.exact`, `second_order.variation_params` and `numerical.rk4`, so exact equations,
+variation of parameters and RK4 finally have a course path. Differential equations reads 33 of 42
+reachable, with the transforms, PDE, Sturm-Liouville and nonlinear chain left as enrichment; the
+corpus reaches 764 of 991. The remainder is 9, and the largest deficit left is precalculus' nine.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still
