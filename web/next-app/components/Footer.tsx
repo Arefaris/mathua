@@ -36,9 +36,16 @@ interface FooterProps {
 // deliberately are not uniform: the portrait set ranges from 9:16 to 2:3, and
 // normalising it would mean cropping the two outliers.
 //
-// One desktop picture remains since 2026-10-17, when the greyscale landscape was
-// removed at the owner's request; each entry keeps its own portrait, so a phone
-// still rotates through six pictures while a desktop always shows the harbour.
+// Three desktop pictures since 2026-10-18: the harbour, and two blue-and-cream
+// coastal engravings added at the owner's request. They are dealt out over the
+// six entries, two each, so every print is equally likely and every entry keeps
+// its own portrait -- a phone still rotates through six pictures.
+//
+// All three are pale, so `tone` stays light on desktop and the ink does not change
+// with the pick. The two newer prints were measured over the nav band after the
+// scrim and came out better than the harbour print did (muted ink, 5th percentile:
+// 7.35 and 5.42 against 4.73), so the two bands above carry them without a corner
+// layer.
 //
 // PROVENANCE: every file named below is shipped, and none of them has a recorded
 // author or licence. See the "Footer artwork" entry in THIRD_PARTY_NOTICES.md. The
@@ -67,19 +74,19 @@ export const FOOTER_ART: FooterArt[] = [
     mobile: { file: '/footer/mobile-coast.jpg', width: 675, height: 1200, tone: 'light' },
   },
   {
-    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
+    desktop: { file: '/footer/coastal-temple.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-field.jpg', width: 638, height: 1140, tone: 'dark' },
   },
   {
-    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
+    desktop: { file: '/footer/coastal-temple.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-lighthouse.jpg', width: 816, height: 1456, tone: 'dark' },
   },
   {
-    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
+    desktop: { file: '/footer/coastal-villa.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-clouds.jpg', width: 1290, height: 2580, tone: 'light' },
   },
   {
-    desktop: { file: '/footer/coastal-town.jpg', width: 1672, height: 643, tone: 'light' },
+    desktop: { file: '/footer/coastal-villa.jpg', width: 1672, height: 643, tone: 'light' },
     mobile: { file: '/footer/mobile-library.jpg', width: 723, height: 1076, tone: 'dark' },
   },
 ]

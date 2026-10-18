@@ -121,13 +121,28 @@ styles carry their own licences; see their
 
 ### Footer artwork — UNRESOLVED, do not ship without settling this
 
-The seven prints in `web/next-app/public/footer/` are shipped to every visitor: one
-desktop landscape and six phone portraits, drawn full-bleed behind the footer.
+The nine prints in `web/next-app/public/footer/` are shipped to every visitor: three
+desktop landscapes and six phone portraits, drawn full-bleed behind the footer.
 
-**Their provenance and licence are not established.** They were collected from image
-search without a recorded source, author, or licence, and nothing in the repository
-says otherwise. This entry is here because the obligation is real and unsatisfied,
-not because it is settled.
+**Their provenance and licence are not established.** The harbour print and the six
+portraits were collected from image search without a recorded source, author, or
+licence. The two coastal engravings added on 2026-10-18 have a recorded source -- the
+Pinterest pins below -- but still no author and no licence. Nothing in the repository
+establishes a right to redistribute any of them. This entry is here because the
+obligation is real and unsatisfied, not because it is settled.
+
+The two added prints:
+
+| File | Source | Original |
+| --- | --- | --- |
+| `coastal-temple.jpg` | [Pinterest pin 774900679681807221](https://www.pinterest.com/pin/774900679681807221/), pinned from <https://justabhinozblog.wordpress.com> | 1672x941, cropped to 2.6:1 |
+| `coastal-villa.jpg` | [Pinterest pin 774900679681807215](https://www.pinterest.com/pin/774900679681807215/), pinned from <https://justabhinozblog.wordpress.com> | 1672x941, cropped to 2.6:1 |
+
+Both pins are titled as aesthetic blue-and-white laptop wallpapers. Neither names an
+author or a licence, and the pinner's blog is the only attribution the platform gives --
+it is the person who pinned the image, not necessarily the person who made it. The
+2.6:1 crop is the footer's, not the original's: the desktop slot holds one ratio so the
+footer's height does not change between visits.
 
 What follows from that, stated plainly:
 
