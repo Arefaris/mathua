@@ -12424,6 +12424,171 @@
     "subdomain": "statistics.probability"
   },
   {
+    "domain": "statistics",
+    "grading_type": "multiple_choice",
+    "id": "stat.infer.hypothesis",
+    "label": "Null and alternative hypotheses",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.sampling",
+      "stat.infer.confidence"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.infer.ztest",
+    "label": "The one-sample z statistic",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.hypothesis",
+      "stat.sampling.se"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.infer.ttest",
+    "label": "The one-sample t statistic",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.ztest",
+      "stat.dist.student_t"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "multiple_choice",
+    "id": "stat.infer.pvalue",
+    "label": "p-values and significance",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.ztest",
+      "stat.dist.z_table"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "multiple_choice",
+    "id": "stat.infer.type_error",
+    "label": "Type I and II errors and power",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.hypothesis",
+      "stat.infer.pvalue"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.infer.proportion",
+    "label": "Standard error of a proportion",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.confidence",
+      "stat.sampling.se"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.test.chi_square",
+    "label": "The chi-square goodness-of-fit test",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.dist.chi_square",
+      "stat.infer.hypothesis"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.test.anova",
+    "label": "One-way ANOVA",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.adv.variance",
+      "stat.infer.hypothesis"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.reg.r2",
+    "label": "The coefficient of determination",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.adv.covariance",
+      "stat.adv.variance"
+    ],
+    "subdomain": "statistics.advanced"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "numeric",
+    "id": "stat.data.histogram",
+    "label": "Histograms",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.data.bar_graph",
+      "stat.data.range"
+    ],
+    "subdomain": "statistics.data_representation"
+  },
+  {
+    "domain": "statistics",
+    "grading_type": "multiple_choice",
+    "id": "stat.infer.nonparametric",
+    "label": "Nonparametric tests",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "stat.infer.hypothesis",
+      "stat.dist.binomial"
+    ],
+    "subdomain": "statistics.inference"
+  },
+  {
     "domain": "topology",
     "grading_type": "multiple_choice",
     "id": "topo.basics.metric",

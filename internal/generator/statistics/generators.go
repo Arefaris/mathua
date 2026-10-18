@@ -52,6 +52,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("stat.prob.discrete_rv", &discreteRVGen{})
 	reg.Register("stat.prob.expected_value", &expectedValueGen{})
 	registerNumeric(reg)
+	registerBatch(reg)
 }
 
 type readTableGen struct{}

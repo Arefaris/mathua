@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 950,
-  "unit_count": 97,
+  "concept_count": 961,
+  "unit_count": 98,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2231,6 +2231,7 @@
       "subdomains": [
         "statistics.advanced",
         "statistics.central_tendency",
+        "statistics.data_representation",
         "statistics.distributions",
         "statistics.probability"
       ],
@@ -2240,6 +2241,7 @@
         "stat.adv.harmonic_mean",
         "stat.adv.rms",
         "stat.adv.variance",
+        "stat.data.histogram",
         "stat.data.median",
         "stat.data.mode",
         "stat.data.range",
@@ -2256,11 +2258,12 @@
         "stat.prob.expected_value",
         "stat.prob.sample_space",
         "stat.quartile.value",
+        "stat.reg.r2",
         "stat.spread.iqr",
         "stat.spread.mad",
         "stat.zscore.value"
       ],
-      "concept_count": 24
+      "concept_count": 26
     },
     {
       "id": "statistics.b4",
@@ -2285,13 +2288,36 @@
         "stat.dist.student_t",
         "stat.dist.z_table",
         "stat.infer.confidence",
+        "stat.infer.hypothesis",
         "stat.infer.margin",
+        "stat.infer.proportion",
         "stat.infer.sampling",
         "stat.prob.conditional",
         "stat.prob.counting",
         "stat.sampling.se"
       ],
-      "concept_count": 15
+      "concept_count": 17
+    },
+    {
+      "id": "statistics.b5",
+      "title": "Statistics · Stage 6",
+      "domain": "statistics",
+      "band": 5,
+      "depth_min": 15,
+      "depth_max": 17,
+      "subdomains": [
+        "statistics.inference"
+      ],
+      "concept_ids": [
+        "stat.infer.nonparametric",
+        "stat.infer.pvalue",
+        "stat.infer.ttest",
+        "stat.infer.type_error",
+        "stat.infer.ztest",
+        "stat.test.anova",
+        "stat.test.chi_square"
+      ],
+      "concept_count": 7
     },
     {
       "id": "statistics.b8",

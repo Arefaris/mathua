@@ -619,5 +619,170 @@
     "streak": 10,
     "avg_time_seconds": 24.0
    }
+  },
+  {
+   "id": "stat.infer.hypothesis",
+   "label": "Null and alternative hypotheses",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "multiple_choice",
+   "prerequisites": [
+   "stat.infer.sampling",
+   "stat.infer.confidence"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.infer.ztest",
+   "label": "The one-sample z statistic",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.infer.hypothesis",
+   "stat.sampling.se"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.infer.ttest",
+   "label": "The one-sample t statistic",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.infer.ztest",
+   "stat.dist.student_t"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.infer.pvalue",
+   "label": "p-values and significance",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "multiple_choice",
+   "prerequisites": [
+   "stat.infer.ztest",
+   "stat.dist.z_table"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.infer.type_error",
+   "label": "Type I and II errors and power",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "multiple_choice",
+   "prerequisites": [
+   "stat.infer.hypothesis",
+   "stat.infer.pvalue"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 26.0
+   }
+  },
+  {
+   "id": "stat.infer.proportion",
+   "label": "Standard error of a proportion",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.infer.confidence",
+   "stat.sampling.se"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "stat.test.chi_square",
+   "label": "The chi-square goodness-of-fit test",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.dist.chi_square",
+   "stat.infer.hypothesis"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 26.0
+   }
+  },
+  {
+   "id": "stat.test.anova",
+   "label": "One-way ANOVA",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.adv.variance",
+   "stat.infer.hypothesis"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 28.0
+   }
+  },
+  {
+   "id": "stat.reg.r2",
+   "label": "The coefficient of determination",
+   "domain": "statistics",
+   "subdomain": "statistics.advanced",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.adv.covariance",
+   "stat.adv.variance"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "stat.data.histogram",
+   "label": "Histograms",
+   "domain": "statistics",
+   "subdomain": "statistics.data_representation",
+   "grading_type": "numeric",
+   "prerequisites": [
+   "stat.data.bar_graph",
+   "stat.data.range"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 20.0
+   }
+  },
+  {
+   "id": "stat.infer.nonparametric",
+   "label": "Nonparametric tests",
+   "domain": "statistics",
+   "subdomain": "statistics.inference",
+   "grading_type": "multiple_choice",
+   "prerequisites": [
+   "stat.infer.hypothesis",
+   "stat.dist.binomial"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 26.0
+   }
   }
 ]

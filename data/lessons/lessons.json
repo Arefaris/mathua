@@ -3798,5 +3798,49 @@
   {
     "concept_id": "linalg.eigen.cayley_hamilton",
     "source": "teaching/linalg.eigen.cayley_hamilton.md"
+  },
+  {
+    "concept_id": "stat.infer.hypothesis",
+    "source": "teaching/stat.infer.hypothesis.md"
+  },
+  {
+    "concept_id": "stat.infer.ztest",
+    "source": "teaching/stat.infer.ztest.md"
+  },
+  {
+    "concept_id": "stat.infer.ttest",
+    "source": "teaching/stat.infer.ttest.md"
+  },
+  {
+    "concept_id": "stat.infer.pvalue",
+    "source": "teaching/stat.infer.pvalue.md"
+  },
+  {
+    "concept_id": "stat.infer.type_error",
+    "source": "teaching/stat.infer.type_error.md"
+  },
+  {
+    "concept_id": "stat.infer.proportion",
+    "source": "teaching/stat.infer.proportion.md"
+  },
+  {
+    "concept_id": "stat.test.chi_square",
+    "source": "teaching/stat.test.chi_square.md"
+  },
+  {
+    "concept_id": "stat.test.anova",
+    "source": "teaching/stat.test.anova.md"
+  },
+  {
+    "concept_id": "stat.reg.r2",
+    "source": "teaching/stat.reg.r2.md"
+  },
+  {
+    "concept_id": "stat.data.histogram",
+    "source": "teaching/stat.data.histogram.md"
+  },
+  {
+    "concept_id": "stat.infer.nonparametric",
+    "source": "teaching/stat.infer.nonparametric.md"
   }
 ]
