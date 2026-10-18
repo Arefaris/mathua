@@ -3706,5 +3706,53 @@
   {
     "concept_id": "ml.tree.ensemble",
     "source": "teaching/ml.tree.ensemble.md"
+  },
+  {
+    "concept_id": "topo.metric.ball",
+    "source": "teaching/topo.metric.ball.md"
+  },
+  {
+    "concept_id": "topo.metric.interior",
+    "source": "teaching/topo.metric.interior.md"
+  },
+  {
+    "concept_id": "topo.metric.limit_point",
+    "source": "teaching/topo.metric.limit_point.md"
+  },
+  {
+    "concept_id": "topo.metric.convergence",
+    "source": "teaching/topo.metric.convergence.md"
+  },
+  {
+    "concept_id": "topo.metric.complete",
+    "source": "teaching/topo.metric.complete.md"
+  },
+  {
+    "concept_id": "topo.metric.basis",
+    "source": "teaching/topo.metric.basis.md"
+  },
+  {
+    "concept_id": "topo.metric.subspace",
+    "source": "teaching/topo.metric.subspace.md"
+  },
+  {
+    "concept_id": "topo.metric.dense",
+    "source": "teaching/topo.metric.dense.md"
+  },
+  {
+    "concept_id": "topo.invariant.homeomorphism",
+    "source": "teaching/topo.invariant.homeomorphism.md"
+  },
+  {
+    "concept_id": "topo.invariant.euler",
+    "source": "teaching/topo.invariant.euler.md"
+  },
+  {
+    "concept_id": "topo.invariant.genus",
+    "source": "teaching/topo.invariant.genus.md"
+  },
+  {
+    "concept_id": "topo.invariant.betti",
+    "source": "teaching/topo.invariant.betti.md"
   }
 ]

@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 927 concepts, and there are 927 KP shard files
-holding 2781 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 939 concepts, and there are 939 KP shard files
+holding 2817 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 628 of the 927 concepts
+### 4.1 The course catalog reaches 662 of the 939 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-628 of the 927 concepts: 299 of them have a node, a generator, a lesson and three KP shards and
+662 of the 939 concepts: 277 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -83,7 +83,7 @@ The count of unreachable concepts by domain:
 |---|---|---|
 | calculus | 165 | 93 |
 | algebra | 104 | 46 |
-| topology | 30 | 22 |
+| topology | 42 | 0 |
 | statistics | 44 | 21 |
 | precalculus | 41 | 20 |
 | fractions | 45 | 13 |
@@ -113,7 +113,7 @@ entirely `multiple_choice`:
 | Domain | Concepts | `multiple_choice` |
 |---|---|---|
 | abstract_algebra | 45 | 43 |
-| topology | 30 | 29 |
+| topology | 42 | 35 |
 | differential_equations | 32 | 24 |
 | machine_learning | 45 | 29 |
 | discrete_math | 55 | 26 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 927 concepts. Reaching a thousand means adding 73, and this is the table that says
+The catalog holds 939 concepts. Reaching a thousand means adding 61, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| topology | university | 30 | 42 | +12 |
 | linear_algebra | university | 34 | 45 | +11 |
 | statistics | bridge | 44 | 55 | +11 |
 | calculus | bridge | 165 | 175 | +10 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | prealgebra | school | 60 | 60 | +0 |
 | abstract_algebra | university | 45 | 45 | +0 |
 | machine_learning | university | 45 | 45 | +0 |
+| topology | university | 42 | 42 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -477,6 +477,22 @@ the tests recompute each answer from them. All 45 machine-learning concepts are 
 the sixteen that no course reached before, because the `ml` course now targets the advanced sinks
 (`bert`, `gan`, `actor_critic`, `adam`, `batchnorm`, `calibration`, `augmentation`) as well as the
 new ones. The remainder is 73, and the largest deficit left is topology's twelve.
+
+**Topology reached its target on 2026-10-18.** Twelve concepts — open balls, interior, closure and
+boundary, limit points, convergence, completeness, bases and subbases, the subspace topology, dense
+sets and separability, homeomorphisms, the Euler characteristic, genus, and Betti numbers — took the
+domain from 30 to 42, so its row reads +0. One subdomain is new, `topology.invariants`, for the four
+invariant concepts. The survey found that the domain jumped from three basics straight to named
+theorems (Urysohn, Tietze, Stone-Čech, Van Kampen, de Rham) with almost no computational middle, so
+the batch builds the metric-space toolkit the later lessons assume and adds the computable
+invariants the algebraic-topology lessons describe but never name. Six of the twelve are numeric,
+which raises the domain from 1 of 30 produced answers to 7 of 42; each numeric generator publishes
+the facts its answers follow from (coordinates, boundary points, leading coefficients, cells, and
+the Euler characteristic or genus) and the tests recompute the answer from them. All 42 topology
+concepts are reachable, including the 34 that no course reached before, because the `topo` course
+now targets the ten existing sinks as well as the nine new ones, and its description now covers the
+full sequence. The remainder is 61, and the largest deficit left is linear_algebra's eleven, tied
+with statistics' eleven.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

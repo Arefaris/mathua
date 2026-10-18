@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 927,
+  "concept_count": 939,
   "unit_count": 97,
   "units": [
     {
@@ -2313,9 +2313,16 @@
         "topo.basics.metric",
         "topo.basics.open_closed",
         "topo.connected",
+        "topo.metric.ball",
+        "topo.metric.basis",
+        "topo.metric.complete",
+        "topo.metric.convergence",
+        "topo.metric.interior",
+        "topo.metric.limit_point",
+        "topo.metric.subspace",
         "topo.product"
       ],
-      "concept_count": 5
+      "concept_count": 12
     },
     {
       "id": "topology.b11",
@@ -2330,6 +2337,7 @@
         "topology.connected",
         "topology.constructions",
         "topology.covering",
+        "topology.invariants",
         "topology.manifolds",
         "topology.metrization",
         "topology.separation"
@@ -2344,13 +2352,16 @@
         "topo.hausdorff",
         "topo.homotopy",
         "topo.homotopy.fundamental",
+        "topo.invariant.euler",
+        "topo.invariant.homeomorphism",
         "topo.manifold",
+        "topo.metric.dense",
         "topo.metrization",
         "topo.quotient",
         "topo.separation.tietze",
         "topo.urysohn"
       ],
-      "concept_count": 14
+      "concept_count": 17
     },
     {
       "id": "topology.b12",
@@ -2363,6 +2374,7 @@
         "topology.algebraic",
         "topology.compact",
         "topology.dimension",
+        "topology.invariants",
         "topology.knot",
         "topology.manifolds",
         "topology.separation"
@@ -2376,11 +2388,13 @@
         "topo.fiber_bundle",
         "topo.fundamental.van_kampen",
         "topo.homology.cellular",
+        "topo.invariant.betti",
+        "topo.invariant.genus",
         "topo.knot",
         "topo.manifold.orientability",
         "topo.separation.completely_regular"
       ],
-      "concept_count": 11
+      "concept_count": 13
     },
     {
       "id": "trigonometry.b2",

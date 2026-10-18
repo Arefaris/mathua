@@ -12694,6 +12694,178 @@
     "subdomain": "topology.algebraic"
   },
   {
+    "domain": "topology",
+    "grading_type": "numeric",
+    "id": "topo.metric.ball",
+    "label": "Open balls",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.metric"
+    ],
+    "subdomain": "topology.basics"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "numeric",
+    "id": "topo.metric.interior",
+    "label": "Interior, closure and boundary",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.open_closed"
+    ],
+    "subdomain": "topology.basics"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "multiple_choice",
+    "id": "topo.metric.limit_point",
+    "label": "Limit points",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.open_closed"
+    ],
+    "subdomain": "topology.basics"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "numeric",
+    "id": "topo.metric.convergence",
+    "label": "Convergence in metric spaces",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.metric"
+    ],
+    "subdomain": "topology.basics"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "multiple_choice",
+    "id": "topo.metric.complete",
+    "label": "Completeness and Cauchy sequences",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.metric.convergence"
+    ],
+    "subdomain": "topology.basics"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "multiple_choice",
+    "id": "topo.metric.basis",
+    "label": "Bases and subbases",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.open_closed"
+    ],
+    "subdomain": "topology.constructions"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "multiple_choice",
+    "id": "topo.metric.subspace",
+    "label": "The subspace topology",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.open_closed"
+    ],
+    "subdomain": "topology.constructions"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "multiple_choice",
+    "id": "topo.metric.dense",
+    "label": "Dense sets and separability",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.metric.interior"
+    ],
+    "subdomain": "topology.constructions"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "multiple_choice",
+    "id": "topo.invariant.homeomorphism",
+    "label": "Homeomorphisms",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.basics.continuous",
+      "topo.connected"
+    ],
+    "subdomain": "topology.invariants"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "numeric",
+    "id": "topo.invariant.euler",
+    "label": "Euler characteristic",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.connected",
+      "topo.compact"
+    ],
+    "subdomain": "topology.invariants"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "numeric",
+    "id": "topo.invariant.genus",
+    "label": "Genus of a surface",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.invariant.euler",
+      "topo.manifold"
+    ],
+    "subdomain": "topology.invariants"
+  },
+  {
+    "domain": "topology",
+    "grading_type": "numeric",
+    "id": "topo.invariant.betti",
+    "label": "Betti numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "topo.invariant.euler",
+      "topo.homology.cellular"
+    ],
+    "subdomain": "topology.invariants"
+  },
+  {
     "domain": "trigonometry",
     "grading_type": "multiple_choice",
     "id": "trig.basics.radians",

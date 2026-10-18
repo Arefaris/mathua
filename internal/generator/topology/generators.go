@@ -39,6 +39,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("topo.fiber_bundle", &fiberBundleGen{})
 	reg.Register("topo.homology.cellular", &cellularHomologyGen{})
 	reg.Register("topo.cohomology.de_rham", &deRhamGen{})
+	registerBatch(reg)
 }
 
 // ----- 1. metric -----

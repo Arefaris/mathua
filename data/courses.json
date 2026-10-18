@@ -505,11 +505,30 @@
     "id": "topo",
     "name": "Topology",
     "grade": "college",
-    "description": "Metric spaces, open and closed sets, and continuity.",
+    "description": "Metric spaces, open and closed sets, continuity, compactness, connectedness, and an introduction to algebraic topology.",
     "targets": [
       "topo.basics.metric",
       "topo.basics.open_closed",
-      "topo.basics.continuous"
+      "topo.basics.continuous",
+      "topo.cohomology.de_rham",
+      "topo.connected.local_path",
+      "topo.dimension",
+      "topo.embedding",
+      "topo.fiber_bundle",
+      "topo.fundamental.van_kampen",
+      "topo.homology.cellular",
+      "topo.knot",
+      "topo.metrization",
+      "topo.quotient",
+      "topo.metric.ball",
+      "topo.metric.limit_point",
+      "topo.metric.complete",
+      "topo.metric.basis",
+      "topo.metric.subspace",
+      "topo.metric.dense",
+      "topo.invariant.homeomorphism",
+      "topo.invariant.genus",
+      "topo.invariant.betti"
     ]
   },
   {

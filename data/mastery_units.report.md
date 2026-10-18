@@ -12,10 +12,10 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 927 |
+| Total concepts | 939 |
 | Total units | 97 |
 | Minimum unit size | 1 |
-| Median unit size | 6 |
+| Median unit size | 7 |
 | Maximum unit size | 50 |
 | Singleton units | 19 |
 | Units with <= 3 concepts | 30 |
@@ -25,7 +25,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 | Backward band edges | 0 |
 
 If the learner is assessed once per unit, then 97 assessments cover the corpus, and the
-median is one assessment per 6 concepts. That is the frequency question this report
+median is one assessment per 7 concepts. That is the frequency question this report
 exists to make concrete.
 
 ## Proposed units
@@ -121,9 +121,9 @@ exists to make concrete.
 | `statistics.b3` | statistics | 3 | 24 | 4 | 9–11 |
 | `statistics.b4` | statistics | 4 | 15 | 3 | 12–14 |
 | `statistics.b8` | statistics | 8 | 1 | 1 | 24–24 |
-| `topology.b10` | topology | 10 | 5 | 3 | 30–32 |
-| `topology.b11` | topology | 11 | 14 | 8 | 33–35 |
-| `topology.b12` | topology | 12 | 11 | 6 | 36–38 |
+| `topology.b10` | topology | 10 | 12 | 3 | 30–32 |
+| `topology.b11` | topology | 11 | 17 | 9 | 33–35 |
+| `topology.b12` | topology | 12 | 13 | 7 | 36–38 |
 | `trigonometry.b2` | trigonometry | 2 | 4 | 1 | 7–8 |
 | `trigonometry.b3` | trigonometry | 3 | 6 | 2 | 9–11 |
 | `trigonometry.b4` | trigonometry | 4 | 14 | 4 | 12–14 |
@@ -143,14 +143,14 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 129 | 5 | 39 | 24 | 45 | 5 | 0 |
-| 3 | 97 | 6 | 50 | 19 | 30 | 6 | 0 |
-| 4 | 78 | 9 | 64 | 9 | 22 | 7 | 0 |
+| 2 | 129 | 5 | 39 | 24 | 44 | 5 | 0 |
+| 3 | 97 | 7 | 50 | 19 | 30 | 6 | 0 |
+| 4 | 78 | 9 | 64 | 9 | 21 | 7 | 0 |
 | 5 | 66 | 10 | 72 | 5 | 13 | 9 | 0 |
-| 6 | 63 | 11 | 97 | 6 | 12 | 9 | 0 |
-| 8 | 49 | 14 | 105 | 3 | 9 | 13 | 0 |
+| 6 | 63 | 11 | 97 | 6 | 12 | 10 | 0 |
+| 8 | 49 | 14 | 105 | 3 | 8 | 13 | 0 |
 | 10 | 43 | 17 | 138 | 3 | 7 | 12 | 0 |
-| 12 | 43 | 16 | 124 | 2 | 5 | 13 | 0 |
+| 12 | 43 | 16 | 124 | 2 | 5 | 14 | 0 |
 | 15 | 33 | 23 | 138 | 2 | 5 | 13 | 0 |
 | 20 | 29 | 24 | 165 | 2 | 4 | 14 | 0 |
 | 45 | 17 | 45 | 165 | 0 | 0 | 17 | 0 |
@@ -170,7 +170,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**90 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**91 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -280,19 +280,20 @@ Unresolvable subdomains:
 `topology.covering` 
 
 `topology.dimension` 
+`topology.invariants` 
 `topology.knot` 
 `topology.manifolds` 
-`topology.metrization` 
 
+`topology.metrization` 
 `topology.separation` 
 `trigonometry.advanced` 
 `trigonometry.functions` 
-`trigonometry.graphs` 
 
+`trigonometry.graphs` 
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 927
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 939
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
