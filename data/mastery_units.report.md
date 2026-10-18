@@ -12,19 +12,19 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 915 |
-| Total units | 96 |
+| Total concepts | 927 |
+| Total units | 97 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
 | Maximum unit size | 50 |
-| Singleton units | 18 |
-| Units with <= 3 concepts | 29 |
+| Singleton units | 19 |
+| Units with <= 3 concepts | 30 |
 | Units with > 25 concepts | 6 |
 | Units with > 50 concepts | 0 |
-| Cross-unit prerequisite edges (derived) | 236 |
+| Cross-unit prerequisite edges (derived) | 245 |
 | Backward band edges | 0 |
 
-If the learner is assessed once per unit, then 96 assessments cover the corpus, and the
+If the learner is assessed once per unit, then 97 assessments cover the corpus, and the
 median is one assessment per 6 concepts. That is the frequency question this report
 exists to make concrete.
 
@@ -90,13 +90,14 @@ exists to make concrete.
 | `linear_algebra.b7` | linear_algebra | 7 | 4 | 2 | 21–22 |
 | `linear_algebra.b8` | linear_algebra | 8 | 5 | 1 | 24–26 |
 | `linear_algebra.b9` | linear_algebra | 9 | 2 | 1 | 27–28 |
-| `machine_learning.b3` | machine_learning | 3 | 4 | 2 | 9–11 |
-| `machine_learning.b7` | machine_learning | 7 | 4 | 2 | 21–23 |
-| `machine_learning.b8` | machine_learning | 8 | 6 | 4 | 24–26 |
+| `machine_learning.b3` | machine_learning | 3 | 5 | 2 | 9–11 |
+| `machine_learning.b4` | machine_learning | 4 | 1 | 1 | 13–13 |
+| `machine_learning.b7` | machine_learning | 7 | 5 | 3 | 21–23 |
+| `machine_learning.b8` | machine_learning | 8 | 9 | 5 | 24–26 |
 | `machine_learning.b9` | machine_learning | 9 | 3 | 2 | 27–28 |
 | `machine_learning.b10` | machine_learning | 10 | 2 | 1 | 31–32 |
-| `machine_learning.b11` | machine_learning | 11 | 8 | 3 | 33–35 |
-| `machine_learning.b12` | machine_learning | 12 | 6 | 2 | 36–37 |
+| `machine_learning.b11` | machine_learning | 11 | 10 | 4 | 33–35 |
+| `machine_learning.b12` | machine_learning | 12 | 10 | 4 | 36–37 |
 | `number_theory.b2` | number_theory | 2 | 1 | 1 | 8–8 |
 | `number_theory.b3` | number_theory | 3 | 10 | 2 | 9–11 |
 | `number_theory.b4` | number_theory | 4 | 12 | 4 | 12–14 |
@@ -142,19 +143,19 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 128 | 5 | 39 | 23 | 47 | 5 | 0 |
-| 3 | 96 | 6 | 50 | 18 | 29 | 6 | 0 |
-| 4 | 77 | 9 | 64 | 8 | 21 | 7 | 0 |
-| 5 | 66 | 9 | 72 | 5 | 14 | 9 | 0 |
-| 6 | 62 | 11 | 97 | 5 | 11 | 9 | 0 |
+| 2 | 129 | 5 | 39 | 24 | 45 | 5 | 0 |
+| 3 | 97 | 6 | 50 | 19 | 30 | 6 | 0 |
+| 4 | 78 | 9 | 64 | 9 | 22 | 7 | 0 |
+| 5 | 66 | 10 | 72 | 5 | 13 | 9 | 0 |
+| 6 | 63 | 11 | 97 | 6 | 12 | 9 | 0 |
 | 8 | 49 | 14 | 105 | 3 | 9 | 13 | 0 |
-| 10 | 43 | 16 | 138 | 3 | 8 | 12 | 0 |
+| 10 | 43 | 17 | 138 | 3 | 7 | 12 | 0 |
 | 12 | 43 | 16 | 124 | 2 | 5 | 13 | 0 |
 | 15 | 33 | 23 | 138 | 2 | 5 | 13 | 0 |
 | 20 | 29 | 24 | 165 | 2 | 4 | 14 | 0 |
 | 45 | 17 | 45 | 165 | 0 | 0 | 17 | 0 |
 
-**No width is clean.** Small widths fragment — at 3 there are 18 singleton units, which is a
+**No width is clean.** Small widths fragment — at 3 there are 19 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
 units too large to assess: at 45 the partition is just the 17 domains themselves, whose
 largest is 128 concepts. The usable widths trade fragmentation against size rather than
@@ -169,7 +170,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**92 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**90 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -248,57 +249,55 @@ Unresolvable subdomains:
 `linear_algebra.systems` 
 `linear_algebra.transformations` 
 
-`machine_learning.evaluation` 
 `machine_learning.nlp` 
-`machine_learning.regression` 
 `machine_learning.reinforcement` 
-
-`machine_learning.unsupervised` 
+`machine_learning.trees` 
 `number_theory.applications` 
+
 `prealgebra.equations` 
 `prealgebra.inequalities` 
-
 `precalculus.conics` 
 `precalculus.discrete` 
+
 `precalculus.exponential` 
 `precalculus.functions` 
-
 `precalculus.parametric` 
 `precalculus.polar` 
+
 `precalculus.polynomials` 
 `precalculus.rational` 
-
 `precalculus.sequences` 
 `precalculus.systems` 
+
 `precalculus.vectors` 
 `statistics.distributions` 
-
 `topology.algebraic` 
 `topology.basics` 
+
 `topology.compact` 
 `topology.connected` 
-
 `topology.constructions` 
 `topology.covering` 
+
 `topology.dimension` 
 `topology.knot` 
-
 `topology.manifolds` 
 `topology.metrization` 
+
 `topology.separation` 
 `trigonometry.advanced` 
-
 `trigonometry.functions` 
 `trigonometry.graphs` 
+
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 915
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 927
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
 
-- **anomaly** `singleton_units`: 18 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
+- **anomaly** `singleton_units`: 19 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
 
 ## Not decided here
 

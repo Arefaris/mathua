@@ -3658,5 +3658,53 @@
   {
     "concept_id": "abstract.structures.module_hom",
     "source": "teaching/abstract.structures.module_hom.md"
+  },
+  {
+    "concept_id": "ml.activation.sigmoid",
+    "source": "teaching/ml.activation.sigmoid.md"
+  },
+  {
+    "concept_id": "ml.logistic.regression",
+    "source": "teaching/ml.logistic.regression.md"
+  },
+  {
+    "concept_id": "ml.grad.vanishing",
+    "source": "teaching/ml.grad.vanishing.md"
+  },
+  {
+    "concept_id": "ml.loss.mae",
+    "source": "teaching/ml.loss.mae.md"
+  },
+  {
+    "concept_id": "ml.eval.confusion",
+    "source": "teaching/ml.eval.confusion.md"
+  },
+  {
+    "concept_id": "ml.eval.f1",
+    "source": "teaching/ml.eval.f1.md"
+  },
+  {
+    "concept_id": "ml.cluster.kmeans",
+    "source": "teaching/ml.cluster.kmeans.md"
+  },
+  {
+    "concept_id": "ml.data.scaling",
+    "source": "teaching/ml.data.scaling.md"
+  },
+  {
+    "concept_id": "ml.data.onehot",
+    "source": "teaching/ml.data.onehot.md"
+  },
+  {
+    "concept_id": "ml.data.imbalance",
+    "source": "teaching/ml.data.imbalance.md"
+  },
+  {
+    "concept_id": "ml.tree.gini",
+    "source": "teaching/ml.tree.gini.md"
+  },
+  {
+    "concept_id": "ml.tree.ensemble",
+    "source": "teaching/ml.tree.ensemble.md"
   }
 ]

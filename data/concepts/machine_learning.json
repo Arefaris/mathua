@@ -469,5 +469,185 @@
       "streak": 10,
       "avg_time_seconds": 24.0
     }
+  },
+  {
+    "id": "ml.activation.sigmoid",
+    "label": "Sigmoid activation",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.neural_networks",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.forward_pass",
+      "precalc.exp.equation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 20.0
+    }
+  },
+  {
+    "id": "ml.logistic.regression",
+    "label": "Logistic regression",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.regression",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ml.activation.sigmoid",
+      "ml.loss.cross_entropy"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.grad.vanishing",
+    "label": "Vanishing and exploding gradients",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.neural_networks",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ml.backpropagation",
+      "ml.activation.sigmoid"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "ml.loss.mae",
+    "label": "Mean absolute error",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.regression",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.loss.mse",
+      "stat.data.mean"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "ml.eval.confusion",
+    "label": "The confusion matrix",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.evaluation",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.validation",
+      "stat.data.read_table"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "ml.eval.f1",
+    "label": "The F1 score",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.evaluation",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.eval.precision",
+      "ml.eval.recall"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "ml.cluster.kmeans",
+    "label": "k-means clustering",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.unsupervised",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ml.knn.nearest_distance",
+      "stat.data.mean"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "ml.data.scaling",
+    "label": "Feature scaling",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.data",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.data.mean",
+      "stat.dist.z_table"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "ml.data.onehot",
+    "label": "One-hot encoding",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.data",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ml.perceptron",
+      "stat.data.read_table"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 20.0
+    }
+  },
+  {
+    "id": "ml.data.imbalance",
+    "label": "Class imbalance",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.data",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ml.eval.accuracy",
+      "ml.validation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.tree.gini",
+    "label": "Gini impurity",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.trees",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.prob.basic",
+      "ml.validation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "ml.tree.ensemble",
+    "label": "Bagging and random forests",
+    "domain": "machine_learning",
+    "subdomain": "machine_learning.trees",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ml.tree.gini",
+      "ml.validation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
   }
 ]

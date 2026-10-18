@@ -529,7 +529,24 @@
       "ml.eval.precision",
       "ml.eval.recall",
       "ml.pca.variance_percent",
-      "ml.knn.nearest_distance"
+      "ml.knn.nearest_distance",
+      "ml.arch.gan",
+      "ml.nlp.bert",
+      "ml.reinforcement.actor_critic",
+      "ml.optim.adam",
+      "ml.optim.batchnorm",
+      "ml.eval.calibration",
+      "ml.data.augmentation",
+      "ml.logistic.regression",
+      "ml.loss.mae",
+      "ml.eval.confusion",
+      "ml.eval.f1",
+      "ml.cluster.kmeans",
+      "ml.data.scaling",
+      "ml.data.onehot",
+      "ml.data.imbalance",
+      "ml.tree.ensemble",
+      "ml.grad.vanishing"
     ]
   },
   {

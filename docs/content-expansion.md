@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 915 concepts, and there are 915 KP shard files
-holding 2745 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 927 concepts, and there are 927 KP shard files
+holding 2781 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 598 of the 915 concepts
+### 4.1 The course catalog reaches 628 of the 927 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-598 of the 915 concepts: 317 of them have a node, a generator, a lesson and three KP shards and
+628 of the 927 concepts: 299 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -84,10 +84,10 @@ The count of unreachable concepts by domain:
 | calculus | 165 | 93 |
 | algebra | 104 | 46 |
 | topology | 30 | 22 |
-| statistics | 44 | 23 |
+| statistics | 44 | 21 |
 | precalculus | 41 | 20 |
 | fractions | 45 | 13 |
-| machine_learning | 33 | 16 |
+| machine_learning | 45 | 0 |
 | complex_numbers | 42 | 0 |
 | number_theory | 32 | 18 |
 | differential_equations | 32 | 12 |
@@ -115,7 +115,7 @@ entirely `multiple_choice`:
 | abstract_algebra | 45 | 43 |
 | topology | 30 | 29 |
 | differential_equations | 32 | 24 |
-| machine_learning | 33 | 24 |
+| machine_learning | 45 | 29 |
 | discrete_math | 55 | 26 |
 | number_theory | 32 | 17 |
 | complex_numbers | 42 | 20 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 915 concepts. Reaching a thousand means adding 85, and this is the table that says
+The catalog holds 927 concepts. Reaching a thousand means adding 73, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| machine_learning | university | 33 | 45 | +12 |
 | topology | university | 30 | 42 | +12 |
 | linear_algebra | university | 34 | 45 | +11 |
 | statistics | bridge | 44 | 55 | +11 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | complex_numbers | university | 42 | 42 | +0 |
 | prealgebra | school | 60 | 60 | +0 |
 | abstract_algebra | university | 45 | 45 | +0 |
+| machine_learning | university | 45 | 45 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -459,7 +459,24 @@ multiple choice. All 45 abstract-algebra concepts are reachable, including the e
 reached before, because `abstract2` now targets the sinks that close over them: the ten targeted
 gaps plus the four older sinks `commutator`, `galois_group`, `noetherian` and `exact_sequence`. The
 batch adds no authored solution schema, consistent with the university-domain policy. The remainder
-is 85, and the largest deficit left is machine_learning's twelve, tied with topology's twelve.
+was 85, and the largest deficit left was machine_learning's twelve, tied with topology's twelve.
+
+**Machine learning reached its target on 2026-10-18.** Twelve concepts — sigmoid activation,
+logistic regression, vanishing and exploding gradients, mean absolute error, the confusion matrix,
+F1, k-means clustering, feature scaling, one-hot encoding, class imbalance, Gini impurity, and
+bagging and random forests — took the domain from 33 to 45, so its row reads +0. Two subdomains are
+new, `machine_learning.data` for the three preprocessing concepts and `machine_learning.trees` for
+the two tree concepts. The survey rejected the obvious additions before writing them: the CNN lesson
+already teaches output-size arithmetic, the validation lesson already teaches leakage, the
+gradient-descent lesson already teaches learning-rate tuning, the overfitting lesson already teaches
+capacity, and the transformer lesson already teaches softmax attention, so none of those became a
+duplicate concept. Seven of the twelve are numeric, which raises the domain from 24 of 33 multiple
+choice to 29 of 45; the numeric generators publish the facts their answers follow from (residuals,
+confusion cells, precision and recall, coordinates, mean and standard deviation, class counts) and
+the tests recompute each answer from them. All 45 machine-learning concepts are reachable, including
+the sixteen that no course reached before, because the `ml` course now targets the advanced sinks
+(`bert`, `gan`, `actor_critic`, `adam`, `batchnorm`, `calibration`, `augmentation`) as well as the
+new ones. The remainder is 73, and the largest deficit left is topology's twelve.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still
