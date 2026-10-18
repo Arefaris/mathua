@@ -71,6 +71,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("arith.order_ops.nested", &orderOpsGen{parens: true, exponents: true})
 
 	reg.Register("arith.dec.intro", &decIntroGen{})
+
+	registerBatch(reg)
 }
 
 type addGen struct {

@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 874,
+  "concept_count": 888,
   "unit_count": 96,
   "units": [
     {
@@ -365,6 +365,7 @@
       "subdomains": [
         "arithmetic.addition",
         "arithmetic.division",
+        "arithmetic.estimation",
         "arithmetic.multiplication",
         "arithmetic.negatives",
         "arithmetic.place_value",
@@ -372,10 +373,14 @@
       ],
       "concept_ids": [
         "arith.add.triple",
+        "arith.compare.whole",
         "arith.div.concept",
+        "arith.estimate.sum",
         "arith.mult.2_5_10",
         "arith.mult.concept",
         "arith.neg.add_sub",
+        "arith.neg.word",
+        "arith.place.expanded",
         "arith.place.hundreds",
         "arith.place.thousands",
         "arith.round.hundreds",
@@ -384,7 +389,7 @@
         "arith.sub.borrow",
         "arith.sub.word"
       ],
-      "concept_count": 12
+      "concept_count": 16
     },
     {
       "id": "arithmetic.b2",
@@ -396,16 +401,20 @@
       "subdomains": [
         "arithmetic.decimals_intro",
         "arithmetic.division",
+        "arithmetic.estimation",
         "arithmetic.exponents",
         "arithmetic.factors",
         "arithmetic.multiplication",
         "arithmetic.negatives",
-        "arithmetic.order_of_operations"
+        "arithmetic.order_of_operations",
+        "arithmetic.place_value"
       ],
       "concept_ids": [
         "arith.dec.intro",
         "arith.div.basic",
         "arith.div.remainder",
+        "arith.div.zero",
+        "arith.estimate.product",
         "arith.exp.concept",
         "arith.exp.evaluate",
         "arith.factor.find",
@@ -415,9 +424,10 @@
         "arith.mult.triple",
         "arith.mult.word",
         "arith.neg.mult_div",
-        "arith.order_ops.basic"
+        "arith.order_ops.basic",
+        "arith.place.powers_ten"
       ],
-      "concept_count": 13
+      "concept_count": 16
     },
     {
       "id": "arithmetic.b3",
@@ -430,11 +440,16 @@
         "arithmetic.division",
         "arithmetic.exponents",
         "arithmetic.factors",
-        "arithmetic.order_of_operations"
+        "arithmetic.order_of_operations",
+        "arithmetic.word_problems"
       ],
       "concept_ids": [
+        "arith.div.interpret_remainder",
         "arith.div.long",
         "arith.div.word",
+        "arith.exp.negative_base",
+        "arith.exp.power_product",
+        "arith.exp.power_quotient",
         "arith.exp.power_rule",
         "arith.exp.product_rule",
         "arith.exp.quotient_rule",
@@ -444,10 +459,13 @@
         "arith.factor.prime_fact",
         "arith.order_ops.full",
         "arith.order_ops.nested",
+        "arith.sqrt.cube",
+        "arith.sqrt.estimate",
         "arith.sqrt.perfect",
-        "arith.sqrt.simplify"
+        "arith.sqrt.simplify",
+        "arith.word.multi_step"
       ],
-      "concept_count": 13
+      "concept_count": 20
     },
     {
       "id": "calculus.b8",

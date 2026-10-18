@@ -3494,5 +3494,61 @@
   {
     "concept_id": "alg.conic.classify",
     "source": "authored/alg.conic.classify.md"
+  },
+  {
+    "concept_id": "arith.compare.whole",
+    "source": "authored/arith.compare.whole.md"
+  },
+  {
+    "concept_id": "arith.place.expanded",
+    "source": "authored/arith.place.expanded.md"
+  },
+  {
+    "concept_id": "arith.place.powers_ten",
+    "source": "authored/arith.place.powers_ten.md"
+  },
+  {
+    "concept_id": "arith.estimate.sum",
+    "source": "authored/arith.estimate.sum.md"
+  },
+  {
+    "concept_id": "arith.estimate.product",
+    "source": "authored/arith.estimate.product.md"
+  },
+  {
+    "concept_id": "arith.word.multi_step",
+    "source": "authored/arith.word.multi_step.md"
+  },
+  {
+    "concept_id": "arith.div.interpret_remainder",
+    "source": "authored/arith.div.interpret_remainder.md"
+  },
+  {
+    "concept_id": "arith.div.zero",
+    "source": "authored/arith.div.zero.md"
+  },
+  {
+    "concept_id": "arith.neg.word",
+    "source": "authored/arith.neg.word.md"
+  },
+  {
+    "concept_id": "arith.exp.negative_base",
+    "source": "authored/arith.exp.negative_base.md"
+  },
+  {
+    "concept_id": "arith.exp.power_product",
+    "source": "authored/arith.exp.power_product.md"
+  },
+  {
+    "concept_id": "arith.exp.power_quotient",
+    "source": "authored/arith.exp.power_quotient.md"
+  },
+  {
+    "concept_id": "arith.sqrt.cube",
+    "source": "authored/arith.sqrt.cube.md"
+  },
+  {
+    "concept_id": "arith.sqrt.estimate",
+    "source": "authored/arith.sqrt.estimate.md"
   }
 ]

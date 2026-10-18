@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 874 concepts, and there are 874 KP shard files
-holding 2622 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 888 concepts, and there are 888 KP shard files
+holding 2664 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 513 of the 874 concepts
+### 4.1 The course catalog reaches 537 of the 888 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-513 of the 874 concepts: 361 of them have a node, a generator, a lesson and three KP shards and
+537 of the 888 concepts: 351 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -93,7 +93,7 @@ The count of unreachable concepts by domain:
 | differential_equations | 32 | 12 |
 | prealgebra | 46 | 23 |
 | trigonometry | 48 | 31 |
-| arithmetic | 46 | 13 |
+| arithmetic | 60 | 3 |
 | linear_algebra | 34 | 11 |
 | abstract_algebra | 32 | 11 |
 | discrete_math | 55 | 3 |
@@ -140,7 +140,7 @@ the schema.
 ### 4.3 Lesson depth is no longer thin at the bottom
 
 Lessons come from three places. The `teaching/` tree holds 329 mappings, the Algebrica import
-holds 328, and 170 are authored. The median lesson is 5,901 bytes, and no lesson is under 1 KB: the
+holds 328, and 231 are authored. The median lesson is 5,128 bytes, and no lesson is under 1 KB: the
 last six were filled on 2026-10-17.
 
 Those six were `calc.series.ratio_test` (671 bytes), `abstract.group.order` (960), `linalg.decomp.lu`
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 874 concepts. Reaching a thousand means adding 126, and this is the table that says
+The catalog holds 888 concepts. Reaching a thousand means adding 112, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| arithmetic | school | 46 | 60 | +14 |
 | prealgebra | school | 46 | 60 | +14 |
 | abstract_algebra | university | 32 | 45 | +13 |
 | machine_learning | university | 33 | 45 | +12 |
@@ -351,6 +350,7 @@ section 6 reads them, largest deficit first.
 | differential_equations | university | 32 | 42 | +10 |
 | precalculus | bridge | 41 | 50 | +9 |
 | algebra | school | 104 | 104 | +0 |
+| arithmetic | school | 60 | 60 | +0 |
 | geometry | school | 45 | 45 | +0 |
 | fractions | school | 45 | 45 | +0 |
 | trigonometry | school | 48 | 48 | +0 |
@@ -406,7 +406,23 @@ subdomains are new, `algebra.rational` and `algebra.radicals`, because the three
 concepts and the two radical concepts had no existing home. The conic-recognition concept is also
 what pulls the four conic prerequisites into a course: targeting it brings `circle`, `ellipse`,
 `parabola` and `hyperbola` inside the closure for the first time, and it reaches `func.quad` as
-well. The remainder is 126, and the largest deficit left is arithmetic's fourteen.
+well. The remainder was 126, and the largest deficit left was arithmetic's fourteen.
+
+**Arithmetic reached its target on 2026-10-18.** Fourteen concepts — ordering whole numbers,
+expanded form, multiplying and dividing by powers of ten, estimating sums and products, a multi-step
+word problem, interpreting a remainder, division by zero, integer word problems, powers with
+negative bases, the power of a product and of a quotient, cube roots, and estimating square roots —
+took the domain from 46 to 60, so its row reads +0. Two subdomains are new,
+`arithmetic.estimation` and `arithmetic.word_problems`, because the estimation and multi-step
+concepts had no existing home. The five grade courses 4 through 8 take the batch: the fourth-grade
+set gains ordering, expanded form, powers of ten and estimation of sums; the fifth-grade set gains
+estimation of products, interpreting remainders, multi-step problems and division by zero; the sixth
+grade gains integer word problems, the seventh negative bases, and the eighth the product and
+quotient rules, cube roots and square-root bounds. All fourteen new concepts are reachable, and
+their prerequisites pull ten older arithmetic concepts into a course path for the first time. Three
+older concepts still sit outside every course: `arith.round.thousands`, `arith.factor.composite`
+and `arith.order_ops.nested`. The remainder is 112, and the largest deficit left is prealgebra's
+fourteen.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

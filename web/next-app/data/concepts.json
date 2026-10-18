@@ -2630,6 +2630,213 @@
     "subdomain": "arithmetic.decimals_intro"
   },
   {
+    "domain": "arithmetic",
+    "grading_type": "tuple",
+    "id": "arith.compare.whole",
+    "label": "Compare and order whole numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.place.thousands"
+    ],
+    "subdomain": "arithmetic.place_value"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "tuple",
+    "id": "arith.place.expanded",
+    "label": "Expanded form of whole numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.place.thousands"
+    ],
+    "subdomain": "arithmetic.place_value"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.place.powers_ten",
+    "label": "Multiply and divide by powers of ten",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.place.thousands",
+      "arith.mult.tables"
+    ],
+    "subdomain": "arithmetic.place_value"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.estimate.sum",
+    "label": "Estimate sums and differences",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.round.hundreds",
+      "arith.add.triple",
+      "arith.sub.borrow"
+    ],
+    "subdomain": "arithmetic.estimation"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.estimate.product",
+    "label": "Estimate products by rounding",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.round.tens",
+      "arith.mult.tables",
+      "arith.place.powers_ten"
+    ],
+    "subdomain": "arithmetic.estimation"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.word.multi_step",
+    "label": "Multi-step whole-number word problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 45,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.add.word",
+      "arith.sub.word",
+      "arith.mult.word",
+      "arith.div.word"
+    ],
+    "subdomain": "arithmetic.word_problems"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.div.interpret_remainder",
+    "label": "Interpret a remainder in context",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.div.remainder"
+    ],
+    "subdomain": "arithmetic.division"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "multiple_choice",
+    "id": "arith.div.zero",
+    "label": "Division by zero",
+    "mastery_threshold": {
+      "avg_time_seconds": 10,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.div.basic"
+    ],
+    "subdomain": "arithmetic.division"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.neg.word",
+    "label": "Integer word problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.neg.add_sub"
+    ],
+    "subdomain": "arithmetic.negatives"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.exp.negative_base",
+    "label": "Powers with negative bases",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.exp.evaluate",
+      "arith.neg.mult_div"
+    ],
+    "subdomain": "arithmetic.exponents"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "expression",
+    "id": "arith.exp.power_product",
+    "label": "Power of a product",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.exp.power_rule",
+      "arith.mult.tables"
+    ],
+    "subdomain": "arithmetic.exponents"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "expression",
+    "id": "arith.exp.power_quotient",
+    "label": "Power of a quotient",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.exp.quotient_rule",
+      "arith.exp.power_rule"
+    ],
+    "subdomain": "arithmetic.exponents"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "numeric",
+    "id": "arith.sqrt.cube",
+    "label": "Cube roots of perfect cubes",
+    "mastery_threshold": {
+      "avg_time_seconds": 10,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.exp.evaluate"
+    ],
+    "subdomain": "arithmetic.exponents"
+  },
+  {
+    "domain": "arithmetic",
+    "grading_type": "tuple",
+    "id": "arith.sqrt.estimate",
+    "label": "Estimate square roots between integers",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.sqrt.perfect"
+    ],
+    "subdomain": "arithmetic.exponents"
+  },
+  {
     "domain": "calculus",
     "encompasses": [
       "alg.func.concept"

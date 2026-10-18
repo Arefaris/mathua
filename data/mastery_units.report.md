@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 874 |
+| Total concepts | 888 |
 | Total units | 96 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
@@ -21,7 +21,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 | Units with <= 3 concepts | 30 |
 | Units with > 25 concepts | 6 |
 | Units with > 50 concepts | 0 |
-| Cross-unit prerequisite edges (derived) | 229 |
+| Cross-unit prerequisite edges (derived) | 231 |
 | Backward band edges | 0 |
 
 If the learner is assessed once per unit, then 96 assessments cover the corpus, and the
@@ -44,9 +44,9 @@ exists to make concrete.
 | `algebra.b8` | algebra | 8 | 24 | 9 | 24–26 |
 | `algebra.b9` | algebra | 9 | 4 | 3 | 27–28 |
 | `arithmetic.b0` | arithmetic | 0 | 8 | 4 | 0–2 |
-| `arithmetic.b1` | arithmetic | 1 | 12 | 6 | 3–5 |
-| `arithmetic.b2` | arithmetic | 2 | 13 | 7 | 6–8 |
-| `arithmetic.b3` | arithmetic | 3 | 13 | 4 | 9–11 |
+| `arithmetic.b1` | arithmetic | 1 | 16 | 7 | 3–5 |
+| `arithmetic.b2` | arithmetic | 2 | 16 | 9 | 6–8 |
+| `arithmetic.b3` | arithmetic | 3 | 20 | 5 | 9–11 |
 | `calculus.b8` | calculus | 8 | 1 | 1 | 26–26 |
 | `calculus.b9` | calculus | 9 | 26 | 4 | 27–29 |
 | `calculus.b10` | calculus | 10 | 50 | 6 | 30–32 |
@@ -144,10 +144,10 @@ at every width.
 |---|---|---|---|---|---|---|---|
 | 2 | 128 | 5 | 39 | 23 | 49 | 5 | 0 |
 | 3 | 96 | 6 | 50 | 18 | 30 | 6 | 0 |
-| 4 | 77 | 9 | 64 | 8 | 21 | 5 | 0 |
-| 5 | 66 | 8 | 72 | 5 | 14 | 8 | 0 |
+| 4 | 77 | 9 | 64 | 8 | 21 | 6 | 0 |
+| 5 | 66 | 9 | 72 | 5 | 14 | 9 | 0 |
 | 6 | 62 | 11 | 97 | 5 | 12 | 7 | 0 |
-| 8 | 49 | 13 | 105 | 3 | 9 | 10 | 0 |
+| 8 | 49 | 13 | 105 | 3 | 9 | 12 | 0 |
 | 10 | 43 | 16 | 138 | 3 | 8 | 12 | 0 |
 | 12 | 43 | 15 | 124 | 2 | 5 | 11 | 0 |
 | 15 | 33 | 23 | 138 | 2 | 5 | 13 | 0 |
@@ -293,7 +293,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 874
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 888
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
