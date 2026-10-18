@@ -1270,5 +1270,226 @@
       "streak": 3,
       "avg_time_seconds": 120
     }
+  },
+  {
+    "id": "alg.linear.two_points",
+    "label": "Equation of a line through two points",
+    "domain": "algebra",
+    "subdomain": "algebra.linear",
+    "grading_type": "expression",
+    "prerequisites": [
+      "alg.linear.slope",
+      "alg.linear.slope_intercept"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 40.0
+    }
+  },
+  {
+    "id": "alg.linear.intercepts",
+    "label": "x- and y-intercepts of a line",
+    "domain": "algebra",
+    "subdomain": "algebra.linear",
+    "grading_type": "tuple",
+    "prerequisites": [
+      "alg.linear.standard_form",
+      "alg.linear.slope_intercept"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "alg.factor.grouping",
+    "label": "Factoring four-term polynomials by grouping",
+    "domain": "algebra",
+    "subdomain": "algebra.factoring",
+    "grading_type": "expression",
+    "prerequisites": [
+      "alg.factor.gcf",
+      "alg.poly.foil"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 40.0
+    }
+  },
+  {
+    "id": "alg.factor.cubes",
+    "label": "Sum and difference of cubes",
+    "domain": "algebra",
+    "subdomain": "algebra.factoring",
+    "grading_type": "expression",
+    "prerequisites": [
+      "alg.poly.special",
+      "alg.factor.diff_squares"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 40.0
+    }
+  },
+  {
+    "id": "alg.quad.vertex_form",
+    "label": "Vertex form by completing the square",
+    "domain": "algebra",
+    "subdomain": "algebra.quadratics",
+    "grading_type": "tuple",
+    "prerequisites": [
+      "alg.quad.complete_square"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "alg.quad.word_problem",
+    "label": "Quadratic word problems: area",
+    "domain": "algebra",
+    "subdomain": "algebra.quadratics",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "alg.quad.formula"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "alg.poly.end_behavior",
+    "label": "End behavior of a polynomial",
+    "domain": "algebra",
+    "subdomain": "algebra.polynomials",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "alg.poly.concept"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 15.0
+    }
+  },
+  {
+    "id": "alg.rational.simplify",
+    "label": "Simplifying rational expressions",
+    "domain": "algebra",
+    "subdomain": "algebra.rational",
+    "grading_type": "expression",
+    "prerequisites": [
+      "alg.factor.trinomial",
+      "alg.factor.diff_squares"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 45.0
+    }
+  },
+  {
+    "id": "alg.rational.mult_div",
+    "label": "Multiply and divide rational expressions",
+    "domain": "algebra",
+    "subdomain": "algebra.rational",
+    "grading_type": "expression",
+    "prerequisites": [
+      "alg.rational.simplify"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 45.0
+    }
+  },
+  {
+    "id": "alg.rational.add_sub",
+    "label": "Add and subtract rational expressions",
+    "domain": "algebra",
+    "subdomain": "algebra.rational",
+    "grading_type": "expression",
+    "prerequisites": [
+      "alg.rational.simplify"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 45.0
+    }
+  },
+  {
+    "id": "alg.radical.rational_exponents",
+    "label": "Rational exponents",
+    "domain": "algebra",
+    "subdomain": "algebra.radicals",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "arith.exp.evaluate",
+      "arith.sqrt.perfect"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "alg.radical.rationalize",
+    "label": "Rationalizing a denominator",
+    "domain": "algebra",
+    "subdomain": "algebra.radicals",
+    "grading_type": "tuple",
+    "prerequisites": [
+      "arith.sqrt.simplify"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "alg.func.variation",
+    "label": "Direct and inverse variation",
+    "domain": "algebra",
+    "subdomain": "algebra.functions",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "alg.linear.slope_intercept",
+      "ratio.ops.proportion"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 25.0
+    }
+  },
+  {
+    "id": "alg.log.change_base",
+    "label": "Change of base",
+    "domain": "algebra",
+    "subdomain": "algebra.logarithms",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "alg.log.evaluate",
+      "alg.log.properties"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "alg.conic.classify",
+    "label": "Classifying a conic from its equation",
+    "domain": "algebra",
+    "subdomain": "algebra.conics",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "alg.conic.circle",
+      "alg.conic.ellipse",
+      "alg.conic.parabola",
+      "alg.conic.hyperbola"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 15.0
+    }
   }
 ]

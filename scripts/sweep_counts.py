@@ -252,7 +252,10 @@ def rules(f: dict) -> list:
         ("internal/concepts/concepts_test.go",
          r't\.Errorf\("expected \d{3} in topo order, got %d", len\(d\.Order\(\)\)\)',
          f't.Errorf("expected {f["concepts"]} in topo order, got %d", len(d.Order()))', 1),
-        ("internal/planning/planner_test.go", r"expected \d+ courses, got", f"expected {f['courses']} courses, got", 1),
+        # `internal/planning/planner_test.go` used to pin the course count with a literal. It now
+        # reads `data/courses.json` and compares against the number it finds there, so there is no
+        # site left to rewrite in this batch; a rule that matches nothing is an error, and the
+        # test's own comment records why the literal must not come back.
         # The app copy a learner reads, and the test that guards it.
         ("web/next-app/app/how-it-works/sections.tsx", r"contains \d{3} concepts",
          f"contains {f['concepts']} concepts", 1),

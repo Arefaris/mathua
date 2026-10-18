@@ -110,6 +110,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("alg.quad.quadratic", &quadQuadraticGen{})
 	reg.Register("alg.systems.concept", &systemsConceptGen{})
 	reg.Register("alg.systems.gaussian", &gaussianElimGen{})
+
+	registerBatch(reg)
 }
 
 // ---------------------------------------------------------------------------

@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 859 concepts, and there are 859 KP shard files
-holding 2577 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 874 concepts, and there are 874 KP shard files
+holding 2622 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 492 of the 859 concepts
+### 4.1 The course catalog reaches 513 of the 874 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-492 of the 859 concepts: 367 of them have a node, a generator, a lesson and three KP shards and
+513 of the 874 concepts: 361 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -82,7 +82,7 @@ The count of unreachable concepts by domain:
 | Domain | Concepts | Unreachable |
 |---|---|---|
 | calculus | 165 | 93 |
-| algebra | 89 | 52 |
+| algebra | 104 | 46 |
 | topology | 30 | 22 |
 | statistics | 44 | 23 |
 | precalculus | 41 | 20 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 859 concepts. Reaching a thousand means adding 141, and this is the table that says
+The catalog holds 874 concepts. Reaching a thousand means adding 126, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| algebra | school | 89 | 104 | +15 |
 | arithmetic | school | 46 | 60 | +14 |
 | prealgebra | school | 46 | 60 | +14 |
 | abstract_algebra | university | 32 | 45 | +13 |
@@ -351,6 +350,7 @@ section 6 reads them, largest deficit first.
 | number_theory | university | 32 | 42 | +10 |
 | differential_equations | university | 32 | 42 | +10 |
 | precalculus | bridge | 41 | 50 | +9 |
+| algebra | school | 104 | 104 | +0 |
 | geometry | school | 45 | 45 | +0 |
 | fractions | school | 45 | 45 | +0 |
 | trigonometry | school | 48 | 48 | +0 |
@@ -394,8 +394,19 @@ took the domain from 26 to 42, so its row reads +0. A new college course, `cx` "
 Analysis", targets all 42: the domain had been reachable only through `pc`'s single polar-form
 target, which left twenty of the twenty-six behind it outside every course. The batch also brought
 the `complex` grading path its first tests, which is how the polar rounding recorded in
-`docs/code-defects.md` came to be documented rather than guessed at. The remainder is 141, and the
-largest deficit left is algebra's fifteen.
+`docs/code-defects.md` came to be documented rather than guessed at. The remainder was 141 at that
+point.
+
+**Algebra reached its target on 2026-10-18.** Fifteen concepts — a line through two points,
+intercepts, factoring by grouping, sum and difference of cubes, vertex form, a quadratic area word
+problem, end behavior, simplifying, multiplying and dividing, adding and subtracting rational
+expressions, rational exponents, rationalizing a denominator, direct and inverse variation, change
+of base, and classifying a conic — took the domain from 89 to 104, so its row reads +0. Two
+subdomains are new, `algebra.rational` and `algebra.radicals`, because the three rational-expression
+concepts and the two radical concepts had no existing home. The conic-recognition concept is also
+what pulls the four conic prerequisites into a course: targeting it brings `circle`, `ellipse`,
+`parabola` and `hyperbola` inside the closure for the first time, and it reaches `func.quad` as
+well. The remainder is 126, and the largest deficit left is arithmetic's fourteen.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

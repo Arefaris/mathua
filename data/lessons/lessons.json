@@ -3434,5 +3434,65 @@
   {
     "concept_id": "complex.topology.domain",
     "source": "authored/complex.topology.domain.md"
+  },
+  {
+    "concept_id": "alg.linear.two_points",
+    "source": "authored/alg.linear.two_points.md"
+  },
+  {
+    "concept_id": "alg.linear.intercepts",
+    "source": "authored/alg.linear.intercepts.md"
+  },
+  {
+    "concept_id": "alg.factor.grouping",
+    "source": "authored/alg.factor.grouping.md"
+  },
+  {
+    "concept_id": "alg.factor.cubes",
+    "source": "authored/alg.factor.cubes.md"
+  },
+  {
+    "concept_id": "alg.quad.vertex_form",
+    "source": "authored/alg.quad.vertex_form.md"
+  },
+  {
+    "concept_id": "alg.quad.word_problem",
+    "source": "authored/alg.quad.word_problem.md"
+  },
+  {
+    "concept_id": "alg.poly.end_behavior",
+    "source": "authored/alg.poly.end_behavior.md"
+  },
+  {
+    "concept_id": "alg.rational.simplify",
+    "source": "authored/alg.rational.simplify.md"
+  },
+  {
+    "concept_id": "alg.rational.mult_div",
+    "source": "authored/alg.rational.mult_div.md"
+  },
+  {
+    "concept_id": "alg.rational.add_sub",
+    "source": "authored/alg.rational.add_sub.md"
+  },
+  {
+    "concept_id": "alg.radical.rational_exponents",
+    "source": "authored/alg.radical.rational_exponents.md"
+  },
+  {
+    "concept_id": "alg.radical.rationalize",
+    "source": "authored/alg.radical.rationalize.md"
+  },
+  {
+    "concept_id": "alg.func.variation",
+    "source": "authored/alg.func.variation.md"
+  },
+  {
+    "concept_id": "alg.log.change_base",
+    "source": "authored/alg.log.change_base.md"
+  },
+  {
+    "concept_id": "alg.conic.classify",
+    "source": "authored/alg.conic.classify.md"
   }
 ]

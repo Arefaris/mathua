@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 859,
-  "unit_count": 95,
+  "concept_count": 874,
+  "unit_count": 96,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -119,6 +119,22 @@
       "concept_count": 2
     },
     {
+      "id": "algebra.b3",
+      "title": "Algebra · Stage 4",
+      "domain": "algebra",
+      "band": 3,
+      "depth_min": 10,
+      "depth_max": 11,
+      "subdomains": [
+        "algebra.radicals"
+      ],
+      "concept_ids": [
+        "alg.radical.rational_exponents",
+        "alg.radical.rationalize"
+      ],
+      "concept_count": 2
+    },
+    {
       "id": "algebra.b5",
       "title": "Algebra · Stage 6",
       "domain": "algebra",
@@ -132,9 +148,10 @@
         "alg.poly.add_sub",
         "alg.poly.concept",
         "alg.poly.division",
+        "alg.poly.end_behavior",
         "alg.poly.monomial"
       ],
-      "concept_count": 4
+      "concept_count": 5
     },
     {
       "id": "algebra.b6",
@@ -163,8 +180,10 @@
         "alg.eq.vars_both_sides",
         "alg.eq.vars_both_sides.word",
         "alg.factor.gcf",
+        "alg.factor.grouping",
         "alg.factor.trinomial",
         "alg.func.concept",
+        "alg.func.variation",
         "alg.ineq.absolute_value",
         "alg.ineq.compound",
         "alg.ineq.interval",
@@ -179,6 +198,7 @@
         "alg.linear.slope",
         "alg.linear.slope_intercept",
         "alg.linear.standard_form",
+        "alg.linear.two_points",
         "alg.poly.foil",
         "alg.poly.mult_mono",
         "alg.poly.special",
@@ -187,7 +207,7 @@
         "alg.systems.gaussian",
         "alg.systems.substitution"
       ],
-      "concept_count": 33
+      "concept_count": 36
     },
     {
       "id": "algebra.b7",
@@ -202,13 +222,16 @@
         "algebra.factoring",
         "algebra.functions",
         "algebra.inequalities",
+        "algebra.linear",
         "algebra.quadratics",
+        "algebra.rational",
         "algebra.systems"
       ],
       "concept_ids": [
         "alg.conic.circle",
         "alg.exp.concept",
         "alg.factor.ac_method",
+        "alg.factor.cubes",
         "alg.factor.diff_squares",
         "alg.func.absolute_value",
         "alg.func.composite",
@@ -227,14 +250,19 @@
         "alg.func.rational",
         "alg.func.sign",
         "alg.ineq.two_var",
+        "alg.linear.intercepts",
         "alg.quad.complete_square",
         "alg.quad.formula",
         "alg.quad.incomplete",
         "alg.quad.solve_factor",
+        "alg.quad.vertex_form",
+        "alg.rational.add_sub",
+        "alg.rational.mult_div",
+        "alg.rational.simplify",
         "alg.systems.elimination",
         "alg.systems.word"
       ],
-      "concept_count": 27
+      "concept_count": 33
     },
     {
       "id": "algebra.b8",
@@ -255,6 +283,7 @@
         "algebra.sequences"
       ],
       "concept_ids": [
+        "alg.conic.classify",
         "alg.conic.ellipse",
         "alg.conic.hyperbola",
         "alg.conic.parabola",
@@ -273,12 +302,13 @@
         "alg.quad.discriminant",
         "alg.quad.parametric",
         "alg.quad.quadratic",
+        "alg.quad.word_problem",
         "alg.seq.arithmetic",
         "alg.seq.geometric",
         "alg.seq.sum_arith",
         "alg.seq.sum_geo"
       ],
-      "concept_count": 22
+      "concept_count": 24
     },
     {
       "id": "algebra.b9",
@@ -295,9 +325,10 @@
       "concept_ids": [
         "alg.eq.logarithmic",
         "alg.ineq.logarithmic",
+        "alg.log.change_base",
         "alg.log.properties"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "arithmetic.b0",

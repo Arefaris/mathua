@@ -99,7 +99,14 @@
       "alg.quad.formula",
       "alg.factor.trinomial",
       "alg.func.linear",
-      "alg.linear.parallel_perp"
+      "alg.linear.parallel_perp",
+      "alg.linear.two_points",
+      "alg.linear.intercepts",
+      "alg.factor.grouping",
+      "alg.quad.vertex_form",
+      "alg.quad.word_problem",
+      "alg.poly.end_behavior",
+      "alg.func.variation"
     ]
   },
   {
@@ -148,7 +155,15 @@
       "alg.func.irrational",
       "alg.func.injectivity",
       "alg.poly.special",
-      "alg.seq.geometric"
+      "alg.seq.geometric",
+      "alg.factor.cubes",
+      "alg.rational.simplify",
+      "alg.rational.mult_div",
+      "alg.rational.add_sub",
+      "alg.radical.rational_exponents",
+      "alg.radical.rationalize",
+      "alg.log.change_base",
+      "alg.conic.classify"
     ]
   },
   {
