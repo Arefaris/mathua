@@ -462,6 +462,203 @@
     "subdomain": "abstract_algebra.groups"
   },
   {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.group.center",
+    "label": "Center of a group",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.group.def",
+      "abstract.group.subgroup"
+    ],
+    "subdomain": "abstract_algebra.groups"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.group.automorphism",
+    "label": "Group automorphisms",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.group.homomorphism",
+      "abstract.group.symmetric"
+    ],
+    "subdomain": "abstract_algebra.groups"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.group.simple",
+    "label": "Simple groups",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.group.normal",
+      "abstract.group.quotient_group"
+    ],
+    "subdomain": "abstract_algebra.groups"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "numeric",
+    "id": "abstract.group.p_group",
+    "label": "p-groups",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.group.order",
+      "abstract.group.sylow",
+      "abstract.group.center"
+    ],
+    "subdomain": "abstract_algebra.groups"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.group.composition_series",
+    "label": "Composition series",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.group.simple",
+      "abstract.group.quotient_group"
+    ],
+    "subdomain": "abstract_algebra.groups"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.rings.zero_divisor",
+    "label": "Zero divisors and cancellation",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.rings.def"
+    ],
+    "subdomain": "abstract_algebra.rings"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.rings.integral_domain",
+    "label": "Integral domains",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.rings.def",
+      "abstract.rings.zero_divisor"
+    ],
+    "subdomain": "abstract_algebra.rings"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.rings.prime_ideal",
+    "label": "Prime and maximal ideals",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.rings.ideal",
+      "abstract.rings.quotient",
+      "abstract.rings.integral_domain"
+    ],
+    "subdomain": "abstract_algebra.rings"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.rings.euclidean",
+    "label": "Euclidean domains",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.rings.def",
+      "abstract.rings.ideal",
+      "abstract.rings.polynomial"
+    ],
+    "subdomain": "abstract_algebra.rings"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "numeric",
+    "id": "abstract.field.characteristic",
+    "label": "Characteristic of a field",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.structures.field",
+      "abstract.rings.def"
+    ],
+    "subdomain": "abstract_algebra.fields"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.field.algebraic",
+    "label": "Algebraic and transcendental elements",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.field.extension",
+      "abstract.rings.polynomial"
+    ],
+    "subdomain": "abstract_algebra.fields"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.structures.submodule",
+    "label": "Submodules and quotient modules",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.structures.module",
+      "abstract.group.subgroup"
+    ],
+    "subdomain": "abstract_algebra.structures"
+  },
+  {
+    "domain": "abstract_algebra",
+    "grading_type": "multiple_choice",
+    "id": "abstract.structures.module_hom",
+    "label": "Module homomorphisms",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "abstract.structures.module",
+      "abstract.group.homomorphism"
+    ],
+    "subdomain": "abstract_algebra.structures"
+  },
+  {
     "domain": "algebra",
     "grading_type": "numeric",
     "id": "alg.linear.slope",

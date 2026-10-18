@@ -3606,5 +3606,57 @@
   {
     "concept_id": "prealg.measure.temperature",
     "source": "authored/prealg.measure.temperature.md"
+  },
+  {
+    "concept_id": "abstract.group.center",
+    "source": "teaching/abstract.group.center.md"
+  },
+  {
+    "concept_id": "abstract.group.automorphism",
+    "source": "teaching/abstract.group.automorphism.md"
+  },
+  {
+    "concept_id": "abstract.group.simple",
+    "source": "teaching/abstract.group.simple.md"
+  },
+  {
+    "concept_id": "abstract.group.p_group",
+    "source": "teaching/abstract.group.p_group.md"
+  },
+  {
+    "concept_id": "abstract.group.composition_series",
+    "source": "teaching/abstract.group.composition_series.md"
+  },
+  {
+    "concept_id": "abstract.rings.zero_divisor",
+    "source": "teaching/abstract.rings.zero_divisor.md"
+  },
+  {
+    "concept_id": "abstract.rings.integral_domain",
+    "source": "teaching/abstract.rings.integral_domain.md"
+  },
+  {
+    "concept_id": "abstract.rings.prime_ideal",
+    "source": "teaching/abstract.rings.prime_ideal.md"
+  },
+  {
+    "concept_id": "abstract.rings.euclidean",
+    "source": "teaching/abstract.rings.euclidean.md"
+  },
+  {
+    "concept_id": "abstract.field.characteristic",
+    "source": "teaching/abstract.field.characteristic.md"
+  },
+  {
+    "concept_id": "abstract.field.algebraic",
+    "source": "teaching/abstract.field.algebraic.md"
+  },
+  {
+    "concept_id": "abstract.structures.submodule",
+    "source": "teaching/abstract.structures.submodule.md"
+  },
+  {
+    "concept_id": "abstract.structures.module_hom",
+    "source": "teaching/abstract.structures.module_hom.md"
   }
 ]

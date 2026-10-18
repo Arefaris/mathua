@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 902,
+  "concept_count": 915,
   "unit_count": 96,
   "units": [
     {
@@ -41,15 +41,18 @@
         "abstract_algebra.structures"
       ],
       "concept_ids": [
+        "abstract.group.automorphism",
+        "abstract.group.center",
         "abstract.group.dihedral",
         "abstract.group.homomorphism",
         "abstract.group.lagrange",
         "abstract.group.normal",
         "abstract.rings.def",
         "abstract.rings.ideal",
+        "abstract.rings.zero_divisor",
         "abstract.structures.field"
       ],
-      "concept_count": 7
+      "concept_count": 10
     },
     {
       "id": "abstract_algebra.b8",
@@ -65,16 +68,23 @@
         "abstract_algebra.structures"
       ],
       "concept_ids": [
+        "abstract.field.characteristic",
         "abstract.field.extension",
         "abstract.group.action",
         "abstract.group.quotient_group",
+        "abstract.group.simple",
+        "abstract.rings.euclidean",
+        "abstract.rings.integral_domain",
         "abstract.rings.localization",
         "abstract.rings.polynomial",
+        "abstract.rings.prime_ideal",
         "abstract.rings.quotient",
         "abstract.rings.ufd",
-        "abstract.structures.module"
+        "abstract.structures.module",
+        "abstract.structures.module_hom",
+        "abstract.structures.submodule"
       ],
-      "concept_count": 8
+      "concept_count": 15
     },
     {
       "id": "abstract_algebra.b9",
@@ -90,9 +100,12 @@
         "abstract_algebra.structures"
       ],
       "concept_ids": [
+        "abstract.field.algebraic",
         "abstract.field.finite",
         "abstract.field.galois_group",
+        "abstract.group.composition_series",
         "abstract.group.nilpotent",
+        "abstract.group.p_group",
         "abstract.group.solvable",
         "abstract.group.sylow",
         "abstract.rings.noetherian",
@@ -100,7 +113,7 @@
         "abstract.structures.galois",
         "abstract.structures.tensor"
       ],
-      "concept_count": 9
+      "concept_count": 12
     },
     {
       "id": "abstract_algebra.b10",

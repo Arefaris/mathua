@@ -462,7 +462,13 @@
       "abstract.group.subgroup",
       "abstract.group.homomorphism",
       "abstract.rings.def",
-      "abstract.structures.field"
+      "abstract.structures.field",
+      "abstract.group.center",
+      "abstract.rings.zero_divisor",
+      "abstract.rings.integral_domain",
+      "abstract.field.characteristic",
+      "abstract.structures.submodule",
+      "abstract.structures.module_hom"
     ]
   },
   {
@@ -481,7 +487,18 @@
       "abstract.field.extension",
       "abstract.structures.galois",
       "abstract.group.symmetric",
-      "abstract.group.dihedral"
+      "abstract.group.dihedral",
+      "abstract.group.automorphism",
+      "abstract.group.simple",
+      "abstract.group.p_group",
+      "abstract.group.composition_series",
+      "abstract.rings.prime_ideal",
+      "abstract.rings.euclidean",
+      "abstract.field.algebraic",
+      "abstract.group.commutator",
+      "abstract.field.galois_group",
+      "abstract.rings.noetherian",
+      "abstract.structures.exact_sequence"
     ]
   },
   {

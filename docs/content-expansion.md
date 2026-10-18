@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 902 concepts, and there are 902 KP shard files
-holding 2706 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 915 concepts, and there are 915 KP shard files
+holding 2745 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 574 of the 902 concepts
+### 4.1 The course catalog reaches 598 of the 915 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-574 of the 902 concepts: 328 of them have a node, a generator, a lesson and three KP shards and
+598 of the 915 concepts: 317 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -95,7 +95,7 @@ The count of unreachable concepts by domain:
 | trigonometry | 48 | 31 |
 | arithmetic | 60 | 3 |
 | linear_algebra | 34 | 11 |
-| abstract_algebra | 32 | 11 |
+| abstract_algebra | 45 | 0 |
 | discrete_math | 55 | 3 |
 | geometry | 45 | 6 |
 
@@ -112,7 +112,7 @@ entirely `multiple_choice`:
 
 | Domain | Concepts | `multiple_choice` |
 |---|---|---|
-| abstract_algebra | 32 | 32 |
+| abstract_algebra | 45 | 43 |
 | topology | 30 | 29 |
 | differential_equations | 32 | 24 |
 | machine_learning | 33 | 24 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 902 concepts. Reaching a thousand means adding 98, and this is the table that says
+The catalog holds 915 concepts. Reaching a thousand means adding 85, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| abstract_algebra | university | 32 | 45 | +13 |
 | machine_learning | university | 33 | 45 | +12 |
 | topology | university | 30 | 42 | +12 |
 | linear_algebra | university | 34 | 45 | +11 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | discrete_math | university | 55 | 55 | +0 |
 | complex_numbers | university | 42 | 42 | +0 |
 | prealgebra | school | 60 | 60 | +0 |
+| abstract_algebra | university | 45 | 45 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -439,7 +439,27 @@ comparison, inequality graphs and customary conversion; the eighth-grade set gai
 simple interest, formula evaluation, inequality word problems and temperature conversion. The
 prealgebra course adds the capstone applications. All 60 prealgebra concepts are reachable, and the
 new targets pull every remaining decimal, percent, ratio, expression and inequality prerequisite into
-a course path. The remainder is 98, and the largest deficit left is abstract_algebra's thirteen.
+a course path. The remainder was 98, and the largest deficit left was abstract_algebra's thirteen.
+
+**Abstract algebra reached its target on 2026-10-18.** Thirteen concepts — the center of a group,
+automorphisms, simple groups, p-groups, composition series, zero divisors, integral domains, prime
+and maximal ideals, Euclidean domains, the characteristic of a field, algebraic elements, submodules,
+and module homomorphisms — took the domain from 32 to 45, so its row reads +0. Three candidate
+concepts were dropped because an existing lesson already teaches them: conjugacy is covered by
+`abstract.group.normal`, so the batch teaches composition series; splitting fields are covered by
+`abstract.field.extension`, so it teaches algebraic and transcendental elements; and vector spaces
+are covered by `abstract.structures.module`, so it teaches submodules. The prerequisite direction is
+preserved: `rings.euclidean` depends on `rings.def`, `rings.ideal` and `rings.polynomial`, not on
+`rings.ufd`, because Euclidean implies PID implies UFD and not the reverse. Prime and maximal ideals
+are stated for a commutative ring with identity, the setting in which the quotient tests hold, and
+the characteristic is kept distinct from the field order: a question on `F_9` asks for its
+characteristic of 3 rather than its order of 9. The two computed concepts, p-groups and the
+characteristic, are numeric and publish the facts their answers follow from; the other eleven are
+multiple choice. All 45 abstract-algebra concepts are reachable, including the eleven that no course
+reached before, because `abstract2` now targets the sinks that close over them: the ten targeted
+gaps plus the four older sinks `commutator`, `galois_group`, `noetherian` and `exact_sequence`. The
+batch adds no authored solution schema, consistent with the university-domain policy. The remainder
+is 85, and the largest deficit left is machine_learning's twelve, tied with topology's twelve.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

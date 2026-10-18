@@ -40,6 +40,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("abstract.group.commutator", &commutatorGen{})
 	reg.Register("abstract.group.symmetric", &symmetricGroupGen{})
 	reg.Register("abstract.group.dihedral", &dihedralGroupGen{})
+	registerBatch(reg)
 }
 
 // ----- 1. group.def -----
