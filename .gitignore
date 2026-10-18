@@ -93,6 +93,10 @@ web/next-app/.next/
 web/next-app/out/
 web/desktop-embed/dist/
 web/next-app/node_modules/
+# Next.js writes its build trace to <cwd>/.next. Building from the repository root
+# by mistake leaves one here, and it is never source: the file records a failed
+# build's timings. The app's own output is the web/next-app/.next/ entry above.
+/.next/
 
 # Python
 __pycache__/

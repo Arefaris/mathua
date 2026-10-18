@@ -147,7 +147,17 @@ jobs:
         with:
           go-version: '1.27'
           cache: false
-      - run: go test ./internal/storage/... -run TestParity -v
+      - name: Postgres parity and AI usage
+        run: go test ./internal/storage/... -run 'TestParity|TestAIUsage' -v
+        env:
+          TEST_POSTGRES_DSN: postgres://pg:pg@localhost:5432/mathua?sslmode=disable
+      # The AI quota is concurrent by design — the whole point of reserving both
+      # counters in one transaction is that two requests racing for the last slot
+      # cannot both win — so the quota and failover tests run under the race
+      # detector too, and the storage ones run against Postgres, where the row
+      # locks and the rollback that make the reserve atomic actually exist.
+      - name: AI concurrency under the race detector
+        run: go test -race ./internal/ai/... ./internal/storage/... ./internal/server/... -run 'TestAIUsage|Quota|AI|RateLimit|TrustedIP' -count=1
         env:
           TEST_POSTGRES_DSN: postgres://pg:pg@localhost:5432/mathua?sslmode=disable
 
