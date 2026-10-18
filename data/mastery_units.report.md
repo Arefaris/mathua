@@ -12,16 +12,16 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 888 |
+| Total concepts | 902 |
 | Total units | 96 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
 | Maximum unit size | 50 |
 | Singleton units | 18 |
-| Units with <= 3 concepts | 30 |
+| Units with <= 3 concepts | 29 |
 | Units with > 25 concepts | 6 |
 | Units with > 50 concepts | 0 |
-| Cross-unit prerequisite edges (derived) | 231 |
+| Cross-unit prerequisite edges (derived) | 234 |
 | Backward band edges | 0 |
 
 If the learner is assessed once per unit, then 96 assessments cover the corpus, and the
@@ -104,10 +104,10 @@ exists to make concrete.
 | `number_theory.b6` | number_theory | 6 | 1 | 1 | 20–20 |
 | `prealgebra.b0` | prealgebra | 0 | 1 | 1 | 1–1 |
 | `prealgebra.b2` | prealgebra | 2 | 1 | 1 | 8–8 |
-| `prealgebra.b3` | prealgebra | 3 | 21 | 6 | 9–11 |
-| `prealgebra.b4` | prealgebra | 4 | 15 | 5 | 12–14 |
-| `prealgebra.b5` | prealgebra | 5 | 6 | 3 | 15–17 |
-| `prealgebra.b6` | prealgebra | 6 | 2 | 2 | 18–18 |
+| `prealgebra.b3` | prealgebra | 3 | 22 | 7 | 9–11 |
+| `prealgebra.b4` | prealgebra | 4 | 22 | 6 | 12–14 |
+| `prealgebra.b5` | prealgebra | 5 | 10 | 5 | 15–17 |
+| `prealgebra.b6` | prealgebra | 6 | 4 | 2 | 18–19 |
 | `precalculus.b3` | precalculus | 3 | 1 | 1 | 10–10 |
 | `precalculus.b4` | precalculus | 4 | 5 | 2 | 12–14 |
 | `precalculus.b6` | precalculus | 6 | 1 | 1 | 20–20 |
@@ -142,14 +142,14 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 128 | 5 | 39 | 23 | 49 | 5 | 0 |
-| 3 | 96 | 6 | 50 | 18 | 30 | 6 | 0 |
-| 4 | 77 | 9 | 64 | 8 | 21 | 6 | 0 |
+| 2 | 128 | 5 | 39 | 23 | 48 | 5 | 0 |
+| 3 | 96 | 6 | 50 | 18 | 29 | 6 | 0 |
+| 4 | 77 | 9 | 64 | 8 | 21 | 7 | 0 |
 | 5 | 66 | 9 | 72 | 5 | 14 | 9 | 0 |
-| 6 | 62 | 11 | 97 | 5 | 12 | 7 | 0 |
+| 6 | 62 | 11 | 97 | 5 | 11 | 8 | 0 |
 | 8 | 49 | 13 | 105 | 3 | 9 | 12 | 0 |
 | 10 | 43 | 16 | 138 | 3 | 8 | 12 | 0 |
-| 12 | 43 | 15 | 124 | 2 | 5 | 11 | 0 |
+| 12 | 43 | 15 | 124 | 2 | 5 | 12 | 0 |
 | 15 | 33 | 23 | 138 | 2 | 5 | 13 | 0 |
 | 20 | 29 | 24 | 165 | 2 | 4 | 14 | 0 |
 | 45 | 17 | 44 | 165 | 0 | 0 | 17 | 0 |
@@ -293,7 +293,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 888
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 902
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

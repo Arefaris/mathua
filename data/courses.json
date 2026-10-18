@@ -28,7 +28,12 @@
       "arith.estimate.product",
       "arith.div.interpret_remainder",
       "arith.word.multi_step",
-      "arith.div.zero"
+      "arith.div.zero",
+      "dec.ops.add.word",
+      "dec.ops.mult.word",
+      "dec.ops.sub.word",
+      "dec.ops.div.word",
+      "dec.ops.round"
     ]
   },
   {
@@ -41,7 +46,17 @@
       "frac.ops.div",
       "ratio.ops.proportion",
       "prealg.expr.evaluate",
-      "arith.neg.word"
+      "arith.neg.word",
+      "dec.convert.from_frac",
+      "dec.convert.to_frac",
+      "pct.convert.from_dec",
+      "ratio.ops.proportion.word",
+      "pct.ops.change",
+      "pct.ops.commission",
+      "pct.ops.markup",
+      "ratio.ops.percent_proportion",
+      "prealg.expr.translate",
+      "prealg.measure.metric"
     ]
   },
   {
@@ -54,7 +69,17 @@
       "prealg.eq.one_step_mult",
       "geo.triangle.pythagorean",
       "ratio.ops.rate",
-      "arith.exp.negative_base"
+      "arith.exp.negative_base",
+      "pct.ops.tax_tip",
+      "ratio.ops.rate.word",
+      "ratio.ops.scale",
+      "arith.neg.abs_value",
+      "arith.neg.order_ops",
+      "arith.exp.neg",
+      "arith.exp.zero",
+      "ratio.ops.better_buy",
+      "prealg.ineq.graph",
+      "prealg.measure.convert"
     ]
   },
   {
@@ -70,7 +95,15 @@
       "arith.exp.power_product",
       "arith.exp.power_quotient",
       "arith.sqrt.cube",
-      "arith.sqrt.estimate"
+      "arith.sqrt.estimate",
+      "arith.sci_notation.ops",
+      "prealg.real.properties",
+      "prealg.types",
+      "pct.ops.error",
+      "pct.ops.simple_interest",
+      "prealg.expr.formula",
+      "prealg.ineq.word",
+      "prealg.measure.temperature"
     ]
   },
   {
@@ -101,7 +134,14 @@
       "frac.of_unit",
       "frac.recipe.scale",
       "frac.remaining",
-      "frac.equivalent.scale"
+      "frac.equivalent.scale",
+      "pct.ops.error",
+      "pct.ops.simple_interest",
+      "prealg.expr.formula",
+      "prealg.ineq.word",
+      "prealg.ineq.graph",
+      "ratio.ops.better_buy",
+      "prealg.measure.temperature"
     ]
   },
   {

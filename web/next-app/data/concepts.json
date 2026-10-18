@@ -10451,6 +10451,219 @@
     "subdomain": "prealgebra.variables"
   },
   {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "pct.ops.change",
+    "label": "Percent change from old and new values",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "pct.ops.find_rate",
+      "dec.ops.sub"
+    ],
+    "subdomain": "prealgebra.percentages"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "pct.ops.error",
+    "label": "Percent error",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "pct.ops.change",
+      "dec.ops.sub",
+      "arith.neg.abs_value"
+    ],
+    "subdomain": "prealgebra.percentages"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "pct.ops.commission",
+    "label": "Commission",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "pct.ops.of_number",
+      "dec.ops.mult"
+    ],
+    "subdomain": "prealgebra.percentages"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "pct.ops.markup",
+    "label": "Markup and selling price",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "pct.ops.increase",
+      "pct.ops.of_number"
+    ],
+    "subdomain": "prealgebra.percentages"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "pct.ops.simple_interest",
+    "label": "Simple interest",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "pct.ops.of_number",
+      "dec.ops.mult",
+      "prealg.expr.evaluate"
+    ],
+    "subdomain": "prealgebra.percentages"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "ratio.ops.percent_proportion",
+    "label": "Solve percent problems with a proportion",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ratio.ops.proportion",
+      "pct.ops.of_number"
+    ],
+    "subdomain": "prealgebra.ratios"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "multiple_choice",
+    "id": "ratio.ops.better_buy",
+    "label": "Compare unit prices to find the better buy",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "ratio.ops.rate",
+      "dec.ops.div.word"
+    ],
+    "subdomain": "prealgebra.ratios"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "expression",
+    "id": "prealg.expr.translate",
+    "label": "Translate words into algebraic expressions",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prealg.var.concept",
+      "prealg.expr.evaluate"
+    ],
+    "subdomain": "prealgebra.variables"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "prealg.expr.formula",
+    "label": "Evaluate a formula",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prealg.expr.evaluate",
+      "prealg.expr.distribute"
+    ],
+    "subdomain": "prealgebra.variables"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "prealg.ineq.word",
+    "label": "Write and solve inequality word problems",
+    "mastery_threshold": {
+      "avg_time_seconds": 35,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prealg.ineq.two_step",
+      "prealg.expr.translate"
+    ],
+    "subdomain": "prealgebra.inequalities"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "multiple_choice",
+    "id": "prealg.ineq.graph",
+    "label": "Graph an inequality on a number line",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prealg.ineq.one_step",
+      "prealg.real.concept"
+    ],
+    "subdomain": "prealgebra.inequalities"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "prealg.measure.convert",
+    "label": "Convert customary units",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "dec.ops.mult",
+      "ratio.ops.rate"
+    ],
+    "subdomain": "prealgebra.measurement"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "prealg.measure.metric",
+    "label": "Convert metric units",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "arith.place.powers_ten",
+      "dec.ops.mult"
+    ],
+    "subdomain": "prealgebra.measurement"
+  },
+  {
+    "domain": "prealgebra",
+    "grading_type": "numeric",
+    "id": "prealg.measure.temperature",
+    "label": "Convert between Celsius and Fahrenheit",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "dec.ops.mult",
+      "dec.ops.add",
+      "prealg.expr.evaluate"
+    ],
+    "subdomain": "prealgebra.measurement"
+  },
+  {
     "domain": "precalculus",
     "grading_type": "multiple_choice",
     "id": "precalc.func.transformations",

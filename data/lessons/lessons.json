@@ -3550,5 +3550,61 @@
   {
     "concept_id": "arith.sqrt.estimate",
     "source": "authored/arith.sqrt.estimate.md"
+  },
+  {
+    "concept_id": "pct.ops.change",
+    "source": "authored/pct.ops.change.md"
+  },
+  {
+    "concept_id": "pct.ops.error",
+    "source": "authored/pct.ops.error.md"
+  },
+  {
+    "concept_id": "pct.ops.commission",
+    "source": "authored/pct.ops.commission.md"
+  },
+  {
+    "concept_id": "pct.ops.markup",
+    "source": "authored/pct.ops.markup.md"
+  },
+  {
+    "concept_id": "pct.ops.simple_interest",
+    "source": "authored/pct.ops.simple_interest.md"
+  },
+  {
+    "concept_id": "ratio.ops.percent_proportion",
+    "source": "authored/ratio.ops.percent_proportion.md"
+  },
+  {
+    "concept_id": "ratio.ops.better_buy",
+    "source": "authored/ratio.ops.better_buy.md"
+  },
+  {
+    "concept_id": "prealg.expr.translate",
+    "source": "authored/prealg.expr.translate.md"
+  },
+  {
+    "concept_id": "prealg.expr.formula",
+    "source": "authored/prealg.expr.formula.md"
+  },
+  {
+    "concept_id": "prealg.ineq.word",
+    "source": "authored/prealg.ineq.word.md"
+  },
+  {
+    "concept_id": "prealg.ineq.graph",
+    "source": "authored/prealg.ineq.graph.md"
+  },
+  {
+    "concept_id": "prealg.measure.convert",
+    "source": "authored/prealg.measure.convert.md"
+  },
+  {
+    "concept_id": "prealg.measure.metric",
+    "source": "authored/prealg.measure.metric.md"
+  },
+  {
+    "concept_id": "prealg.measure.temperature",
+    "source": "authored/prealg.measure.temperature.md"
   }
 ]

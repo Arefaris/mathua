@@ -65,6 +65,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("prealg.real.concept", &realConceptGen{})
 	reg.Register("prealg.real.properties", &realPropertiesGen{})
 	reg.Register("prealg.types", &typesGen{})
+
+	registerBatch(reg)
 }
 
 // Decimals

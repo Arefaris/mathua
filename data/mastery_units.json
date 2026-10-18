@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 888,
+  "concept_count": 902,
   "unit_count": 96,
   "units": [
     {
@@ -1861,6 +1861,7 @@
       "subdomains": [
         "prealgebra.decimals",
         "prealgebra.exponents",
+        "prealgebra.measurement",
         "prealgebra.negatives",
         "prealgebra.percentages",
         "prealgebra.ratios",
@@ -1885,11 +1886,12 @@
         "pct.convert.from_dec",
         "pct.convert.to_dec",
         "pct.ops.of_number",
+        "prealg.measure.metric",
         "prealg.real.concept",
         "prealg.types",
         "ratio.ops.simplify"
       ],
-      "concept_count": 21
+      "concept_count": 22
     },
     {
       "id": "prealgebra.b4",
@@ -1901,6 +1903,7 @@
       "subdomains": [
         "prealgebra.decimals",
         "prealgebra.exponents",
+        "prealgebra.measurement",
         "prealgebra.percentages",
         "prealgebra.ratios",
         "prealgebra.variables"
@@ -1909,20 +1912,27 @@
         "arith.sci_notation.ops",
         "dec.convert.to_frac",
         "dec.ops.div.word",
+        "pct.ops.change",
+        "pct.ops.commission",
         "pct.ops.discount",
+        "pct.ops.error",
         "pct.ops.find_rate",
         "pct.ops.increase",
+        "pct.ops.markup",
         "pct.ops.tax_tip",
         "prealg.expr.evaluate",
+        "prealg.measure.convert",
         "prealg.real.properties",
         "prealg.var.concept",
+        "ratio.ops.better_buy",
+        "ratio.ops.percent_proportion",
         "ratio.ops.proportion",
         "ratio.ops.proportion.word",
         "ratio.ops.rate",
         "ratio.ops.rate.word",
         "ratio.ops.scale"
       ],
-      "concept_count": 15
+      "concept_count": 22
     },
     {
       "id": "prealgebra.b5",
@@ -1934,17 +1944,23 @@
       "subdomains": [
         "prealgebra.equations",
         "prealgebra.inequalities",
+        "prealgebra.measurement",
+        "prealgebra.percentages",
         "prealgebra.variables"
       ],
       "concept_ids": [
+        "pct.ops.simple_interest",
         "prealg.eq.one_step_add",
         "prealg.eq.one_step_mult",
         "prealg.eq.two_step",
         "prealg.expr.distribute",
+        "prealg.expr.formula",
         "prealg.expr.like_terms",
-        "prealg.ineq.one_step"
+        "prealg.expr.translate",
+        "prealg.ineq.one_step",
+        "prealg.measure.temperature"
       ],
-      "concept_count": 6
+      "concept_count": 10
     },
     {
       "id": "prealgebra.b6",
@@ -1952,16 +1968,18 @@
       "domain": "prealgebra",
       "band": 6,
       "depth_min": 18,
-      "depth_max": 18,
+      "depth_max": 19,
       "subdomains": [
         "prealgebra.equations",
         "prealgebra.inequalities"
       ],
       "concept_ids": [
         "prealg.eq.word",
-        "prealg.ineq.two_step"
+        "prealg.ineq.graph",
+        "prealg.ineq.two_step",
+        "prealg.ineq.word"
       ],
-      "concept_count": 2
+      "concept_count": 4
     },
     {
       "id": "precalculus.b3",
