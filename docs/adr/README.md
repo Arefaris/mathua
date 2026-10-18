@@ -58,3 +58,4 @@ One file per decision. The domain language stays in [`CONTEXT.md`](../../CONTEXT
 | [ADR-052](ADR-052-administration-reaches-a-phone-and-the-mobile.md) | Administration reaches a phone, and the mobile menu was dead while it said otherwise | 2026-10-08 |
 | [ADR-053](ADR-053-the-admin-entry-was-missing-on-phones.md) | The Admin entry was missing on phones because the login path dropped the role, and no test walked that path | 2026-10-08 |
 | [ADR-054](ADR-054-reference-access-is-not-learning-eligibility-and.md) | Reference access is not learning eligibility, and `/study` is restored as a context-bound reference page | 2026-10-11 |
+| [ADR-055](ADR-055-ai-augmentation-is-a-registry-of-declared-policies.md) | AI augmentation is a registry of declared policies, not a trusted provider list | 2026-10-16 |

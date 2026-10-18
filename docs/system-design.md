@@ -166,7 +166,7 @@ Migrations are embedded directly in the application binary  --  no external migr
 The `Repository` interface abstracts the storage layer (`store.go:127`):
 
 - **SQLiteStore**  --  Fully implemented (`sqlite.go:1`, `WAL` `migrate.go:23`), used for local dev and `DATABASE_URL=sqlite:mathua.db` / `:memory:` tests
-- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:19` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions) — used when `DATABASE_URL=postgres://` `main.go:69`
+- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:21` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions) — used when `DATABASE_URL=postgres://` `main.go:69`
 
 The codebase checks `DATABASE_URL` at startup and opens `pgx` for `postgres://` else `SQLite` (`mathua.db`).
 
@@ -369,9 +369,9 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | `cors` | Sets `Access-Control-Allow-Origin` from `CORS_ALLOWED_ORIGINS` allowlist (`server.go:32`), handles OPTIONS (204), `Vary: Origin` |
 | `logRequest` | Logs method and path |
 | `authMiddleware` | Reads `Authorization: Bearer <token>`, validates `HS256` JWT (`auth.go:98`), injects `studentID` into context |
-| `authLimiter` | Token-bucket rate limiter (5 rate, 10 burst, 1 min window) on auth endpoints `server.go:70` |
-| `writeLimiter` | 20 burst, 3s window on write endpoints (`/api/study/answer`, `/api/quiz/*`, `/api/goal/*`, `/api/reviews/*`) `server.go:69` |
-| `shareLimiter` | 10 burst, 6s window on `GET /api/share/*` `server.go:69` |
+| `authLimiter` | Token-bucket rate limiter (5 rate, 10 burst, 1 min window) on auth endpoints `server.go:207` |
+| `writeLimiter` | 20 burst, 3s window on write endpoints (`/api/study/answer`, `/api/quiz/*`, `/api/goal/*`, `/api/reviews/*`) `server.go:208` |
+| `shareLimiter` | 10 burst, 6s window on `GET /api/share/*` `server.go:209` |
 
 ### All Routes
 
@@ -574,7 +574,7 @@ Trade-off: generation latency. Complex polynomial questions require a SymPy subp
 
 ### Why No ORM?
 
-The schema has 18 tables with straightforward relationships. Raw SQL with `database/sql` gives:
+The schema has 19 tables with straightforward relationships. Raw SQL with `database/sql` gives:
 - Full control over query optimization (especially the SM-2 upsert and leaderboard queries)
 - No query generation overhead
 - Transparent SQL for debugging
@@ -602,5 +602,5 @@ The Go binary serves the Next.js static export directly. This means:
 
 ## Summary
 
-Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:19` / `storage/sqlite.go:1`, same `Repository` `store.go:127`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 17 domain registries (874 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
+Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:21` / `storage/sqlite.go:1`, same `Repository` `store.go:477`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 17 domain registries (874 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
 
