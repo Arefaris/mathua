@@ -3882,5 +3882,45 @@
   {
     "concept_id": "calc.integral.moment_inertia",
     "source": "teaching/calc.integral.moment_inertia.md"
+  },
+  {
+    "concept_id": "nt.adv.jacobi",
+    "source": "teaching/nt.adv.jacobi.md"
+  },
+  {
+    "concept_id": "nt.adv.discrete_log",
+    "source": "teaching/nt.adv.discrete_log.md"
+  },
+  {
+    "concept_id": "nt.adv.modular_sqrt",
+    "source": "teaching/nt.adv.modular_sqrt.md"
+  },
+  {
+    "concept_id": "nt.adv.two_squares",
+    "source": "teaching/nt.adv.two_squares.md"
+  },
+  {
+    "concept_id": "nt.adv.pell",
+    "source": "teaching/nt.adv.pell.md"
+  },
+  {
+    "concept_id": "nt.adv.pisano",
+    "source": "teaching/nt.adv.pisano.md"
+  },
+  {
+    "concept_id": "nt.adv.carmichael_function",
+    "source": "teaching/nt.adv.carmichael_function.md"
+  },
+  {
+    "concept_id": "nt.adv.miller_rabin",
+    "source": "teaching/nt.adv.miller_rabin.md"
+  },
+  {
+    "concept_id": "nt.adv.prime_gap",
+    "source": "teaching/nt.adv.prime_gap.md"
+  },
+  {
+    "concept_id": "nt.adv.bertrand",
+    "source": "teaching/nt.adv.bertrand.md"
   }
 ]

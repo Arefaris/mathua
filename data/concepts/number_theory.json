@@ -455,5 +455,145 @@
       "streak": 10,
       "avg_time_seconds": 24.0
     }
+  },
+  {
+    "id": "nt.adv.jacobi",
+    "label": "The Jacobi symbol",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.adv.legendre"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "nt.adv.discrete_log",
+    "label": "Discrete logarithms",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.adv.primitive_root"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "nt.adv.modular_sqrt",
+    "label": "Square roots modulo a prime",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.residue.count"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "nt.adv.two_squares",
+    "label": "Sums of two squares",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.residue.count"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "nt.adv.pell",
+    "label": "Pell's equation",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.adv.continued_fractions"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "nt.adv.pisano",
+    "label": "Pisano periods",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.basics.modular"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "nt.adv.carmichael_function",
+    "label": "The Carmichael function",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.adv.euler_phi"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "nt.adv.miller_rabin",
+    "label": "The Miller-Rabin test",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "nt.adv.fermat_little"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "nt.adv.prime_gap",
+    "label": "Prime gaps and the next prime",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "nt.basics.prime_inf"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "nt.adv.bertrand",
+    "label": "Bertrand's postulate",
+    "domain": "number_theory",
+    "subdomain": "number_theory.advanced",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "nt.basics.prime_inf"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
   }
 ]

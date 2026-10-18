@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 971 concepts, and there are 971 KP shard files
-holding 2913 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 981 concepts, and there are 981 KP shard files
+holding 2943 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 731 of the 971 concepts
+### 4.1 The course catalog reaches 750 of the 981 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-731 of the 971 concepts: 240 of them have a node, a generator, a lesson and three KP shards and
+750 of the 981 concepts: 231 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -89,7 +89,7 @@ The count of unreachable concepts by domain:
 | fractions | 45 | 13 |
 | machine_learning | 45 | 0 |
 | complex_numbers | 42 | 0 |
-| number_theory | 32 | 18 |
+| number_theory | 42 | 9 |
 | differential_equations | 32 | 12 |
 | prealgebra | 60 | 0 |
 | trigonometry | 48 | 31 |
@@ -117,7 +117,7 @@ entirely `multiple_choice`:
 | differential_equations | 32 | 24 |
 | machine_learning | 45 | 29 |
 | discrete_math | 55 | 26 |
-| number_theory | 32 | 17 |
+| number_theory | 42 | 19 |
 | complex_numbers | 42 | 20 |
 
 Against that, `calculus` carries 86 `symbolic` concepts and `algebra` carries 36. The pool
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 971 concepts. Reaching a thousand means adding 29, and this is the table that says
+The catalog holds 981 concepts. Reaching a thousand means adding 19, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| number_theory | university | 32 | 42 | +10 |
 | differential_equations | university | 32 | 42 | +10 |
 | precalculus | bridge | 41 | 50 | +9 |
 | algebra | school | 104 | 104 | +0 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | linear_algebra | university | 45 | 45 | +0 |
 | statistics | bridge | 55 | 55 | +0 |
 | calculus | bridge | 175 | 175 | +0 |
+| number_theory | university | 42 | 42 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -541,8 +541,24 @@ and one is a tuple. The wiring is deliberately scoped: section 5.1 measured sink
 rejected it, because the calculus sinks are most of the domain and would make `calc1` and `calc2`
 exhaustive, so the three courses gain only the three new concepts that belong to their stage.
 Calculus therefore reads 86 of 175 reachable, with the staged courses preserved; the corpus reaches
-731 of 971. The remainder is 29, and the largest deficit left is number_theory's ten, tied with
+731 of 971. The remainder was 29, and the largest deficit left was number_theory's ten, tied with
 differential_equations' ten.
+
+**Number theory reached its target on 2026-10-18.** Ten concepts — the Jacobi symbol, discrete
+logarithms, square roots modulo a prime, sums of two squares, Pell's equation, Pisano periods, the
+Carmichael function, the Miller-Rabin test, prime gaps, and Bertrand's postulate — took the domain
+from 32 to 42, so its row reads +0. The survey rejected the additions existing lessons already teach:
+modular inverses in the Bézout lesson, Euler's criterion in the Legendre lesson, perfect numbers and
+Mersenne primes in the divisor-sum lesson, twin primes and Brun's sieve in the sieve lesson, and
+Gaussian integers in the class-number lesson. Eight of the ten are numeric, and each numeric
+generator publishes the facts its answers follow from (the Jacobi arguments, the prime and primitive
+root, the residue and modulus, n, d, the Fibonacci modulus, the Carmichael input, or the prime before
+the gap) and the tests recompute the answer from them. The wiring is scoped plus applied: the `nt`
+course gains the ten new concepts together with `crypto` and `diophantine`, the two topics its
+description already advertises. Number theory reads 33 of 42 reachable, with the nine analytic and
+graduate concepts (Möbius, PNT, zeta, Chebyshev, Dirichlet, elliptic curves, class numbers,
+quadratic reciprocity and the sieve) left as enrichment; the corpus reaches 750 of 981. The remainder
+is 19, and the largest deficit left is differential_equations' ten.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

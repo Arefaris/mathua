@@ -464,7 +464,7 @@
     "id": "nt",
     "name": "Number Theory",
     "grade": "college",
-    "description": "Divisibility, primes, modular arithmetic, Euler's theorem, and cryptography.",
+    "description": "Divisibility, primes, modular arithmetic, Euler's theorem, quadratic residues, continued fractions, and cryptography.",
     "targets": [
       "nt.basics.divisibility",
       "nt.basics.gcd_euclidean",
@@ -476,7 +476,19 @@
       "nt.congruence.linear",
       "nt.pythagorean.hypotenuse",
       "nt.residue.count",
-      "nt.base.convert"
+      "nt.base.convert",
+      "nt.adv.jacobi",
+      "nt.adv.discrete_log",
+      "nt.adv.modular_sqrt",
+      "nt.adv.two_squares",
+      "nt.adv.pell",
+      "nt.adv.pisano",
+      "nt.adv.carmichael_function",
+      "nt.adv.miller_rabin",
+      "nt.adv.prime_gap",
+      "nt.adv.bertrand",
+      "nt.app.crypto",
+      "nt.adv.diophantine"
     ]
   },
   {

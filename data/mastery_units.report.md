@@ -12,7 +12,7 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 971 |
+| Total concepts | 981 |
 | Total units | 98 |
 | Minimum unit size | 1 |
 | Median unit size | 7 |
@@ -99,9 +99,9 @@ exists to make concrete.
 | `machine_learning.b11` | machine_learning | 11 | 10 | 4 | 33–35 |
 | `machine_learning.b12` | machine_learning | 12 | 10 | 4 | 36–37 |
 | `number_theory.b2` | number_theory | 2 | 1 | 1 | 8–8 |
-| `number_theory.b3` | number_theory | 3 | 10 | 2 | 9–11 |
-| `number_theory.b4` | number_theory | 4 | 12 | 4 | 12–14 |
-| `number_theory.b5` | number_theory | 5 | 8 | 2 | 15–17 |
+| `number_theory.b3` | number_theory | 3 | 13 | 2 | 9–11 |
+| `number_theory.b4` | number_theory | 4 | 15 | 4 | 12–14 |
+| `number_theory.b5` | number_theory | 5 | 12 | 2 | 15–17 |
 | `number_theory.b6` | number_theory | 6 | 1 | 1 | 20–20 |
 | `prealgebra.b0` | prealgebra | 0 | 1 | 1 | 1–1 |
 | `prealgebra.b2` | prealgebra | 2 | 1 | 1 | 8–8 |
@@ -148,11 +148,11 @@ at every width.
 | 3 | 98 | 7 | 51 | 19 | 29 | 7 | 0 |
 | 4 | 79 | 9 | 66 | 8 | 22 | 8 | 0 |
 | 5 | 67 | 10 | 74 | 5 | 13 | 9 | 0 |
-| 6 | 63 | 11 | 99 | 6 | 12 | 11 | 0 |
+| 6 | 63 | 12 | 99 | 6 | 12 | 12 | 0 |
 | 8 | 50 | 14 | 115 | 3 | 9 | 13 | 0 |
-| 10 | 43 | 17 | 148 | 3 | 7 | 12 | 0 |
-| 12 | 43 | 18 | 126 | 2 | 5 | 14 | 0 |
-| 15 | 33 | 23 | 148 | 1 | 4 | 14 | 0 |
+| 10 | 43 | 17 | 148 | 3 | 7 | 13 | 0 |
+| 12 | 43 | 18 | 126 | 2 | 5 | 15 | 0 |
+| 15 | 33 | 24 | 148 | 1 | 4 | 15 | 0 |
 | 20 | 29 | 28 | 175 | 2 | 4 | 15 | 0 |
 | 45 | 17 | 45 | 175 | 0 | 0 | 17 | 0 |
 
@@ -294,7 +294,7 @@ Unresolvable subdomains:
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 971
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 981
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

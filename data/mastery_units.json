@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 971,
+  "concept_count": 981,
   "unit_count": 98,
   "units": [
     {
@@ -1807,7 +1807,10 @@
         "number_theory.basics"
       ],
       "concept_ids": [
+        "nt.adv.bertrand",
         "nt.adv.fermat_little",
+        "nt.adv.pisano",
+        "nt.adv.prime_gap",
         "nt.base.convert",
         "nt.basics.congruence",
         "nt.basics.gcd_euclidean",
@@ -1818,7 +1821,7 @@
         "nt.divisor.sum",
         "nt.prime.exponent"
       ],
-      "concept_count": 10
+      "concept_count": 13
     },
     {
       "id": "number_theory.b4",
@@ -1834,8 +1837,11 @@
         "number_theory.basics"
       ],
       "concept_ids": [
+        "nt.adv.carmichael_function",
         "nt.adv.euler_phi",
+        "nt.adv.jacobi",
         "nt.adv.legendre",
+        "nt.adv.miller_rabin",
         "nt.adv.mobius",
         "nt.adv.quadratic_reciprocity",
         "nt.adv.wilson",
@@ -1847,7 +1853,7 @@
         "nt.pythagorean.hypotenuse",
         "nt.residue.count"
       ],
-      "concept_count": 12
+      "concept_count": 15
     },
     {
       "id": "number_theory.b5",
@@ -1865,12 +1871,16 @@
         "nt.adv.class_number",
         "nt.adv.continued_fractions",
         "nt.adv.dirichlet",
+        "nt.adv.discrete_log",
         "nt.adv.elliptic_curve",
+        "nt.adv.modular_sqrt",
+        "nt.adv.pell",
         "nt.adv.primitive_root",
         "nt.adv.sieve",
+        "nt.adv.two_squares",
         "nt.analytic.zeta"
       ],
-      "concept_count": 8
+      "concept_count": 12
     },
     {
       "id": "number_theory.b6",
