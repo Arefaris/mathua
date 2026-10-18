@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 961 concepts, and there are 961 KP shard files
-holding 2883 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 971 concepts, and there are 971 KP shard files
+holding 2913 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 717 of the 961 concepts
+### 4.1 The course catalog reaches 731 of the 971 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-717 of the 961 concepts: 244 of them have a node, a generator, a lesson and three KP shards and
+731 of the 971 concepts: 240 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -81,7 +81,7 @@ The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 165 | 93 |
+| calculus | 175 | 89 |
 | algebra | 104 | 45 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 961 concepts. Reaching a thousand means adding 39, and this is the table that says
+The catalog holds 971 concepts. Reaching a thousand means adding 29, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| calculus | bridge | 165 | 175 | +10 |
 | number_theory | university | 32 | 42 | +10 |
 | differential_equations | university | 32 | 42 | +10 |
 | precalculus | bridge | 41 | 50 | +9 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | topology | university | 42 | 42 | +0 |
 | linear_algebra | university | 45 | 45 | +0 |
 | statistics | bridge | 55 | 55 | +0 |
+| calculus | bridge | 175 | 175 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -527,7 +527,22 @@ the bin) and the tests recompute the statistic from them. The domain's multiple-
 from 1 of 44 to 5 of 55, still the corpus's most computational domain. All 55 statistics concepts are
 reachable, including the 32 that no course reached before, because the `probstat` course now targets
 the sixteen existing sinks and the eight new ones, and its description now covers hypothesis testing
-and the tests built on it. The remainder is 39, and the largest deficit left is calculus' ten.
+and the tests built on it. The remainder was 39, and the largest deficit left was calculus' ten.
+
+**Calculus reached its target on 2026-10-18.** Ten concepts — derivatives of hyperbolic functions, the
+second derivative of a parametric curve, finite differences, arc length in polar coordinates, torsion,
+the Frenet frame, the second-order Taylor approximation, hydrostatic force, Pappus's centroid theorem,
+and moment of inertia — took the domain from 165 to 175, so its row reads +0. The survey found the
+domain already dense and rejected the additions existing lessons already cover: Taylor's theorem with
+remainder and the Weierstrass M-test in the series lessons, numerical-integration error bounds, the
+Hessian in the partial-derivatives lesson, hyperbolic integrals in the integration tables, and surface
+area of graphs and revolutions. Seven of the ten are numeric, one is an expression, one is symbolic
+and one is a tuple. The wiring is deliberately scoped: section 5.1 measured sink targeting and
+rejected it, because the calculus sinks are most of the domain and would make `calc1` and `calc2`
+exhaustive, so the three courses gain only the three new concepts that belong to their stage.
+Calculus therefore reads 86 of 175 reachable, with the staged courses preserved; the corpus reaches
+731 of 971. The remainder is 29, and the largest deficit left is number_theory's ten, tied with
+differential_equations' ten.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

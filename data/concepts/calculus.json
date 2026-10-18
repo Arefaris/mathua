@@ -2368,5 +2368,155 @@
     "streak": 10,
     "avg_time_seconds": 22.0
    }
+  },
+  {
+   "id": "calc.deriv.hyperbolic",
+   "label": "Derivatives of hyperbolic functions",
+   "domain": "calculus",
+   "subdomain": "calculus.derivatives",
+   "grading_type": "expression",
+   "prerequisites": [
+    "calc.deriv.exp_log",
+    "calc.deriv.chain_rule"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "calc.deriv.parametric_second",
+   "label": "The second derivative of a parametric curve",
+   "domain": "calculus",
+   "subdomain": "calculus.derivatives",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.parametric_derivative",
+    "calc.deriv.chain_rule"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "calc.deriv.finite_difference",
+   "label": "Finite differences",
+   "domain": "calculus",
+   "subdomain": "calculus.derivatives",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.deriv.concept",
+    "calc.deriv.tangent_line"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "calc.polar.arc_length",
+   "label": "Arc length in polar coordinates",
+   "domain": "calculus",
+   "subdomain": "calculus.polar",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.integral.arc_length",
+    "calc.polar.slope"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "calc.vec.torsion",
+   "label": "Torsion of a space curve",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.vec.curvature",
+    "linalg.vector.cross"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 26.0
+   }
+  },
+  {
+   "id": "calc.vec.frenet",
+   "label": "The Frenet frame",
+   "domain": "calculus",
+   "subdomain": "calculus.vector",
+   "grading_type": "tuple",
+   "prerequisites": [
+    "calc.vec.curvature",
+    "calc.vec.torsion"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 26.0
+   }
+  },
+  {
+   "id": "calc.multi.taylor2",
+   "label": "Second-order Taylor approximation",
+   "domain": "calculus",
+   "subdomain": "calculus.multivariable",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.multi.tangent_plane",
+    "calc.deriv.partial_higher"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 26.0
+   }
+  },
+  {
+   "id": "calc.integral.hydrostatic",
+   "label": "Hydrostatic force",
+   "domain": "calculus",
+   "subdomain": "calculus.integrals",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.integral.definite",
+    "calc.integral.work"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "calc.integral.pappus",
+   "label": "Pappus's centroid theorem",
+   "domain": "calculus",
+   "subdomain": "calculus.integrals",
+   "grading_type": "symbolic",
+   "prerequisites": [
+    "calc.integral.center_mass",
+    "calc.integral.surface_area"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "calc.integral.moment_inertia",
+   "label": "Moment of inertia",
+   "domain": "calculus",
+   "subdomain": "calculus.integrals",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "calc.integral.center_mass",
+    "calc.integral.definite"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
   }
 ]

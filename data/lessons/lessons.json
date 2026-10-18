@@ -3842,5 +3842,45 @@
   {
     "concept_id": "stat.infer.nonparametric",
     "source": "teaching/stat.infer.nonparametric.md"
+  },
+  {
+    "concept_id": "calc.deriv.hyperbolic",
+    "source": "teaching/calc.deriv.hyperbolic.md"
+  },
+  {
+    "concept_id": "calc.deriv.parametric_second",
+    "source": "teaching/calc.deriv.parametric_second.md"
+  },
+  {
+    "concept_id": "calc.deriv.finite_difference",
+    "source": "teaching/calc.deriv.finite_difference.md"
+  },
+  {
+    "concept_id": "calc.polar.arc_length",
+    "source": "teaching/calc.polar.arc_length.md"
+  },
+  {
+    "concept_id": "calc.vec.torsion",
+    "source": "teaching/calc.vec.torsion.md"
+  },
+  {
+    "concept_id": "calc.vec.frenet",
+    "source": "teaching/calc.vec.frenet.md"
+  },
+  {
+    "concept_id": "calc.multi.taylor2",
+    "source": "teaching/calc.multi.taylor2.md"
+  },
+  {
+    "concept_id": "calc.integral.hydrostatic",
+    "source": "teaching/calc.integral.hydrostatic.md"
+  },
+  {
+    "concept_id": "calc.integral.pappus",
+    "source": "teaching/calc.integral.pappus.md"
+  },
+  {
+    "concept_id": "calc.integral.moment_inertia",
+    "source": "teaching/calc.integral.moment_inertia.md"
   }
 ]

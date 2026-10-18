@@ -259,7 +259,10 @@
       "calc.deriv.chain_rule",
       "calc.deriv.optimization",
       "calc.integral.definite",
-      "calc.integral.ftc"
+      "calc.integral.ftc",
+      "calc.deriv.hyperbolic",
+      "calc.deriv.parametric_second",
+      "calc.deriv.finite_difference"
     ]
   },
   {
@@ -275,7 +278,10 @@
       "calc.series.taylor",
       "calc.integral.disc",
       "calc.integral.washer",
-      "calc.integral.shell"
+      "calc.integral.shell",
+      "calc.integral.hydrostatic",
+      "calc.integral.pappus",
+      "calc.integral.moment_inertia"
     ]
   },
   {
@@ -316,7 +322,10 @@
       "calc.multi.mass_lamina",
       "calc.integral.substitution_value",
       "calc.integral.mass_density",
-      "calc.deriv.higher_order_value"
+      "calc.deriv.higher_order_value",
+      "calc.polar.arc_length",
+      "calc.vec.frenet",
+      "calc.multi.taylor2"
     ]
   },
   {
