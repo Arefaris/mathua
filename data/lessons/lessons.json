@@ -3754,5 +3754,49 @@
   {
     "concept_id": "topo.invariant.betti",
     "source": "teaching/topo.invariant.betti.md"
+  },
+  {
+    "concept_id": "linalg.space.axioms",
+    "source": "teaching/linalg.space.axioms.md"
+  },
+  {
+    "concept_id": "linalg.transform.kernel",
+    "source": "teaching/linalg.transform.kernel.md"
+  },
+  {
+    "concept_id": "linalg.transform.invertible",
+    "source": "teaching/linalg.transform.invertible.md"
+  },
+  {
+    "concept_id": "linalg.basis.change",
+    "source": "teaching/linalg.basis.change.md"
+  },
+  {
+    "concept_id": "linalg.orth.complement",
+    "source": "teaching/linalg.orth.complement.md"
+  },
+  {
+    "concept_id": "linalg.orth.projection_matrix",
+    "source": "teaching/linalg.orth.projection_matrix.md"
+  },
+  {
+    "concept_id": "linalg.symmetric.spectral",
+    "source": "teaching/linalg.symmetric.spectral.md"
+  },
+  {
+    "concept_id": "linalg.quadratic.definite",
+    "source": "teaching/linalg.quadratic.definite.md"
+  },
+  {
+    "concept_id": "linalg.vector.cross",
+    "source": "teaching/linalg.vector.cross.md"
+  },
+  {
+    "concept_id": "linalg.matrix.condition",
+    "source": "teaching/linalg.matrix.condition.md"
+  },
+  {
+    "concept_id": "linalg.eigen.cayley_hamilton",
+    "source": "teaching/linalg.eigen.cayley_hamilton.md"
   }
 ]

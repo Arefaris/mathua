@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 939 concepts, and there are 939 KP shard files
-holding 2817 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 950 concepts, and there are 950 KP shard files
+holding 2850 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 662 of the 939 concepts
+### 4.1 The course catalog reaches 685 of the 950 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-662 of the 939 concepts: 277 of them have a node, a generator, a lesson and three KP shards and
+685 of the 950 concepts: 265 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -82,7 +82,7 @@ The count of unreachable concepts by domain:
 | Domain | Concepts | Unreachable |
 |---|---|---|
 | calculus | 165 | 93 |
-| algebra | 104 | 46 |
+| algebra | 104 | 45 |
 | topology | 42 | 0 |
 | statistics | 44 | 21 |
 | precalculus | 41 | 20 |
@@ -94,7 +94,7 @@ The count of unreachable concepts by domain:
 | prealgebra | 60 | 0 |
 | trigonometry | 48 | 31 |
 | arithmetic | 60 | 3 |
-| linear_algebra | 34 | 11 |
+| linear_algebra | 45 | 0 |
 | abstract_algebra | 45 | 0 |
 | discrete_math | 55 | 3 |
 | geometry | 45 | 6 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 939 concepts. Reaching a thousand means adding 61, and this is the table that says
+The catalog holds 950 concepts. Reaching a thousand means adding 50, and this is the table that says
 where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
 section 6 reads them, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| linear_algebra | university | 34 | 45 | +11 |
 | statistics | bridge | 44 | 55 | +11 |
 | calculus | bridge | 165 | 175 | +10 |
 | number_theory | university | 32 | 42 | +10 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | abstract_algebra | university | 45 | 45 | +0 |
 | machine_learning | university | 45 | 45 | +0 |
 | topology | university | 42 | 42 | +0 |
+| linear_algebra | university | 45 | 45 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -491,8 +491,25 @@ the facts its answers follow from (coordinates, boundary points, leading coeffic
 the Euler characteristic or genus) and the tests recompute the answer from them. All 42 topology
 concepts are reachable, including the 34 that no course reached before, because the `topo` course
 now targets the ten existing sinks as well as the nine new ones, and its description now covers the
-full sequence. The remainder is 61, and the largest deficit left is linear_algebra's eleven, tied
+full sequence. The remainder was 61, and the largest deficit left was linear_algebra's eleven, tied
 with statistics' eleven.
+
+**Linear algebra reached its target on 2026-10-18.** Eleven concepts — vector-space axioms, kernel
+and image, injective, surjective and invertible maps, coordinates and change of basis, orthogonal
+complements, projection onto a subspace, the spectral theorem, quadratic forms and definiteness, the
+cross product, the condition number, and Cayley-Hamilton — took the domain from 34 to 45, so its row
+reads +0. The survey found the domain well supplied with computations but thin on the structural
+ideas that connect them, and it rejected the obvious additions that existing lessons already teach:
+determinant properties, transpose, linear combinations and coordinate representation, the
+characteristic polynomial, algebraic and geometric multiplicity, and Gram-Schmidt behind the QR
+lesson. Five of the eleven are numeric and one is a tuple (the cross product), so the batch keeps the
+domain's produced-answer emphasis; each numeric generator publishes the facts its answers follow
+from (matrix rows, basis vectors, dimensions, singular values) and the tests recompute the rank,
+coordinates, dimension, projection, cross product and condition number from them. All 45
+linear-algebra concepts are reachable, including the 22 that no course reached before, because the
+`linalg` course now targets the five unreachable sinks and the eight new ones, and its description
+now covers inner products and matrix decompositions. The remainder is 50, and the largest deficit
+left is statistics' eleven.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

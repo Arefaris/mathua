@@ -9048,6 +9048,169 @@
     "subdomain": "linear_algebra.transformations"
   },
   {
+    "domain": "linear_algebra",
+    "grading_type": "multiple_choice",
+    "id": "linalg.space.axioms",
+    "label": "Vector spaces and their axioms",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.vector.add"
+    ],
+    "subdomain": "linear_algebra.vectors"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.transform.kernel",
+    "label": "Kernel and image of a linear map",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.lintrans.concept",
+      "linalg.rank.nullity"
+    ],
+    "subdomain": "linear_algebra.transformations"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "multiple_choice",
+    "id": "linalg.transform.invertible",
+    "label": "Injective, surjective and invertible maps",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.transform.kernel",
+      "linalg.matrix.identity"
+    ],
+    "subdomain": "linear_algebra.transformations"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.basis.change",
+    "label": "Coordinates and change of basis",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.vec.basis",
+      "linalg.independence.count"
+    ],
+    "subdomain": "linear_algebra.vectors"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.orth.complement",
+    "label": "Orthogonal complements",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.inner_product",
+      "linalg.vec.basis"
+    ],
+    "subdomain": "linear_algebra.inner_product"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.orth.projection_matrix",
+    "label": "Projection onto a subspace",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.orth.projection_coeff",
+      "linalg.orth.complement"
+    ],
+    "subdomain": "linear_algebra.inner_product"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "multiple_choice",
+    "id": "linalg.symmetric.spectral",
+    "label": "The spectral theorem for symmetric matrices",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.eigen.diagonalization",
+      "linalg.inner_product"
+    ],
+    "subdomain": "linear_algebra.eigenvalues"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "multiple_choice",
+    "id": "linalg.quadratic.definite",
+    "label": "Quadratic forms and definiteness",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.symmetric.spectral",
+      "linalg.det.2x2"
+    ],
+    "subdomain": "linear_algebra.eigenvalues"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "tuple",
+    "id": "linalg.vector.cross",
+    "label": "The cross product",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.vector.dot"
+    ],
+    "subdomain": "linear_algebra.vectors"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "numeric",
+    "id": "linalg.matrix.condition",
+    "label": "The condition number",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.decomp.svd",
+      "linalg.vec.norm_squared"
+    ],
+    "subdomain": "linear_algebra.decompositions"
+  },
+  {
+    "domain": "linear_algebra",
+    "grading_type": "multiple_choice",
+    "id": "linalg.eigen.cayley_hamilton",
+    "label": "The Cayley-Hamilton theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "linalg.eigen.diagonalization",
+      "linalg.matrix.mult"
+    ],
+    "subdomain": "linear_algebra.eigenvalues"
+  },
+  {
     "domain": "machine_learning",
     "grading_type": "multiple_choice",
     "id": "ml.perceptron",

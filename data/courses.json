@@ -323,7 +323,7 @@
     "id": "linalg",
     "name": "Linear Algebra",
     "grade": "college",
-    "description": "Vectors, matrices, determinants, systems, eigenvalues, spans and bases, and linear transformations.",
+    "description": "Vectors, matrices, determinants, systems, eigenvalues, spans and bases, linear transformations, inner products, and matrix decompositions.",
     "targets": [
       "linalg.matrix.mult",
       "linalg.det.3x3",
@@ -339,7 +339,20 @@
       "linalg.eigen.det_product",
       "linalg.orth.projection_coeff",
       "linalg.vec.norm_squared",
-      "linalg.transform.det_scale"
+      "linalg.transform.det_scale",
+      "linalg.decomp.jordan",
+      "linalg.sys.cramer",
+      "linalg.systems.matrix",
+      "linalg.vector.cosine_similarity",
+      "linalg.vector.parametric",
+      "linalg.space.axioms",
+      "linalg.transform.invertible",
+      "linalg.basis.change",
+      "linalg.orth.projection_matrix",
+      "linalg.quadratic.definite",
+      "linalg.vector.cross",
+      "linalg.matrix.condition",
+      "linalg.eigen.cayley_hamilton"
     ]
   },
   {

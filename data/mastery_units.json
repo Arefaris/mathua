@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 939,
+  "concept_count": 950,
   "unit_count": 97,
   "units": [
     {
@@ -1461,10 +1461,11 @@
       "concept_ids": [
         "linalg.matrix.add",
         "linalg.matrix.concept",
+        "linalg.space.axioms",
         "linalg.vector.add",
         "linalg.vector.parametric"
       ],
-      "concept_count": 4
+      "concept_count": 5
     },
     {
       "id": "linear_algebra.b2",
@@ -1505,9 +1506,10 @@
         "linalg.orth.projection_coeff",
         "linalg.vec.norm_squared",
         "linalg.vec.span",
-        "linalg.vector.cosine_similarity"
+        "linalg.vector.cosine_similarity",
+        "linalg.vector.cross"
       ],
-      "concept_count": 10
+      "concept_count": 11
     },
     {
       "id": "linear_algebra.b4",
@@ -1515,7 +1517,7 @@
       "domain": "linear_algebra",
       "band": 4,
       "depth_min": 12,
-      "depth_max": 13,
+      "depth_max": 14,
       "subdomains": [
         "linear_algebra.decompositions",
         "linear_algebra.inner_product",
@@ -1523,15 +1525,18 @@
         "linear_algebra.vectors"
       ],
       "concept_ids": [
+        "linalg.basis.change",
         "linalg.decomp.qr",
         "linalg.independence.count",
         "linalg.inner_product",
         "linalg.matrix.rank",
+        "linalg.orth.complement",
+        "linalg.orth.projection_matrix",
         "linalg.rank.nullity",
         "linalg.subspace",
         "linalg.vec.basis"
       ],
-      "concept_count": 7
+      "concept_count": 10
     },
     {
       "id": "linear_algebra.b7",
@@ -1539,7 +1544,7 @@
       "domain": "linear_algebra",
       "band": 7,
       "depth_min": 21,
-      "depth_max": 22,
+      "depth_max": 23,
       "subdomains": [
         "linear_algebra.systems",
         "linear_algebra.transformations"
@@ -1548,9 +1553,11 @@
         "linalg.lintrans.concept",
         "linalg.sys.cramer",
         "linalg.systems.matrix",
-        "linalg.transform.det_scale"
+        "linalg.transform.det_scale",
+        "linalg.transform.invertible",
+        "linalg.transform.kernel"
       ],
-      "concept_count": 4
+      "concept_count": 6
     },
     {
       "id": "linear_algebra.b8",
@@ -1579,13 +1586,18 @@
       "depth_min": 27,
       "depth_max": 28,
       "subdomains": [
-        "linear_algebra.decompositions"
+        "linear_algebra.decompositions",
+        "linear_algebra.eigenvalues"
       ],
       "concept_ids": [
         "linalg.decomp.jordan",
-        "linalg.decomp.svd"
+        "linalg.decomp.svd",
+        "linalg.eigen.cayley_hamilton",
+        "linalg.matrix.condition",
+        "linalg.quadratic.definite",
+        "linalg.symmetric.spectral"
       ],
-      "concept_count": 2
+      "concept_count": 6
     },
     {
       "id": "machine_learning.b3",

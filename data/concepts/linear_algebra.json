@@ -491,5 +491,168 @@
       "streak": 10,
       "avg_time_seconds": 24.0
     }
+  },
+  {
+    "id": "linalg.space.axioms",
+    "label": "Vector spaces and their axioms",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.vectors",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "linalg.vector.add"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "linalg.transform.kernel",
+    "label": "Kernel and image of a linear map",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.transformations",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "linalg.lintrans.concept",
+      "linalg.rank.nullity"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "linalg.transform.invertible",
+    "label": "Injective, surjective and invertible maps",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.transformations",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "linalg.transform.kernel",
+      "linalg.matrix.identity"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "linalg.basis.change",
+    "label": "Coordinates and change of basis",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.vectors",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "linalg.vec.basis",
+      "linalg.independence.count"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "linalg.orth.complement",
+    "label": "Orthogonal complements",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.inner_product",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "linalg.inner_product",
+      "linalg.vec.basis"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 22.0
+    }
+  },
+  {
+    "id": "linalg.orth.projection_matrix",
+    "label": "Projection onto a subspace",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.inner_product",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "linalg.orth.projection_coeff",
+      "linalg.orth.complement"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "linalg.symmetric.spectral",
+    "label": "The spectral theorem for symmetric matrices",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.eigenvalues",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "linalg.eigen.diagonalization",
+      "linalg.inner_product"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "linalg.quadratic.definite",
+    "label": "Quadratic forms and definiteness",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.eigenvalues",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "linalg.symmetric.spectral",
+      "linalg.det.2x2"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "linalg.vector.cross",
+    "label": "The cross product",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.vectors",
+    "grading_type": "tuple",
+    "prerequisites": [
+      "linalg.vector.dot"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 20.0
+    }
+  },
+  {
+    "id": "linalg.matrix.condition",
+    "label": "The condition number",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.decompositions",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "linalg.decomp.svd",
+      "linalg.vec.norm_squared"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "linalg.eigen.cayley_hamilton",
+    "label": "The Cayley-Hamilton theorem",
+    "domain": "linear_algebra",
+    "subdomain": "linear_algebra.eigenvalues",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "linalg.eigen.diagonalization",
+      "linalg.matrix.mult"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
   }
 ]
