@@ -3962,5 +3962,41 @@
   {
     "concept_id": "ode.numerical.heun",
     "source": "teaching/ode.numerical.heun.md"
+  },
+  {
+    "concept_id": "precalc.exp.continuous",
+    "source": "teaching/precalc.exp.continuous.md"
+  },
+  {
+    "concept_id": "precalc.exp.cooling",
+    "source": "teaching/precalc.exp.cooling.md"
+  },
+  {
+    "concept_id": "precalc.log.scale",
+    "source": "teaching/precalc.log.scale.md"
+  },
+  {
+    "concept_id": "precalc.poly.inequality",
+    "source": "teaching/precalc.poly.inequality.md"
+  },
+  {
+    "concept_id": "precalc.rational.holes",
+    "source": "teaching/precalc.rational.holes.md"
+  },
+  {
+    "concept_id": "precalc.conic.general",
+    "source": "teaching/precalc.conic.general.md"
+  },
+  {
+    "concept_id": "precalc.parametric.projectile",
+    "source": "teaching/precalc.parametric.projectile.md"
+  },
+  {
+    "concept_id": "precalc.vector.resultant",
+    "source": "teaching/precalc.vector.resultant.md"
+  },
+  {
+    "concept_id": "precalc.func.decomposition",
+    "source": "teaching/precalc.func.decomposition.md"
   }
 ]

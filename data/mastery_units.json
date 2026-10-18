@@ -5,7 +5,7 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 991,
+  "concept_count": 1000,
   "unit_count": 98,
   "units": [
     {
@@ -2098,9 +2098,10 @@
         "precalc.polar.graph",
         "precalc.vector.basics",
         "precalc.vector.dot",
-        "precalc.vector.ops"
+        "precalc.vector.ops",
+        "precalc.vector.resultant"
       ],
-      "concept_count": 5
+      "concept_count": 6
     },
     {
       "id": "precalculus.b6",
@@ -2141,12 +2142,13 @@
         "precalc.partial_fractions",
         "precalc.poly.complex_conjugate",
         "precalc.poly.descartes",
+        "precalc.poly.inequality",
         "precalc.poly.rational_roots",
         "precalc.poly.remainder_theorem",
         "precalc.poly.zeros_multiplicity",
         "precalc.rational.asymptote"
       ],
-      "concept_count": 13
+      "concept_count": 14
     },
     {
       "id": "precalculus.b8",
@@ -2167,17 +2169,22 @@
       ],
       "concept_ids": [
         "precalc.conic.ellipse",
+        "precalc.conic.general",
         "precalc.conic.hyperbola",
         "precalc.conic.parabola",
         "precalc.exp.compound_interest",
+        "precalc.exp.cooling",
         "precalc.exp.equation",
         "precalc.exp.growth_model",
         "precalc.func.composition_value",
+        "precalc.func.decomposition",
         "precalc.func.heaviside",
         "precalc.induction",
         "precalc.log.evaluate",
         "precalc.parametric.equations",
         "precalc.parametric.graph",
+        "precalc.parametric.projectile",
+        "precalc.rational.holes",
         "precalc.rational.oblique_asymptote",
         "precalc.seq.arithmetic",
         "precalc.seq.geometric",
@@ -2186,7 +2193,7 @@
         "precalc.series.geometric",
         "precalc.systems.nonlinear"
       ],
-      "concept_count": 19
+      "concept_count": 24
     },
     {
       "id": "precalculus.b9",
@@ -2200,10 +2207,12 @@
         "precalculus.sequences"
       ],
       "concept_ids": [
+        "precalc.exp.continuous",
         "precalc.log.equation",
+        "precalc.log.scale",
         "precalc.series.geom_infinite"
       ],
-      "concept_count": 2
+      "concept_count": 4
     },
     {
       "id": "statistics.b0",

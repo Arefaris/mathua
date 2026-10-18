@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 991 concepts, and there are 991 KP shard files
-holding 2973 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1000 concepts, and there are 1000 KP shard files
+holding 3000 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 764 of the 991 concepts
+### 4.1 The course catalog reaches 794 of the 1000 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 24 courses those closures reach
-764 of the 991 concepts: 227 of them have a node, a generator, a lesson and three KP shards and
+794 of the 1000 concepts: 206 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -82,10 +82,10 @@ The count of unreachable concepts by domain:
 | Domain | Concepts | Unreachable |
 |---|---|---|
 | calculus | 175 | 88 |
-| algebra | 104 | 45 |
+| algebra | 104 | 44 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
-| precalculus | 41 | 20 |
+| precalculus | 50 | 0 |
 | fractions | 45 | 13 |
 | machine_learning | 45 | 0 |
 | complex_numbers | 42 | 0 |
@@ -333,13 +333,12 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 991 concepts. Reaching a thousand means adding 9, and this is the table that says
-where. `Now` is read from the corpus; `Target` is the decision. The rows are ordered the way step 6 of
-section 6 reads them, largest deficit first.
+The catalog holds 1000 concepts. Reaching a thousand means adding 0, and this is the table that says
+where: every domain is now at its target. `Now` is read from the corpus; `Target` is the decision. The
+rows keep the order step 6 of section 6 used, largest deficit first when there was one.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| precalculus | bridge | 41 | 50 | +9 |
 | algebra | school | 104 | 104 | +0 |
 | arithmetic | school | 60 | 60 | +0 |
 | geometry | school | 45 | 45 | +0 |
@@ -356,6 +355,7 @@ section 6 reads them, largest deficit first.
 | calculus | bridge | 175 | 175 | +0 |
 | number_theory | university | 42 | 42 | +0 |
 | differential_equations | university | 42 | 42 | +0 |
+| precalculus | bridge | 50 | 50 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -575,7 +575,23 @@ from them. The wiring is core: the `diffeq` course gains the ten new concepts to
 `first_order.exact`, `second_order.variation_params` and `numerical.rk4`, so exact equations,
 variation of parameters and RK4 finally have a course path. Differential equations reads 33 of 42
 reachable, with the transforms, PDE, Sturm-Liouville and nonlinear chain left as enrichment; the
-corpus reaches 764 of 991. The remainder is 9, and the largest deficit left is precalculus' nine.
+corpus reaches 764 of 991. The remainder was 9, and the largest deficit left was precalculus' nine.
+
+**Precalculus reached its target on 2026-10-18, and the corpus reached a thousand.** Nine concepts —
+continuous compounding, Newton's law of cooling, logarithmic scales, polynomial and rational
+inequalities, holes in rational graphs, the discriminant of a general conic, projectile motion,
+resultant vectors, and decomposition of a function — took the domain from 41 to 50, so its row reads
++0. The survey found the domain's twenty unreachable concepts were all standard precalculus (conics,
+sequences and series, vectors, the binomial theorem, induction, parametric and polar graphs), so the
+course was wired to cover them rather than leave the subject half-taught. It rejected the additions
+existing lessons already teach: half-life in the growth lesson, logarithm properties in the logarithm
+lessons, eccentricity in the conic lessons, unit vectors in the vectors lesson, the midpoint in the
+distance lesson, even and odd functions in the functions lessons, and one-to-one functions in the
+inverse lesson. Six of the nine are numeric, one is an expression, and two are multiple choice; each
+numeric generator publishes the facts its answers follow from, and the tests recompute the answer from
+them. All 50 precalculus concepts are reachable, so the corpus reaches 794 of 1000, with 206 left
+outside the named course paths — the enrichment section 4.1 measures, not a gap in a target. Every
+domain on the table is now at its target.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

@@ -592,5 +592,131 @@
     "streak": 10,
     "avg_time_seconds": 22.0
    }
+  },
+  {
+   "id": "precalc.exp.continuous",
+   "label": "Continuous compounding",
+   "domain": "precalculus",
+   "subdomain": "precalculus.exponential",
+   "grading_type": "multiple_choice",
+   "prerequisites": [
+    "precalc.exp.compound_interest"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.exp.cooling",
+   "label": "Newton's law of cooling",
+   "domain": "precalculus",
+   "subdomain": "precalculus.exponential",
+   "grading_type": "multiple_choice",
+   "prerequisites": [
+    "precalc.exp.growth_model"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.log.scale",
+   "label": "Logarithmic scales",
+   "domain": "precalculus",
+   "subdomain": "precalculus.exponential",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.log.evaluate"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.poly.inequality",
+   "label": "Polynomial and rational inequalities",
+   "domain": "precalculus",
+   "subdomain": "precalculus.polynomials",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.poly.zeros_multiplicity"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "precalc.rational.holes",
+   "label": "Holes in rational graphs",
+   "domain": "precalculus",
+   "subdomain": "precalculus.rational",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.rational.asymptote"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "precalc.conic.general",
+   "label": "Classifying a general conic",
+   "domain": "precalculus",
+   "subdomain": "precalculus.conics",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.conic.parabola"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "precalc.parametric.projectile",
+   "label": "Projectile motion",
+   "domain": "precalculus",
+   "subdomain": "precalculus.parametric",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.parametric.equations"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 24.0
+   }
+  },
+  {
+   "id": "precalc.vector.resultant",
+   "label": "Resultant vectors",
+   "domain": "precalculus",
+   "subdomain": "precalculus.vectors",
+   "grading_type": "numeric",
+   "prerequisites": [
+    "precalc.vector.ops"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
+  },
+  {
+   "id": "precalc.func.decomposition",
+   "label": "Decomposing a function",
+   "domain": "precalculus",
+   "subdomain": "precalculus.functions",
+   "grading_type": "expression",
+   "prerequisites": [
+    "precalc.func.composition_value"
+   ],
+   "mastery_threshold": {
+    "streak": 10,
+    "avg_time_seconds": 22.0
+   }
   }
 ]

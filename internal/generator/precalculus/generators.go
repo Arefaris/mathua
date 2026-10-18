@@ -16,6 +16,7 @@ func Register(reg *generator.Registry) {
 	for _, e := range all {
 		reg.Register(e.id, e.gen)
 	}
+	registerBatch(reg)
 }
 
 var all = []struct {

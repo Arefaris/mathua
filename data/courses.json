@@ -224,7 +224,7 @@
     "id": "pc",
     "name": "Precalculus",
     "grade": "11th-12th",
-    "description": "Advanced trigonometry, complex numbers, vectors, matrices, limits, and sequences.",
+    "description": "Functions, polynomials, rational and exponential functions, conics, vectors, parametric and polar curves, sequences and series, and advanced trigonometry.",
     "targets": [
       "trig.adv.law_cosines",
       "trig.func.arcsine",
@@ -246,7 +246,28 @@
       "precalc.log.equation",
       "precalc.exp.compound_interest",
       "precalc.func.composition_value",
-      "precalc.analytic.distance"
+      "precalc.analytic.distance",
+      "precalc.binomial_theorem",
+      "precalc.conic.ellipse",
+      "precalc.conic.hyperbola",
+      "precalc.func.arith_combine",
+      "precalc.induction",
+      "precalc.parametric.graph",
+      "precalc.partial_fractions",
+      "precalc.polar.graph",
+      "precalc.series.arithmetic",
+      "precalc.series.geom_infinite",
+      "precalc.systems.nonlinear",
+      "precalc.vector.dot",
+      "precalc.exp.continuous",
+      "precalc.exp.cooling",
+      "precalc.log.scale",
+      "precalc.poly.inequality",
+      "precalc.rational.holes",
+      "precalc.conic.general",
+      "precalc.parametric.projectile",
+      "precalc.vector.resultant",
+      "precalc.func.decomposition"
     ]
   },
   {
