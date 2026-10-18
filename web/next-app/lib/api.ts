@@ -493,6 +493,13 @@ export interface ConfigRes {
 	auth_enabled: boolean
 	google_client_id?: string
 	providers?: string[]
+	/**
+	 * Whether optional AI augmentation is configured on the server. A boolean
+	 * only: the provider chain, model ids and per-identity quota are operational
+	 * detail the client has no use for. When this is false the AI calls below
+	 * are not attempted and the deterministic paths stand alone.
+	 */
+	ai_enabled?: boolean
 }
 
 export async function getConfig(): Promise<ConfigRes | null> {
@@ -1810,6 +1817,67 @@ export async function revokeAdminInvitation(id: number): Promise<AdminInvitation
 	if (!res.ok) await throwWithResponse(res, 'Could not revoke the invitation')
 	const data = (await res.json()) as { invitation?: unknown }
 	return validateResponse(AdminInvitationSchema, data.invitation, 'adminInvitationRevoke')
+}
+
+// ── Optional AI augmentation ──
+//
+// Both calls are best-effort enhancements, never a dependency. The server
+// refuses them when AI is disabled (503) or the caller's daily budget is spent
+// (429); getGoalScope folds either into used_ai=false so a caller falls back to
+// its deterministic match with no special case. No `expected_answer` is ever a
+// field here: the graded answer stays on the server.
+
+export interface TutorReply {
+	reply: string
+}
+
+/**
+ * Ask the study tutor. Throws when AI is unavailable or the quota is spent, so
+ * the caller shows "unavailable" rather than a wrong answer.
+ */
+export async function askTutor(body: {
+	message: string
+	domain?: string
+	concept_ids?: string[]
+}): Promise<TutorReply> {
+	const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() } satisfies Record<string, string>
+	const res = await authedFetch(`${API_BASE}/api/ai/tutor`, {
+		method: 'POST',
+		headers,
+		body: JSON.stringify(body),
+	})
+	if (!res.ok) await throwWithResponse(res, `Tutor unavailable: ${res.status}`)
+	return res.json() as Promise<TutorReply>
+}
+
+export interface GoalScopeRes {
+	/** Destination ids the model chose, validated against the server's own list. */
+	destinations: string[]
+	/** False when AI is off, failed, or chose nothing — use the deterministic match. */
+	used_ai: boolean
+	/**
+	 * Why AI did not contribute, set only when used_ai is false. The server
+	 * distinguishes "the provider failed" from "the model chose nothing", so the
+	 * UI can say "suggestions unavailable" instead of silently showing an empty
+	 * list for both.
+	 */
+	reason?: 'disabled' | 'no_candidates' | 'failed' | 'no_match'
+}
+
+/**
+ * Ask the model to map a free-text goal to destinations. Never throws: a
+ * failure is reported as used_ai=false, because the caller already has a
+ * deterministic answer on screen and must not lose it to a provider outage.
+ */
+export async function getGoalScope(goal: string): Promise<GoalScopeRes> {
+	const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() } satisfies Record<string, string>
+	const res = await authedFetch(`${API_BASE}/api/ai/goal-scope`, {
+		method: 'POST',
+		headers,
+		body: JSON.stringify({ goal }),
+	})
+	if (!res.ok) return { destinations: [], used_ai: false }
+	return res.json() as Promise<GoalScopeRes>
 }
 
 export interface AdminContentConcept {
