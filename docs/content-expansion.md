@@ -69,45 +69,48 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 1101 of the 1250 concepts
+### 4.1 The course catalog reaches 1250 of the 1250 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 28 courses those closures reach
-1101 of the 1250 concepts: 149 of them have a node, a generator, a lesson and three KP shards and
-still sit outside every named course path. A learner reaches them through the diagnostic or a
-free-choice goal, not through the catalog.
+1250 of the 1250 concepts: 0 of them have a node, a generator, a lesson and three KP shards and
+still sit outside every named course path. The wiring batch of 2026-10-19 moved the 149 that used
+to sit there into the courses that teach their subject, and the table stays as the measurement on
+the number, because a concept that no course targets is unreachable whatever the diagnostic
+offers.
 
 The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 205 | 57 |
-| algebra | 124 | 35 |
+| calculus | 205 | 0 |
+| algebra | 124 | 0 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
 | precalculus | 50 | 0 |
-| fractions | 45 | 13 |
+| fractions | 45 | 0 |
 | machine_learning | 45 | 0 |
 | complex_numbers | 42 | 0 |
-| number_theory | 42 | 9 |
-| differential_equations | 42 | 9 |
+| number_theory | 42 | 0 |
+| differential_equations | 42 | 0 |
 | prealgebra | 60 | 0 |
-| trigonometry | 68 | 14 |
-| arithmetic | 60 | 3 |
+| trigonometry | 68 | 0 |
+| arithmetic | 60 | 0 |
 | linear_algebra | 45 | 0 |
 | abstract_algebra | 45 | 0 |
-| discrete_math | 55 | 3 |
-| geometry | 45 | 6 |
+| discrete_math | 55 | 0 |
+| geometry | 45 | 0 |
 | graph_theory | 40 | 0 |
 | probability_theory | 50 | 0 |
 | numerical_analysis | 40 | 0 |
 | real_analysis | 50 | 0 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
-cover: `calc1` targets 17 calculus concepts and `calc2` targets 21, and their closures reach 42
-and 51 concepts of the domain, so the two courses are stages rather than a partition. Second, one
-whole domain has no course of its own: `trigonometry` is reached only by the closures of `a2` and
-`pc` together, which bring in 54 of its 68 concepts.
+cover: `calc1` targets 51 calculus concepts and `calc2` targets 42, and their closures reach 80 and
+74 of the domain's 205, so the two courses are stages rather than a partition. Second, one whole
+domain still has no course of its own: `trigonometry` is reached only by the closures of `a2` and
+`pc`, which bring in 54 and 29 of its 68 concepts, so a learner meets trigonometry as algebra and
+precalculus material rather than as a trigonometry syllabus.
 
 ### 4.2 Whole domains ask a learner to pick rather than to produce
 
@@ -198,9 +201,10 @@ Twenty-one concepts apply a technique their parent teaches rather than teach a n
 `geo.triangle.pythagorean.word`. They cover 17 subdomains.
 
 Each one is a *dependent*: a parent technique is one of its prerequisites. Twenty of the
-twenty-one are also leaves, so nothing else depends on them and no course closure needs them —
-they are inside the 149 unreachable concepts of section 4.1. `prealg.eq.word` is the exception on
-both counts: something depends on it, and that something is what pulls it into a course closure.
+twenty-one are also leaves, so nothing else depends on them and no course closure needed them
+until the wiring batch of 2026-10-19 named them as targets, which is the only way a leaf enters a
+closure. `prealg.eq.word` is the exception on both counts: something depends on it, and that
+something is what pulls it into a course closure.
 
 The pattern is cheap because it writes no lesson prose. A sibling shares its parent's lesson file
 — `data/lessons/lessons.json` points both ids at one source — so its three KP sections come from
@@ -294,6 +298,13 @@ to be *chosen*, and that is curriculum work rather than a policy switch.
 so the decision left is how far: it is a target size for the catalog, and the measurements above are
 the boundary that number has to be drawn against. Section 6's first step is that decision, and it is
 also the gate on a new domain (section 5.4), because a domain with no course target is unreachable.
+
+**The wiring batch of 2026-10-19 chose the targets.** The 149 concepts that section 4.1 measured as
+unreachable were added, subject by subject, to the courses that teach them, so the catalog now
+reaches all 1250 and the table in section 4.1 reads zero on every row. That is the curriculum work
+the paragraph above says the fix has to be, done deliberately rather than by a closure rule, and it
+does not make the courses domain covers: `calc1` still reaches 80 of the domain's 205 calculus
+concepts, and trigonometry still has no course of its own.
 
 ### 5.2 Producing an answer in a multiple-choice domain
 

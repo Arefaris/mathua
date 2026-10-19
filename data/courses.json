@@ -12,7 +12,13 @@
       "arith.place.expanded",
       "arith.compare.whole",
       "arith.estimate.sum",
-      "arith.place.powers_ten"
+      "arith.place.powers_ten",
+      "arith.factor.composite",
+      "arith.order_ops.nested",
+      "arith.round.thousands",
+      "frac.basics.number_line",
+      "geo.basic.complementary",
+      "geo.basic.vertical"
     ]
   },
   {
@@ -33,7 +39,8 @@
       "dec.ops.mult.word",
       "dec.ops.sub.word",
       "dec.ops.div.word",
-      "dec.ops.round"
+      "dec.ops.round",
+      "frac.ops.to_decimal"
     ]
   },
   {
@@ -142,7 +149,18 @@
       "prealg.ineq.graph",
       "ratio.ops.better_buy",
       "prealg.measure.temperature",
-      "alg.rational.proportions"
+      "alg.rational.proportions",
+      "frac.add.word",
+      "frac.compare.word",
+      "frac.div.whole",
+      "frac.div.word",
+      "frac.mixed.add",
+      "frac.mixed.mult",
+      "frac.mixed.sub",
+      "frac.mixed.word",
+      "frac.mult.whole",
+      "frac.mult.word",
+      "frac.sub.word"
     ]
   },
   {
@@ -170,7 +188,19 @@
       "alg.systems.nonlinear",
       "alg.seq.sigma",
       "alg.radical.simplify",
-      "alg.radical.operations"
+      "alg.radical.operations",
+      "alg.factor.ac_method",
+      "alg.func.absolute_value",
+      "alg.func.dirichlet",
+      "alg.func.even_odd",
+      "alg.func.sigmoid",
+      "alg.func.sign",
+      "alg.quad.complex",
+      "alg.quad.discriminant",
+      "alg.quad.incomplete",
+      "alg.quad.parametric",
+      "alg.quad.quadratic",
+      "alg.systems.word"
     ]
   },
   {
@@ -202,7 +232,11 @@
       "geo.coord.distance_3d",
       "geo.quad.trapezoid_area",
       "geo.solid.similar_volume",
-      "geo.circle.tangent_chord"
+      "geo.circle.tangent_chord",
+      "geo.coord.midpoint",
+      "geo.coord.polar",
+      "geo.quad.perimeter",
+      "geo.triangle.pythagorean.word"
     ]
   },
   {
@@ -252,7 +286,41 @@
       "trig.graph.tan",
       "trig.graph.transformations",
       "trig.graph.inverse",
-      "trig.graph.reciprocal"
+      "trig.graph.reciprocal",
+      "alg.eq.absolute_value",
+      "alg.eq.binomial",
+      "alg.eq.exponential",
+      "alg.eq.extraneous_roots",
+      "alg.eq.irrational",
+      "alg.eq.literal",
+      "alg.eq.logarithmic",
+      "alg.eq.polynomial",
+      "alg.eq.rational",
+      "alg.eq.trinomial",
+      "alg.eq.vars_both_sides.word",
+      "alg.ineq.absolute_value",
+      "alg.ineq.irrational",
+      "alg.ineq.logarithmic",
+      "alg.ineq.multi_step.word",
+      "alg.ineq.quadratic",
+      "alg.ineq.rational",
+      "alg.ineq.sign_analysis",
+      "alg.ineq.systems",
+      "alg.ineq.two_var",
+      "alg.poly.monomial",
+      "alg.poly.synthetic_division",
+      "alg.poly.vieta",
+      "trig.basics.coterminal",
+      "trig.basics.quadrant",
+      "trig.basics.sector_area",
+      "trig.eq.homogeneous",
+      "trig.eq.quadratic",
+      "trig.func.arccosine",
+      "trig.func.arccotangent",
+      "trig.func.cotangent",
+      "trig.graph.phase_shift",
+      "trig.ident.cofunction",
+      "trig.ident.half_angle"
     ]
   },
   {
@@ -307,7 +375,10 @@
       "trig.hyperbolic.inverse",
       "trig.hyperbolic.derivative",
       "trig.adv.polar",
-      "trig.adv.vector_projection"
+      "trig.adv.vector_projection",
+      "trig.adv.ambiguous_case",
+      "trig.adv.area_sas",
+      "trig.adv.heron_area"
     ]
   },
   {
@@ -332,7 +403,41 @@
       "calc.deriv.newton_convergence",
       "calc.deriv.convex_jensen",
       "calc.deriv.marginal_analysis",
-      "calc.deriv.epsilon_delta_deriv"
+      "calc.deriv.epsilon_delta_deriv",
+      "calc.deriv.cauchy_mvt",
+      "calc.deriv.chain_multi",
+      "calc.deriv.chain_power",
+      "calc.deriv.clairaut",
+      "calc.deriv.critical_points",
+      "calc.deriv.curve_sketch",
+      "calc.deriv.diff_continuity",
+      "calc.deriv.directional",
+      "calc.deriv.error_prop",
+      "calc.deriv.fermat",
+      "calc.deriv.general_exp",
+      "calc.deriv.global_extrema",
+      "calc.deriv.gradient",
+      "calc.deriv.implicit_second",
+      "calc.deriv.inflection",
+      "calc.deriv.inverse_func",
+      "calc.deriv.log_diff",
+      "calc.deriv.non_differentiability",
+      "calc.deriv.quotient_rule",
+      "calc.deriv.related_rates",
+      "calc.deriv.second_test",
+      "calc.deriv.total_diff",
+      "calc.deriv.trig_other",
+      "calc.limit.algebra",
+      "calc.limit.asymptotes",
+      "calc.limit.big_o",
+      "calc.limit.exp_limit",
+      "calc.limit.infinite",
+      "calc.limit.infinity",
+      "calc.limit.little_o",
+      "calc.limit.one_sided",
+      "calc.limit.sine_limit",
+      "calc.limit.squeeze",
+      "calc.limit.weierstrass"
     ]
   },
   {
@@ -361,7 +466,28 @@
       "calc.integral.numerical_error",
       "calc.integral.beta",
       "calc.integral.consumer_surplus",
-      "calc.integral.fourier_coefficients"
+      "calc.integral.fourier_coefficients",
+      "calc.integral.convergence",
+      "calc.integral.exp_integral",
+      "calc.integral.improper_compare",
+      "calc.integral.irrational",
+      "calc.integral.mvt",
+      "calc.integral.net_change",
+      "calc.integral.p_test",
+      "calc.integral.reduction",
+      "calc.integral.simpson",
+      "calc.integral.strategy",
+      "calc.integral.trig_integrals",
+      "calc.integral.variable_limits",
+      "calc.integral.volume",
+      "calc.integral.weierstrass_sub",
+      "calc.series.harmonic",
+      "calc.series.limit_compare",
+      "calc.series.nth_term",
+      "calc.series.radius",
+      "calc.series.remainder",
+      "calc.series.root_test",
+      "calc.series.telescoping"
     ]
   },
   {
@@ -416,7 +542,9 @@
       "calc.vec.line_scalar",
       "calc.vec.parametric_surface",
       "calc.vec.flux_general",
-      "calc.vec.identities"
+      "calc.vec.identities",
+      "calc.seq.euler",
+      "calc.seq.function_sequences"
     ]
   },
   {
@@ -486,7 +614,10 @@
       "discrete.graphs.cayley",
       "discrete.graphs.degree_sequence",
       "discrete.sequences.linear_recurrence",
-      "discrete.sequences.growth_rates"
+      "discrete.sequences.growth_rates",
+      "discrete.combinatorics.binomial_theorem",
+      "discrete.combinatorics.pascal",
+      "discrete.sequences.generating_functions"
     ]
   },
   {
@@ -579,7 +710,16 @@
       "nt.adv.prime_gap",
       "nt.adv.bertrand",
       "nt.app.crypto",
-      "nt.adv.diophantine"
+      "nt.adv.diophantine",
+      "nt.adv.chebyshev",
+      "nt.adv.class_number",
+      "nt.adv.dirichlet",
+      "nt.adv.elliptic_curve",
+      "nt.adv.mobius",
+      "nt.adv.quadratic_reciprocity",
+      "nt.adv.sieve",
+      "nt.analytic.prime_number_theorem",
+      "nt.analytic.zeta"
     ]
   },
   {
@@ -611,7 +751,16 @@
       "ode.numerical.heun",
       "ode.first_order.exact",
       "ode.second_order.variation_params",
-      "ode.numerical.rk4"
+      "ode.numerical.rk4",
+      "ode.boundary_value",
+      "ode.green.function",
+      "ode.integral.volterra",
+      "ode.nonlinear.bifurcation",
+      "ode.nonlinear.lyapunov",
+      "ode.pde.laplace_eq",
+      "ode.sturm_liouville",
+      "ode.transforms.convolution",
+      "ode.transforms.fourier"
     ]
   },
   {
