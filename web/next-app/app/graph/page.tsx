@@ -20,7 +20,7 @@ import { createInflightCache, createSessionCache } from '../../lib/requestCache'
 import Loading from '../../components/Loading'
 
 const graphLoadingStyle: React.CSSProperties = {
-  height: 'clamp(320px, 60dvh, 520px)',
+  height: 'clamp(480px, calc(100dvh - 360px), 1400px)',
   background: 'var(--surface)',
   borderRadius: '0',
   border: '0.5px solid var(--border)',
@@ -214,7 +214,7 @@ function GraphContent() {
   return (
     <>
       <Header />
-      <div className="max-w-container mx-auto px-4 sm:px-6 pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 overflow-x-hidden min-w-0">
+      <div className="w-full max-w-none px-4 sm:px-6 pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 overflow-x-hidden min-w-0">
       <section className="pt-8 min-w-0 overflow-hidden">
         <span className="flex justify-between mb-4">
           <button type="button" onClick={() => { if (window.history.length > 1) window.history.back() }} className="text-mathua-secondary text-sm hover:text-mathua-blue">

@@ -1040,7 +1040,7 @@ function GraphInner({
       <div
         className="flex items-center justify-center border-[0.5px] border-mathua-border bg-mathua-graph-surface text-mathua-muted font-mono text-sm w-full max-w-full"
         style={{
-          height: isMobile ? 'clamp(320px,60dvh,520px)' : 'clamp(320px,50dvh,520px)',
+          height: isMobile ? 'clamp(320px,60dvh,520px)' : 'clamp(480px, calc(100dvh - 360px), 1400px)',
         }}
       >
         No concepts to display
@@ -1062,7 +1062,7 @@ function GraphInner({
         }}
         aria-keyshortcuts="plus minus 0 ArrowLeft ArrowRight ArrowUp ArrowDown Escape"
         style={{
-          height: isMobile ? 'clamp(320px,60dvh,520px)' : 'clamp(320px,50dvh,520px)',
+          height: isMobile ? 'clamp(320px,60dvh,520px)' : 'clamp(480px, calc(100dvh - 360px), 1400px)',
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >
