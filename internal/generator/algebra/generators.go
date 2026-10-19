@@ -205,7 +205,7 @@ func (g *stdFormGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	return generator.Problem{
 		Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x+1, y, a, b, c),
 		Answer:      "no",
-		Explanation: fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\), not \\(%d\\). No!", a, x+1, b, y, a*(x+1), b*y, a*(x+1)+b*y, c),
+		Explanation: fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\), not %d. No!", a, x+1, b, y, a*(x+1), b*y, a*(x+1)+b*y, c),
 		Facts:       map[string]string{"x": strconv.Itoa(x + 1), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * (x + 1)), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*(x+1) + b*y), "verdict": "no"},
 	}
 }
@@ -368,7 +368,7 @@ func (g *ineqWordGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		Question: fmt.Sprintf("A %s charges $%d plus $%d per %s. You can spend at most $%d. What is the greatest whole number of %ss you can pay for?",
 			s.service, base, per, s.unit, budget, s.unit),
 		Answer: strconv.Itoa(count),
-		Explanation: fmt.Sprintf("\\(%d + %dm \\le %d\\) → \\(%dm \\le %d\\) → \\(m \\le %d\\), and \\(%d\\) %ss would cost \\(%d\\), more than the budget allows, so \\(m = %d\\).",
+		Explanation: fmt.Sprintf("\\(%d + %dm \\le %d\\) → \\(%dm \\le %d\\) → \\(m \\le %d\\), and %d %ss would cost %d, more than the budget allows, so \\(m = %d\\).",
 			base, per, budget, per, room, room/per, count+1, s.unit, base+per*(count+1), count),
 		Facts: map[string]string{
 			"service": s.service, "unit": s.unit, "base": strconv.Itoa(base),
@@ -567,7 +567,7 @@ func (g *factorGCFGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	return generator.Problem{
 		Question:    fmt.Sprintf("Factor: \\(%dx + %d\\)", a, b),
 		Answer:      fmt.Sprintf("%d(%dx + %d)", f, a/f, b/f),
-		Explanation: fmt.Sprintf("GCF is \\(%d\\): \\(%dx + %d = %d(%dx + %d)\\)", f, a, b, f, a/f, b/f),
+		Explanation: fmt.Sprintf("GCF is %d: \\(%dx + %d = %d(%dx + %d)\\)", f, a, b, f, a/f, b/f),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "gcf": strconv.Itoa(f), "out_a": strconv.Itoa(a / f), "out_b": strconv.Itoa(b / f)},
 	}
 }
@@ -659,7 +659,7 @@ func (g *quadFormulaGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	return generator.Problem{
 		Question:    fmt.Sprintf("Solve using quadratic formula: %s = 0", q),
 		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("\\(x = \\frac{%d \\pm \\sqrt{%d - 4(%d)}}{2} = %d\\) or \\(%d\\)", b, b*b, c, r1, r2),
+		Explanation: fmt.Sprintf("\\(x = \\frac{%d \\pm \\sqrt{%d - 4(%d)}}{2} = %d\\) or %d", b, b*b, c, r1, r2),
 		Facts:       map[string]string{"q": q, "b": strconv.Itoa(b), "c": strconv.Itoa(c), "b2": strconv.Itoa(b * b), "four_c": strconv.Itoa(4 * c), "disc": strconv.Itoa(b*b - 4*c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
@@ -746,14 +746,14 @@ func (g *funcLinearGen) Generate(ctx generator.GeneratorContext) generator.Probl
 			return generator.Problem{
 				Question:    fmt.Sprintf("What is the slope of \\(%s\\)? (enter a number)", formatLinear(m, b)),
 				Answer:      fmt.Sprintf("%d", m),
-				Explanation: fmt.Sprintf("In \\(y = mx + b\\), the slope is \\(%d\\).", m),
+				Explanation: fmt.Sprintf("In \\(y = mx + b\\), the slope is %d.", m),
 				Facts:       map[string]string{"m": strconv.Itoa(m), "b": strconv.Itoa(b), "is_slope": "yes"},
 			}
 		}
 		return generator.Problem{
 			Question:    fmt.Sprintf("What is the y-intercept of \\(%s\\)? (enter a number)", formatLinear(m, b)),
 			Answer:      fmt.Sprintf("%d", b),
-			Explanation: fmt.Sprintf("In \\(y = mx + b\\), the y-intercept is \\(%d\\).", b),
+			Explanation: fmt.Sprintf("In \\(y = mx + b\\), the y-intercept is %d.", b),
 			Facts:       map[string]string{"m": strconv.Itoa(m), "b": strconv.Itoa(b), "is_intercept": "yes"},
 		}
 	}
@@ -876,7 +876,7 @@ func (g *seqArithGen) Generate(ctx generator.GeneratorContext) generator.Problem
 	n := rand.Intn(5) + 3
 	an := a1 + (n-1)*d
 	return generator.Problem{
-		Question:    fmt.Sprintf("Arithmetic sequence: \\(%d, %d, %d, \\ldots\\) Find term \\(%d\\).", a1, a1+d, a1+2*d, n),
+		Question:    fmt.Sprintf("Arithmetic sequence: \\(%d, %d, %d, \\ldots\\) Find term %d.", a1, a1+d, a1+2*d, n),
 		Answer:      fmt.Sprintf("%d", an),
 		Explanation: fmt.Sprintf("\\(a_{n} = a_{1} + (n-1)d = %d + (%d)(%d) = %d\\)", a1, n-1, d, an),
 		Facts:       map[string]string{"a1": strconv.Itoa(a1), "d": strconv.Itoa(d), "n": strconv.Itoa(n), "nm1": strconv.Itoa(n - 1), "an": strconv.Itoa(an)},
@@ -891,7 +891,7 @@ func (g *seqGeomGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	n := rand.Intn(4) + 2
 	an := a1 * mathutil.IntPow(r, n-1)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Geometric sequence: \\(%d, %d, %d, \\ldots\\) Find term \\(%d\\).", a1, a1*r, a1*r*r, n),
+		Question:    fmt.Sprintf("Geometric sequence: \\(%d, %d, %d, \\ldots\\) Find term %d.", a1, a1*r, a1*r*r, n),
 		Answer:      fmt.Sprintf("%d", an),
 		Explanation: fmt.Sprintf("\\(a_{n} = a_{1} \\times r^{n-1} = %d \\times %d^{%d} = %d\\)", a1, r, n-1, an),
 		Facts:       map[string]string{"a1": strconv.Itoa(a1), "r": strconv.Itoa(r), "n": strconv.Itoa(n), "nm1": strconv.Itoa(n - 1), "an": strconv.Itoa(an)},
@@ -1317,7 +1317,7 @@ func (g *funcDomainGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		exp      string
 	}
 	entries := []entry{
-		{"What is excluded from the domain of \\(f(x) = 1/x\\)? (enter a number)", "0", "Division by zero is undefined, so \\(x\\) cannot be \\(0\\). The domain is all nonzero reals."},
+		{"What is excluded from the domain of \\(f(x) = 1/x\\)? (enter a number)", "0", "Division by zero is undefined, so \\(x\\) cannot be 0. The domain is all nonzero reals."},
 		{"What is the smallest integer in the domain of \\(f(x) = \\sqrt{x}\\)? (enter a number)", "0", "The square root of a negative number is not real, so the domain is \\(x \\geq 0\\); the smallest integer in it is 0."},
 		{"What is the smallest integer in the domain of \\(f(x) = \\ln(x)\\)? (enter a number)", "1", "The natural log of zero or negative numbers is undefined, so the domain is \\(x > 0\\); the smallest integer in it is 1."},
 		{"What is excluded from the domain of \\(f(x) = 1/(x-2)\\)? (enter a number)", "2", "The denominator is zero at \\(x = 2\\), so 2 is excluded from the domain."},
@@ -1393,7 +1393,7 @@ func (g *monotonicityGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	return generator.Problem{
 		Question:    fmt.Sprintf("Is \\(f(x) = %dx\\) increasing or decreasing on \\(\\mathbb{R}\\)?", a),
 		Answer:      map[bool]string{true: "increasing", false: "decreasing"}[a > 0],
-		Explanation: fmt.Sprintf("Slope = \\(%d\\). %s slope means the function is %s.", a, map[bool]string{true: "Positive", false: "Negative"}[a > 0], map[bool]string{true: "increasing", false: "decreasing"}[a > 0]),
+		Explanation: fmt.Sprintf("Slope = %d. %s slope means the function is %s.", a, map[bool]string{true: "Positive", false: "Negative"}[a > 0], map[bool]string{true: "increasing", false: "decreasing"}[a > 0]),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "dir": map[bool]string{true: "increasing", false: "decreasing"}[a > 0], "sign": map[bool]string{true: "positive", false: "negative"}[a > 0]},
 	}
 }
@@ -1459,7 +1459,7 @@ func (g *ineqAbsValGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	return generator.Problem{
 		Question:    fmt.Sprintf("What is the largest integer \\(x\\) with \\(|x| < %d\\)? (enter a number)", a),
 		Answer:      fmt.Sprintf("%d", a-1),
-		Explanation: fmt.Sprintf("\\(|x| < %d\\) means \\(-%d < x < %d\\), so the largest integer is \\(%d\\)", a, a, a, a-1),
+		Explanation: fmt.Sprintf("\\(|x| < %d\\) means \\(-%d < x < %d\\), so the largest integer is %d", a, a, a, a-1),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "x": strconv.Itoa(a - 1)},
 	}
 }
@@ -1498,7 +1498,7 @@ func (g *ineqIrrationalGen) Generate(ctx generator.GeneratorContext) generator.P
 	return generator.Problem{
 		Question:    fmt.Sprintf("What is the smallest integer \\(x\\) with \\(\\sqrt{x} > %d\\)? (enter a number)", x),
 		Answer:      fmt.Sprintf("%d", x*x+1),
-		Explanation: fmt.Sprintf("\\(\\sqrt{x} > %d\\) → \\(x > %d^{2} = %d\\) (x ≥ 0 implied), so the smallest integer is \\(%d\\)", x, x, x*x, x*x+1),
+		Explanation: fmt.Sprintf("\\(\\sqrt{x} > %d\\) → \\(x > %d^{2} = %d\\) (x ≥ 0 implied), so the smallest integer is %d", x, x, x*x, x*x+1),
 		Facts:       map[string]string{"x": strconv.Itoa(x), "x2": strconv.Itoa(x * x), "ans": strconv.Itoa(x*x + 1)},
 	}
 }
@@ -1512,7 +1512,7 @@ func (g *ineqLogGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	return generator.Problem{
 		Question:    fmt.Sprintf("What is the smallest integer \\(x\\) with \\(\\log_{%d}(x) > %d\\)? (enter a number)", b, e),
 		Answer:      fmt.Sprintf("%d", v+1),
-		Explanation: fmt.Sprintf("\\(\\log_{%d}(x) > %d\\) → \\(x > %d^{%d} = %d\\) (base > 1 preserves inequality), so the smallest integer is \\(%d\\)", b, e, b, e, v, v+1),
+		Explanation: fmt.Sprintf("\\(\\log_{%d}(x) > %d\\) → \\(x > %d^{%d} = %d\\) (base > 1 preserves inequality), so the smallest integer is %d", b, e, b, e, v, v+1),
 		Facts:       map[string]string{"base": strconv.Itoa(b), "e": strconv.Itoa(e), "v": strconv.Itoa(v), "x": strconv.Itoa(v + 1)},
 	}
 }
@@ -1524,7 +1524,7 @@ func (g *ineqQuadraticGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	return generator.Problem{
 		Question:    fmt.Sprintf("What is the largest integer \\(x\\) with \\(x^{2} - %d < 0\\)? (enter a number)", r*r),
 		Answer:      fmt.Sprintf("%d", r-1),
-		Explanation: fmt.Sprintf("\\(x^{2} - %d < 0\\) → \\((x-%d)(x+%d) < 0\\) → \\(-%d < x < %d\\), so the largest integer is \\(%d\\)", r*r, r, r, r, r, r-1),
+		Explanation: fmt.Sprintf("\\(x^{2} - %d < 0\\) → \\((x-%d)(x+%d) < 0\\) → \\(-%d < x < %d\\), so the largest integer is %d", r*r, r, r, r, r, r-1),
 		Facts:       map[string]string{"r2": strconv.Itoa(r * r), "r": strconv.Itoa(r), "x": strconv.Itoa(r - 1)},
 	}
 }
@@ -1536,7 +1536,7 @@ func (g *ineqRationalGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	return generator.Problem{
 		Question:    fmt.Sprintf("What is the smallest integer \\(x\\) with \\(\\frac{1}{x-%d} > 0\\)? (enter a number)", a),
 		Answer:      fmt.Sprintf("%d", a+1),
-		Explanation: fmt.Sprintf("The numerator 1 is always positive, so \\(\\frac{1}{x-%d} > 0\\) when \\(x-%d > 0\\) → \\(x > %d\\); the smallest integer is \\(%d\\)", a, a, a, a+1),
+		Explanation: fmt.Sprintf("The numerator 1 is always positive, so \\(\\frac{1}{x-%d} > 0\\) when \\(x-%d > 0\\) → \\(x > %d\\); the smallest integer is %d", a, a, a, a+1),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "ans": strconv.Itoa(a + 1)},
 	}
 }
@@ -1636,7 +1636,7 @@ func (g *polyRootsGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	return generator.Problem{
 		Question:    fmt.Sprintf("Find the roots of \\(x^{2} + %dx + %d = 0\\).", b, c),
 		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("\\((x %+d)(x %+d) = 0\\) → roots are \\(%d\\) and \\(%d\\)", -r1, -r2, r1, r2),
+		Explanation: fmt.Sprintf("\\((x %+d)(x %+d) = 0\\) → roots are %d and %d", -r1, -r2, r1, r2),
 		Facts:       map[string]string{"q": formatQuadratic(b, c), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
@@ -1651,7 +1651,7 @@ func (g *synthDivGen) Generate(ctx generator.GeneratorContext) generator.Problem
 	return generator.Problem{
 		Question:    fmt.Sprintf("Use synthetic division to divide \\((%dx^{2} + %dx)\\) by \\((x - %d)\\). What is the quotient?", a, b, r),
 		Answer:      fmt.Sprintf("%dx + %d", a, b+a*r),
-		Explanation: fmt.Sprintf("Synthetic division by \\(%d\\) gives coefficients %d and %d → \\(%dx + %d\\)", r, a, b+a*r, a, b+a*r),
+		Explanation: fmt.Sprintf("Synthetic division by %d gives coefficients %d and %d → \\(%dx + %d\\)", r, a, b+a*r, a, b+a*r),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "r": strconv.Itoa(r), "out_a": strconv.Itoa(a), "out_b": strconv.Itoa(b + a*r)},
 	}
 }
@@ -1666,7 +1666,7 @@ func (g *vietaGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	return generator.Problem{
 		Question:    fmt.Sprintf("For \\(x^{2} + %dx + %d = 0\\), what is the sum of the roots?", b, c),
 		Answer:      fmt.Sprintf("%d", r1+r2),
-		Explanation: fmt.Sprintf("By Vieta: sum of roots = \\(%d\\). Roots are \\(%d\\) and \\(%d\\), sum = \\(%d\\)", -b, r1, r2, r1+r2),
+		Explanation: fmt.Sprintf("By Vieta: sum of roots = %d. Roots are %d and %d, sum = %d", -b, r1, r2, r1+r2),
 		Facts:       map[string]string{"q": formatQuadratic(b, c), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "sum": strconv.Itoa(r1 + r2), "neg_b": strconv.Itoa(-b), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
@@ -1756,7 +1756,7 @@ func (g *quadQuadraticGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		return generator.Problem{
 			Question:    fmt.Sprintf("Solve with the quadratic formula: %s = 0. What is the smaller root? (enter a number)", formatQuadratic(b, c)),
 			Answer:      fmt.Sprintf("%d", lo),
-			Explanation: fmt.Sprintf("\\(x = [-b \\pm \\sqrt{b^{2}-4ac}]/(2a)\\) gives \\(x = %d\\) or \\(x = %d\\); the smaller root is \\(%d\\). The formula solves \\(ax^{2} + bx + c = 0\\).", r1, r2, lo),
+			Explanation: fmt.Sprintf("\\(x = [-b \\pm \\sqrt{b^{2}-4ac}]/(2a)\\) gives \\(x = %d\\) or \\(x = %d\\); the smaller root is %d. The formula solves \\(ax^{2} + bx + c = 0\\).", r1, r2, lo),
 			Facts:       map[string]string{"q": formatQuadratic(b, c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2), "lo": strconv.Itoa(lo)},
 		}
 	case 2:

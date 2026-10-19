@@ -332,7 +332,7 @@ func (g *marginalAnalysisGen) Generate(ctx generator.GeneratorContext) generator
 	return generator.Problem{
 		Question: fmt.Sprintf("A firm's cost of producing \\(x\\) units is \\(C(x) = %dx^{2} + %dx + %d\\). The marginal cost is \\(C'(x)\\). What is the marginal cost at \\(x = %d\\)? (enter a number)", a, b, c, x0),
 		Answer:   answer,
-		Explanation: fmt.Sprintf("Differentiating gives \\(C'(x) = %dx + %d\\), so at \\(x = %d\\) the marginal cost is \\(%d\\).",
+		Explanation: fmt.Sprintf("Differentiating gives \\(C'(x) = %dx + %d\\), so at \\(x = %d\\) the marginal cost is %d.",
 			2*a, b, x0, marginal),
 		Facts: map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "x0": strconv.Itoa(x0), "marginal": answer},
 	}

@@ -262,7 +262,7 @@ func (g *pythagoreanGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	}
 	t := pool[rand.Intn(len(pool))]
 	return generator.Problem{
-		Question:    fmt.Sprintf("Right triangle: legs \\(= %d\\) and \\(%d\\). Find the hypotenuse \\(c\\).", t.a, t.b),
+		Question:    fmt.Sprintf("Right triangle: legs \\(= %d\\) and %d. Find the hypotenuse \\(c\\).", t.a, t.b),
 		Answer:      fmt.Sprintf("%d", t.c),
 		Explanation: fmt.Sprintf("\\(c^{2} = %d^{2} + %d^{2} = %d + %d = %d\\), so \\(c = \\sqrt{%d} = %d\\).", t.a, t.b, t.a*t.a, t.b*t.b, t.c*t.c, t.c*t.c, t.c),
 		Facts:       map[string]string{"a": strconv.Itoa(t.a), "b": strconv.Itoa(t.b), "c": strconv.Itoa(t.c), "a_sq": strconv.Itoa(t.a * t.a), "b_sq": strconv.Itoa(t.b * t.b), "c_sq": strconv.Itoa(t.c * t.c)},

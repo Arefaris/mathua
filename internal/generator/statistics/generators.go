@@ -501,7 +501,7 @@ func (g *geometricMeanGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		gm = int(math.Sqrt(p))
 	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find the geometric mean of \\(%d\\) and \\(%d\\).", a, b),
+		Question:    fmt.Sprintf("Find the geometric mean of %d and %d.", a, b),
 		Answer:      fmt.Sprintf("%d", gm),
 		Explanation: fmt.Sprintf("\\(\\text{Geometric mean} = \\sqrt{%d \\times %d} = \\sqrt{%d} = %d\\)", a, b, a*b, gm),
 	}
@@ -517,7 +517,7 @@ func (g *harmonicMeanGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	denom := a + b
 	gcd := mathutil.GCD(numer, denom)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find the harmonic mean of \\(%d\\) and \\(%d\\).", a, b),
+		Question:    fmt.Sprintf("Find the harmonic mean of %d and %d.", a, b),
 		Answer:      fmt.Sprintf("%d/%d", numer/gcd, denom/gcd),
 		Explanation: fmt.Sprintf("\\(H = \\frac{2}{\\frac{1}{%d} + \\frac{1}{%d}} = \\frac{2}{\\frac{%d}{%d}} = \\frac{%d}{%d} = \\frac{%d}{%d}\\)", a, b, a+b, a*b, 2*a*b, a+b, numer/gcd, denom/gcd),
 	}
@@ -540,7 +540,7 @@ func (g *rmsGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		rms = int(math.Sqrt(float64(p)))
 	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find the root mean square (RMS) of \\(%d\\) and \\(%d\\).", a, b),
+		Question:    fmt.Sprintf("Find the root mean square (RMS) of %d and %d.", a, b),
 		Answer:      fmt.Sprintf("%d", rms),
 		Explanation: fmt.Sprintf("\\(\\text{RMS} = \\sqrt{\\frac{%d^{2}+%d^{2}}{2}} = \\sqrt{\\frac{%d+%d}{2}} = \\sqrt{%d} = %d\\)", a, b, a*a, b*b, p, rms),
 	}

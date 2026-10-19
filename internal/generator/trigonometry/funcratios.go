@@ -63,7 +63,7 @@ func (g *sineRatioGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	given := hypotenuse * scale
 	answer := opposite * scale
 	return ratioProblem(
-		fmt.Sprintf("A right triangle has \\(\\sin\\theta = \\frac{%d}{%d}\\). If its hypotenuse is \\(%d\\), what is the length of the side opposite \\(\\theta\\)?",
+		fmt.Sprintf("A right triangle has \\(\\sin\\theta = \\frac{%d}{%d}\\). If its hypotenuse is %d, what is the length of the side opposite \\(\\theta\\)?",
 			opposite, hypotenuse, given),
 		strconv.Itoa(answer),
 		fmt.Sprintf("The sine of an angle is the side opposite it over the hypotenuse, so the opposite side is that fraction of the hypotenuse: \\(\\frac{%d}{%d} \\times %d = %d\\).",
@@ -86,7 +86,7 @@ func (g *cosineRatioGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	given := hypotenuse * scale
 	answer := adjacent * scale
 	return ratioProblem(
-		fmt.Sprintf("A right triangle has \\(\\cos\\theta = \\frac{%d}{%d}\\). If its hypotenuse is \\(%d\\), what is the length of the side adjacent to \\(\\theta\\)?",
+		fmt.Sprintf("A right triangle has \\(\\cos\\theta = \\frac{%d}{%d}\\). If its hypotenuse is %d, what is the length of the side adjacent to \\(\\theta\\)?",
 			adjacent, hypotenuse, given),
 		strconv.Itoa(answer),
 		fmt.Sprintf("The cosine of an angle is the side adjacent to it over the hypotenuse, so the adjacent side is that fraction of the hypotenuse: \\(\\frac{%d}{%d} \\times %d = %d\\).",
@@ -109,7 +109,7 @@ func (g *tangentRatioGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	given := adjacent * scale
 	answer := opposite * scale
 	return ratioProblem(
-		fmt.Sprintf("A right triangle has \\(\\tan\\theta = \\frac{%d}{%d}\\). If the side adjacent to \\(\\theta\\) is \\(%d\\), what is the length of the opposite side?",
+		fmt.Sprintf("A right triangle has \\(\\tan\\theta = \\frac{%d}{%d}\\). If the side adjacent to \\(\\theta\\) is %d, what is the length of the opposite side?",
 			opposite, adjacent, given),
 		strconv.Itoa(answer),
 		fmt.Sprintf("The tangent of an angle is the side opposite it over the side adjacent to it, so the opposite side is that fraction of the adjacent side: \\(\\frac{%d}{%d} \\times %d = %d\\).",
@@ -132,7 +132,7 @@ func (g *secantRatioGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	given := adjacent * scale
 	answer := hypotenuse * scale
 	return ratioProblem(
-		fmt.Sprintf("A right triangle has \\(\\sec\\theta = \\frac{%d}{%d}\\). If the side adjacent to \\(\\theta\\) is \\(%d\\), what is the hypotenuse?",
+		fmt.Sprintf("A right triangle has \\(\\sec\\theta = \\frac{%d}{%d}\\). If the side adjacent to \\(\\theta\\) is %d, what is the hypotenuse?",
 			hypotenuse, adjacent, given),
 		strconv.Itoa(answer),
 		fmt.Sprintf("The secant is the reciprocal of the cosine, so it is the hypotenuse over the adjacent side. The hypotenuse is therefore that fraction of the adjacent side: \\(\\frac{%d}{%d} \\times %d = %d\\).",
@@ -155,7 +155,7 @@ func (g *cosecantRatioGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	given := opposite * scale
 	answer := hypotenuse * scale
 	return ratioProblem(
-		fmt.Sprintf("A right triangle has \\(\\csc\\theta = \\frac{%d}{%d}\\). If the side opposite \\(\\theta\\) is \\(%d\\), what is the hypotenuse?",
+		fmt.Sprintf("A right triangle has \\(\\csc\\theta = \\frac{%d}{%d}\\). If the side opposite \\(\\theta\\) is %d, what is the hypotenuse?",
 			hypotenuse, opposite, given),
 		strconv.Itoa(answer),
 		fmt.Sprintf("The cosecant is the reciprocal of the sine, so it is the hypotenuse over the opposite side. The hypotenuse is therefore that fraction of the opposite side: \\(\\frac{%d}{%d} \\times %d = %d\\).",
@@ -178,7 +178,7 @@ func (g *cotangentRatioGen) Generate(ctx generator.GeneratorContext) generator.P
 	given := opposite * scale
 	answer := adjacent * scale
 	return ratioProblem(
-		fmt.Sprintf("A right triangle has \\(\\cot\\theta = \\frac{%d}{%d}\\). If the side opposite \\(\\theta\\) is \\(%d\\), what is the length of the adjacent side?",
+		fmt.Sprintf("A right triangle has \\(\\cot\\theta = \\frac{%d}{%d}\\). If the side opposite \\(\\theta\\) is %d, what is the length of the adjacent side?",
 			adjacent, opposite, given),
 		strconv.Itoa(answer),
 		fmt.Sprintf("The cotangent is the reciprocal of the tangent, so it is the adjacent side over the opposite side. The adjacent side is therefore that fraction of the opposite side: \\(\\frac{%d}{%d} \\times %d = %d\\).",

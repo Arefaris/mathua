@@ -131,10 +131,10 @@ func (g *congruenceGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		congruent = false
 	}
 	ans := "no"
-	exp := fmt.Sprintf("\\(%d - %d = %d\\), which is not divisible by \\(%d\\), so \\(%d \\not\\equiv %d \\pmod{%d}\\).", a, b, a-b, m, a, b, m)
+	exp := fmt.Sprintf("\\(%d - %d = %d\\), which is not divisible by %d, so \\(%d \\not\\equiv %d \\pmod{%d}\\).", a, b, a-b, m, a, b, m)
 	if congruent {
 		ans = "yes"
-		exp = fmt.Sprintf("\\(%d - %d = %d\\), which is divisible by \\(%d\\), so \\(%d \\equiv %d \\pmod{%d}\\).", a, b, a-b, m, a, b, m)
+		exp = fmt.Sprintf("\\(%d - %d = %d\\), which is divisible by %d, so \\(%d \\equiv %d \\pmod{%d}\\).", a, b, a-b, m, a, b, m)
 	}
 	return generator.Problem{
 		Question:    fmt.Sprintf("Is \\(%d \\equiv %d \\pmod{%d}\\)? (yes/no)", a, b, m),
@@ -159,7 +159,7 @@ func (g *fermatLittleGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	return generator.Problem{
 		Question:    fmt.Sprintf("By Fermat's little theorem, what is \\(%d^{%d} \\bmod %d\\)?", a, p, p),
 		Answer:      fmt.Sprintf("%d", a),
-		Explanation: fmt.Sprintf("Multiply Fermat by \\(a\\): \\(a^{p} \\equiv a \\pmod{%d}\\), so the answer is \\(%d\\).", p, a),
+		Explanation: fmt.Sprintf("Multiply Fermat by \\(a\\): \\(a^{p} \\equiv a \\pmod{%d}\\), so the answer is %d.", p, a),
 	}
 }
 
@@ -290,7 +290,7 @@ func (g *primeInfGen) Generate(ctx generator.GeneratorContext) generator.Problem
 	}
 	// question: is n divisible by any listed prime? always no
 	return generator.Problem{
-		Question:    fmt.Sprintf("Euclid's construction: \\(N = %s + 1 = %d\\) where the product is over \\(%v\\). Is \\(N\\) divisible by any of \\(%v\\)? (yes/no)", joinProd(primes), n, primes, primes),
+		Question:    fmt.Sprintf("Euclid's construction: \\(N = %s + 1 = %d\\) where the product is over %v. Is \\(N\\) divisible by any of %v? (yes/no)", joinProd(primes), n, primes, primes),
 		Answer:      "no",
 		Explanation: fmt.Sprintf("If \\(N\\) were divisible by any \\(p\\) in the set, \\(p\\) would divide \\(N - \\text{product}=1\\), impossible. So \\(N\\) has a new prime factor."),
 	}

@@ -571,7 +571,7 @@ func (g *rationalExponentsGen) Generate(ctx generator.GeneratorContext) generato
 		Question: fmt.Sprintf("Evaluate \\(%d^{%s}\\).", base, exponent),
 		Answer:   value,
 		Explanation: fmt.Sprintf("Since \\(%d = %d^{%d}\\), \\(%d^{%d/%d} = %d^{%d} = %d\\). "+
-			"With the exponent \\(%s\\), the value is %s.",
+			"With the exponent %s, the value is %s.",
 			base, root, index, base, power, index, root, power, magnitude, exponent, value),
 		Facts: map[string]string{
 			"base": strconv.Itoa(base), "index": strconv.Itoa(index), "power": strconv.Itoa(power),

@@ -125,7 +125,7 @@ func (g *fracNumberLineGen) Generate(ctx generator.GeneratorContext) generator.P
 	den := rand.Intn(max(3, scale*2)) + 2
 	num := rand.Intn(den-1) + 1
 	return generator.Problem{
-		Question:    fmt.Sprintf("Where is \\(\\frac{%d}{%d}\\) on a number line from \\(0\\) to \\(1\\)?", num, den),
+		Question:    fmt.Sprintf("Where is \\(\\frac{%d}{%d}\\) on a number line from 0 to 1?", num, den),
 		Answer:      fmt.Sprintf("%.2f", float64(num)/float64(den)),
 		Explanation: fmt.Sprintf("%d/%d = %.2f, located between 0 and 1.", num, den, float64(num)/float64(den)),
 		Facts:       map[string]string{"num": strconv.Itoa(num), "den": strconv.Itoa(den), "dec": fmt.Sprintf("%.2f", float64(num)/float64(den))},
@@ -141,7 +141,7 @@ func (g *fracEquivalentGen) Generate(ctx generator.GeneratorContext) generator.P
 	mult := rand.Intn(max(1, scale)) + 2
 	goal := fracStr(num*mult, den*mult)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find an equivalent fraction to \\(\\frac{%d}{%d}\\) by multiplying numerator and denominator by \\(%d\\).", num, den, mult),
+		Question:    fmt.Sprintf("Find an equivalent fraction to \\(\\frac{%d}{%d}\\) by multiplying numerator and denominator by %d.", num, den, mult),
 		Answer:      goal,
 		Explanation: fmt.Sprintf("%d/%d x %d/%d = %d/%d", num, den, mult, mult, num*mult, den*mult),
 		Facts:       map[string]string{"num": strconv.Itoa(num), "den": strconv.Itoa(den), "mult": strconv.Itoa(mult), "eq_num": strconv.Itoa(num * mult), "eq_den": strconv.Itoa(den * mult)},

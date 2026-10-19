@@ -356,7 +356,7 @@ func (g *polarGraphGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	circleAxis := fmt.Sprintf("a circle of diameter \\(|a|=%d\\) passing through the pole, centered on the polar axis", 2*a)
 	circlePerp := fmt.Sprintf("a circle of diameter \\(|a|=%d\\) passing through the pole, centered on the line \\(\\theta=90^{\\circ}\\)", 2*a)
 	line := fmt.Sprintf("a straight line through the pole making an angle \\(%s\\) with the polar axis", deg)
-	centerCircle := fmt.Sprintf("a circle centered at the pole with radius \\(%d\\)", a)
+	centerCircle := fmt.Sprintf("a circle centered at the pole with radius %d", a)
 	type variant struct{ form, correct, wrong1, wrong2, wrong3 string }
 	v := []variant{
 		{fmt.Sprintf("r = %d", a), centerCircle, line, circleAxis, circlePerp},
@@ -540,7 +540,7 @@ func (g *binomialTheoremGen) Generate(ctx generator.GeneratorContext) generator.
 	}
 	q := fmt.Sprintf("Find the coefficient of \\(x^{%d}\\) in the expansion of \\((x %+d)^{%d}\\).", k, c, n)
 	ans := strconv.Itoa(coef)
-	ex := fmt.Sprintf("The term is \\(\\binom{%d}{%d} (%+d)^{%d} x^{%d}\\), giving coefficient \\(%s\\).", n, k, c, n-k, k, ans)
+	ex := fmt.Sprintf("The term is \\(\\binom{%d}{%d} (%+d)^{%d} x^{%d}\\), giving coefficient %s.", n, k, c, n-k, k, ans)
 	return generator.Problem{Question: q, Answer: ans, Explanation: ex}
 }
 
@@ -561,7 +561,7 @@ func (g *inductionGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	cl := claims[rand.Intn(len(claims))]
 	value := strings.Split(cl.formula, "= ")[1]
 	q := cl.q + fmt.Sprintf(" To start the induction, verify \\(P(%d)\\): what common value do both sides equal?", n)
-	ex := fmt.Sprintf("LHS at \\(n=%d\\): %s. RHS: substituting \\(n=%d\\) gives the same value \\(%s\\).", n, value, n, value)
+	ex := fmt.Sprintf("LHS at \\(n=%d\\): %s. RHS: substituting \\(n=%d\\) gives the same value %s.", n, value, n, value)
 	return generator.Problem{Question: q, Answer: value, Explanation: ex}
 }
 
@@ -777,7 +777,7 @@ func (g *arithSeqGen) Generate(ctx generator.GeneratorContext) generator.Problem
 	}
 	n := 5 + rand.Intn(10+int(ctx.Difficulty*15))
 	an := a1 + (n-1)*d
-	q := fmt.Sprintf("An arithmetic sequence starts at \\(%d\\) with common difference \\(%+d\\). Find term \\(a_{%d}\\).", a1, d, n)
+	q := fmt.Sprintf("An arithmetic sequence starts at %d with common difference %+d. Find term \\(a_{%d}\\).", a1, d, n)
 	ex := fmt.Sprintf("\\(a_n=a_1+(n-1)d=%d+%d\\cdot%d=%d\\).", a1, n-1, d, an)
 	return generator.Problem{Question: q, Answer: strconv.Itoa(an), Explanation: ex}
 }
@@ -797,7 +797,7 @@ func (g *geoSeqGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	for i := 1; i < n; i++ {
 		an *= r
 	}
-	q := fmt.Sprintf("A geometric sequence starts at \\(%d\\) with common ratio \\(%d\\). Find term \\(a_{%d}\\).", a1, r, n)
+	q := fmt.Sprintf("A geometric sequence starts at %d with common ratio %d. Find term \\(a_{%d}\\).", a1, r, n)
 	ex := fmt.Sprintf("\\(a_n=a_1 r^{n-1}=%d\\cdot(%d)^{%d}=%d\\).", a1, r, n-1, an)
 	return generator.Problem{Question: q, Answer: strconv.Itoa(an), Explanation: ex}
 }
@@ -836,7 +836,7 @@ func (g *arithSeriesGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	n := 4 + rand.Intn(8)
 	an := a1 + (n-1)*d
 	sum := n * (a1 + an) / 2
-	q := fmt.Sprintf("Find the sum of the first \\(%d\\) terms of the arithmetic sequence \\(a_1=%d\\), \\(d=%+d\\).", n, a1, d)
+	q := fmt.Sprintf("Find the sum of the first %d terms of the arithmetic sequence \\(a_1=%d\\), \\(d=%+d\\).", n, a1, d)
 	ex := fmt.Sprintf("\\(S_n=\\frac{n(a_1+a_n)}{2}=\\frac{%d(%d %+d)}{2}=%d\\).", n, a1, (n-1)*d, sum)
 	return generator.Problem{Question: q, Answer: strconv.Itoa(sum), Explanation: ex}
 }
@@ -857,7 +857,7 @@ func (g *geoSeriesGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		term *= r
 		sum += term
 	}
-	q := fmt.Sprintf("Find the sum of the first \\(%d\\) terms of the geometric sequence \\(a_1=%d\\), \\(r=%d\\).", n, a1, r)
+	q := fmt.Sprintf("Find the sum of the first %d terms of the geometric sequence \\(a_1=%d\\), \\(r=%d\\).", n, a1, r)
 	ex := fmt.Sprintf("\\(S_n=a_1\\frac{r^{n}-1}{r-1}=%d\\cdot\\frac{(%d)^{%d}-1}{%d}=%d\\).", a1, r, n, r-1, sum)
 	return generator.Problem{Question: q, Answer: strconv.Itoa(sum), Explanation: ex}
 }
@@ -875,7 +875,7 @@ func (g *geomInfiniteGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	gap := f.q - f.p
 	a1 := gap * (1 + rand.Intn(2+int(ctx.Difficulty*4)))
 	sum := a1 * f.q / gap
-	qText := fmt.Sprintf("An infinite geometric series has first term \\(%d\\) and common ratio \\(%s\\). Give its sum.", a1, fracStr(a1, f))
+	qText := fmt.Sprintf("An infinite geometric series has first term %d and common ratio \\(%s\\). Give its sum.", a1, fracStr(a1, f))
 	ex := fmt.Sprintf("Since \\(|r|<1\\), the series converges: \\(S=\\frac{a_1}{1-r}=\\frac{%d}{1-%s}=%d\\).", a1, fracStr(0, f), sum)
 	return generator.Problem{Question: qText, Answer: strconv.Itoa(sum), Explanation: ex}
 }

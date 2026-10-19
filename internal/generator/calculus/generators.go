@@ -599,14 +599,14 @@ func (g *integralVolumeGen) Generate(ctx generator.GeneratorContext) generator.P
 		q, a, e string
 	}
 	tableEasy := []entry{
-		{"Find the volume when \\(y=\\sqrt{x}\\) from \\(x=0\\) to \\(4\\) is revolved around the \\(x\\)-axis.", "8pi", "V = π∫(√x)²dx = π∫x dx = π[x²/2]₀⁴ = π(16/2-0) = 8π."},
-		{"Find the volume when \\(y=x\\) from \\(x=0\\) to \\(1\\) is revolved around the \\(x\\)-axis.", "pi/3", "V = π∫x²dx = π[x³/3]₀¹ = pi/3."},
-		{"Find the volume when \\(y=x\\) from \\(x=0\\) to \\(2\\) is revolved around the \\(x\\)-axis.", "8pi/3", "V = π∫x²dx = π[x³/3]₀² = 8pi/3."},
-		{"Find the volume when \\(y=2\\) from \\(x=0\\) to \\(3\\) is revolved around the \\(x\\)-axis.", "12pi", "V = π∫4dx = π[4x]₀³ = 12pi (a cylinder of radius 2)."},
+		{"Find the volume when \\(y=\\sqrt{x}\\) from \\(x=0\\) to 4 is revolved around the \\(x\\)-axis.", "8pi", "V = π∫(√x)²dx = π∫x dx = π[x²/2]₀⁴ = π(16/2-0) = 8π."},
+		{"Find the volume when \\(y=x\\) from \\(x=0\\) to 1 is revolved around the \\(x\\)-axis.", "pi/3", "V = π∫x²dx = π[x³/3]₀¹ = pi/3."},
+		{"Find the volume when \\(y=x\\) from \\(x=0\\) to 2 is revolved around the \\(x\\)-axis.", "8pi/3", "V = π∫x²dx = π[x³/3]₀² = 8pi/3."},
+		{"Find the volume when \\(y=2\\) from \\(x=0\\) to 3 is revolved around the \\(x\\)-axis.", "12pi", "V = π∫4dx = π[4x]₀³ = 12pi (a cylinder of radius 2)."},
 	}
 	tableHard := []entry{
-		{"Find the volume when \\(y=x^{2}\\) from \\(x=0\\) to \\(2\\) is revolved around the \\(x\\)-axis.", "32pi/5", "V = π∫x⁴dx = π[x⁵/5]₀² = 32pi/5."},
-		{"Find the volume when \\(y=\\sqrt{x}\\) from \\(x=0\\) to \\(1\\) is revolved around the \\(x\\)-axis.", "pi/2", "V = π∫x dx = π[x²/2]₀¹ = pi/2."},
+		{"Find the volume when \\(y=x^{2}\\) from \\(x=0\\) to 2 is revolved around the \\(x\\)-axis.", "32pi/5", "V = π∫x⁴dx = π[x⁵/5]₀² = 32pi/5."},
+		{"Find the volume when \\(y=\\sqrt{x}\\) from \\(x=0\\) to 1 is revolved around the \\(x\\)-axis.", "pi/2", "V = π∫x dx = π[x²/2]₀¹ = pi/2."},
 	}
 	pool := tableEasy
 	if scale > 3 {
@@ -945,12 +945,12 @@ func (g *arcLengthGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	}
 	tableEasy := []entry{
 		{"Arc length integrates speed sqrt(1+(f')^2). For \\(y=3x\\), what is \\((f')^2\\)? (enter a number)", "9", "f'=3, so (f')^2=9 and the integrand is sqrt(1+9)=sqrt(10). Arc length is the integral of speed: ∫ₐᵇ √(1+(f'(x))²) dx."},
-		{"What is the arc length of \\(y=2x\\) from \\(x=0\\) to \\(1\\)?", "sqrt(5)", "f'(x)=2, so L = ∫₀¹√(1+4)dx = √5."},
-		{"What is the arc length of \\(y=x\\) from \\(x=0\\) to \\(3\\)?", "3sqrt(2)", "f'(x)=1, so L = ∫₀³√2 dx = 3√2."},
+		{"What is the arc length of \\(y=2x\\) from \\(x=0\\) to 1?", "sqrt(5)", "f'(x)=2, so L = ∫₀¹√(1+4)dx = √5."},
+		{"What is the arc length of \\(y=x\\) from \\(x=0\\) to 3?", "3sqrt(2)", "f'(x)=1, so L = ∫₀³√2 dx = 3√2."},
 		{"In the arc-length integrand √(1+(f')²), what is f' for \\(y=3x\\)?", "3", "The derivative of 3x is the constant 3."},
 	}
 	tableHard := []entry{
-		{"What is the arc length of \\(y=4x\\) from \\(x=0\\) to \\(2\\)?", "2sqrt(17)", "f'(x)=4, so L = ∫₀²√17 dx = 2√17."},
+		{"What is the arc length of \\(y=4x\\) from \\(x=0\\) to 2?", "2sqrt(17)", "f'(x)=4, so L = ∫₀²√17 dx = 2√17."},
 		{"What integrand replaces √(1+(f')²) for a parametric curve \\((x(t),y(t))\\)?", "sqrt((dx/dt)^2+(dy/dt)^2)", "Parametric arc length uses ∫√((dx/dt)²+(dy/dt)²)dt."},
 	}
 	pool := tableEasy
@@ -1108,7 +1108,7 @@ func (g *asymptotesGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		q, a, e string
 	}
 	table := []entry{
-		{"What are the vertical asymptotes of \\(f(x)=1/(x-2)\\)?", "x=2", "The denominator is \\(0\\) at \\(x=2\\), and the numerator is nonzero, so \\(x=2\\) is a vertical asymptote."},
+		{"What are the vertical asymptotes of \\(f(x)=1/(x-2)\\)?", "x=2", "The denominator is 0 at \\(x=2\\), and the numerator is nonzero, so \\(x=2\\) is a vertical asymptote."},
 		{"What is the horizontal asymptote of \\(f(x)=1/x\\)?", "y=0", "As \\(x\\to\\infty\\), \\(1/x\\to 0\\). As \\(x\\to -\\infty\\), \\(1/x\\to 0\\). So \\(y=0\\) is the horizontal asymptote."},
 		{"What is the horizontal asymptote of \\(f(x)=\\frac{2x+1}{x-3}\\)?", "y=2", "As \\(x\\to\\infty\\), \\(\\frac{2x+1}{x-3}\\to 2\\). The ratio of leading coefficients gives the horizontal asymptote."},
 		{"Can a function cross its horizontal asymptote?", "yes", "A function CAN cross its horizontal asymptote (unlike vertical asymptotes). The asymptote describes end behavior only."},
@@ -1126,9 +1126,9 @@ func (g *discontinuityGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	}
 	table := []entry{
 		{"What kind of discontinuity does \\(1/x\\) have at \\(x=0\\)?", "infinite", "\\(1/x\\) has an infinite discontinuity (vertical asymptote) at \\(x=0\\)."},
-		{"What kind of discontinuity does \\(|x|/x\\) have at \\(x=0\\)?", "jump", "The left limit is \\(-1\\) and the right limit is \\(1\\), so there is a jump discontinuity."},
-		{"What kind of discontinuity does \\(\\frac{x^{2}-1}{x-1}\\) have at \\(x=1\\)?", "removable", "The function simplifies to \\(x+1\\) for \\(x\\neq 1\\), and the limit as \\(x\\to 1\\) is \\(2\\)."},
-		{"What kind of discontinuity does \\(\\sin(1/x)\\) have at \\(x=0\\)?", "essential", "\\(\\sin(1/x)\\) oscillates infinitely near \\(0\\), so the limit does not exist (essential/oscillatory discontinuity)."},
+		{"What kind of discontinuity does \\(|x|/x\\) have at \\(x=0\\)?", "jump", "The left limit is -1 and the right limit is 1, so there is a jump discontinuity."},
+		{"What kind of discontinuity does \\(\\frac{x^{2}-1}{x-1}\\) have at \\(x=1\\)?", "removable", "The function simplifies to \\(x+1\\) for \\(x\\neq 1\\), and the limit as \\(x\\to 1\\) is 2."},
+		{"What kind of discontinuity does \\(\\sin(1/x)\\) have at \\(x=0\\)?", "essential", "\\(\\sin(1/x)\\) oscillates infinitely near 0, so the limit does not exist (essential/oscillatory discontinuity)."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1145,8 +1145,8 @@ func (g *indeterminateGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		{"Is \\(\\infty/\\infty\\) an indeterminate form?", "yes", "\\(\\infty/\\infty\\) is indeterminate — the ratio of functions both approaching infinity could converge to anything."},
 		{"Is \\(0 \\cdot \\infty\\) an indeterminate form?", "yes", "\\(0 \\cdot \\infty\\) is indeterminate — it can be rewritten as \\(0/0\\) or \\(\\infty/\\infty\\)."},
 		{"Is \\(\\infty - \\infty\\) an indeterminate form?", "yes", "\\(\\infty - \\infty\\) is indeterminate — the difference of two quantities approaching infinity could be anything."},
-		{"Is \\(0^{\\infty}\\) an indeterminate form?", "no", "\\(0^{\\infty} = 0\\). If the base approaches \\(0\\) and the exponent approaches \\(\\infty\\), the result is \\(0\\) (not indeterminate)."},
-		{"Is \\(1^{\\infty}\\) an indeterminate form?", "yes", "\\(1^{\\infty}\\) is indeterminate — it often arises with exponential limits and can approach \\(e\\), \\(1\\), or other values."},
+		{"Is \\(0^{\\infty}\\) an indeterminate form?", "no", "\\(0^{\\infty} = 0\\). If the base approaches 0 and the exponent approaches \\(\\infty\\), the result is 0 (not indeterminate)."},
+		{"Is \\(1^{\\infty}\\) an indeterminate form?", "yes", "\\(1^{\\infty}\\) is indeterminate — it often arises with exponential limits and can approach \\(e\\), 1, or other values."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1210,8 +1210,8 @@ func (g *squeezeGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	}
 	table := []entry{
 		{"What does the squeeze theorem say? (yes/no: squeezed f takes the common limit L)", "yes", "The squeeze theorem: if g(x)≤f(x)≤h(x) and lim g=lim h=L, then lim f=L."},
-		{"Find \\(\\lim_{x \\to 0} x^{2} \\sin(1/x)\\) using the squeeze theorem.", "0", "\\(-1\\leq \\sin(1/x)\\leq 1 \\implies -x^{2} \\leq x^{2}\\sin(1/x) \\leq x^{2}\\). Since \\(-x^{2}\\to 0\\) and \\(x^{2}\\to 0\\), the squeeze theorem gives limit \\(0\\)."},
-		{"Find \\(\\lim_{x \\to 0} x \\cos(1/x)\\) using the squeeze theorem.", "0", "\\(-1\\leq \\cos(1/x)\\leq 1 \\implies -x \\leq x\\cos(1/x) \\leq x\\). Since \\(-x\\to 0\\) and \\(x\\to 0\\), the limit is \\(0\\)."},
+		{"Find \\(\\lim_{x \\to 0} x^{2} \\sin(1/x)\\) using the squeeze theorem.", "0", "\\(-1\\leq \\sin(1/x)\\leq 1 \\implies -x^{2} \\leq x^{2}\\sin(1/x) \\leq x^{2}\\). Since \\(-x^{2}\\to 0\\) and \\(x^{2}\\to 0\\), the squeeze theorem gives limit 0."},
+		{"Find \\(\\lim_{x \\to 0} x \\cos(1/x)\\) using the squeeze theorem.", "0", "\\(-1\\leq \\cos(1/x)\\leq 1 \\implies -x \\leq x\\cos(1/x) \\leq x\\). Since \\(-x\\to 0\\) and \\(x\\to 0\\), the limit is 0."},
 		{"What is a common way to apply the squeeze theorem? (yes/no: bound f between simpler functions with the same limit)", "yes", "Bound the function between two simpler functions with the same limit, then show the upper and lower bounds converge to that limit."},
 	}
 	e := table[rand.Intn(len(table))]
@@ -1225,9 +1225,9 @@ func (g *supremumGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		q, a, e string
 	}
 	table := []entry{
-		{"What is the supremum of the set \\(\\{1-1/n : n \\in \\mathbb{N}\\}\\)?", "1", "The values approach \\(1\\) from below. \\(1\\) is an upper bound, and no smaller number is an upper bound. Supremum = 1."},
-		{"What is the infimum of the set \\(\\{1/n : n \\in \\mathbb{N}\\}\\)?", "0", "The values approach \\(0\\) from above. \\(0\\) is a lower bound, and no larger number is a lower bound. Infimum = 0."},
-		{"Is the supremum always in the set?", "no", "The supremum need not be in the set. E.g., \\(\\sup\\{1-1/n\\}=1\\), but \\(1\\) is not in the set."},
+		{"What is the supremum of the set \\(\\{1-1/n : n \\in \\mathbb{N}\\}\\)?", "1", "The values approach 1 from below. 1 is an upper bound, and no smaller number is an upper bound. Supremum = 1."},
+		{"What is the infimum of the set \\(\\{1/n : n \\in \\mathbb{N}\\}\\)?", "0", "The values approach 0 from above. 0 is a lower bound, and no larger number is a lower bound. Infimum = 0."},
+		{"Is the supremum always in the set?", "no", "The supremum need not be in the set. E.g., \\(\\sup\\{1-1/n\\}=1\\), but 1 is not in the set."},
 		{"Is the maximum always in the set?", "yes", "If a maximum exists, it is the supremum and is also in the set. Unlike supremum, maximum must be attained."},
 		{"What is \\(\\sup\\{x \\in \\mathbb{R} : x^{2}<2\\}\\)? (enter as sqrt(...))", "sqrt(2)", "The set is \\((-\\sqrt{2}, \\sqrt{2})\\). The supremum is \\(\\sqrt{2}\\) (the least upper bound), which is not in the set."},
 	}
@@ -1293,9 +1293,9 @@ func (g *seqConvergenceGen) Generate(ctx generator.GeneratorContext) generator.P
 		q, a, e string
 	}
 	table := []entry{
-		{"Does \\(a_{n} = 1/n\\) converge? If so, to what?", "yes, to 0", "As \\(n\\to\\infty\\), \\(1/n \\to 0\\). The sequence converges to \\(0\\)."},
+		{"Does \\(a_{n} = 1/n\\) converge? If so, to what?", "yes, to 0", "As \\(n\\to\\infty\\), \\(1/n \\to 0\\). The sequence converges to 0."},
 		{"Does \\(a_{n} = n/(n+1)\\) converge? If so, to what?", "yes, to 1", "\\(n/(n+1) = 1/(1+1/n) \\to 1/(1+0) = 1\\)."},
-		{"Does \\(a_{n} = (-1)^{n}\\) converge?", "no", "\\((-1)^{n}\\) oscillates between \\(-1\\) and \\(1\\) without approaching a single limit."},
+		{"Does \\(a_{n} = (-1)^{n}\\) converge?", "no", "\\((-1)^{n}\\) oscillates between -1 and 1 without approaching a single limit."},
 		{"Does \\(a_{n} = n^{2}\\) converge?", "no (diverges to \\(\\infty\\))", "\\(n^{2} \\to \\infty\\) as \\(n\\to\\infty\\), so the sequence diverges."},
 		{"Does \\(a_{n} = 2^{n}/n!\\) converge? If so, to what?", "yes, to 0", "The factorial grows faster than the exponential, so \\(2^{n}/n! \\to 0\\)."},
 	}
@@ -1476,7 +1476,10 @@ func (g *rootTestGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		{"Does sum (n/(n+1))^(n^2) converge? (yes/no)", "yes", "|a(n)|^(1/n) = (n/(n+1))^n = 1/(1+1/n)^n → 1/e < 1. The series converges by the root test."},
 		{"Does sum 1/2^n converge? (yes/no)", "yes", "|a(n)|^(1/n) = 1/2 < 1. The series sum 1/2^n converges by root test (it is a geometric series)."},
 		{"Is the root test useful when a_n involves nth powers? (yes/no)", "yes", "The root test is especially useful when a(n) contains expressions like (something)^n or nth powers."},
-		{"For sum 1/2^n, L = 1/2. What is L? (enter like 1/2)", "1/2", "|a(n)|^(1/n) = 1/2."},
+		{"For a_n = (2n/(3n+1))^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter an exact fraction)", "2/3", "|a(n)|^(1/n) = 2n/(3n+1) → 2/3 < 1, so the series converges absolutely by the root test."},
+		{"For a_n = ((3n+1)/n)^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter a number)", "3", "|a(n)|^(1/n) = (3n+1)/n → 3 > 1, so the series diverges by the root test."},
+		{"For a_n = ((n+1)/n)^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter a number)", "1", "|a(n)|^(1/n) = (n+1)/n → 1, so the root test is inconclusive; this series diverges because a(n) → e ≠ 0."},
+		{"A series has root-test limit L = 1. Does the root test decide convergence? (yes/no)", "no", "When L = 1 the root test gives no conclusion, so another test is needed."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1731,10 +1734,10 @@ func (g *derivGlobalExtremaGen) Generate(ctx generator.GeneratorContext) generat
 		q, a, e string
 	}
 	table := []entry{
-		{"What is the global maximum VALUE of \\(f(x)=x^{2}-4x\\) on \\([0,3]\\)? (enter a number)", "0", "Critical point \\(x=2\\): \\(f(2)=-4\\). Endpoints: \\(f(0)=0\\), \\(f(3)=-3\\). Global max value is \\(0\\) at \\(x=3\\)."},
-		{"What is the global minimum VALUE of \\(f(x)=x^{2}-4x\\) on \\([0,3]\\)? (enter a number)", "-4", "Critical point \\(x=2\\): \\(f(2)=-4\\). Endpoints give \\(0\\) and \\(-3\\). Global min value is \\(-4\\) at \\(x=2\\)."},
+		{"What is the global maximum VALUE of \\(f(x)=x^{2}-4x\\) on \\([0,3]\\)? (enter a number)", "0", "Critical point \\(x=2\\): \\(f(2)=-4\\). Endpoints: \\(f(0)=0\\), \\(f(3)=-3\\). Global max value is 0 at \\(x=3\\)."},
+		{"What is the global minimum VALUE of \\(f(x)=x^{2}-4x\\) on \\([0,3]\\)? (enter a number)", "-4", "Critical point \\(x=2\\): \\(f(2)=-4\\). Endpoints give 0 and -3. Global min value is -4 at \\(x=2\\)."},
 		{"Does the closed-interval method evaluate f at critical points and endpoints? (yes/no)", "yes", "On \\([a,b]\\): find critical points inside, evaluate \\(f\\) there and at \\(a,b\\); extremes are the largest/smallest values."},
-		{"What is the global maximum VALUE of \\(f(x)=-x^{2}+4x\\) on \\([0,3]\\)? (enter a number)", "4", "Critical point \\(x=2\\): \\(f(2)=4\\). Endpoints: \\(f(0)=0\\), \\(f(3)=3\\). Global max value is \\(4\\) at \\(x=2\\)."},
+		{"What is the global maximum VALUE of \\(f(x)=-x^{2}+4x\\) on \\([0,3]\\)? (enter a number)", "4", "Critical point \\(x=2\\): \\(f(2)=4\\). Endpoints: \\(f(0)=0\\), \\(f(3)=3\\). Global max value is 4 at \\(x=2\\)."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1890,8 +1893,8 @@ func (g *derivDirectionalGen) Generate(ctx generator.GeneratorContext) generator
 	}
 	table := []entry{
 		{"Is the directional derivative the dot product of the gradient with the direction? (yes/no)", "yes", "The derivative in unit direction \\(u\\) is \\(D_{u}f = \\nabla f \\cdot u\\)."},
-		{"For \\(f(x,y)=x^{2}+y^{2}\\) at \\((1,0)\\) in direction \\((1,0)\\), find \\(D_{u}f\\).", "2", "\\(\\nabla f(1,0) = (2,0)\\); dotted with \\((1,0)\\): \\(2\\)."},
-		{"For \\(f(x,y)=xy\\) at \\((1,1)\\) in direction \\((1,0)\\), find \\(D_{u}f\\).", "1", "\\(\\nabla f(1,1) = (1,1)\\); dotted with \\((1,0)\\): \\(1\\)."},
+		{"For \\(f(x,y)=x^{2}+y^{2}\\) at \\((1,0)\\) in direction \\((1,0)\\), find \\(D_{u}f\\).", "2", "\\(\\nabla f(1,0) = (2,0)\\); dotted with \\((1,0)\\): 2."},
+		{"For \\(f(x,y)=xy\\) at \\((1,1)\\) in direction \\((1,0)\\), find \\(D_{u}f\\).", "1", "\\(\\nabla f(1,1) = (1,1)\\); dotted with \\((1,0)\\): 1."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1951,8 +1954,8 @@ func (g *derivDiffContinuityGen) Generate(ctx generator.GeneratorContext) genera
 	}
 	table := []entry{
 		{"If \\(f\\) is differentiable at \\(a\\), must \\(f\\) be continuous at \\(a\\)? (yes/no)", "yes", "Differentiability at \\(a\\) implies continuity at \\(a\\): f is continuous at a."},
-		{"Does continuity imply differentiability?", "no", "Continuity does not imply differentiability (e.g. \\(|x|\\) at \\(0\\))."},
-		{"Give a function continuous but not differentiable at \\(0\\).", "|x|", "\\(f(x)=|x|\\) is continuous at \\(0\\) but has no derivative there (corner)."},
+		{"Does continuity imply differentiability?", "no", "Continuity does not imply differentiability (e.g. \\(|x|\\) at 0)."},
+		{"Give a function continuous but not differentiable at 0.", "|x|", "\\(f(x)=|x|\\) is continuous at 0 but has no derivative there (corner)."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2014,7 +2017,7 @@ func (g *integralMVTGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	table := []entry{
 		{"Does the integral MVT guarantee some c with f(c) equal to the average value on [a,b]? (yes/no)", "yes", "Some \\(c \\in [a,b]\\) attains the average value: \\(f(c) = \\frac{1}{b-a}\\int_{a}^{b}f\\)."},
 		{"Find the average value of \\(f(x)=x^{2}\\) on \\([0,2]\\).", "4/3", "Average \\(= \\frac{1}{2}\\int_{0}^{2}x^{2}\\,dx = \\frac{1}{2}\\cdot\\frac{8}{3} = 4/3\\)."},
-		{"Find \\(c\\) guaranteed by the integral MVT for \\(f(x)=x\\) on \\([0,4]\\).", "2", "Average is \\(2\\); \\(f(c)=c=2\\) gives \\(c=2\\)."},
+		{"Find \\(c\\) guaranteed by the integral MVT for \\(f(x)=x\\) on \\([0,4]\\).", "2", "Average is 2; \\(f(c)=c=2\\) gives \\(c=2\\)."},
 		{"Find the average value of \\(f(x)=3x\\) on \\([1,3]\\).", "6", "Average \\(= \\frac{1}{2}\\int_{1}^{3}3x\\,dx = \\frac{1}{2}(12) = 6\\)."},
 	}
 	e := table[rand.Intn(len(table))]
@@ -2031,7 +2034,7 @@ func (g *integralWorkGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		{"A force \\(F(x)=2x\\) moves an object from \\(x=0\\) to \\(x=3\\). Find the work.", "9", "Work \\(= \\int_{0}^{3}2x\\,dx = 9\\) J."},
 		{"A force \\(F(x)=x^{2}\\) moves an object from \\(x=1\\) to \\(x=2\\). Find the work.", "7/3", "Work \\(= \\int_{1}^{2}x^{2}\\,dx = (8-1)/3 = 7/3\\) J."},
 		{"A force \\(F(x)=3x\\) moves an object from \\(x=0\\) to \\(x=4\\). Find the work.", "24", "Work by a variable force is W = integral of F(x)dx: \\(\\int_{0}^{4}3x\\,dx = 24\\) J."},
-		{"A spring with \\(F(x)=4x\\) is stretched from \\(0\\) to \\(2\\). Find the work.", "8", "Work \\(= \\int_{0}^{2}4x\\,dx = 8\\) J."},
+		{"A spring with \\(F(x)=4x\\) is stretched from 0 to 2. Find the work.", "8", "Work \\(= \\int_{0}^{2}4x\\,dx = 8\\) J."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2060,7 +2063,7 @@ func (g *integralSurfaceAreaGen) Generate(ctx generator.GeneratorContext) genera
 		q, a, e string
 	}
 	table := []entry{
-		{"What is the surface area of a sphere of radius \\(2\\)? (enter in terms of pi)", "16pi", "Revolving a semicircle gives S = 4 pi r^2; with r=2: 16pi. Bands of radius f(x): S = 2 pi times integral of f(x)sqrt(1+(f')^2)dx."},
+		{"What is the surface area of a sphere of radius 2? (enter in terms of pi)", "16pi", "Revolving a semicircle gives S = 4 pi r^2; with r=2: 16pi. Bands of radius f(x): S = 2 pi times integral of f(x)sqrt(1+(f')^2)dx."},
 		{"What is the surface area of a sphere of radius \\(r\\)? (enter in terms of pi)", "4*pi*r^2", "Revolving a semicircle gives \\(S = 4\\pi r^{2}\\)."},
 		{"For \\(y=3x\\), what is \\(1+(f'(x))^{2}\\)? (enter a number)", "10", "f'=3, so 1+(f')^2=10. The arc-length element sqrt(1+(f')^2)dx measures slant length in the surface formula."},
 	}
@@ -2076,8 +2079,8 @@ func (g *integralTrapezoidGen) Generate(ctx generator.GeneratorContext) generato
 	}
 	table := []entry{
 		{"Approximate \\(\\int_{0}^{2}x^{2}\\,dx\\) with one trapezoid.", "4", "Trapezoidal rule: average height ((0+4)/2=2) times width 2 = 4 (true value 8/3). Endpoints count once, interior twice, scaled by Δx/2."},
-		{"Approximate \\(\\int_{0}^{2}x\\,dx\\) with one trapezoid.", "2", "Average height \\((0+2)/2=1\\) times width \\(2\\): \\(2\\)."},
-		{"Approximate \\(\\int_{0}^{1}x^{2}\\,dx\\) with one trapezoid.", "1/2", "Average height \\((0+1)/2\\) times width \\(1\\): \\(1/2\\) (true value \\(1/3\\))."},
+		{"Approximate \\(\\int_{0}^{2}x\\,dx\\) with one trapezoid.", "2", "Average height \\((0+2)/2=1\\) times width 2: 2."},
+		{"Approximate \\(\\int_{0}^{1}x^{2}\\,dx\\) with one trapezoid.", "1/2", "Average height \\((0+1)/2\\) times width 1: \\(1/2\\) (true value \\(1/3\\))."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2123,7 +2126,7 @@ func (g *integralPTestGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		{"What is the smallest integer p for which \\(\\int_{1}^{\\infty}dx/x^{p}\\) converges? (enter a number)", "2", "The \\(p\\)-integral converges iff \\(p>1\\): smallest integer 2."},
 		{"Does \\(\\int_{1}^{\\infty}dx/x^{3}\\) converge? (yes/no)", "yes", "Since \\(p=3>1\\), the integral converges."},
 		{"Does \\(\\int_{1}^{\\infty}dx/x\\) converge? (yes/no)", "no", "The harmonic case \\(p=1\\) diverges (logarithmic growth)."},
-		{"Does \\(\\int_{0}^{1}dx/x^{p}\\) converge for \\(p<1\\)? (yes/no)", "yes", "At \\(0\\), \\(\\int_{0}^{1}dx/x^{p}\\) converges iff \\(p<1\\) (flipped condition)."},
+		{"Does \\(\\int_{0}^{1}dx/x^{p}\\) converge for \\(p<1\\)? (yes/no)", "yes", "At 0, \\(\\int_{0}^{1}dx/x^{p}\\) converges iff \\(p<1\\) (flipped condition)."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2193,7 +2196,7 @@ func (g *telescopingSeriesGen) Generate(ctx generator.GeneratorContext) generato
 	table := []entry{
 		{"Find \\(\\sum_{n=1}^{\\infty}(1/n-1/(n+1))\\).", "1", "Partial sums telescope: \\(1-1/(N+1)\\to 1\\)."},
 		{"Do interior terms cancel in telescoping partial sums? (yes/no)", "yes", "Telescoping: write terms as differences so consecutive terms cancel; interior terms cancel in partial sums."},
-		{"Find \\(\\sum_{n=1}^{\\infty}(1/(n(n+1)))\\) via partial fractions.", "1", "\\(1/(n(n+1)) = 1/n-1/(n+1)\\), telescoping to \\(1\\)."},
+		{"Find \\(\\sum_{n=1}^{\\infty}(1/(n(n+1)))\\) via partial fractions.", "1", "\\(1/(n(n+1)) = 1/n-1/(n+1)\\), telescoping to 1."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2308,7 +2311,7 @@ func (g *oneSidedLimitGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		{"Does lim as x approaches 0 from the right of 1/x diverge to positive infinity? (enter 1 for yes, 0 for no)", "1", "From the right, \\(1/x\\) grows without bound: \\(+\\infty\\)."},
 		{"Is lim as x approaches 0 from the left of 1/x equal to positive infinity? (enter 1 for yes, 0 for no)", "0", "From the left, \\(1/x\\) dives to \\(-\\infty\\), not \\(+\\infty\\)."},
 		{"How many one-sided limits must agree for a two-sided limit to exist? (enter a number)", "2", "\\(\\lim_{x\\to a}f\\) exists iff both one-sided limits exist and are equal."},
-		{"Find \\(\\lim_{x\\to 1^{+}}|x-1|/(x-1)\\).", "1", "For \\(x>1\\), the quotient is \\(1\\)."},
+		{"Find \\(\\lim_{x\\to 1^{+}}|x-1|/(x-1)\\).", "1", "For \\(x>1\\), the quotient is 1."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2337,7 +2340,7 @@ func (g *sineLimitGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		q, a, e string
 	}
 	table := []entry{
-		{"Find \\(\\lim_{x\\to 0}\\sin(x)/x\\).", "1", "The fundamental trigonometric limit equals \\(1\\)."},
+		{"Find \\(\\lim_{x\\to 0}\\sin(x)/x\\).", "1", "The fundamental trigonometric limit equals 1."},
 		{"Find \\(\\lim_{x\\to 0}\\sin(3x)/x\\).", "3", "\\(\\sin(3x)/x = 3\\cdot\\sin(3x)/(3x) \\to 3\\)."},
 		{"Find \\(\\lim_{x\\to 0}(1-\\cos(x))/x\\).", "0", "Standard companion limit: \\((1-\\cos x)/x \\to 0\\)."},
 		{"Find \\(\\lim_{x\\to 0}\\tan(x)/x\\).", "1", "\\(\\tan x/x = (\\sin x/x)\\cdot(1/\\cos x) \\to 1\\)."},
@@ -2353,9 +2356,9 @@ func (g *expLimitGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		q, a, e string
 	}
 	table := []entry{
-		{"Find \\(\\lim_{x\\to 0}(e^{x}-1)/x\\).", "1", "The fundamental exponential limit equals \\(1\\)."},
+		{"Find \\(\\lim_{x\\to 0}(e^{x}-1)/x\\).", "1", "The fundamental exponential limit equals 1."},
 		{"Find \\(\\lim_{n\\to\\infty}(1+1/n)^{n}\\).", "e", "This limit defines \\(e\\)."},
-		{"Find \\(\\lim_{x\\to 0}\\ln(1+x)/x\\).", "1", "The logarithmic companion limit equals \\(1\\)."},
+		{"Find \\(\\lim_{x\\to 0}\\ln(1+x)/x\\).", "1", "The logarithmic companion limit equals 1."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -2368,7 +2371,7 @@ func (g *boundedSeqGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		q, a, e string
 	}
 	table := []entry{
-		{"Is \\(a_{n}=(-1)^{n}\\) bounded? (yes/no)", "yes", "It oscillates between \\(-1\\) and \\(1\\): bounded (|a_n|≤1) but divergent."},
+		{"Is \\(a_{n}=(-1)^{n}\\) bounded? (yes/no)", "yes", "It oscillates between -1 and 1: bounded (|a_n|≤1) but divergent."},
 		{"Does every convergent sequence have to be bounded?", "yes", "Convergence forces boundedness (terms eventually stay near the limit)."},
 		{"Is \\(a_{n}=n^{2}\\) bounded?", "no", "It grows without bound."},
 		{"Is a bounded sequence always convergent?", "no", "\\((-1)^{n}\\) is bounded yet oscillates: boundedness is necessary, not sufficient."},
@@ -2514,7 +2517,7 @@ func (g *discMethodGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		case 3:
 			r := rand.Intn(6) + 1
 			return generator.Problem{
-				Question:    fmt.Sprintf("A disc-method cross section has radius \\(%d\\). What is its area divided by \\(\\pi\\)? (enter a number)", r),
+				Question:    fmt.Sprintf("A disc-method cross section has radius %d. What is its area divided by \\(\\pi\\)? (enter a number)", r),
 				Answer:      fmt.Sprintf("%d", r*r),
 				Explanation: fmt.Sprintf("Area πr² with r=%d gives area/π = %d² = %d.", r, r, r*r),
 			}
@@ -2560,7 +2563,7 @@ func (g *washerMethodGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			smallR := rand.Intn(bigR-1) + 1
 			l := rand.Intn(4) + 1
 			return generator.Problem{
-				Question:    fmt.Sprintf("Washers have outer radius \\(%d\\), inner radius \\(%d\\), over length \\(%d\\). What is \\(V/\\pi\\)? (enter a number)", bigR, smallR, l),
+				Question:    fmt.Sprintf("Washers have outer radius %d, inner radius %d, over length %d. What is \\(V/\\pi\\)? (enter a number)", bigR, smallR, l),
 				Answer:      fmt.Sprintf("%d", (bigR*bigR-smallR*smallR)*l),
 				Explanation: fmt.Sprintf("V = π(%d²-%d²)·%d = π·%d, so V/π = %d.", bigR, smallR, l, (bigR*bigR-smallR*smallR)*l, (bigR*bigR-smallR*smallR)*l),
 			}
@@ -2568,7 +2571,7 @@ func (g *washerMethodGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			bigR := rand.Intn(5) + 2
 			smallR := rand.Intn(bigR-1) + 1
 			return generator.Problem{
-				Question:    fmt.Sprintf("A washer has outer radius \\(%d\\) and inner radius \\(%d\\). What is its area divided by \\(\\pi\\)? (enter a number)", bigR, smallR),
+				Question:    fmt.Sprintf("A washer has outer radius %d and inner radius %d. What is its area divided by \\(\\pi\\)? (enter a number)", bigR, smallR),
 				Answer:      fmt.Sprintf("%d", bigR*bigR-smallR*smallR),
 				Explanation: fmt.Sprintf("Annulus π(%d²-%d²) = π·%d, so area/π = %d.", bigR, smallR, bigR*bigR-smallR*smallR, bigR*bigR-smallR*smallR),
 			}
@@ -2593,7 +2596,7 @@ func (g *washerMethodGen) Generate(ctx generator.GeneratorContext) generator.Pro
 				ans = "32/3"
 			}
 			return generator.Problem{
-				Question:    fmt.Sprintf("A spherical napkin ring has height \\(%d\\). Its volume is \\(\\pi h^{3}/6\\). What is \\(V/\\pi\\)? (enter a fraction)", h),
+				Question:    fmt.Sprintf("A spherical napkin ring has height %d. Its volume is \\(\\pi h^{3}/6\\). What is \\(V/\\pi\\)? (enter a fraction)", h),
 				Answer:      ans,
 				Explanation: fmt.Sprintf("V/π = %d³/6 = %s.", h, ans),
 			}
@@ -2601,7 +2604,7 @@ func (g *washerMethodGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			bigR := rand.Intn(5) + 1
 			l := rand.Intn(4) + 1
 			return generator.Problem{
-				Question:    fmt.Sprintf("Washers with inner radius \\(0\\) (a disc), outer radius \\(%d\\), over length \\(%d\\). What is \\(V/\\pi\\)? (enter a number)", bigR, l),
+				Question:    fmt.Sprintf("Washers with inner radius 0 (a disc), outer radius %d, over length %d. What is \\(V/\\pi\\)? (enter a number)", bigR, l),
 				Answer:      fmt.Sprintf("%d", bigR*bigR*l),
 				Explanation: fmt.Sprintf("Inner radius 0 degenerates to a disc: V = π·%d²·%d, so V/π = %d.", bigR, l, bigR*bigR*l),
 			}
@@ -2651,7 +2654,7 @@ func (g *shellMethodGen) Generate(ctx generator.GeneratorContext) generator.Prob
 			r := rand.Intn(5) + 1
 			h := rand.Intn(5) + 1
 			return generator.Problem{
-				Question:    fmt.Sprintf("A cylindrical shell has radius \\(%d\\) and height \\(%d\\). What is \\(dV/(\\pi\\,dx)\\)? (enter a number)", r, h),
+				Question:    fmt.Sprintf("A cylindrical shell has radius %d and height %d. What is \\(dV/(\\pi\\,dx)\\)? (enter a number)", r, h),
 				Answer:      fmt.Sprintf("%d", 2*r*h),
 				Explanation: fmt.Sprintf("dV = 2π·radius·height·dx = 2π·%d·%d·dx, so dV/(π\\,dx) = %d.", r, h, 2*r*h),
 			}

@@ -772,13 +772,13 @@ func (g *trigIneqGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		exp      string
 	}
 	entries := []entry{
-		{"For \\(0^{\\circ} < x < 90^{\\circ}\\), is \\(\\sin(x)\\) increasing or decreasing?", "increasing", "\\(\\sin(x)\\) increases from \\(0\\) to \\(1\\) on \\([0^{\\circ}, 90^{\\circ}]\\)."},
-		{"For \\(0^{\\circ} < x < 90^{\\circ}\\), is \\(\\cos(x)\\) increasing or decreasing?", "decreasing", "\\(\\cos(x)\\) decreases from \\(1\\) to \\(0\\) on \\([0^{\\circ}, 90^{\\circ}]\\)."},
-		{"For \\(0^{\\circ} < x < 90^{\\circ}\\), is \\(\\tan(x)\\) increasing or decreasing?", "increasing", "\\(\\tan(x)\\) increases from \\(0\\) to \\(\\infty\\) on \\([0^{\\circ}, 90^{\\circ})\\)."},
-		{"What is the maximum value of \\(\\sin(x)\\)?", "1", "The maximum of \\(\\sin(x)\\) is \\(1\\), achieved at \\(x = 90^{\\circ}\\)."},
-		{"What is the minimum value of \\(\\sin(x)\\)?", "-1", "The minimum of \\(\\sin(x)\\) is \\(-1\\), achieved at \\(x = 270^{\\circ}\\)."},
-		{"What is the maximum value of \\(\\cos(x)\\)?", "1", "The maximum of \\(\\cos(x)\\) is \\(1\\), achieved at \\(x = 0^{\\circ}\\)."},
-		{"What is the minimum value of \\(\\cos(x)\\)?", "-1", "The minimum of \\(\\cos(x)\\) is \\(-1\\), achieved at \\(x = 180^{\\circ}\\)."},
+		{"For \\(0^{\\circ} < x < 90^{\\circ}\\), is \\(\\sin(x)\\) increasing or decreasing?", "increasing", "\\(\\sin(x)\\) increases from 0 to 1 on \\([0^{\\circ}, 90^{\\circ}]\\)."},
+		{"For \\(0^{\\circ} < x < 90^{\\circ}\\), is \\(\\cos(x)\\) increasing or decreasing?", "decreasing", "\\(\\cos(x)\\) decreases from 1 to 0 on \\([0^{\\circ}, 90^{\\circ}]\\)."},
+		{"For \\(0^{\\circ} < x < 90^{\\circ}\\), is \\(\\tan(x)\\) increasing or decreasing?", "increasing", "\\(\\tan(x)\\) increases from 0 to \\(\\infty\\) on \\([0^{\\circ}, 90^{\\circ})\\)."},
+		{"What is the maximum value of \\(\\sin(x)\\)?", "1", "The maximum of \\(\\sin(x)\\) is 1, achieved at \\(x = 90^{\\circ}\\)."},
+		{"What is the minimum value of \\(\\sin(x)\\)?", "-1", "The minimum of \\(\\sin(x)\\) is -1, achieved at \\(x = 270^{\\circ}\\)."},
+		{"What is the maximum value of \\(\\cos(x)\\)?", "1", "The maximum of \\(\\cos(x)\\) is 1, achieved at \\(x = 0^{\\circ}\\)."},
+		{"What is the minimum value of \\(\\cos(x)\\)?", "-1", "The minimum of \\(\\cos(x)\\) is -1, achieved at \\(x = 180^{\\circ}\\)."},
 		{"For \\(90^{\\circ} < x < 180^{\\circ}\\), is \\(\\sin(x)\\) positive or negative?", "positive", "\\(\\sin(x)\\) is positive in Quadrant II (\\(90^{\\circ}\\) to \\(180^{\\circ}\\))."},
 	}
 	e := entries[rand.Intn(len(entries))]
@@ -816,13 +816,13 @@ type sineFuncGen struct{}
 func (g *sineFuncGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	easy := []funcEntry{
 		{"What is the period of \\(y = \\sin(x)\\)? (type like 2pi)", "2pi", "The sine wave repeats every \\(2\\pi\\) radians."},
-		{"What is the maximum value of \\(y = \\sin(x)\\)? (enter a number)", "1", "The sine function oscillates between \\(-1\\) and \\(1\\); the maximum is \\(1\\)."},
-		{"What is the minimum value of \\(y = \\sin(x)\\)? (enter a number)", "-1", "The sine function oscillates between \\(-1\\) and \\(1\\); the minimum is \\(-1\\)."},
+		{"What is the maximum value of \\(y = \\sin(x)\\)? (enter a number)", "1", "The sine function oscillates between -1 and 1; the maximum is 1."},
+		{"What is the minimum value of \\(y = \\sin(x)\\)? (enter a number)", "-1", "The sine function oscillates between -1 and 1; the minimum is -1."},
 		{"What is \\(\\sin(0)\\)? (enter a number)", "0", "\\(\\sin(0) = 0\\): the wave starts at the origin."},
 		{"Is \\(\\sin(x)\\) odd, even, or neither? (type one word)", "odd", "\\(\\sin(-x) = -\\sin(x)\\), so sine is odd."},
 		{"What is the derivative of \\(\\sin(x)\\)?", "cos(x)", "\\(d/dx \\sin(x) = \\cos(x)\\)."},
 		{"What is the indefinite integral of \\(\\sin(x)\\)?", "-cos(x)", "Since \\(d/dx(-\\cos(x)) = \\sin(x)\\), the integral is \\(-\\cos(x) + c\\)."},
-		{"What is the limit of \\(\\sin(x)/x\\) as \\(x \\to 0\\)? (enter a number)", "1", "Near the origin the sine curve matches \\(y = x\\), so the ratio tends to \\(1\\)."},
+		{"What is the limit of \\(\\sin(x)/x\\) as \\(x \\to 0\\)? (enter a number)", "1", "Near the origin the sine curve matches \\(y = x\\), so the ratio tends to 1."},
 	}
 	hard := []funcEntry{
 		{"What is \\(\\sin(\\pi/2)\\)? (enter a number)", "1", "\\(\\sin(\\pi/2) = 1\\): the first maximum of the wave."},
@@ -839,19 +839,19 @@ type cosineFuncGen struct{}
 func (g *cosineFuncGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	easy := []funcEntry{
 		{"What is the period of \\(y = \\cos(x)\\)? (type like 2pi)", "2pi", "The cosine wave repeats every \\(2\\pi\\) radians."},
-		{"What is the maximum value of \\(y = \\cos(x)\\)? (enter a number)", "1", "The cosine function oscillates between \\(-1\\) and \\(1\\); the maximum is \\(1\\)."},
-		{"What is the minimum value of \\(y = \\cos(x)\\)? (enter a number)", "-1", "The cosine function oscillates between \\(-1\\) and \\(1\\); the minimum is \\(-1\\)."},
+		{"What is the maximum value of \\(y = \\cos(x)\\)? (enter a number)", "1", "The cosine function oscillates between -1 and 1; the maximum is 1."},
+		{"What is the minimum value of \\(y = \\cos(x)\\)? (enter a number)", "-1", "The cosine function oscillates between -1 and 1; the minimum is -1."},
 		{"What is \\(\\cos(0)\\)? (enter a number)", "1", "\\(\\cos(0) = 1\\): the wave starts at its peak."},
 		{"Is \\(\\cos(x)\\) odd, even, or neither? (type one word)", "even", "\\(\\cos(-x) = \\cos(x)\\), so cosine is even."},
 		{"What is the derivative of \\(\\cos(x)\\)?", "-sin(x)", "\\(d/dx \\cos(x) = -\\sin(x)\\)."},
 		{"What is the indefinite integral of \\(\\cos(x)\\)?", "sin(x)", "Since \\(d/dx(\\sin(x)) = \\cos(x)\\), the integral is \\(\\sin(x) + c\\)."},
-		{"What is the limit of \\((1 - \\cos(x))/x\\) as \\(x \\to 0\\)? (enter a number)", "0", "Near the origin \\(1 - \\cos(x)\\) vanishes faster than \\(x\\), so the ratio tends to \\(0\\)."},
+		{"What is the limit of \\((1 - \\cos(x))/x\\) as \\(x \\to 0\\)? (enter a number)", "0", "Near the origin \\(1 - \\cos(x)\\) vanishes faster than \\(x\\), so the ratio tends to 0."},
 	}
 	hard := []funcEntry{
 		{"What is \\(\\cos(\\pi)\\)? (enter a number)", "-1", "\\(\\cos(\\pi) = -1\\): the first minimum of the wave."},
 		{"What is the second derivative of \\(\\cos(x)\\)?", "-cos(x)", "Differentiating twice: \\(-\\sin(x) \\to -\\cos(x)\\)."},
 		{"What is the constant term of the Maclaurin series of \\(\\cos(x)\\)? (enter a number)", "1", "\\(\\cos(x) = 1 - x^2/2! + \\cdots\\): only even powers appear."},
-		{"Evaluate the integral of \\(\\cos(x)\\) from \\(0\\) to \\(\\pi/2\\). (enter a number)", "1", "\\(\\sin(\\pi/2) - \\sin(0) = 1 - 0 = 1\\)."},
+		{"Evaluate the integral of \\(\\cos(x)\\) from 0 to \\(\\pi/2\\). (enter a number)", "1", "\\(\\sin(\\pi/2) - \\sin(0) = 1 - 0 = 1\\)."},
 	}
 	return funcPool(ctx, easy, hard)
 }
@@ -873,7 +873,7 @@ func (g *tangentFuncGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	hard := []funcEntry{
 		{"What is \\(\\tan(\\pi/4)\\)? (enter a number)", "1", "\\(\\tan(\\pi/4) = \\sin(\\pi/4)/\\cos(\\pi/4) = 1\\)."},
 		{"What is \\(\\tan(-\\pi/4)\\)? (enter a number)", "-1", "Tangent is odd, so \\(\\tan(-\\pi/4) = -\\tan(\\pi/4) = -1\\)."},
-		{"What is the limit of \\(\\tan(x)/x\\) as \\(x \\to 0\\)? (enter a number)", "1", "Near the origin the tangent curve matches \\(y = x\\), so the ratio tends to \\(1\\)."},
+		{"What is the limit of \\(\\tan(x)/x\\) as \\(x \\to 0\\)? (enter a number)", "1", "Near the origin the tangent curve matches \\(y = x\\), so the ratio tends to 1."},
 		{"What is the limit of \\(\\tan(x)\\) as \\(x \\to \\pi/2\\) from the left? (type +infinity or -infinity)", "+infinity", "From the left the cosine is positive and tends to zero, so tangent grows without bound."},
 	}
 	return funcPool(ctx, easy, hard)
@@ -884,7 +884,7 @@ type cotangentFuncGen struct{}
 
 func (g *cotangentFuncGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	zeros := []funcEntry{
-		{"Name a point in \\([0, \\pi]\\) where \\(\\cot(x)\\) is undefined (type 0 or pi)", "0", "Sine vanishes at \\(0\\), so cotangent has a vertical asymptote there."},
+		{"Name a point in \\([0, \\pi]\\) where \\(\\cot(x)\\) is undefined (type 0 or pi)", "0", "Sine vanishes at 0, so cotangent has a vertical asymptote there."},
 		{"Name a point in \\([0, \\pi]\\) where \\(\\cot(x)\\) is undefined (type 0 or pi)", "pi", "Sine vanishes at \\(\\pi\\), so cotangent has a vertical asymptote there."},
 	}
 	easy := []funcEntry{
@@ -898,7 +898,7 @@ func (g *cotangentFuncGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	easy = append(easy, zeros...)
 	hard := []funcEntry{
 		{"What is \\(\\cot(\\pi/4)\\)? (enter a number)", "1", "\\(\\cot(\\pi/4) = \\cos(\\pi/4)/\\sin(\\pi/4) = 1\\)."},
-		{"What is the limit of \\(x\\cot(x)\\) as \\(x \\to 0\\)? (enter a number)", "1", "Since \\(\\cot(x) = \\cos(x)/\\sin(x)\\) and \\(\\sin(x)/x \\to 1\\), the product tends to \\(1\\)."},
+		{"What is the limit of \\(x\\cot(x)\\) as \\(x \\to 0\\)? (enter a number)", "1", "Since \\(\\cot(x) = \\cos(x)/\\sin(x)\\) and \\(\\sin(x)/x \\to 1\\), the product tends to 1."},
 		{"Is \\(\\cot(x)\\) increasing or decreasing on each branch? (type one word)", "decreasing", "Cotangent is strictly decreasing on every interval \\((k\\pi, \\pi + k\\pi)\\)."},
 	}
 	return funcPool(ctx, easy, hard)
@@ -944,7 +944,7 @@ func (g *cosecantFuncGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		{"What is the period of \\(y = \\csc(x)\\)? (type like 2pi)", "2pi", "Cosecant inherits the \\(2\\pi\\) period of sine."},
 		{"Is \\(\\csc(x)\\) odd, even, or neither? (type one word)", "odd", "\\(\\csc(-x) = -\\csc(x)\\), so cosecant is odd."},
 		{"What is the derivative of \\(\\csc(x)\\)?", "-csc(x)cot(x)", "\\(d/dx \\csc(x) = -\\csc(x)\\cot(x)\\)."},
-		{"At which \\(x\\) in \\([0, \\pi]\\) is \\(\\csc(x)\\) undefined? (type 0 or pi)", "0", "Sine vanishes at \\(0\\), so cosecant has a vertical asymptote there."},
+		{"At which \\(x\\) in \\([0, \\pi]\\) is \\(\\csc(x)\\) undefined? (type 0 or pi)", "0", "Sine vanishes at 0, so cosecant has a vertical asymptote there."},
 	}
 	easy = append(easy, recips...)
 	hard := []funcEntry{
@@ -972,7 +972,7 @@ func (g *arcsineFuncGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		{"What is \\(\\arcsin(-1)\\)? (type like -pi/2)", "-pi/2", "\\(\\arcsin(-1) = -\\pi/2\\): the minimum, at the left endpoint."},
 		{"What is \\(\\sin(\\arcsin(1/2))\\)? (enter a fraction like 1/2)", "1/2", "Applying sine after arcsine returns the argument: \\(1/2\\)."},
 		{"What is \\(\\arcsin(x) + \\arccos(x)\\)? (type like pi/2)", "pi/2", "The complementary inverse pair sums to \\(\\pi/2\\) for every \\(x\\)."},
-		{"Evaluate the integral of \\(\\arcsin(x)\\) from \\(0\\) to \\(1\\). (type like pi/2 - 1)", "pi/2 - 1", "The antiderivative \\(x\\arcsin(x) + \\sqrt{1-x^{2}}\\) gives \\(\\pi/2 - 1\\)."},
+		{"Evaluate the integral of \\(\\arcsin(x)\\) from 0 to 1. (type like pi/2 - 1)", "pi/2 - 1", "The antiderivative \\(x\\arcsin(x) + \\sqrt{1-x^{2}}\\) gives \\(\\pi/2 - 1\\)."},
 	}
 	return funcPool(ctx, easy, hard)
 }
@@ -993,7 +993,7 @@ func (g *arccosineFuncGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	hard := []funcEntry{
 		{"What is \\(\\arccos(-1)\\)? (type like pi)", "pi", "\\(\\arccos(-1) = \\pi\\): the maximum, at the left endpoint."},
 		{"What is \\(\\cos(\\arccos(1/2))\\)? (enter a fraction like 1/2)", "1/2", "Applying cosine after arccosine returns the argument: \\(1/2\\)."},
-		{"Evaluate the integral of \\(\\arccos(x)\\) from \\(-1\\) to \\(1\\). (type like pi)", "pi", "Point symmetry about \\((0, \\pi/2)\\) makes the area \\(2 \\times \\pi/2 = \\pi\\)."},
+		{"Evaluate the integral of \\(\\arccos(x)\\) from -1 to 1. (type like pi)", "pi", "Point symmetry about \\((0, \\pi/2)\\) makes the area \\(2 \\times \\pi/2 = \\pi\\)."},
 	}
 	return funcPool(ctx, easy, hard)
 }
@@ -1034,7 +1034,7 @@ func (g *arccotangentFuncGen) Generate(ctx generator.GeneratorContext) generator
 		{"Is \\(\\mathrm{arccot}(x)\\) increasing or decreasing on its domain? (type one word)", "decreasing", "The derivative \\(-1/(1+x^{2})\\) is negative everywhere."},
 	}
 	hard := []funcEntry{
-		{"What is \\(\\mathrm{arccot}(1)\\)? (type like pi/4)", "pi/4", "The cotangent equals \\(1\\) at \\(\\pi/4\\), so \\(\\mathrm{arccot}(1) = \\pi/4\\)."},
+		{"What is \\(\\mathrm{arccot}(1)\\)? (type like pi/4)", "pi/4", "The cotangent equals 1 at \\(\\pi/4\\), so \\(\\mathrm{arccot}(1) = \\pi/4\\)."},
 		{"What is the limit of \\(\\mathrm{arccot}(x)\\) as \\(x \\to -\\infty\\)? (type like pi)", "pi", "The graph has the horizontal asymptote \\(y = \\pi\\)."},
 		{"What is \\(\\arctan(x) + \\mathrm{arccot}(x)\\)? (type like pi/2)", "pi/2", "The complementary inverse pair sums to \\(\\pi/2\\) for every real \\(x\\)."},
 		{"What is \\(\\mathrm{arccot}(-1)\\)? (type like 3pi/4)", "3pi/4", "By symmetry \\(\\mathrm{arccot}(-1) = \\pi - \\pi/4 = 3\\pi/4\\)."},

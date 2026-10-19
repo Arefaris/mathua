@@ -59,7 +59,7 @@ func (g *metricGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		{"Which axiom fails for d(x,y) = (x-y)^2 on R: triangle or symmetry? (type one word)", "triangle", "Squares break the triangle inequality: d(0,2)=4 exceeds d(0,1)+d(1,2)=2."},
 		{"Is the usual distance \\(d(x,y)=|x-y|\\) a metric on \\(\\mathbb{R}\\)? (yes/no)", "yes", "d(x,y)=|x-y| satisfies all metric axioms: non-negativity, identity of indiscernibles, symmetry, and triangle inequality."},
 		{"Is \\(d(x,y) = |x^{2}-y^{2}|\\) a metric on \\(\\mathbb{R}\\)? (yes/no)", "no", "It is not a metric because d(1,-1)=0 but 1≠-1, violating the identity of indiscernibles."},
-		{"Is the discrete metric \\((d(x,y)=1\\) if \\(x\\neq y\\), \\(0\\) if \\(x=y)\\) a metric? (yes/no)", "yes", "The discrete metric satisfies all metric axioms including the triangle inequality."},
+		{"Is the discrete metric \\((d(x,y)=1\\) if \\(x\\neq y\\), 0 if \\(x=y)\\) a metric? (yes/no)", "yes", "The discrete metric satisfies all metric axioms including the triangle inequality."},
 	}
 	hard := []entry{
 		{"In a metric space, is it true that \\(d(x,y)=0\\) if and only if \\(x=y\\)? (yes/no)", "yes", "This is the identity of indiscernibles axiom: d(x,y)=0 ⇔ x=y."},
