@@ -30,7 +30,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.symmetric",
     "label": "Symmetric groups S_n",
     "mastery_threshold": {
@@ -45,7 +45,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.dihedral",
     "label": "Dihedral groups",
     "mastery_threshold": {
@@ -89,7 +89,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.homomorphism",
     "label": "Group homomorphisms",
     "mastery_threshold": {
@@ -132,7 +132,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.cyclic",
     "label": "Cyclic groups",
     "mastery_threshold": {
@@ -146,7 +146,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.order",
     "label": "Order of a group and its elements",
     "mastery_threshold": {
@@ -203,7 +203,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.lagrange",
     "label": "Lagrange's theorem",
     "mastery_threshold": {
@@ -249,7 +249,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.action",
     "label": "Group actions and orbit-stabilizer",
     "mastery_threshold": {
@@ -336,7 +336,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.field.finite",
     "label": "Finite fields",
     "mastery_threshold": {
@@ -478,7 +478,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.group.automorphism",
     "label": "Group automorphisms",
     "mastery_threshold": {
@@ -584,7 +584,7 @@
   },
   {
     "domain": "abstract_algebra",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "abstract.rings.euclidean",
     "label": "Euclidean domains",
     "mastery_threshold": {

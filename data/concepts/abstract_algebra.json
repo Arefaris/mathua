@@ -33,7 +33,7 @@
     "label": "Symmetric groups S_n",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.def",
       "abstract.group.examples"
@@ -48,7 +48,7 @@
     "label": "Dihedral groups",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.def",
       "abstract.group.symmetric"
@@ -92,7 +92,7 @@
     "label": "Group homomorphisms",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.subgroup",
       "alg.func.concept"
@@ -135,7 +135,7 @@
     "label": "Cyclic groups",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.def"
     ],
@@ -149,7 +149,7 @@
     "label": "Order of a group and its elements",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.cyclic"
     ],
@@ -206,7 +206,7 @@
     "label": "Lagrange's theorem",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.order",
       "abstract.group.subgroup"
@@ -252,7 +252,7 @@
     "label": "Group actions and orbit-stabilizer",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.quotient_group"
     ],
@@ -339,7 +339,7 @@
     "label": "Finite fields",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.fields",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.field.extension"
     ],
@@ -481,7 +481,7 @@
     "label": "Group automorphisms",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.groups",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.group.homomorphism",
       "abstract.group.symmetric"
@@ -587,7 +587,7 @@
     "label": "Euclidean domains",
     "domain": "abstract_algebra",
     "subdomain": "abstract_algebra.rings",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "abstract.rings.def",
       "abstract.rings.ideal",

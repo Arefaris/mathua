@@ -120,7 +120,7 @@ largest first:
 
 | Domain | Concepts | `multiple_choice` |
 |---|---|---|
-| abstract_algebra | 45 | 43 |
+| abstract_algebra | 45 | 33 |
 | topology | 42 | 35 |
 | real_analysis | 50 | 34 |
 | machine_learning | 45 | 29 |
@@ -148,6 +148,17 @@ so topology is 29 `multiple_choice` concepts rather than 30, and the worked exam
 is the four files it touched: `data/concepts/topology.json`,
 `internal/generator/topology/generators.go`, `internal/generator/topology/generators_test.go` and
 the schema.
+
+**The abstract-algebra batch converted ten.** The domain was the most recognition-shaped in the
+corpus: 43 of its 45 concepts asked a learner to choose a statement. Ten of them have an answer
+that is a number, so each keeps its content and loses only the option list: the order of an
+element in a cyclic group (`n/gcd(a,n)`), the index of a subgroup, the number of generators of
+`Z_n`, the order of `S_n` and of a dihedral group, the order of a finite field, an orbit size, a
+kernel size, the number of automorphisms of `Z_n`, and a greatest common divisor. Every one
+publishes the numbers its answer follows from, and
+`internal/generator/abstract/conversions_test.go` recomputes the answer from those facts rather
+than comparing it with itself. The domain now carries 33 `multiple_choice` concepts rather than
+43, and the table above is updated to match.
 
 ### 4.3 Lesson depth is no longer thin at the bottom
 

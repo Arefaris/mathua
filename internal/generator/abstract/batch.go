@@ -34,14 +34,12 @@ import (
 
 func registerBatch(reg *generator.Registry) {
 	reg.Register("abstract.group.center", &groupCenterGen{})
-	reg.Register("abstract.group.automorphism", &automorphismGen{})
 	reg.Register("abstract.group.simple", &simpleGroupGen{})
 	reg.Register("abstract.group.p_group", &pGroupGen{})
 	reg.Register("abstract.group.composition_series", &compositionSeriesGen{})
 	reg.Register("abstract.rings.zero_divisor", &zeroDivisorGen{})
 	reg.Register("abstract.rings.integral_domain", &integralDomainGen{})
 	reg.Register("abstract.rings.prime_ideal", &primeIdealGen{})
-	reg.Register("abstract.rings.euclidean", &euclideanGen{})
 	reg.Register("abstract.field.characteristic", &characteristicGen{})
 	reg.Register("abstract.field.algebraic", &algebraicElementGen{})
 	reg.Register("abstract.structures.submodule", &submoduleGen{})
