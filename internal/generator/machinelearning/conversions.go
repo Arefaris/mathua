@@ -157,7 +157,7 @@ func (g *regularizationConvertedGen) Generate(ctx generator.GeneratorContext) ge
 	w2 := smallInt(-4, 4)
 	penalty := lambda * (w1*w1 + w2*w2)
 	return generator.Problem{
-		Question: fmt.Sprintf("L2 regularization with strength %d adds the penalty \\(\\lambda (w_1^2 + w_2^2)\\) to the loss. For weights %d and %d, what does it add?",
+		Question: fmt.Sprintf("L2 regularization with strength %d adds the penalty \\(\\lambda (w_1^2 + w_2^2)\\) to the loss. For weights %d and %d, what is the added penalty?",
 			lambda, w1, w2),
 		Answer: fmt.Sprintf("%d", penalty),
 		Explanation: fmt.Sprintf("The squared weights are %d and %d. Their sum is %d, and multiplying by the strength %d gives a penalty of %d.",
