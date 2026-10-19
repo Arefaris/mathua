@@ -36,6 +36,26 @@ var rootTestPairs = []rootTestPair{
 }
 
 func TestRootTestTableIsComplete(t *testing.T) {
+	// The table is package-level, so the count and uniqueness are asserted
+	// directly. Sampling alone cannot tell the eight intended items from nine
+	// entries with one question repeated.
+	if len(rootTestTable) != len(rootTestPairs) {
+		t.Fatalf("rootTestTable has %d entries, want %d", len(rootTestTable), len(rootTestPairs))
+	}
+	tableQuestions := map[string]bool{}
+	for _, e := range rootTestTable {
+		if strings.TrimSpace(e.q) == "" || strings.TrimSpace(e.a) == "" || strings.TrimSpace(e.e) == "" {
+			t.Errorf("entry with an empty field: %+v", e)
+		}
+		if tableQuestions[e.q] {
+			t.Errorf("duplicate question in the table: %q", e.q)
+		}
+		tableQuestions[e.q] = true
+	}
+	if len(tableQuestions) != len(rootTestTable) {
+		t.Fatalf("%d unique questions for %d entries", len(tableQuestions), len(rootTestTable))
+	}
+
 	gen := &rootTestGen{}
 	seen := map[string]string{}
 	for i := 0; i < 500; i++ {

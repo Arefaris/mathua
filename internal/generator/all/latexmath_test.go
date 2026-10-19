@@ -52,6 +52,9 @@ func TestOverescapedNumberClassifier(t *testing.T) {
 		{`\(4p = 3\)`, ""},
 		{`\(x = 1\)`, ""},
 		{`\(360^{\circ}\)`, ""},
+		{`about 50% of the time`, ""},
+		{`\(50\%\)`, ""},
+		{`\(12.5\%\)`, ""},
 		{`The answer is 16.`, ""},
 	}
 	for _, tc := range cases {

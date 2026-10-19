@@ -1465,23 +1465,28 @@ func (g *integralTestGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
+type rootTestEntry struct {
+	q, a, e string
+}
+
+// rootTestTable is package-level so the completeness test can assert the entry
+// count and question uniqueness directly. A sampled test cannot tell an added
+// duplicate entry from the eight intended items.
+var rootTestTable = []rootTestEntry{
+	{"Does the root test use the nth root of |a_n|? (yes/no)", "yes", "Root test evaluates limsup |a(n)|^(1/n); if L < 1, sum a(n) converges absolutely. If L > 1, diverges. Inconclusive if L=1."},
+	{"Does sum (n/(n+1))^(n^2) converge? (yes/no)", "yes", "|a(n)|^(1/n) = (n/(n+1))^n = 1/(1+1/n)^n → 1/e < 1. The series converges by the root test."},
+	{"Does sum 1/2^n converge? (yes/no)", "yes", "|a(n)|^(1/n) = 1/2 < 1. The series sum 1/2^n converges by root test (it is a geometric series)."},
+	{"Is the root test useful when a_n involves nth powers? (yes/no)", "yes", "The root test is especially useful when a(n) contains expressions like (something)^n or nth powers."},
+	{"For a_n = (2n/(3n+1))^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter an exact fraction)", "2/3", "|a(n)|^(1/n) = 2n/(3n+1) → 2/3 < 1, so the series converges absolutely by the root test."},
+	{"For a_n = ((3n+1)/n)^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter a number)", "3", "|a(n)|^(1/n) = (3n+1)/n → 3 > 1, so the series diverges by the root test."},
+	{"For a_n = ((n+1)/n)^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter a number)", "1", "|a(n)|^(1/n) = (n+1)/n → 1, so the root test is inconclusive. The series still diverges: a(n) → e ≠ 0, so the nth-term test applies."},
+	{"A series has root-test limit L = 1. Does the root test decide convergence? (yes/no)", "no", "When L = 1 the root test gives no conclusion, so another test is needed."},
+}
+
 type rootTestGen struct{}
 
 func (g *rootTestGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
-	}
-	table := []entry{
-		{"Does the root test use the nth root of |a_n|? (yes/no)", "yes", "Root test evaluates limsup |a(n)|^(1/n); if L < 1, sum a(n) converges absolutely. If L > 1, diverges. Inconclusive if L=1."},
-		{"Does sum (n/(n+1))^(n^2) converge? (yes/no)", "yes", "|a(n)|^(1/n) = (n/(n+1))^n = 1/(1+1/n)^n → 1/e < 1. The series converges by the root test."},
-		{"Does sum 1/2^n converge? (yes/no)", "yes", "|a(n)|^(1/n) = 1/2 < 1. The series sum 1/2^n converges by root test (it is a geometric series)."},
-		{"Is the root test useful when a_n involves nth powers? (yes/no)", "yes", "The root test is especially useful when a(n) contains expressions like (something)^n or nth powers."},
-		{"For a_n = (2n/(3n+1))^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter an exact fraction)", "2/3", "|a(n)|^(1/n) = 2n/(3n+1) → 2/3 < 1, so the series converges absolutely by the root test."},
-		{"For a_n = ((3n+1)/n)^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter a number)", "3", "|a(n)|^(1/n) = (3n+1)/n → 3 > 1, so the series diverges by the root test."},
-		{"For a_n = ((n+1)/n)^n, what is the root-test limit L = lim |a_n|^(1/n)? (enter a number)", "1", "|a(n)|^(1/n) = (n+1)/n → 1, so the root test is inconclusive; this series diverges because a(n) → e ≠ 0."},
-		{"A series has root-test limit L = 1. Does the root test decide convergence? (yes/no)", "no", "When L = 1 the root test gives no conclusion, so another test is needed."},
-	}
-	e := table[rand.Intn(len(table))]
+	e := rootTestTable[rand.Intn(len(rootTestTable))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
