@@ -15433,7 +15433,7 @@
     "prerequisites": [
       "calc.series.power"
     ],
-    "subdomain": "real_analysis.deriv"
+    "subdomain": "real_analysis.seq"
   },
   {
     "domain": "real_analysis",

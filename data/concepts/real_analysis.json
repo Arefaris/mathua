@@ -541,7 +541,7 @@
     "id": "ra.deriv.power_series",
     "label": "Power series",
     "domain": "real_analysis",
-    "subdomain": "real_analysis.deriv",
+    "subdomain": "real_analysis.seq",
     "grading_type": "numeric",
     "prerequisites": [
       "calc.series.power"
