@@ -354,5 +354,355 @@
       "streak": 10,
       "avg_time_seconds": 34.0
     }
+  },
+  {
+    "id": "ra.limit.connected",
+    "label": "Connected sets",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.limit",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "calc.limit.continuity"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.limit.discontinuity",
+    "label": "Classification of discontinuities",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.limit",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "calc.limit.discontinuity"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.limit.monotone_fn",
+    "label": "Monotone functions",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.limit",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.seq.monotone"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.deriv.mvt",
+    "label": "The mean value theorem",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.deriv.mvt"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.chain",
+    "label": "The chain rule",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.deriv.chain_rule"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.taylor",
+    "label": "Taylor's theorem",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.series.taylor"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.lhopital",
+    "label": "L'Hopital's rule",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.limit.lhopital"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.riemann",
+    "label": "The Riemann integral",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.integral.riemann_criteria"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.darboux",
+    "label": "Darboux's theorem",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.deriv.mvt"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.deriv.ftc",
+    "label": "The fundamental theorem of calculus",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.integral.ftc"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.parts",
+    "label": "Integration by parts",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.integral.parts"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.improper",
+    "label": "Improper integrals",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.integral.improper"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.uniform_conv",
+    "label": "Uniform convergence",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.limit.uniform"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.deriv.power_series",
+    "label": "Power series",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "calc.series.power"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.deriv.interchange",
+    "label": "Interchange of limits",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.deriv",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.deriv.uniform_conv"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.spaces",
+    "label": "Metric spaces",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.seq.cauchy"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.open_closed",
+    "label": "Open and closed sets",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.metric.spaces"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.closure",
+    "label": "Closure and interior",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.metric.open_closed"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.convergence",
+    "label": "Convergence in metric spaces",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.metric.spaces"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.complete",
+    "label": "Completeness",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.seq.cauchy"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.compact",
+    "label": "Compactness",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.limit.compact"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.continuity",
+    "label": "Continuity in metric spaces",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.limit.continuity"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.contraction",
+    "label": "The contraction mapping principle",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "ra.metric.complete"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "ra.metric.baire",
+    "label": "Baire's category theorem",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.metric.complete"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
+  },
+  {
+    "id": "ra.metric.equivalent",
+    "label": "Equivalent metrics",
+    "domain": "real_analysis",
+    "subdomain": "real_analysis.metric",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "ra.metric.open_closed"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 33.0
+    }
   }
 ]

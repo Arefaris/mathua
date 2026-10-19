@@ -4618,5 +4618,105 @@
   {
     "concept_id": "ra.limit.compact",
     "source": "teaching/ra.limit.compact.md"
+  },
+  {
+    "concept_id": "ra.limit.connected",
+    "source": "teaching/ra.limit.connected.md"
+  },
+  {
+    "concept_id": "ra.limit.discontinuity",
+    "source": "teaching/ra.limit.discontinuity.md"
+  },
+  {
+    "concept_id": "ra.limit.monotone_fn",
+    "source": "teaching/ra.limit.monotone_fn.md"
+  },
+  {
+    "concept_id": "ra.deriv.mvt",
+    "source": "teaching/ra.deriv.mvt.md"
+  },
+  {
+    "concept_id": "ra.deriv.chain",
+    "source": "teaching/ra.deriv.chain.md"
+  },
+  {
+    "concept_id": "ra.deriv.taylor",
+    "source": "teaching/ra.deriv.taylor.md"
+  },
+  {
+    "concept_id": "ra.deriv.lhopital",
+    "source": "teaching/ra.deriv.lhopital.md"
+  },
+  {
+    "concept_id": "ra.deriv.riemann",
+    "source": "teaching/ra.deriv.riemann.md"
+  },
+  {
+    "concept_id": "ra.deriv.darboux",
+    "source": "teaching/ra.deriv.darboux.md"
+  },
+  {
+    "concept_id": "ra.deriv.ftc",
+    "source": "teaching/ra.deriv.ftc.md"
+  },
+  {
+    "concept_id": "ra.deriv.parts",
+    "source": "teaching/ra.deriv.parts.md"
+  },
+  {
+    "concept_id": "ra.deriv.improper",
+    "source": "teaching/ra.deriv.improper.md"
+  },
+  {
+    "concept_id": "ra.deriv.uniform_conv",
+    "source": "teaching/ra.deriv.uniform_conv.md"
+  },
+  {
+    "concept_id": "ra.deriv.power_series",
+    "source": "teaching/ra.deriv.power_series.md"
+  },
+  {
+    "concept_id": "ra.deriv.interchange",
+    "source": "teaching/ra.deriv.interchange.md"
+  },
+  {
+    "concept_id": "ra.metric.spaces",
+    "source": "teaching/ra.metric.spaces.md"
+  },
+  {
+    "concept_id": "ra.metric.open_closed",
+    "source": "teaching/ra.metric.open_closed.md"
+  },
+  {
+    "concept_id": "ra.metric.closure",
+    "source": "teaching/ra.metric.closure.md"
+  },
+  {
+    "concept_id": "ra.metric.convergence",
+    "source": "teaching/ra.metric.convergence.md"
+  },
+  {
+    "concept_id": "ra.metric.complete",
+    "source": "teaching/ra.metric.complete.md"
+  },
+  {
+    "concept_id": "ra.metric.compact",
+    "source": "teaching/ra.metric.compact.md"
+  },
+  {
+    "concept_id": "ra.metric.continuity",
+    "source": "teaching/ra.metric.continuity.md"
+  },
+  {
+    "concept_id": "ra.metric.contraction",
+    "source": "teaching/ra.metric.contraction.md"
+  },
+  {
+    "concept_id": "ra.metric.baire",
+    "source": "teaching/ra.metric.baire.md"
+  },
+  {
+    "concept_id": "ra.metric.equivalent",
+    "source": "teaching/ra.metric.equivalent.md"
   }
 ]

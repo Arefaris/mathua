@@ -894,7 +894,32 @@
       "ra.limit.ivt",
       "ra.limit.evt",
       "ra.limit.uniform",
-      "ra.limit.compact"
+      "ra.limit.compact",
+      "ra.limit.connected",
+      "ra.limit.discontinuity",
+      "ra.limit.monotone_fn",
+      "ra.deriv.mvt",
+      "ra.deriv.chain",
+      "ra.deriv.taylor",
+      "ra.deriv.lhopital",
+      "ra.deriv.riemann",
+      "ra.deriv.darboux",
+      "ra.deriv.ftc",
+      "ra.deriv.parts",
+      "ra.deriv.improper",
+      "ra.deriv.uniform_conv",
+      "ra.deriv.power_series",
+      "ra.deriv.interchange",
+      "ra.metric.spaces",
+      "ra.metric.open_closed",
+      "ra.metric.closure",
+      "ra.metric.convergence",
+      "ra.metric.complete",
+      "ra.metric.compact",
+      "ra.metric.continuity",
+      "ra.metric.contraction",
+      "ra.metric.baire",
+      "ra.metric.equivalent"
     ]
   }
 ]

@@ -12,19 +12,19 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 1155 |
-| Total units | 119 |
+| Total concepts | 1180 |
+| Total units | 120 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
 | Maximum unit size | 51 |
 | Singleton units | 24 |
-| Units with <= 3 concepts | 35 |
-| Units with > 25 concepts | 8 |
+| Units with <= 3 concepts | 34 |
+| Units with > 25 concepts | 9 |
 | Units with > 50 concepts | 1 |
-| Cross-unit prerequisite edges (derived) | 290 |
+| Cross-unit prerequisite edges (derived) | 294 |
 | Backward band edges | 0 |
 
-If the learner is assessed once per unit, then 119 assessments cover the corpus, and the
+If the learner is assessed once per unit, then 120 assessments cover the corpus, and the
 median is one assessment per 6 concepts. That is the frequency question this report
 exists to make concrete.
 
@@ -134,8 +134,9 @@ exists to make concrete.
 | `probability_theory.b4` | probability_theory | 4 | 30 | 7 | 12–14 |
 | `probability_theory.b5` | probability_theory | 5 | 14 | 4 | 15–17 |
 | `real_analysis.b9` | real_analysis | 9 | 5 | 3 | 28–29 |
-| `real_analysis.b10` | real_analysis | 10 | 18 | 3 | 30–32 |
-| `real_analysis.b11` | real_analysis | 11 | 2 | 2 | 33–33 |
+| `real_analysis.b10` | real_analysis | 10 | 32 | 5 | 30–32 |
+| `real_analysis.b11` | real_analysis | 11 | 9 | 4 | 33–35 |
+| `real_analysis.b12` | real_analysis | 12 | 4 | 1 | 36–37 |
 | `statistics.b0` | statistics | 0 | 2 | 1 | 1–2 |
 | `statistics.b1` | statistics | 1 | 1 | 1 | 3–3 |
 | `statistics.b2` | statistics | 2 | 1 | 1 | 8–8 |
@@ -165,17 +166,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 157 | 5 | 46 | 28 | 54 | 5 | 0 |
-| 3 | 119 | 6 | 51 | 24 | 35 | 8 | 0 |
-| 4 | 96 | 9 | 66 | 11 | 28 | 10 | 0 |
-| 5 | 82 | 10 | 74 | 7 | 18 | 10 | 0 |
-| 6 | 78 | 10 | 99 | 9 | 17 | 16 | 0 |
-| 8 | 63 | 12 | 115 | 6 | 14 | 16 | 0 |
-| 10 | 53 | 17 | 148 | 4 | 9 | 14 | 0 |
-| 12 | 53 | 16 | 126 | 2 | 8 | 18 | 0 |
-| 15 | 42 | 21 | 148 | 1 | 5 | 17 | 0 |
-| 20 | 35 | 24 | 175 | 2 | 4 | 16 | 0 |
-| 45 | 21 | 45 | 175 | 0 | 0 | 20 | 0 |
+| 2 | 159 | 5 | 46 | 28 | 55 | 5 | 0 |
+| 3 | 120 | 6 | 51 | 24 | 34 | 9 | 0 |
+| 4 | 97 | 9 | 66 | 11 | 28 | 11 | 0 |
+| 5 | 83 | 9 | 74 | 7 | 18 | 11 | 0 |
+| 6 | 79 | 10 | 99 | 9 | 17 | 17 | 0 |
+| 8 | 63 | 13 | 115 | 6 | 14 | 17 | 0 |
+| 10 | 53 | 17 | 148 | 4 | 9 | 15 | 0 |
+| 12 | 54 | 16 | 126 | 2 | 8 | 19 | 0 |
+| 15 | 42 | 22 | 148 | 1 | 5 | 18 | 0 |
+| 20 | 35 | 24 | 175 | 2 | 4 | 17 | 0 |
+| 45 | 21 | 45 | 175 | 0 | 0 | 21 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 24 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -192,7 +193,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**112 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**114 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -314,34 +315,37 @@ Unresolvable subdomains:
 `probability_theory.joint` 
 `probability_theory.limits` 
 `probability_theory.processes` 
-`real_analysis.limit` 
+`real_analysis.deriv` 
 
+`real_analysis.limit` 
+`real_analysis.metric` 
 `real_analysis.order` 
 `real_analysis.seq` 
+
 `statistics.distributions` 
 `topology.algebraic` 
-
 `topology.basics` 
 `topology.compact` 
+
 `topology.connected` 
 `topology.constructions` 
-
 `topology.covering` 
 `topology.dimension` 
+
 `topology.invariants` 
 `topology.knot` 
-
 `topology.manifolds` 
 `topology.metrization` 
+
 `topology.separation` 
 `trigonometry.advanced` 
-
 `trigonometry.functions` 
 `trigonometry.graphs` 
+
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1155
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1180
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

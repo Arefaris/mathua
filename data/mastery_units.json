@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1155,
-  "unit_count": 119,
+  "concept_count": 1180,
+  "unit_count": 120,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2649,17 +2649,33 @@
       "depth_min": 30,
       "depth_max": 32,
       "subdomains": [
+        "real_analysis.deriv",
         "real_analysis.limit",
+        "real_analysis.metric",
         "real_analysis.order",
         "real_analysis.seq"
       ],
       "concept_ids": [
+        "ra.deriv.lhopital",
+        "ra.deriv.power_series",
+        "ra.deriv.taylor",
+        "ra.deriv.uniform_conv",
         "ra.limit.compact",
+        "ra.limit.connected",
         "ra.limit.continuity",
+        "ra.limit.discontinuity",
         "ra.limit.evt",
         "ra.limit.ivt",
+        "ra.limit.monotone_fn",
         "ra.limit.sequential",
         "ra.limit.uniform",
+        "ra.metric.baire",
+        "ra.metric.complete",
+        "ra.metric.continuity",
+        "ra.metric.contraction",
+        "ra.metric.convergence",
+        "ra.metric.open_closed",
+        "ra.metric.spaces",
         "ra.order.archimedean",
         "ra.order.countable",
         "ra.order.density",
@@ -2673,7 +2689,7 @@
         "ra.seq.subsequence",
         "ra.seq.tests"
       ],
-      "concept_count": 18
+      "concept_count": 32
     },
     {
       "id": "real_analysis.b11",
@@ -2681,16 +2697,43 @@
       "domain": "real_analysis",
       "band": 11,
       "depth_min": 33,
-      "depth_max": 33,
+      "depth_max": 35,
       "subdomains": [
+        "real_analysis.deriv",
+        "real_analysis.metric",
         "real_analysis.order",
         "real_analysis.seq"
       ],
       "concept_ids": [
+        "ra.deriv.chain",
+        "ra.deriv.darboux",
+        "ra.deriv.interchange",
+        "ra.deriv.mvt",
+        "ra.metric.closure",
+        "ra.metric.compact",
+        "ra.metric.equivalent",
         "ra.order.uncountable",
         "ra.seq.rearrangement"
       ],
-      "concept_count": 2
+      "concept_count": 9
+    },
+    {
+      "id": "real_analysis.b12",
+      "title": "Real Analysis · Stage 13",
+      "domain": "real_analysis",
+      "band": 12,
+      "depth_min": 36,
+      "depth_max": 37,
+      "subdomains": [
+        "real_analysis.deriv"
+      ],
+      "concept_ids": [
+        "ra.deriv.ftc",
+        "ra.deriv.improper",
+        "ra.deriv.parts",
+        "ra.deriv.riemann"
+      ],
+      "concept_count": 4
     },
     {
       "id": "statistics.b0",
