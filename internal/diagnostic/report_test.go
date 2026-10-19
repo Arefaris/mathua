@@ -28,6 +28,11 @@ func TestDomainToCourse_AdvancedPlacements(t *testing.T) {
 		{"abstract_algebra", "abstract_algebra.rings", "abstract2"},
 		{"abstract_algebra", "abstract_algebra.fields", "abstract2"},
 		{"abstract_algebra", "abstract_algebra.structures", "abstract2"},
+		// Domains whose course existed but had no placement mapping.
+		{"real_analysis", "real_analysis.seq", "ra"},
+		{"graph_theory", "graph_theory.basics", "graph"},
+		{"numerical_analysis", "numerical_analysis.basics", "numa"},
+		{"probability_theory", "probability_theory.basics", "prob"},
 	}
 	for _, tc := range cases {
 		c := &concepts.Concept{Domain: tc.domain, Subdomain: tc.subdomain}

@@ -141,6 +141,14 @@ func domainToCourse(c *concepts.Concept) string {
 		return "topo"
 	case strings.HasPrefix(d, "machine_learning"):
 		return "ml"
+	case strings.HasPrefix(d, "real_analysis"):
+		return "ra"
+	case strings.HasPrefix(d, "graph_theory"):
+		return "graph"
+	case strings.HasPrefix(d, "numerical_analysis"):
+		return "numa"
+	case strings.HasPrefix(d, "probability_theory"):
+		return "prob"
 	}
 	return ""
 }
