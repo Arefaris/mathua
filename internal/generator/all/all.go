@@ -33,6 +33,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/generator/prealgebra"
 	"github.com/chuma-beep/mathua/internal/generator/precalculus"
 	"github.com/chuma-beep/mathua/internal/generator/probability"
+	"github.com/chuma-beep/mathua/internal/generator/realanalysis"
 	"github.com/chuma-beep/mathua/internal/generator/statistics"
 	"github.com/chuma-beep/mathua/internal/generator/topology"
 	"github.com/chuma-beep/mathua/internal/generator/trigonometry"
@@ -64,6 +65,7 @@ func Register(reg *generator.Registry) {
 	combinatorics.Register(reg)
 	probability.Register(reg)
 	numerical.Register(reg)
+	realanalysis.Register(reg)
 }
 
 // Registry returns a registry with every generator registered.

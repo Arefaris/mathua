@@ -863,5 +863,38 @@
       "numa.linear.power",
       "numa.linear.least_squares_qr"
     ]
+  },
+  {
+    "id": "ra",
+    "name": "Real Analysis",
+    "grade": "college",
+    "description": "The completeness of the real line, sequences and series, limits and continuity, and the core theorems of the calculus, developed rigorously.",
+    "targets": [
+      "ra.order.supremum",
+      "ra.order.completeness",
+      "ra.order.archimedean",
+      "ra.order.nested_intervals",
+      "ra.order.density",
+      "ra.order.countable",
+      "ra.order.uncountable",
+      "ra.order.extended",
+      "ra.seq.convergence",
+      "ra.seq.monotone",
+      "ra.seq.subsequence",
+      "ra.seq.bolzano_weierstrass",
+      "ra.seq.cauchy",
+      "ra.seq.series",
+      "ra.seq.tests",
+      "ra.seq.absolute",
+      "ra.seq.rearrangement",
+      "ra.seq.cauchy_criterion",
+      "ra.limit.function",
+      "ra.limit.sequential",
+      "ra.limit.continuity",
+      "ra.limit.ivt",
+      "ra.limit.evt",
+      "ra.limit.uniform",
+      "ra.limit.compact"
+    ]
   }
 ]

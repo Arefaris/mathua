@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1130,
-  "unit_count": 116,
+  "concept_count": 1155,
+  "unit_count": 119,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2619,6 +2619,78 @@
         "prob.process.transition_matrix"
       ],
       "concept_count": 14
+    },
+    {
+      "id": "real_analysis.b9",
+      "title": "Real Analysis · Stage 10",
+      "domain": "real_analysis",
+      "band": 9,
+      "depth_min": 28,
+      "depth_max": 29,
+      "subdomains": [
+        "real_analysis.limit",
+        "real_analysis.order",
+        "real_analysis.seq"
+      ],
+      "concept_ids": [
+        "ra.limit.function",
+        "ra.order.completeness",
+        "ra.order.extended",
+        "ra.order.supremum",
+        "ra.seq.convergence"
+      ],
+      "concept_count": 5
+    },
+    {
+      "id": "real_analysis.b10",
+      "title": "Real Analysis · Stage 11",
+      "domain": "real_analysis",
+      "band": 10,
+      "depth_min": 30,
+      "depth_max": 32,
+      "subdomains": [
+        "real_analysis.limit",
+        "real_analysis.order",
+        "real_analysis.seq"
+      ],
+      "concept_ids": [
+        "ra.limit.compact",
+        "ra.limit.continuity",
+        "ra.limit.evt",
+        "ra.limit.ivt",
+        "ra.limit.sequential",
+        "ra.limit.uniform",
+        "ra.order.archimedean",
+        "ra.order.countable",
+        "ra.order.density",
+        "ra.order.nested_intervals",
+        "ra.seq.absolute",
+        "ra.seq.bolzano_weierstrass",
+        "ra.seq.cauchy",
+        "ra.seq.cauchy_criterion",
+        "ra.seq.monotone",
+        "ra.seq.series",
+        "ra.seq.subsequence",
+        "ra.seq.tests"
+      ],
+      "concept_count": 18
+    },
+    {
+      "id": "real_analysis.b11",
+      "title": "Real Analysis · Stage 12",
+      "domain": "real_analysis",
+      "band": 11,
+      "depth_min": 33,
+      "depth_max": 33,
+      "subdomains": [
+        "real_analysis.order",
+        "real_analysis.seq"
+      ],
+      "concept_ids": [
+        "ra.order.uncountable",
+        "ra.seq.rearrangement"
+      ],
+      "concept_count": 2
     },
     {
       "id": "statistics.b0",

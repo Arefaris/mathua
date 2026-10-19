@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 1130 concepts, and there are 1130 KP shard files
-holding 3390 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1155 concepts, and there are 1155 KP shard files
+holding 3465 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 924 of the 1130 concepts
+### 4.1 The course catalog reaches 962 of the 1155 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
-`internal/planning/planner.go:64` (`collectChain`). Across the 27 courses those closures reach
-924 of the 1130 concepts: 206 of them have a node, a generator, a lesson and three KP shards and
+`internal/planning/planner.go:64` (`collectChain`). Across the 28 courses those closures reach
+962 of the 1155 concepts: 193 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -81,7 +81,7 @@ The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 175 | 88 |
+| calculus | 175 | 75 |
 | algebra | 104 | 44 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
@@ -101,6 +101,7 @@ The count of unreachable concepts by domain:
 | graph_theory | 40 | 0 |
 | probability_theory | 50 | 0 |
 | numerical_analysis | 40 | 0 |
+| real_analysis | 25 | 0 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
 cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
@@ -261,7 +262,7 @@ uses:
 
 Three things follow, and together they decide the first two policies.
 
-- **A makes the catalog exhaustive.** The union of the 27 closures goes from 247 to **666**: every
+- **A makes the catalog exhaustive.** The union of the 28 closures goes from 247 to **666**: every
   concept in the corpus becomes reachable. That is the end of a sampled path — the catalog and the
   corpus become the same set — and it leaves the diagnostic and a free-choice goal nothing to do.
 - **Both policies collapse the staged pairs.** `calc1` and `calc2` are 67 and 70 concepts now and 342
@@ -336,7 +337,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1130 concepts. The remaining per-domain targets add up to 70, and this is the table
+The catalog holds 1155 concepts. The remaining per-domain targets add up to 95, and this is the table
 that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
 tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
 section 6 used, largest deficit first.
@@ -344,6 +345,7 @@ section 6 used, largest deficit first.
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
 | calculus | bridge | 175 | 205 | +30 |
+| real_analysis | university | 25 | 50 | +25 |
 | algebra | school | 104 | 124 | +20 |
 | trigonometry | school | 48 | 68 | +20 |
 | numerical_analysis | university | 40 | 40 | +0 |

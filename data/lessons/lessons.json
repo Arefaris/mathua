@@ -4518,5 +4518,105 @@
   {
     "concept_id": "numa.linear.least_squares_qr",
     "source": "teaching/numa.linear.least_squares_qr.md"
+  },
+  {
+    "concept_id": "ra.order.supremum",
+    "source": "teaching/ra.order.supremum.md"
+  },
+  {
+    "concept_id": "ra.order.completeness",
+    "source": "teaching/ra.order.completeness.md"
+  },
+  {
+    "concept_id": "ra.order.archimedean",
+    "source": "teaching/ra.order.archimedean.md"
+  },
+  {
+    "concept_id": "ra.order.nested_intervals",
+    "source": "teaching/ra.order.nested_intervals.md"
+  },
+  {
+    "concept_id": "ra.order.density",
+    "source": "teaching/ra.order.density.md"
+  },
+  {
+    "concept_id": "ra.order.countable",
+    "source": "teaching/ra.order.countable.md"
+  },
+  {
+    "concept_id": "ra.order.uncountable",
+    "source": "teaching/ra.order.uncountable.md"
+  },
+  {
+    "concept_id": "ra.order.extended",
+    "source": "teaching/ra.order.extended.md"
+  },
+  {
+    "concept_id": "ra.seq.convergence",
+    "source": "teaching/ra.seq.convergence.md"
+  },
+  {
+    "concept_id": "ra.seq.monotone",
+    "source": "teaching/ra.seq.monotone.md"
+  },
+  {
+    "concept_id": "ra.seq.subsequence",
+    "source": "teaching/ra.seq.subsequence.md"
+  },
+  {
+    "concept_id": "ra.seq.bolzano_weierstrass",
+    "source": "teaching/ra.seq.bolzano_weierstrass.md"
+  },
+  {
+    "concept_id": "ra.seq.cauchy",
+    "source": "teaching/ra.seq.cauchy.md"
+  },
+  {
+    "concept_id": "ra.seq.series",
+    "source": "teaching/ra.seq.series.md"
+  },
+  {
+    "concept_id": "ra.seq.tests",
+    "source": "teaching/ra.seq.tests.md"
+  },
+  {
+    "concept_id": "ra.seq.absolute",
+    "source": "teaching/ra.seq.absolute.md"
+  },
+  {
+    "concept_id": "ra.seq.rearrangement",
+    "source": "teaching/ra.seq.rearrangement.md"
+  },
+  {
+    "concept_id": "ra.seq.cauchy_criterion",
+    "source": "teaching/ra.seq.cauchy_criterion.md"
+  },
+  {
+    "concept_id": "ra.limit.function",
+    "source": "teaching/ra.limit.function.md"
+  },
+  {
+    "concept_id": "ra.limit.sequential",
+    "source": "teaching/ra.limit.sequential.md"
+  },
+  {
+    "concept_id": "ra.limit.continuity",
+    "source": "teaching/ra.limit.continuity.md"
+  },
+  {
+    "concept_id": "ra.limit.ivt",
+    "source": "teaching/ra.limit.ivt.md"
+  },
+  {
+    "concept_id": "ra.limit.evt",
+    "source": "teaching/ra.limit.evt.md"
+  },
+  {
+    "concept_id": "ra.limit.uniform",
+    "source": "teaching/ra.limit.uniform.md"
+  },
+  {
+    "concept_id": "ra.limit.compact",
+    "source": "teaching/ra.limit.compact.md"
   }
 ]

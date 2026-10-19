@@ -33,7 +33,7 @@ describe('learner-facing copy tells the truth', () => {
   const stale = [
     { re: /\b20 XP\b/, what: 'a flat per-answer XP award the economy does not use' },
     { re: /\b150 XP\b/, what: 'the pre-rescale quiz gate; QuizGateXP is 50' },
-    { re: /\b641\b/, what: 'a superseded concept count; the graph holds 1130' },
+    { re: /\b641\b/, what: 'a superseded concept count; the graph holds 1155' },
     { re: /2 in a row to advance before you practice/, what: 'an advance gate the Learn loop does not have' },
     { re: /worked example first, then answer/, what: 'an answer step the Learn loop does not have' },
   ]

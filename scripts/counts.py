@@ -45,6 +45,7 @@ DOMAIN_LABELS = [
     ("graph_theory", "Graph Theory"),
     ("probability_theory", "Probability Theory"),
     ("numerical_analysis", "Numerical Analysis"),
+    ("real_analysis", "Real Analysis"),
 ]
 
 # Numbers that were correct at some past corpus size and must never reappear.

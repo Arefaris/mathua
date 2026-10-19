@@ -157,3 +157,60 @@ describe('domain list authority', () => {
     expect(seen.size, 'the detector found no domain enumeration anywhere').toBeGreaterThan(0)
   })
 })
+
+// A display name has two owners: `scripts/counts.py` renders the README's domain table and
+// `lib/graphDomains.ts` renders every domain name in the app. Nothing compared them, so the app
+// labelled `differential_equations` "Diff. Eqs." while the README spelled it out -- the
+// abbreviation a learner read on the onboarding picker was the shorter of two hand-maintained
+// copies, and no gate could see the disagreement. This is the label half of AGENTS.md section 7:
+// a fact with two owners needs a check that reads both.
+describe('domain labels agree across the app and the README', () => {
+  function pythonLabels(): Record<string, string> {
+    const text = fs.readFileSync(path.join(REPO, 'scripts', 'counts.py'), 'utf8')
+    const out: Record<string, string> = {}
+    for (const m of text.matchAll(/^\s*\(\s*"([a-z_]+)"\s*,\s*"([^"]+)"\s*\),?\s*$/gm)) {
+      out[m[1]] = m[2]
+    }
+    return out
+  }
+
+  function webLabels(): Record<string, string> {
+    const text = fs.readFileSync(CANONICAL, 'utf8')
+    const start = text.indexOf('export const DOMAIN_LABELS')
+    const block = text.slice(start, text.indexOf('}', start))
+    const out: Record<string, string> = {}
+    for (const m of block.matchAll(/^\s*([a-z_]+):\s*'([^']+)',?\s*$/gm)) {
+      out[m[1]] = m[2]
+    }
+    return out
+  }
+
+  it('reads both label lists, so a pass is not the scan visiting nothing', () => {
+    // Same trap as the corpus read: a comparison of two empty maps finds no disagreement.
+    expect(Object.keys(pythonLabels()).length).toBeGreaterThanOrEqual(17)
+    expect(Object.keys(webLabels()).length).toBeGreaterThanOrEqual(17)
+  })
+
+  it('spells every domain the same way in the app as in the README', () => {
+    const py = pythonLabels()
+    const web = webLabels()
+    const problems: string[] = []
+    for (const domain of Object.keys(py)) {
+      if (!(domain in web)) problems.push(`${domain}: in counts.py, missing from graphDomains.ts`)
+      else if (py[domain] !== web[domain]) {
+        problems.push(`${domain}: counts.py says ${JSON.stringify(py[domain])}, graphDomains.ts says ${JSON.stringify(web[domain])}`)
+      }
+    }
+    for (const domain of Object.keys(web)) {
+      if (!(domain in py)) problems.push(`${domain}: in graphDomains.ts, missing from counts.py`)
+    }
+    expect(problems).toEqual([])
+  })
+
+  it('spells differential equations out in full', () => {
+    // The comparison above already catches this, but the incident deserves a legible failure:
+    // a learner saw "Diff. Eqs." on the onboarding picker after the complete name was decided.
+    expect(webLabels()['differential_equations']).toBe('Differential Equations')
+    expect(pythonLabels()['differential_equations']).toBe('Differential Equations')
+  })
+})
