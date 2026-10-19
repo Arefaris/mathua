@@ -12,19 +12,19 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 1110 |
-| Total units | 112 |
+| Total concepts | 1130 |
+| Total units | 116 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
 | Maximum unit size | 51 |
-| Singleton units | 22 |
-| Units with <= 3 concepts | 33 |
+| Singleton units | 24 |
+| Units with <= 3 concepts | 34 |
 | Units with > 25 concepts | 8 |
 | Units with > 50 concepts | 1 |
-| Cross-unit prerequisite edges (derived) | 278 |
+| Cross-unit prerequisite edges (derived) | 285 |
 | Backward band edges | 0 |
 
-If the learner is assessed once per unit, then 112 assessments cover the corpus, and the
+If the learner is assessed once per unit, then 116 assessments cover the corpus, and the
 median is one assessment per 6 concepts. That is the frequency question this report
 exists to make concrete.
 
@@ -110,10 +110,14 @@ exists to make concrete.
 | `number_theory.b4` | number_theory | 4 | 15 | 4 | 12–14 |
 | `number_theory.b5` | number_theory | 5 | 12 | 2 | 15–17 |
 | `number_theory.b6` | number_theory | 6 | 1 | 1 | 20–20 |
-| `numerical_analysis.b0` | numerical_analysis | 0 | 9 | 2 | 0–2 |
-| `numerical_analysis.b1` | numerical_analysis | 1 | 2 | 1 | 3–3 |
+| `numerical_analysis.b0` | numerical_analysis | 0 | 10 | 2 | 0–2 |
+| `numerical_analysis.b1` | numerical_analysis | 1 | 5 | 1 | 3–3 |
+| `numerical_analysis.b4` | numerical_analysis | 4 | 1 | 1 | 14–14 |
+| `numerical_analysis.b7` | numerical_analysis | 7 | 1 | 1 | 23–23 |
+| `numerical_analysis.b8` | numerical_analysis | 8 | 5 | 1 | 24–26 |
 | `numerical_analysis.b10` | numerical_analysis | 10 | 4 | 1 | 30–32 |
-| `numerical_analysis.b11` | numerical_analysis | 11 | 5 | 1 | 33–34 |
+| `numerical_analysis.b11` | numerical_analysis | 11 | 6 | 2 | 33–35 |
+| `numerical_analysis.b12` | numerical_analysis | 12 | 8 | 1 | 36–38 |
 | `prealgebra.b0` | prealgebra | 0 | 1 | 1 | 1–1 |
 | `prealgebra.b2` | prealgebra | 2 | 1 | 1 | 8–8 |
 | `prealgebra.b3` | prealgebra | 3 | 22 | 7 | 9–11 |
@@ -158,19 +162,19 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 148 | 5 | 46 | 26 | 50 | 5 | 0 |
-| 3 | 112 | 6 | 51 | 22 | 33 | 8 | 0 |
-| 4 | 90 | 9 | 66 | 9 | 26 | 10 | 0 |
-| 5 | 76 | 11 | 74 | 6 | 16 | 10 | 0 |
-| 6 | 72 | 11 | 99 | 7 | 15 | 16 | 0 |
-| 8 | 59 | 11 | 115 | 4 | 13 | 16 | 0 |
-| 10 | 49 | 17 | 148 | 3 | 8 | 14 | 0 |
-| 12 | 50 | 16 | 126 | 2 | 7 | 18 | 0 |
-| 15 | 39 | 22 | 148 | 1 | 5 | 17 | 0 |
+| 2 | 154 | 5 | 46 | 28 | 54 | 5 | 0 |
+| 3 | 116 | 6 | 51 | 24 | 34 | 8 | 0 |
+| 4 | 94 | 9 | 66 | 11 | 28 | 10 | 0 |
+| 5 | 80 | 10 | 74 | 7 | 18 | 10 | 0 |
+| 6 | 76 | 10 | 99 | 9 | 17 | 16 | 0 |
+| 8 | 61 | 12 | 115 | 6 | 14 | 16 | 0 |
+| 10 | 51 | 17 | 148 | 4 | 9 | 14 | 0 |
+| 12 | 52 | 16 | 126 | 2 | 8 | 18 | 0 |
+| 15 | 40 | 22 | 148 | 1 | 5 | 17 | 0 |
 | 20 | 34 | 24 | 175 | 2 | 4 | 16 | 0 |
-| 45 | 20 | 45 | 175 | 0 | 0 | 19 | 0 |
+| 45 | 20 | 45 | 175 | 0 | 0 | 20 | 0 |
 
-**No width is clean.** Small widths fragment — at 3 there are 22 singleton units, which is a
+**No width is clean.** Small widths fragment — at 3 there are 24 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
 units too large to assess: at 45 the partition is just the 17 domains themselves, whose
 largest is 128 concepts. The usable widths trade fragmentation against size rather than
@@ -185,7 +189,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**108 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**109 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -280,61 +284,63 @@ Unresolvable subdomains:
 `number_theory.applications` 
 
 `numerical_analysis.errors` 
+`numerical_analysis.integration` 
 `numerical_analysis.roots` 
 `prealgebra.equations` 
-`prealgebra.inequalities` 
 
+`prealgebra.inequalities` 
 `precalculus.conics` 
 `precalculus.discrete` 
 `precalculus.exponential` 
-`precalculus.functions` 
 
+`precalculus.functions` 
 `precalculus.parametric` 
 `precalculus.polar` 
 `precalculus.polynomials` 
-`precalculus.rational` 
 
+`precalculus.rational` 
 `precalculus.sequences` 
 `precalculus.systems` 
 `precalculus.vectors` 
-`probability_theory.characteristic` 
 
+`probability_theory.characteristic` 
 `probability_theory.convergence` 
 `probability_theory.distributions` 
 `probability_theory.foundations` 
-`probability_theory.joint` 
 
+`probability_theory.joint` 
 `probability_theory.limits` 
 `probability_theory.processes` 
 `statistics.distributions` 
-`topology.algebraic` 
 
+`topology.algebraic` 
 `topology.basics` 
 `topology.compact` 
 `topology.connected` 
-`topology.constructions` 
 
+`topology.constructions` 
 `topology.covering` 
 `topology.dimension` 
 `topology.invariants` 
-`topology.knot` 
 
+`topology.knot` 
 `topology.manifolds` 
 `topology.metrization` 
 `topology.separation` 
-`trigonometry.advanced` 
 
+`trigonometry.advanced` 
 `trigonometry.functions` 
 `trigonometry.graphs` 
 `trigonometry.hyperbolic` 
+
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1110
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1130
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings
 
-- **anomaly** `singleton_units`: 22 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
+- **anomaly** `singleton_units`: 24 unit(s) hold a single concept; the spec forbids a quiz per concept, so these need merging
 
 ## Not decided here
 

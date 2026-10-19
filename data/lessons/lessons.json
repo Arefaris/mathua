@@ -4438,5 +4438,85 @@
   {
     "concept_id": "numa.interp.splines",
     "source": "teaching/numa.interp.splines.md"
+  },
+  {
+    "concept_id": "numa.interp.least_squares",
+    "source": "teaching/numa.interp.least_squares.md"
+  },
+  {
+    "concept_id": "numa.interp.normal_equations",
+    "source": "teaching/numa.interp.normal_equations.md"
+  },
+  {
+    "concept_id": "numa.interp.orthogonal",
+    "source": "teaching/numa.interp.orthogonal.md"
+  },
+  {
+    "concept_id": "numa.interp.extrapolation",
+    "source": "teaching/numa.interp.extrapolation.md"
+  },
+  {
+    "concept_id": "numa.integration.trapezoid",
+    "source": "teaching/numa.integration.trapezoid.md"
+  },
+  {
+    "concept_id": "numa.integration.midpoint",
+    "source": "teaching/numa.integration.midpoint.md"
+  },
+  {
+    "concept_id": "numa.integration.simpson",
+    "source": "teaching/numa.integration.simpson.md"
+  },
+  {
+    "concept_id": "numa.integration.composite",
+    "source": "teaching/numa.integration.composite.md"
+  },
+  {
+    "concept_id": "numa.integration.error",
+    "source": "teaching/numa.integration.error.md"
+  },
+  {
+    "concept_id": "numa.integration.romberg",
+    "source": "teaching/numa.integration.romberg.md"
+  },
+  {
+    "concept_id": "numa.integration.gauss",
+    "source": "teaching/numa.integration.gauss.md"
+  },
+  {
+    "concept_id": "numa.integration.adaptive",
+    "source": "teaching/numa.integration.adaptive.md"
+  },
+  {
+    "concept_id": "numa.integration.improper",
+    "source": "teaching/numa.integration.improper.md"
+  },
+  {
+    "concept_id": "numa.linear.elimination",
+    "source": "teaching/numa.linear.elimination.md"
+  },
+  {
+    "concept_id": "numa.linear.pivoting",
+    "source": "teaching/numa.linear.pivoting.md"
+  },
+  {
+    "concept_id": "numa.linear.lu",
+    "source": "teaching/numa.linear.lu.md"
+  },
+  {
+    "concept_id": "numa.linear.jacobi",
+    "source": "teaching/numa.linear.jacobi.md"
+  },
+  {
+    "concept_id": "numa.linear.gauss_seidel",
+    "source": "teaching/numa.linear.gauss_seidel.md"
+  },
+  {
+    "concept_id": "numa.linear.power",
+    "source": "teaching/numa.linear.power.md"
+  },
+  {
+    "concept_id": "numa.linear.least_squares_qr",
+    "source": "teaching/numa.linear.least_squares_qr.md"
   }
 ]

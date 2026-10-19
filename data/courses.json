@@ -841,7 +841,27 @@
       "numa.interp.divided_differences",
       "numa.interp.error",
       "numa.interp.chebyshev",
-      "numa.interp.splines"
+      "numa.interp.splines",
+      "numa.interp.least_squares",
+      "numa.interp.normal_equations",
+      "numa.interp.orthogonal",
+      "numa.interp.extrapolation",
+      "numa.integration.trapezoid",
+      "numa.integration.midpoint",
+      "numa.integration.simpson",
+      "numa.integration.composite",
+      "numa.integration.error",
+      "numa.integration.romberg",
+      "numa.integration.gauss",
+      "numa.integration.adaptive",
+      "numa.integration.improper",
+      "numa.linear.elimination",
+      "numa.linear.pivoting",
+      "numa.linear.lu",
+      "numa.linear.jacobi",
+      "numa.linear.gauss_seidel",
+      "numa.linear.power",
+      "numa.linear.least_squares_qr"
     ]
   }
 ]

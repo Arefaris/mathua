@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1110,
-  "unit_count": 112,
+  "concept_count": 1130,
+  "unit_count": 116,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2075,9 +2075,10 @@
         "numa.errors.taylor",
         "numa.interp.divided_differences",
         "numa.interp.error",
-        "numa.interp.lagrange"
+        "numa.interp.lagrange",
+        "numa.interp.least_squares"
       ],
-      "concept_count": 9
+      "concept_count": 10
     },
     {
       "id": "numerical_analysis.b1",
@@ -2091,9 +2092,61 @@
       ],
       "concept_ids": [
         "numa.interp.chebyshev",
+        "numa.interp.extrapolation",
+        "numa.interp.normal_equations",
+        "numa.interp.orthogonal",
         "numa.interp.splines"
       ],
-      "concept_count": 2
+      "concept_count": 5
+    },
+    {
+      "id": "numerical_analysis.b4",
+      "title": "Numerical Analysis · Stage 5",
+      "domain": "numerical_analysis",
+      "band": 4,
+      "depth_min": 14,
+      "depth_max": 14,
+      "subdomains": [
+        "numerical_analysis.linear"
+      ],
+      "concept_ids": [
+        "numa.linear.least_squares_qr"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "numerical_analysis.b7",
+      "title": "Numerical Analysis · Stage 8",
+      "domain": "numerical_analysis",
+      "band": 7,
+      "depth_min": 23,
+      "depth_max": 23,
+      "subdomains": [
+        "numerical_analysis.linear"
+      ],
+      "concept_ids": [
+        "numa.linear.elimination"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "numerical_analysis.b8",
+      "title": "Numerical Analysis · Stage 9",
+      "domain": "numerical_analysis",
+      "band": 8,
+      "depth_min": 24,
+      "depth_max": 26,
+      "subdomains": [
+        "numerical_analysis.linear"
+      ],
+      "concept_ids": [
+        "numa.linear.gauss_seidel",
+        "numa.linear.jacobi",
+        "numa.linear.lu",
+        "numa.linear.pivoting",
+        "numa.linear.power"
+      ],
+      "concept_count": 5
     },
     {
       "id": "numerical_analysis.b10",
@@ -2119,18 +2172,42 @@
       "domain": "numerical_analysis",
       "band": 11,
       "depth_min": 33,
-      "depth_max": 34,
+      "depth_max": 35,
       "subdomains": [
+        "numerical_analysis.integration",
         "numerical_analysis.roots"
       ],
       "concept_ids": [
+        "numa.integration.trapezoid",
         "numa.roots.bracketing",
         "numa.roots.horner",
         "numa.roots.multiple",
         "numa.roots.order",
         "numa.roots.secant"
       ],
-      "concept_count": 5
+      "concept_count": 6
+    },
+    {
+      "id": "numerical_analysis.b12",
+      "title": "Numerical Analysis · Stage 13",
+      "domain": "numerical_analysis",
+      "band": 12,
+      "depth_min": 36,
+      "depth_max": 38,
+      "subdomains": [
+        "numerical_analysis.integration"
+      ],
+      "concept_ids": [
+        "numa.integration.adaptive",
+        "numa.integration.composite",
+        "numa.integration.error",
+        "numa.integration.gauss",
+        "numa.integration.improper",
+        "numa.integration.midpoint",
+        "numa.integration.romberg",
+        "numa.integration.simpson"
+      ],
+      "concept_count": 8
     },
     {
       "id": "prealgebra.b0",
