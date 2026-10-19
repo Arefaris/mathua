@@ -124,3 +124,45 @@ func TestEasyPoolsDiscriminate(t *testing.T) {
 	checkRatchet("single-answer easy pools", singleAnswer, baseline.ThinPoolsSingleAnswer)
 	checkRatchet("yes/no-only easy pools", yesNoOnly, baseline.ThinPoolsYesNoOnly)
 }
+
+// TestDeepPoolsAreDeepEnough is the other half of the same ratchet. The easy
+// pool only has to discriminate at all, with two answers; a concept whose
+// practice feed draws from four or five answers still repeats itself inside a
+// session, and the learner notices. These five calculus generators were
+// measured at four to six distinct answers over 300 samples, so their claim
+// tables were widened until each clears eight.
+//
+// The list is explicit rather than derived from a threshold over the whole
+// corpus: it records which concepts were measured thin and fixed, so a later
+// change to one of them cannot quietly regress it. A concept that is thin for a
+// defensible reason belongs here only after that reason is written down.
+func TestDeepPoolsAreDeepEnough(t *testing.T) {
+	rand.Seed(20261019)
+	const samples = 300
+	const minimum = 8
+
+	reg := generator.NewRegistry()
+	registerAllDomains(reg)
+
+	for _, id := range []string{
+		"calc.deriv.parametric_second",
+		"calc.polar.arc_length",
+		"calc.integral.pappus",
+		"calc.integral.moment_inertia",
+		"calc.vec.frenet",
+	} {
+		gen, err := reg.Get(id)
+		if err != nil {
+			t.Fatalf("%s: %v", id, err)
+		}
+		answers := map[string]bool{}
+		for i := 0; i < samples; i++ {
+			p := gen.Generate(generator.GeneratorContext{Difficulty: 0.5})
+			answers[normAnswer(p.Answer)] = true
+		}
+		if len(answers) < minimum {
+			t.Errorf("%s: only %d distinct answers over %d samples, want at least %d",
+				id, len(answers), samples, minimum)
+		}
+	}
+}

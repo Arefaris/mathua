@@ -146,6 +146,36 @@ func (g *parametricSecondGen) Generate(ctx generator.GeneratorContext) generator
 			answer:   "-0.03125", xp: 4, yp: 1, xpp: 2, ypp: 0,
 			reason: "The numerator is 0 - 2 = -2, and the denominator is 64, so the second derivative is -0.03125.",
 		},
+		{
+			question: "At a point on a parametric curve, x' = 1, y' = 1, x'' = 0 and y'' = 3. What is d^2y/dx^2 = (x'y'' - y'x'')/(x')^3? (enter a number)",
+			answer:   "3", xp: 1, yp: 1, xpp: 0, ypp: 3,
+			reason: "The numerator is 1*3 - 1*0 = 3, and the denominator is 1, so the second derivative is 3.",
+		},
+		{
+			question: "At a point on a parametric curve, x' = 1, y' = 2, x'' = 0 and y'' = 5. What is d^2y/dx^2 = (x'y'' - y'x'')/(x')^3? (enter a number)",
+			answer:   "5", xp: 1, yp: 2, xpp: 0, ypp: 5,
+			reason: "The numerator is 1*5 - 2*0 = 5, and the denominator is 1, so the second derivative is 5.",
+		},
+		{
+			question: "At a point on a parametric curve, x' = 1, y' = 1, x'' = 0 and y'' = 7. What is d^2y/dx^2 = (x'y'' - y'x'')/(x')^3? (enter a number)",
+			answer:   "7", xp: 1, yp: 1, xpp: 0, ypp: 7,
+			reason: "The numerator is 1*7 - 1*0 = 7, and the denominator is 1, so the second derivative is 7.",
+		},
+		{
+			question: "At a point on a parametric curve, x' = 1, y' = 3, x'' = 0 and y'' = 1. What is d^2y/dx^2 = (x'y'' - y'x'')/(x')^3? (enter a number)",
+			answer:   "1", xp: 1, yp: 3, xpp: 0, ypp: 1,
+			reason: "The numerator is 1*1 - 3*0 = 1, and the denominator is 1, so the second derivative is 1.",
+		},
+		{
+			question: "At a point on a parametric curve, x' = 1, y' = 3, x'' = 1 and y'' = 9. What is d^2y/dx^2 = (x'y'' - y'x'')/(x')^3? (enter a number)",
+			answer:   "6", xp: 1, yp: 3, xpp: 1, ypp: 9,
+			reason: "The numerator is 1*9 - 3*1 = 6, and the denominator is 1, so the second derivative is 6.",
+		},
+		{
+			question: "At a point on a parametric curve, x' = 1, y' = 2, x'' = 2 and y'' = 8. What is d^2y/dx^2 = (x'y'' - y'x'')/(x')^3? (enter a number)",
+			answer:   "4", xp: 1, yp: 2, xpp: 2, ypp: 8,
+			reason: "The numerator is 1*8 - 2*2 = 4, and the denominator is 1, so the second derivative is 4.",
+		},
 	}
 	c := claims[rand.Intn(len(claims))]
 	return generator.Problem{
@@ -275,6 +305,26 @@ func (g *polarArcLengthGen) Generate(ctx generator.GeneratorContext) generator.P
 			answer:   "8", kind: "cardioid", a: 1, bLabel: "2*pi",
 			reason: "The full cardioid has arc length 8: twice the half-cardioid length 4.",
 		},
+		{
+			question: "The polar curve r = 5*sec(theta) is traced from theta = 0 to theta = pi/4. What is its arc length L = integral of sqrt(r^2 + (dr/dtheta)^2) dtheta? (enter a number)",
+			answer:   "5", kind: "sec", a: 5, bLabel: "pi/4",
+			reason: "The integrand is 5*sec^2(theta), so L = 5 tan(theta) from 0 to pi/4 = 5.",
+		},
+		{
+			question: "The polar curve r = 6*sec(theta) is traced from theta = 0 to theta = pi/4. What is its arc length L = integral of sqrt(r^2 + (dr/dtheta)^2) dtheta? (enter a number)",
+			answer:   "6", kind: "sec", a: 6, bLabel: "pi/4",
+			reason: "The integrand is 6*sec^2(theta), so L = 6 tan(theta) from 0 to pi/4 = 6.",
+		},
+		{
+			question: "The polar curve r = 7*sec(theta) is traced from theta = 0 to theta = pi/4. What is its arc length L = integral of sqrt(r^2 + (dr/dtheta)^2) dtheta? (enter a number)",
+			answer:   "7", kind: "sec", a: 7, bLabel: "pi/4",
+			reason: "The integrand is 7*sec^2(theta), so L = 7 tan(theta) from 0 to pi/4 = 7.",
+		},
+		{
+			question: "The polar curve r = 8*sec(theta) is traced from theta = 0 to theta = pi/4. What is its arc length L = integral of sqrt(r^2 + (dr/dtheta)^2) dtheta? (enter a number)",
+			answer:   "8", kind: "sec", a: 8, bLabel: "pi/4",
+			reason: "The integrand is 8*sec^2(theta), so L = 8 tan(theta) from 0 to pi/4 = 8.",
+		},
 	}
 	c := claims[rand.Intn(len(claims))]
 	return generator.Problem{
@@ -383,6 +433,9 @@ func (g *frenetGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		{rp: [3]int{1, 0, 0}, rpp: [3]int{0, 0, 2}},
 		{rp: [3]int{0, 0, 1}, rpp: [3]int{-1, 0, 0}},
 		{rp: [3]int{1, 0, 0}, rpp: [3]int{0, 0, -2}},
+		{rp: [3]int{0, 1, 0}, rpp: [3]int{0, 0, 2}},
+		{rp: [3]int{0, 1, 0}, rpp: [3]int{0, 0, -2}},
+		{rp: [3]int{0, 0, 1}, rpp: [3]int{1, 0, 0}},
 	}
 	c := claims[rand.Intn(len(claims))]
 	// Every r' in the table is a unit axis vector, so T is r' itself.
@@ -572,6 +625,36 @@ func (g *pappusGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			answer:   "48*pi", area: 8, d: 3,
 			reason: "V = 2*pi*3*8 = 48*pi.",
 		},
+		{
+			question: "A plane region of area 3 has its centroid 1 unit from an external axis that does not cut the region. Pappus's centroid theorem gives the volume swept as V = 2*pi*d*A. What is V? (enter an exact multiple of pi, such as 6*pi)",
+			answer:   "6*pi", area: 3, d: 1,
+			reason: "V = 2*pi*1*3 = 6*pi.",
+		},
+		{
+			question: "A plane region of area 4 has its centroid 2 units from an external axis that does not cut the region. Pappus's centroid theorem gives the volume swept as V = 2*pi*d*A. What is V? (enter an exact multiple of pi, such as 16*pi)",
+			answer:   "16*pi", area: 4, d: 2,
+			reason: "V = 2*pi*2*4 = 16*pi.",
+		},
+		{
+			question: "A plane region of area 5 has its centroid 3 units from an external axis that does not cut the region. Pappus's centroid theorem gives the volume swept as V = 2*pi*d*A. What is V? (enter an exact multiple of pi, such as 30*pi)",
+			answer:   "30*pi", area: 5, d: 3,
+			reason: "V = 2*pi*3*5 = 30*pi.",
+		},
+		{
+			question: "A plane region of area 1 has its centroid 6 units from an external axis that does not cut the region. Pappus's centroid theorem gives the volume swept as V = 2*pi*d*A. What is V? (enter an exact multiple of pi, such as 12*pi)",
+			answer:   "12*pi", area: 1, d: 6,
+			reason: "V = 2*pi*6*1 = 12*pi.",
+		},
+		{
+			question: "A plane region of area 7 has its centroid 3 units from an external axis that does not cut the region. Pappus's centroid theorem gives the volume swept as V = 2*pi*d*A. What is V? (enter an exact multiple of pi, such as 42*pi)",
+			answer:   "42*pi", area: 7, d: 3,
+			reason: "V = 2*pi*3*7 = 42*pi.",
+		},
+		{
+			question: "A plane region of area 9 has its centroid 2 units from an external axis that does not cut the region. Pappus's centroid theorem gives the volume swept as V = 2*pi*d*A. What is V? (enter an exact multiple of pi, such as 36*pi)",
+			answer:   "36*pi", area: 9, d: 2,
+			reason: "V = 2*pi*2*9 = 36*pi.",
+		},
 	}
 	c := claims[rand.Intn(len(claims))]
 	return generator.Problem{
@@ -631,6 +714,46 @@ func (g *momentInertiaGen) Generate(ctx generator.GeneratorContext) generator.Pr
 			question: "A uniform disk of mass 4 and radius 2 rotates about its central axis. What is its moment of inertia (1/2)M*R^2? (enter a number)",
 			answer:   "8", kind: "disk", m: 4, r: 2,
 			reason: "(1/2)M*R^2 = 0.5*4*4 = 8.",
+		},
+		{
+			question: "A uniform rod of mass 6 and length 2 rotates about an axis through its centre, perpendicular to the rod. What is its moment of inertia M*L^2/12? (enter a number)",
+			answer:   "2", kind: "rod_center", m: 6, l: 2,
+			reason: "M*L^2/12 = 6*4/12 = 2.",
+		},
+		{
+			question: "A uniform rod of mass 9 and length 1 rotates about an axis through one end, perpendicular to the rod. What is its moment of inertia M*L^2/3? (enter a number)",
+			answer:   "3", kind: "rod_end", m: 9, l: 1,
+			reason: "M*L^2/3 = 9*1/3 = 3.",
+		},
+		{
+			question: "A uniform rod of mass 12 and length 4 rotates about an axis through its centre, perpendicular to the rod. What is its moment of inertia M*L^2/12? (enter a number)",
+			answer:   "16", kind: "rod_center", m: 12, l: 4,
+			reason: "M*L^2/12 = 12*16/12 = 16.",
+		},
+		{
+			question: "A uniform rod of mass 15 and length 2 rotates about an axis through one end, perpendicular to the rod. What is its moment of inertia M*L^2/3? (enter a number)",
+			answer:   "20", kind: "rod_end", m: 15, l: 2,
+			reason: "M*L^2/3 = 15*4/3 = 20.",
+		},
+		{
+			question: "A uniform disk of mass 4 and radius 3 rotates about its central axis. What is its moment of inertia (1/2)M*R^2? (enter a number)",
+			answer:   "18", kind: "disk", m: 4, r: 3,
+			reason: "(1/2)M*R^2 = 0.5*4*9 = 18.",
+		},
+		{
+			question: "A uniform disk of mass 6 and radius 2 rotates about its central axis. What is its moment of inertia (1/2)M*R^2? (enter a number)",
+			answer:   "12", kind: "disk", m: 6, r: 2,
+			reason: "(1/2)M*R^2 = 0.5*6*4 = 12.",
+		},
+		{
+			question: "Point masses 1 and 2 sit at distances 2 and 3 from an axis. What is the moment of inertia sum m*r^2? (enter a number)",
+			answer:   "22", kind: "points", masses: []int{1, 2}, distances: []int{2, 3},
+			reason: "1*2^2 + 2*3^2 = 4 + 18 = 22.",
+		},
+		{
+			question: "Point masses 3 and 4 sit at distances 1 and 2 from an axis. What is the moment of inertia sum m*r^2? (enter a number)",
+			answer:   "19", kind: "points", masses: []int{3, 4}, distances: []int{1, 2},
+			reason: "3*1^2 + 4*2^2 = 3 + 16 = 19.",
 		},
 	}
 	c := claims[rand.Intn(len(claims))]
