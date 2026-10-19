@@ -757,5 +757,38 @@
       "graph.topological_sort",
       "graph.dag_paths"
     ]
+  },
+  {
+    "id": "prob",
+    "name": "Probability Theory",
+    "grade": "college",
+    "description": "The axioms, conditional probability, random variables, distributions, generating functions and limit theorems.",
+    "targets": [
+      "prob.space.axioms",
+      "prob.space.sigma_algebra",
+      "prob.space.inclusion_exclusion",
+      "prob.space.continuity",
+      "prob.cond.multiplication",
+      "prob.cond.total_probability",
+      "prob.bayes.prior",
+      "prob.independence.pairwise",
+      "prob.rv.definition",
+      "prob.rv.cdf",
+      "prob.rv.pmf",
+      "prob.rv.pdf",
+      "prob.rv.joint",
+      "prob.rv.expectation",
+      "prob.rv.variance",
+      "prob.rv.mgf",
+      "prob.rv.transform",
+      "prob.dist.order_stats",
+      "prob.dist.memoryless",
+      "prob.dist.poisson_process",
+      "prob.dist.exponential_family",
+      "prob.limit.markov",
+      "prob.limit.chebyshev",
+      "prob.limit.weak_law",
+      "prob.limit.clt"
+    ]
   }
 ]

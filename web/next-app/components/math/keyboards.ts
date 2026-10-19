@@ -83,6 +83,7 @@ const DOMAIN_MODES: Record<string, MathKeyboardMode> = {
   calculus: 'calculus',
   differential_equations: 'calculus',
   graph_theory: 'algebra',
+  probability_theory: 'arithmetic',
 }
 
 export const DEFAULT_KEYBOARD_MODE: MathKeyboardMode = 'algebra'

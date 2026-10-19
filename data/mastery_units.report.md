@@ -12,8 +12,8 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 
 | Metric | Value |
 |---|---|
-| Total concepts | 1040 |
-| Total units | 105 |
+| Total concepts | 1065 |
+| Total units | 107 |
 | Minimum unit size | 1 |
 | Median unit size | 6 |
 | Maximum unit size | 51 |
@@ -21,10 +21,10 @@ assessed; `3` is a candidate, not a decision. Regenerate with `-band 2` or `-ban
 | Units with <= 3 concepts | 32 |
 | Units with > 25 concepts | 7 |
 | Units with > 50 concepts | 1 |
-| Cross-unit prerequisite edges (derived) | 268 |
+| Cross-unit prerequisite edges (derived) | 272 |
 | Backward band edges | 0 |
 
-If the learner is assessed once per unit, then 105 assessments cover the corpus, and the
+If the learner is assessed once per unit, then 107 assessments cover the corpus, and the
 median is one assessment per 6 concepts. That is the frequency question this report
 exists to make concrete.
 
@@ -122,6 +122,8 @@ exists to make concrete.
 | `precalculus.b7` | precalculus | 7 | 14 | 5 | 21–23 |
 | `precalculus.b8` | precalculus | 8 | 24 | 8 | 24–26 |
 | `precalculus.b9` | precalculus | 9 | 4 | 2 | 27–27 |
+| `probability_theory.b3` | probability_theory | 3 | 5 | 3 | 10–11 |
+| `probability_theory.b4` | probability_theory | 4 | 20 | 4 | 12–14 |
 | `statistics.b0` | statistics | 0 | 2 | 1 | 1–2 |
 | `statistics.b1` | statistics | 1 | 1 | 1 | 3–3 |
 | `statistics.b2` | statistics | 2 | 1 | 1 | 8–8 |
@@ -151,17 +153,17 @@ at every width.
 
 | Band width | Units | Median | Max | Singletons | <=3 | >25 | Backward |
 |---|---|---|---|---|---|---|---|
-| 2 | 139 | 5 | 46 | 25 | 48 | 5 | 0 |
-| 3 | 105 | 6 | 51 | 22 | 32 | 7 | 0 |
-| 4 | 84 | 9 | 66 | 9 | 25 | 9 | 0 |
-| 5 | 72 | 10 | 74 | 6 | 16 | 9 | 0 |
-| 6 | 68 | 11 | 99 | 7 | 15 | 15 | 0 |
-| 8 | 54 | 13 | 115 | 4 | 12 | 15 | 0 |
-| 10 | 46 | 17 | 148 | 3 | 8 | 13 | 0 |
-| 12 | 46 | 18 | 126 | 2 | 7 | 17 | 0 |
-| 15 | 35 | 24 | 148 | 1 | 5 | 16 | 0 |
-| 20 | 31 | 24 | 175 | 2 | 4 | 15 | 0 |
-| 45 | 18 | 45 | 175 | 0 | 0 | 18 | 0 |
+| 2 | 142 | 5 | 46 | 25 | 49 | 5 | 0 |
+| 3 | 107 | 6 | 51 | 22 | 32 | 7 | 0 |
+| 4 | 86 | 9 | 66 | 9 | 25 | 9 | 0 |
+| 5 | 73 | 10 | 74 | 6 | 16 | 9 | 0 |
+| 6 | 70 | 11 | 99 | 7 | 15 | 15 | 0 |
+| 8 | 55 | 13 | 115 | 4 | 12 | 15 | 0 |
+| 10 | 47 | 17 | 148 | 3 | 8 | 13 | 0 |
+| 12 | 48 | 18 | 126 | 2 | 7 | 17 | 0 |
+| 15 | 36 | 24 | 148 | 1 | 5 | 16 | 0 |
+| 20 | 32 | 25 | 175 | 2 | 4 | 15 | 0 |
+| 45 | 19 | 45 | 175 | 0 | 0 | 18 | 0 |
 
 **No width is clean.** Small widths fragment — at 3 there are 22 singleton units, which is a
 quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce
@@ -178,7 +180,7 @@ The subdomain condensation of the concept DAG **contains cycles**: grouping conc
 subdomain discards the per-concept ordering, so a concept in subdomain A can be a
 prerequisite of one in subdomain B whose other members depend on A.
 
-**99 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
+**102 of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream
 of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and
 the remaining 34 behind them; Kahn cannot order either group, because ordering a node
 requires its predecessors to be ordered first.) An implementation that ignores this
@@ -288,30 +290,34 @@ Unresolvable subdomains:
 `precalculus.systems` 
 
 `precalculus.vectors` 
+`probability_theory.distributions` 
+`probability_theory.foundations` 
+`probability_theory.limits` 
+
 `statistics.distributions` 
 `topology.algebraic` 
 `topology.basics` 
-
 `topology.compact` 
+
 `topology.connected` 
 `topology.constructions` 
 `topology.covering` 
-
 `topology.dimension` 
+
 `topology.invariants` 
 `topology.knot` 
 `topology.manifolds` 
-
 `topology.metrization` 
+
 `topology.separation` 
 `trigonometry.advanced` 
 `trigonometry.functions` 
-
 `trigonometry.graphs` 
+
 `trigonometry.hyperbolic` 
 `trigonometry.identities` 
 
-Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1040
+Concept depth is a proper topological ranking on an acyclic graph, so it resolves all 1065
 concepts and yields zero backward band edges by construction.
 
 ## Validation findings

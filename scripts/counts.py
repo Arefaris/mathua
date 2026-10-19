@@ -43,6 +43,7 @@ DOMAIN_LABELS = [
     ("machine_learning", "Machine Learning"),
     ("topology", "Topology"),
     ("graph_theory", "Graph Theory"),
+    ("probability_theory", "Probability Theory"),
 ]
 
 # Numbers that were correct at some past corpus size and must never reappear.

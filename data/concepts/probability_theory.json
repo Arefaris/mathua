@@ -1,0 +1,353 @@
+[
+  {
+    "id": "prob.space.axioms",
+    "label": "Probability axioms",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "stat.prob.sample_space"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.space.sigma_algebra",
+    "label": "Sigma-algebras and events",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "prob.space.axioms"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.space.inclusion_exclusion",
+    "label": "Inclusion-exclusion",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.prob.compound"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.space.continuity",
+    "label": "Continuity of probability",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "prob.space.axioms"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.cond.multiplication",
+    "label": "The multiplication rule",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.prob.conditional"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "prob.cond.total_probability",
+    "label": "The law of total probability",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.prob.conditional"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.bayes.prior",
+    "label": "Bayes' theorem with priors",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.prob.bayes",
+      "prob.cond.total_probability"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.independence.pairwise",
+    "label": "Pairwise and mutual independence",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.foundations",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "stat.prob.compound"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.rv.definition",
+    "label": "Random variables",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "stat.prob.discrete_rv"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.rv.cdf",
+    "label": "The distribution function",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "stat.prob.continuous_rv"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.rv.pmf",
+    "label": "The probability mass function",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.definition"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 24.0
+    }
+  },
+  {
+    "id": "prob.rv.pdf",
+    "label": "The probability density function",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.cdf"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.rv.joint",
+    "label": "Joint probability mass functions",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.pmf"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.rv.expectation",
+    "label": "Expectation of a function of a random variable",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.prob.expected_value"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.rv.variance",
+    "label": "Variance by the second moment",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.adv.variance"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.rv.mgf",
+    "label": "Moment generating functions",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.expectation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.rv.transform",
+    "label": "Transformations of random variables",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.random_variables",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.cdf"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.dist.order_stats",
+    "label": "Order statistics",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.distributions",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.cdf"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.dist.memoryless",
+    "label": "The memoryless property",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.distributions",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "stat.dist.geometric"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.dist.poisson_process",
+    "label": "The Poisson process",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.distributions",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "stat.dist.poisson"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.dist.exponential_family",
+    "label": "The exponential family",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.distributions",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "stat.dist.normal"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  },
+  {
+    "id": "prob.limit.markov",
+    "label": "Markov's inequality",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.limits",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.expectation"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.limit.chebyshev",
+    "label": "Chebyshev's inequality",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.limits",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.rv.variance"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 26.0
+    }
+  },
+  {
+    "id": "prob.limit.weak_law",
+    "label": "The weak law of large numbers",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.limits",
+    "grading_type": "multiple_choice",
+    "prerequisites": [
+      "prob.limit.chebyshev"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 28.0
+    }
+  },
+  {
+    "id": "prob.limit.clt",
+    "label": "The central limit theorem",
+    "domain": "probability_theory",
+    "subdomain": "probability_theory.limits",
+    "grading_type": "numeric",
+    "prerequisites": [
+      "prob.limit.chebyshev"
+    ],
+    "mastery_threshold": {
+      "streak": 10,
+      "avg_time_seconds": 30.0
+    }
+  }
+]

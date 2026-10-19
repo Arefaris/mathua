@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1040,
-  "unit_count": 105,
+  "concept_count": 1065,
+  "unit_count": 107,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2361,6 +2361,64 @@
         "precalc.series.geom_infinite"
       ],
       "concept_count": 4
+    },
+    {
+      "id": "probability_theory.b3",
+      "title": "Probability Theory · Stage 4",
+      "domain": "probability_theory",
+      "band": 3,
+      "depth_min": 10,
+      "depth_max": 11,
+      "subdomains": [
+        "probability_theory.foundations",
+        "probability_theory.limits",
+        "probability_theory.random_variables"
+      ],
+      "concept_ids": [
+        "prob.limit.chebyshev",
+        "prob.rv.cdf",
+        "prob.rv.definition",
+        "prob.rv.variance",
+        "prob.space.axioms"
+      ],
+      "concept_count": 5
+    },
+    {
+      "id": "probability_theory.b4",
+      "title": "Probability Theory · Stage 5",
+      "domain": "probability_theory",
+      "band": 4,
+      "depth_min": 12,
+      "depth_max": 14,
+      "subdomains": [
+        "probability_theory.distributions",
+        "probability_theory.foundations",
+        "probability_theory.limits",
+        "probability_theory.random_variables"
+      ],
+      "concept_ids": [
+        "prob.bayes.prior",
+        "prob.cond.multiplication",
+        "prob.cond.total_probability",
+        "prob.dist.exponential_family",
+        "prob.dist.memoryless",
+        "prob.dist.order_stats",
+        "prob.dist.poisson_process",
+        "prob.independence.pairwise",
+        "prob.limit.clt",
+        "prob.limit.markov",
+        "prob.limit.weak_law",
+        "prob.rv.expectation",
+        "prob.rv.joint",
+        "prob.rv.mgf",
+        "prob.rv.pdf",
+        "prob.rv.pmf",
+        "prob.rv.transform",
+        "prob.space.continuity",
+        "prob.space.inclusion_exclusion",
+        "prob.space.sigma_algebra"
+      ],
+      "concept_count": 20
     },
     {
       "id": "statistics.b0",
