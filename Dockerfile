@@ -48,6 +48,7 @@ COPY --from=builder /mathua /mathua
 COPY data/concepts/ /app/data/concepts/
 COPY data/lessons/ /app/data/lessons/
 COPY data/courses.json /app/data/courses.json
+COPY data/destinations.json /app/data/destinations.json
 COPY --from=webbuilder /app/web/next-app/out /app/web/next-app/out
 COPY grading/sympy_service.py /app/grading/sympy_service.py
 
