@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 1065 concepts, and there are 1065 KP shard files
-holding 3195 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1090 concepts, and there are 1090 KP shard files
+holding 3270 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 859 of the 1065 concepts
+### 4.1 The course catalog reaches 884 of the 1090 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 26 courses those closures reach
-859 of the 1065 concepts: 206 of them have a node, a generator, a lesson and three KP shards and
+884 of the 1090 concepts: 206 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -99,7 +99,7 @@ The count of unreachable concepts by domain:
 | discrete_math | 55 | 3 |
 | geometry | 45 | 6 |
 | graph_theory | 40 | 0 |
-| probability_theory | 25 | 0 |
+| probability_theory | 50 | 0 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
 cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
@@ -335,7 +335,7 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1065 concepts. The remaining per-domain targets add up to 95, and this is the table
+The catalog holds 1090 concepts. The remaining per-domain targets add up to 70, and this is the table
 that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
 tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
 section 6 used, largest deficit first.
@@ -343,9 +343,9 @@ section 6 used, largest deficit first.
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
 | calculus | bridge | 175 | 205 | +30 |
-| probability_theory | university | 25 | 50 | +25 |
 | algebra | school | 104 | 124 | +20 |
 | trigonometry | school | 48 | 68 | +20 |
+| probability_theory | university | 50 | 50 | +0 |
 | graph_theory | university | 40 | 40 | +0 |
 | arithmetic | school | 60 | 60 | +0 |
 | geometry | school | 45 | 45 | +0 |

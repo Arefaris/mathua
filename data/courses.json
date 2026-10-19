@@ -788,7 +788,32 @@
       "prob.limit.markov",
       "prob.limit.chebyshev",
       "prob.limit.weak_law",
-      "prob.limit.clt"
+      "prob.limit.clt",
+      "prob.joint.marginal",
+      "prob.joint.continuous",
+      "prob.joint.rv_independence",
+      "prob.expect.conditional",
+      "prob.expect.total",
+      "prob.expect.total_variance",
+      "prob.cov.covariance",
+      "prob.cov.correlation",
+      "prob.conv.in_probability",
+      "prob.conv.in_distribution",
+      "prob.conv.almost_sure",
+      "prob.conv.strong_law",
+      "prob.conv.borel_cantelli",
+      "prob.conv.slutsky",
+      "prob.conv.delta",
+      "prob.chf.definition",
+      "prob.chf.moments",
+      "prob.chf.independence",
+      "prob.chf.continuity",
+      "prob.chf.clt",
+      "prob.process.markov_chain",
+      "prob.process.transition_matrix",
+      "prob.process.stationary",
+      "prob.process.random_walk",
+      "prob.process.martingale"
     ]
   }
 ]

@@ -13271,6 +13271,358 @@
     "subdomain": "probability_theory.limits"
   },
   {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.joint.marginal",
+    "label": "Marginal distributions",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.rv.joint"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.joint.continuous",
+    "label": "Joint densities",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.rv.pdf"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.joint.rv_independence",
+    "label": "Independent random variables",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.joint.marginal"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.expect.conditional",
+    "label": "Conditional expectation",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.joint.marginal"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.expect.total",
+    "label": "The law of total expectation",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.expect.conditional"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.expect.total_variance",
+    "label": "The law of total variance",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.expect.total",
+      "prob.rv.variance"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.cov.covariance",
+    "label": "Covariance",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.rv.variance"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.cov.correlation",
+    "label": "Correlation",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.cov.covariance"
+    ],
+    "subdomain": "probability_theory.joint"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.conv.in_probability",
+    "label": "Convergence in probability",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.limit.weak_law"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.conv.in_distribution",
+    "label": "Convergence in distribution",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.conv.in_probability"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.conv.almost_sure",
+    "label": "Almost-sure convergence",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.conv.in_probability"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.conv.strong_law",
+    "label": "The strong law of large numbers",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.limit.weak_law"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.conv.borel_cantelli",
+    "label": "The Borel-Cantelli lemmas",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.space.continuity"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.conv.slutsky",
+    "label": "Slutsky's theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.conv.in_distribution"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.conv.delta",
+    "label": "The delta method",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.limit.clt"
+    ],
+    "subdomain": "probability_theory.convergence"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.chf.definition",
+    "label": "Characteristic functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.rv.mgf"
+    ],
+    "subdomain": "probability_theory.characteristic"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.chf.moments",
+    "label": "Moments from the characteristic function",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.chf.definition"
+    ],
+    "subdomain": "probability_theory.characteristic"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.chf.independence",
+    "label": "Characteristic functions of sums",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.chf.definition"
+    ],
+    "subdomain": "probability_theory.characteristic"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.chf.continuity",
+    "label": "The continuity theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.chf.definition"
+    ],
+    "subdomain": "probability_theory.characteristic"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.chf.clt",
+    "label": "The central limit theorem by characteristic functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.chf.continuity",
+      "prob.limit.clt"
+    ],
+    "subdomain": "probability_theory.characteristic"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.process.markov_chain",
+    "label": "Markov chains",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.joint.marginal"
+    ],
+    "subdomain": "probability_theory.processes"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.process.transition_matrix",
+    "label": "Transition matrices",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.process.markov_chain"
+    ],
+    "subdomain": "probability_theory.processes"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.process.stationary",
+    "label": "Stationary distributions",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.process.transition_matrix"
+    ],
+    "subdomain": "probability_theory.processes"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "numeric",
+    "id": "prob.process.random_walk",
+    "label": "Random walks",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.process.markov_chain"
+    ],
+    "subdomain": "probability_theory.processes"
+  },
+  {
+    "domain": "probability_theory",
+    "grading_type": "multiple_choice",
+    "id": "prob.process.martingale",
+    "label": "Martingales",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "prob.expect.conditional"
+    ],
+    "subdomain": "probability_theory.processes"
+  },
+  {
     "domain": "statistics",
     "grading_type": "numeric",
     "id": "stat.data.read_table",

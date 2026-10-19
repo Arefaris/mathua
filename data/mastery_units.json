@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1065,
-  "unit_count": 107,
+  "concept_count": 1090,
+  "unit_count": 108,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2371,17 +2371,19 @@
       "depth_max": 11,
       "subdomains": [
         "probability_theory.foundations",
+        "probability_theory.joint",
         "probability_theory.limits",
         "probability_theory.random_variables"
       ],
       "concept_ids": [
+        "prob.cov.covariance",
         "prob.limit.chebyshev",
         "prob.rv.cdf",
         "prob.rv.definition",
         "prob.rv.variance",
         "prob.space.axioms"
       ],
-      "concept_count": 5
+      "concept_count": 6
     },
     {
       "id": "probability_theory.b4",
@@ -2391,20 +2393,33 @@
       "depth_min": 12,
       "depth_max": 14,
       "subdomains": [
+        "probability_theory.characteristic",
+        "probability_theory.convergence",
         "probability_theory.distributions",
         "probability_theory.foundations",
+        "probability_theory.joint",
         "probability_theory.limits",
         "probability_theory.random_variables"
       ],
       "concept_ids": [
         "prob.bayes.prior",
+        "prob.chf.definition",
         "prob.cond.multiplication",
         "prob.cond.total_probability",
+        "prob.conv.almost_sure",
+        "prob.conv.borel_cantelli",
+        "prob.conv.delta",
+        "prob.conv.in_distribution",
+        "prob.conv.in_probability",
+        "prob.conv.strong_law",
+        "prob.cov.correlation",
         "prob.dist.exponential_family",
         "prob.dist.memoryless",
         "prob.dist.order_stats",
         "prob.dist.poisson_process",
         "prob.independence.pairwise",
+        "prob.joint.continuous",
+        "prob.joint.marginal",
         "prob.limit.clt",
         "prob.limit.markov",
         "prob.limit.weak_law",
@@ -2418,7 +2433,38 @@
         "prob.space.inclusion_exclusion",
         "prob.space.sigma_algebra"
       ],
-      "concept_count": 20
+      "concept_count": 30
+    },
+    {
+      "id": "probability_theory.b5",
+      "title": "Probability Theory · Stage 6",
+      "domain": "probability_theory",
+      "band": 5,
+      "depth_min": 15,
+      "depth_max": 17,
+      "subdomains": [
+        "probability_theory.characteristic",
+        "probability_theory.convergence",
+        "probability_theory.joint",
+        "probability_theory.processes"
+      ],
+      "concept_ids": [
+        "prob.chf.clt",
+        "prob.chf.continuity",
+        "prob.chf.independence",
+        "prob.chf.moments",
+        "prob.conv.slutsky",
+        "prob.expect.conditional",
+        "prob.expect.total",
+        "prob.expect.total_variance",
+        "prob.joint.rv_independence",
+        "prob.process.markov_chain",
+        "prob.process.martingale",
+        "prob.process.random_walk",
+        "prob.process.stationary",
+        "prob.process.transition_matrix"
+      ],
+      "concept_count": 14
     },
     {
       "id": "statistics.b0",
