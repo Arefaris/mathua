@@ -11315,6 +11315,286 @@
     "subdomain": "number_theory.advanced"
   },
   {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.errors.absolute",
+    "label": "Absolute and relative error",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [],
+    "subdomain": "numerical_analysis.errors"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.errors.roundoff",
+    "label": "Floating-point roundoff and machine epsilon",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.errors.absolute"
+    ],
+    "subdomain": "numerical_analysis.errors"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.errors.cancellation",
+    "label": "Catastrophic cancellation",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.errors.roundoff"
+    ],
+    "subdomain": "numerical_analysis.errors"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.errors.conditioning",
+    "label": "The condition number of a problem",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.errors.absolute"
+    ],
+    "subdomain": "numerical_analysis.errors"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.errors.stability",
+    "label": "Stability of an algorithm",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.errors.conditioning"
+    ],
+    "subdomain": "numerical_analysis.errors"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.errors.taylor",
+    "label": "Taylor truncation error",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.errors.absolute"
+    ],
+    "subdomain": "numerical_analysis.errors"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.roots.bisection",
+    "label": "The bisection method",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.limit.continuity"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.roots.fixed_point",
+    "label": "Fixed-point iteration",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.bisection"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.roots.newton",
+    "label": "Newton's method",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.fixed_point",
+      "calc.deriv.concept"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.roots.secant",
+    "label": "The secant method",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.newton"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.roots.false_position",
+    "label": "The method of false position",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.bisection"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.roots.order",
+    "label": "Order of convergence",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.newton"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.roots.multiple",
+    "label": "Multiple roots and modified Newton",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.newton"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.roots.bracketing",
+    "label": "Bracketing versus open methods",
+    "mastery_threshold": {
+      "avg_time_seconds": 26,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.bisection",
+      "numa.roots.secant"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.roots.horner",
+    "label": "Horner's method and polynomial roots",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.roots.newton"
+    ],
+    "subdomain": "numerical_analysis.roots"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.interp.lagrange",
+    "label": "Lagrange interpolation",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.errors.absolute"
+    ],
+    "subdomain": "numerical_analysis.interp"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "numeric",
+    "id": "numa.interp.divided_differences",
+    "label": "Newton's divided differences",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.interp.lagrange"
+    ],
+    "subdomain": "numerical_analysis.interp"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.interp.error",
+    "label": "The interpolation error",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.interp.lagrange"
+    ],
+    "subdomain": "numerical_analysis.interp"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.interp.chebyshev",
+    "label": "Chebyshev nodes",
+    "mastery_threshold": {
+      "avg_time_seconds": 30,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.interp.error"
+    ],
+    "subdomain": "numerical_analysis.interp"
+  },
+  {
+    "domain": "numerical_analysis",
+    "grading_type": "multiple_choice",
+    "id": "numa.interp.splines",
+    "label": "Cubic splines",
+    "mastery_threshold": {
+      "avg_time_seconds": 28,
+      "streak": 10
+    },
+    "prerequisites": [
+      "numa.interp.divided_differences"
+    ],
+    "subdomain": "numerical_analysis.interp"
+  },
+  {
     "domain": "prealgebra",
     "grading_type": "comparison",
     "id": "dec.basics.compare",

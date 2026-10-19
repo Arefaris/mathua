@@ -22,6 +22,7 @@ const DOMAIN_COLORS = {
   topology:             '#f9a8d4',
   graph_theory:         '#a3e635',
   probability_theory:   '#5eead4',
+  numerical_analysis:   '#fbbf24',
 } satisfies Record<string, string>
 
 const DOMAIN_COLORS_LIGHT = {
@@ -44,6 +45,7 @@ const DOMAIN_COLORS_LIGHT = {
   topology:             '#d080b0',
   graph_theory:         '#6a9a18',
   probability_theory:   '#199e8c',
+  numerical_analysis:   '#b07d0a',
 } satisfies Record<string, string>
 
 export const DOMAIN_ORDER = [
@@ -66,6 +68,7 @@ export const DOMAIN_ORDER = [
   'topology',
   'graph_theory',
   'probability_theory',
+  'numerical_analysis',
 ] as const
 
 export const DOMAIN_LABELS = {
@@ -88,6 +91,7 @@ export const DOMAIN_LABELS = {
   topology: 'Topology',
   graph_theory: 'Graph Theory',
   probability_theory: 'Probability Theory',
+  numerical_analysis: 'Numerical Analysis',
 } satisfies Record<string, string>
 
 const FALLBACK_COLOR = '#5a6577'

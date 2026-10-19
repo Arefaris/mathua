@@ -815,5 +815,33 @@
       "prob.process.random_walk",
       "prob.process.martingale"
     ]
+  },
+  {
+    "id": "numa",
+    "name": "Numerical Analysis",
+    "grade": "college",
+    "description": "Error and conditioning, root finding, interpolation and approximation, quadrature, and numerical linear algebra.",
+    "targets": [
+      "numa.errors.absolute",
+      "numa.errors.roundoff",
+      "numa.errors.cancellation",
+      "numa.errors.conditioning",
+      "numa.errors.stability",
+      "numa.errors.taylor",
+      "numa.roots.bisection",
+      "numa.roots.fixed_point",
+      "numa.roots.newton",
+      "numa.roots.secant",
+      "numa.roots.false_position",
+      "numa.roots.order",
+      "numa.roots.multiple",
+      "numa.roots.bracketing",
+      "numa.roots.horner",
+      "numa.interp.lagrange",
+      "numa.interp.divided_differences",
+      "numa.interp.error",
+      "numa.interp.chebyshev",
+      "numa.interp.splines"
+    ]
   }
 ]

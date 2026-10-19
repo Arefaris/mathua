@@ -4358,5 +4358,85 @@
   {
     "concept_id": "prob.process.martingale",
     "source": "teaching/prob.process.martingale.md"
+  },
+  {
+    "concept_id": "numa.errors.absolute",
+    "source": "teaching/numa.errors.absolute.md"
+  },
+  {
+    "concept_id": "numa.errors.roundoff",
+    "source": "teaching/numa.errors.roundoff.md"
+  },
+  {
+    "concept_id": "numa.errors.cancellation",
+    "source": "teaching/numa.errors.cancellation.md"
+  },
+  {
+    "concept_id": "numa.errors.conditioning",
+    "source": "teaching/numa.errors.conditioning.md"
+  },
+  {
+    "concept_id": "numa.errors.stability",
+    "source": "teaching/numa.errors.stability.md"
+  },
+  {
+    "concept_id": "numa.errors.taylor",
+    "source": "teaching/numa.errors.taylor.md"
+  },
+  {
+    "concept_id": "numa.roots.bisection",
+    "source": "teaching/numa.roots.bisection.md"
+  },
+  {
+    "concept_id": "numa.roots.fixed_point",
+    "source": "teaching/numa.roots.fixed_point.md"
+  },
+  {
+    "concept_id": "numa.roots.newton",
+    "source": "teaching/numa.roots.newton.md"
+  },
+  {
+    "concept_id": "numa.roots.secant",
+    "source": "teaching/numa.roots.secant.md"
+  },
+  {
+    "concept_id": "numa.roots.false_position",
+    "source": "teaching/numa.roots.false_position.md"
+  },
+  {
+    "concept_id": "numa.roots.order",
+    "source": "teaching/numa.roots.order.md"
+  },
+  {
+    "concept_id": "numa.roots.multiple",
+    "source": "teaching/numa.roots.multiple.md"
+  },
+  {
+    "concept_id": "numa.roots.bracketing",
+    "source": "teaching/numa.roots.bracketing.md"
+  },
+  {
+    "concept_id": "numa.roots.horner",
+    "source": "teaching/numa.roots.horner.md"
+  },
+  {
+    "concept_id": "numa.interp.lagrange",
+    "source": "teaching/numa.interp.lagrange.md"
+  },
+  {
+    "concept_id": "numa.interp.divided_differences",
+    "source": "teaching/numa.interp.divided_differences.md"
+  },
+  {
+    "concept_id": "numa.interp.error",
+    "source": "teaching/numa.interp.error.md"
+  },
+  {
+    "concept_id": "numa.interp.chebyshev",
+    "source": "teaching/numa.interp.chebyshev.md"
+  },
+  {
+    "concept_id": "numa.interp.splines",
+    "source": "teaching/numa.interp.splines.md"
   }
 ]

@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1090,
-  "unit_count": 108,
+  "concept_count": 1110,
+  "unit_count": 112,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -2054,6 +2054,83 @@
         "nt.adv.diophantine"
       ],
       "concept_count": 1
+    },
+    {
+      "id": "numerical_analysis.b0",
+      "title": "Numerical Analysis · Stage 1",
+      "domain": "numerical_analysis",
+      "band": 0,
+      "depth_min": 0,
+      "depth_max": 2,
+      "subdomains": [
+        "numerical_analysis.errors",
+        "numerical_analysis.interp"
+      ],
+      "concept_ids": [
+        "numa.errors.absolute",
+        "numa.errors.cancellation",
+        "numa.errors.conditioning",
+        "numa.errors.roundoff",
+        "numa.errors.stability",
+        "numa.errors.taylor",
+        "numa.interp.divided_differences",
+        "numa.interp.error",
+        "numa.interp.lagrange"
+      ],
+      "concept_count": 9
+    },
+    {
+      "id": "numerical_analysis.b1",
+      "title": "Numerical Analysis · Stage 2",
+      "domain": "numerical_analysis",
+      "band": 1,
+      "depth_min": 3,
+      "depth_max": 3,
+      "subdomains": [
+        "numerical_analysis.interp"
+      ],
+      "concept_ids": [
+        "numa.interp.chebyshev",
+        "numa.interp.splines"
+      ],
+      "concept_count": 2
+    },
+    {
+      "id": "numerical_analysis.b10",
+      "title": "Numerical Analysis · Stage 11",
+      "domain": "numerical_analysis",
+      "band": 10,
+      "depth_min": 30,
+      "depth_max": 32,
+      "subdomains": [
+        "numerical_analysis.roots"
+      ],
+      "concept_ids": [
+        "numa.roots.bisection",
+        "numa.roots.false_position",
+        "numa.roots.fixed_point",
+        "numa.roots.newton"
+      ],
+      "concept_count": 4
+    },
+    {
+      "id": "numerical_analysis.b11",
+      "title": "Numerical Analysis · Stage 12",
+      "domain": "numerical_analysis",
+      "band": 11,
+      "depth_min": 33,
+      "depth_max": 34,
+      "subdomains": [
+        "numerical_analysis.roots"
+      ],
+      "concept_ids": [
+        "numa.roots.bracketing",
+        "numa.roots.horner",
+        "numa.roots.multiple",
+        "numa.roots.order",
+        "numa.roots.secant"
+      ],
+      "concept_count": 5
     },
     {
       "id": "prealgebra.b0",
