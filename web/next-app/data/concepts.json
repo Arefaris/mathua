@@ -5554,6 +5554,426 @@
     "subdomain": "calculus.integrals"
   },
   {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.limit.intermediate_value",
+    "label": "Intermediate value theorem applications",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.limit.continuity"
+    ],
+    "subdomain": "calculus.limits"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.limit.limsup",
+    "label": "Limit superior and inferior",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.seq.convergence"
+    ],
+    "subdomain": "calculus.limits"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.limit.oscillation",
+    "label": "Oscillation of a function",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.limit.discontinuity"
+    ],
+    "subdomain": "calculus.limits"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.deriv.inverse_hyperbolic",
+    "label": "Derivatives of inverse hyperbolic functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.inverse_trig"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.deriv.mvt_applications",
+    "label": "Mean value theorem applications",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.mvt"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.deriv.newton_convergence",
+    "label": "Convergence of Newton's method",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.newton"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.deriv.convex_jensen",
+    "label": "Convexity and Jensen's inequality",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.convexity"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.deriv.marginal_analysis",
+    "label": "Marginal analysis",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.applications"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.deriv.epsilon_delta_deriv",
+    "label": "Epsilon-delta definition of the derivative",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.difference_quotient"
+    ],
+    "subdomain": "calculus.derivatives"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.series.operations",
+    "label": "Operations on series",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.concept"
+    ],
+    "subdomain": "calculus.series"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.series.binomial",
+    "label": "The binomial series",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.taylor"
+    ],
+    "subdomain": "calculus.series"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.series.cauchy_product",
+    "label": "The Cauchy product",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.absolute"
+    ],
+    "subdomain": "calculus.series"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.series.p_series",
+    "label": "The p-series",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.integral_test"
+    ],
+    "subdomain": "calculus.series"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.series.dirichlet_test",
+    "label": "Dirichlet's test",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.alternating"
+    ],
+    "subdomain": "calculus.series"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.series.gamma",
+    "label": "The gamma function",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.improper"
+    ],
+    "subdomain": "calculus.series"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.numerical_error",
+    "label": "Error bounds for numerical integration",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.trapezoid"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.double_polar",
+    "label": "Double integrals in polar coordinates",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.double_integral_rect"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.surface_scalar",
+    "label": "Scalar surface integrals",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.surface_area"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.beta",
+    "label": "The beta function",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.improper"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.consumer_surplus",
+    "label": "Consumer surplus",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.integral.area_between"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.integral.fourier_coefficients",
+    "label": "Fourier coefficients",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.series.fourier"
+    ],
+    "subdomain": "calculus.integrals"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.multi.lagrange_two",
+    "label": "Lagrange multipliers with two constraints",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.lagrange"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.implicit_function",
+    "label": "The implicit function theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.implicit"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.inverse_function",
+    "label": "The inverse function theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.jacobian"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.multi.iterated_limits",
+    "label": "Iterated limits",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.multi.double_integral_region"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.multi.euler_homogeneous",
+    "label": "Euler's homogeneous function theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.deriv.partial"
+    ],
+    "subdomain": "calculus.multivariable"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.line_scalar",
+    "label": "Scalar line integrals",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.line_integral"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.parametric_surface",
+    "label": "Parametric surface area",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.surface_area"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "numeric",
+    "id": "calc.vec.flux_general",
+    "label": "General flux integrals",
+    "mastery_threshold": {
+      "avg_time_seconds": 24,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.flux_uniform"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
+    "domain": "calculus",
+    "grading_type": "multiple_choice",
+    "id": "calc.vec.identities",
+    "label": "Vector identities",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "calc.vec.curl_3d"
+    ],
+    "subdomain": "calculus.vector"
+  },
+  {
     "domain": "complex_numbers",
     "grading_type": "complex",
     "id": "complex.basics.concept",

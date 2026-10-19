@@ -149,6 +149,7 @@ func Register(reg *generator.Registry) {
 	registerRemaining(reg)
 	registerNumeric(reg)
 	registerBatch(reg)
+	registerRaise(reg)
 }
 
 type limitConceptGen struct{}

@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 1180 concepts, and there are 1180 KP shard files
-holding 3540 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1210 concepts, and there are 1210 KP shard files
+holding 3630 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 994 of the 1180 concepts
+### 4.1 The course catalog reaches 1036 of the 1210 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 28 courses those closures reach
-994 of the 1180 concepts: 186 of them have a node, a generator, a lesson and three KP shards and
+1036 of the 1210 concepts: 174 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -81,8 +81,8 @@ The count of unreachable concepts by domain:
 
 | Domain | Concepts | Unreachable |
 |---|---|---|
-| calculus | 175 | 68 |
-| algebra | 104 | 44 |
+| calculus | 205 | 57 |
+| algebra | 104 | 43 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
 | precalculus | 50 | 0 |
@@ -337,14 +337,13 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1180 concepts. The remaining per-domain targets add up to 70, and this is the table
+The catalog holds 1210 concepts. The remaining per-domain targets add up to 40, and this is the table
 that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
 tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
 section 6 used, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| calculus | bridge | 175 | 205 | +30 |
 | algebra | school | 104 | 124 | +20 |
 | trigonometry | school | 48 | 68 | +20 |
 | numerical_analysis | university | 40 | 40 | +0 |
@@ -365,6 +364,7 @@ section 6 used, largest deficit first.
 | differential_equations | university | 42 | 42 | +0 |
 | precalculus | bridge | 50 | 50 | +0 |
 | real_analysis | university | 50 | 50 | +0 |
+| calculus | bridge | 205 | 205 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -613,6 +613,24 @@ random graphs, and flows and digraphs. The `graph` course targets all 40, so the
 reachable and the corpus reaches 834 of 1,040 with 206 enrichment concepts outside the named paths.
 Real analysis, numerical analysis and probability theory follow, with the three target raises. The
 raises are recorded in the table above, and each new domain takes its row as it opens.
+
+**Calculus reached its target on 2026-10-19.** Thirty concepts took the domain from 175 to 205, so
+its row reads +0. The survey found the domain already dense in one-variable technique, so the batch
+deepens the edges of each subdomain instead of restating what the lessons already teach: limits gain
+the intermediate value theorem as a computation, limit superior and inferior, and oscillation;
+derivatives gain the inverse hyperbolic rules, the mean value theorem as a physical statement,
+Newton's method as a convergence question, convexity and Jensen's inequality, marginal analysis, and
+the epsilon-delta definition of the derivative; series gain operations, the binomial series, the
+Cauchy product, the p-series threshold, Dirichlet's test and the gamma function; integrals gain the
+trapezoid error bound, double integrals in polar coordinates, scalar surface integrals, the beta
+function, consumer surplus and Fourier coefficients; multivariable calculus gains Lagrange
+multipliers with two constraints, the implicit and inverse function theorems, iterated limits and
+Euler's homogeneous function theorem; and vector calculus gains the scalar line integral, parametric
+surface area, general flux integrals and the vector identities. Nineteen concepts are numeric and
+eleven are multiple choice; each numeric generator publishes the facts its answer follows from, and
+the tests recompute the answer from those facts. The three staged courses each take the new concepts
+that belong to their stage, nine to `calc1`, ten to `calc2` and eleven to `calc3`, so all 205
+concepts are reachable and the remaining per-domain total falls to 40.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

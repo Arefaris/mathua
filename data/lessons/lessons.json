@@ -4718,5 +4718,125 @@
   {
     "concept_id": "ra.metric.equivalent",
     "source": "teaching/ra.metric.equivalent.md"
+  },
+  {
+    "concept_id": "calc.limit.intermediate_value",
+    "source": "teaching/calc.limit.intermediate_value.md"
+  },
+  {
+    "concept_id": "calc.limit.limsup",
+    "source": "teaching/calc.limit.limsup.md"
+  },
+  {
+    "concept_id": "calc.limit.oscillation",
+    "source": "teaching/calc.limit.oscillation.md"
+  },
+  {
+    "concept_id": "calc.deriv.inverse_hyperbolic",
+    "source": "teaching/calc.deriv.inverse_hyperbolic.md"
+  },
+  {
+    "concept_id": "calc.deriv.mvt_applications",
+    "source": "teaching/calc.deriv.mvt_applications.md"
+  },
+  {
+    "concept_id": "calc.deriv.newton_convergence",
+    "source": "teaching/calc.deriv.newton_convergence.md"
+  },
+  {
+    "concept_id": "calc.deriv.convex_jensen",
+    "source": "teaching/calc.deriv.convex_jensen.md"
+  },
+  {
+    "concept_id": "calc.deriv.marginal_analysis",
+    "source": "teaching/calc.deriv.marginal_analysis.md"
+  },
+  {
+    "concept_id": "calc.deriv.epsilon_delta_deriv",
+    "source": "teaching/calc.deriv.epsilon_delta_deriv.md"
+  },
+  {
+    "concept_id": "calc.series.operations",
+    "source": "teaching/calc.series.operations.md"
+  },
+  {
+    "concept_id": "calc.series.binomial",
+    "source": "teaching/calc.series.binomial.md"
+  },
+  {
+    "concept_id": "calc.series.cauchy_product",
+    "source": "teaching/calc.series.cauchy_product.md"
+  },
+  {
+    "concept_id": "calc.series.p_series",
+    "source": "teaching/calc.series.p_series.md"
+  },
+  {
+    "concept_id": "calc.series.dirichlet_test",
+    "source": "teaching/calc.series.dirichlet_test.md"
+  },
+  {
+    "concept_id": "calc.series.gamma",
+    "source": "teaching/calc.series.gamma.md"
+  },
+  {
+    "concept_id": "calc.integral.numerical_error",
+    "source": "teaching/calc.integral.numerical_error.md"
+  },
+  {
+    "concept_id": "calc.integral.double_polar",
+    "source": "teaching/calc.integral.double_polar.md"
+  },
+  {
+    "concept_id": "calc.integral.surface_scalar",
+    "source": "teaching/calc.integral.surface_scalar.md"
+  },
+  {
+    "concept_id": "calc.integral.beta",
+    "source": "teaching/calc.integral.beta.md"
+  },
+  {
+    "concept_id": "calc.integral.consumer_surplus",
+    "source": "teaching/calc.integral.consumer_surplus.md"
+  },
+  {
+    "concept_id": "calc.integral.fourier_coefficients",
+    "source": "teaching/calc.integral.fourier_coefficients.md"
+  },
+  {
+    "concept_id": "calc.multi.lagrange_two",
+    "source": "teaching/calc.multi.lagrange_two.md"
+  },
+  {
+    "concept_id": "calc.multi.implicit_function",
+    "source": "teaching/calc.multi.implicit_function.md"
+  },
+  {
+    "concept_id": "calc.multi.inverse_function",
+    "source": "teaching/calc.multi.inverse_function.md"
+  },
+  {
+    "concept_id": "calc.multi.iterated_limits",
+    "source": "teaching/calc.multi.iterated_limits.md"
+  },
+  {
+    "concept_id": "calc.multi.euler_homogeneous",
+    "source": "teaching/calc.multi.euler_homogeneous.md"
+  },
+  {
+    "concept_id": "calc.vec.line_scalar",
+    "source": "teaching/calc.vec.line_scalar.md"
+  },
+  {
+    "concept_id": "calc.vec.parametric_surface",
+    "source": "teaching/calc.vec.parametric_surface.md"
+  },
+  {
+    "concept_id": "calc.vec.flux_general",
+    "source": "teaching/calc.vec.flux_general.md"
+  },
+  {
+    "concept_id": "calc.vec.identities",
+    "source": "teaching/calc.vec.identities.md"
   }
 ]

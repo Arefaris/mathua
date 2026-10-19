@@ -283,7 +283,16 @@
       "calc.integral.ftc",
       "calc.deriv.hyperbolic",
       "calc.deriv.parametric_second",
-      "calc.deriv.finite_difference"
+      "calc.deriv.finite_difference",
+      "calc.limit.intermediate_value",
+      "calc.limit.limsup",
+      "calc.limit.oscillation",
+      "calc.deriv.inverse_hyperbolic",
+      "calc.deriv.mvt_applications",
+      "calc.deriv.newton_convergence",
+      "calc.deriv.convex_jensen",
+      "calc.deriv.marginal_analysis",
+      "calc.deriv.epsilon_delta_deriv"
     ]
   },
   {
@@ -302,7 +311,17 @@
       "calc.integral.shell",
       "calc.integral.hydrostatic",
       "calc.integral.pappus",
-      "calc.integral.moment_inertia"
+      "calc.integral.moment_inertia",
+      "calc.series.operations",
+      "calc.series.binomial",
+      "calc.series.cauchy_product",
+      "calc.series.p_series",
+      "calc.series.dirichlet_test",
+      "calc.series.gamma",
+      "calc.integral.numerical_error",
+      "calc.integral.beta",
+      "calc.integral.consumer_surplus",
+      "calc.integral.fourier_coefficients"
     ]
   },
   {
@@ -346,7 +365,18 @@
       "calc.deriv.higher_order_value",
       "calc.polar.arc_length",
       "calc.vec.frenet",
-      "calc.multi.taylor2"
+      "calc.multi.taylor2",
+      "calc.integral.double_polar",
+      "calc.integral.surface_scalar",
+      "calc.multi.lagrange_two",
+      "calc.multi.implicit_function",
+      "calc.multi.inverse_function",
+      "calc.multi.iterated_limits",
+      "calc.multi.euler_homogeneous",
+      "calc.vec.line_scalar",
+      "calc.vec.parametric_surface",
+      "calc.vec.flux_general",
+      "calc.vec.identities"
     ]
   },
   {
