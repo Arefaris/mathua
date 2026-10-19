@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1210,
-  "unit_count": 120,
+  "concept_count": 1230,
+  "unit_count": 121,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -142,10 +142,27 @@
         "algebra.radicals"
       ],
       "concept_ids": [
+        "alg.radical.operations",
         "alg.radical.rational_exponents",
-        "alg.radical.rationalize"
+        "alg.radical.rationalize",
+        "alg.radical.simplify"
       ],
-      "concept_count": 2
+      "concept_count": 4
+    },
+    {
+      "id": "algebra.b4",
+      "title": "Algebra · Stage 5",
+      "domain": "algebra",
+      "band": 4,
+      "depth_min": 12,
+      "depth_max": 12,
+      "subdomains": [
+        "algebra.radicals"
+      ],
+      "concept_ids": [
+        "alg.radical.conjugate"
+      ],
+      "concept_count": 1
     },
     {
       "id": "algebra.b5",
@@ -255,13 +272,16 @@
         "alg.func.graph_analysis",
         "alg.func.injectivity",
         "alg.func.inverse",
+        "alg.func.inverse_domain",
         "alg.func.irrational",
         "alg.func.linear",
         "alg.func.monotonicity",
         "alg.func.notation",
+        "alg.func.piecewise",
         "alg.func.power",
         "alg.func.rational",
         "alg.func.sign",
+        "alg.func.transformations",
         "alg.ineq.two_var",
         "alg.linear.intercepts",
         "alg.quad.complete_square",
@@ -270,12 +290,17 @@
         "alg.quad.solve_factor",
         "alg.quad.vertex_form",
         "alg.rational.add_sub",
+        "alg.rational.asymptotes",
         "alg.rational.mult_div",
+        "alg.rational.proportions",
         "alg.rational.simplify",
         "alg.systems.elimination",
+        "alg.systems.matrices",
+        "alg.systems.nonlinear",
+        "alg.systems.three_var",
         "alg.systems.word"
       ],
-      "concept_count": 33
+      "concept_count": 41
     },
     {
       "id": "algebra.b8",
@@ -293,6 +318,7 @@
         "algebra.logarithms",
         "algebra.polynomials",
         "algebra.quadratics",
+        "algebra.rational",
         "algebra.sequences"
       ],
       "concept_ids": [
@@ -303,12 +329,16 @@
         "alg.eq.exponential",
         "alg.eq.polynomial",
         "alg.eq.trinomial",
+        "alg.exp.compound",
         "alg.exp.evaluate",
+        "alg.exp.graph",
         "alg.func.quad",
         "alg.func.sigmoid",
         "alg.ineq.quadratic",
         "alg.log.concept",
         "alg.log.evaluate",
+        "alg.poly.factor_theorem",
+        "alg.poly.rational_root",
         "alg.poly.roots",
         "alg.poly.vieta",
         "alg.quad.complex",
@@ -316,12 +346,14 @@
         "alg.quad.parametric",
         "alg.quad.quadratic",
         "alg.quad.word_problem",
+        "alg.rational.complex_fraction",
         "alg.seq.arithmetic",
         "alg.seq.geometric",
+        "alg.seq.sigma",
         "alg.seq.sum_arith",
         "alg.seq.sum_geo"
       ],
-      "concept_count": 24
+      "concept_count": 30
     },
     {
       "id": "algebra.b9",
@@ -333,15 +365,19 @@
       "subdomains": [
         "algebra.equations",
         "algebra.inequalities",
-        "algebra.logarithms"
+        "algebra.logarithms",
+        "algebra.sequences"
       ],
       "concept_ids": [
         "alg.eq.logarithmic",
         "alg.ineq.logarithmic",
         "alg.log.change_base",
-        "alg.log.properties"
+        "alg.log.graph",
+        "alg.log.model",
+        "alg.log.properties",
+        "alg.seq.induction"
       ],
-      "concept_count": 4
+      "concept_count": 7
     },
     {
       "id": "arithmetic.b0",

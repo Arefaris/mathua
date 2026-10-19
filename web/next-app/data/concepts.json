@@ -2169,6 +2169,286 @@
     "subdomain": "algebra.conics"
   },
   {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.func.piecewise",
+    "label": "Evaluating a piecewise function",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.func.evaluate"
+    ],
+    "subdomain": "algebra.functions"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.func.transformations",
+    "label": "Transformations of graphs",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.func.graph_analysis"
+    ],
+    "subdomain": "algebra.functions"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.func.inverse_domain",
+    "label": "Domain and range of an inverse function",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.func.inverse"
+    ],
+    "subdomain": "algebra.functions"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.exp.graph",
+    "label": "Graphs of exponential functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.exp.evaluate"
+    ],
+    "subdomain": "algebra.exponential"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.exp.compound",
+    "label": "Compound interest",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.exp.concept"
+    ],
+    "subdomain": "algebra.exponential"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.log.graph",
+    "label": "Graphs of logarithmic functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.log.evaluate"
+    ],
+    "subdomain": "algebra.logarithms"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.log.model",
+    "label": "Solving logarithmic models",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.log.properties"
+    ],
+    "subdomain": "algebra.logarithms"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.radical.simplify",
+    "label": "Simplifying radical expressions",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.radical.rational_exponents"
+    ],
+    "subdomain": "algebra.radicals"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.radical.operations",
+    "label": "Operations with radicals",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.radical.rational_exponents"
+    ],
+    "subdomain": "algebra.radicals"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.radical.conjugate",
+    "label": "Rationalizing with conjugates",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.radical.rationalize"
+    ],
+    "subdomain": "algebra.radicals"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.rational.complex_fraction",
+    "label": "Simplifying complex fractions",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.rational.add_sub"
+    ],
+    "subdomain": "algebra.rational"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.rational.proportions",
+    "label": "Solving proportions",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.rational.simplify"
+    ],
+    "subdomain": "algebra.rational"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.rational.asymptotes",
+    "label": "Asymptotes of rational functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.func.rational"
+    ],
+    "subdomain": "algebra.rational"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.systems.three_var",
+    "label": "Systems of three equations",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.systems.elimination"
+    ],
+    "subdomain": "algebra.systems"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.systems.matrices",
+    "label": "Solving systems with matrices",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.systems.gaussian"
+    ],
+    "subdomain": "algebra.systems"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.systems.nonlinear",
+    "label": "Nonlinear systems",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.systems.substitution"
+    ],
+    "subdomain": "algebra.systems"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.seq.sigma",
+    "label": "Sigma notation",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.seq.sum_arith"
+    ],
+    "subdomain": "algebra.sequences"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.seq.induction",
+    "label": "Proof by induction",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.seq.sum_geo"
+    ],
+    "subdomain": "algebra.sequences"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "multiple_choice",
+    "id": "alg.poly.factor_theorem",
+    "label": "The factor theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 15,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.poly.roots"
+    ],
+    "subdomain": "algebra.polynomials"
+  },
+  {
+    "domain": "algebra",
+    "grading_type": "numeric",
+    "id": "alg.poly.rational_root",
+    "label": "The rational root theorem",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "alg.poly.roots"
+    ],
+    "subdomain": "algebra.polynomials"
+  },
+  {
     "domain": "arithmetic",
     "grading_type": "numeric",
     "id": "arith.add.single",

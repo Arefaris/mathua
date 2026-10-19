@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 1210 concepts, and there are 1210 KP shard files
-holding 3630 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1230 concepts, and there are 1230 KP shard files
+holding 3690 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 1036 of the 1210 concepts
+### 4.1 The course catalog reaches 1064 of the 1230 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 28 courses those closures reach
-1036 of the 1210 concepts: 174 of them have a node, a generator, a lesson and three KP shards and
+1064 of the 1230 concepts: 166 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -82,7 +82,7 @@ The count of unreachable concepts by domain:
 | Domain | Concepts | Unreachable |
 |---|---|---|
 | calculus | 205 | 57 |
-| algebra | 104 | 43 |
+| algebra | 124 | 35 |
 | topology | 42 | 0 |
 | statistics | 55 | 0 |
 | precalculus | 50 | 0 |
@@ -337,14 +337,13 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1210 concepts. The remaining per-domain targets add up to 40, and this is the table
+The catalog holds 1230 concepts. The remaining per-domain targets add up to 20, and this is the table
 that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
 tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
 section 6 used, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| algebra | school | 104 | 124 | +20 |
 | trigonometry | school | 48 | 68 | +20 |
 | numerical_analysis | university | 40 | 40 | +0 |
 | probability_theory | university | 50 | 50 | +0 |
@@ -365,6 +364,7 @@ section 6 used, largest deficit first.
 | precalculus | bridge | 50 | 50 | +0 |
 | real_analysis | university | 50 | 50 | +0 |
 | calculus | bridge | 205 | 205 | +0 |
+| algebra | school | 124 | 124 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -631,6 +631,24 @@ eleven are multiple choice; each numeric generator publishes the facts its answe
 the tests recompute the answer from those facts. The three staged courses each take the new concepts
 that belong to their stage, nine to `calc1`, ten to `calc2` and eleven to `calc3`, so all 205
 concepts are reachable and the remaining per-domain total falls to 40.
+
+**Algebra reached its target on 2026-10-19.** Twenty concepts took the domain from 104 to 124, so
+its row reads +0. The survey found the groups uneven — functions, exponentials and logarithms,
+radicals, rational expressions, systems, sequences and polynomials were each thinner than the
+linear and quadratic material — so the batch fills those edges rather than deepening the core
+again. Functions gain piecewise evaluation, graph transformations and the domain and range of an
+inverse; exponentials and logarithms gain their graphs, compound interest and the solution of a
+logarithmic model; radicals gain simplifying, combining like radicals and rationalizing with
+conjugates; rational expressions gain complex fractions, proportions and vertical asymptotes;
+systems gain a three-variable elimination, the matrix method and a nonlinear pair; sequences gain
+sigma notation and induction; and polynomials gain the factor theorem and the rational root
+theorem. Twelve concepts are numeric and eight are conceptual multiple choice. Every numeric
+generator publishes the facts its answer follows from, and the tests recompute the answer from
+those facts. The three school courses each take the concepts of their stage — nine to `a1`, ten to
+`a2` and one to `pa` — and the corpus reaches 1064 of 1230, so the remaining per-domain total falls
+to 20. Algebra is a school domain, so the twelve computed concepts carry authored solution schemas
+and the eight fixed-question concepts are named in the exemption list, which the schema gate checks
+in both directions.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

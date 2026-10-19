@@ -112,6 +112,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("alg.systems.gaussian", &gaussianElimGen{})
 
 	registerBatch(reg)
+	registerRaise(reg)
 }
 
 // ---------------------------------------------------------------------------

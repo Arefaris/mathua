@@ -4838,5 +4838,85 @@
   {
     "concept_id": "calc.vec.identities",
     "source": "teaching/calc.vec.identities.md"
+  },
+  {
+    "concept_id": "alg.func.piecewise",
+    "source": "teaching/alg.func.piecewise.md"
+  },
+  {
+    "concept_id": "alg.func.transformations",
+    "source": "teaching/alg.func.transformations.md"
+  },
+  {
+    "concept_id": "alg.func.inverse_domain",
+    "source": "teaching/alg.func.inverse_domain.md"
+  },
+  {
+    "concept_id": "alg.exp.graph",
+    "source": "teaching/alg.exp.graph.md"
+  },
+  {
+    "concept_id": "alg.exp.compound",
+    "source": "teaching/alg.exp.compound.md"
+  },
+  {
+    "concept_id": "alg.log.graph",
+    "source": "teaching/alg.log.graph.md"
+  },
+  {
+    "concept_id": "alg.log.model",
+    "source": "teaching/alg.log.model.md"
+  },
+  {
+    "concept_id": "alg.radical.simplify",
+    "source": "teaching/alg.radical.simplify.md"
+  },
+  {
+    "concept_id": "alg.radical.operations",
+    "source": "teaching/alg.radical.operations.md"
+  },
+  {
+    "concept_id": "alg.radical.conjugate",
+    "source": "teaching/alg.radical.conjugate.md"
+  },
+  {
+    "concept_id": "alg.rational.complex_fraction",
+    "source": "teaching/alg.rational.complex_fraction.md"
+  },
+  {
+    "concept_id": "alg.rational.proportions",
+    "source": "teaching/alg.rational.proportions.md"
+  },
+  {
+    "concept_id": "alg.rational.asymptotes",
+    "source": "teaching/alg.rational.asymptotes.md"
+  },
+  {
+    "concept_id": "alg.systems.three_var",
+    "source": "teaching/alg.systems.three_var.md"
+  },
+  {
+    "concept_id": "alg.systems.matrices",
+    "source": "teaching/alg.systems.matrices.md"
+  },
+  {
+    "concept_id": "alg.systems.nonlinear",
+    "source": "teaching/alg.systems.nonlinear.md"
+  },
+  {
+    "concept_id": "alg.seq.sigma",
+    "source": "teaching/alg.seq.sigma.md"
+  },
+  {
+    "concept_id": "alg.seq.induction",
+    "source": "teaching/alg.seq.induction.md"
+  },
+  {
+    "concept_id": "alg.poly.factor_theorem",
+    "source": "teaching/alg.poly.factor_theorem.md"
+  },
+  {
+    "concept_id": "alg.poly.rational_root",
+    "source": "teaching/alg.poly.rational_root.md"
   }
 ]

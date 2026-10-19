@@ -141,7 +141,8 @@
       "prealg.ineq.word",
       "prealg.ineq.graph",
       "ratio.ops.better_buy",
-      "prealg.measure.temperature"
+      "prealg.measure.temperature",
+      "alg.rational.proportions"
     ]
   },
   {
@@ -160,7 +161,16 @@
       "alg.quad.vertex_form",
       "alg.quad.word_problem",
       "alg.poly.end_behavior",
-      "alg.func.variation"
+      "alg.func.variation",
+      "alg.func.piecewise",
+      "alg.func.transformations",
+      "alg.func.inverse_domain",
+      "alg.systems.three_var",
+      "alg.systems.matrices",
+      "alg.systems.nonlinear",
+      "alg.seq.sigma",
+      "alg.radical.simplify",
+      "alg.radical.operations"
     ]
   },
   {
@@ -217,7 +227,17 @@
       "alg.radical.rational_exponents",
       "alg.radical.rationalize",
       "alg.log.change_base",
-      "alg.conic.classify"
+      "alg.conic.classify",
+      "alg.exp.graph",
+      "alg.exp.compound",
+      "alg.log.graph",
+      "alg.log.model",
+      "alg.radical.conjugate",
+      "alg.rational.complex_fraction",
+      "alg.rational.asymptotes",
+      "alg.seq.induction",
+      "alg.poly.factor_theorem",
+      "alg.poly.rational_root"
     ]
   },
   {
