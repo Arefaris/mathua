@@ -25,6 +25,8 @@ package calculus
 // follows from, so the tests recompute the answer from those facts.
 
 import (
+	"fmt"
+	"math"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -351,54 +353,58 @@ func (g *torsionGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 
 type frenetGen struct{}
 
+func frenetCrossInt(a, b [3]int) [3]int {
+	return [3]int{
+		a[1]*b[2] - a[2]*b[1],
+		a[2]*b[0] - a[0]*b[2],
+		a[0]*b[1] - a[1]*b[0],
+	}
+}
+
+func frenetNormInt(a [3]int) int {
+	return int(math.Sqrt(float64(a[0]*a[0] + a[1]*a[1] + a[2]*a[2])))
+}
+
+func frenetString(v [3]int) string {
+	return fmt.Sprintf("(%d, %d, %d)", v[0], v[1], v[2])
+}
+
+// frenetGen asks for the whole frame, not just the binormal: the concept is
+// named for the frame, and a question that returns one of its three vectors
+// tests a third of the concept.
 func (g *frenetGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	type claim struct {
-		question string
-		answer   string
-		rp, rpp  [3]int
-		reason   string
+		rp, rpp [3]int
 	}
 	claims := []claim{
-		{
-			question: "For a regular space curve with r' = (0, 1, 0) and r'' = (-1, 0, 0) at a point, the unit binormal is B = (r' x r'')/|r' x r''|. Enter B as (Bx, By, Bz).",
-			answer:   "(0,0,1)", rp: [3]int{0, 1, 0}, rpp: [3]int{-1, 0, 0},
-			reason: "r' x r'' = (0, 0, 1), already a unit vector, so B = (0, 0, 1).",
-		},
-		{
-			question: "For a regular space curve with r' = (1, 0, 0) and r'' = (0, 2, 0) at a point, the unit binormal is B = (r' x r'')/|r' x r''|. Enter B as (Bx, By, Bz).",
-			answer:   "(0,0,1)", rp: [3]int{1, 0, 0}, rpp: [3]int{0, 2, 0},
-			reason: "r' x r'' = (0, 0, 2), whose length is 2, so B = (0, 0, 1).",
-		},
-		{
-			question: "For a regular space curve with r' = (1, 0, 0) and r'' = (0, -2, 0) at a point, the unit binormal is B = (r' x r'')/|r' x r''|. Enter B as (Bx, By, Bz).",
-			answer:   "(0,0,-1)", rp: [3]int{1, 0, 0}, rpp: [3]int{0, -2, 0},
-			reason: "r' x r'' = (0, 0, -2), whose length is 2, so B = (0, 0, -1).",
-		},
-		{
-			question: "For a regular space curve with r' = (1, 0, 0) and r'' = (0, 0, 2) at a point, the unit binormal is B = (r' x r'')/|r' x r''|. Enter B as (Bx, By, Bz).",
-			answer:   "(0,-1,0)", rp: [3]int{1, 0, 0}, rpp: [3]int{0, 0, 2},
-			reason: "r' x r'' = (0, -2, 0), whose length is 2, so B = (0, -1, 0).",
-		},
-		{
-			question: "For a regular space curve with r' = (0, 0, 1) and r'' = (-1, 0, 0) at a point, the unit binormal is B = (r' x r'')/|r' x r''|. Enter B as (Bx, By, Bz).",
-			answer:   "(0,-1,0)", rp: [3]int{0, 0, 1}, rpp: [3]int{-1, 0, 0},
-			reason: "r' x r'' = (0, -1, 0), already a unit vector, so B = (0, -1, 0).",
-		},
-		{
-			question: "For a regular space curve with r' = (1, 0, 0) and r'' = (0, 0, -2) at a point, the unit binormal is B = (r' x r'')/|r' x r''|. Enter B as (Bx, By, Bz).",
-			answer:   "(0,1,0)", rp: [3]int{1, 0, 0}, rpp: [3]int{0, 0, -2},
-			reason: "r' x r'' = (0, 2, 0), whose length is 2, so B = (0, 1, 0).",
-		},
+		{rp: [3]int{0, 1, 0}, rpp: [3]int{-1, 0, 0}},
+		{rp: [3]int{1, 0, 0}, rpp: [3]int{0, 2, 0}},
+		{rp: [3]int{1, 0, 0}, rpp: [3]int{0, -2, 0}},
+		{rp: [3]int{1, 0, 0}, rpp: [3]int{0, 0, 2}},
+		{rp: [3]int{0, 0, 1}, rpp: [3]int{-1, 0, 0}},
+		{rp: [3]int{1, 0, 0}, rpp: [3]int{0, 0, -2}},
 	}
 	c := claims[rand.Intn(len(claims))]
+	// Every r' in the table is a unit axis vector, so T is r' itself.
+	tangent := c.rp
+	cross := frenetCrossInt(c.rp, c.rpp)
+	norm := frenetNormInt(cross)
+	binormal := [3]int{cross[0] / norm, cross[1] / norm, cross[2] / norm}
+	normal := frenetCrossInt(binormal, tangent)
+	answer := fmt.Sprintf("(%d,%d,%d,%d,%d,%d,%d,%d,%d)",
+		tangent[0], tangent[1], tangent[2],
+		normal[0], normal[1], normal[2],
+		binormal[0], binormal[1], binormal[2])
 	return generator.Problem{
-		Question:    c.question,
-		Answer:      c.answer,
-		Explanation: c.reason,
+		Question: fmt.Sprintf("For a regular space curve with r' = %s and r'' = %s at a point, the Frenet frame is (T, N, B) with T = r'/|r'|, B = (r' x r'')/|r' x r''| and N = B x T. Enter the nine components in the order (Tx, Ty, Tz, Nx, Ny, Nz, Bx, By, Bz).",
+			frenetString(c.rp), frenetString(c.rpp)),
+		Answer: answer,
+		Explanation: fmt.Sprintf("r' is already a unit vector, so T = %s. r' x r'' = %s has length %d, so B = %s. Then N = B x T = %s, which points the same way as the component of r'' perpendicular to T.",
+			frenetString(tangent), frenetString(cross), norm, frenetString(binormal), frenetString(normal)),
 		Facts: map[string]string{
 			"rp":     strconv.Itoa(c.rp[0]) + "," + strconv.Itoa(c.rp[1]) + "," + strconv.Itoa(c.rp[2]),
 			"rpp":    strconv.Itoa(c.rpp[0]) + "," + strconv.Itoa(c.rpp[1]) + "," + strconv.Itoa(c.rpp[2]),
-			"answer": c.answer,
+			"answer": answer,
 		},
 	}
 }

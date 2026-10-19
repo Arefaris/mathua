@@ -324,11 +324,18 @@ func TestBatchFrenetRecomputes(t *testing.T) {
 		if norm == 0 {
 			t.Fatalf("frenet: r' x r'' is zero, binormal is undefined")
 		}
-		parts := make([]string, 3)
-		for j, v := range cross {
-			parts[j] = strconv.Itoa(int(math.Round(float64(v) / norm)))
+		binormal := []int{int(math.Round(float64(cross[0]) / norm)), int(math.Round(float64(cross[1]) / norm)), int(math.Round(float64(cross[2]) / norm))}
+		tangent := rp
+		normal := []int{
+			binormal[1]*tangent[2] - binormal[2]*tangent[1],
+			binormal[2]*tangent[0] - binormal[0]*tangent[2],
+			binormal[0]*tangent[1] - binormal[1]*tangent[0],
 		}
-		want := "(" + strings.Join(parts, ",") + ")"
+		want := "(" + strings.Join([]string{
+			strconv.Itoa(tangent[0]), strconv.Itoa(tangent[1]), strconv.Itoa(tangent[2]),
+			strconv.Itoa(normal[0]), strconv.Itoa(normal[1]), strconv.Itoa(normal[2]),
+			strconv.Itoa(binormal[0]), strconv.Itoa(binormal[1]), strconv.Itoa(binormal[2]),
+		}, ",") + ")"
 		if p.Answer != want {
 			t.Fatalf("frenet: rp=%v rpp=%v answers %s, want %s", rp, rpp, p.Answer, want)
 		}
