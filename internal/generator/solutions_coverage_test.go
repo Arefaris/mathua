@@ -60,15 +60,9 @@ var generatorExplained = map[string]string{
 	"prealg.real.properties": "table-driven: fixed question, fixed answer",
 	"prealg.types":           "table-driven: fixed question, fixed answer",
 	// algebra — table-driven
-	"alg.eq.extraneous_roots":       "table-driven: fixed question, fixed answer",
 	"alg.func.dirichlet":            "table-driven: fixed question, fixed answer",
-	"alg.func.domain":               "table-driven: fixed question, fixed answer",
 	"alg.func.even_odd":             "table-driven: fixed question, fixed answer",
-	"alg.func.graph_analysis":       "table-driven: fixed question, fixed answer",
-	"alg.func.injectivity":          "table-driven: fixed question, fixed answer",
 	"alg.func.inverse_domain":       "table-driven: fixed question, fixed answer",
-	"alg.func.irrational":           "table-driven: fixed question, fixed answer",
-	"alg.func.power":                "table-driven: fixed question, fixed answer",
 	"alg.func.sigmoid":              "table-driven: fixed question, fixed answer",
 	"alg.func.transformations":      "table-driven: fixed question, fixed answer",
 	"alg.log.graph":                 "table-driven: fixed question, fixed answer",
@@ -76,7 +70,6 @@ var generatorExplained = map[string]string{
 	"alg.radical.conjugate":         "table-driven: fixed question, fixed answer",
 	"alg.rational.complex_fraction": "table-driven: fixed question, fixed answer",
 	"alg.seq.induction":             "table-driven: fixed question, fixed answer",
-	"alg.systems.concept":           "table-driven: fixed question, fixed answer",
 	"alg.systems.matrices":          "table-driven: fixed question, fixed answer",
 }
 

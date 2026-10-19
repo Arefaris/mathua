@@ -71,7 +71,6 @@ func Register(reg *generator.Registry) {
 	reg.Register("alg.eq.absolute_value", &eqAbsValGen{})
 	reg.Register("alg.eq.binomial", &eqBinomialGen{})
 	reg.Register("alg.eq.exponential", &eqExpGen{})
-	reg.Register("alg.eq.extraneous_roots", &extraneousRootsGen{})
 	reg.Register("alg.eq.irrational", &eqIrrationalGen{})
 	reg.Register("alg.eq.logarithmic", &eqLogGen{})
 	reg.Register("alg.eq.polynomial", &eqPolyGen{})
@@ -79,13 +78,8 @@ func Register(reg *generator.Registry) {
 	reg.Register("alg.eq.trinomial", &eqTrinomialGen{})
 	reg.Register("alg.func.absolute_value", &funcAbsValGen{})
 	reg.Register("alg.func.composite", &funcCompositeGen{})
-	reg.Register("alg.func.injectivity", &injectivityGen{})
-	reg.Register("alg.func.power", &powerFuncGen{})
-	reg.Register("alg.func.irrational", &irrationalFuncGen{})
 	reg.Register("alg.func.dirichlet", &funcDirichletGen{})
-	reg.Register("alg.func.domain", &funcDomainGen{})
 	reg.Register("alg.func.even_odd", &funcEvenOddGen{})
-	reg.Register("alg.func.graph_analysis", &graphAnalysisGen{})
 	reg.Register("alg.func.inverse", &funcInverseGen{})
 	reg.Register("alg.func.monotonicity", &monotonicityGen{})
 	reg.Register("alg.func.rational", &funcRationalGen{})
@@ -108,11 +102,11 @@ func Register(reg *generator.Registry) {
 	reg.Register("alg.quad.incomplete", &quadIncompleteGen{})
 	reg.Register("alg.quad.parametric", &quadParametricGen{})
 	reg.Register("alg.quad.quadratic", &quadQuadraticGen{})
-	reg.Register("alg.systems.concept", &systemsConceptGen{})
 	reg.Register("alg.systems.gaussian", &gaussianElimGen{})
 
 	registerBatch(reg)
 	registerRaise(reg)
+	registerConversions(reg)
 }
 
 // ---------------------------------------------------------------------------

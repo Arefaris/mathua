@@ -789,7 +789,7 @@
     "label": "Extraneous solutions and loss of roots",
     "domain": "algebra",
     "subdomain": "algebra.equations",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.eq.rational",
       "alg.eq.irrational"
@@ -963,7 +963,7 @@
     "label": "Determining the domain of a function",
     "domain": "algebra",
     "subdomain": "algebra.functions",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.func.concept"
     ],
@@ -1061,7 +1061,7 @@
     "label": "Analyzing graphs of functions",
     "domain": "algebra",
     "subdomain": "algebra.functions",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.func.concept",
       "alg.func.monotonicity"
@@ -1203,7 +1203,7 @@
     "label": "Systems of linear equations: introduction",
     "domain": "algebra",
     "subdomain": "algebra.systems",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.eq.multi_step"
     ],
@@ -1231,7 +1231,7 @@
     "label": "Injective, surjective, and bijective functions",
     "domain": "algebra",
     "subdomain": "algebra.functions",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.func.concept",
       "alg.func.composite"
@@ -1246,7 +1246,7 @@
     "label": "Power functions x^a",
     "domain": "algebra",
     "subdomain": "algebra.functions",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.func.evaluate",
       "arith.exp.evaluate"
@@ -1261,7 +1261,7 @@
     "label": "Irrational (root) functions",
     "domain": "algebra",
     "subdomain": "algebra.functions",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "prerequisites": [
       "alg.func.domain",
       "arith.sqrt.simplify"

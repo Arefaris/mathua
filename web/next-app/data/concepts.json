@@ -1462,7 +1462,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.eq.extraneous_roots",
     "label": "Extraneous solutions and loss of roots",
     "mastery_threshold": {
@@ -1636,7 +1636,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.func.domain",
     "label": "Determining the domain of a function",
     "mastery_threshold": {
@@ -1734,7 +1734,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.func.graph_analysis",
     "label": "Analyzing graphs of functions",
     "mastery_threshold": {
@@ -1876,7 +1876,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.systems.concept",
     "label": "Systems of linear equations: introduction",
     "mastery_threshold": {
@@ -1904,7 +1904,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.func.injectivity",
     "label": "Injective, surjective, and bijective functions",
     "mastery_threshold": {
@@ -1919,7 +1919,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.func.power",
     "label": "Power functions x^a",
     "mastery_threshold": {
@@ -1934,7 +1934,7 @@
   },
   {
     "domain": "algebra",
-    "grading_type": "symbolic",
+    "grading_type": "numeric",
     "id": "alg.func.irrational",
     "label": "Irrational (root) functions",
     "mastery_threshold": {
