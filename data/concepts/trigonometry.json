@@ -325,7 +325,7 @@
     "label": "Sine function: properties, derivatives, and integrals",
     "domain": "trigonometry",
     "subdomain": "trigonometry.functions",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "trig.basics.sin_cos_def",
       "alg.func.concept"
@@ -340,7 +340,7 @@
     "label": "Cosine function: properties, derivatives, and integrals",
     "domain": "trigonometry",
     "subdomain": "trigonometry.functions",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "trig.func.sine"
     ],
@@ -354,7 +354,7 @@
     "label": "Tangent function: asymptotes, derivative, and integral",
     "domain": "trigonometry",
     "subdomain": "trigonometry.functions",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "trig.basics.tan_def",
       "trig.func.sine"
@@ -369,7 +369,7 @@
     "label": "Cotangent function: asymptotes, derivative, and integral",
     "domain": "trigonometry",
     "subdomain": "trigonometry.functions",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "trig.func.tangent"
     ],
@@ -383,7 +383,7 @@
     "label": "Secant function: reciprocal properties and calculus",
     "domain": "trigonometry",
     "subdomain": "trigonometry.functions",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "trig.basics.reciprocal",
       "trig.func.cosine"
@@ -398,7 +398,7 @@
     "label": "Cosecant function: reciprocal properties and calculus",
     "domain": "trigonometry",
     "subdomain": "trigonometry.functions",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "trig.basics.reciprocal",
       "trig.func.sine"

@@ -17308,7 +17308,7 @@
   },
   {
     "domain": "trigonometry",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "trig.func.sine",
     "label": "Sine function: properties, derivatives, and integrals",
     "mastery_threshold": {
@@ -17323,7 +17323,7 @@
   },
   {
     "domain": "trigonometry",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "trig.func.cosine",
     "label": "Cosine function: properties, derivatives, and integrals",
     "mastery_threshold": {
@@ -17337,7 +17337,7 @@
   },
   {
     "domain": "trigonometry",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "trig.func.tangent",
     "label": "Tangent function: asymptotes, derivative, and integral",
     "mastery_threshold": {
@@ -17352,7 +17352,7 @@
   },
   {
     "domain": "trigonometry",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "trig.func.cotangent",
     "label": "Cotangent function: asymptotes, derivative, and integral",
     "mastery_threshold": {
@@ -17366,7 +17366,7 @@
   },
   {
     "domain": "trigonometry",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "trig.func.secant",
     "label": "Secant function: reciprocal properties and calculus",
     "mastery_threshold": {
@@ -17381,7 +17381,7 @@
   },
   {
     "domain": "trigonometry",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "trig.func.cosecant",
     "label": "Cosecant function: reciprocal properties and calculus",
     "mastery_threshold": {

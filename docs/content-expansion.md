@@ -115,7 +115,7 @@ precalculus material rather than as a trigonometry syllabus.
 ### 4.2 Whole domains ask a learner to pick rather than to produce
 
 The `grading_type` mix shows where the corpus is recognition-shaped. The criterion here is a
-domain where `multiple_choice` is at least four concepts in ten; these eleven qualify,
+domain where `multiple_choice` is at least four concepts in ten; these ten qualify,
 largest first:
 
 | Domain | Concepts | `multiple_choice` |
@@ -123,7 +123,6 @@ largest first:
 | topology | 42 | 35 |
 | real_analysis | 50 | 34 |
 | abstract_algebra | 45 | 33 |
-| trigonometry | 68 | 29 |
 | differential_equations | 42 | 28 |
 | discrete_math | 55 | 26 |
 | probability_theory | 50 | 21 |
@@ -169,6 +168,19 @@ rather than for a description of the procedure, publishes its inputs as facts, a
 `internal/generator/machinelearning/conversions_test.go` recomputes the answer from them. The
 domain carries 19 `multiple_choice` concepts rather than 29.
 
+**The trigonometry batch converted six and authored six schemas.** The six are the definitions
+themselves, and a learner now applies each one rather than naming it: given that the sine is the
+ratio of the opposite side to the hypotenuse, and a hypotenuse of a chosen length, how long is the
+opposite side; the same question for the cosine, tangent, secant, cosecant and cotangent. The
+triangles are drawn from eight Pythagorean triples scaled by a factor of three to ten, so every
+answer is an exact integer rather than a rounded decimal, and each generator publishes the ratio,
+the side it gives and the side it wants. Unlike the two batches above, trigonometry is one of the
+six learner domains, so each of the six also needed an authored schema —
+`data/lessons/solutions/trig.func.sine.json` and its five siblings — and their table-driven
+exemptions are gone from `internal/generator/solutions_coverage_test.go`. Learner-domain schema
+coverage moves from 349 of 402 to 355, and trigonometry's `multiple_choice` count falls from 29 to
+23, which takes it below the four-in-ten criterion and off the table above.
+
 ### 4.3 Lesson depth is no longer thin at the bottom
 
 Lessons come from three places. The `teaching/` tree holds 329 mappings, the Algebrica import
@@ -208,7 +220,7 @@ candidate is either matched to an existing asset in `data/diagrams/meta.json` or
 ### 4.5 Diagrams and solution schemas are complete against their own rules
 
 `data/diagrams/meta.json` maps 183 assets, each to at least one concept and a license.
-`data/lessons/solutions/` holds 382 schemas, and the six learner domains require one per
+`data/lessons/solutions/` holds 388 schemas, and the six learner domains require one per
 computed concept; the table-driven exceptions are an explicit allowlist with a reason per entry
 in `internal/generator/solutions_coverage_test.go`. Growing either is additive work, not repair.
 

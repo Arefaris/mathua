@@ -35,12 +35,6 @@ func Register(reg *generator.Registry) {
 	reg.Register("trig.hyperbolic.tanh_coth", &tanhCothGen{})
 	reg.Register("trig.ident.identities", &trigIdentGen{})
 	reg.Register("trig.ineq.basic", &trigIneqGen{})
-	reg.Register("trig.func.sine", &sineFuncGen{})
-	reg.Register("trig.func.cosine", &cosineFuncGen{})
-	reg.Register("trig.func.tangent", &tangentFuncGen{})
-	reg.Register("trig.func.cotangent", &cotangentFuncGen{})
-	reg.Register("trig.func.secant", &secantFuncGen{})
-	reg.Register("trig.func.cosecant", &cosecantFuncGen{})
 	reg.Register("trig.func.arcsine", &arcsineFuncGen{})
 	reg.Register("trig.func.arccosine", &arccosineFuncGen{})
 	reg.Register("trig.func.arctangent", &arctangentFuncGen{})
@@ -48,6 +42,7 @@ func Register(reg *generator.Registry) {
 
 	registerComputed(reg)
 	registerRaise(reg)
+	registerFuncRatios(reg)
 }
 
 type radiansGen struct{}
