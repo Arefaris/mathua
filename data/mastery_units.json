@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1230,
-  "unit_count": 121,
+  "concept_count": 1250,
+  "unit_count": 122,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -3092,6 +3092,7 @@
         "trigonometry.identities"
       ],
       "concept_ids": [
+        "trig.basics.angular_velocity",
         "trig.basics.quadrant",
         "trig.basics.reference_angle",
         "trig.basics.sector_area",
@@ -3099,7 +3100,7 @@
         "trig.basics.special_angles",
         "trig.ident.cofunction"
       ],
-      "concept_count": 6
+      "concept_count": 7
     },
     {
       "id": "trigonometry.b4",
@@ -3118,19 +3119,39 @@
         "trig.adv.ambiguous_case",
         "trig.adv.area_sas",
         "trig.adv.law_sines",
+        "trig.adv.polar",
         "trig.adv.vector_dot",
         "trig.adv.vector_magnitude",
+        "trig.basics.bearings",
         "trig.basics.reciprocal",
         "trig.basics.right_triangle",
         "trig.basics.tan_def",
         "trig.eq.basic",
         "trig.eq.homogeneous",
+        "trig.eq.linear",
         "trig.eq.quadratic",
+        "trig.hyperbolic.derivative",
+        "trig.hyperbolic.inverse",
         "trig.hyperbolic.sinh_cosh",
         "trig.hyperbolic.tanh_coth",
         "trig.ineq.basic"
       ],
-      "concept_count": 14
+      "concept_count": 19
+    },
+    {
+      "id": "trigonometry.b5",
+      "title": "Trigonometry · Stage 6",
+      "domain": "trigonometry",
+      "band": 5,
+      "depth_min": 15,
+      "depth_max": 15,
+      "subdomains": [
+        "trigonometry.advanced"
+      ],
+      "concept_ids": [
+        "trig.adv.vector_projection"
+      ],
+      "concept_count": 1
     },
     {
       "id": "trigonometry.b7",
@@ -3143,6 +3164,7 @@
         "trigonometry.advanced",
         "trigonometry.functions",
         "trigonometry.graphs",
+        "trigonometry.hyperbolic",
         "trigonometry.identities"
       ],
       "concept_ids": [
@@ -3159,13 +3181,17 @@
         "trig.graph.cos",
         "trig.graph.period",
         "trig.graph.sin",
+        "trig.hyperbolic.identities",
         "trig.ident.double_angle",
         "trig.ident.half_angle",
         "trig.ident.identities",
+        "trig.ident.power_reduction",
         "trig.ident.pythagorean",
-        "trig.ident.sum_diff"
+        "trig.ident.sum_diff",
+        "trig.ident.triple_angle",
+        "trig.ineq.advanced"
       ],
-      "concept_count": 18
+      "concept_count": 22
     },
     {
       "id": "trigonometry.b8",
@@ -3176,18 +3202,29 @@
       "depth_max": 25,
       "subdomains": [
         "trigonometry.advanced",
+        "trigonometry.basics",
         "trigonometry.functions",
-        "trigonometry.graphs"
+        "trigonometry.graphs",
+        "trigonometry.identities"
       ],
       "concept_ids": [
         "trig.adv.heron_area",
         "trig.adv.law_cosines",
+        "trig.basics.periodicity",
+        "trig.eq.general_solution",
         "trig.func.arccosine",
         "trig.func.arccotangent",
         "trig.func.arctangent",
-        "trig.graph.phase_shift"
+        "trig.graph.inverse",
+        "trig.graph.phase_shift",
+        "trig.graph.reciprocal",
+        "trig.graph.tan",
+        "trig.graph.transformations",
+        "trig.ident.product_to_sum",
+        "trig.ident.pythagorean_variants",
+        "trig.ident.sum_to_product"
       ],
-      "concept_count": 6
+      "concept_count": 15
     }
   ]
 }

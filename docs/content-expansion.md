@@ -25,8 +25,8 @@ and the artifact it describes are one fact (AGENTS.md section 7).
 | Courses | `data/courses.json` | named target sets |
 | Destinations | `data/destinations.json` | named bundles of courses |
 
-Two numbers are useful to hold together. There are 1230 concepts, and there are 1230 KP shard files
-holding 3690 knowledge points, three per concept.
+Two numbers are useful to hold together. There are 1250 concepts, and there are 1250 KP shard files
+holding 3750 knowledge points, three per concept.
 
 ## 2. The pipeline
 
@@ -69,11 +69,11 @@ means a new thin concept cannot be added quietly.
 
 ## 4. Where the corpus is thin
 
-### 4.1 The course catalog reaches 1064 of the 1230 concepts
+### 4.1 The course catalog reaches 1101 of the 1250 concepts
 
 Courses carry target sets, and a target expands to its transitive prerequisite closure in
 `internal/planning/planner.go:64` (`collectChain`). Across the 28 courses those closures reach
-1064 of the 1230 concepts: 166 of them have a node, a generator, a lesson and three KP shards and
+1101 of the 1250 concepts: 149 of them have a node, a generator, a lesson and three KP shards and
 still sit outside every named course path. A learner reaches them through the diagnostic or a
 free-choice goal, not through the catalog.
 
@@ -92,7 +92,7 @@ The count of unreachable concepts by domain:
 | number_theory | 42 | 9 |
 | differential_equations | 42 | 9 |
 | prealgebra | 60 | 0 |
-| trigonometry | 48 | 31 |
+| trigonometry | 68 | 14 |
 | arithmetic | 60 | 3 |
 | linear_algebra | 45 | 0 |
 | abstract_algebra | 45 | 0 |
@@ -337,14 +337,13 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1230 concepts. The remaining per-domain targets add up to 20, and this is the table
+The catalog holds 1250 concepts. The remaining per-domain targets add up to 0, and this is the table
 that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
 tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
 section 6 used, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
-| trigonometry | school | 48 | 68 | +20 |
 | numerical_analysis | university | 40 | 40 | +0 |
 | probability_theory | university | 50 | 50 | +0 |
 | graph_theory | university | 40 | 40 | +0 |
@@ -365,6 +364,7 @@ section 6 used, largest deficit first.
 | real_analysis | university | 50 | 50 | +0 |
 | calculus | bridge | 205 | 205 | +0 |
 | algebra | school | 124 | 124 | +0 |
+| trigonometry | school | 68 | 68 | +0 |
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
@@ -649,6 +649,27 @@ those facts. The three school courses each take the concepts of their stage — 
 to 20. Algebra is a school domain, so the twelve computed concepts carry authored solution schemas
 and the eight fixed-question concepts are named in the exemption list, which the schema gate checks
 in both directions.
+
+**Trigonometry reached its target on 2026-10-19.** Twenty concepts took the domain from 48 to 68,
+so its row reads +0 and the remaining per-domain total falls to zero. The survey found the domain
+already solid on the unit circle, the right triangle and the laws of sines and cosines, but thin at
+the edges: nothing taught periodicity as a property, angular velocity, bearings, the product-to-sum
+and sum-to-product identities, the triple-angle and power-reduction formulas, the variants of the
+Pythagorean identity, general solutions and linear equations, inequalities on an interval, the
+tangent and reciprocal graphs, transformations and inverse graphs, the hyperbolic identities and
+their inverses and derivatives, polar coordinates or the scalar projection. The batch fills exactly
+those gaps. Nine concepts are numeric and eleven are multiple choice; each numeric generator
+publishes the facts its answer follows from, and the tests recompute the answer from those facts:
+the period from the coefficient, the angular velocity, the bearing from the quadrant, the
+triple-angle sine, the power-reduction value, the linear-equation root, the inverse-hyperbolic
+cosine, the polar abscissa and the scalar projection. Trigonometry is a school domain, so the nine
+computed concepts carry authored solution schemas and the eleven fixed-question concepts are named
+in the exemption list, which the gate checks in both directions. There is no trigonometry course;
+the domain is reached through the algebra and precalculus courses, so fifteen concepts join `a2`
+and five join `pc`, and the corpus reaches 1101 of 1250, leaving 149 outside the named course
+paths. Every concept has an authored lesson, three knowledge-point sections and a lesson
+registration. Counts, the mastery partition and the web graph are regenerated; the target table is
+re-sorted and this paragraph records the change.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still

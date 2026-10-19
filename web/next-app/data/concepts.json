@@ -17675,5 +17675,305 @@
       "trig.graph.period"
     ],
     "subdomain": "trigonometry.graphs"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.basics.periodicity",
+    "label": "Periodicity of trigonometric functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.graph.period",
+      "trig.basics.radians"
+    ],
+    "subdomain": "trigonometry.basics"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.basics.angular_velocity",
+    "label": "Angular velocity and linear speed",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.basics.radians",
+      "trig.basics.arc_length"
+    ],
+    "subdomain": "trigonometry.basics"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.basics.bearings",
+    "label": "Bearings and navigation",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.basics.right_triangle",
+      "trig.basics.reference_angle"
+    ],
+    "subdomain": "trigonometry.basics"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.ident.product_to_sum",
+    "label": "Product-to-sum formulas",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.ident.sum_diff",
+      "trig.ident.identities"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.ident.sum_to_product",
+    "label": "Sum-to-product formulas",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.ident.sum_diff",
+      "trig.ident.identities"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.ident.triple_angle",
+    "label": "Triple-angle formulas",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.ident.double_angle",
+      "trig.ident.pythagorean"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.ident.power_reduction",
+    "label": "Power-reduction formulas",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.ident.double_angle",
+      "trig.ident.pythagorean"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.ident.pythagorean_variants",
+    "label": "Variants of the Pythagorean identity",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.ident.pythagorean",
+      "trig.func.secant"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.eq.general_solution",
+    "label": "General solutions of trigonometric equations",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.eq.basic",
+      "trig.graph.period"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.eq.linear",
+    "label": "Linear trigonometric equations",
+    "mastery_threshold": {
+      "avg_time_seconds": 20,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.eq.basic",
+      "trig.basics.special_angles"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.ineq.advanced",
+    "label": "Trigonometric inequalities on an interval",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.ineq.basic",
+      "trig.graph.sin"
+    ],
+    "subdomain": "trigonometry.identities"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.graph.tan",
+    "label": "Graph of the tangent function",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.func.tangent",
+      "trig.graph.period"
+    ],
+    "subdomain": "trigonometry.graphs"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.graph.transformations",
+    "label": "Transformations of sinusoidal graphs",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.graph.period",
+      "trig.graph.amplitude"
+    ],
+    "subdomain": "trigonometry.graphs"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.graph.inverse",
+    "label": "Graphs of inverse trigonometric functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.adv.inverse",
+      "trig.func.arcsine"
+    ],
+    "subdomain": "trigonometry.graphs"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.graph.reciprocal",
+    "label": "Graphs of the reciprocal trigonometric functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.func.secant",
+      "trig.func.cosecant"
+    ],
+    "subdomain": "trigonometry.graphs"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.hyperbolic.identities",
+    "label": "Hyperbolic identities",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.hyperbolic.sinh_cosh",
+      "trig.ident.pythagorean"
+    ],
+    "subdomain": "trigonometry.hyperbolic"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.hyperbolic.inverse",
+    "label": "Inverse hyperbolic functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 22,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.hyperbolic.sinh_cosh",
+      "trig.hyperbolic.tanh_coth"
+    ],
+    "subdomain": "trigonometry.hyperbolic"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "multiple_choice",
+    "id": "trig.hyperbolic.derivative",
+    "label": "Derivatives of hyperbolic functions",
+    "mastery_threshold": {
+      "avg_time_seconds": 18,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.hyperbolic.sinh_cosh",
+      "trig.hyperbolic.tanh_coth"
+    ],
+    "subdomain": "trigonometry.hyperbolic"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.adv.polar",
+    "label": "Polar coordinates",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.basics.sin_cos_def",
+      "trig.basics.unit_circle"
+    ],
+    "subdomain": "trigonometry.advanced"
+  },
+  {
+    "domain": "trigonometry",
+    "grading_type": "numeric",
+    "id": "trig.adv.vector_projection",
+    "label": "Scalar projection of a vector",
+    "mastery_threshold": {
+      "avg_time_seconds": 25,
+      "streak": 10
+    },
+    "prerequisites": [
+      "trig.adv.vector_dot",
+      "trig.adv.vector_magnitude"
+    ],
+    "subdomain": "trigonometry.advanced"
   }
 ]

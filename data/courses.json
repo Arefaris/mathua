@@ -237,7 +237,22 @@
       "alg.rational.asymptotes",
       "alg.seq.induction",
       "alg.poly.factor_theorem",
-      "alg.poly.rational_root"
+      "alg.poly.rational_root",
+      "trig.basics.periodicity",
+      "trig.basics.angular_velocity",
+      "trig.basics.bearings",
+      "trig.ident.product_to_sum",
+      "trig.ident.sum_to_product",
+      "trig.ident.triple_angle",
+      "trig.ident.power_reduction",
+      "trig.ident.pythagorean_variants",
+      "trig.eq.general_solution",
+      "trig.eq.linear",
+      "trig.ineq.advanced",
+      "trig.graph.tan",
+      "trig.graph.transformations",
+      "trig.graph.inverse",
+      "trig.graph.reciprocal"
     ]
   },
   {
@@ -287,7 +302,12 @@
       "precalc.conic.general",
       "precalc.parametric.projectile",
       "precalc.vector.resultant",
-      "precalc.func.decomposition"
+      "precalc.func.decomposition",
+      "trig.hyperbolic.identities",
+      "trig.hyperbolic.inverse",
+      "trig.hyperbolic.derivative",
+      "trig.adv.polar",
+      "trig.adv.vector_projection"
     ]
   },
   {

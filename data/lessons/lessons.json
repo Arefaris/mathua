@@ -4918,5 +4918,85 @@
   {
     "concept_id": "alg.poly.rational_root",
     "source": "teaching/alg.poly.rational_root.md"
+  },
+  {
+    "concept_id": "trig.basics.periodicity",
+    "source": "teaching/trig.basics.periodicity.md"
+  },
+  {
+    "concept_id": "trig.basics.angular_velocity",
+    "source": "teaching/trig.basics.angular_velocity.md"
+  },
+  {
+    "concept_id": "trig.basics.bearings",
+    "source": "teaching/trig.basics.bearings.md"
+  },
+  {
+    "concept_id": "trig.ident.product_to_sum",
+    "source": "teaching/trig.ident.product_to_sum.md"
+  },
+  {
+    "concept_id": "trig.ident.sum_to_product",
+    "source": "teaching/trig.ident.sum_to_product.md"
+  },
+  {
+    "concept_id": "trig.ident.triple_angle",
+    "source": "teaching/trig.ident.triple_angle.md"
+  },
+  {
+    "concept_id": "trig.ident.power_reduction",
+    "source": "teaching/trig.ident.power_reduction.md"
+  },
+  {
+    "concept_id": "trig.ident.pythagorean_variants",
+    "source": "teaching/trig.ident.pythagorean_variants.md"
+  },
+  {
+    "concept_id": "trig.eq.general_solution",
+    "source": "teaching/trig.eq.general_solution.md"
+  },
+  {
+    "concept_id": "trig.eq.linear",
+    "source": "teaching/trig.eq.linear.md"
+  },
+  {
+    "concept_id": "trig.ineq.advanced",
+    "source": "teaching/trig.ineq.advanced.md"
+  },
+  {
+    "concept_id": "trig.graph.tan",
+    "source": "teaching/trig.graph.tan.md"
+  },
+  {
+    "concept_id": "trig.graph.transformations",
+    "source": "teaching/trig.graph.transformations.md"
+  },
+  {
+    "concept_id": "trig.graph.inverse",
+    "source": "teaching/trig.graph.inverse.md"
+  },
+  {
+    "concept_id": "trig.graph.reciprocal",
+    "source": "teaching/trig.graph.reciprocal.md"
+  },
+  {
+    "concept_id": "trig.hyperbolic.identities",
+    "source": "teaching/trig.hyperbolic.identities.md"
+  },
+  {
+    "concept_id": "trig.hyperbolic.inverse",
+    "source": "teaching/trig.hyperbolic.inverse.md"
+  },
+  {
+    "concept_id": "trig.hyperbolic.derivative",
+    "source": "teaching/trig.hyperbolic.derivative.md"
+  },
+  {
+    "concept_id": "trig.adv.polar",
+    "source": "teaching/trig.adv.polar.md"
+  },
+  {
+    "concept_id": "trig.adv.vector_projection",
+    "source": "teaching/trig.adv.vector_projection.md"
   }
 ]
