@@ -132,19 +132,23 @@ largest first:
 | numerical_analysis | 40 | 18 |
 
 Against that, `calculus` carries 87 `symbolic` concepts and `algebra` carries 36. The pool
-ratchet in `internal/generator/pools_test.go` exists for exactly this surface: an easy pool that
-yields a single distinct answer, or that is yes/no only, is a violation. It is empty today
-because every registered generator clears the bar for its current grading type, not because a
-multiple-choice pool produces much. Turning one of these concepts into `numeric` or `symbolic`
-means a real generator and a solution schema, because the explanation stops being one fixed
-string.
+ratchet in `internal/generator/pools_test.go` exists for exactly this surface, and it runs at two
+depths. An easy pool that yields a single distinct answer, or that is yes/no only, is a
+violation, and that check is baseline-backed: `scripts/audit_baseline.json` is empty on both keys
+because every registered generator clears that bar for its current grading type. A deeper pool is
+measured too: the five calculus generators that were widened on 2026-10-19 must each produce at
+least eight distinct answers over 300 samples at mid difficulty, because a feed that draws from
+four or five answers repeats itself within a session. A new concept that fails either check fails
+the build. Turning one of these concepts into `numeric` or `symbolic` means a real generator and a
+solution schema, because the explanation stops being one fixed string.
 
 **The first conversion landed.** `topo.dimension` was a table of yes/no rows; it now asks for the
 Lebesgue covering dimension of a Euclidean space, a sphere, a torus or the Cantor set, computes
 the number from the ambient dimension, and publishes `space`, `dim` and `rule` as facts for the
 authored schema in `data/lessons/solutions/topo.dimension.json`. Its `grading_type` is `numeric`,
-so topology is 29 `multiple_choice` concepts rather than 30, and the worked example of the path
-is the four files it touched: `data/concepts/topology.json`,
+so topology had 29 `multiple_choice` concepts rather than 30 when the batch landed; the domain has
+since grown to 42 concepts, 35 of them multiple choice. The worked example of the path is the four
+files it touched: `data/concepts/topology.json`,
 `internal/generator/topology/generators.go`, `internal/generator/topology/generators_test.go` and
 the schema.
 

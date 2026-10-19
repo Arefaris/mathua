@@ -16,4 +16,4 @@ At $t = 0$ this gives $T = (0,1,0)$, $N = (-1,0,0)$ and $B = (0,0,1)$.
 
 ## Why the binormal matters
 
-$B$ is the normal to the osculating plane, so it is the vector the torsion turns. The generated questions ask for the unit binormal, entered as $(B_x, B_y, B_z)$, and it is defined only where $r' \times r''$ is nonzero. When the curve is planar, $B$ is constant; when it twists, $B$ moves and the torsion measures the rate.
+$B$ is the normal to the osculating plane, so it is the vector the torsion turns. The generated questions ask for the whole frame — $T$, $N$ then $B$, entered as the nine components $(T_x, T_y, T_z, N_x, N_y, N_z, B_x, B_y, B_z)$ — and $B$ is defined only where $r' \times r''$ is nonzero. When the curve is planar, $B$ is constant; when it twists, $B$ moves and the torsion measures the rate.
