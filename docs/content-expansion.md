@@ -334,19 +334,20 @@ because the change this section prepares for is the one that would have tripped 
 
 ### 5.5 The concept target, and where it goes
 
-The catalog holds 1040 concepts. The remaining per-domain targets add up to 0, and this is the table
+The catalog holds 1040 concepts. The remaining per-domain targets add up to 70, and this is the table
 that says where: the thousand-concept milestone is complete, and graph theory has opened the 1,250
 tranche. `Now` is read from the corpus; `Target` is the decision. The rows keep the order step 6 of
 section 6 used, largest deficit first.
 
 | Domain | Tier | Now | Target | Add |
 |---|---|---:|---:|---:|
+| calculus | bridge | 175 | 205 | +30 |
+| algebra | school | 104 | 124 | +20 |
+| trigonometry | school | 48 | 68 | +20 |
 | graph_theory | university | 40 | 40 | +0 |
-| algebra | school | 104 | 104 | +0 |
 | arithmetic | school | 60 | 60 | +0 |
 | geometry | school | 45 | 45 | +0 |
 | fractions | school | 45 | 45 | +0 |
-| trigonometry | school | 48 | 48 | +0 |
 | discrete_math | university | 55 | 55 | +0 |
 | complex_numbers | university | 42 | 42 | +0 |
 | prealgebra | school | 60 | 60 | +0 |
@@ -355,7 +356,6 @@ section 6 used, largest deficit first.
 | topology | university | 42 | 42 | +0 |
 | linear_algebra | university | 45 | 45 | +0 |
 | statistics | bridge | 55 | 55 | +0 |
-| calculus | bridge | 175 | 175 | +0 |
 | number_theory | university | 42 | 42 | +0 |
 | differential_equations | university | 42 | 42 | +0 |
 | precalculus | bridge | 50 | 50 | +0 |
@@ -605,7 +605,8 @@ products, distance and cuts, Menger's theorem, matchings and covers, Tutte's the
 edge and list coloring. The second covered planarity and minors, spectral graph theory, extremal and
 random graphs, and flows and digraphs. The `graph` course targets all 40, so the domain reads 40/40
 reachable and the corpus reaches 834 of 1,040 with 206 enrichment concepts outside the named paths.
-Real analysis, numerical analysis and probability theory follow, with the three target raises.
+Real analysis, numerical analysis and probability theory follow, with the three target raises. The
+raises are recorded in the table above, and each new domain takes its row as it opens.
 
 **A target per domain, not a rule.** Rule-based widening was measured in section 5.1 and does not
 work: closing over a domain's sinks makes the catalog exhaustive, and every smaller radius still
