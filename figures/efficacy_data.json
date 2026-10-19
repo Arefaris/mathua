@@ -1,14 +1,14 @@
 {
   "schema": "efficacy-bundle/1",
   "source": "https://mathua.fly.dev/api/efficacy/all (+trend)",
-  "total_attempts": 274,
-  "students_tracked": 14,
-  "concepts_touched": 133,
+  "total_attempts": 575,
+  "students_tracked": 23,
+  "concepts_touched": 217,
   "concepts_catalog": [],
-  "first_pass_rate": 0.3533834586466165,
-  "second_pass_rate": 0.39097744360902253,
-  "avg_attempts_per_concept": 2.0601503759398496,
+  "first_pass_rate": 0.4423963133640553,
+  "second_pass_rate": 0.48847926267281105,
+  "avg_attempts_per_concept": 2.6497695852534564,
   "window_start": "2026-06-01",
-  "window_end": "2026-10-05",
+  "window_end": "2026-10-19",
   "observational": true
 }

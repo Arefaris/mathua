@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-12T13:52:59+00:00</dc:date>
+    <dc:date>2026-10-19T09:41:44+00:00</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -41,12 +41,12 @@ z
     <g id="xtick_1">
      <g id="line2d_1">
       <defs>
-       <path id="m74a86fe371" d="M 0 0 
+       <path id="mddbb180c60" d="M 0 0 
 L 0 3.5 
 " style="stroke: #475569; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#m74a86fe371" x="330.02" y="311.08" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#mddbb180c60" x="330.02" y="311.08" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_1">
@@ -58,12 +58,12 @@ L 0 3.5
     <g id="ytick_1">
      <g id="line2d_2">
       <defs>
-       <path id="m3ffbb000a4" d="M 0 0 
+       <path id="m1313aeccf3" d="M 0 0 
 L -3.5 0 
 " style="stroke: #475569; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#m3ffbb000a4" x="68.12" y="311.08" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#m1313aeccf3" x="68.12" y="311.08" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_2">
@@ -73,7 +73,7 @@ L -3.5 0
     <g id="ytick_2">
      <g id="line2d_3">
       <g>
-       <use xlink:href="#m3ffbb000a4" x="68.12" y="257.553098" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#m1313aeccf3" x="68.12" y="257.553098" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_3">
@@ -83,7 +83,7 @@ L -3.5 0
     <g id="ytick_3">
      <g id="line2d_4">
       <g>
-       <use xlink:href="#m3ffbb000a4" x="68.12" y="204.026196" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#m1313aeccf3" x="68.12" y="204.026196" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_4">
@@ -93,7 +93,7 @@ L -3.5 0
     <g id="ytick_4">
      <g id="line2d_5">
       <g>
-       <use xlink:href="#m3ffbb000a4" x="68.12" y="150.499294" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#m1313aeccf3" x="68.12" y="150.499294" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_5">
@@ -103,7 +103,7 @@ L -3.5 0
     <g id="ytick_5">
      <g id="line2d_6">
       <g>
-       <use xlink:href="#m3ffbb000a4" x="68.12" y="96.972392" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#m1313aeccf3" x="68.12" y="96.972392" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_6">
@@ -113,7 +113,7 @@ L -3.5 0
     <g id="ytick_6">
      <g id="line2d_7">
       <g>
-       <use xlink:href="#m3ffbb000a4" x="68.12" y="43.44549" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+       <use xlink:href="#m1313aeccf3" x="68.12" y="43.44549" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_7">
@@ -127,12 +127,12 @@ L -3.5 0
    <g id="line2d_8">
     <path d="M 68.12 62.179906 
 L 591.92 62.179906 
-" clip-path="url(#p898d75f1df)" style="fill: none; stroke-dasharray: 4.8,3.6; stroke-dashoffset: 0; stroke: #475569; stroke-opacity: 0.8; stroke-width: 1.2"/>
+" clip-path="url(#pd2b1b737ca)" style="fill: none; stroke-dasharray: 4.8,3.6; stroke-dashoffset: 0; stroke: #475569; stroke-opacity: 0.8; stroke-width: 1.2"/>
    </g>
    <g id="line2d_9">
     <path d="M 68.12 48.79818 
 L 591.92 48.79818 
-" clip-path="url(#p898d75f1df)" style="fill: none; stroke-dasharray: 4.8,3.6; stroke-dashoffset: 0; stroke: #475569; stroke-opacity: 0.8; stroke-width: 1.2"/>
+" clip-path="url(#pd2b1b737ca)" style="fill: none; stroke-dasharray: 4.8,3.6; stroke-dashoffset: 0; stroke: #475569; stroke-opacity: 0.8; stroke-width: 1.2"/>
    </g>
    <g id="patch_3">
     <path d="M 68.12 311.08 
@@ -147,24 +147,24 @@ L 591.92 311.08
    <g id="patch_5">
     <path d="M 91.929091 311.08 
 L 320.099545 311.08 
-L 320.099545 216.502391 
-L 91.929091 216.502391 
+L 320.099545 192.67948 
+L 91.929091 192.67948 
 z
-" clip-path="url(#p898d75f1df)" style="fill: #b8933e; stroke: #1e293b; stroke-width: 1.5; stroke-linejoin: miter"/>
+" clip-path="url(#pd2b1b737ca)" style="fill: #b8933e; stroke: #1e293b; stroke-width: 1.5; stroke-linejoin: miter"/>
    </g>
    <g id="patch_6">
     <path d="M 339.940455 311.08 
 L 568.110909 311.08 
-L 568.110909 206.440944 
-L 339.940455 206.440944 
+L 568.110909 180.346092 
+L 339.940455 180.346092 
 z
-" clip-path="url(#p898d75f1df)" style="fill: url(#h351c96a8c5); stroke: #1e293b; stroke-width: 1.5; stroke-linejoin: miter"/>
+" clip-path="url(#pd2b1b737ca)" style="fill: url(#h13d1b66412); stroke: #1e293b; stroke-width: 1.5; stroke-linejoin: miter"/>
    </g>
    <g id="text_9">
-    <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: middle; fill: #1e293b" x="206.014318" y="213.044595" transform="rotate(-0 206.014318 213.044595)">35%</text>
+    <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: middle; fill: #1e293b" x="206.014318" y="189.107519" transform="rotate(-0 206.014318 189.107519)">44%</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: middle; fill: #1e293b" x="454.025682" y="202.983148" transform="rotate(-0 454.025682 202.983148)">39%</text>
+    <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: middle; fill: #1e293b" x="454.025682" y="176.774131" transform="rotate(-0 454.025682 176.774131)">49%</text>
    </g>
    <g id="text_11">
     <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: end; fill: #475569" x="586.682" y="57.03883" transform="rotate(-0 586.682 57.03883)">MA 93% (external)</text>
@@ -177,16 +177,16 @@ z
    </g>
   </g>
   <g id="text_14">
-   <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: middle; fill: #475569" x="299.92" y="379.12" transform="rotate(-0 299.92 379.12)">274 attempts · 14 students · 133 concepts · 2026-06-01 → 2026-10-05 · dev log, observational</text>
+   <text style="font-size: 10px; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; text-anchor: middle; fill: #475569" x="299.92" y="379.12" transform="rotate(-0 299.92 379.12)">575 attempts · 23 students · 217 concepts · 2026-06-01 → 2026-10-19 · dev log, observational</text>
   </g>
  </g>
  <defs>
-  <clipPath id="p898d75f1df">
+  <clipPath id="pd2b1b737ca">
    <rect x="68.12" y="38.0928" width="523.8" height="272.9872"/>
   </clipPath>
  </defs>
  <defs>
-  <pattern id="h351c96a8c5" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72">
+  <pattern id="h13d1b66412" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72">
    <rect x="0" y="0" width="73" height="73" fill="#059669"/>
    <path d="M -36 36 
 L 36 -36 
