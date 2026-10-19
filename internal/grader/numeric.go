@@ -33,7 +33,7 @@ func (g *numericGrader) grade(expected, answer string) Result {
 		return Result{Correct: false, Score: 0, Feedback: "Could not parse numeric values"}
 	}
 	if eIsFloat || aIsFloat {
-		if math.Abs(eVal-aVal) < floatTolerance {
+		if math.Abs(eVal-aVal) <= numericEpsilon(e, eVal) {
 			return Result{Correct: true, Score: 1}
 		}
 	} else {
@@ -48,6 +48,30 @@ func normalise(s string) string {
 	s = commaRe.ReplaceAllString(s, "")
 	s = plusZeroRe.ReplaceAllString(s, "")
 	return strings.TrimSpace(s)
+}
+
+// numericEpsilon is the window inside which an answer counts as the same number
+// as the expected one. For an expected value printed with a decimal point it is
+// half a unit in the last printed place: "12.61" accepts 12.610001, because
+// that is the same answer rounded differently, and rejects 12.62, which is a
+// different number at that precision. Expected values without a decimal point —
+// integers, fractions, mixed numbers and scientific notation — keep the flat
+// tolerance, because widening those would accept a different value of the same
+// shape. The relative term keeps large magnitudes comparable without making the
+// window unlimited.
+func numericEpsilon(expected string, value float64) float64 {
+	eps := floatTolerance
+	if i := strings.IndexByte(expected, '.'); i >= 0 && !strings.ContainsAny(expected, "/eE") {
+		if places := len(expected) - i - 1; places > 0 {
+			if half := 0.5 / math.Pow(10, float64(places)); half > eps {
+				eps = half
+			}
+		}
+	}
+	if relative := floatTolerance * math.Abs(value); relative > eps {
+		eps = relative
+	}
+	return eps
 }
 
 func parseNumeric(s string) (float64, bool, bool) {

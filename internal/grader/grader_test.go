@@ -457,3 +457,34 @@ func TestExpression_GoFastPaths(t *testing.T) {
 		}
 	}
 }
+
+// TestNumeric_Grade_RoundedAnswers pins the rounding window. An expected answer
+// printed with a decimal point accepts answers that are the same number rounded
+// differently, and rejects answers that differ at the printed precision.
+// Expected answers without a decimal point keep the flat tolerance.
+func TestNumeric_Grade_RoundedAnswers(t *testing.T) {
+	r := NewRouter()
+	for _, tc := range []struct {
+		expected, answer string
+		correct          bool
+		why              string
+	}{
+		{"12.61", "12.61", true, "the same answer"},
+		{"12.61", "12.610001", true, "below half a unit in the last printed place"},
+		{"12.61", "12.6149", true, "still below half a unit"},
+		{"12.61", "12.62", false, "a different number at the printed precision"},
+		{"12.61", "12.6", false, "one place short of the printed precision"},
+		{"3.14", "3.14159", true, "a more precise value that rounds to the expected one"},
+		{"0.5", "0.54", true, "rounds to 0.5 at one place"},
+		{"0.5", "0.56", false, "rounds to 0.6"},
+		{"42", "42.4", false, "an expected integer stays exact"},
+		{"4 1/10", "4.14", false, "an expected mixed number stays exact"},
+		{"1/3", "0.3333333333", true, "the fraction tolerance is unchanged"},
+	} {
+		res := r.Grade(GradingNumeric, tc.expected, tc.answer)
+		if res.Correct != tc.correct {
+			t.Errorf("expected %q vs %q: correct=%v, want %v (%s)",
+				tc.expected, tc.answer, res.Correct, tc.correct, tc.why)
+		}
+	}
+}
