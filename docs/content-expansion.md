@@ -104,27 +104,32 @@ The count of unreachable concepts by domain:
 | real_analysis | 50 | 0 |
 
 Two structural facts sit behind that table. First, a course is a *sampled* path, not a domain
-cover: `calc1` reaches 15 calculus concepts and `calc2` reaches 24, and their targets differ, so
-the two courses are stages rather than a partition. Second, one whole domain has no course of its
-own: `complex_numbers` is reached only through the `pc` course, which pulls in 6 of its 26
-concepts.
+cover: `calc1` targets 17 calculus concepts and `calc2` targets 21, and their closures reach 42
+and 51 concepts of the domain, so the two courses are stages rather than a partition. Second, one
+whole domain has no course of its own: `trigonometry` is reached only by the closures of `a2` and
+`pc` together, which bring in 54 of its 68 concepts.
 
 ### 4.2 Whole domains ask a learner to pick rather than to produce
 
-The `grading_type` mix shows where the corpus is recognition-shaped. These domains are almost
-entirely `multiple_choice`:
+The `grading_type` mix shows where the corpus is recognition-shaped. The criterion here is a
+domain where `multiple_choice` is at least four concepts in ten; these eleven qualify,
+largest first:
 
 | Domain | Concepts | `multiple_choice` |
 |---|---|---|
 | abstract_algebra | 45 | 43 |
 | topology | 42 | 35 |
-| differential_equations | 42 | 28 |
+| real_analysis | 50 | 34 |
 | machine_learning | 45 | 29 |
+| trigonometry | 68 | 29 |
+| differential_equations | 42 | 28 |
 | discrete_math | 55 | 26 |
-| number_theory | 42 | 19 |
+| probability_theory | 50 | 21 |
 | complex_numbers | 42 | 20 |
+| number_theory | 42 | 19 |
+| numerical_analysis | 40 | 18 |
 
-Against that, `calculus` carries 86 `symbolic` concepts and `algebra` carries 36. The pool
+Against that, `calculus` carries 87 `symbolic` concepts and `algebra` carries 36. The pool
 ratchet in `internal/generator/pools_test.go` exists for exactly this surface: an easy pool that
 yields a single distinct answer, or that is yes/no only, is a violation. It is empty today
 because every registered generator clears the bar for its current grading type, not because a
@@ -180,7 +185,7 @@ candidate is either matched to an existing asset in `data/diagrams/meta.json` or
 ### 4.5 Diagrams and solution schemas are complete against their own rules
 
 `data/diagrams/meta.json` maps 183 assets, each to at least one concept and a license.
-`data/lessons/solutions/` holds 230 schemas, and the six learner domains require one per
+`data/lessons/solutions/` holds 382 schemas, and the six learner domains require one per
 computed concept; the table-driven exceptions are an explicit allowlist with a reason per entry
 in `internal/generator/solutions_coverage_test.go`. Growing either is additive work, not repair.
 
@@ -194,7 +199,7 @@ Twenty-one concepts apply a technique their parent teaches rather than teach a n
 
 Each one is a *dependent*: a parent technique is one of its prerequisites. Twenty of the
 twenty-one are also leaves, so nothing else depends on them and no course closure needs them —
-they are inside the 419 unreachable concepts of section 4.1. `prealg.eq.word` is the exception on
+they are inside the 149 unreachable concepts of section 4.1. `prealg.eq.word` is the exception on
 both counts: something depends on it, and that something is what pulls it into a course closure.
 
 The pattern is cheap because it writes no lesson prose. A sibling shares its parent's lesson file
