@@ -7,25 +7,16 @@ import (
 )
 
 func Register(reg *generator.Registry) {
-	reg.Register("ml.perceptron", &perceptronGen{})
-	reg.Register("ml.loss.mse", &mseGen{})
-	reg.Register("ml.forward_pass", &forwardPassGen{})
-	reg.Register("ml.gradient_descent", &gradientDescentGen{})
 	reg.Register("ml.backpropagation", &backpropGen{})
 	reg.Register("ml.loss.cross_entropy", &crossEntropyGen{})
-	reg.Register("ml.regularization", &regularizationGen{})
 	reg.Register("ml.overfitting", &overfittingGen{})
-	reg.Register("ml.validation", &validationGen{})
-	reg.Register("ml.optim.momentum", &momentumGen{})
 	reg.Register("ml.regularization.dropout", &dropoutGen{})
-	reg.Register("ml.arch.cnn", &cnnGen{})
 	reg.Register("ml.arch.rnn", &rnnGen{})
 	reg.Register("ml.optim.batchnorm", &batchNormGen{})
 	reg.Register("ml.eval.roc", &rocGen{})
 	reg.Register("ml.arch.transformer", &transformerGen{})
 	reg.Register("ml.arch.gan", &ganGen{})
 	reg.Register("ml.optim.adam", &adamDetailsGen{})
-	reg.Register("ml.eval.calibration", &calibrationGen{})
 	reg.Register("ml.data.augmentation", &augmentationGen{})
 	reg.Register("ml.nlp.transformer", &nlpTransformerGen{})
 	reg.Register("ml.reinforcement.qlearning", &qlearningGen{})
@@ -34,6 +25,7 @@ func Register(reg *generator.Registry) {
 	reg.Register("ml.reinforcement.actor_critic", &actorCriticGen{})
 	registerNumeric(reg)
 	registerBatch(reg)
+	registerConversions(reg)
 }
 
 type backpropGen struct{}

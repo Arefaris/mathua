@@ -10768,7 +10768,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.perceptron",
     "label": "Perceptron",
     "mastery_threshold": {
@@ -10783,7 +10783,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.loss.mse",
     "label": "Mean squared error loss",
     "mastery_threshold": {
@@ -10798,7 +10798,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.forward_pass",
     "label": "Forward pass",
     "mastery_threshold": {
@@ -10813,7 +10813,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.gradient_descent",
     "label": "Gradient descent",
     "mastery_threshold": {
@@ -10859,7 +10859,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.regularization",
     "label": "Regularization (L2 weight decay)",
     "mastery_threshold": {
@@ -10888,7 +10888,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.validation",
     "label": "Train/validation split and cross-validation",
     "mastery_threshold": {
@@ -10902,7 +10902,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.optim.momentum",
     "label": "Momentum and Adam optimization",
     "mastery_threshold": {
@@ -10931,7 +10931,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.arch.cnn",
     "label": "Convolutional neural networks",
     "mastery_threshold": {
@@ -11029,7 +11029,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.eval.calibration",
     "label": "Calibration and reliability diagrams",
     "mastery_threshold": {
@@ -11359,7 +11359,7 @@
   },
   {
     "domain": "machine_learning",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "id": "ml.data.onehot",
     "label": "One-hot encoding",
     "mastery_threshold": {

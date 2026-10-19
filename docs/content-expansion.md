@@ -120,16 +120,16 @@ largest first:
 
 | Domain | Concepts | `multiple_choice` |
 |---|---|---|
-| abstract_algebra | 45 | 33 |
 | topology | 42 | 35 |
 | real_analysis | 50 | 34 |
-| machine_learning | 45 | 29 |
+| abstract_algebra | 45 | 33 |
 | trigonometry | 68 | 29 |
 | differential_equations | 42 | 28 |
 | discrete_math | 55 | 26 |
 | probability_theory | 50 | 21 |
 | complex_numbers | 42 | 20 |
 | number_theory | 42 | 19 |
+| machine_learning | 45 | 19 |
 | numerical_analysis | 40 | 18 |
 
 Against that, `calculus` carries 87 `symbolic` concepts and `algebra` carries 36. The pool
@@ -159,6 +159,15 @@ publishes the numbers its answer follows from, and
 `internal/generator/abstract/conversions_test.go` recomputes the answer from those facts rather
 than comparing it with itself. The domain now carries 33 `multiple_choice` concepts rather than
 43, and the table above is updated to match.
+
+**The machine-learning batch converted ten.** Its procedures are easy to describe and just as
+easy to run: mean squared error over three predictions, the sign a perceptron returns, a ReLU
+forward pass, one gradient-descent step, an L2 penalty, the size of a validation fold, the width
+of a drop-first one-hot encoding, the parameter count of a convolution layer, expected
+calibration error over two confidence bins, and one momentum update. Each now asks for the number
+rather than for a description of the procedure, publishes its inputs as facts, and
+`internal/generator/machinelearning/conversions_test.go` recomputes the answer from them. The
+domain carries 19 `multiple_choice` concepts rather than 29.
 
 ### 4.3 Lesson depth is no longer thin at the bottom
 

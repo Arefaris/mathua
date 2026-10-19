@@ -4,7 +4,7 @@
     "label": "Perceptron",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "linalg.vector.dot",
       "alg.func.concept"
@@ -19,7 +19,7 @@
     "label": "Mean squared error loss",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "linalg.vector.dot",
       "stat.data.mean"
@@ -34,7 +34,7 @@
     "label": "Forward pass",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.perceptron",
       "linalg.matrix.mult"
@@ -49,7 +49,7 @@
     "label": "Gradient descent",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "calc.deriv.concept",
       "linalg.vector.dot"
@@ -95,7 +95,7 @@
     "label": "Regularization (L2 weight decay)",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.loss.cross_entropy",
       "ml.gradient_descent"
@@ -124,7 +124,7 @@
     "label": "Train/validation split and cross-validation",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.overfitting"
     ],
@@ -138,7 +138,7 @@
     "label": "Momentum and Adam optimization",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.gradient_descent",
       "ml.backpropagation"
@@ -167,7 +167,7 @@
     "label": "Convolutional neural networks",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.forward_pass"
     ],
@@ -265,7 +265,7 @@
     "label": "Calibration and reliability diagrams",
     "domain": "machine_learning",
     "subdomain": "machine_learning.neural_networks",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.eval.roc"
     ],
@@ -357,7 +357,7 @@
       "streak": 10,
       "avg_time_seconds": 26.0
     }
-    },
+  },
   {
     "id": "ml.linreg.least_squares",
     "label": "The least-squares line",
@@ -595,7 +595,7 @@
     "label": "One-hot encoding",
     "domain": "machine_learning",
     "subdomain": "machine_learning.data",
-    "grading_type": "multiple_choice",
+    "grading_type": "numeric",
     "prerequisites": [
       "ml.perceptron",
       "stat.data.read_table"

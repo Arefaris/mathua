@@ -40,7 +40,6 @@ func registerBatch(reg *generator.Registry) {
 	reg.Register("ml.eval.f1", &f1Gen{})
 	reg.Register("ml.cluster.kmeans", &kmeansGen{})
 	reg.Register("ml.data.scaling", &scalingGen{})
-	reg.Register("ml.data.onehot", &oneHotGen{})
 	reg.Register("ml.data.imbalance", &imbalanceGen{})
 	reg.Register("ml.tree.gini", &giniGen{})
 	reg.Register("ml.tree.ensemble", &ensembleGen{})
