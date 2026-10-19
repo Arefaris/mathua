@@ -5,8 +5,8 @@
   "band_width": 3,
   "note": "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is assessed), not product policy. Unit prerequisite order is DERIVED from the concept DAG and deliberately not stored: authoring it would be a second hierarchy. Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
   "source": "data/concepts",
-  "concept_count": 1020,
-  "unit_count": 102,
+  "concept_count": 1040,
+  "unit_count": 105,
   "units": [
     {
       "id": "abstract_algebra.b6",
@@ -1453,6 +1453,51 @@
       "concept_count": 1
     },
     {
+      "id": "graph_theory.b1",
+      "title": "Graph Theory · Stage 2",
+      "domain": "graph_theory",
+      "band": 1,
+      "depth_min": 5,
+      "depth_max": 5,
+      "subdomains": [
+        "graph_theory.spectral"
+      ],
+      "concept_ids": [
+        "graph.adjacency"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "graph_theory.b2",
+      "title": "Graph Theory · Stage 3",
+      "domain": "graph_theory",
+      "band": 2,
+      "depth_min": 6,
+      "depth_max": 6,
+      "subdomains": [
+        "graph_theory.spectral"
+      ],
+      "concept_ids": [
+        "graph.laplacian"
+      ],
+      "concept_count": 1
+    },
+    {
+      "id": "graph_theory.b3",
+      "title": "Graph Theory · Stage 4",
+      "domain": "graph_theory",
+      "band": 3,
+      "depth_min": 11,
+      "depth_max": 11,
+      "subdomains": [
+        "graph_theory.spectral"
+      ],
+      "concept_ids": [
+        "graph.matrix_tree"
+      ],
+      "concept_count": 1
+    },
+    {
       "id": "graph_theory.b5",
       "title": "Graph Theory · Stage 6",
       "domain": "graph_theory",
@@ -1460,14 +1505,16 @@
       "depth_min": 17,
       "depth_max": 17,
       "subdomains": [
-        "graph_theory.basics"
+        "graph_theory.basics",
+        "graph_theory.extremal"
       ],
       "concept_ids": [
         "graph.complement",
         "graph.isomorphism",
+        "graph.mantel",
         "graph.subgraph"
       ],
-      "concept_count": 3
+      "concept_count": 4
     },
     {
       "id": "graph_theory.b6",
@@ -1478,18 +1525,29 @@
       "depth_max": 20,
       "subdomains": [
         "graph_theory.basics",
-        "graph_theory.connectivity"
+        "graph_theory.connectivity",
+        "graph_theory.extremal",
+        "graph_theory.flows",
+        "graph_theory.planarity"
       ],
       "concept_ids": [
         "graph.bridge",
         "graph.connectivity",
         "graph.cut_vertex",
         "graph.distance",
+        "graph.genus",
         "graph.homomorphism",
+        "graph.kuratowski",
         "graph.menger",
-        "graph.product"
+        "graph.moore_bound",
+        "graph.outerplanar",
+        "graph.product",
+        "graph.random_threshold",
+        "graph.strong_connectivity",
+        "graph.tournament",
+        "graph.turan"
       ],
-      "concept_count": 7
+      "concept_count": 15
     },
     {
       "id": "graph_theory.b7",
@@ -1500,20 +1558,29 @@
       "depth_max": 23,
       "subdomains": [
         "graph_theory.coloring",
-        "graph_theory.matching"
+        "graph_theory.extremal",
+        "graph_theory.flows",
+        "graph_theory.matching",
+        "graph_theory.planarity"
       ],
       "concept_ids": [
         "graph.brooks",
         "graph.chromatic_polynomial",
+        "graph.dag_paths",
         "graph.edge_coloring",
         "graph.independent_set",
         "graph.list_coloring",
         "graph.matching",
+        "graph.max_flow",
+        "graph.minor",
         "graph.perfect_graph",
         "graph.perfect_matching",
+        "graph.ramsey",
+        "graph.topological_sort",
+        "graph.treewidth",
         "graph.vertex_cover"
       ],
-      "concept_count": 9
+      "concept_count": 15
     },
     {
       "id": "graph_theory.b8",
@@ -1521,14 +1588,17 @@
       "domain": "graph_theory",
       "band": 8,
       "depth_min": 24,
-      "depth_max": 24,
+      "depth_max": 25,
       "subdomains": [
-        "graph_theory.matching"
+        "graph_theory.matching",
+        "graph_theory.spectral"
       ],
       "concept_ids": [
+        "graph.spectral_gap",
+        "graph.spectral_radius",
         "graph.tutte"
       ],
-      "concept_count": 1
+      "concept_count": 3
     },
     {
       "id": "linear_algebra.b0",

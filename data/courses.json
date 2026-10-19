@@ -735,7 +735,27 @@
       "graph.brooks",
       "graph.edge_coloring",
       "graph.perfect_graph",
-      "graph.list_coloring"
+      "graph.list_coloring",
+      "graph.kuratowski",
+      "graph.minor",
+      "graph.treewidth",
+      "graph.genus",
+      "graph.outerplanar",
+      "graph.adjacency",
+      "graph.laplacian",
+      "graph.matrix_tree",
+      "graph.spectral_radius",
+      "graph.spectral_gap",
+      "graph.mantel",
+      "graph.turan",
+      "graph.ramsey",
+      "graph.random_threshold",
+      "graph.moore_bound",
+      "graph.max_flow",
+      "graph.tournament",
+      "graph.strong_connectivity",
+      "graph.topological_sort",
+      "graph.dag_paths"
     ]
   }
 ]

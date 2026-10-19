@@ -4078,5 +4078,85 @@
   {
     "concept_id": "graph.list_coloring",
     "source": "teaching/graph.list_coloring.md"
+  },
+  {
+    "concept_id": "graph.kuratowski",
+    "source": "teaching/graph.kuratowski.md"
+  },
+  {
+    "concept_id": "graph.minor",
+    "source": "teaching/graph.minor.md"
+  },
+  {
+    "concept_id": "graph.treewidth",
+    "source": "teaching/graph.treewidth.md"
+  },
+  {
+    "concept_id": "graph.genus",
+    "source": "teaching/graph.genus.md"
+  },
+  {
+    "concept_id": "graph.outerplanar",
+    "source": "teaching/graph.outerplanar.md"
+  },
+  {
+    "concept_id": "graph.adjacency",
+    "source": "teaching/graph.adjacency.md"
+  },
+  {
+    "concept_id": "graph.laplacian",
+    "source": "teaching/graph.laplacian.md"
+  },
+  {
+    "concept_id": "graph.matrix_tree",
+    "source": "teaching/graph.matrix_tree.md"
+  },
+  {
+    "concept_id": "graph.spectral_radius",
+    "source": "teaching/graph.spectral_radius.md"
+  },
+  {
+    "concept_id": "graph.spectral_gap",
+    "source": "teaching/graph.spectral_gap.md"
+  },
+  {
+    "concept_id": "graph.mantel",
+    "source": "teaching/graph.mantel.md"
+  },
+  {
+    "concept_id": "graph.turan",
+    "source": "teaching/graph.turan.md"
+  },
+  {
+    "concept_id": "graph.ramsey",
+    "source": "teaching/graph.ramsey.md"
+  },
+  {
+    "concept_id": "graph.random_threshold",
+    "source": "teaching/graph.random_threshold.md"
+  },
+  {
+    "concept_id": "graph.moore_bound",
+    "source": "teaching/graph.moore_bound.md"
+  },
+  {
+    "concept_id": "graph.max_flow",
+    "source": "teaching/graph.max_flow.md"
+  },
+  {
+    "concept_id": "graph.tournament",
+    "source": "teaching/graph.tournament.md"
+  },
+  {
+    "concept_id": "graph.strong_connectivity",
+    "source": "teaching/graph.strong_connectivity.md"
+  },
+  {
+    "concept_id": "graph.topological_sort",
+    "source": "teaching/graph.topological_sort.md"
+  },
+  {
+    "concept_id": "graph.dag_paths",
+    "source": "teaching/graph.dag_paths.md"
   }
 ]
