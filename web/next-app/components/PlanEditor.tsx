@@ -10,7 +10,7 @@ import { clampGoal, daysFor, monthLabel, DEFAULT_DAILY_GOAL, GOAL_PRESETS } from
 // mastery are independent of every number here. Shared by /plan (full) and
 // Settings (compact): compact hides the workload detail list, the what-if
 // slider, and the plan-delta line, keeping destination/mode/inputs/save.
-export default function PlanEditor({ compact = false }: { compact?: boolean }) {
+export default function PlanEditor({ compact = false, initialDestination }: { compact?: boolean; initialDestination?: string }) {
   const [dests, setDests] = useState<DestinationStatus[]>([])
   const [destId, setDestId] = useState('')
   const [mode, setMode] = useState<'effort' | 'deadline'>('effort')
@@ -41,7 +41,10 @@ export default function PlanEditor({ compact = false }: { compact?: boolean }) {
       getCurrentPlan().catch(() => ({ plan: null as StudyPlan | null })),
     ]).then(([d, s, p]) => {
       setDests(d.dests)
-      if (d.dests.length > 0) setDestId(d.dests[0].id)
+      // A link from the assistant names a destination; preselecting it is what
+      // makes that link land on the thing it named instead of the first option.
+      const wanted = d.dests.find(x => x.id === initialDestination)?.id ?? d.dests[0]?.id
+      if (wanted) setDestId(wanted)
       if (d.err) setError(d.err)
       const guestGoal = (() => {
         try {
@@ -57,7 +60,7 @@ export default function PlanEditor({ compact = false }: { compact?: boolean }) {
       if (p.plan) setSaved(p.plan)
       setLoading(false)
     })
-  }, [])
+  }, [initialDestination])
 
   const fetchEst = useCallback(async (id: string, goal: number, deadline: number, rest: number) => {
     if (!id) return

@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import Header from '../../components/Header'
 import BottomTabs from '../../components/BottomTabs'
 import Footer from '../../components/Footer'
@@ -12,11 +13,15 @@ import PlanEditor from '../../components/PlanEditor'
 // mastery are independent of every number on this page. The editor is shared
 // with Settings (compact there); this page keeps the full estimate display.
 function PlanContent() {
+  const params = useSearchParams()
+  // Set by an assistant link, so "start with calculus" lands on the planner
+  // with calculus selected instead of on whatever sorts first.
+  const destination = params.get('destination') ?? undefined
   return (
     <div className="max-w-2xl mx-auto mt-6 mb-16 px-4">
       <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Learning planner</p>
       <h1 className="font-serif text-2xl text-mathua-primary mt-1">Plan your learning</h1>
-      <PlanEditor />
+      <PlanEditor initialDestination={destination} />
       <Link href="/profile" className="mt-4 inline-block font-mono text-xs text-mathua-blue">← Back to profile</Link>
     </div>
   )

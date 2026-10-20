@@ -1827,17 +1827,33 @@ export async function revokeAdminInvitation(id: number): Promise<AdminInvitation
 // its deterministic match with no special case. No `expected_answer` is ever a
 // field here: the graded answer stays on the server.
 
+export interface AssistantLink {
+	/** The id the assistant named, e.g. "glossary" or a destination id. */
+	id: string
+	label: string
+	/** An internal route the server chose; never built from the model's text. */
+	href: string
+}
+
+export interface AssistantTurn {
+	role: 'user' | 'assistant'
+	content: string
+}
+
 export interface AssistantReply {
 	reply: string
+	links: AssistantLink[]
 }
 
 /**
  * Ask the product assistant. It answers "what is Mathua" and "where do I
- * start"; it is not a tutor and holds no concept or mastery context. Throws
- * when AI is unavailable or the quota is spent, so the caller shows
- * "unavailable" rather than a wrong answer.
+ * start"; it is not a tutor and holds no concept or mastery context. `history`
+ * is replayed so the assistant can follow up on its own clarifying question; the
+ * server bounds it and keeps only user and assistant turns. Throws when AI is
+ * unavailable or the quota is spent, so the caller shows "unavailable" rather
+ * than a wrong answer.
  */
-export async function askAssistant(body: { message: string }): Promise<AssistantReply> {
+export async function askAssistant(body: { message: string; history?: AssistantTurn[] }): Promise<AssistantReply> {
 	const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() } satisfies Record<string, string>
 	const res = await authedFetch(`${API_BASE}/api/ai/assistant`, {
 		method: 'POST',
@@ -1845,7 +1861,8 @@ export async function askAssistant(body: { message: string }): Promise<Assistant
 		body: JSON.stringify(body),
 	})
 	if (!res.ok) await throwWithResponse(res, `Assistant unavailable: ${res.status}`)
-	return res.json() as Promise<AssistantReply>
+	const data = (await res.json()) as AssistantReply
+	return { reply: data.reply, links: data.links ?? [] }
 }
 
 export interface GoalScopeRes {

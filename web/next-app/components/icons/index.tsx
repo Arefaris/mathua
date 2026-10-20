@@ -46,6 +46,9 @@ import {
   UserIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  ArrowUpIcon,
+  MessagesSquareIcon,
+  XIcon,
 } from '@animateicons/react/lucide'
 
 /**
@@ -135,6 +138,14 @@ export const User = wrap(UserIcon as never)
 export const ChevronDown = wrap(ChevronDownIcon as never)
 export const ChevronUp = wrap(ChevronUpIcon as never)
 
+// The product assistant's dock. A speech pair rather than a single bubble: the
+// control opens a conversation, and one bubble reads as a notification badge.
+export const MessagesSquare = wrap(MessagesSquareIcon as never)
+// Named Close rather than X: the call site says what the control does, and `X`
+// in a component that also handles coordinates is a name waiting to be misread.
+export const Close = wrap(XIcon as never)
+export const ArrowUp = wrap(ArrowUpIcon as never)
+
 // Settings' avatar randomiser. The app used lucide's `Dices` (two dice) and there is no animated
 // `Dices` in the set — `Dice5` is a single die. This is the one icon whose shape changes, and it
 // is called out here rather than left to be noticed.
@@ -166,4 +177,7 @@ export const ICON_NAMES = [
   'User',
   'ChevronDown',
   'ChevronUp',
+  'MessagesSquare',
+  'Close',
+  'ArrowUp',
 ] as const

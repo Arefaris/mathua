@@ -4,6 +4,7 @@ import localFont from 'next/font/local'
 import { Toaster } from '@/components/ui/sonner'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import ChromeToggle from '@/components/ChromeToggle'
+import AssistantDock from '@/components/AssistantDock'
 import { SITE_URL } from '@/lib/site'
 // MathLive's own stylesheet for the <math-field> rendering (MathML). Loaded here,
 // not in the lazily-loaded component, so the chunk has no CSS side-effect.
@@ -117,6 +118,9 @@ export default function RootLayout({
             meant to bring it back. It renders nothing on pages with no chrome
             (mobile /profile). */}
         <ChromeToggle />
+        {/* Mounted once here rather than per page so a conversation survives
+            navigation; it renders nothing when the server reports AI is off. */}
+        <AssistantDock />
       </body>
     </html>
   )
