@@ -13,9 +13,13 @@ import { ArrowUp, Close, MessagesSquare } from './icons'
 //
 // Three constraints are deliberate.
 //
-// **It renders nothing unless the server says AI is on.** `ai_enabled` is the one
-// fact `/api/config` exposes (ADR-055); a deployment without a provider loses the
-// button rather than offering a control that always fails.
+// **It always renders, and the server decides what it can do.** `ai_enabled` is
+// the one fact `/api/config` exposes (ADR-055). Hiding the button when AI is off
+// made a switched-off feature indistinguishable from a missing one: the same
+// page looked identical whether the assistant was unimplemented, unconfigured or
+// broken. With a provider the panel answers; without one it says so once and
+// offers the same destinations as links, which is what a visitor wanted anyway.
+// It never pretends to answer, and it never leaves an empty box behind.
 //
 // **Replies are text, never HTML.** The server returns plain prose and a list of
 // links whose hrefs it chose itself, so there is no markup to sanitise and no URL
@@ -30,6 +34,19 @@ type Bubble = AssistantTurn & { links?: AssistantLink[] }
 
 const SUGGESTIONS = ['What is Mathua?', 'Where should I start?']
 
+// AREAS is what the panel offers when the assistant cannot answer. These are
+// routes the app owns regardless of AI, so the dock is useful in a deployment
+// with no provider — which is every fresh checkout until a key is set.
+const AREAS = [
+	{ label: 'Start learning', href: '/learn' },
+	{ label: 'Take the diagnostic', href: '/diagnose' },
+	{ label: 'Plan a goal', href: '/plan' },
+	{ label: 'Concept graph', href: '/graph' },
+	{ label: 'Glossary', href: '/glossary' },
+]
+
+type Status = 'loading' | 'on' | 'off'
+
 function failureCopy(e: unknown): string {
 	const message = e instanceof Error ? e.message : ''
 	if (message.includes('429')) {
@@ -39,7 +56,7 @@ function failureCopy(e: unknown): string {
 }
 
 export default function AssistantDock() {
-	const [enabled, setEnabled] = useState(false)
+	const [status, setStatus] = useState<Status>('loading')
 	const [open, setOpen] = useState(false)
 	const [turns, setTurns] = useState<Bubble[]>([])
 	const [draft, setDraft] = useState('')
@@ -52,11 +69,13 @@ export default function AssistantDock() {
 		let alive = true
 		getConfig()
 			.then(c => {
-				if (alive) setEnabled(Boolean(c?.ai_enabled))
+				if (alive) setStatus(c?.ai_enabled ? 'on' : 'off')
 			})
 			.catch(() => {
 				// A config read that fails is not a reason to show an assistant that
-				// cannot answer; staying hidden is the safe default.
+				// cannot answer, but it is also not a reason to hide a control the
+				// page now always offers; the panel says it is unavailable instead.
+				if (alive) setStatus('off')
 			})
 		return () => {
 			alive = false
@@ -84,7 +103,7 @@ export default function AssistantDock() {
 	const send = useCallback(
 		async (text: string) => {
 			const message = text.trim()
-			if (!message || busy) return
+			if (!message || busy || status !== 'on') return
 			setError('')
 			setDraft('')
 			// Replay what both sides said, so a clarifying question can be answered.
@@ -101,10 +120,8 @@ export default function AssistantDock() {
 				setBusy(false)
 			}
 		},
-		[busy, turns],
+		[busy, status, turns],
 	)
-
-	if (!enabled) return null
 
 	return (
 		<div className="fixed right-4 bottom-20 z-40 flex flex-col items-end gap-2 print:hidden lg:bottom-6">
@@ -126,6 +143,32 @@ export default function AssistantDock() {
 						</button>
 					</header>
 
+					{status !== 'on' && (
+						<div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
+							<p className="text-[13px] leading-relaxed text-mathua-muted">
+								{status === 'loading'
+									? 'Connecting to the assistant…'
+									: 'The assistant is unavailable right now. These go to the same places:'}
+							</p>
+							{status === 'off' && (
+								<div className="flex flex-wrap gap-2">
+									{AREAS.map(a => (
+										<Link
+											key={a.href}
+											href={a.href}
+											onClick={() => setOpen(false)}
+											className="rounded border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:bg-mathua-surface-elevated"
+										>
+											{a.label}
+										</Link>
+									))}
+								</div>
+							)}
+						</div>
+					)}
+
+					{status === 'on' && (
+						<>
 					<div ref={listRef} aria-live="polite" className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
 						{turns.length === 0 && (
 							<div className="space-y-2">
@@ -205,6 +248,8 @@ export default function AssistantDock() {
 							<ArrowUp size={16} />
 						</button>
 					</form>
+						</>
+					)}
 				</section>
 			)}
 
