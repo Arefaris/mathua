@@ -129,14 +129,14 @@ export default function AssistantDock() {
 				<section
 					role="dialog"
 					aria-label="Mathua assistant"
-					className="flex h-[min(28rem,70dvh)] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-lg border border-mathua-border bg-mathua-bg shadow-xl"
+					className="flex h-[min(28rem,70dvh)] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-none border border-mathua-border bg-mathua-bg shadow-xl"
 				>
 					<header className="flex items-center justify-between border-b border-mathua-border px-3 py-2">
 						<p className="font-mono text-[11px] tracking-wider text-mathua-muted uppercase">Assistant</p>
 						<button
 							type="button"
 							onClick={() => setOpen(false)}
-							className="rounded p-1 text-mathua-muted hover:bg-mathua-surface-elevated hover:text-mathua-primary"
+							className="rounded-none p-1 text-mathua-muted hover:bg-mathua-surface-elevated hover:text-mathua-primary"
 							aria-label="Close assistant"
 						>
 							<Close size={14} />
@@ -157,7 +157,7 @@ export default function AssistantDock() {
 											key={a.href}
 											href={a.href}
 											onClick={() => setOpen(false)}
-											className="rounded border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:bg-mathua-surface-elevated"
+											className="rounded-none border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:border-mathua-blue hover:bg-mathua-surface-elevated"
 										>
 											{a.label}
 										</Link>
@@ -181,7 +181,7 @@ export default function AssistantDock() {
 											key={s}
 											type="button"
 											onClick={() => void send(s)}
-											className="rounded border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:bg-mathua-surface-elevated"
+											className="rounded-none border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:border-mathua-blue hover:bg-mathua-surface-elevated"
 										>
 											{s}
 										</button>
@@ -194,7 +194,7 @@ export default function AssistantDock() {
 							<div key={i} className={t.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
 								<div
 									className={[
-										'max-w-[85%] rounded-lg px-3 py-2 text-[13px] leading-relaxed whitespace-pre-wrap',
+										'max-w-[85%] rounded-none px-3 py-2 text-[13px] leading-relaxed whitespace-pre-wrap',
 										t.role === 'user'
 											? 'bg-mathua-surface-elevated text-mathua-primary'
 											: 'border border-mathua-border text-mathua-primary',
@@ -208,7 +208,7 @@ export default function AssistantDock() {
 													key={l.href}
 													href={l.href}
 													onClick={() => setOpen(false)}
-													className="rounded border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:bg-mathua-surface-elevated"
+													className="rounded-none border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:border-mathua-blue hover:bg-mathua-surface-elevated"
 												>
 													{l.label}
 												</Link>
@@ -243,7 +243,7 @@ export default function AssistantDock() {
 							type="submit"
 							disabled={busy || !draft.trim()}
 							aria-label="Send"
-							className="rounded p-1.5 text-mathua-blue disabled:text-mathua-muted"
+							className="rounded-none p-1.5 text-mathua-blue disabled:text-mathua-muted"
 						>
 							<ArrowUp size={16} />
 						</button>
@@ -258,7 +258,7 @@ export default function AssistantDock() {
 				onClick={() => setOpen(v => !v)}
 				aria-expanded={open}
 				aria-label={open ? 'Close assistant' : 'Open assistant'}
-				className="flex h-11 w-11 items-center justify-center rounded-full border border-mathua-border bg-mathua-surface text-mathua-primary shadow-lg hover:bg-mathua-surface-elevated"
+				className="flex h-11 w-11 items-center justify-center rounded-none border border-mathua-border bg-mathua-surface text-mathua-primary shadow-lg hover:bg-mathua-surface-elevated"
 			>
 				{open ? <Close size={18} /> : <MessagesSquare size={18} />}
 			</button>
