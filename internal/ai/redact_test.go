@@ -50,6 +50,9 @@ func TestAssistantMessagesIncludeCatalogue(t *testing.T) {
 			{ID: "math-for-ml", Name: "Math for machine learning", Description: "Calculus and linear algebra for ML."},
 			{ID: "linear-algebra", Name: "Linear algebra"},
 		},
+		Areas: []Destination{
+			{ID: "diagnose", Name: "Take the diagnostic", Description: "Measures what you already know."},
+		},
 	}
 	msgs := c.Messages()
 	if len(msgs) != 4 {
@@ -65,6 +68,14 @@ func TestAssistantMessagesIncludeCatalogue(t *testing.T) {
 	for _, want := range []string{"math-for-ml", "Math for machine learning", "linear-algebra", "Calculus and linear algebra for ML."} {
 		if !strings.Contains(got, want) {
 			t.Errorf("assistant messages missing %q", want)
+		}
+	}
+	// Areas have to reach the model for a rule that names one to be obeyable.
+	// They are listed under their own heading so a destination and a surface
+	// are not confused for one another.
+	for _, want := range []string{"Areas of the site you may point at:", "diagnose", "Take the diagnostic", "Measures what you already know."} {
+		if !strings.Contains(got, want) {
+			t.Errorf("assistant messages missing area %q", want)
 		}
 	}
 }
@@ -148,6 +159,19 @@ func TestAssistantRulesSortFactsMethodsAndExercises(t *testing.T) {
 	// refusal for 1 + 1 happened.
 	if !strings.Contains(lower, "even when it contains numbers") {
 		t.Error("assistant rules do not say a fact with numbers is answerable")
+	}
+}
+
+// TestAssistantRulesPointBeginnersAtTheDiagnostic pins the orientation rule the
+// /plan page exposed: a destination sets a pace, but a visitor who has not told
+// the assistant what they know cannot be placed from a catalogue entry.
+func TestAssistantRulesPointBeginnersAtTheDiagnostic(t *testing.T) {
+	lower := strings.ToLower(assistantRules)
+	if !strings.Contains(lower, "where to start") {
+		t.Error("assistant rules do not name the question this rule answers")
+	}
+	if !strings.Contains(assistantRules, "[[diagnose]]") {
+		t.Error("assistant rules do not point at the diagnostic")
 	}
 }
 

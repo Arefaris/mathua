@@ -592,6 +592,40 @@ func TestAIAssistantHistoryReplaysOnlyConversationTurns(t *testing.T) {
 	}
 }
 
+// TestAIAssistantOffersTheAreasItCanLink pins the two halves of the same table:
+// the resolver turns [[diagnose]] into a link, and the model is told that the id
+// exists. A rule naming an id the model was never shown can only be obeyed by
+// guessing, and a guessed id resolves to nothing.
+func TestAIAssistantOffersTheAreasItCanLink(t *testing.T) {
+	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "Take the [[diagnose]] first."}
+	_, mux, _ := aiTestServer(t, 5, stub)
+
+	code, body := aiPost(t, mux, "/api/ai/assistant", `{"message":"where do I start?"}`, "1.2.3.4")
+	if code != http.StatusOK {
+		t.Fatalf("status = %d", code)
+	}
+	var catalogue string
+	for _, m := range stub.LastRequest().Messages {
+		if strings.Contains(m.Content, "Areas of the site you may point at:") {
+			catalogue = m.Content
+		}
+	}
+	for _, want := range []string{"diagnose: Take the diagnostic", "learn: Learn"} {
+		if !strings.Contains(catalogue, want) {
+			t.Errorf("the model was not offered %q", want)
+		}
+	}
+	segments, ok := body["segments"].([]interface{})
+	if !ok || len(segments) != 3 {
+		t.Fatalf("segments = %v, want text, link, text", body["segments"])
+	}
+	part, ok := segments[1].(map[string]interface{})
+	link, _ := part["link"].(map[string]interface{})
+	if !ok || link["id"] != "diagnose" || link["href"] != "/onboard" {
+		t.Errorf("diagnose link = %v, want id diagnose href /onboard", segments[1])
+	}
+}
+
 // TestAIAssistantHistoryIsBoundedToRecentTurns keeps one visitor from buying an
 // arbitrarily long prompt with one request.
 func TestAIAssistantHistoryIsBoundedToRecentTurns(t *testing.T) {

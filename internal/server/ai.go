@@ -58,6 +58,9 @@ type aiAssistantLink struct {
 	ID    string `json:"id"`
 	Label string `json:"label"`
 	Href  string `json:"href"`
+	// Description is shown to the model with the id, so it can tell the
+	// diagnostic from the planner. It is never sent to the client.
+	Description string `json:"-"`
 }
 
 // aiAssistantPart is one run of the reply: either plain text or a link.
@@ -82,13 +85,25 @@ type aiAssistantResponse struct {
 // assistantAreas are the fixed places the assistant may point at, beside the
 // destination catalogue. Hrefs live here and nowhere else.
 var assistantAreas = []aiAssistantLink{
-	{ID: "diagnose", Label: "Take the diagnostic", Href: "/diagnose"},
-	{ID: "plan", Label: "Your study plan", Href: "/plan"},
-	{ID: "learn", Label: "Learn", Href: "/learn"},
-	{ID: "review", Label: "Review", Href: "/review"},
-	{ID: "graph", Label: "Concept graph", Href: "/graph"},
-	{ID: "glossary", Label: "Glossary", Href: "/glossary"},
-	{ID: "leaderboard", Label: "Leaderboard", Href: "/leaderboard"},
+	{ID: "diagnose", Label: "Take the diagnostic", Href: "/onboard", Description: "Measures what you already know and starts you at the right concept."},
+	{ID: "plan", Label: "Your study plan", Href: "/plan", Description: "Sets a destination and a daily pace."},
+	{ID: "learn", Label: "Learn", Href: "/learn", Description: "Answer questions and get them graded."},
+	{ID: "review", Label: "Review", Href: "/review", Description: "Scheduled review of concepts you have met."},
+	{ID: "graph", Label: "Concept graph", Href: "/graph", Description: "Every concept and its prerequisites."},
+	{ID: "glossary", Label: "Glossary", Href: "/glossary", Description: "Definitions of mathematical terms."},
+	{ID: "leaderboard", Label: "Leaderboard", Href: "/leaderboard", Description: "Standings, when someone asks about them."},
+}
+
+// assistantContextAreas offers the linkable areas to the model. Without this
+// the resolver knows the ids and the model does not, so a rule telling it to
+// point at the diagnostic could only be obeyed by guessing an id or by writing
+// a URL, and a URL in a reply is not a link: only ids from this list are.
+func assistantContextAreas() []ai.Destination {
+	out := make([]ai.Destination, 0, len(assistantAreas))
+	for _, a := range assistantAreas {
+		out = append(out, ai.Destination{ID: a.ID, Name: a.Label, Description: a.Description})
+	}
+	return out
 }
 
 // assistantMarker matches the link syntax the system prompt requests.
@@ -253,6 +268,7 @@ func (s *Server) handleAIAssistant(w http.ResponseWriter, r *http.Request) {
 	actx := ai.AssistantContext{
 		Message:      msg,
 		Destinations: assistantDestinations(s.goalCandidates()),
+		Areas:        assistantContextAreas(),
 		History:      sanitizeAssistantHistory(req.History),
 	}
 	res, err := s.aiChain.Complete(r.Context(), ai.DataPseudonymous, ai.Request{

@@ -53,6 +53,7 @@ You do not solve or work through mathematics. What you are asked is one of three
 - A method for a class of problems: name the method and the idea behind it, in at most two sentences. Do not apply it step by step to an example, and do not carry out any part of the calculation.
 - A specific exercise the person gives you: never work it, never simplify or rearrange it for them, and never state or confirm a final value, not even to check one. Say in one sentence that you do not work through problems, and name [[learn]], where practice is graded.
 - Never restate a value as a confirmation, and never say an answer is correct.
+- When someone asks where to start, or what to do first, and has not told you what they already know, point at [[diagnose]] before any destination. A destination sets a pace; the diagnostic decides where to begin.
 - Suggest only destinations from the list you are given. Never invent a course, feature, price or date.
 - When you name a destination or an area of the site, write its id in double square brackets, like [[calculus]], and the app turns that into a link. Use only ids from the list you are given.
 - Do not claim to know anyone's progress, results or grades.
@@ -99,6 +100,12 @@ type AssistantContext struct {
 	// Destinations is the public catalogue the assistant may suggest from, so
 	// it can name a real place to start instead of inventing one.
 	Destinations []Destination
+	// Areas are the product surfaces it may point at: the diagnostic, the
+	// planner, Learn. They are passed in rather than written here because the
+	// routes belong to the server, which also owns the table that resolves an
+	// id to an href. Offering them matters: a rule that says "point at the
+	// diagnostic" is useless to a model that was never told its id.
+	Areas []Destination
 	// History is the earlier turns of this conversation, oldest first. It is the
 	// visitor's own words and the assistant's own replies, so it carries no data
 	// the current message does not already carry.
@@ -141,24 +148,35 @@ func (c AssistantContext) Messages() []Message {
 	return msgs
 }
 
-// Catalogue renders the destination list as one system message. It is empty
-// when the server has no catalogue, which is a valid state: the assistant then
-// answers product questions and asks where the visitor wants to go, rather than
-// naming a destination it cannot vouch for.
+// Catalogue renders the destination and area lists as one system message. It
+// is empty when the server passes neither, which is a valid state: the
+// assistant then answers product questions and asks where the visitor wants to
+// go, rather than naming a destination it cannot vouch for.
 func (c AssistantContext) Catalogue() string {
-	if len(c.Destinations) == 0 {
-		return ""
-	}
 	var b strings.Builder
-	b.WriteString("Destinations you may suggest:\n")
-	for _, d := range c.Destinations {
-		fmt.Fprintf(&b, "- %s: %s", d.ID, d.Name)
+	if len(c.Destinations) > 0 {
+		b.WriteString("Destinations you may suggest:\n")
+		writeCatalogueEntries(&b, c.Destinations)
+	}
+	if len(c.Areas) > 0 {
+		if b.Len() > 0 {
+			b.WriteByte('\n')
+		}
+		b.WriteString("Areas of the site you may point at:\n")
+		writeCatalogueEntries(&b, c.Areas)
+	}
+	return strings.TrimRight(b.String(), "\n")
+}
+
+// writeCatalogueEntries renders one "- id: Name — description" line per entry.
+func writeCatalogueEntries(b *strings.Builder, entries []Destination) {
+	for _, d := range entries {
+		fmt.Fprintf(b, "- %s: %s", d.ID, d.Name)
 		if d.Description != "" {
-			fmt.Fprintf(&b, " — %s", truncateRunes(d.Description, maxDescriptionRunes))
+			fmt.Fprintf(b, " — %s", truncateRunes(d.Description, maxDescriptionRunes))
 		}
 		b.WriteByte('\n')
 	}
-	return strings.TrimRight(b.String(), "\n")
 }
 
 // truncateRunes cuts s to at most n runes, appending an ellipsis when it was

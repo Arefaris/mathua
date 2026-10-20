@@ -10,7 +10,7 @@ import { clampGoal, daysFor, monthLabel, DEFAULT_DAILY_GOAL, GOAL_PRESETS } from
 // mastery are independent of every number here. Shared by /plan (full) and
 // Settings (compact): compact hides the workload detail list, the what-if
 // slider, and the plan-delta line, keeping destination/mode/inputs/save.
-export default function PlanEditor({ compact = false, initialDestination }: { compact?: boolean; initialDestination?: string }) {
+export default function PlanEditor({ compact = false, initialDestination, onSaved }: { compact?: boolean; initialDestination?: string; onSaved?: () => void }) {
   const [dests, setDests] = useState<DestinationStatus[]>([])
   const [destId, setDestId] = useState('')
   const [mode, setMode] = useState<'effort' | 'deadline'>('effort')
@@ -94,6 +94,12 @@ export default function PlanEditor({ compact = false, initialDestination }: { co
     try {
       const p = await savePlan({ destination: destId, daily_goal: clampGoal(dailyGoal), deadline_days: mode === 'deadline' ? deadlineDays : 0, rest_days: restDays })
       setSaved(p)
+      // The caller owns what to say after a save. This component cannot: the
+      // next step is a link to another route, and Settings embeds the editor
+      // compact for editing a plan that already exists, where that advice is
+      // noise. A callback keeps one copy of the sentence in the page that can
+      // show it.
+      onSaved?.()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed')
     } finally {
