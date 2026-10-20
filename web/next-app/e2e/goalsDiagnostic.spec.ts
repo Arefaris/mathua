@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import { answerField, focusAnswerField, typeAnswer } from './helpers/answer'
 
 // Goals diagnostic flow (select → answer → results). This is the safety net

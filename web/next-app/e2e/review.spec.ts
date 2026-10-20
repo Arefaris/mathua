@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import { typeAnswer } from './helpers/answer'
 
 // Review runner flow (intro → answer → done). Safety net for the dead-end

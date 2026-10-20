@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Regression: layout + page both rendered chrome on these routes
 // (double headers on /docs, double bottom tab bars on /diagnose + /goals).

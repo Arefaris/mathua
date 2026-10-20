@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import conceptsData from '../data/concepts.json'
 
 const sample = conceptsData.slice(0, 300) as Array<{ id: string; label: string; domain: string; prerequisites: string[] }>

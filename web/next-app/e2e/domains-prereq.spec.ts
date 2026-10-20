@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // The reported failure: "View prerequisite path" on a locked curriculum row did
 // nothing useful — the panel rendered below a 128-concept list, outside the

@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 import { answerField, answerLatex, focusAnswerField, setAnswer, typeIntoField, showVirtualKeyboard, keyboardRows, keyboardPanel, keyboardVisible, hideVirtualKeyboard, keycaps, glyphKeycap, loadingAnswerField, captureSubmittedAnswer, pressKeycap, useAlphabeticLayout, mathLiveSpacebar } from './helpers/answer'
 import { installInstrumentation, delayMathLiveChunk } from './helpers/instrument'
 

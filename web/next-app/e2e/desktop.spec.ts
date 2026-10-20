@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('graph controls are desktop-sized and minimap is readable at 1280px', async ({ page }) => {
   await page.goto('/graph')

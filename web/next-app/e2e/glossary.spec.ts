@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // The glossary is a static reference: no API routes are stubbed here on
 // purpose. If the page ever needs the network to render, these tests fail,

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import conceptsData from '../data/concepts.json'
 
 test('landing page renders a diagram-free hero', async ({ page }) => {

@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test'
-import type { Page } from '@playwright/test'
+import { test, expect } from './fixtures'
+import type { Page } from './fixtures'
 import { answerLatex, answerField, focusAnswerField, waitForAnswerField } from './helpers/answer'
 
 const CONCEPT = 'arith.add.single'

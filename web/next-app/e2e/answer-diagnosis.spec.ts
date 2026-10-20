@@ -56,7 +56,7 @@
 //
 // Runs under `chromium` (desktop) and both mobile profiles.
 
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 import { answerField, focusAnswerField, setAnswer, typeIntoField } from './helpers/answer'
 import {
   installInstrumentation,
