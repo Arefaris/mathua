@@ -16,15 +16,34 @@ import (
 func aiStores(t *testing.T) map[string]Repository {
 	t.Helper()
 	stores := map[string]Repository{"sq": newTestStore(t)}
-	if dsn := os.Getenv("TEST_POSTGRES_DSN"); dsn != "" {
-		pg, err := NewPostgresStore(dsn)
-		if err != nil {
-			t.Fatalf("open postgres: %v", err)
-		}
-		t.Cleanup(func() { pg.Close() })
-		stores["pg"] = pg
+	if os.Getenv("TEST_POSTGRES_DSN") != "" {
+		stores["pg"] = freshPostgresStore(t)
 	}
 	return stores
+}
+
+// freshPostgresStore opens the Postgres twin and empties ai_usage first.
+//
+// The CI service container is shared by two steps that both run these tests, so
+// the second step began with the first step's rows: a three-reserve test read
+// six, a "first" reserve was refused by a ceiling the previous run had already
+// reached, and a prune that had removed one row reported two. Every assertion
+// here is about a counter, so a counter has to start from zero; making one is
+// cheaper than debugging arithmetic that is only wrong on the second run.
+//
+// PruneAIUsage is the delete the janitor already uses, so this borrows a tested
+// path instead of adding SQL to a test file.
+func freshPostgresStore(t *testing.T) *PostgresStore {
+	t.Helper()
+	pg, err := NewPostgresStore(os.Getenv("TEST_POSTGRES_DSN"))
+	if err != nil {
+		t.Fatalf("open postgres: %v", err)
+	}
+	t.Cleanup(func() { pg.Close() })
+	if _, err := pg.PruneAIUsage("9999-12-31"); err != nil {
+		t.Fatalf("clear ai usage: %v", err)
+	}
+	return pg
 }
 
 // uncapped gives a limit that maintains its counter without a ceiling, which is
@@ -124,13 +143,8 @@ func TestAIUsageConcurrentReservations(t *testing.T) {
 	}
 	t.Cleanup(func() { sq.Close() })
 	stores["sq"] = sq
-	if dsn := os.Getenv("TEST_POSTGRES_DSN"); dsn != "" {
-		pg, err := NewPostgresStore(dsn)
-		if err != nil {
-			t.Fatalf("open postgres: %v", err)
-		}
-		t.Cleanup(func() { pg.Close() })
-		stores["pg"] = pg
+	if os.Getenv("TEST_POSTGRES_DSN") != "" {
+		stores["pg"] = freshPostgresStore(t)
 	}
 
 	const goroutines = 100
