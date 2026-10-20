@@ -427,3 +427,27 @@ test('double-clicking Check Answer fires exactly one POST', async ({ page }) => 
   expect(answerPosts).toBe(1)
   await expect(page.getByText('Failed to submit answer')).toHaveCount(0)
 })
+
+// The assistant trigger and the table-of-contents button both float in the
+// bottom-right corner, and on `/how-it-works` the trigger sat directly on top of
+// the Contents button: two 44px controls at the same offset, so the TOC was
+// unreachable on a phone. They are stacked now, and this pins the stacking
+// rather than the numbers, so either offset can move as long as the two boxes
+// stay apart.
+test('the assistant trigger does not cover the contents button', async ({ page }) => {
+  await page.goto('/how-it-works')
+
+  const contents = page.getByRole('button', { name: 'Table of contents' })
+  const assistant = page.getByRole('button', { name: 'Open assistant' })
+  await expect(contents).toBeVisible()
+  await expect(assistant).toBeVisible()
+
+  const c = await contents.boundingBox()
+  const a = await assistant.boundingBox()
+  expect(c, 'contents button has no box').not.toBeNull()
+  expect(a, 'assistant trigger has no box').not.toBeNull()
+  if (!c || !a) return
+
+  const overlap = c.x < a.x + a.width && a.x < c.x + c.width && c.y < a.y + a.height && a.y < c.y + c.height
+  expect(overlap, `contents ${JSON.stringify(c)} overlaps assistant ${JSON.stringify(a)}`).toBe(false)
+})

@@ -76,8 +76,12 @@ export default function TableOfContents({
             type="button"
             aria-label="Table of contents"
             className="lg:hidden fixed right-4 z-40 flex items-center gap-2 border border-mathua-border bg-mathua-surface px-3 font-mono text-[11px] text-mathua-secondary min-h-[44px]"
-            // Clear the bottom tab bar, which is itself fixed at the safe-area bottom.
-            style={{ bottom: 'calc(80px + env(safe-area-inset-bottom))' }}
+            // Clear the bottom tab bar, which is itself fixed at the safe-area bottom,
+            // and clear the assistant trigger above it: both float in this corner, and
+            // stacking them here is cheaper than teaching either component about the
+            // other. 136px is the trigger's 80px offset plus its 44px height plus a
+            // 12px gap.
+            style={{ bottom: 'calc(136px + env(safe-area-inset-bottom))' }}
           >
             <Layers size={16} />
             Contents

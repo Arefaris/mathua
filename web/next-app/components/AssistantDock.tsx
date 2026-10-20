@@ -124,7 +124,10 @@ export default function AssistantDock() {
 	)
 
 	return (
-		<div className="fixed right-4 bottom-20 z-40 flex flex-col items-end gap-2 print:hidden lg:bottom-6">
+		// The mobile offset carries the safe-area inset for the same reason the tab
+		// bar does: on a phone with a home indicator, a plain 5rem lands the trigger
+		// on top of the tabs. On desktop the tab bar is gone, so the inset is too.
+		<div className="fixed right-4 bottom-[calc(80px+env(safe-area-inset-bottom))] z-40 flex flex-col items-end gap-2 print:hidden lg:bottom-6">
 			{open && (
 				<section
 					role="dialog"
