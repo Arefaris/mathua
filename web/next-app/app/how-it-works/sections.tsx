@@ -15,6 +15,7 @@ import {
   tableHeaderStyle,
   bodyFont,
 } from './styles'
+import { CONCEPT_COUNT, DOMAIN_COUNT } from '../../lib/curriculumFacts'
 
 const StudentModelFlow = dynamic(() => import('../../components/StudentModelFlow'), {
   ssr: false,
@@ -48,8 +49,8 @@ export function ConceptGraphSection() {
         B is ever shown to the student.
       </p>
       <p style={bodyStyle}>
-        The graph currently contains 1250 concepts spanning 17 domains: from early Counting
-        through Calculus, Linear Algebra and Topology.
+        The graph currently contains {CONCEPT_COUNT} concepts spanning {DOMAIN_COUNT} domains:
+        from early Counting through Calculus, Linear Algebra and Topology.
       </p>
       <pre style={codeBlockStyle}>
 {`{
@@ -204,7 +205,8 @@ export function DiagnosticSection() {
       <DiagnosticFlow />
       <p style={bodyStyle}>
         The diagnostic test asks as few questions as possible. Without this algorithm, a
-        naive assessment of 1250 concepts would require up to 1250 questions. The CAT approach,
+        naive assessment of {CONCEPT_COUNT} concepts would require up to {CONCEPT_COUNT} questions.
+        The CAT approach,
         picking each question by information gain over a covering set, reduces this by roughly 94%.
       </p>
       <p style={bodyStyle}>
