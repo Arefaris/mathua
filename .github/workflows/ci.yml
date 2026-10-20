@@ -86,10 +86,6 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run lint
       - run: npm run lint:antislop
-      # Repo-root: aislop reads .aislop/config.yml (excludes vendored/generated).
-      - name: aislop (soft gate — reports, never fails)
-        working-directory: ${{ github.workspace }}
-        run: npx --yes aislop@0.16.1 ci --human
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
@@ -101,6 +97,17 @@ jobs:
       - run: npx playwright test --shard=2/2
         env:
           PW_WORKERS: 1
+      # Repo-root: aislop reads .aislop/config.yml (excludes vendored/generated).
+      #
+      # This runs last on purpose. It exits 1 on any error, and a failed step skips
+      # every step after it: on two consecutive pushes a single finding here meant
+      # npm test, npm run build and both Playwright shards never ran, so the commit
+      # was neither tested nor deployed. The step used to be named "soft gate -
+      # reports, never fails", which was false in the same way. It is a hard gate
+      # and it is now placed where being hard costs only itself.
+      - name: aislop security scan (fails on error)
+        working-directory: ${{ github.workspace }}
+        run: npx --yes aislop@0.16.1 ci --human
       # A failing e2e run used to leave nothing behind: the config retains a trace and writes an HTML
       # report, and this job uploaded neither, so the only evidence was the assertion text in the log.
       # The trace has the DOM snapshot, the network log and the screenshots.
