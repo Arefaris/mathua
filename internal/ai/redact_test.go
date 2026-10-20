@@ -14,12 +14,12 @@ func joinMessages(msgs []Message) string {
 	return b.String()
 }
 
-func TestTutorMessagesNeverLeakExpectedAnswer(t *testing.T) {
+func TestAssistantMessagesNeverLeakExpectedAnswer(t *testing.T) {
 	const sentinel = "EXPECTED-ANSWER-SENTINEL-7f3"
-	c := TutorContext{
-		LearnerMessage: "how do I solve this?",
+	c := AssistantContext{
+		Message:        "how do I solve this?",
 		ExpectedAnswer: sentinel,
-		ConceptIDs:     []string{"algebra.linear.one-variable"},
+		Destinations:   []Destination{{ID: "math-for-ml", Name: "Math for machine learning"}},
 	}
 	for _, m := range c.Messages() {
 		if strings.Contains(m.Content, sentinel) {
@@ -28,64 +28,95 @@ func TestTutorMessagesNeverLeakExpectedAnswer(t *testing.T) {
 	}
 }
 
-func TestTutorMessagesDropIdentifiers(t *testing.T) {
-	c := TutorContext{
-		LearnerMessage: "help with fractions",
-		LearnerName:    "NAME-SENTINEL-Alice",
-		LearnerEmail:   "EMAIL-SENTINEL-alice@example.test",
-		StudentID:      "ID-SENTINEL-12345",
-		Domain:         "algebra",
+func TestAssistantMessagesDropIdentifiers(t *testing.T) {
+	c := AssistantContext{
+		Message:      "what is this app?",
+		LearnerName:  "NAME-SENTINEL-Alice",
+		LearnerEmail: "EMAIL-SENTINEL-alice@example.test",
+		StudentID:    "ID-SENTINEL-12345",
 	}
 	got := joinMessages(c.Messages())
 	for _, forbidden := range []string{"NAME-SENTINEL-Alice", "EMAIL-SENTINEL-alice@example.test", "ID-SENTINEL-12345"} {
 		if strings.Contains(got, forbidden) {
-			t.Errorf("identifier %q leaked into tutor messages", forbidden)
+			t.Errorf("identifier %q leaked into assistant messages", forbidden)
 		}
 	}
 }
 
-func TestTutorMessagesKeepLearningContext(t *testing.T) {
-	c := TutorContext{
-		LearnerMessage: "explain completing the square",
-		Domain:         "algebra",
-		ConceptIDs:     []string{"algebra.quadratic.completing-square", "algebra.quadratic.roots"},
-		Mastery:        []MasteryLine{{ConceptID: "algebra.quadratic.roots", State: "learning"}},
-		LessonExcerpt:  "A quadratic has the form ax^2 + bx + c = 0.",
+func TestAssistantMessagesIncludeCatalogue(t *testing.T) {
+	c := AssistantContext{
+		Message: "where do I start?",
+		Destinations: []Destination{
+			{ID: "math-for-ml", Name: "Math for machine learning", Description: "Calculus and linear algebra for ML."},
+			{ID: "linear-algebra", Name: "Linear algebra"},
+		},
 	}
 	msgs := c.Messages()
-	if len(msgs) < 3 {
-		t.Fatalf("want system, context and user messages, got %d", len(msgs))
+	if len(msgs) != 3 {
+		t.Fatalf("want system, catalogue and user messages, got %d", len(msgs))
 	}
-	if msgs[0].Role != RoleSystem {
-		t.Errorf("first message role = %s, want system", msgs[0].Role)
+	if msgs[0].Role != RoleSystem || msgs[1].Role != RoleSystem {
+		t.Errorf("first two roles = %s, %s, want system, system", msgs[0].Role, msgs[1].Role)
 	}
-	if last := msgs[len(msgs)-1]; last.Role != RoleUser || last.Content != "explain completing the square" {
+	if last := msgs[len(msgs)-1]; last.Role != RoleUser || last.Content != "where do I start?" {
 		t.Errorf("last message = %+v", last)
 	}
 	got := joinMessages(msgs)
-	for _, want := range []string{
-		"algebra",
-		"algebra.quadratic.completing-square",
-		"algebra.quadratic.roots: learning",
-		"ax^2 + bx + c = 0",
-	} {
+	for _, want := range []string{"math-for-ml", "Math for machine learning", "linear-algebra", "Calculus and linear algebra for ML."} {
 		if !strings.Contains(got, want) {
-			t.Errorf("tutor messages missing %q", want)
+			t.Errorf("assistant messages missing %q", want)
 		}
 	}
 }
 
-func TestTutorMessagesOmitEmptyContextBlock(t *testing.T) {
-	c := TutorContext{LearnerMessage: "hello"}
+func TestAssistantMessagesOmitCatalogueWhenEmpty(t *testing.T) {
+	c := AssistantContext{Message: "hello"}
 	msgs := c.Messages()
 	if len(msgs) != 2 {
-		t.Fatalf("want exactly system+user when there is no context, got %d: %+v", len(msgs), msgs)
+		t.Fatalf("want exactly system+user when there is no catalogue, got %d: %+v", len(msgs), msgs)
+	}
+	if c.Catalogue() != "" {
+		t.Errorf("Catalogue() = %q, want empty", c.Catalogue())
 	}
 }
 
-func TestTutorContextClassIsPseudonymous(t *testing.T) {
-	if got := (TutorContext{}).Class(); got != DataPseudonymous {
-		t.Errorf("TutorContext class = %s, want pseudonymous", got)
+func TestAssistantContextClassIsPseudonymous(t *testing.T) {
+	if got := (AssistantContext{}).Class(); got != DataPseudonymous {
+		t.Errorf("AssistantContext class = %s, want pseudonymous", got)
+	}
+}
+
+// TestAssistantPromptAsksForPlainProse pins the instruction that the endpoint's
+// only rendering surface depends on. The app shows the reply as text, so a
+// model told nothing about format returns Markdown and LaTeX that the reader
+// sees as asterisks and backslashes.
+func TestAssistantPromptAsksForPlainProse(t *testing.T) {
+	lower := strings.ToLower(assistantSystemPrompt)
+	for _, want := range []string{"plain prose", "no markdown", "no latex"} {
+		if !strings.Contains(lower, want) {
+			t.Errorf("assistant prompt does not ask for %q", want)
+		}
+	}
+}
+
+// TestAssistantPromptIsTheAssistantNotATutor guards the rename at the level
+// that matters: what the model is told it is. A prompt opening "study tutor"
+// produced maths answers to product questions.
+func TestAssistantPromptIsTheAssistantNotATutor(t *testing.T) {
+	lower := strings.ToLower(assistantSystemPrompt)
+	if strings.Contains(lower, "you are mathua's study tutor") {
+		t.Error("assistant prompt still declares itself a study tutor")
+	}
+	if !strings.Contains(lower, "you are mathua's assistant") {
+		t.Error("assistant prompt does not declare itself the assistant")
+	}
+}
+
+func TestCatalogueTruncatesLongDescription(t *testing.T) {
+	long := strings.Repeat("x", maxDescriptionRunes+50)
+	c := AssistantContext{Destinations: []Destination{{ID: "a", Name: "A", Description: long}}}
+	if got := c.Catalogue(); !strings.Contains(got, "...") {
+		t.Errorf("long description was not truncated: %q", got)
 	}
 }
 

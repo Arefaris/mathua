@@ -157,13 +157,13 @@ type Server struct {
 	// enhancement, never a dependency.
 	aiChain *ai.Chain
 	aiQuota *ai.Quota
-	// aiTutorMaxTokens and aiGoalMaxTokens bound one completion each. They are
+	// aiAssistantMaxTokens and aiGoalMaxTokens bound one completion each. They are
 	// fields rather than constants because the right budget depends on the
 	// provider's model: a reasoning model spends part of every budget on hidden
 	// reasoning tokens, which is how a 200-token goal-scope request came to
 	// spend 135 tokens on reasoning and then fail.
-	aiTutorMaxTokens int
-	aiGoalMaxTokens  int
+	aiAssistantMaxTokens int
+	aiGoalMaxTokens      int
 	// ipHeader is the trusted client-IP header, or "" to use the socket
 	// address. See resolveTrustedIPHeader.
 	ipHeader string
@@ -171,8 +171,8 @@ type Server struct {
 
 // AILimits are the per-request token budgets the AI handlers apply.
 type AILimits struct {
-	TutorMaxTokens int
-	GoalMaxTokens  int
+	AssistantMaxTokens int
+	GoalMaxTokens      int
 }
 
 // Option configures optional parts of a Server at construction.
@@ -185,8 +185,8 @@ func WithAI(chain *ai.Chain, quota *ai.Quota, limits AILimits) Option {
 	return func(s *Server) {
 		s.aiChain = chain
 		s.aiQuota = quota
-		if limits.TutorMaxTokens > 0 {
-			s.aiTutorMaxTokens = limits.TutorMaxTokens
+		if limits.AssistantMaxTokens > 0 {
+			s.aiAssistantMaxTokens = limits.AssistantMaxTokens
 		}
 		if limits.GoalMaxTokens > 0 {
 			s.aiGoalMaxTokens = limits.GoalMaxTokens
@@ -197,19 +197,19 @@ func WithAI(chain *ai.Chain, quota *ai.Quota, limits AILimits) Option {
 func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService, opts ...Option) *Server {
 	trustedHeader := resolveTrustedIPHeader()
 	s := &Server{
-		eng:              eng,
-		repo:             repo,
-		auth:             auth,
-		diagSessions:     make(map[string]*diagnostic.Session),
-		diagCreated:      make(map[string]time.Time),
-		quizSessions:     make(map[string]*quiz.Session),
-		quizCreated:      make(map[string]time.Time),
-		authLimiter:      newRateLimiter(5, 10, time.Minute, trustedHeader),
-		writeLimiter:     newRateLimiter(20, 20, 3*time.Second, trustedHeader),
-		shareLimiter:     newRateLimiter(10, 10, 6*time.Second, trustedHeader),
-		aiTutorMaxTokens: ai.DefaultTutorMaxTokens,
-		aiGoalMaxTokens:  ai.DefaultGoalMaxTokens,
-		ipHeader:         trustedHeader,
+		eng:                  eng,
+		repo:                 repo,
+		auth:                 auth,
+		diagSessions:         make(map[string]*diagnostic.Session),
+		diagCreated:          make(map[string]time.Time),
+		quizSessions:         make(map[string]*quiz.Session),
+		quizCreated:          make(map[string]time.Time),
+		authLimiter:          newRateLimiter(5, 10, time.Minute, trustedHeader),
+		writeLimiter:         newRateLimiter(20, 20, 3*time.Second, trustedHeader),
+		shareLimiter:         newRateLimiter(10, 10, 6*time.Second, trustedHeader),
+		aiAssistantMaxTokens: ai.DefaultAssistantMaxTokens,
+		aiGoalMaxTokens:      ai.DefaultGoalMaxTokens,
+		ipHeader:             trustedHeader,
 	}
 	// MATHUA_LOADTEST=1 relaxes rate limits so load generators measure the
 	// app and database instead of the limiter. Local/staging use only —
@@ -429,7 +429,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// before the per-identity cap applies. Neither is on any learning path: a
 	// disabled or failed call leaves grading, scheduling and onboarding exactly
 	// as they are.
-	mux.HandleFunc("/api/ai/tutor", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleAITutor)))))
+	mux.HandleFunc("/api/ai/assistant", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleAIAssistant)))))
 	mux.HandleFunc("/api/ai/goal-scope", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleAIGoalScope)))))
 }
 

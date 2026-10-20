@@ -89,7 +89,7 @@ func prodPolicy() ai.Policy {
 	}
 }
 
-func TestAITutorUnavailableWhenNoChain(t *testing.T) {
+func TestAIAssistantUnavailableWhenNoChain(t *testing.T) {
 	// A server built without WithAI: the deterministic app must answer with a
 	// clear "unavailable", not a panic or a 500.
 	d, _ := concepts.Build([]concepts.Concept{{ID: "a", Label: "A", Domain: "d", GradingType: "numeric"}})
@@ -99,9 +99,9 @@ func TestAITutorUnavailableWhenNoChain(t *testing.T) {
 	mux := http.NewServeMux()
 	s.Register(mux)
 
-	code, _ := aiPost(t, mux, "/api/ai/tutor", `{"message":"hi"}`, "1.2.3.4")
+	code, _ := aiPost(t, mux, "/api/ai/assistant", `{"message":"hi"}`, "1.2.3.4")
 	if code != http.StatusServiceUnavailable {
-		t.Fatalf("disabled tutor status = %d, want 503", code)
+		t.Fatalf("disabled assistant status = %d, want 503", code)
 	}
 }
 
@@ -128,11 +128,11 @@ func TestAIConfigExposesOnlyABoolean(t *testing.T) {
 	}
 }
 
-func TestAITutorReturnsReply(t *testing.T) {
+func TestAIAssistantReturnsReply(t *testing.T) {
 	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "Try factoring."}
 	_, mux, _ := aiTestServer(t, 5, stub)
 
-	code, res := aiPost(t, mux, "/api/ai/tutor", `{"message":"how do I factor?","domain":"algebra"}`, "1.2.3.4")
+	code, res := aiPost(t, mux, "/api/ai/assistant", `{"message":"how do I factor?"}`, "1.2.3.4")
 	if code != http.StatusOK {
 		t.Fatalf("status = %d, body = %v", code, res)
 	}
@@ -141,16 +141,16 @@ func TestAITutorReturnsReply(t *testing.T) {
 	}
 }
 
-// TestAITutorNeverForwardsExpectedAnswer is the answer-leakage guard: even if a
+// TestAIAssistantNeverForwardsExpectedAnswer is the answer-leakage guard: even if a
 // client sends an expected_answer field, no request reaching a provider may
 // contain it.
-func TestAITutorNeverForwardsExpectedAnswer(t *testing.T) {
+func TestAIAssistantNeverForwardsExpectedAnswer(t *testing.T) {
 	const sentinel = "SEKRIT-EXPECTED-ANSWER-42"
 	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "hint"}
 	_, mux, _ := aiTestServer(t, 5, stub)
 
 	body := `{"message":"what is x?","expected_answer":"` + sentinel + `","concept_ids":["a"]}`
-	code, _ := aiPost(t, mux, "/api/ai/tutor", body, "1.2.3.4")
+	code, _ := aiPost(t, mux, "/api/ai/assistant", body, "1.2.3.4")
 	if code != http.StatusOK {
 		t.Fatalf("status = %d", code)
 	}
@@ -165,12 +165,12 @@ func TestAITutorNeverForwardsExpectedAnswer(t *testing.T) {
 	}
 }
 
-func TestAITutorFailsOverToSecondProvider(t *testing.T) {
+func TestAIAssistantFailsOverToSecondProvider(t *testing.T) {
 	first := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Err: ai.NewTransient(429, 0, errString("rate limited"))}
 	second := &ai.Stub{IDValue: "cloudflare", Pol: prodPolicy(), Reply: "from failover"}
 	_, mux, _ := aiTestServer(t, 5, first, second)
 
-	code, res := aiPost(t, mux, "/api/ai/tutor", `{"message":"hi"}`, "1.2.3.4")
+	code, res := aiPost(t, mux, "/api/ai/assistant", `{"message":"hi"}`, "1.2.3.4")
 	if code != http.StatusOK {
 		t.Fatalf("status = %d, body = %v", code, res)
 	}
@@ -188,25 +188,25 @@ func TestAIGuestQuotaKeyedByIP(t *testing.T) {
 	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "ok"}
 	_, mux, _ := aiTestServer(t, 1, stub)
 
-	code, _ := aiPost(t, mux, "/api/ai/tutor", `{"message":"one","student_id":"guest_aaa"}`, "203.0.113.9")
+	code, _ := aiPost(t, mux, "/api/ai/assistant", `{"message":"one","student_id":"guest_aaa"}`, "203.0.113.9")
 	if code != http.StatusOK {
 		t.Fatalf("first request status = %d", code)
 	}
-	code, _ = aiPost(t, mux, "/api/ai/tutor", `{"message":"two","student_id":"guest_bbb"}`, "203.0.113.9")
+	code, _ = aiPost(t, mux, "/api/ai/assistant", `{"message":"two","student_id":"guest_bbb"}`, "203.0.113.9")
 	if code != http.StatusTooManyRequests {
 		t.Fatalf("second request from the same IP must be capped, got %d", code)
 	}
 	// A different IP has its own budget.
-	code, _ = aiPost(t, mux, "/api/ai/tutor", `{"message":"three","student_id":"guest_ccc"}`, "203.0.113.10")
+	code, _ = aiPost(t, mux, "/api/ai/assistant", `{"message":"three","student_id":"guest_ccc"}`, "203.0.113.10")
 	if code != http.StatusOK {
 		t.Fatalf("a different IP should have its own budget, got %d", code)
 	}
 }
 
-func TestAITutorRejectsEmptyMessage(t *testing.T) {
+func TestAIAssistantRejectsEmptyMessage(t *testing.T) {
 	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "ok"}
 	_, mux, _ := aiTestServer(t, 5, stub)
-	code, _ := aiPost(t, mux, "/api/ai/tutor", `{"message":"   "}`, "1.2.3.4")
+	code, _ := aiPost(t, mux, "/api/ai/assistant", `{"message":"   "}`, "1.2.3.4")
 	if code != http.StatusBadRequest {
 		t.Fatalf("status = %d, want 400", code)
 	}
@@ -394,10 +394,10 @@ func TestAIUsageCutoffIsWellBehind(t *testing.T) {
 func TestAIGoalScopeDenialIsCounted(t *testing.T) {
 	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "ok"}
 	s, mux, _ := aiTestServer(t, 1, stub)
-	if code, _ := aiPost(t, mux, "/api/ai/tutor", `{"message":"one"}`, "203.0.113.7"); code != http.StatusOK {
+	if code, _ := aiPost(t, mux, "/api/ai/assistant", `{"message":"one"}`, "203.0.113.7"); code != http.StatusOK {
 		t.Fatalf("first status = %d", code)
 	}
-	if code, _ := aiPost(t, mux, "/api/ai/tutor", `{"message":"two"}`, "203.0.113.7"); code != http.StatusTooManyRequests {
+	if code, _ := aiPost(t, mux, "/api/ai/assistant", `{"message":"two"}`, "203.0.113.7"); code != http.StatusTooManyRequests {
 		t.Fatalf("second status = %d, want 429", code)
 	}
 	if got := s.aiChain.Stats().Snapshot().Denials; got != 1 {
@@ -414,28 +414,27 @@ func TestAIGuestQuotaIgnoresUntrustedHeader(t *testing.T) {
 	_, mux, _ := aiTestServerTrusting(t, 1, "", stub)
 
 	// Two requests, two different forged headers, one socket: one budget.
-	code, _ := aiPost(t, mux, "/api/ai/tutor", `{"message":"one"}`, "203.0.113.9")
+	code, _ := aiPost(t, mux, "/api/ai/assistant", `{"message":"one"}`, "203.0.113.9")
 	if code != http.StatusOK {
 		t.Fatalf("first request status = %d", code)
 	}
-	code, _ = aiPost(t, mux, "/api/ai/tutor", `{"message":"two"}`, "203.0.113.10")
+	code, _ = aiPost(t, mux, "/api/ai/assistant", `{"message":"two"}`, "203.0.113.10")
 	if code != http.StatusTooManyRequests {
 		t.Fatalf("a forged header must not grant a second budget, got %d", code)
 	}
 }
 
-func TestSanitizeConceptIDsDropsUnknown(t *testing.T) {
-	s, _, _ := aiTestServer(t, 5, &ai.Stub{IDValue: "groq", Pol: prodPolicy()})
-	got := s.sanitizeConceptIDs([]string{"a", "does-not-exist", "b", "b"})
-	want := []string{"a", "b", "b"}
-	if len(got) != len(want) {
-		t.Fatalf("sanitize = %v, want %v", got, want)
+// TestAssistantDestinationsArePublicCatalogue pins the projection: the
+// assistant receives ids, names and descriptions from the server's own
+// destination list, and nil rather than an empty slice when there is no
+// catalogue, so Messages can omit the block entirely.
+func TestAssistantDestinationsArePublicCatalogue(t *testing.T) {
+	got := assistantDestinations([]goalCandidate{{ID: "calculus", Name: "Calculus", Description: "Rates of change."}})
+	if len(got) != 1 || got[0].ID != "calculus" || got[0].Name != "Calculus" || got[0].Description != "Rates of change." {
+		t.Fatalf("destinations = %+v", got)
 	}
-	for i := range want {
-		if got[i] != want[i] {
-			t.Errorf("sanitize = %v, want %v", got, want)
-			break
-		}
+	if assistantDestinations(nil) != nil {
+		t.Error("empty candidates must give a nil catalogue")
 	}
 }
 

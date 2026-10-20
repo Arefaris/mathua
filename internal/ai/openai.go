@@ -221,7 +221,7 @@ const maxErrorSummaryRunes = 300
 // The raw body is deliberately discarded. A provider that rejects a request
 // frequently echoes parts of it back, and Groq's `json_validate_failed` returns
 // the model's unparsed generation under `failed_generation` — which, for a
-// tutor whose whole input is the learner's own words, can restate them. A log
+// caller whose whole input is the learner's own words, can restate them. A log
 // line is the one place a prompt must never reappear, so only the provider's own
 // `error.message` survives, and only after control characters are stripped so a
 // crafted message cannot forge a second log line.

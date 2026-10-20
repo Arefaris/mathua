@@ -10,27 +10,28 @@ import (
 	"github.com/chuma-beep/mathua/internal/ai"
 )
 
-// Bounds for the AI endpoints. They are small on purpose: a tutor message is a
-// question, not an essay, and the goal is a sentence. A caller that exceeds them
-// is rejected rather than truncated, so a learner never gets a reply to
-// something they did not ask.
+// Bounds for the AI endpoints. They are small on purpose: an assistant message
+// is a question, not an essay, and the goal is a sentence. A caller that
+// exceeds them is rejected rather than truncated, so a visitor never gets a
+// reply to something they did not ask.
 const (
 	maxAIBody           = 16 << 10
-	maxTutorMessageLen  = 2000
+	maxAssistantMsgLen  = 2000
 	maxGoalLen          = 500
-	maxTutorConcepts    = 20
 	maxGoalDestinations = 3
 )
 
-// aiTutorRequest is the tutor endpoint's body.
+// aiAssistantRequest is the assistant endpoint's body.
+//
+// It carries one field. The assistant answers product questions and helps a
+// visitor choose a starting point, so it has no use for a concept id or a
+// mastery line, and the request cannot carry one.
 //
 // There is deliberately no expected_answer field. The graded answer lives in
 // the server's own study-session record and is never a request field, so a
 // client cannot send one and a future refactor cannot accidentally forward one.
-type aiTutorRequest struct {
-	Message    string   `json:"message"`
-	Domain     string   `json:"domain"`
-	ConceptIDs []string `json:"concept_ids"`
+type aiAssistantRequest struct {
+	Message string `json:"message"`
 }
 
 // aiGoalScopeRequest is the goal-scope endpoint's body.
@@ -38,10 +39,12 @@ type aiGoalScopeRequest struct {
 	Goal string `json:"goal"`
 }
 
-// POST /api/ai/tutor — an optional, best-effort study tutor. The deterministic
+// POST /api/ai/assistant — an optional, best-effort product assistant. It
+// answers "what is Mathua" and "where do I start", and it is not a tutor: it
+// holds no concept context and never guides a graded question. The deterministic
 // app does not depend on it: a disabled registry, an exhausted quota or a
 // provider outage all surface as an error the client shows as "unavailable".
-func (s *Server) handleAITutor(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleAIAssistant(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeError(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -51,12 +54,12 @@ func (s *Server) handleAITutor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req aiTutorRequest
+	var req aiAssistantRequest
 	if err := decodeAIJSON(w, r, &req); err != nil {
 		return
 	}
 	msg := strings.TrimSpace(req.Message)
-	if msg == "" || len([]rune(msg)) > maxTutorMessageLen {
+	if msg == "" || len([]rune(msg)) > maxAssistantMsgLen {
 		writeError(w, "message must be 1 to 2000 characters", http.StatusBadRequest)
 		return
 	}
@@ -65,17 +68,19 @@ func (s *Server) handleAITutor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tctx := ai.TutorContext{
-		LearnerMessage: msg,
-		Domain:         strings.TrimSpace(req.Domain),
-		ConceptIDs:     s.sanitizeConceptIDs(req.ConceptIDs),
+	// The catalogue is the server's own destination list, so the assistant can
+	// name a real starting point and cannot invent one. With no catalogue it
+	// still answers, and asks where the visitor wants to go.
+	actx := ai.AssistantContext{
+		Message:      msg,
+		Destinations: assistantDestinations(s.goalCandidates()),
 	}
 	res, err := s.aiChain.Complete(r.Context(), ai.DataPseudonymous, ai.Request{
-		Messages:  tctx.Messages(),
-		MaxTokens: s.aiTutorMaxTokens,
+		Messages:  actx.Messages(),
+		MaxTokens: s.aiAssistantMaxTokens,
 	})
 	if err != nil {
-		s.writeAIError(w, "tutor", err)
+		s.writeAIError(w, "assistant", err)
 		return
 	}
 	writeJSON(w, map[string]string{"reply": res.Response.Text})
@@ -255,19 +260,17 @@ func validateDestinationIDs(ids []string, candidates []goalCandidate) []string {
 	return out
 }
 
-// sanitizeConceptIDs keeps only ids the concept graph knows, capped, so a client
-// cannot inject arbitrary text through the concept list.
-func (s *Server) sanitizeConceptIDs(ids []string) []string {
-	dag := s.eng.GetDAG()
-	out := make([]string, 0, len(ids))
-	for _, id := range ids {
-		if len(out) == maxTutorConcepts {
-			break
-		}
-		id = strings.TrimSpace(id)
-		if dag.Concept(id) != nil {
-			out = append(out, id)
-		}
+// assistantDestinations converts the server's destination list into the public
+// catalogue the assistant may name. It is a projection, not a filter: the
+// assistant needs ids, names and descriptions, and nothing about a learner's
+// progress, which is why this type cannot carry any.
+func assistantDestinations(candidates []goalCandidate) []ai.Destination {
+	if len(candidates) == 0 {
+		return nil
+	}
+	out := make([]ai.Destination, 0, len(candidates))
+	for _, c := range candidates {
+		out = append(out, ai.Destination{ID: c.ID, Name: c.Name, Description: c.Description})
 	}
 	return out
 }

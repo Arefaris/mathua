@@ -1827,27 +1827,25 @@ export async function revokeAdminInvitation(id: number): Promise<AdminInvitation
 // its deterministic match with no special case. No `expected_answer` is ever a
 // field here: the graded answer stays on the server.
 
-export interface TutorReply {
+export interface AssistantReply {
 	reply: string
 }
 
 /**
- * Ask the study tutor. Throws when AI is unavailable or the quota is spent, so
- * the caller shows "unavailable" rather than a wrong answer.
+ * Ask the product assistant. It answers "what is Mathua" and "where do I
+ * start"; it is not a tutor and holds no concept or mastery context. Throws
+ * when AI is unavailable or the quota is spent, so the caller shows
+ * "unavailable" rather than a wrong answer.
  */
-export async function askTutor(body: {
-	message: string
-	domain?: string
-	concept_ids?: string[]
-}): Promise<TutorReply> {
+export async function askAssistant(body: { message: string }): Promise<AssistantReply> {
 	const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() } satisfies Record<string, string>
-	const res = await authedFetch(`${API_BASE}/api/ai/tutor`, {
+	const res = await authedFetch(`${API_BASE}/api/ai/assistant`, {
 		method: 'POST',
 		headers,
 		body: JSON.stringify(body),
 	})
-	if (!res.ok) await throwWithResponse(res, `Tutor unavailable: ${res.status}`)
-	return res.json() as Promise<TutorReply>
+	if (!res.ok) await throwWithResponse(res, `Assistant unavailable: ${res.status}`)
+	return res.json() as Promise<AssistantReply>
 }
 
 export interface GoalScopeRes {

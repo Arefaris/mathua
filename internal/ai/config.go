@@ -28,8 +28,8 @@ const DefaultGlobalDailyCap = 800
 // reasoning tokens before it emits an answer: a 200-token budget was measured
 // spending 135 tokens on reasoning and then failing outright.
 const (
-	DefaultTutorMaxTokens = 1500
-	DefaultGoalMaxTokens  = 600
+	DefaultAssistantMaxTokens = 600
+	DefaultGoalMaxTokens      = 600
 )
 
 // Settings is the AI configuration resolved from the environment.
@@ -40,9 +40,9 @@ type Settings struct {
 	DailyUserCap int
 	// GlobalDailyCap is the application-wide daily request ceiling.
 	GlobalDailyCap int
-	// TutorMaxTokens and GoalMaxTokens bound one completion each.
-	TutorMaxTokens int
-	GoalMaxTokens  int
+	// AssistantMaxTokens and GoalMaxTokens bound one completion each.
+	AssistantMaxTokens int
+	GoalMaxTokens      int
 	// Production marks a deployment serving real learner traffic.
 	Production bool
 	// DisabledReason is non-empty when AI was configured but refused to start,
@@ -59,11 +59,11 @@ type Settings struct {
 // so the feature is off unless it is asked for.
 func FromEnv() (Settings, error) {
 	settings := Settings{
-		Production:     os.Getenv("AI_ENV") == "production",
-		DailyUserCap:   DefaultDailyUserCap,
-		GlobalDailyCap: DefaultGlobalDailyCap,
-		TutorMaxTokens: DefaultTutorMaxTokens,
-		GoalMaxTokens:  DefaultGoalMaxTokens,
+		Production:         os.Getenv("AI_ENV") == "production",
+		DailyUserCap:       DefaultDailyUserCap,
+		GlobalDailyCap:     DefaultGlobalDailyCap,
+		AssistantMaxTokens: DefaultAssistantMaxTokens,
+		GoalMaxTokens:      DefaultGoalMaxTokens,
 	}
 	intEnv := func(key string, dst *int, allowZero bool) error {
 		v := strings.TrimSpace(os.Getenv(key))
@@ -90,7 +90,7 @@ func FromEnv() (Settings, error) {
 	if err := intEnv("AI_GLOBAL_DAILY_CAP", &settings.GlobalDailyCap, true); err != nil {
 		return settings, err
 	}
-	if err := intEnv("AI_TUTOR_MAX_TOKENS", &settings.TutorMaxTokens, false); err != nil {
+	if err := intEnv("AI_ASSISTANT_MAX_TOKENS", &settings.AssistantMaxTokens, false); err != nil {
 		return settings, err
 	}
 	if err := intEnv("AI_GOAL_MAX_TOKENS", &settings.GoalMaxTokens, false); err != nil {

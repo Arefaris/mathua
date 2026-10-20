@@ -179,7 +179,7 @@ func TestOpenAIChatRecordsFinishReasonAndReasoningTokens(t *testing.T) {
 
 // TestOpenAIChatEmptyCompletionIsTransientError is the regression test for the
 // shipped defect: a reasoning model given too small a budget returned
-// finish_reason "length" with empty content, and the tutor served that as a 200
+// finish_reason "length" with empty content, and the assistant served that as a 200
 // with an empty reply. It must be an error the chain can fail over.
 func TestOpenAIChatEmptyCompletionIsTransientError(t *testing.T) {
 	p, _ := newTestProvider(t, func(w http.ResponseWriter, r *http.Request) {
@@ -232,7 +232,7 @@ func TestOpenAIChatTruncatedCompletionIsTransientError(t *testing.T) {
 // to providers whose acceptance of it has been verified.
 // TestOpenAIProviderFailureKeepsPromptsOutOfErrors pins the log-hygiene rule.
 // A provider's rejection frequently echoes what was sent — Groq returns the
-// model's unparsed generation under `failed_generation`, and for a tutor that
+// model's unparsed generation under `failed_generation`, and for an assistant whose
 // generation can restate the learner's own words. Only the provider's own
 // `error.message` may survive into an error, and therefore into a log line.
 func TestOpenAIProviderFailureKeepsPromptsOutOfErrors(t *testing.T) {

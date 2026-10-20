@@ -316,8 +316,8 @@ func main() {
 		fmt.Println("ai disabled")
 	}
 	srv := server.New(eng, repo, authSvc, server.WithAI(aiChain, aiQuota, server.AILimits{
-		TutorMaxTokens: aiSettings.TutorMaxTokens,
-		GoalMaxTokens:  aiSettings.GoalMaxTokens,
+		AssistantMaxTokens: aiSettings.AssistantMaxTokens,
+		GoalMaxTokens:      aiSettings.GoalMaxTokens,
 	}))
 	mux := http.NewServeMux()
 	srv.Register(mux)

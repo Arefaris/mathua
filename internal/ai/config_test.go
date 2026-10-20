@@ -8,7 +8,7 @@ func clearAIEnv(t *testing.T) {
 	t.Helper()
 	for _, k := range []string{
 		"AI_ENABLED", "AI_ENV", "AI_DEV_PROVIDERS", "AI_DAILY_USER_CAP", "AI_PROVIDER_CHAIN",
-		"AI_GLOBAL_DAILY_CAP", "AI_TUTOR_MAX_TOKENS", "AI_GOAL_MAX_TOKENS",
+		"AI_GLOBAL_DAILY_CAP", "AI_ASSISTANT_MAX_TOKENS", "AI_GOAL_MAX_TOKENS",
 		"AI_ZDR_CONFIRMED", "AI_TRUSTED_IP_HEADER",
 		"GROQ_API_KEY", "GROQ_BASE_URL", "GROQ_MODEL", "GROQ_REASONING_EFFORT",
 		"CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_MODEL",
@@ -189,25 +189,25 @@ func TestFromEnvGlobalAndTokenBudgets(t *testing.T) {
 	if s.GlobalDailyCap != DefaultGlobalDailyCap {
 		t.Errorf("global cap = %d, want %d", s.GlobalDailyCap, DefaultGlobalDailyCap)
 	}
-	if s.TutorMaxTokens != DefaultTutorMaxTokens || s.GoalMaxTokens != DefaultGoalMaxTokens {
+	if s.AssistantMaxTokens != DefaultAssistantMaxTokens || s.GoalMaxTokens != DefaultGoalMaxTokens {
 		t.Errorf("token budgets = %d/%d, want %d/%d",
-			s.TutorMaxTokens, s.GoalMaxTokens, DefaultTutorMaxTokens, DefaultGoalMaxTokens)
+			s.AssistantMaxTokens, s.GoalMaxTokens, DefaultAssistantMaxTokens, DefaultGoalMaxTokens)
 	}
 
 	t.Setenv("AI_GLOBAL_DAILY_CAP", "42")
-	t.Setenv("AI_TUTOR_MAX_TOKENS", "900")
+	t.Setenv("AI_ASSISTANT_MAX_TOKENS", "900")
 	t.Setenv("AI_GOAL_MAX_TOKENS", "300")
 	s, err = FromEnv()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if s.GlobalDailyCap != 42 || s.TutorMaxTokens != 900 || s.GoalMaxTokens != 300 {
-		t.Errorf("parsed budgets = %d/%d/%d, want 42/900/300", s.GlobalDailyCap, s.TutorMaxTokens, s.GoalMaxTokens)
+	if s.GlobalDailyCap != 42 || s.AssistantMaxTokens != 900 || s.GoalMaxTokens != 300 {
+		t.Errorf("parsed budgets = %d/%d/%d, want 42/900/300", s.GlobalDailyCap, s.AssistantMaxTokens, s.GoalMaxTokens)
 	}
 
 	// A zero token budget is nonsense and is rejected rather than silently
 	// truncating every reply to nothing.
-	t.Setenv("AI_TUTOR_MAX_TOKENS", "0")
+	t.Setenv("AI_ASSISTANT_MAX_TOKENS", "0")
 	if _, err := FromEnv(); err == nil {
 		t.Error("want error for a zero token budget")
 	}
