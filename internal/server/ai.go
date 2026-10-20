@@ -5,6 +5,8 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/chuma-beep/mathua/internal/ai"
@@ -17,26 +19,150 @@ import (
 const (
 	maxAIBody           = 16 << 10
 	maxAssistantMsgLen  = 2000
+	maxAssistantHistory = 8
+	maxAssistantLinks   = 4
 	maxGoalLen          = 500
 	maxGoalDestinations = 3
 )
 
-// aiAssistantRequest is the assistant endpoint's body.
-//
-// It carries one field. The assistant answers product questions and helps a
-// visitor choose a starting point, so it has no use for a concept id or a
-// mastery line, and the request cannot carry one.
-//
-// There is deliberately no expected_answer field. The graded answer lives in
-// the server's own study-session record and is never a request field, so a
-// client cannot send one and a future refactor cannot accidentally forward one.
-type aiAssistantRequest struct {
-	Message string `json:"message"`
-}
-
 // aiGoalScopeRequest is the goal-scope endpoint's body.
 type aiGoalScopeRequest struct {
 	Goal string `json:"goal"`
+}
+
+// aiAssistantRequest is the assistant endpoint's body.
+//
+// History is the earlier turns of the same conversation, replayed so the app can
+// hold a conversation at all: the fixed prompt tells the assistant to ask one
+// clarifying question, and a question with no memory of it is unanswerable. The
+// server keeps only user and assistant roles from it, so a client cannot add a
+// second set of instructions.
+type aiAssistantRequest struct {
+	Message string       `json:"message"`
+	History []aiChatTurn `json:"history"`
+}
+
+// aiChatTurn is one replayed turn as the client sends it.
+type aiChatTurn struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+// aiAssistantLink is one clickable destination in the reply.
+//
+// The href is never taken from the model. The model writes a marker naming an id,
+// the server looks the id up in its own table, and an id it does not know is
+// removed from the text rather than turned into a link. A generated URL would be
+// one prompt injection away from sending a visitor anywhere.
+type aiAssistantLink struct {
+	ID    string `json:"id"`
+	Label string `json:"label"`
+	Href  string `json:"href"`
+}
+
+type aiAssistantResponse struct {
+	Reply string            `json:"reply"`
+	Links []aiAssistantLink `json:"links"`
+}
+
+// assistantAreas are the fixed places the assistant may point at, beside the
+// destination catalogue. Hrefs live here and nowhere else.
+var assistantAreas = []aiAssistantLink{
+	{ID: "diagnose", Label: "Take the diagnostic", Href: "/diagnose"},
+	{ID: "plan", Label: "Your study plan", Href: "/plan"},
+	{ID: "learn", Label: "Learn", Href: "/learn"},
+	{ID: "review", Label: "Review", Href: "/review"},
+	{ID: "graph", Label: "Concept graph", Href: "/graph"},
+	{ID: "glossary", Label: "Glossary", Href: "/glossary"},
+	{ID: "leaderboard", Label: "Leaderboard", Href: "/leaderboard"},
+}
+
+// assistantMarker matches the link syntax the system prompt requests.
+var assistantMarker = regexp.MustCompile(`\[\[([A-Za-z0-9_-]+)\]\]`)
+
+// assistantLinks resolves the markers in a reply against the server's own table.
+//
+// It returns the text with every marker replaced by the link's label, so a
+// reader sees a sentence rather than brackets, plus at most maxAssistantLinks
+// unique links. An unknown id is removed and produces no link: the assistant can
+// name a destination it was given, and nothing else.
+func assistantLinks(reply string, destinations []ai.Destination) (string, []aiAssistantLink) {
+	byID := make(map[string]aiAssistantLink, len(assistantAreas)+len(destinations))
+	for _, a := range assistantAreas {
+		byID[a.ID] = a
+	}
+	for _, d := range destinations {
+		if d.ID == "" {
+			continue
+		}
+		// A destination whose id collides with an area keeps the area: those
+		// ids are reserved, and silently redirecting them would be surprising.
+		if _, taken := byID[d.ID]; taken {
+			continue
+		}
+		label := d.Name
+		if label == "" {
+			label = d.ID
+		}
+		byID[d.ID] = aiAssistantLink{
+			ID:    d.ID,
+			Label: label,
+			Href:  "/plan?destination=" + url.QueryEscape(d.ID),
+		}
+	}
+
+	links := make([]aiAssistantLink, 0, maxAssistantLinks)
+	seen := make(map[string]bool, maxAssistantLinks)
+	text := assistantMarker.ReplaceAllStringFunc(reply, func(marker string) string {
+		sub := assistantMarker.FindStringSubmatch(marker)
+		link, ok := byID[sub[1]]
+		if !ok {
+			return ""
+		}
+		if !seen[link.Href] && len(links) < maxAssistantLinks {
+			seen[link.Href] = true
+			links = append(links, link)
+		}
+		return link.Label
+	})
+	return tidyRemovedMarkers(text), links
+}
+
+// tidyRemovedMarkers repairs the double spaces and the space before punctuation
+// that deleting a marker leaves behind, without touching the reply's own line
+// breaks.
+func tidyRemovedMarkers(s string) string {
+	s = strings.ReplaceAll(s, " ,", ",")
+	s = strings.ReplaceAll(s, " .", ".")
+	for strings.Contains(s, "  ") {
+		s = strings.ReplaceAll(s, "  ", " ")
+	}
+	return strings.TrimSpace(s)
+}
+
+// sanitizeAssistantHistory bounds what a client may replay. It keeps the most
+// recent turns, drops anything that is not a user or assistant turn, and drops
+// over-long turns rather than truncating them, so a replayed message is answered
+// as the visitor typed it or not at all.
+func sanitizeAssistantHistory(in []aiChatTurn) []ai.Turn {
+	if len(in) == 0 {
+		return nil
+	}
+	if len(in) > maxAssistantHistory {
+		in = in[len(in)-maxAssistantHistory:]
+	}
+	out := make([]ai.Turn, 0, len(in))
+	for _, t := range in {
+		content := strings.TrimSpace(t.Content)
+		if content == "" || len([]rune(content)) > maxAssistantMsgLen {
+			continue
+		}
+		switch t.Role {
+		case string(ai.RoleUser), string(ai.RoleAssistant):
+			out = append(out, ai.Turn{Role: t.Role, Content: content})
+		}
+	}
+	return out
 }
 
 // POST /api/ai/assistant — an optional, best-effort product assistant. It
@@ -74,6 +200,7 @@ func (s *Server) handleAIAssistant(w http.ResponseWriter, r *http.Request) {
 	actx := ai.AssistantContext{
 		Message:      msg,
 		Destinations: assistantDestinations(s.goalCandidates()),
+		History:      sanitizeAssistantHistory(req.History),
 	}
 	res, err := s.aiChain.Complete(r.Context(), ai.DataPseudonymous, ai.Request{
 		Messages:  actx.Messages(),
@@ -83,7 +210,8 @@ func (s *Server) handleAIAssistant(w http.ResponseWriter, r *http.Request) {
 		s.writeAIError(w, "assistant", err)
 		return
 	}
-	writeJSON(w, map[string]string{"reply": res.Response.Text})
+	reply, links := assistantLinks(res.Response.Text, actx.Destinations)
+	writeJSON(w, aiAssistantResponse{Reply: reply, Links: links})
 }
 
 // Goal-scope reasons. They exist so a failure is not silently indistinguishable

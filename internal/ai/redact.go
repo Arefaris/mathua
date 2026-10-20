@@ -22,6 +22,7 @@ const assistantSystemPrompt = `You are Mathua's assistant. Mathua teaches mathem
 Answer questions about the product and help a visitor work out where to start.
 When the answer depends on what the person already knows, ask one clarifying question before you suggest anything.
 Suggest only destinations from the list you are given. Never invent a course, feature, price or date.
+When you name a destination or an area of the site, write its id in double square brackets, like [[calculus]], and the app turns that into a link. Use only ids from the list you are given.
 Do not claim to know anyone's progress, results or grades.
 Reply in plain prose, at most four short sentences. No Markdown, no LaTeX, no lists.`
 
@@ -36,6 +37,16 @@ type Destination struct {
 	ID          string
 	Name        string
 	Description string
+}
+
+// Turn is one earlier message in the same conversation, replayed so a
+// clarifying question from the assistant is answerable. Role is narrowed to the
+// two sides of a conversation: a replayed system message would be a second
+// instruction set the client controls, which is exactly what the fixed prompt
+// above exists to prevent.
+type Turn struct {
+	Role    string
+	Content string
 }
 
 // AssistantContext is the material an assistant request may use.
@@ -56,6 +67,10 @@ type AssistantContext struct {
 	// Destinations is the public catalogue the assistant may suggest from, so
 	// it can name a real place to start instead of inventing one.
 	Destinations []Destination
+	// History is the earlier turns of this conversation, oldest first. It is the
+	// visitor's own words and the assistant's own replies, so it carries no data
+	// the current message does not already carry.
+	History []Turn
 	// ExpectedAnswer is a graded answer. A model must never receive it, so
 	// Messages drops it unconditionally. The field exists so that a caller
 	// holding the answer cannot pass it through by accident, and so
@@ -74,10 +89,18 @@ func (c AssistantContext) Class() DataClass { return DataPseudonymous }
 // StudentID and ExpectedAnswer are ignored, which is what makes the function
 // safe to call with a fully populated context from the server.
 func (c AssistantContext) Messages() []Message {
-	msgs := make([]Message, 0, 3)
+	msgs := make([]Message, 0, len(c.History)+3)
 	msgs = append(msgs, Message{Role: RoleSystem, Content: assistantSystemPrompt})
 	if catalogue := c.Catalogue(); catalogue != "" {
 		msgs = append(msgs, Message{Role: RoleSystem, Content: catalogue})
+	}
+	for _, t := range c.History {
+		switch t.Role {
+		case string(RoleUser):
+			msgs = append(msgs, Message{Role: RoleUser, Content: t.Content})
+		case string(RoleAssistant):
+			msgs = append(msgs, Message{Role: RoleAssistant, Content: t.Content})
+		}
 	}
 	msgs = append(msgs, Message{Role: RoleUser, Content: c.Message})
 	return msgs

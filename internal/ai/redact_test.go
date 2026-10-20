@@ -135,3 +135,12 @@ func TestTruncateRunes(t *testing.T) {
 		t.Errorf("zero limit = %q", got)
 	}
 }
+
+// TestAssistantPromptRequestsLinkMarkers pins the other half of the contract
+// with the server: the reply is scanned for [[id]] markers, so a prompt that
+// stops asking for them makes every link silently disappear.
+func TestAssistantPromptRequestsLinkMarkers(t *testing.T) {
+	if !strings.Contains(assistantSystemPrompt, "[[") {
+		t.Fatal("the prompt no longer asks for [[id]] markers, so no reply can produce a link")
+	}
+}
