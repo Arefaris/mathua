@@ -18,6 +18,17 @@ vi.mock('next/link', () => ({
 	),
 }))
 
+// next/dynamic would load the real KaTeX chunk asynchronously, which this test
+// is not about. The stub records that the dock routed mathematics to the math
+// component instead of printing the delimiters as text.
+vi.mock('next/dynamic', () => ({
+	default: () => ({ tex, display }: { tex: string; display: boolean }) => (
+		<span data-testid="math" data-display={String(display)}>
+			{tex}
+		</span>
+	),
+}))
+
 // The icon wrapper renders animated SVG through @animateicons/react, which is
 // not what this test is about. A plain span keeps the assertions about copy and
 // links, so a change to the icon set does not fail a behaviour test.
@@ -88,6 +99,29 @@ describe('AssistantDock', () => {
 		expect(screen.getAllByText('Learn')).toHaveLength(1)
 		expect(screen.getByRole('link', { name: 'Learn' })).toHaveAttribute('href', '/learn')
 		expect(askAssistantMock).toHaveBeenCalledWith({ message: 'Where do I start?', history: [] })
+	})
+
+	it('renders mathematics instead of printing its delimiters', async () => {
+		getConfigMock.mockResolvedValue({ ai_enabled: true })
+		// The exact shape a live reply used for "explain how to find a derivative".
+		const reply = String.raw`Apply the limit definition \(f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}\).`
+		askAssistantMock.mockResolvedValue({ reply, segments: [{ text: reply }] })
+		render(<AssistantDock />)
+
+		await screen.findByRole('button', { name: 'Open assistant' })
+		openPanel()
+
+		fireEvent.change(await screen.findByLabelText('Your question'), {
+			target: { value: 'how do i find a derivative' },
+		})
+		fireEvent.click(screen.getByRole('button', { name: 'Send' }))
+
+		const math = await screen.findByTestId('math')
+		expect(math).toHaveTextContent(String.raw`f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}`)
+		expect(math).toHaveAttribute('data-display', 'false')
+		// The delimiter itself must not survive as visible text.
+		expect(screen.queryByText(String.raw`\(`)).toBeNull()
+		expect(screen.getByText(/Apply the limit definition/)).toBeInTheDocument()
 	})
 
 	it('sends earlier turns as history', async () => {

@@ -2,8 +2,35 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { askAssistant, getConfig, type AssistantPart, type AssistantTurn } from '../lib/api'
+import { splitMath } from '../lib/assistantMath'
 import { ArrowUp, Close, MessagesSquare } from './icons'
+
+// KaTeX is a large dependency and the dock is mounted in the root layout, so it
+// would otherwise be pulled into every route's bundle. Loading it through a
+// dynamic import means a reply with no mathematics — an orientation answer, which
+// is most of them — never downloads it.
+const AssistantMath = dynamic(() => import('./AssistantMath'), { ssr: false })
+
+// AssistantText renders one prose segment of a reply. Mathematics inside it is
+// split out and rendered; everything else is the characters the model wrote,
+// including any Markdown it used despite being asked not to.
+function AssistantText({ text }: { text: string }) {
+	const parts = splitMath(text)
+	if (parts.length === 1 && parts[0].kind === 'text') return <>{text}</>
+	return (
+		<>
+			{parts.map((p, i) =>
+				p.kind === 'math' ? (
+					<AssistantMath key={i} tex={p.tex} display={p.display} />
+				) : (
+					<span key={i}>{p.text}</span>
+				),
+			)}
+		</>
+	)
+}
 
 // The product assistant, as a dock in the corner.
 //
@@ -215,7 +242,7 @@ export default function AssistantDock() {
 														{p.link.label}
 													</Link>
 												) : (
-													<span key={j}>{p.text}</span>
+													<AssistantText key={j} text={p.text ?? ''} />
 												),
 											)
 										: t.content}

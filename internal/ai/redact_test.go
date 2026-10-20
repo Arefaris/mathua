@@ -87,12 +87,14 @@ func TestAssistantContextClassIsPseudonymous(t *testing.T) {
 }
 
 // TestAssistantPromptAsksForPlainProse pins the instruction that the endpoint's
-// only rendering surface depends on. The app shows the reply as text, so a
-// model told nothing about format returns Markdown and LaTeX that the reader
-// sees as asterisks and backslashes.
+// rendering surface depends on. The app shows the reply as text with one
+// exception — mathematics between dollar signs, which the panel parses and
+// renders — so a model told nothing about format returns Markdown the reader
+// sees as asterisks, and a model told "no LaTeX" answers a method question
+// without the formula that is the method's name.
 func TestAssistantPromptAsksForPlainProse(t *testing.T) {
 	lower := strings.ToLower(assistantGuidance())
-	for _, want := range []string{"plain prose", "no markdown", "no latex"} {
+	for _, want := range []string{"plain prose", "no markdown", "dollar signs"} {
 		if !strings.Contains(lower, want) {
 			t.Errorf("assistant prompt does not ask for %q", want)
 		}

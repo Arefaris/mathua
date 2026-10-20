@@ -14,10 +14,12 @@ import (
 // start", so it is an assistant, and a prompt that says "tutor" invites the
 // model to answer a maths question instead of the question that was asked.
 //
-// The last line is not decoration: the endpoint returns plain text and the app
-// renders plain text, so Markdown and LaTeX reach the reader as asterisks and
-// backslashes. A reply of four short sentences also keeps one request inside a
-// budget that a free provider will actually serve.
+// The last line is not decoration: the app renders a reply as text, so Markdown
+// reaches the reader as asterisks and any delimiter the panel does not know
+// reaches them as backslashes. Mathematics is the one exception, and it is
+// written between dollar signs because that is the delimiter the panel parses
+// and hands to KaTeX. A reply of four short sentences also keeps one request
+// inside a budget that a free provider will actually serve.
 const assistantSystemPrompt = `You are Mathua's assistant. Mathua teaches mathematics by concept: each concept has lessons, a short mastery check, and scheduled review.
 Answer questions about the product and help a visitor work out where to start.
 When the answer depends on what the person already knows, ask one clarifying question before you suggest anything.
@@ -54,7 +56,7 @@ You do not solve or work through mathematics. What you are asked is one of three
 - Suggest only destinations from the list you are given. Never invent a course, feature, price or date.
 - When you name a destination or an area of the site, write its id in double square brackets, like [[calculus]], and the app turns that into a link. Use only ids from the list you are given.
 - Do not claim to know anyone's progress, results or grades.
-- Reply in plain prose, at most four short sentences. No Markdown, no LaTeX, no lists.`
+- Reply in plain prose, at most four short sentences. No Markdown and no lists. The one exception is mathematics, which you write between dollar signs, like $x^2$ or $\frac{dy}{dx}$; nothing else in the reply is formatting.`
 
 // maxDescriptionRunes bounds one catalogue description. The list is authored
 // product data, but a long description would still push a prompt past a small
