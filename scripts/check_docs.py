@@ -315,6 +315,33 @@ def check_corpus_figures(rep: Report) -> None:
                               f'"{m.group(0)}" but the corpus has {facts[key]} {key}')
 
 
+def check_generator_registries(rep: Report) -> None:
+    """A quoted count of generator registries must match the packages all.go pulls in.
+
+    This is a different fact from the number of corpus domains, and the two drifted apart
+    silently: `system-design.md` said "17 domain registries" while `internal/generator/all`
+    imported 22 and no rule read either. The count is taken from the import list rather than
+    from a directory listing, because a package can exist without being registered.
+    """
+    all_go = read("internal/generator/all/all.go")
+    n = len(re.findall(r'"github\.com/chuma-beep/mathua/internal/generator/[a-z]+"', all_go))
+    if n == 0:
+        rep.error("internal/generator/all/all.go", "generator-registries",
+                  "found no generator imports; this rule would otherwise pass vacuously")
+        return
+    pat = re.compile(r"([0-9][0-9,]*)\s+domain registr(?:y|ies)", re.I)
+    for doc in DOCS:
+        p = ROOT / doc
+        if not p.is_file():
+            continue
+        for line_no, line in enumerate(read(doc).splitlines(), 1):
+            for m in pat.finditer(line):
+                got = int(m.group(1).replace(",", ""))
+                if got != n:
+                    rep.error(f"{doc}:{line_no}", "generator-registries",
+                              f'"{m.group(0)}" but all.go imports {n} generator packages')
+
+
 def check_course_reach(rep: Report) -> None:
     """How much of the graph the course catalog reaches must match the doc that quotes it.
 
@@ -1246,6 +1273,7 @@ def main() -> int:
     check_xp_gate(rep)
     check_kp_rule(rep)
     check_corpus_figures(rep)
+    check_generator_registries(rep)
     check_course_reach(rep)
     check_media_candidates(rep)
     check_figure_dispositions(rep)

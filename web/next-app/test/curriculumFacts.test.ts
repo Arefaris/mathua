@@ -53,4 +53,12 @@ describe('curriculum facts in the copy', () => {
     expect(source).not.toMatch(/\b\d{3,4}\s+concepts\b/)
     expect(source).not.toMatch(/\b\d{1,2}\s+domains\b/)
   })
+
+  it('does not hardcode the domain count in the contributing copy', () => {
+    // The same class of bug, one page further along: the concept schema table
+    // said "One of the 16 domain categories" while the corpus held 21. It is a
+    // string inside an array of table cells, so nothing type-checked it either.
+    const source = readFileSync(join(__dirname, '../app/docs/contributing/page.tsx'), 'utf8')
+    expect(source).not.toMatch(/\b\d{1,2}\s+domain categories\b/)
+  })
 })

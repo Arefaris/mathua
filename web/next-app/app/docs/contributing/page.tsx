@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import SectionHeader from '../../../components/SectionHeader'
 import Loading from '../../../components/Loading'
 import Link from 'next/link'
+import { DOMAIN_COUNT } from '../../../lib/curriculumFacts'
 
 export const metadata: Metadata = {
   title: 'Contributing \u2014 Mathua',
@@ -244,7 +245,7 @@ npm run dev`}
           {[
             ['id', 'string', 'Yes', 'Unique dot-separated identifier (e.g., arith.add.single)'],
             ['label', 'string', 'Yes', 'Human-readable name displayed in the UI'],
-            ['domain', 'string', 'Yes', 'One of the 16 domain categories'],
+            ['domain', 'string', 'Yes', `One of the ${DOMAIN_COUNT} domain categories`],
             ['subdomain', 'string', 'Optional', 'Nested grouping within a domain'],
             ['grading_type', 'enum', 'Yes', 'numeric for arithmetic, polynomial/expression for algebra (uses SymPy), multiple_choice, comparison, ordering'],
             ['prerequisites', 'string[]', 'Yes', 'Concept IDs that must be mastered first'],
@@ -291,7 +292,7 @@ npm run dev`}
               {[
                 ['id', 'string', 'Yes', 'Unique dot-separated identifier (e.g., arith.add.single)'],
                 ['label', 'string', 'Yes', 'Human-readable name displayed in the UI'],
-                ['domain', 'string', 'Yes', 'One of the 16 domain categories'],
+                ['domain', 'string', 'Yes', `One of the ${DOMAIN_COUNT} domain categories`],
                 ['subdomain', 'string', 'Optional', 'Nested grouping within a domain'],
                 ['grading_type', 'enum', 'Yes', 'numeric for arithmetic, polynomial/expression for algebra (uses SymPy), multiple_choice, comparison, ordering'],
                 ['prerequisites', 'string[]', 'Yes', 'Concept IDs that must be mastered first'],
