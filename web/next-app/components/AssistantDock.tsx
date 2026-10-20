@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { askAssistant, getConfig, type AssistantLink, type AssistantTurn } from '../lib/api'
+import { askAssistant, getConfig, type AssistantPart, type AssistantTurn } from '../lib/api'
 import { ArrowUp, Close, MessagesSquare } from './icons'
 
 // The product assistant, as a dock in the corner.
@@ -30,7 +30,7 @@ import { ArrowUp, Close, MessagesSquare } from './icons'
 // produce different copy, because "try again later" is wrong advice for a limit
 // that resets tomorrow.
 
-type Bubble = AssistantTurn & { links?: AssistantLink[] }
+type Bubble = AssistantTurn & { parts?: AssistantPart[] }
 
 const SUGGESTIONS = ['What is Mathua?', 'Where should I start?']
 
@@ -113,7 +113,7 @@ export default function AssistantDock() {
 			setBusy(true)
 			try {
 				const res = await askAssistant({ message, history })
-				setTurns(t => [...t, { role: 'assistant', content: res.reply, links: res.links }])
+				setTurns(t => [...t, { role: 'assistant', content: res.reply, parts: res.segments }])
 			} catch (e) {
 				setError(failureCopy(e))
 			} finally {
@@ -203,21 +203,22 @@ export default function AssistantDock() {
 											: 'border border-mathua-border text-mathua-primary',
 									].join(' ')}
 								>
-									{t.content}
-									{t.links && t.links.length > 0 && (
-										<div className="mt-2 flex flex-wrap gap-2">
-											{t.links.map(l => (
-												<Link
-													key={l.href}
-													href={l.href}
-													onClick={() => setOpen(false)}
-													className="rounded-none border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:border-mathua-blue hover:bg-mathua-surface-elevated"
-												>
-													{l.label}
-												</Link>
-											))}
-										</div>
-									)}
+									{t.parts && t.parts.length > 0
+										? t.parts.map((p, j) =>
+												p.link ? (
+													<Link
+														key={j}
+														href={p.link.href}
+														onClick={() => setOpen(false)}
+														className="text-mathua-blue underline decoration-mathua-border underline-offset-2 hover:decoration-mathua-blue"
+													>
+														{p.link.label}
+													</Link>
+												) : (
+													<span key={j}>{p.text}</span>
+												),
+											)
+										: t.content}
 								</div>
 							</div>
 						))}

@@ -1840,9 +1840,19 @@ export interface AssistantTurn {
 	content: string
 }
 
+/**
+ * One run of a reply: either text or a link. Links arrive as parts rather than
+ * as a list beside the text, so the label appears where the assistant wrote it
+ * and is not printed a second time underneath.
+ */
+export interface AssistantPart {
+	text?: string
+	link?: AssistantLink
+}
+
 export interface AssistantReply {
 	reply: string
-	links: AssistantLink[]
+	segments: AssistantPart[]
 }
 
 /**
@@ -1862,7 +1872,7 @@ export async function askAssistant(body: { message: string; history?: AssistantT
 	})
 	if (!res.ok) await throwWithResponse(res, `Assistant unavailable: ${res.status}`)
 	const data = (await res.json()) as AssistantReply
-	return { reply: data.reply, links: data.links ?? [] }
+	return { reply: data.reply, segments: data.segments ?? [] }
 }
 
 export interface GoalScopeRes {

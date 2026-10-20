@@ -65,8 +65,11 @@ describe('AssistantDock', () => {
 	it('answers, replays history and renders the reply as text', async () => {
 		getConfigMock.mockResolvedValue({ ai_enabled: true })
 		askAssistantMock.mockResolvedValue({
-			reply: '<b>not markup</b>',
-			links: [{ id: 'learn', label: 'Learn', href: '/learn' }],
+			reply: '<b>not markup</b> Learn',
+			segments: [
+				{ text: '<b>not markup</b> ' },
+				{ link: { id: 'learn', label: 'Learn', href: '/learn' } },
+			],
 		})
 		render(<AssistantDock />)
 
@@ -79,13 +82,17 @@ describe('AssistantDock', () => {
 
 		expect(await screen.findByText('<b>not markup</b>')).toBeInTheDocument()
 		expect(screen.queryByText('not markup', { selector: 'b' })).toBeNull()
+		// The label is printed once, as the link itself: no chip repeats it under
+		// the sentence, which is what made a reply read "start here: Calculus"
+		// and then show a Calculus box.
+		expect(screen.getAllByText('Learn')).toHaveLength(1)
 		expect(screen.getByRole('link', { name: 'Learn' })).toHaveAttribute('href', '/learn')
 		expect(askAssistantMock).toHaveBeenCalledWith({ message: 'Where do I start?', history: [] })
 	})
 
 	it('sends earlier turns as history', async () => {
 		getConfigMock.mockResolvedValue({ ai_enabled: true })
-		askAssistantMock.mockResolvedValue({ reply: 'Yes.', links: [] })
+		askAssistantMock.mockResolvedValue({ reply: 'Yes.', segments: [] })
 		render(<AssistantDock />)
 
 		await screen.findByRole('button', { name: 'Open assistant' })

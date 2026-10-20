@@ -60,9 +60,23 @@ type aiAssistantLink struct {
 	Href  string `json:"href"`
 }
 
+// aiAssistantPart is one run of the reply: either plain text or a link.
+//
+// The reply is sent as ordered parts rather than as text plus a list of links
+// because the list rendered the label twice — once where the model wrote the
+// marker, and again in a row of boxes underneath — so a sentence read "you can
+// start with our Calculus path here: Calculus" followed by a Calculus box. A
+// part sequence puts the link where the model put it and nowhere else.
+type aiAssistantPart struct {
+	Text string           `json:"text,omitempty"`
+	Link *aiAssistantLink `json:"link,omitempty"`
+}
+
 type aiAssistantResponse struct {
-	Reply string            `json:"reply"`
-	Links []aiAssistantLink `json:"links"`
+	// Reply is the same text as the parts, flattened. It is what a client that
+	// does not render links shows, and what the conversation history replays.
+	Reply    string            `json:"reply"`
+	Segments []aiAssistantPart `json:"segments"`
 }
 
 // assistantAreas are the fixed places the assistant may point at, beside the
@@ -82,11 +96,11 @@ var assistantMarker = regexp.MustCompile(`\[\[([A-Za-z0-9_-]+)\]\]`)
 
 // assistantLinks resolves the markers in a reply against the server's own table.
 //
-// It returns the text with every marker replaced by the link's label, so a
-// reader sees a sentence rather than brackets, plus at most maxAssistantLinks
-// unique links. An unknown id is removed and produces no link: the assistant can
-// name a destination it was given, and nothing else.
-func assistantLinks(reply string, destinations []ai.Destination) (string, []aiAssistantLink) {
+// It returns the reply as ordered parts, with at most maxAssistantLinks unique
+// links. A marker this server does not know is removed and produces no link, and
+// a marker past the cap keeps its label but is rendered as text: the assistant
+// can name a destination it was given, and nothing else.
+func assistantLinks(reply string, destinations []ai.Destination) (string, []aiAssistantPart) {
 	byID := make(map[string]aiAssistantLink, len(assistantAreas)+len(destinations))
 	for _, a := range assistantAreas {
 		byID[a.ID] = a
@@ -111,33 +125,72 @@ func assistantLinks(reply string, destinations []ai.Destination) (string, []aiAs
 		}
 	}
 
-	links := make([]aiAssistantLink, 0, maxAssistantLinks)
+	parts := make([]aiAssistantPart, 0, 3)
 	seen := make(map[string]bool, maxAssistantLinks)
-	text := assistantMarker.ReplaceAllStringFunc(reply, func(marker string) string {
-		sub := assistantMarker.FindStringSubmatch(marker)
-		link, ok := byID[sub[1]]
-		if !ok {
-			return ""
+	appendText := func(s string) {
+		if s == "" {
+			return
 		}
-		if !seen[link.Href] && len(links) < maxAssistantLinks {
+		// Adjacent text runs are merged: removing an unknown marker splits the
+		// sentence, and three spans where one is enough is a rendering artefact.
+		if n := len(parts); n > 0 && parts[n-1].Link == nil {
+			parts[n-1].Text = tidySpacing(parts[n-1].Text + s)
+			return
+		}
+		parts = append(parts, aiAssistantPart{Text: tidySpacing(s)})
+	}
+	last := 0
+	for _, m := range assistantMarker.FindAllStringSubmatchIndex(reply, -1) {
+		appendText(reply[last:m[0]])
+		link, ok := byID[reply[m[2]:m[3]]]
+		switch {
+		case !ok:
+			// Unknown id: removed, so the reply cannot name what it was not given.
+		case seen[link.Href]:
+			// Already linked once. The word still reads as a link, since the
+			// same marker twice is a sentence, not a second destination.
+			l := link
+			parts = append(parts, aiAssistantPart{Link: &l})
+		case len(seen) >= maxAssistantLinks:
+			appendText(link.Label)
+		default:
 			seen[link.Href] = true
-			links = append(links, link)
+			l := link
+			parts = append(parts, aiAssistantPart{Link: &l})
 		}
-		return link.Label
-	})
-	return tidyRemovedMarkers(text), links
+		last = m[1]
+	}
+	appendText(reply[last:])
+
+	// The flattened reply is built from the parts rather than recomputed, so the
+	// text and the links cannot disagree about what the reply said.
+	var flat strings.Builder
+	for _, p := range parts {
+		if p.Link != nil {
+			flat.WriteString(p.Link.Label)
+			continue
+		}
+		flat.WriteString(p.Text)
+	}
+	return tidyRemovedMarkers(flat.String()), parts
 }
 
-// tidyRemovedMarkers repairs the double spaces and the space before punctuation
-// that deleting a marker leaves behind, without touching the reply's own line
-// breaks.
-func tidyRemovedMarkers(s string) string {
+// tidySpacing repairs the double spaces and the space before punctuation that
+// deleting a marker leaves behind, without touching the reply's own line breaks
+// or the space that separates a run of text from the link that follows it.
+func tidySpacing(s string) string {
 	s = strings.ReplaceAll(s, " ,", ",")
 	s = strings.ReplaceAll(s, " .", ".")
 	for strings.Contains(s, "  ") {
 		s = strings.ReplaceAll(s, "  ", " ")
 	}
-	return strings.TrimSpace(s)
+	return s
+}
+
+// tidyRemovedMarkers is tidySpacing for a whole reply, where the leading and
+// trailing whitespace of the reply itself is noise.
+func tidyRemovedMarkers(s string) string {
+	return strings.TrimSpace(tidySpacing(s))
 }
 
 // sanitizeAssistantHistory bounds what a client may replay. It keeps the most
@@ -210,8 +263,8 @@ func (s *Server) handleAIAssistant(w http.ResponseWriter, r *http.Request) {
 		s.writeAIError(w, "assistant", err)
 		return
 	}
-	reply, links := assistantLinks(res.Response.Text, actx.Destinations)
-	writeJSON(w, aiAssistantResponse{Reply: reply, Links: links})
+	reply, segments := assistantLinks(res.Response.Text, actx.Destinations)
+	writeJSON(w, aiAssistantResponse{Reply: reply, Segments: segments})
 }
 
 // Goal-scope reasons. They exist so a failure is not silently indistinguishable

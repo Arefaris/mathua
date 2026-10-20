@@ -484,16 +484,24 @@ func TestAIAssistantResolvesLinkMarkers(t *testing.T) {
 	if res["reply"] != "Try the Glossary first." {
 		t.Errorf("reply = %q, want the marker replaced by the label", res["reply"])
 	}
-	links, ok := res["links"].([]interface{})
-	if !ok || len(links) != 1 {
-		t.Fatalf("links = %v, want exactly one", res["links"])
+	segments, ok := res["segments"].([]interface{})
+	if !ok || len(segments) != 3 {
+		t.Fatalf("segments = %v, want text, link, text", res["segments"])
 	}
-	link, _ := links[0].(map[string]interface{})
+	if got := segments[0].(map[string]interface{})["text"]; got != "Try the " {
+		t.Errorf("first segment = %v, want the text before the link", got)
+	}
+	link, _ := segments[1].(map[string]interface{})["link"].(map[string]interface{})
 	if link["href"] != "/glossary" {
 		t.Errorf("href = %v, want /glossary", link["href"])
 	}
 	if link["id"] != "glossary" {
 		t.Errorf("id = %v, want glossary", link["id"])
+	}
+	// The label appears once, in the link itself. A chip row would print it a
+	// second time and read as "start here: Calculus" followed by a Calculus box.
+	if got := segments[2].(map[string]interface{})["text"]; got != " first." {
+		t.Errorf("last segment = %v, want the text after the link", got)
 	}
 }
 
@@ -511,8 +519,41 @@ func TestAIAssistantDropsUnknownLinkMarkers(t *testing.T) {
 	if strings.Contains(reply, "[[") || strings.Contains(reply, "]]") {
 		t.Errorf("reply kept link markers: %q", reply)
 	}
-	if links, ok := res["links"].([]interface{}); !ok || len(links) != 0 {
-		t.Errorf("links = %v, want none for unknown ids", res["links"])
+	if segs, ok := res["segments"].([]interface{}); !ok || len(segs) != 1 {
+		t.Errorf("segments = %v, want one text run and no links", res["segments"])
+	}
+}
+
+// TestAIAssistantLinksAreInlineAndNamedOnce pins the shape the dock renders: a
+// link sits where the model wrote it, and its label is not repeated under the
+// sentence. The previous contract returned text plus a list of links, and the
+// client drew the list as boxes, so a reply read "start with our Calculus path
+// here: Calculus" and then showed a Calculus box.
+func TestAIAssistantLinksAreInlineAndNamedOnce(t *testing.T) {
+	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(),
+		Reply: "You can start with the [[learn]] path, or check the [[glossary]]."}
+	_, mux, _ := aiTestServer(t, 5, stub)
+
+	code, res := aiPost(t, mux, "/api/ai/assistant", `{"message":"where do I start?"}`, "1.2.3.4")
+	if code != http.StatusOK {
+		t.Fatalf("status = %d, body = %v", code, res)
+	}
+	reply, _ := res["reply"].(string)
+	if got := strings.Count(reply, "Learn"); got != 1 {
+		t.Errorf("reply names Learn %d times: %q", got, reply)
+	}
+	segs, ok := res["segments"].([]interface{})
+	if !ok {
+		t.Fatalf("segments missing: %v", res)
+	}
+	links := 0
+	for _, raw := range segs {
+		if _, isLink := raw.(map[string]interface{})["link"]; isLink {
+			links++
+		}
+	}
+	if links != 2 {
+		t.Errorf("links in segments = %d, want 2", links)
 	}
 }
 
