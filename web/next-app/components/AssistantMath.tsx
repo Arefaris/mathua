@@ -30,6 +30,7 @@ export default function AssistantMath({ tex, display }: { tex: string; display: 
 		<span
 			className={display ? 'my-1 block overflow-x-auto' : 'inline-block align-middle'}
 			// eslint-disable-next-line react/no-danger -- KaTeX output, not model HTML; see above.
+			// aislop-ignore-line security/dangerously-set-innerhtml -- the string is KaTeX's output tree built from TeX with trust:false, never model HTML
 			dangerouslySetInnerHTML={{ __html: html }}
 		/>
 	)
