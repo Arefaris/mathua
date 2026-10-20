@@ -19,7 +19,14 @@ import SubmitErrorBlock, {
 import { concepts as conceptsData } from '../../lib/conceptData'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
 
-type Phase = 'loading' | 'intro' | 'quiz' | 'done'
+// 'failed' exists because 'done' used to carry two meanings. Any thrown request
+// set phase to 'done', and the done screen reads "No questions available" while
+// the accuracy counters are still zero — so a network blip, a 500 or an expired
+// token told the learner the corpus had no questions for them. The engine cannot
+// actually produce that state: a session with no picked concepts falls back to
+// the first five concepts in DAG order, so a real empty result needs an empty
+// curriculum. A failure is a failure and says so.
+type Phase = 'loading' | 'intro' | 'quiz' | 'done' | 'failed'
 
 // Actionable quiz every 50 XP (engine.QuizGateXP): timed closed-book, own
 // grading path, guest unlimited retake. Self-contained so the goals page only
@@ -27,6 +34,9 @@ type Phase = 'loading' | 'intro' | 'quiz' | 'done'
 export default function QuizHost() {
   const [phase, setPhase] = useState<Phase>('intro')
   const [loading, setLoading] = useState(false)
+  // Carried separately from the phase so the failed screen can say what went
+  // wrong without pretending the quiz is over.
+  const [startError, setStartError] = useState('')
 
   const quizSessionId = useRef('')
   const quizInputRef = useRef<MathFocusHandle | null>(null)
@@ -65,6 +75,7 @@ export default function QuizHost() {
   async function startQuiz() {
     setPhase('loading')
     setLoading(true)
+    setStartError('')
     try {
       const res = await startQuizSession()
       if (res.done) {
@@ -92,7 +103,8 @@ export default function QuizHost() {
       setPhase('quiz')
     } catch {
       toast.error('Quiz failed to start — try again.')
-      setPhase('done')
+      setStartError('The quiz could not start. That is a request problem, not a missing topic.')
+      setPhase('failed')
     } finally {
       setLoading(false)
     }
@@ -231,6 +243,22 @@ export default function QuizHost() {
     return (
       <div className="py-20 text-center">
         <Loading label="LOADING QUIZ" />
+      </div>
+    )
+  }
+
+  if (phase === 'failed') {
+    return (
+      <div className="max-w-2xl mx-auto text-center">
+        <SectionHeader label="Quiz" title="Quiz could not start" />
+        <p role="alert" className="font-mono text-sm text-mathua-secondary mt-4">
+          {startError || 'The quiz could not start.'} Nothing is wrong with the topics — the
+          request failed.
+        </p>
+        <div className="mt-6 flex gap-3 justify-center">
+          <button type="button" onClick={() => { void startQuiz() }} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">Try again →</button>
+          <Link href="/learn" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">Practice in Learn →</Link>
+        </div>
       </div>
     )
   }
