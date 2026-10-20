@@ -121,6 +121,34 @@ func TestAssistantRulesRefuseToSolveProblems(t *testing.T) {
 	}
 }
 
+// TestAssistantRulesSortFactsMethodsAndExercises pins the boundary that one
+// blunt rule got wrong in a live session: "what is 1 + 1" was refused as an
+// exercise, "explain how to find a derivative" was answered with a definition
+// instead of the method, and "how do I find the area under a curve" was
+// answered with the whole method. The rule has to name three kinds, or it
+// produces three different answers to the same kind of question.
+func TestAssistantRulesSortFactsMethodsAndExercises(t *testing.T) {
+	lower := strings.ToLower(assistantRules)
+	for _, want := range []string{
+		"a fact or a definition",
+		"1 + 1 is 2",
+		"a method for a class of problems",
+		"do not apply it step by step",
+		"a specific exercise",
+		"[[learn]]",
+	} {
+		if !strings.Contains(lower, want) {
+			t.Errorf("assistant rules do not mention %q, so the three kinds are not separated", want)
+		}
+	}
+	// The fact branch must say that a plain sum is answerable. Without this the
+	// model reads "you do not solve" as covering arithmetic, which is how the
+	// refusal for 1 + 1 happened.
+	if !strings.Contains(lower, "even when it contains numbers") {
+		t.Error("assistant rules do not say a fact with numbers is answerable")
+	}
+}
+
 // TestAssistantRulesComeAfterTheHistory checks placement, not wording: the
 // rules must be the last message before the visitor's turn. Wording alone was
 // already present in spirit when a live session talked the model round.
