@@ -212,3 +212,41 @@ func TestFromEnvGlobalAndTokenBudgets(t *testing.T) {
 		t.Error("want error for a zero token budget")
 	}
 }
+
+// TestCloudflareDefaultModelIsTheProvenOne pins the fallback model id.
+//
+// The id was a documented guess until 2026-10-20, when the real leg failed
+// with failovers=1 while Groq covered for it: the account serves Llama 3.1 8B
+// quantised to FP8, under a different id. A guess that 404s is invisible while
+// the first provider is healthy, and leaving the working id only in a Fly
+// secret means a fresh deployment silently reintroduces the dead leg.
+func TestCloudflareDefaultModelIsTheProvenOne(t *testing.T) {
+	clearAIEnv(t)
+	t.Setenv("AI_ENABLED", "1")
+	t.Setenv("AI_ENV", "production")
+	t.Setenv("AI_ZDR_CONFIRMED", "1")
+	t.Setenv("CLOUDFLARE_API_TOKEN", "t")
+	t.Setenv("CLOUDFLARE_ACCOUNT_ID", "acct")
+
+	s, err := FromEnv()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var caps Capabilities
+	var found bool
+	for _, p := range s.Registry.Select(DataPseudonymous) {
+		if p.ID() == "cloudflare" {
+			caps = p.Capabilities()
+			found = true
+		}
+	}
+	if !found {
+		t.Fatal("cloudflare provider missing from the registry")
+	}
+	if len(caps.Models) != 1 || caps.Models[0] != "@cf/meta/llama-3.1-8b-instruct-fp8" {
+		t.Errorf("default model = %v, want the fp8 id proven on 2026-10-20", caps.Models)
+	}
+	if caps.ContextWindow != 32768 {
+		t.Errorf("context window = %d, want 32768 (the model's published size)", caps.ContextWindow)
+	}
+}

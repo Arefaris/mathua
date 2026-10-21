@@ -215,9 +215,11 @@ func productionSpecs() []providerSpec {
 				MaxClass:            DataPseudonymous,
 				ProductionPermitted: true,
 				Retention:           RetentionNone,
-				// No retention by default, and ZDR is available on all plans
-				// (console.groq.com/docs/your-data, verified 2026-10-16). ZDR
-				// must be enabled on the organisation before this claim holds.
+				// No retention: zero data retention is enabled on this
+				// organisation, and the registry refuses a production-permitted
+				// RetentionNone provider until AI_ZDR_CONFIRMED=1 records that
+				// the setting was checked (console.groq.com/docs/your-data,
+				// verified 2026-10-16).
 				Source: "https://console.groq.com/docs/your-data (2026-10-16)",
 			},
 			caps: Capabilities{ContextWindow: 131072, Models: []string{"openai/gpt-oss-120b"}, JSON: true, Streaming: true},
@@ -272,9 +274,14 @@ func buildCloudflare() (Provider, bool, error) {
 	}
 	model := strings.TrimSpace(os.Getenv("CLOUDFLARE_MODEL"))
 	if model == "" {
-		// Documented Workers AI text model id; override with CLOUDFLARE_MODEL
-		// to pin a specific one. Verify availability against the account.
-		model = "@cf/meta/llama-3.1-8b-instruct"
+		// Workers AI's Llama 3.1 8B is served quantised to FP8 under this id;
+		// the unquantised id it replaced is the one that was failing with
+		// failovers=1 while Groq covered for it. Pinning the working id here
+		// means a deployment cannot depend on a Fly secret for it: the earlier
+		// default was a guess, and a guess that 404s is invisible while the
+		// first provider is healthy. Verified against the live API on
+		// 2026-10-20 (200 in 0.56s, content "ok").
+		model = "@cf/meta/llama-3.1-8b-instruct-fp8"
 	}
 	p, err := NewOpenAIProvider(OpenAIConfig{
 		ID:      "cloudflare",
@@ -289,7 +296,7 @@ func buildCloudflare() (Provider, bool, error) {
 			// Content (verified 2026-10-16).
 			Source: "https://developers.cloudflare.com/workers-ai/platform/data-usage/ (2026-10-16)",
 		},
-		Capabilities: Capabilities{ContextWindow: 8192, Models: []string{model}, JSON: true, Streaming: true},
+		Capabilities: Capabilities{ContextWindow: 32768, Models: []string{model}, JSON: true, Streaming: true},
 	})
 	if err != nil {
 		return nil, false, err
