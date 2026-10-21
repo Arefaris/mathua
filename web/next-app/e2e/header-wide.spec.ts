@@ -13,6 +13,14 @@ const WIDE = { width: 1600, height: 900 }
 test('the header rule reaches both edges of the window', async ({ page }) => {
   await page.setViewportSize(WIDE)
   await page.goto('/')
+  // `/` is a client page: until the theme has mounted and the logged-in redirect
+  // check has resolved it returns a bare placeholder div, so the exported HTML for
+  // `/` contains no <header> at all — grep out/index.html and count them. The
+  // selector below therefore runs against a document that may still be empty, and
+  // reading `.firstElementChild` on null is what turned this test red on a loaded
+  // runner three attempts in a row. Wait for the header to be attached; the subject
+  // of this test is the geometry once it exists, not the speed of hydration.
+  await expect(page.locator('header > div > div')).toHaveCount(1)
 
   const box = await page.evaluate(() => {
     // The wrapper carrying the rule: a direct child of the `min-h-0 overflow-hidden` clipper.
