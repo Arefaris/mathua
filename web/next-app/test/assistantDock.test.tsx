@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import AssistantDock from '../components/AssistantDock'
+import AssistantDock, {
+	ASSISTANT_CONSENT_KEY,
+	ASSISTANT_CONSENT_VERSION,
+} from '../components/AssistantDock'
 
 const getConfigMock = vi.fn()
 const askAssistantMock = vi.fn()
@@ -45,6 +48,11 @@ function openPanel() {
 beforeEach(() => {
 	getConfigMock.mockReset()
 	askAssistantMock.mockReset()
+	// These tests are about what the panel does, not about the notice that comes
+	// before it. Seeding the acceptance keeps that step out of their way, and the
+	// consent block below removes the seed to test the step itself.
+	window.localStorage.clear()
+	window.localStorage.setItem(ASSISTANT_CONSENT_KEY, ASSISTANT_CONSENT_VERSION)
 })
 
 describe('AssistantDock', () => {
@@ -162,5 +170,63 @@ describe('AssistantDock', () => {
 		fireEvent.click(screen.getByRole('button', { name: 'Send' }))
 
 		expect(await screen.findByText(/today’s limit/i)).toBeInTheDocument()
+	})
+})
+
+// What a visitor types here is the only thing Mathua sends to another company,
+// so the panel has to say so before it offers an input. The state that matters
+// is the one before the first message: no acceptance, no form.
+describe('AssistantDock consent', () => {
+	beforeEach(() => {
+		window.localStorage.clear()
+	})
+
+	it('asks before the first message and has no input until accepted', async () => {
+		getConfigMock.mockResolvedValue({ ai_enabled: true })
+		render(<AssistantDock />)
+
+		await screen.findByRole('button', { name: 'Open assistant' })
+		openPanel()
+
+		expect(await screen.findByText(/before you send a message/i)).toBeInTheDocument()
+		expect(screen.queryByLabelText('Your question')).toBeNull()
+
+		const start = screen.getByRole('button', { name: 'Start' })
+		expect(start).toBeDisabled()
+		fireEvent.click(start)
+		expect(screen.queryByLabelText('Your question')).toBeNull()
+
+		fireEvent.click(screen.getByRole('checkbox', { name: /13 or older/i }))
+		expect(start).toBeEnabled()
+		fireEvent.click(start)
+
+		expect(await screen.findByLabelText('Your question')).toBeInTheDocument()
+		expect(window.localStorage.getItem(ASSISTANT_CONSENT_KEY)).toBe(ASSISTANT_CONSENT_VERSION)
+	})
+
+	it('does not ask again once accepted', async () => {
+		window.localStorage.setItem(ASSISTANT_CONSENT_KEY, ASSISTANT_CONSENT_VERSION)
+		getConfigMock.mockResolvedValue({ ai_enabled: true })
+		render(<AssistantDock />)
+
+		await screen.findByRole('button', { name: 'Open assistant' })
+		openPanel()
+
+		expect(await screen.findByLabelText('Your question')).toBeInTheDocument()
+		expect(screen.queryByText(/before you send a message/i)).toBeNull()
+	})
+
+	it('asks again when the notice changes', async () => {
+		// An old acceptance covers old wording. A changed version must re-ask, which
+		// is the whole reason the stored value is a version and not a boolean.
+		window.localStorage.setItem(ASSISTANT_CONSENT_KEY, 'v0')
+		getConfigMock.mockResolvedValue({ ai_enabled: true })
+		render(<AssistantDock />)
+
+		await screen.findByRole('button', { name: 'Open assistant' })
+		openPanel()
+
+		expect(await screen.findByText(/before you send a message/i)).toBeInTheDocument()
+		expect(screen.queryByLabelText('Your question')).toBeNull()
 	})
 })

@@ -74,6 +74,27 @@ const AREAS = [
 
 type Status = 'loading' | 'on' | 'off'
 
+// Consent before the first message.
+//
+// The dock is the one surface where a visitor's own words leave the server, so it is the one
+// place that has to say so before they type. The gate is deliberately small: a notice, one
+// checkbox and a Start button, inside the panel they have already opened. Nothing is sent
+// until it is accepted, and an unaccepted panel has no input at all rather than a dead one.
+//
+// It is an attestation, not a check. No account is required, because registration is the
+// easiest thing for a minor to complete and would have made signing up the loophole. Email
+// ownership shows that someone can receive mail, not how old they are.
+//
+// The key is versioned: if what leaves the server ever changes, bump the version and every
+// visitor is asked again, instead of being covered by an acceptance of the old wording.
+export const ASSISTANT_CONSENT_KEY = 'mathua.assistant-consent'
+export const ASSISTANT_CONSENT_VERSION = 'v1'
+
+// 'unknown' is the first client render, before storage has been read. It is not 'needed',
+// because that would flash the notice at every visitor who had already accepted it, and it
+// is not 'given', because that would render an input nobody has agreed to yet.
+type Consent = 'unknown' | 'given' | 'needed'
+
 function failureCopy(e: unknown): string {
 	const message = e instanceof Error ? e.message : ''
 	if (message.includes('429')) {
@@ -85,6 +106,8 @@ function failureCopy(e: unknown): string {
 export default function AssistantDock() {
 	const [status, setStatus] = useState<Status>('loading')
 	const [open, setOpen] = useState(false)
+	const [consent, setConsent] = useState<Consent>('unknown')
+	const [consentChecked, setConsentChecked] = useState(false)
 	const [turns, setTurns] = useState<Bubble[]>([])
 	const [draft, setDraft] = useState('')
 	const [busy, setBusy] = useState(false)
@@ -109,6 +132,29 @@ export default function AssistantDock() {
 		}
 	}, [])
 
+	// Read the acceptance once, on mount. Storage can be unavailable — a private window,
+	// blocked cookies — and the safe failure is to show the notice again, not to assume it
+	// was given.
+	useEffect(() => {
+		let stored = ''
+		try {
+			stored = window.localStorage.getItem(ASSISTANT_CONSENT_KEY) ?? ''
+		} catch {
+			stored = ''
+		}
+		setConsent(stored === ASSISTANT_CONSENT_VERSION ? 'given' : 'needed')
+	}, [])
+
+	const acceptConsent = useCallback(() => {
+		try {
+			window.localStorage.setItem(ASSISTANT_CONSENT_KEY, ASSISTANT_CONSENT_VERSION)
+		} catch {
+			// Not persisting only means this visitor is asked again next time. The answer
+			// they just gave is still the answer, so the panel opens either way.
+		}
+		setConsent('given')
+	}, [])
+
 	useEffect(() => {
 		if (open) inputRef.current?.focus()
 	}, [open])
@@ -130,7 +176,7 @@ export default function AssistantDock() {
 	const send = useCallback(
 		async (text: string) => {
 			const message = text.trim()
-			if (!message || busy || status !== 'on') return
+			if (!message || busy || status !== 'on' || consent !== 'given') return
 			setError('')
 			setDraft('')
 			// Replay what both sides said, so a clarifying question can be answered.
@@ -147,7 +193,7 @@ export default function AssistantDock() {
 				setBusy(false)
 			}
 		},
-		[busy, status, turns],
+		[busy, status, turns, consent],
 	)
 
 	return (
@@ -197,7 +243,49 @@ export default function AssistantDock() {
 						</div>
 					)}
 
-					{status === 'on' && (
+					{status === 'on' && consent === 'needed' && (
+						<div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
+							<p className="font-mono text-[11px] tracking-wider text-mathua-muted uppercase">
+								Before you send a message
+							</p>
+							<p className="text-[13px] leading-relaxed text-mathua-primary">
+								Your text goes to an AI provider so it can answer. Do not type names, email
+								addresses, school details, or anything about another person.
+							</p>
+							<p className="text-[12px] leading-relaxed text-mathua-muted">
+								Your answers, progress and account details are not sent. The message is not
+								stored after it is answered. Replies can be wrong.
+							</p>
+							<label className="flex cursor-pointer items-start gap-2 text-[12px] leading-relaxed text-mathua-primary">
+								<input
+									type="checkbox"
+									checked={consentChecked}
+									onChange={e => setConsentChecked(e.target.checked)}
+									className="mt-0.5 accent-mathua-blue"
+								/>
+								<span>I am 13 or older, and I understand this.</span>
+							</label>
+							<div className="flex items-center gap-2">
+								<button
+									type="button"
+									onClick={acceptConsent}
+									disabled={!consentChecked}
+									className="rounded-none border border-mathua-blue bg-mathua-blue-faint px-3 py-1.5 font-mono text-[11px] text-mathua-blue disabled:border-mathua-border disabled:bg-transparent disabled:text-mathua-muted"
+								>
+									Start
+								</button>
+								<Link
+									href="/privacy"
+									onClick={() => setOpen(false)}
+									className="font-mono text-[11px] text-mathua-muted underline decoration-mathua-border underline-offset-2 hover:text-mathua-blue"
+								>
+									Privacy notice
+								</Link>
+							</div>
+						</div>
+					)}
+
+					{status === 'on' && consent === 'given' && (
 						<>
 					<div ref={listRef} aria-live="polite" className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
 						{turns.length === 0 && (

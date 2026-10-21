@@ -247,6 +247,10 @@ export default function Footer({ className = '' }: FooterProps) {
           <Link href="/licenses" className="underline hover:no-underline">
             Licenses
           </Link>
+          {' · '}
+          <Link href="/privacy" className="underline hover:no-underline">
+            Privacy
+          </Link>
         </div>
       </div>
     </footer>
