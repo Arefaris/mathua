@@ -1962,12 +1962,75 @@ export interface AdminContentConcept {
 	subdomain: string
 	grading_type: string
 	prerequisites: string[]
+	// The format the question will actually be served with, and whether it was
+	// declared by the generator rather than derived from the grading type. The
+	// concept record alone cannot answer this: grading_type names the grader.
+	answer_hint: string
+	answer_input_mode: 'numeric' | 'text'
+	answer_overridden: boolean
 }
 
-export async function listAdminContent(q = ''): Promise<{ concepts: AdminContentConcept[]; total: number }> {
-	const qs = q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''
+export async function listAdminContent(
+	q = '',
+	opts: { overridden?: boolean } = {},
+): Promise<{ concepts: AdminContentConcept[]; total: number }> {
+	const params = new URLSearchParams()
+	if (q.trim()) params.set('q', q.trim())
+	if (opts.overridden) params.set('overridden', '1')
+	const qs = params.toString() ? `?${params.toString()}` : ''
 	const res = await authedFetch(`${API_BASE}/api/admin/content${qs}`, { cache: 'no-store' })
 	if (!res.ok) await throwWithResponse(res, 'Could not load content')
 	const data = (await res.json()) as { concepts?: AdminContentConcept[]; total?: number }
 	return { concepts: data.concepts ?? [], total: data.total ?? 0 }
+}
+
+// The lab. Both routes are read-only: generate serves what the generator would
+// produce for a concept, and grade runs the same pure GradeAnswer the report
+// replay uses. `writes: false` in each response is the server stating that.
+export interface LabQuestion {
+	question: string
+	answer: string
+	explanation: string
+	answer_hint: string
+	answer_input_mode: 'numeric' | 'text'
+}
+
+export interface LabGenerateRes {
+	concept_id: string
+	concept_name: string
+	grading_type: string
+	answer_hint: string
+	answer_input_mode: 'numeric' | 'text'
+	difficulty: number
+	questions: LabQuestion[]
+	writes: boolean
+}
+
+export async function generateLabQuestions(
+	conceptId: string,
+	count = 3,
+	difficulty = 0.5,
+): Promise<LabGenerateRes> {
+	const res = await authedFetch(`${API_BASE}/api/admin/lab/generate`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ concept_id: conceptId, count, difficulty }),
+	})
+	if (!res.ok) await throwWithResponse(res, 'Could not generate questions')
+	return (await res.json()) as LabGenerateRes
+}
+
+export async function gradeLabAnswer(
+	conceptId: string,
+	expected: string,
+	answer: string,
+): Promise<AdminGradeRes> {
+	const res = await authedFetch(`${API_BASE}/api/admin/lab/grade`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ concept_id: conceptId, expected, answer }),
+	})
+	if (!res.ok) await throwWithResponse(res, 'Could not grade the answer')
+	const data = (await res.json()) as AdminGradeRes
+	return data
 }

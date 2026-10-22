@@ -21,6 +21,7 @@ const ITEMS: { label: string; href: string; perm: string }[] = [
   { label: 'Users', href: '/admin/users', perm: 'users.read' },
   { label: 'Contributors', href: '/admin/contributors', perm: 'admins.read' },
   { label: 'Content', href: '/admin/content', perm: 'content.read' },
+  { label: 'Lab', href: '/admin/lab', perm: 'content.read' },
   { label: 'Audit Log', href: '/admin/audit', perm: 'audit.read' },
 ]
 

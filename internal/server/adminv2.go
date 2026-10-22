@@ -210,20 +210,7 @@ func (s *Server) handleAdminReportGrade(w http.ResponseWriter, r *http.Request, 
 		writeError(w, "this report has no concept, expected answer and given answer to replay", 400)
 		return
 	}
-	res := s.eng.GradeAnswer(report.ConceptID, report.Expected, answer)
-	format := s.answerFormatOf(report.ConceptID)
-	writeJSON(w, map[string]interface{}{
-		"correct":           res.Correct,
-		"score":             res.Score,
-		"feedback":          res.Feedback,
-		"diagnosis":         res.Diagnosis,
-		"unavailable":       res.Unavailable,
-		"graded_answer":     answer,
-		"expected":          report.Expected,
-		"answer_hint":       format.Hint,
-		"answer_input_mode": format.InputMode,
-		"writes":            false,
-	})
+	s.writeGradeResult(w, report.ConceptID, report.Expected, answer)
 }
 
 // ── Admins and contributors ───────────────────────────────────────────────
@@ -452,19 +439,31 @@ func (s *Server) handleAdminContent(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, map[string]interface{}{"concepts": []interface{}{}, "total": 0})
 		return
 	}
+	// overridden=1 lists only the concepts whose served answer format differs
+	// from the default their grading type would give. The lab renders that as a
+	// table so a new override, or a removed one, is visible without reading the
+	// generator source.
+	overriddenOnly := r.URL.Query().Get("overridden") == "1"
 	type row struct {
-		ID            string   `json:"id"`
-		Label         string   `json:"label"`
-		Domain        string   `json:"domain"`
-		Subdomain     string   `json:"subdomain"`
-		GradingType   string   `json:"grading_type"`
-		Prerequisites []string `json:"prerequisites"`
+		ID               string   `json:"id"`
+		Label            string   `json:"label"`
+		Domain           string   `json:"domain"`
+		Subdomain        string   `json:"subdomain"`
+		GradingType      string   `json:"grading_type"`
+		Prerequisites    []string `json:"prerequisites"`
+		AnswerHint       string   `json:"answer_hint"`
+		AnswerInputMode  string   `json:"answer_input_mode"`
+		AnswerOverridden bool     `json:"answer_overridden"`
 	}
 	all := dag.Order()
 	out := []row{}
 	matched := 0
 	for _, c := range all {
 		if q != "" && !strings.Contains(strings.ToLower(c.ID), q) && !strings.Contains(strings.ToLower(c.Label), q) {
+			continue
+		}
+		format, overridden := s.answerFormatIsOverride(c.ID, c.GradingType)
+		if overriddenOnly && !overridden {
 			continue
 		}
 		matched++
@@ -474,6 +473,8 @@ func (s *Server) handleAdminContent(w http.ResponseWriter, r *http.Request) {
 		out = append(out, row{
 			ID: c.ID, Label: c.Label, Domain: c.Domain, Subdomain: c.Subdomain,
 			GradingType: c.GradingType, Prerequisites: c.Prerequisites,
+			AnswerHint: format.Hint, AnswerInputMode: format.InputMode,
+			AnswerOverridden: overridden,
 		})
 	}
 	writeJSON(w, map[string]interface{}{"concepts": out, "total": matched})

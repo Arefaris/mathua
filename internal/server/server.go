@@ -415,6 +415,12 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/admin/invitations/", logRequest(cors(s.requirePermission(admin.AdminsRead, s.handleAdminInvitationRevoke))))
 	mux.HandleFunc("/api/admin/audit", logRequest(cors(s.requirePermission(admin.AuditRead, s.handleAdminAudit))))
 	mux.HandleFunc("/api/admin/content", logRequest(cors(s.requirePermission(admin.ContentRead, s.handleAdminContent))))
+	// The lab. Read-only by construction: generate serves what the generator
+	// would produce, grade runs the same pure GradeAnswer the report replay
+	// uses, and neither touches a learner's evidence. content.read is inspection,
+	// which is exactly what this is.
+	mux.HandleFunc("/api/admin/lab/generate", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGenerate)))))
+	mux.HandleFunc("/api/admin/lab/grade", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGrade)))))
 	mux.HandleFunc("/api/quiz/session", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleQuizSession)))))
 	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleQuizAnswer)))))
 	mux.HandleFunc("/api/quiz/skip", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleQuizSkip)))))
