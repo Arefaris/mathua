@@ -1,4 +1,4 @@
-import { getLocale } from './i18n/locale'
+import { getRenderLocale } from './i18n/locale'
 
 // Small pure helpers for goal + planner math (client-side what-if).
 // Server remains the authority for estimates; these only recompute
@@ -41,6 +41,6 @@ export function daysFor(xpRemaining: number, dailyRate: number, restDaysPerWeek:
 export function monthLabel(isoDate: string): string {
   const d = new Date(`${isoDate}T12:00:00Z`)
   if (Number.isNaN(d.getTime())) return ''
-  const locale = getLocale()
+  const locale = getRenderLocale()
   return d.toLocaleString(locale === 'en' ? 'en-US' : locale, { month: 'long', year: 'numeric', timeZone: 'UTC' })
 }

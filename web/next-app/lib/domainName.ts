@@ -1,5 +1,5 @@
 import { domainLabel } from './graphDomains'
-import { getLocale } from './i18n/locale'
+import { getRenderLocale } from './i18n/locale'
 import { getTranslator } from './i18n/react'
 
 /**
@@ -14,5 +14,5 @@ import { getTranslator } from './i18n/react'
  * the learner switches.
  */
 export function domainName(domain: string): string {
-  return getTranslator(getLocale()).dynamic(`common.domain.${domain}`, undefined, domainLabel(domain))
+  return getTranslator(getRenderLocale()).dynamic(`common.domain.${domain}`, undefined, domainLabel(domain))
 }

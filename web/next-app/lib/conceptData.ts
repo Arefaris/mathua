@@ -1,6 +1,6 @@
 import conceptsData from '../data/concepts.json'
 import ruLabels from '../data/concepts.labels.ru.json'
-import { getLocale } from './i18n/locale'
+import { getRenderLocale } from './i18n/locale'
 
 // Typed view over data/concepts.json. The raw JSON import infers a large
 // literal type that is awkward to iterate, which previously forced `as any[]`
@@ -36,7 +36,7 @@ export const concepts: ConceptRecord[] = (conceptsData as ConceptRecord[]).map(c
   const english = c.label
   Object.defineProperty(record, 'label', {
     enumerable: true,
-    get: () => (getLocale() === 'ru' ? translatedLabels[c.id] ?? english : english),
+    get: () => (getRenderLocale() === 'ru' ? translatedLabels[c.id] ?? english : english),
   })
   return record
 })

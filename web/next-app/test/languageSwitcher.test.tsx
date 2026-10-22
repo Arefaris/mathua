@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { useEffect } from 'react'
 import LanguageSwitcher from '../components/LanguageSwitcher'
@@ -53,5 +53,50 @@ describe('LocaleRoot', () => {
     expect(mounts).toBe(2)
     act(() => setLocale('ru'))
     expect(mounts).toBe(2)
+  })
+})
+
+// The page is prerendered in English and hydrated in the learner's language. A helper that
+// formats text outside a hook must agree with the hook for that first pass, or React finds the
+// DOM different from what it rendered and throws the server markup away.
+describe('hydration in Russian', () => {
+  it('matches the prerendered English markup on the first client render, then shows Russian', async () => {
+    const { renderToString } = await import('react-dom/server')
+    const { hydrateRoot } = await import('react-dom/client')
+    const { domainName } = await import('../lib/domainName')
+    const { resetLocaleForTests } = await import('../lib/i18n/locale')
+
+    function Probe() {
+      const t = useT()
+      return (
+        <p>
+          {t('common.language.label')} / {domainName('arithmetic')}
+        </p>
+      )
+    }
+    const tree = (
+      <LocaleRoot>
+        <Probe />
+      </LocaleRoot>
+    )
+
+    resetLocaleForTests('en')
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const html = renderToString(tree)
+    expect(html.replace(/<!-- -->/g, '')).toContain('Language / Arithmetic')
+    spy.mockClear()
+
+    resetLocaleForTests('ru')
+    const container = document.createElement('div')
+    container.innerHTML = html
+    document.body.appendChild(container)
+    await act(async () => {
+      hydrateRoot(container, tree)
+    })
+
+    expect(spy.mock.calls.map(c => String(c[0]))).toEqual([])
+    expect(container.textContent).toBe('Язык / Арифметика')
+    spy.mockRestore()
+    container.remove()
   })
 })

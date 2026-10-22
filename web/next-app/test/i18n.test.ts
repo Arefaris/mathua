@@ -269,3 +269,44 @@ describe('the typed key', () => {
     expect(tr.dynamic('common.language.label')).toBe('Language')
   })
 })
+
+// Russian is a separate chunk, fetched when a learner uses it. English visitors never pay for it.
+describe('the Russian dictionary loads on demand', () => {
+  async function freshModules() {
+    vi.resetModules()
+    const messages = await import('../lib/i18n/messages')
+    const locale = await import('../lib/i18n/locale')
+    const translate = await import('../lib/i18n/translate')
+    expect(messages.messagesLoaded('ru')).toBe(false)
+    locale.resetLocaleForTests('en')
+    return { messages, locale, translate }
+  }
+
+  it('falls back to English until it arrives, and waits for it before switching', async () => {
+    const { locale, translate } = await freshModules()
+    expect(translate.translate('ru', 'common.language.label')).toBe('Language')
+
+    locale.setLocale('ru')
+    // Not yet: switching now would remount the page into English and then again into Russian.
+    expect(locale.getLocale()).toBe('en')
+    await vi.waitFor(() => expect(locale.getLocale()).toBe('ru'))
+    expect(translate.translate('ru', 'common.language.label')).toBe('Язык')
+    expect(locale.getMessagesVersion()).toBeGreaterThan(0)
+  })
+
+  it('ignores a request the learner has already taken back', async () => {
+    const { locale, messages } = await freshModules()
+    locale.setLocale('ru')
+    locale.setLocale('en')
+    await vi.waitFor(() => expect(messages.messagesLoaded('ru')).toBe(true))
+    expect(locale.getLocale()).toBe('en')
+  })
+
+  it('starts fetching when the stored choice is read on load', async () => {
+    const { locale, messages } = await freshModules()
+    localStorage.setItem(LOCALE_STORAGE_KEY, 'ru')
+    locale.resetLocaleForTests(null)
+    expect(locale.getLocale()).toBe('ru')
+    await vi.waitFor(() => expect(messages.messagesLoaded('ru')).toBe(true))
+  })
+})

@@ -10,6 +10,8 @@
 // component mount one first. `useSyncExternalStore` gives the same re-render on change
 // without it.
 
+import { loadMessages, messagesLoaded, messagesVersion } from './messages'
+
 export type Locale = 'en' | 'ru'
 
 export const LOCALES: readonly Locale[] = ['en', 'ru']
@@ -57,11 +59,41 @@ function notify() {
   listeners.forEach(fn => fn())
 }
 
+// Start fetching a language's dictionary. A failed fetch is not retried here: lookups fall back to
+// English, which is a readable page, and the next load tries again.
+function warm(locale: Locale) {
+  if (!messagesLoaded(locale)) loadMessages(locale).then(notify, () => {})
+}
+
 export function getLocale(): Locale {
   // The server (static prerender) and tests without a window have no learner to ask.
   if (typeof window === 'undefined') return DEFAULT_LOCALE
-  if (current === null) current = readStored() ?? fromBrowser()
+  if (current === null) {
+    current = readStored() ?? fromBrowser()
+    warm(current)
+  }
   return current
+}
+
+/** Changes whenever a dictionary arrives; `useT` subscribes to it, because the locale string has not changed. */
+export function getMessagesVersion(): number {
+  return messagesVersion()
+}
+
+// While React hydrates the prerendered English HTML, `useLocale` answers English (the server
+// snapshot) even when the learner's choice is Russian. Code that formats text during render
+// without going through a hook (`domainName`, `concept.label`, the level names) must agree with
+// the hooks, or the first client render differs from the HTML and React discards it. LocaleRoot
+// holds the render locale at the hook's answer for exactly that first pass.
+let heldRenderLocale: Locale | null = null
+
+/** The locale to format display text in during render. Equal to `getLocale()` except while hydrating. */
+export function getRenderLocale(): Locale {
+  return heldRenderLocale ?? getLocale()
+}
+
+export function holdRenderLocale(locale: Locale | null) {
+  heldRenderLocale = locale
 }
 
 export function getLocaleEpoch(): number {
@@ -79,8 +111,20 @@ function applyToDocument(locale: Locale) {
   if (typeof document !== 'undefined') document.documentElement.lang = locale
 }
 
+// The language the learner asked for last. A switch waits for its dictionary, so the page does not
+// remount into English and then again into Russian; if the learner changes their mind meanwhile,
+// the stale request does nothing.
+let requested: Locale | null = null
+
 export function setLocale(next: Locale) {
-  if (!isLocale(next) || next === getLocale()) return
+  if (!isLocale(next)) return
+  requested = next
+  if (messagesLoaded(next)) commit(next)
+  else loadMessages(next).then(() => requested === next && commit(next), () => requested === next && commit(next))
+}
+
+function commit(next: Locale) {
+  if (next === getLocale()) return
   current = next
   try {
     localStorage.setItem(LOCALE_STORAGE_KEY, next)
@@ -104,10 +148,9 @@ if (typeof window !== 'undefined') {
     if (e.key !== LOCALE_STORAGE_KEY) return
     const next = isLocale(e.newValue) ? e.newValue : fromBrowser()
     if (next === current) return
-    current = next
-    epoch += 1
-    applyToDocument(next)
-    notify()
+    requested = next
+    if (messagesLoaded(next)) commit(next)
+    else loadMessages(next).then(() => requested === next && commit(next), () => requested === next && commit(next))
   })
 }
 

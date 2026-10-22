@@ -27,7 +27,7 @@ import type { MathKeyboardMode } from './keyboards'
 // hand-rolled `{ width?: number }` would happily accept and then render wrong, so
 // the library's own type is the one worth having.
 import type { VirtualKeyboardKeycap } from 'mathlive'
-import { getLocale } from '../../lib/i18n/locale'
+import { getRenderLocale } from '../../lib/i18n/locale'
 import { getTranslator } from '../../lib/i18n/react'
 
 export type Keycap = string | Partial<VirtualKeyboardKeycap>
@@ -341,7 +341,7 @@ function localizeKeycap(keycap: Keycap): Keycap {
   if (typeof keycap === 'string') return keycap
   const out = { ...keycap }
   const key = out.aside ? ASIDE_KEYS[out.aside] : undefined
-  if (key) out.aside = getTranslator(getLocale()).dynamic(`learn.keyboard.aside.${key}`, undefined, out.aside)
+  if (key) out.aside = getTranslator(getRenderLocale()).dynamic(`learn.keyboard.aside.${key}`, undefined, out.aside)
   if (Array.isArray(out.variants)) out.variants = out.variants.map(v => localizeKeycap(v) as typeof v)
   return out
 }
@@ -359,7 +359,7 @@ export function layoutForMode(mode: MathKeyboardMode): Layout {
  */
 export function layoutsForMode(mode: MathKeyboardMode): Layout[] {
   const layout = layoutForMode(mode)
-  const t = getTranslator(getLocale())
+  const t = getTranslator(getRenderLocale())
   return layout.layers.map(layer => ({
     label: layer.label,
     tooltip: t.dynamic(`learn.keyboard.tooltip.${mode}`, undefined, layout.tooltip),

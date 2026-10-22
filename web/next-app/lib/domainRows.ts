@@ -1,7 +1,7 @@
 import { countByDomain, masteryState, prereqMet } from './progress'
 import { DOMAIN_ORDER } from './graphDomains'
 import { domainName } from './domainName'
-import { getLocale } from './i18n/locale'
+import { getRenderLocale } from './i18n/locale'
 import { getTranslator } from './i18n/react'
 import type { ConceptRecord } from './conceptData'
 import type { ConceptProgress } from './api'
@@ -50,7 +50,7 @@ export const DOMAIN_STATUS_LABEL: Record<DomainConceptStatus, string> = {
  * a component that shows a status calls this and must itself read the locale (`useT`).
  */
 export function domainStatusLabel(status: DomainConceptStatus): string {
-  return getTranslator(getLocale()).dynamic(`explore.domainStatus.${status}`, undefined, DOMAIN_STATUS_LABEL[status])
+  return getTranslator(getRenderLocale()).dynamic(`explore.domainStatus.${status}`, undefined, DOMAIN_STATUS_LABEL[status])
 }
 
 export const DOMAIN_STATUS_ORDER: DomainConceptStatus[] = [

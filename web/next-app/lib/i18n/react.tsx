@@ -1,10 +1,13 @@
 'use client'
 
-import { Fragment, useEffect, useMemo, useSyncExternalStore, type ReactNode } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useSyncExternalStore, type ReactNode } from 'react'
 import {
   DEFAULT_LOCALE,
   getLocale,
   getLocaleEpoch,
+  getMessagesVersion,
+  getRenderLocale,
+  holdRenderLocale,
   subscribeLocale,
   syncDocumentLang,
   type Locale,
@@ -25,17 +28,24 @@ export interface TFunction {
   readonly locale: Locale
 }
 
-const translators = new Map<Locale, TFunction>()
+// useLayoutEffect warns when React renders on the server, where there is no layout to run it.
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
-/** One stable function per locale, so `t` is safe in a dependency array. */
+const translators = new Map<string, TFunction>()
+
+/**
+ * One stable function per locale, so `t` is safe in a dependency array. A new one when that
+ * locale's dictionary arrives, so a memo that depends on `t` recomputes with the real text.
+ */
 export function getTranslator(locale: Locale): TFunction {
-  let t = translators.get(locale)
+  const cacheKey = `${locale}:${getMessagesVersion()}`
+  let t = translators.get(cacheKey)
   if (!t) {
     const fn = ((key: MessageKey, params?: Params) => translate(locale, key, params)) as TFunction
     Object.defineProperty(fn, 'locale', { value: locale })
     fn.dynamic = (key, params, fallback) => resolve(locale, key, params) ?? fallback ?? key
     t = fn
-    translators.set(locale, t)
+    translators.set(cacheKey, t)
   }
   return t
 }
@@ -48,7 +58,7 @@ export function getTranslator(locale: Locale): TFunction {
  * otherwise it will not re-render on a switch.
  */
 export function tNow(key: MessageKey, params?: Params): string {
-  return getTranslator(getLocale())(key, params)
+  return getTranslator(getRenderLocale())(key, params)
 }
 
 export function useLocale(): Locale {
@@ -59,7 +69,10 @@ export function useLocale(): Locale {
 
 export function useT(): TFunction {
   const locale = useLocale()
-  return useMemo(() => getTranslator(locale), [locale])
+  // The locale string does not change when its dictionary arrives; the version does. Reading it
+  // re-renders the component, and getTranslator hands back the function for the new version.
+  useSyncExternalStore(subscribeLocale, getMessagesVersion, () => 0)
+  return getTranslator(locale)
 }
 
 /**
@@ -74,6 +87,14 @@ export function useT(): TFunction {
 export function LocaleRoot({ children }: { children: ReactNode }) {
   const locale = useLocale()
   const epoch = useSyncExternalStore(subscribeLocale, getLocaleEpoch, () => 0)
+  // `locale` is English while hydrating even for a Russian learner; `getLocale()` is already
+  // Russian. Until the first commit, tell the render-time helpers to agree with the hook, so the
+  // first client render matches the prerendered HTML. The re-render React schedules right after
+  // hydration then switches everything to Russian.
+  if (locale !== getLocale()) holdRenderLocale(locale)
+  useIsomorphicLayoutEffect(() => {
+    holdRenderLocale(null)
+  }, [])
   useEffect(() => {
     syncDocumentLang()
   }, [locale])

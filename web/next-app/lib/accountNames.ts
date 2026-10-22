@@ -1,4 +1,4 @@
-import { getLocale } from './i18n/locale'
+import { getRenderLocale } from './i18n/locale'
 import { getTranslator } from './i18n/react'
 
 // Names the server sends as English words: a learner's level ("Math Architect"), a league tier
@@ -16,7 +16,7 @@ function keyOf(name: string): string {
 }
 
 function lookup(group: string, name: string): string {
-  return getTranslator(getLocale()).dynamic(`account.${group}.${keyOf(name)}`, undefined, name)
+  return getTranslator(getRenderLocale()).dynamic(`account.${group}.${keyOf(name)}`, undefined, name)
 }
 
 export const levelName = (level: string) => lookup('level', level)
