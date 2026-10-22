@@ -54,6 +54,9 @@ describe('every API route has a caller', () => {
       ['/api/admin/logout', 'called from the admin page'],
       ['/api/vercel', 'deployment webhook, no browser caller'],
       ['/api/activity', 'fetched by the profile and heatmap'],
+      // Emitted by the server inside leaderboard and league avatar payloads;
+      // the client fetches whatever URL it was given and never names the route.
+      ['/api/avatar/u/', 'avatar URL is built server-side and fetched as given'],
       ['/api/efficacy/all', 'fetched by the efficacy page'],
       ['/api/efficacy/trend', 'fetched by the efficacy page'],
       // OAuth providers: the login page offers Google only, but the server

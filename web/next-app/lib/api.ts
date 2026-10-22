@@ -168,19 +168,48 @@ export interface GraphRes {
   count: number
 }
 
+export type LeaderboardView = 'weekly' | 'all_time'
+
+// No student id reaches the browser. `id` is a username (or a one-way
+// derivation of the account id), which is what the avatar route and React keys
+// use; a guest id would have been a credential on a public page.
 export interface LeaderboardEntry {
   rank: number
-  student_id: string
+  id: string
   name: string
-  username?: string
-  avatar_url?: string
-  avatar_dicebear?: { style: string; seed: string } | null
-  avatar_custom?: boolean
-  avatar_version?: number
+  avatar?: LeaderboardAvatar
+  xp: number
+  xp_total: number
   mastered: number
-  streak: number
   level: string
-  score: number
+  is_me?: boolean
+}
+
+export interface LeaderboardAvatar {
+  kind: 'custom' | 'generated'
+  url?: string
+  style?: string
+  version?: number
+}
+
+export interface LeaderboardPosition {
+  rank: number
+  xp: number
+  eligible: boolean
+  guest?: boolean
+  in_page: boolean
+}
+
+export interface LeaderboardBoard {
+  view: LeaderboardView
+  page: number
+  page_size: number
+  total: number
+  total_pages: number
+  entries: LeaderboardEntry[]
+  me?: LeaderboardPosition
+  week_start: string
+  week_end: string
 }
 
 export interface Scores {
@@ -316,40 +345,46 @@ export async function getCurriculumDomain(domainId: string): Promise<DomainDetai
   return res.json() as Promise<DomainDetail>
 }
 
-export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
-  const res = await authedFetch(`${API_BASE}/api/leaderboard`)
-  if (!res.ok) return []
-  return res.json()
+export async function getLeaderboard(
+  view: LeaderboardView,
+  page: number,
+  pageSize = 25,
+): Promise<LeaderboardBoard> {
+  const params = new URLSearchParams({ view, page: String(page), page_size: String(pageSize) })
+  const res = await authedFetch(`${API_BASE}/api/leaderboard?${params.toString()}`, { cache: 'no-store' })
+  if (!res.ok) await throwWithResponse(res, 'Could not load the leaderboard')
+  return res.json() as Promise<LeaderboardBoard>
 }
 
-export interface LeagueMember {
-  student_id: string
+export interface LeagueMemberLine {
+  rank: number
+  id: string
   name: string
-  username?: string
-  avatar_url?: string
-  avatar_dicebear?: { style: string; seed: string } | null
-  avatar_custom?: boolean
-  avatar_version?: number
-  tier: string
-  total_mastered: number
-  weekly_mastered: number
-  moved: number
+  avatar?: LeaderboardAvatar
+  xp: number
+  is_me?: boolean
 }
 
-export interface League {
-  tier: string
-  members: LeagueMember[]
-}
-
-export interface LeagueBoard {
+export interface MyLeague {
   week: string
-  leagues: League[]
+  week_start: string
+  week_end: string
+  tier: string
+  league_no: number
+  size: number
+  promote: number
+  demote: number
+  members: LeagueMemberLine[]
+  me?: { rank: number; xp: number }
 }
 
-export async function getLeagues(): Promise<LeagueBoard> {
-  const res = await authedFetch(`${API_BASE}/api/leagues`, { headers: { ...getAuthHeaders() } })
-  if (!res.ok) return { week: '', leagues: [] }
-  return res.json()
+// A signed-in learner's own league. Unauthenticated callers get null rather
+// than an error: "sign in to compete" is an answer, not a failure.
+export async function getMyLeague(): Promise<MyLeague | null> {
+  const res = await authedFetch(`${API_BASE}/api/leagues`, { cache: 'no-store' })
+  if (res.status === 401) return null
+  if (!res.ok) await throwWithResponse(res, 'Could not load your league')
+  return res.json() as Promise<MyLeague>
 }
 
 export interface ShareReport {
