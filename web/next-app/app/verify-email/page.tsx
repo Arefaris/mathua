@@ -10,8 +10,10 @@ import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
 import { verifyEmail } from '../../lib/api'
 import { getUserInfo, setUserInfo } from '../../lib/auth'
+import { useT } from '../../lib/i18n'
 
 function VerifyEmailInner() {
+  const t = useT()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'working' | 'done' | 'error'>('working')
   const [message, setMessage] = useState('')
@@ -20,7 +22,7 @@ function VerifyEmailInner() {
     const token = searchParams.get('token')
     if (!token) {
       setStatus('error')
-      setMessage('This verification link is missing its token.')
+      setMessage(t('account.verifyEmail.missingToken'))
       return
     }
     verifyEmail(token)
@@ -31,24 +33,24 @@ function VerifyEmailInner() {
       })
       .catch((e) => {
         setStatus('error')
-        setMessage(e instanceof Error ? e.message : 'Verification failed — the link may have expired.')
+        setMessage(e instanceof Error ? e.message : t('account.verifyEmail.failed'))
       })
-  }, [searchParams])
+  }, [searchParams, t])
 
   return (
     <>
       <Header />
       <div className="max-w-container mx-auto px-4 sm:px-6 pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 overflow-x-hidden min-w-0">
         <section className="pt-8 max-w-md mx-auto mt-8 sm:mt-12 min-w-0 overflow-hidden text-center">
-          <SectionHeader label="Email" title="Verify email" />
+          <SectionHeader label={t('account.verifyEmail.label')} title={t('account.verifyEmail.title')} />
           <div className="mt-6">
-            {status === 'working' && <Loading label="VERIFYING" />}
+            {status === 'working' && <Loading label={t('account.verifyEmail.working')} />}
             {status === 'done' && (
               <>
-                <p className="font-mono text-sm text-mathua-green">Email verified.</p>
-                <p className="text-mathua-secondary text-sm mt-2">Your logins now merge into one account.</p>
+                <p className="font-mono text-sm text-mathua-green">{t('account.verifyEmail.done')}</p>
+                <p className="text-mathua-secondary text-sm mt-2">{t('account.verifyEmail.merge')}</p>
                 <Link href="/profile" className="inline-block mt-6 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px]">
-                  Continue to profile →
+                  {t('account.verifyEmail.continue')}
                 </Link>
               </>
             )}

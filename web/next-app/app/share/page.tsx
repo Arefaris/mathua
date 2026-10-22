@@ -15,8 +15,10 @@ import { concepts } from '../../lib/conceptData'
 import { buildDomainRows } from '../../lib/domainRows'
 import AttemptList from '../../components/AttemptList'
 import { getShareReport, type ShareReport } from '../../lib/api'
+import { useT } from '../../lib/i18n'
 
 function ShareContent() {
+  const t = useT()
   const searchParams = useSearchParams()
   const token = searchParams.get('token') || ''
   const [report, setReport] = useState<ShareReport | null>(null)
@@ -24,13 +26,13 @@ function ShareContent() {
 
   useEffect(() => {
     if (!token) {
-      setError('Missing share token.')
+      setError(t('account.share.missingToken'))
       return
     }
     getShareReport(token)
-      .then(r => r ? setReport(r) : setError('This share link is invalid or has been disabled.'))
-      .catch(() => setError('Failed to load the shared report.'))
-  }, [token])
+      .then(r => r ? setReport(r) : setError(t('account.share.invalid')))
+      .catch(() => setError(t('account.share.failed')))
+  }, [token, t])
 
   if (error) {
     return (
@@ -39,10 +41,10 @@ function ShareContent() {
         <div className="max-w-container mx-auto px-4 sm:px-6 pt-[var(--chrome-top)] pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 text-center overflow-x-hidden min-w-0">
           <p className="text-mathua-muted text-sm">{error}</p>
           {!token && (
-            <p className="text-mathua-muted text-xs font-mono mt-2">Ask the student to enable sharing in Settings → Share with parent / teacher.</p>
+            <p className="text-mathua-muted text-xs font-mono mt-2">{t('account.share.askEnable')}</p>
           )}
           <Link href="/" className="text-mathua-blue text-sm hover:underline mt-4 inline-block">
-            ← Back home
+            {t('account.share.backHome')}
           </Link>
         </div>
         <Footer />
@@ -56,7 +58,7 @@ function ShareContent() {
       <>
         <Header />
         <div className="max-w-container mx-auto px-4 sm:px-6 pt-[var(--chrome-top)] pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 text-center overflow-x-hidden min-w-0">
-          <Loading label="LOADING REPORT" />
+          <Loading label={t('account.share.loading')} />
         </div>
         <Footer />
         <BottomTabs />
@@ -69,9 +71,9 @@ function ShareContent() {
       <Header />
       <div className="max-w-container mx-auto px-4 sm:px-6 pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 overflow-x-hidden min-w-0">
         <section className="pt-8 min-w-0 overflow-hidden">
-          <SectionHeader label="Read-only report" title={`${report.name}'s progress`} />
+          <SectionHeader label={t('account.share.label')} title={t('account.share.title', { name: report.name })} />
           <p className="text-mathua-muted text-xs font-mono text-center mt-3">
-            Shared by the student for parent / teacher oversight
+            {t('account.share.sharedBy')}
           </p>
 
           <div className="mx-auto w-full max-w-[820px] min-w-0 px-0 sm:px-4 py-8 overflow-hidden">
@@ -79,7 +81,7 @@ function ShareContent() {
 
             <section className="mt-8 flex min-w-0 flex-col items-stretch">
               <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-4 w-full">
-                Activity
+                {t('account.share.activity')}
               </h2>
               <div className="w-full max-w-full min-w-0 flex justify-center overflow-hidden">
                 <div className="w-full max-w-full min-w-0">
@@ -97,12 +99,12 @@ function ShareContent() {
             {(report.attempts?.length ?? 0) > 0 && (
               <section className="mt-8 min-w-0">
                 <h2 className="font-serif text-[1.05rem] font-normal text-mathua-primary mb-4 w-full">
-                  Progress card
+                  {t('account.share.progressCard')}
                 </h2>
                 <AttemptList attempts={(report.attempts ?? []).slice(0, 100)} />
                 {(report.attempts ?? []).length > 100 && (
                   <p className="font-mono text-[11px] text-mathua-muted mt-3 text-center">
-                    Showing latest 100 of {(report.attempts ?? []).length}
+                    {t('account.share.latest', { total: (report.attempts ?? []).length })}
                   </p>
                 )}
               </section>
@@ -118,9 +120,10 @@ function ShareContent() {
 }
 
 export default function SharePage() {
+  const t = useT()
   return (
     <Suspense fallback={
-      <><Header /><div className="max-w-container mx-auto px-4 sm:px-6 pt-[var(--chrome-top)] pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 text-center overflow-x-hidden min-w-0"><Loading label="LOADING REPORT" /></div></>
+      <><Header /><div className="max-w-container mx-auto px-4 sm:px-6 pt-[var(--chrome-top)] pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 text-center overflow-x-hidden min-w-0"><Loading label={t('account.share.loading')} /></div></>
     }>
       <ShareContent />
     </Suspense>
