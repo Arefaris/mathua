@@ -272,7 +272,7 @@ export default function LeaderboardPage() {
             </div>
           )}
 
-          <div role="tablist" aria-label="Leaderboard view" className="flex justify-center gap-1 border-b border-mathua-border mb-6 overflow-x-auto">
+          <div role="tablist" aria-label="Leaderboard view" className="flex flex-wrap justify-center gap-1 border-b border-mathua-border mb-6">
             {TABS.map((t) => (
               <button
                 key={t.id}
@@ -282,7 +282,7 @@ export default function LeaderboardPage() {
                 aria-selected={tab === t.id}
                 aria-controls={`panel-${t.id}`}
                 onClick={() => selectTab(t.id)}
-                className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border-b-2 -mb-px whitespace-nowrap ${
+                className={`font-mono text-xs uppercase tracking-wider px-3 sm:px-4 py-2 border-b-2 -mb-px whitespace-nowrap ${
                   tab === t.id
                     ? 'border-mathua-blue text-mathua-blue'
                     : 'border-transparent text-mathua-muted hover:text-mathua-primary'

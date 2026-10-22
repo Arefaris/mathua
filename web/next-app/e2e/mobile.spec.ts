@@ -325,7 +325,24 @@ test('stacked table cards are centered with equal gutters', async ({ page }) => 
 })
 
 test('scroll containers are edge-to-edge and horizontally scrollable', async ({ page }) => {
-  // Leaderboard table
+  // Leaderboard table. The production build points at the live API, so mock the
+  // page here: a layout assertion must not fail because the deployed shape is
+  // from another version.
+  await page.route('**/api/leaderboard*', route => route.fulfill({
+    json: {
+      view: 'weekly',
+      page: 1,
+      page_size: 25,
+      total: 2,
+      total_pages: 1,
+      week_start: '2026-10-19T00:00:00Z',
+      week_end: '2026-10-26T00:00:00Z',
+      entries: [
+        { rank: 1, id: 'ada', name: 'Ada', xp: 40, xp_total: 100, mastered: 2, level: 'Novice' },
+        { rank: 2, id: 'bob', name: 'Bob', xp: 20, xp_total: 50, mastered: 1, level: 'Novice' },
+      ],
+    },
+  }))
   await page.goto('/leaderboard')
   const lb = page.locator('div.overflow-x-auto').first()
   await expect(lb).toBeVisible()

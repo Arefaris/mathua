@@ -353,7 +353,14 @@ export async function getLeaderboard(
   const params = new URLSearchParams({ view, page: String(page), page_size: String(pageSize) })
   const res = await authedFetch(`${API_BASE}/api/leaderboard?${params.toString()}`, { cache: 'no-store' })
   if (!res.ok) await throwWithResponse(res, 'Could not load the leaderboard')
-  return res.json() as Promise<LeaderboardBoard>
+  const data = (await res.json()) as Partial<LeaderboardBoard>
+  // A deploy in progress can pair this bundle with the previous API, whose
+  // response was a bare array. Render the error state rather than crash on
+  // `entries.length` underneath the error boundary.
+  if (!data || !Array.isArray(data.entries)) {
+    throw new Error('The leaderboard response was not a page')
+  }
+  return data as LeaderboardBoard
 }
 
 export interface LeagueMemberLine {
