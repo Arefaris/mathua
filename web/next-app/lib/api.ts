@@ -1792,7 +1792,13 @@ const QuestionReportSchema = z.object({
 	answer_given: z.string().optional(),
 	grading_type: z.string().optional(),
 	answer_hint: z.string().optional(),
-	answer_input_mode: z.enum(['numeric', 'text']).optional(),
+	// The Go field has no omitempty, so a report filed before the capture
+	// existed carries "" rather than omitting the key. Without the preprocess
+	// that empty string fails the enum and one old row hides the whole queue.
+	answer_input_mode: z.preprocess(
+		v => (v === '' ? undefined : v),
+		z.enum(['numeric', 'text']).optional(),
+	),
 	reason: z.string(),
 	detail: z.string(),
 	status: z.string(),
