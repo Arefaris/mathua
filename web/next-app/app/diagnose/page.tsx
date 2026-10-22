@@ -8,21 +8,38 @@ import BottomTabs from '../../components/BottomTabs'
 import SectionHeader from '../../components/SectionHeader'
 import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
+import { useT } from '../../lib/i18n'
 
-const DiagnosticFlow = dynamic(() => import('../../components/DiagnosticFlow'), {
-  ssr: false,
-  loading: () => (
+// A component rather than an inline arrow, because `dynamic` calls it outside any render the
+// page controls and the label needs the locale hook.
+function FlowLoading() {
+  const t = useT()
+  return (
     <div style={{
       height: 420, border: '0.5px solid var(--border)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       color: 'var(--text-muted)', fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontSize: '13px',
     }}>
-      <Loading label="LOADING DIAGNOSTIC" />
+      <Loading label={t('goals.diagnose.loading')} />
     </div>
-  ),
+  )
+}
+
+const DiagnosticFlow = dynamic(() => import('../../components/DiagnosticFlow'), {
+  ssr: false,
+  loading: () => <FlowLoading />,
 })
 
+const STEP_KEYS = [
+  'goals.diagnose.step1',
+  'goals.diagnose.step2',
+  'goals.diagnose.step3',
+  'goals.diagnose.step4',
+  'goals.diagnose.step5',
+] as const
+
 export default function DiagnosePage() {
+  const t = useT()
   const { mounted } = useTheme()
 
   if (!mounted) return <div style={{ background: 'var(--bg)', minHeight: '100vh' }} />
@@ -34,41 +51,34 @@ export default function DiagnosePage() {
       <section className="pt-8 min-w-0 overflow-hidden">
         <span className="flex mb-4">
           <Link href="/" className="text-mathua-secondary text-sm hover:text-mathua-blue">
-            ← Back
+            {t('goals.diagnose.back')}
           </Link>
         </span>
 
-        <SectionHeader label="Diagnostic Test" title="Find your starting point" />
+        <SectionHeader label={t('goals.diagnose.label')} title={t('goals.diagnose.title')} />
 
         <p className="text-mathua-secondary text-sm leading-relaxed text-center max-w-[600px] mx-auto mt-4">
-          A diagnostic test that locates your position in the concept graph
-          using as few questions as possible.
+          {t('goals.diagnose.lead')}
         </p>
       </section>
 
 
       {/* How it works */}
       <section className="py-20 max-sm:py-12">
-        <SectionHeader label="Method" title="How the diagnostic works" />
+        <SectionHeader label={t('goals.diagnose.methodLabel')} title={t('goals.diagnose.howTitle')} />
 
         <div className="flex justify-center mt-8">
           <DiagnosticFlow />
         </div>
 
         <ul className="max-w-[600px] mx-auto mt-8 space-y-3 list-none">
-           {[
-             'The concept graph is sorted topologically: the diagnostic starts at the midpoint.',
-             'Each concept is probed with multiple questions at varying difficulty to get a reliable estimate.',
-             'Correct answers within the time limit move the probe forward toward harder concepts.',
-             'Incorrect or slow answers move backward toward foundational material.',
-             'The diagnostic records a mastery estimate for every concept passed through.',
-           ].map((step) => (
+           {STEP_KEYS.map((stepKey) => (
             <li
-              key={step}
+              key={stepKey}
               className="text-mathua-secondary text-[0.95rem] leading-[1.7] pl-9 relative before:content-[counter(step)] before:absolute before:left-0 before:text-mathua-blue before:font-mono before:text-[13px]"
               style={{ counterIncrement: 'step-counter 1' }}
             >
-              {step}
+              {t(stepKey)}
             </li>
           ))}
         </ul>
@@ -78,11 +88,10 @@ export default function DiagnosePage() {
 
       {/* Actions */}
       <section className="py-20 max-sm:py-12 text-center">
-        <SectionHeader label="Ready" title="Begin your diagnostic" />
+        <SectionHeader label={t('goals.diagnose.readyLabel')} title={t('goals.diagnose.beginTitle')} />
 
         <p className="text-mathua-secondary text-sm leading-relaxed max-w-[500px] mx-auto mt-4 mb-8">
-          You can retake the diagnostic test at any time: retaking never
-          deletes progress, and Mathua always keeps the most optimistic estimate.
+          {t('goals.diagnose.retake')}
         </p>
 
         <div className="flex gap-3 justify-center max-sm:flex-col max-sm:items-center min-w-0">
@@ -90,13 +99,13 @@ export default function DiagnosePage() {
             href="/onboard"
             className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-10 min-h-[36px] px-6 text-[13px] font-medium transition-colors flex items-center justify-center w-full sm:w-auto max-w-[280px]"
           >
-            Start diagnostic test
+            {t('goals.diagnose.start')}
           </Link>
           <Link
             href="/docs/system-design#cat-diagnostic"
             className="border border-mathua-border-strong text-mathua-primary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-10 min-h-[36px] px-6 text-[13px] font-medium transition-colors flex items-center justify-center w-full sm:w-auto max-w-[280px]"
           >
-            Read the full algorithm
+            {t('goals.diagnose.readAlgorithm')}
           </Link>
         </div>
       </section>
