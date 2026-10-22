@@ -87,6 +87,18 @@ export default function ContactPage() {
         </p>
         <ContactBox />
 
+        <h2 style={h2Style}>Discord</h2>
+        <p style={textStyle}>
+          The{' '}
+          <a href="https://discord.gg/qXPeQ2jys" target="_blank" rel="noreferrer" style={linkStyle}>
+            Mathua Discord server
+          </a>{' '}
+          is the fastest way to reach other learners and the administrator. Ask about a lesson,
+          say what you are working on, or explain a problem that is easier to talk through than
+          to type into a form. Keep anything private — an account problem, a password, a message
+          meant for one person — to the box above, not the public server.
+        </p>
+
         <h2 style={h2Style}>A question is wrong</h2>
         <p style={textStyle}>
           Use the report control on the question itself. Choose <em>Report a problem</em>, then

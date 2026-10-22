@@ -143,9 +143,9 @@ describe('Header mobile nav menu', () => {
     // Whatever is left after the tab bar is subtracted out. Domains is not here: it holds a
     // tab, having taken the slot the closed Study route occupied, so it is always one tap away
     // on mobile instead of hiding one level deep.
-    expect(labels).toEqual(['Leaderboard', 'Glossary', 'Login'])
+    expect(labels).toEqual(['Leaderboard', 'Glossary', 'Contact', 'Login'])
     const hrefs = items.map(i => (i as HTMLAnchorElement).getAttribute('href'))
-    expect(hrefs).toEqual(['/leaderboard', '/glossary', '/login'])
+    expect(hrefs).toEqual(['/leaderboard', '/glossary', '/contact', '/login'])
     // The invariant behind the exact list: nothing appears twice on one screen.
     for (const href of hrefs) {
       expect(hrefs.filter(h => h === href)).toHaveLength(1)
@@ -192,7 +192,7 @@ describe('Header mobile nav menu', () => {
   it('closes on Escape', () => {
     render(<Header />)
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation menu' }))
-    expect(screen.getAllByRole('menuitem')).toHaveLength(3)
+    expect(screen.getAllByRole('menuitem')).toHaveLength(4)
     fireEvent.keyDown(document, { key: 'Escape' })
     expect(screen.queryAllByRole('menuitem')).toHaveLength(0)
   })
@@ -201,11 +201,11 @@ describe('Header mobile nav menu', () => {
     render(<Header />)
     const button = screen.getByRole('button', { name: 'Open navigation menu' })
     fireEvent.click(button)
-    expect(screen.getAllByRole('menuitem')).toHaveLength(3)
+    expect(screen.getAllByRole('menuitem')).toHaveLength(4)
     fireEvent.click(button)
     expect(screen.queryAllByRole('menuitem')).toHaveLength(0)
     fireEvent.click(button)
-    expect(screen.getAllByRole('menuitem')).toHaveLength(3)
+    expect(screen.getAllByRole('menuitem')).toHaveLength(4)
   })
 
   it('closes when a link is clicked', () => {

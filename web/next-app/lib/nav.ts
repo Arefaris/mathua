@@ -42,6 +42,10 @@ export const DISPLAY_LINKS: NavLink[] = [
   // and gates nothing, so it sits with the orientation surfaces rather than beside Learn.
   // It reaches mobile through the compass overflow (it is not a bottom tab).
   { label: 'Glossary', href: '/glossary' },
+  // Reaching the person who runs this must not depend on finding an avatar menu.
+  // /contact is not a bottom tab, so this one entry surfaces it in the desktop
+  // row and in the mobile compass overflow.
+  { label: 'Contact', href: '/contact' },
 ]
 
 export const LOGGED_IN_LINKS: NavLink[] = [
