@@ -3,6 +3,7 @@
 // build script import it.
 import { z } from 'zod'
 import type { ConceptRecord } from './conceptData'
+import type { Locale } from './i18n/locale'
 
 export const GRAPH_PAYLOAD_VERSION = 2
 
@@ -27,6 +28,34 @@ export type GraphPayload = z.infer<typeof GraphPayloadSchema>
 // drift — and it did, for as long as the page said 150. internal/xp's
 // TestLandingQuizGateMatchesEngine reads the generated artifact and fails when the two disagree.
 export const QUIZ_GATE_XP = 50
+
+/**
+ * Which artifact holds the labels for a language.
+ *
+ * English is `concepts.graph.json`; every other language is `concepts.graph.<locale>.json`,
+ * written by build-graph.mjs only when a label overlay exists. A consumer asks for the file
+ * for the learner's language and falls back to the English one when that request fails, so a
+ * language with no translated labels yet degrades to English instead of an empty graph.
+ */
+export function graphPayloadFile(locale: Locale): string {
+  // Type-only import above: build-graph.mjs runs this file under plain Node, which cannot
+  // resolve the extensionless runtime imports of the app. English is the default locale.
+  return locale === 'en' ? 'concepts.graph.json' : `concepts.graph.${locale}.json`
+}
+
+/**
+ * The corpus with translated labels swapped in. An id the overlay does not mention keeps its
+ * English label, so a partial translation is usable while it is being finished.
+ */
+export function applyLabelOverlay(
+  concepts: ConceptRecord[],
+  overlay: Record<string, string>
+): ConceptRecord[] {
+  return concepts.map(c => {
+    const label = overlay[c.id]
+    return typeof label === 'string' && label.trim() !== '' ? { ...c, label } : c
+  })
+}
 
 export interface GraphMeta {
   quizGateXP: number

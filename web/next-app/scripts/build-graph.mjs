@@ -5,16 +5,25 @@
 //   public/data/concepts.graph.json      nodes + indexed edges + domain counts
 //   data/graph.meta.json                 tiny static stats for page sections
 //
+// Translated labels, when the content side has supplied them (see label-overlay.mjs):
+//   public/data/concepts.graph.ru.json   the same payload with Russian labels
+//   data/concepts.labels.ru.json         flat id -> label, bundled by lib/conceptData.ts
+// With no overlay the first is removed and the second is `{}`, so a checkout without
+// translations builds what it always built.
+//
 // Usage: npm run graph:build
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { layoutDAG3D } from './layoutDAG3D.ts'
-import { buildGraphMeta, buildGraphPayload } from '../lib/graphPayload.ts'
+import { applyLabelOverlay, buildGraphMeta, buildGraphPayload, graphPayloadFile } from '../lib/graphPayload.ts'
+import { readLabelOverlay } from './label-overlay.mjs'
 import { DOMAIN_ORDER } from '../lib/graphDomains.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const concepts = JSON.parse(readFileSync(join(root, 'data', 'concepts.json'), 'utf8'))
+// The app lives in web/next-app, two levels below the repository root that holds data/i18n.
+const overlayPath = join(root, '..', '..', 'data', 'i18n', 'ru', 'concepts.json')
 
 const t0 = performance.now()
 const input = concepts.map(c => ({
@@ -39,7 +48,29 @@ writeFileSync(join(root, 'public', 'data', 'concepts.positions.json'), JSON.stri
 writeFileSync(join(root, 'public', 'data', 'concepts.graph.json'), JSON.stringify(payload) + '\n')
 writeFileSync(join(root, 'data', 'graph.meta.json'), JSON.stringify(meta, null, 2) + '\n')
 
+// Russian labels. Positions are keyed by id and do not change with the language, so the
+// positions file is shared.
+const overlay = readLabelOverlay(overlayPath)
+const ruGraphPath = join(root, 'public', 'data', graphPayloadFile('ru'))
+const ruLabelsPath = join(root, 'data', 'concepts.labels.ru.json')
+const known = new Set(concepts.map(c => c.id))
+const labels = {}
+if (overlay) {
+  for (const [id, label] of Object.entries(overlay)) {
+    if (known.has(id) && label.trim() !== '') labels[id] = label
+  }
+  const stale = Object.keys(overlay).filter(id => !known.has(id))
+  if (stale.length) console.warn(`graph:build ${stale.length} overlay ids are not in the corpus (first: ${stale[0]})`)
+  const ruPayload = buildGraphPayload(applyLabelOverlay(concepts, labels), importance)
+  writeFileSync(ruGraphPath, JSON.stringify(ruPayload) + '\n')
+} else {
+  // A stale artifact from an earlier overlay would keep shipping labels nobody maintains.
+  rmSync(ruGraphPath, { force: true })
+}
+writeFileSync(ruLabelsPath, JSON.stringify(labels) + '\n')
+
 console.log(
   `graph:build ${concepts.length} nodes / ${payload.edges.length} edges in ${layoutMs.toFixed(0)}ms ` +
-    `(layout), ${Object.keys(quantized).length} positions -> public/data/ + data/graph.meta.json`
+    `(layout), ${Object.keys(quantized).length} positions -> public/data/ + data/graph.meta.json` +
+    (overlay ? `; ru labels for ${Object.keys(labels).length}` : '; no ru overlay')
 )
