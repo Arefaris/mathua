@@ -223,4 +223,4 @@ Each step is an artifact or a small product change; none require the full accred
 - National Standards for Quality Online Courses: https://www.nsqol.org/
 
 **Mathua (repo, not web sources)**
-- `README.md:14,26,66-89` — mission, mastery gating, SM-2; `data/courses.json:1` — 28 courses; `internal/diagnostic/report.go:11-33` — `DiagnosticReport{PlacementCourseID, MasteryLevels, CompletionEstimates, GapsByDomain}`; `internal/server/server.go:2513-2556` — `/api/transcript?format=csv`; `internal/mastery/machine.go:41` — threshold gating; `internal/lessons/lesson.go:32` — lesson loading; `improve.md:139,148` — planned accommodations, accreditation-track design.
+- `README.md:14,26,66-89` — mission, mastery gating, SM-2; `data/courses.json:1` — 28 courses; `internal/diagnostic/report.go:11-33` — `DiagnosticReport{PlacementCourseID, MasteryLevels, CompletionEstimates, GapsByDomain}`; `internal/server/server.go:2642` — `/api/transcript?format=csv`; `internal/mastery/machine.go:41` — threshold gating; `internal/lessons/lesson.go:32` — lesson loading; `improve.md:139,148` — planned accommodations, accreditation-track design.
