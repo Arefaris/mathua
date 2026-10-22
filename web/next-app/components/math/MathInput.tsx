@@ -396,6 +396,25 @@ export function MathAnswerInput({
   // LaTeX here so typing does not round-trip the answer through a parser on every
   // keystroke, and let the field push plain text upward.
   const latexRef = useRef(value)
+  // The last plain answer this control sent upward. The host's `value` coming back
+  // unchanged is an echo and must not be pushed into the editor; a *different*
+  // value is the host owning the answer, and must be.
+  const emittedRef = useRef(value)
+  const [, rerender] = useState(0)
+
+  // A host may replace the answer from outside this control: ChoiceOptions fills
+  // the field, a retry wipes it, or the next question arrives with an empty answer.
+  // Without this the editor kept showing the previous question's LaTeX, because
+  // `latexRef` was only ever written by the field itself — so the next question
+  // started with the old text still in the box, and the submit button disabled
+  // because the host's string was empty. Adopt an external value, ignore the echo
+  // of our own.
+  useEffect(() => {
+    if (value === emittedRef.current) return
+    emittedRef.current = value
+    latexRef.current = value
+    rerender(n => n + 1)
+  }, [value])
 
   if (editor === 'text') {
     if (focusRef) focusRef.current = { focus: () => inputRef.current?.focus() }
@@ -438,6 +457,7 @@ export function MathAnswerInput({
       onSubmit={() => onSubmit?.()}
       onChange={v => {
         latexRef.current = v.latex
+        emittedRef.current = v.plainAnswer
         onChange(v.plainAnswer)
       }}
     />

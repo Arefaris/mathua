@@ -5,6 +5,7 @@
 // no knowledge of which control rendered. Everything MathLive-specific is asserted
 // here so a host never has to.
 
+import { useState } from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import { MathAnswerInput, type MathFocusHandle } from '../components/math/MathInput'
@@ -129,6 +130,31 @@ describe('MathAnswerInput answer flow', () => {
     await waitFor(() => expect(field()).toBeTruthy())
     fireEvent.keyDown(await mathField(), { key: 'Tab' })
     expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('clears the editor when the host clears its answer', async () => {
+    // The diagnostic and quiz hosts keep this control mounted across questions and
+    // set their plain answer to "" before revealing the next one. The editor's LaTeX
+    // lived in a ref that only the field itself wrote, so the previous answer stayed
+    // on screen, disabled, above the new question.
+    function Host() {
+      const [answer, setAnswer] = useState('')
+      return (
+        <>
+          <MathAnswerInput value={answer} onChange={setAnswer} gradingType="numeric" conceptId="arith.add.single" />
+          <button type="button" onClick={() => setAnswer('')}>clear</button>
+        </>
+      )
+    }
+
+    render(<Host />)
+    await waitFor(() => expect(field()).toBeTruthy())
+    const el = (await mathField()) as unknown as { value: string }
+    el.value = '\\frac{1}{2}'
+    await waitFor(() => expect(el.value).toBe('\\frac{1}{2}'))
+
+    fireEvent.click(screen.getByRole('button', { name: 'clear' }))
+    await waitFor(() => expect(el.value).toBe(''))
   })
 
   it('honours a focus request that arrives before the editor has loaded', async () => {
