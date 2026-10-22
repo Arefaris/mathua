@@ -3,10 +3,19 @@
 import { useMemo } from 'react'
 import type { DailyActivity } from '../lib/api'
 import { heatColor } from '../lib/heatColor'
+import { formatDate, useLocale, useT, type Locale } from '../lib/i18n'
 
-const DAY_HEADERS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-const SHOWN_DAY_HEADERS = new Set(['Mo', 'We', 'Fr'])
-export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+// Keys of the weekday headers, Sunday first to match Date#getDay. Only Monday, Wednesday and
+// Friday are shown, as on the yearly grid, so the column labels do not crowd the cells.
+export const DAY_KEYS = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'] as const
+const SHOWN_DAY_INDEXES = new Set([1, 3, 5])
+
+// The full month name in the learner's language, standalone and capitalized ("March", "Март").
+// Intl rather than a list so a third language needs no new table.
+export function monthName(month: number, locale: Locale): string {
+  const name = new Date(2000, month, 1).toLocaleString(locale === 'en' ? 'en-US' : locale, { month: 'long' })
+  return name.charAt(0).toUpperCase() + name.slice(1)
+}
 
 interface Props {
   year: number
@@ -15,6 +24,8 @@ interface Props {
 }
 
 export default function MonthCard({ year, month, data }: Props) {
+  const t = useT()
+  const locale = useLocale()
   const monthData = useMemo(() => {
     const prefix = `${year}-${String(month + 1).padStart(2, '0')}`
     return data.filter((d) => d.date.startsWith(prefix))
@@ -91,29 +102,29 @@ export default function MonthCard({ year, month, data }: Props) {
     <div className="w-[272px] shrink-0 snap-start border-[0.5px] border-mathua-border overflow-hidden bg-transparent">
       <div className="px-3 py-2 min-w-0">
         <p className="min-w-0 truncate text-left text-[13px] font-normal font-mono text-mathua-primary">
-          {MONTH_NAMES[month]} {year}
+          {monthName(month, locale)} {year}
           <span className="ml-2 text-[11px] text-mathua-muted">
-            {activeDays} day{activeDays !== 1 ? 's' : ''}
+            {t('common.count.days', { count: activeDays })}
           </span>
         </p>
       </div>
 
       <div className="px-3 pb-3 pt-0 border-t-[0.5px] border-mathua-border w-full min-w-0 overflow-hidden">
         <div className="flex flex-wrap gap-x-4 gap-y-1 py-2 font-mono text-[11px] text-mathua-secondary">
-          <span>{stats.questions} questions</span>
-          <span className="text-mathua-muted">{stats.accuracy}% correct</span>
-          <span className="text-mathua-muted">{stats.concepts} topics</span>
+          <span>{t('common.count.questions', { count: stats.questions })}</span>
+          <span className="text-mathua-muted">{t('goals.activity.correctPercent', { percent: stats.accuracy })}</span>
+          <span className="text-mathua-muted">{t('goals.activity.topics', { count: stats.concepts })}</span>
         </div>
 
         <div className="flex justify-center w-full max-w-full min-w-0 overflow-hidden">
           <div className="inline-block max-w-full">
             <div className="flex gap-1 mb-1">
-              {DAY_HEADERS.map((dh) => (
+              {DAY_KEYS.map((dayKey, dayIndex) => (
                 <div
-                  key={dh}
+                  key={dayKey}
                   className="w-5 h-5 flex items-center justify-center font-mono text-[10px] text-mathua-muted shrink-0"
                 >
-                  {SHOWN_DAY_HEADERS.has(dh) ? dh : ''}
+                  {SHOWN_DAY_INDEXES.has(dayIndex) ? t(`goals.activity.day.${dayKey}`) : ''}
                 </div>
               ))}
             </div>
@@ -125,7 +136,11 @@ export default function MonthCard({ year, month, data }: Props) {
                     key={di}
                     title={
                       cell
-                        ? `${MONTH_NAMES[month].slice(0, 3)} ${cell.date}: ${cell.questions}q, ${cell.questions > 0 ? Math.round((cell.correct / cell.questions) * 100) : 0}%`
+                        ? t('goals.activity.cellTitle', {
+                            date: formatDate(new Date(year, month, cell.date), locale, { month: 'short', day: 'numeric' }),
+                            questions: cell.questions,
+                            percent: cell.questions > 0 ? Math.round((cell.correct / cell.questions) * 100) : 0,
+                          })
                         : ''
                     }
                     className="w-5 h-5 shrink-0 border-[0.5px]"

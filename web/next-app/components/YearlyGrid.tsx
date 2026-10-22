@@ -3,6 +3,8 @@
 import { useMemo, useState } from 'react'
 import type { DailyActivity } from '../lib/api'
 import { heatColor } from '../lib/heatColor'
+import { formatDate, useLocale, useT, type Locale } from '../lib/i18n'
+import { DAY_KEYS } from './MonthCard'
 
 const CELL_W = 12
 const CELL_H = 12
@@ -10,8 +12,7 @@ const GAP = 2
 const LABEL_W = 28
 const COLS = 53
 
-const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const MONTH_KEYS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'] as const
 
 function intensityLevel(count: number, max: number): number {
   if (count === 0 || max === 0) return 0
@@ -22,9 +23,8 @@ function intensityLevel(count: number, max: number): number {
   return 4
 }
 
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+function tooltipDate(dateStr: string, locale: Locale): string {
+  return formatDate(new Date(dateStr + 'T00:00:00'), locale, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 interface Props {
@@ -32,6 +32,8 @@ interface Props {
 }
 
 export default function YearlyGrid({ data }: Props) {
+  const t = useT()
+  const locale = useLocale()
   const [tooltip, setTooltip] = useState<{ date: string; questions: number; correct: number; x: number; y: number } | null>(null)
 
   const { grid, monthLabels } = useMemo(() => {
@@ -67,7 +69,7 @@ export default function YearlyGrid({ data }: Props) {
 
         if (date.getMonth() !== lastMonth && r === 0) {
           lastMonth = date.getMonth()
-          ml.push({ col: c, label: MONTH_LABELS[date.getMonth()] })
+          ml.push({ col: c, label: t(`goals.activity.monthShort.${MONTH_KEYS[date.getMonth()]}`) })
         }
 
         const act = activityMap.get(dateStr)
@@ -87,7 +89,7 @@ export default function YearlyGrid({ data }: Props) {
     }
 
     return { grid: cells, monthLabels: ml, maxQuestions: maxQ }
-  }, [data])
+  }, [data, t])
 
   const svgW = LABEL_W + COLS * (CELL_W + GAP)
   const svgH = 16 + (7 * (CELL_H + GAP)) + GAP + 24
@@ -138,7 +140,7 @@ export default function YearlyGrid({ data }: Props) {
             y={20 + r * (CELL_H + GAP) + CELL_H / 2 + 4}
             style={{ fontSize: 9, fill: 'var(--text-muted)' }}
           >
-            {DAY_LABELS[r].slice(0, 2)}
+            {t(`goals.activity.day.${DAY_KEYS[r]}`)}
           </text>
         ))}
 
@@ -176,7 +178,7 @@ export default function YearlyGrid({ data }: Props) {
         ))}
 
         <text x={svgW - 180} y={svgH - 6} style={{ fontSize: 9, fill: 'var(--text-muted)' }}>
-          Less
+          {t('goals.activity.less')}
         </text>
         {[0, 1, 2, 3, 4].map((level) => (
           <rect
@@ -194,7 +196,7 @@ export default function YearlyGrid({ data }: Props) {
           />
         ))}
         <text x={svgW - 64} y={svgH - 6} style={{ fontSize: 9, fill: 'var(--text-muted)' }}>
-          More
+          {t('goals.activity.more')}
         </text>
       </svg>
 
@@ -208,13 +210,12 @@ export default function YearlyGrid({ data }: Props) {
           }}
           onClick={() => setTooltip(null)}
         >
-          <div className="truncate">{formatDate(tooltip.date)}</div>
+          <div className="truncate">{tooltipDate(tooltip.date, locale)}</div>
           <div>
-            {tooltip.questions} questions ·{' '}
-            {tooltip.questions > 0
-              ? Math.round((tooltip.correct / tooltip.questions) * 100)
-              : 0}
-            % correct
+            {t('goals.activity.tooltipLine', {
+              count: tooltip.questions,
+              percent: tooltip.questions > 0 ? Math.round((tooltip.correct / tooltip.questions) * 100) : 0,
+            })}
           </div>
         </div>
       )}
