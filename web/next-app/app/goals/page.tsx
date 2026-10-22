@@ -8,6 +8,7 @@ import BottomTabs from '../../components/BottomTabs'
 import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
 import QuizHost from './QuizHost'
+import { useT } from '../../lib/i18n'
 
 // This route is the quiz. The domain picker and the goals diagnostic used to be
 // rendered here as well, which meant two copies of the same screen with the same
@@ -54,8 +55,9 @@ function GoalsContent() {
 }
 
 export default function GoalsPage() {
+  const t = useT()
   return (
-    <Suspense fallback={<><div style={{ background: 'var(--bg)', minHeight: '100vh' }}><Loading label="LOADING" /></div></>}>
+    <Suspense fallback={<><div style={{ background: 'var(--bg)', minHeight: '100vh' }}><Loading label={t('goals.page.loading')} /></div></>}>
       <GoalsContent />
     </Suspense>
   )

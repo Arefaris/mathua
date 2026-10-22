@@ -27,6 +27,7 @@ import SubmitErrorBlock, {
 } from '../../components/SubmitErrorBlock'
 import { GOALS_DIAG_KEY } from './constants'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
+import { useT } from '../../lib/i18n'
 
 const EMPTY_PLAN: GoalPlanRes = {
   readiness: 1,
@@ -49,6 +50,7 @@ export default function DiagnosticHost({
   onComplete: (plan: GoalPlanRes) => void
   onResumeExpired: () => void
 }) {
+  const t = useT()
   const [loading, setLoading] = useState(false)
   const sessionId = useRef('')
   const conceptId = useRef('')
@@ -129,7 +131,7 @@ export default function DiagnosticHost({
       setSkipCount(0)
       setRetryAvailable(false)
     } catch {
-      toast.error("Something went wrong, but we're working on it.")
+      toast.error(t('goals.diagnostic.startFailed'))
       onResumeExpired()
     } finally {
       setLoading(false)
@@ -149,7 +151,7 @@ export default function DiagnosticHost({
         try {
           sessionStorage.removeItem(GOALS_DIAG_KEY)
         } catch { /* ignore */ }
-        toast.error('That diagnostic already finished — start a fresh one below.')
+        toast.error(t('goals.diagnostic.alreadyFinished'))
         onResumeExpired()
         return
       }
@@ -176,7 +178,7 @@ export default function DiagnosticHost({
       try {
         sessionStorage.removeItem(GOALS_DIAG_KEY)
       } catch { /* ignore */ }
-      toast.error('Could not resume — that session expired. Start a fresh diagnostic.')
+      toast.error(t('goals.diagnostic.resumeExpired'))
       onResumeExpired()
     } finally {
       setLoading(false)
@@ -208,7 +210,7 @@ export default function DiagnosticHost({
       const correct = data.correct || false
       // An admitted unknown is not a wrong answer, so it does not get the wrong answer's words.
       // Empty here, because the verdict line states it; the engine's accounting is untouched.
-      const feedback = dontKnow ? '' : data.feedback || (correct ? 'Correct!' : 'Not quite.')
+      const feedback = dontKnow ? '' : data.feedback || (correct ? t('goals.verdict.correct') : t('goals.verdict.notQuite'))
       setAccuracy(prev => ({
         correct: prev.correct + (correct ? 1 : 0),
         total: prev.total + 1,
@@ -240,7 +242,7 @@ export default function DiagnosticHost({
       }
       setLoading(false)
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to submit answer.'))
+      setSubmitError(toSubmitError(e, t('goals.diagnostic.submitFailed')))
       setLoading(false)
     }
   }
@@ -254,7 +256,7 @@ export default function DiagnosticHost({
       } catch { /* ignore */ }
       onComplete(planRes)
     } catch (e) {
-      setPlanError(getErrorMessage(e) || 'Could not generate plan.')
+      setPlanError(getErrorMessage(e) || t('goals.diagnostic.planFailed'))
     } finally {
       setLoading(false)
     }
@@ -283,7 +285,7 @@ export default function DiagnosticHost({
       setSkipCount(c => c + 1)
       if (data.done) {
         setFinished(true)
-        setLastResult({ correct: false, feedback: 'Skipped — no evidence recorded.', conceptId: conceptId.current })
+        setLastResult({ correct: false, feedback: t('goals.diagnostic.skipped'), conceptId: conceptId.current })
         setTimeout(() => {
           void fetchPlan()
         }, 800)
@@ -295,7 +297,7 @@ export default function DiagnosticHost({
       }
       applyQuestion(data.question || '', data.concept_id || '', data.concept_name || '', data.grading_type || '', data)
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to skip question.'))
+      setSubmitError(toSubmitError(e, t('goals.diagnostic.skipFailed')))
     } finally {
       setLoading(false)
     }
@@ -328,7 +330,7 @@ export default function DiagnosticHost({
       setLastResult(null)
       setAnswerInput('')
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to retry question.'))
+      setSubmitError(toSubmitError(e, t('goals.diagnostic.retryFailed')))
     } finally {
       setLoading(false)
     }
@@ -347,7 +349,7 @@ export default function DiagnosticHost({
 
   return (
     <>
-      <SectionHeader label={`Question ${progress ? progress.answered + 1 : questionCount}`} title={conceptName} />
+      <SectionHeader label={t('goals.question.number', { count: progress ? progress.answered + 1 : questionCount })} title={conceptName} />
       <div className="max-w-2xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
         <ProgressBar
           answered={progress ? progress.answered + 1 : questionCount}
@@ -361,7 +363,7 @@ export default function DiagnosticHost({
             <span className={accuracy.correct / accuracy.total >= 0.7 ? 'text-mathua-green' : accuracy.correct / accuracy.total < 0.4 ? 'text-mathua-red' : ''}>
               {accuracy.correct}/{accuracy.total}
             </span>
-            <span>correct</span>
+            <span>{t('goals.question.correctWord')}</span>
             <div className="w-20 h-1 bg-mathua-code rounded-full overflow-hidden">
               <div
                 className="h-full bg-mathua-blue rounded-full transition-all"
@@ -384,7 +386,7 @@ export default function DiagnosticHost({
                 onSubmit={e => { e.preventDefault(); void submitAnswer(false) }}
                 className="flex flex-col sm:flex-row gap-3 min-w-0"
               >
-                <label htmlFor="goals-answer" className="sr-only">Your answer</label>
+                <label htmlFor="goals-answer" className="sr-only">{t('goals.question.yourAnswer')}</label>
                 <MathAnswerInput
                   id="goals-answer"
                   value={answerInput}
@@ -395,7 +397,7 @@ export default function DiagnosticHost({
                   disabled={loading}
                   status={lastResult ? (lastResult.correct ? 'correct' : 'incorrect') : 'default'}
                   inputMode={answerFormat.inputMode}
-              placeholder="Your answer..."
+              placeholder={t('goals.question.placeholder')}
                   className="sm:flex-1"
                   focusRef={goalsInputRef}
                 />
@@ -404,7 +406,7 @@ export default function DiagnosticHost({
                   disabled={!answerInput.trim() || loading}
                   className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-6 font-medium text-sm disabled:opacity-50 shrink-0 w-auto self-end sm:self-auto"
                 >
-                  Check Answer
+                  {t('goals.question.checkAnswer')}
                 </button>
               </form>
               <div className="mt-2 flex items-center justify-between gap-2">
@@ -415,7 +417,7 @@ export default function DiagnosticHost({
                   disabled={loading}
                   className="shrink-0 font-mono text-[11px] text-mathua-muted hover:text-mathua-red underline underline-offset-2 disabled:opacity-50"
                 >
-                  I don&apos;t know
+                  {t('goals.question.dontKnow')}
                 </button>
               </div>
               <div className="mt-2 flex justify-end">
@@ -436,7 +438,7 @@ export default function DiagnosticHost({
           ) : (
             <div className="animate-fadeIn text-center">
               <p className={`text-base font-medium mb-2 ${lastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}`}>
-                {lastResult.dontKnow ? 'No answer' : lastResult.correct ? '✓ Correct!' : '✗ Not quite'}
+                {lastResult.dontKnow ? t('goals.verdict.noAnswer') : lastResult.correct ? t('goals.verdict.markCorrect') : t('goals.verdict.markWrong')}
               </p>
               <KatexContent className="text-mathua-secondary text-sm">{lastResult.feedback}</KatexContent>
               {/* A miss offers the teaching surface as a deliberate next step, not as the answer.
@@ -447,7 +449,7 @@ export default function DiagnosticHost({
                   href={`/learn?concept=${encodeURIComponent(lastResult.conceptId)}`}
                   className="mt-2 inline-flex items-center border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em]"
                 >
-                  Learn this concept →
+                  {t('goals.question.learnThis')}
                 </Link>
               )}
               {!lastResult.correct && !finished && retryAvailable && (
@@ -457,7 +459,7 @@ export default function DiagnosticHost({
                   disabled={loading}
                   className="mt-2 font-mono text-[11px] text-mathua-muted hover:text-mathua-blue underline underline-offset-2 disabled:opacity-50"
                 >
-                  I made a silly mistake — retry
+                  {t('goals.question.retrySlip')}
                 </button>
               )}
             </div>
@@ -472,7 +474,7 @@ export default function DiagnosticHost({
               onSkip={skipAnswer}
               skipsLeft={MAX_SKIPS - skipCount}
               onRestart={restartDiagnostic}
-              restartLabel="Restart diagnostic"
+              restartLabel={t('goals.diagnostic.restart')}
               retrying={loading}
             />
           </div>
@@ -484,12 +486,12 @@ export default function DiagnosticHost({
               onClick={goNext}
               className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
             >
-              Next →
+              {t('goals.question.next')}
             </button>
           </div>
         ) : lastResult && finished && planError ? (
           <div className="mb-6 border border-mathua-red bg-mathua-surface p-4 text-left" role="alert">
-            <p className="font-mono text-xs text-mathua-red">Couldn&apos;t load your plan.</p>
+            <p className="font-mono text-xs text-mathua-red">{t('goals.diagnostic.planErrorTitle')}</p>
             <p className="mt-1 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">{planError}</p>
             <div className="mt-3">
               <button
@@ -498,13 +500,13 @@ export default function DiagnosticHost({
                 disabled={loading}
                 className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 h-10 font-mono text-xs disabled:opacity-50"
               >
-                {loading ? 'Loading…' : 'Load plan'}
+                {loading ? t('common.status.loading') : t('goals.diagnostic.loadPlan')}
               </button>
             </div>
           </div>
         ) : lastResult && finished ? (
           <div className="mb-6 text-center text-mathua-muted text-xs font-mono">
-            Preparing your plan…
+            {t('goals.diagnostic.preparingPlan')}
           </div>
         ) : null}
       </div>
