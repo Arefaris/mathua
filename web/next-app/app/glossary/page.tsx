@@ -20,6 +20,7 @@ import {
   totalPagesFor,
 } from '../../lib/glossary/search'
 import { mathSearchEntries } from '../../lib/glossary/mathQuery'
+import { useT } from '../../lib/i18n'
 
 /**
  * The mathematical glossary: a standalone reference for symbols, notation
@@ -52,18 +53,19 @@ function PaginationControls({
   totalPages: number
   onGo: (p: number) => void
 }) {
+  const t = useT()
   if (totalPages <= 1) return null
   const btn =
     'border px-3 py-1 font-mono text-[11px] min-h-[44px] min-w-[44px] transition-colors disabled:opacity-40 disabled:cursor-default'
   const idle = 'border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue'
   const current = 'border-mathua-blue text-mathua-blue'
   return (
-    <nav aria-label="Glossary pages" className="flex flex-wrap items-center gap-2">
+    <nav aria-label={t('explore.glossary.pagesNav')} className="flex flex-wrap items-center gap-2">
       <button
         type="button"
         onClick={() => onGo(page - 1)}
         disabled={page <= 1}
-        aria-label="Previous page"
+        aria-label={t('explore.glossary.previous')}
         className={`${btn} ${idle}`}
       >
         ←
@@ -79,7 +81,7 @@ function PaginationControls({
             type="button"
             onClick={() => onGo(p)}
             disabled={p === page}
-            aria-label={`Go to page ${p}`}
+            aria-label={t('explore.glossary.goTo', { page: p })}
             aria-current={p === page ? 'page' : undefined}
             className={`${btn} ${p === page ? current : idle}`}
           >
@@ -91,7 +93,7 @@ function PaginationControls({
         type="button"
         onClick={() => onGo(page + 1)}
         disabled={page >= totalPages}
-        aria-label="Next page"
+        aria-label={t('explore.glossary.next')}
         className={`${btn} ${idle}`}
       >
         →
@@ -101,6 +103,7 @@ function PaginationControls({
 }
 
 function GlossaryPageInner() {
+  const t = useT()
   const { mounted } = useTheme()
   const router = useRouter()
   const pathname = usePathname()
@@ -211,7 +214,7 @@ function GlossaryPageInner() {
     [results],
   )
 
-  if (!mounted) return <Loading label="Loading glossary" full />
+  if (!mounted) return <Loading label={t('explore.glossary.loading')} full />
 
   const pageEntries = paginateEntries(results, page)
   const rangeStart = results.length === 0 ? 0 : (page - 1) * GLOSSARY_PAGE_SIZE + 1
@@ -222,7 +225,7 @@ function GlossaryPageInner() {
     <>
       <Header />
       <main className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
-        <SectionHeader label="Reference" title="Mathematical glossary" />
+        <SectionHeader label={t('explore.glossary.label')} title={t('explore.glossary.title')} />
 
         <GlossarySearch
           query={query}
@@ -243,18 +246,19 @@ function GlossaryPageInner() {
           {results.length === 0 ? (
             <div className="border border-mathua-border bg-mathua-surface px-4 py-8 text-center">
               <p className="font-mono text-xs text-mathua-primary">
-                No entries match{query.trim() && <> “{query.trim()}”</>}.
+                {query.trim()
+                  ? t('explore.glossary.noMatchQuery', { query: query.trim() })
+                  : t('explore.glossary.noMatch')}
               </p>
               <p className="mt-2 font-mono text-[11px] text-mathua-secondary">
-                Try a symbol (∀, ∫, λ), a name (integral, lambda) or a word
-                from a definition.
+                {t('explore.glossary.hint')}
               </p>
               <button
                 type="button"
                 onClick={clear}
                 className="mt-4 border border-mathua-blue px-4 py-2 font-mono text-[11px] text-mathua-blue hover:bg-mathua-blue-faint min-h-[44px]"
               >
-                Clear search and filters
+                {t('explore.glossary.clear')}
               </button>
             </div>
           ) : (
