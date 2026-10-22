@@ -686,6 +686,9 @@ export async function submitGoalAnswer(
 	dontKnow?: boolean,
 ): Promise<GoalDiagAnswerRes> {
 	const res = await authedFetch(`${API_BASE}/api/goal/diagnostic/answer`, {
+    // The engine replays an attempt id it has already graded, so repeating
+    // this exact body cannot grade or award twice.
+    retryAttempts: 1,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
 		body: JSON.stringify({ session_id: sessionId, concept_id: conceptId, answer, elapsed, dont_know: dontKnow ?? false }),
@@ -1385,6 +1388,9 @@ export async function submitStudyAnswer(conceptId: string, answer: string, elaps
 		body.student_id = guestId
 	}
 	const res = await authedFetch(`${API_BASE}/api/study/answer`, {
+    // The engine replays an attempt id it has already graded, so repeating
+    // this exact body cannot grade or award twice.
+    retryAttempts: 1,
 		method: 'POST',
 		headers,
 		body: JSON.stringify(body),
@@ -1443,6 +1449,7 @@ export async function submitReviewAnswer(
 	} satisfies Record<string, string>
 	const res = await authedFetch(`${API_BASE}/api/reviews/answer`, {
 		method: 'POST',
+		retryAttempts: 1,
 		headers,
 		body: JSON.stringify({ session_id: sessionID, attempt_id: attemptID, answer, elapsed }),
 	})
@@ -1531,6 +1538,9 @@ export async function submitQuizAnswer(sessionId: string, conceptId: string, ans
 	const guestId = getGuestId()
 	if (guestId && !('Authorization' in headers)) body.student_id = guestId
 	const res = await authedFetch(`${API_BASE}/api/quiz/answer`, {
+    // The engine replays an attempt id it has already graded, so repeating
+    // this exact body cannot grade or award twice.
+    retryAttempts: 1,
 		method: 'POST',
 		headers,
 		body: JSON.stringify(body),
