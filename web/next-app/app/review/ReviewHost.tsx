@@ -13,6 +13,7 @@ import { formatForGradingType, type AnswerFormat } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
 import SubmitErrorBlock, { toSubmitError, type SubmitError } from '../../components/SubmitErrorBlock'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
+import { useT } from '@/lib/i18n'
 
 type Phase = 'loading' | 'intro' | 'run' | 'done'
 
@@ -20,6 +21,7 @@ type Phase = 'loading' | 'intro' | 'run' | 'done'
 // (POST /api/reviews/session → /api/reviews/answer). Self-contained so the
 // review page only mounts it.
 export default function ReviewHost() {
+  const t = useT()
   const [phase, setPhase] = useState<Phase>('intro')
   const [loading, setLoading] = useState(false)
 
@@ -80,7 +82,7 @@ export default function ReviewHost() {
       setFinished(false)
       setPhase('run')
     } catch {
-      toast.error('Review failed to start — try again.')
+      toast.error(t('learn.review.errors.start'))
       setPhase('intro')
     } finally {
       setLoading(false)
@@ -103,12 +105,12 @@ export default function ReviewHost() {
       const data = await submitReviewAnswer(reviewSessionId.current, answer, elapsed, reviewAttemptId.current)
       // Grader unavailable: never counts as a miss; ask the student to retry.
       if (data.result?.ungraded) {
-        setSubmitError({ message: 'Grading is temporarily unavailable — please try again.' })
+        setSubmitError({ message: t('learn.review.errors.ungraded') })
         setLoading(false)
         return
       }
       const correct = data.result?.correct || false
-      const feedback = data.result?.feedback || (correct ? 'Correct!' : 'Not quite.')
+      const feedback = data.result?.feedback || (correct ? t('learn.answer.correct') : t('learn.answer.notQuite'))
       const xp = data.result?.xp ?? 0
       setReviewAccuracy(prev => ({ correct: prev.correct + (correct ? 1 : 0), total: prev.total + 1 }))
       setReviewXp(prev => prev + xp)
@@ -131,7 +133,7 @@ export default function ReviewHost() {
       }
       setLoading(false)
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to submit review answer.'))
+      setSubmitError(toSubmitError(e, t('learn.review.errors.submit')))
       setLoading(false)
     }
   }
@@ -167,9 +169,9 @@ export default function ReviewHost() {
   if (phase === 'intro') {
     return (
       <>
-        <SectionHeader label="Review" title="Due for review" />
+        <SectionHeader label={t('learn.review.header.label')} title={t('learn.review.header.title')} />
         <div className="max-w-2xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
-          <BriefingCard eyebrow="Before you start" items={REVIEW_BRIEFING} />
+          <BriefingCard eyebrow={t('learn.review.briefingEyebrow')} items={REVIEW_BRIEFING} />
           <div className="mt-6 text-center">
             <button
               type="button"
@@ -177,7 +179,7 @@ export default function ReviewHost() {
               disabled={loading}
               className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm disabled:opacity-50"
             >
-              Start review →
+              {t('learn.review.start')}
             </button>
           </div>
         </div>
@@ -188,7 +190,7 @@ export default function ReviewHost() {
   if (phase === 'loading') {
     return (
       <div className="py-20 text-center">
-        <Loading label="LOADING REVIEW" />
+        <Loading label={t('learn.review.loading')} />
       </div>
     )
   }
@@ -198,27 +200,27 @@ export default function ReviewHost() {
       <div className="max-w-2xl mx-auto text-center">
         {empty ? (
           <>
-            <SectionHeader label="Review" title="All caught up" />
-            <p className="font-mono text-sm text-mathua-secondary mt-4">Nothing is due for review right now. New reviews appear here as memories fade.</p>
+            <SectionHeader label={t('learn.review.header.label')} title={t('learn.review.empty.title')} />
+            <p className="font-mono text-sm text-mathua-secondary mt-4">{t('learn.review.empty.body')}</p>
             <div className="mt-6 flex gap-3 justify-center">
               {/* A review run is a Learn sub-mode that has finished. Sending
                   the learner into the reference library at that point is the
                   exact confusion this app is trying to avoid, so both exits go
                   back to doing. */}
-              <Link href="/learn" className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm inline-flex items-center">Answer more questions →</Link>
-              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">Back to Profile →</Link>
+              <Link href="/learn" className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm inline-flex items-center">{t('learn.review.empty.more')}</Link>
+              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">{t('learn.review.backToProfileArrow')}</Link>
             </div>
           </>
         ) : (
           <>
-            <SectionHeader label="Review complete" title={`${reviewAccuracy.correct}/${reviewAccuracy.total} correct`} />
-            <p className="font-mono text-sm text-mathua-secondary mt-4">Reviews record progress like practice{reviewXp > 0 ? ` · +${reviewXp} XP this run` : ''}.</p>
+            <SectionHeader label={t('learn.review.done.label')} title={t('learn.answer.correctCount', { correct: reviewAccuracy.correct, total: reviewAccuracy.total })} />
+            <p className="font-mono text-sm text-mathua-secondary mt-4">{reviewXp > 0 ? t('learn.review.done.summaryXp', { xp: reviewXp }) : t('learn.review.done.summary')}</p>
             <div className="mt-6 flex gap-3 justify-center">
-              <button type="button" onClick={restartReview} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">Review again →</button>
-              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">Back to Profile →</Link>
+              <button type="button" onClick={restartReview} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">{t('learn.review.done.again')}</button>
+              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">{t('learn.review.backToProfileArrow')}</Link>
             </div>
             <div className="mt-3 text-center">
-              <Link href="/history" className="font-mono text-xs text-mathua-muted hover:text-mathua-primary">Every question you&apos;ve answered →</Link>
+              <Link href="/history" className="font-mono text-xs text-mathua-muted hover:text-mathua-primary">{t('learn.review.done.history')}</Link>
             </div>
           </>
         )}
@@ -228,10 +230,10 @@ export default function ReviewHost() {
 
   return (
     <>
-      <SectionHeader label={`Review question ${reviewCount}`} title={reviewConceptName} />
+      <SectionHeader label={t('learn.review.questionLabel', { number: reviewCount })} title={reviewConceptName} />
       <div className="max-w-2xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
         <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-mathua-muted justify-center">
-          <span className={reviewAccuracy.correct / Math.max(reviewAccuracy.total, 1) >= 0.7 ? 'text-mathua-green' : ''}>{reviewAccuracy.correct}/{reviewAccuracy.total} correct</span>
+          <span className={reviewAccuracy.correct / Math.max(reviewAccuracy.total, 1) >= 0.7 ? 'text-mathua-green' : ''}>{t('learn.answer.correctCount', { correct: reviewAccuracy.correct, total: reviewAccuracy.total })}</span>
           {reviewXp > 0 ? <span className="text-yellow-400">+{reviewXp} XP</span> : null}
         </div>
         <div className={`bg-mathua-surface border rounded-none p-4 sm:p-6 mb-6 transition-colors w-full max-w-full min-w-0 overflow-hidden ${reviewLastResult ? (reviewLastResult.correct ? 'border-mathua-green-faint' : 'border-mathua-red-faint') : 'border-mathua-border'}`}>
@@ -242,7 +244,7 @@ export default function ReviewHost() {
           {!reviewLastResult ? (
             <>
               <form onSubmit={e => { e.preventDefault(); void submitReviewFn() }} className="flex flex-col sm:flex-row gap-3 min-w-0">
-                <label htmlFor="review-answer" className="sr-only">Your answer</label>
+                <label htmlFor="review-answer" className="sr-only">{t('learn.answer.label')}</label>
                 <MathAnswerInput
                   id="review-answer"
                   value={reviewAnswerInput}
@@ -253,11 +255,11 @@ export default function ReviewHost() {
                   disabled={loading}
                   status={reviewLastResult ? (reviewLastResult.correct ? 'correct' : 'incorrect') : 'default'}
                   inputMode={answerFormat.inputMode}
-              placeholder="Your answer..."
+              placeholder={t('learn.answer.placeholderDots')}
                   className="sm:flex-1"
                   focusRef={reviewInputRef}
                 />
-                <button type="submit" disabled={!reviewAnswerInput.trim() || loading} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-6 font-medium text-sm disabled:opacity-50 shrink-0 w-auto self-end sm:self-auto">Check Answer</button>
+                <button type="submit" disabled={!reviewAnswerInput.trim() || loading} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-6 font-medium text-sm disabled:opacity-50 shrink-0 w-auto self-end sm:self-auto">{t('learn.review.check')}</button>
               </form>
               <div className="mt-2 flex items-center justify-between gap-2">
                 <p className="font-mono text-[11px] text-mathua-muted">{answerFormat.hint}</p>
@@ -279,7 +281,7 @@ export default function ReviewHost() {
             </>
           ) : (
             <div className="animate-fadeIn">
-              <p className={`text-base font-medium mb-2 text-center ${reviewLastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}`}>{reviewLastResult.correct ? '✓ Correct!' : '✗ Not quite'}</p>
+              <p className={`text-base font-medium mb-2 text-center ${reviewLastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}`}>{reviewLastResult.correct ? t('learn.review.verdictCorrect') : t('learn.review.verdictWrong')}</p>
               {/* The explanation is the solution for this instance and is the
                   body of the result; `feedback` is the grader's verdict token
                   ("Incorrect"), so showing it above the working is noise. Fall
@@ -303,7 +305,7 @@ export default function ReviewHost() {
               error={submitError}
               onRetry={() => { void submitReviewFn() }}
               onRestart={restartReview}
-              restartLabel="Restart review"
+              restartLabel={t('learn.review.restart')}
               retrying={loading}
             />
           </div>
@@ -315,12 +317,12 @@ export default function ReviewHost() {
               onClick={goNext}
               className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
             >
-              Next →
+              {t('learn.answer.nextArrow')}
             </button>
           </div>
         ) : reviewLastResult && finished ? (
           <div className="mb-6 text-center text-mathua-muted text-xs font-mono">
-            Wrapping up…
+            {t('learn.review.wrappingUp')}
           </div>
         ) : null}
       </div>

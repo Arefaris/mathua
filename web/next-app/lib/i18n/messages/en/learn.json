@@ -4,7 +4,38 @@
   },
   "review": {
     "back": "← Back",
-    "footnote": "Reviews record progress and XP like practice."
+    "footnote": "Reviews record progress and XP like practice.",
+    "header": {
+      "label": "Review",
+      "title": "Due for review"
+    },
+    "briefingEyebrow": "Before you start",
+    "start": "Start review →",
+    "loading": "LOADING REVIEW",
+    "empty": {
+      "title": "All caught up",
+      "body": "Nothing is due for review right now. New reviews appear here as memories fade.",
+      "more": "Answer more questions →"
+    },
+    "backToProfileArrow": "Back to Profile →",
+    "done": {
+      "label": "Review complete",
+      "summary": "Reviews record progress like practice.",
+      "summaryXp": "Reviews record progress like practice · +{xp} XP this run.",
+      "again": "Review again →",
+      "history": "Every question you've answered →"
+    },
+    "questionLabel": "Review question {number}",
+    "check": "Check Answer",
+    "verdictCorrect": "✓ Correct!",
+    "verdictWrong": "✗ Not quite",
+    "restart": "Restart review",
+    "wrappingUp": "Wrapping up…",
+    "errors": {
+      "start": "Review failed to start — try again.",
+      "ungraded": "Grading is temporarily unavailable — please try again.",
+      "submit": "Failed to submit review answer."
+    }
   },
   "nextUp": {
     "heading": "Next up",
@@ -111,5 +142,50 @@
     "retrying": "Retrying…",
     "skip": "Skip →",
     "noSkips": "No skips left — restart for a fresh run."
+  },
+  "answer": {
+    "label": "Your answer",
+    "placeholder": "Your answer",
+    "placeholderDots": "Your answer...",
+    "correct": "Correct!",
+    "notQuite": "Not quite.",
+    "nextArrow": "Next →",
+    "backToProfile": "Back to Profile",
+    "correctCount": "{correct}/{total} correct"
+  },
+  "study": {
+    "backTo": "← Back to {label}",
+    "backToPrevious": "← Back to previous topic",
+    "reference": "Reference",
+    "state": {
+      "mastered": "Mastered",
+      "dueCheck": "Due a check",
+      "inProgress": "In progress",
+      "notStarted": "Not started",
+      "locked": "Locked"
+    },
+    "explorePrereqs": "Explore prerequisites",
+    "practise": "Practise this concept →",
+    "statusFailed": "Couldn't refresh this concept's status. You can still read the material below.",
+    "dependsOn": "Depends on",
+    "noPrereqs": "No prerequisites listed",
+    "unlocks": "Unlocks",
+    "noDependents": "No dependent concepts listed",
+    "ready": {
+      "title": "Ready to practise?",
+      "body": "Work toward mastery in the assessed learning flow. Reading here does not count as progress."
+    }
+  },
+  "reference": {
+    "loadFailed": "Couldn't load the reference for {label}. The questions below still work.",
+    "unavailable": "Detailed study material is not available for this concept yet. You can still explore its prerequisites and related concepts, return to your original topic, or check whether practice is available.",
+    "workedExamples": "Worked examples ({count})",
+    "workedExample": "Worked example",
+    "also": " · also {names}",
+    "diagramAlt": "Worked diagram for {label}",
+    "fullLesson": "Full lesson",
+    "fullLessonTitled": "Full lesson — {title}",
+    "note": "Reference explains. It does not count as progress — only the questions below move this concept.",
+    "summary": "Reference — the full lesson"
   }
 }

@@ -10,6 +10,7 @@ import { getUserInfo } from '../lib/auth'
 import { buildExampleBlocks, type ExampleBlock } from '../lib/lessonBlocks'
 import { stripMathDelimiters } from '../lib/lessonMath'
 import { concepts } from '../lib/conceptData'
+import { useT } from '../lib/i18n'
 
 // The reference material for one concept.
 //
@@ -64,6 +65,7 @@ async function fetchLessonTitle(conceptId: string): Promise<string | null> {
 }
 
 export default function ConceptReference({ conceptId, variant = 'panel', emptyActions }: Props) {
+  const t = useT()
   const [shard, setShard] = useState<LessonKpsRes | null>(null)
   const [lessonTitle, setLessonTitle] = useState<string | null>(null)
   const [body, setBody] = useState<string>('')
@@ -116,16 +118,14 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
     <div className={variant === 'page' ? 'px-0' : 'px-4 pb-4 min-w-0 overflow-hidden'}>
       {failed && (
         <p role="alert" className="font-mono text-xs text-mathua-red">
-          Couldn&apos;t load the reference for {label}. The questions below still work.
+          {t('learn.reference.loadFailed', { label })}
         </p>
       )}
 
       {unavailable && (
         <>
           <p role="note" className="font-mono text-xs text-mathua-secondary">
-            Detailed study material is not available for this concept yet. You can still explore
-            its prerequisites and related concepts, return to your original topic, or check
-            whether practice is available.
+            {t('learn.reference.unavailable')}
           </p>
           {emptyActions && <div className="mt-4 flex flex-wrap gap-3">{emptyActions}</div>}
         </>
@@ -134,7 +134,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
       {blocks.length > 0 && (
         <div data-testid="reference-blocks">
           <h3 className="font-mono text-[11px] text-mathua-muted mb-2 uppercase tracking-wider">
-            Worked examples ({blocks.length})
+            {t('learn.reference.workedExamples', { count: blocks.length })}
           </h3>
           <div className="space-y-3">
             {blocks.map((b, i) => (
@@ -144,14 +144,14 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
                     {b.body ? (
                       <details open={i === 0}>
                         <summary className="font-mono text-xs text-mathua-primary cursor-pointer">
-                          {i + 1}. {b.label ? stripMathDelimiters(b.label) : 'Worked example'}
+                          {i + 1}. {b.label ? stripMathDelimiters(b.label) : t('learn.reference.workedExample')}
                           {b.also.length > 0 && (
-                            <span className="text-mathua-muted"> · also {b.also.map(stripMathDelimiters).join(', ')}</span>
+                            <span className="text-mathua-muted">{t('learn.reference.also', { names: b.also.map(stripMathDelimiters).join(', ') })}</span>
                           )}
                         </summary>
                         {b.diagram && (
                           <div className="mt-3">
-                            <LessonDiagram src={b.diagram} alt={`Worked diagram for ${label}`} />
+                            <LessonDiagram src={b.diagram} alt={t('learn.reference.diagramAlt', { label })} />
                           </div>
                         )}
                         {b.subgoals.length > 0 && (
@@ -170,9 +170,9 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
                     ) : (
                       <>
                         <p className="font-mono text-xs text-mathua-primary">
-                          {i + 1}. {b.label ? stripMathDelimiters(b.label) : 'Worked example'}
+                          {i + 1}. {b.label ? stripMathDelimiters(b.label) : t('learn.reference.workedExample')}
                           {b.also.length > 0 && (
-                            <span className="text-mathua-muted"> · also {b.also.map(stripMathDelimiters).join(', ')}</span>
+                            <span className="text-mathua-muted">{t('learn.reference.also', { names: b.also.map(stripMathDelimiters).join(', ') })}</span>
                           )}
                         </p>
                         {b.subgoals.length > 0 && (
@@ -204,7 +204,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
       {body && (
         <div className={blocks.length > 0 ? 'mt-4' : ''}>
           <h3 className="font-mono text-[11px] text-mathua-muted mb-2 uppercase tracking-wider">
-            Full lesson{lessonTitle ? ` — ${lessonTitle}` : ''}
+            {lessonTitle ? t('learn.reference.fullLessonTitled', { title: lessonTitle }) : t('learn.reference.fullLesson')}
           </h3>
           <div className="border border-mathua-border bg-mathua-code p-3 text-sm overflow-hidden">
             <KatexContent>{body}</KatexContent>
@@ -223,8 +223,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
       )}
 
       <p className="mt-4 border-t border-mathua-border pt-3 font-mono text-[10px] text-mathua-muted">
-        Reference explains. It does not count as progress — only the questions below move this
-        concept.
+        {t('learn.reference.note')}
       </p>
     </div>
   )
@@ -238,7 +237,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
   return (
     <details className="mb-4 border border-mathua-border bg-mathua-surface">
       <summary className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted px-4 py-3 cursor-pointer hover:text-mathua-blue">
-        Reference — the full lesson
+        {t('learn.reference.summary')}
       </summary>
       {content}
     </details>

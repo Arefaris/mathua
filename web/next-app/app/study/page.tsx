@@ -12,7 +12,8 @@ import { prereqStateWord } from '../../components/PrerequisitePanel'
 import { getLessonReadiness, getProgress, type ConceptProgress, type ReadinessRes } from '../../lib/api'
 import { getUserInfo } from '../../lib/auth'
 import { concepts } from '../../lib/conceptData'
-import { domainLabel } from '../../lib/graphDomains'
+import { domainName } from '../../lib/domainName'
+import { tNow, useT } from '../../lib/i18n'
 import { masteryState } from '../../lib/progress'
 import { backTarget, learnConceptPath, parseReturnStack, pushReturn, studyConceptPath, withReturnStack } from '../../lib/learnReturn'
 import { hrefConceptId } from '../../lib/nextUp'
@@ -43,16 +44,16 @@ function ConceptNotFound() {
 function stateLabel(state: string | undefined): string {
   switch (state) {
     case 'mastered':
-      return 'Mastered'
+      return tNow('learn.study.state.mastered')
     case 'due_for_review':
-      return 'Due a check'
+      return tNow('learn.study.state.dueCheck')
     case 'in_progress':
-      return 'In progress'
+      return tNow('learn.study.state.inProgress')
     case 'unlocked':
     case 'upcoming':
-      return 'Not started'
+      return tNow('learn.study.state.notStarted')
     case 'locked':
-      return 'Locked'
+      return tNow('learn.study.state.locked')
     default:
       return ''
   }
@@ -62,18 +63,19 @@ function stateLabel(state: string | undefined): string {
 function dependentStateWord(p: ConceptProgress | undefined): string {
   switch (masteryState(p)) {
     case 'mastered':
-      return 'Mastered'
+      return tNow('learn.study.state.mastered')
     case 'decaying':
-      return 'Due a check'
+      return tNow('learn.study.state.dueCheck')
     case 'practicing':
     case 'learning':
-      return 'In progress'
+      return tNow('learn.study.state.inProgress')
     default:
-      return 'Not started'
+      return tNow('learn.study.state.notStarted')
   }
 }
 
 function StudyContent() {
+  const t = useT()
   const searchParams = useSearchParams()
   const conceptId = searchParams.get('concept') || ''
   const returnStack = useMemo(() => parseReturnStack(searchParams), [searchParams])
@@ -134,14 +136,14 @@ function StudyContent() {
           href="#depends-on"
           className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue min-h-[36px] inline-flex items-center"
         >
-          Explore prerequisites
+          {t('learn.study.explorePrereqs')}
         </Link>
       )}
       <Link
         href={practiseHref}
         className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center"
       >
-        Practise this concept →
+        {t('learn.study.practise')}
       </Link>
     </>
   )
@@ -152,11 +154,11 @@ function StudyContent() {
         <div className="mb-4">
           {back ? (
             <Link href={back.href} className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue">
-              ← Back to {backLabel || 'previous topic'}
+              {backLabel ? t('learn.study.backTo', { label: backLabel }) : t('learn.study.backToPrevious')}
             </Link>
           ) : (
             <Link href="/profile" className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue">
-              ← Profile
+              {t('learn.page.backToProfile')}
             </Link>
           )}
         </div>
@@ -165,13 +167,12 @@ function StudyContent() {
           {label}
         </h1>
         <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">
-          Reference{domain ? ` · ${domainLabel(domain)}` : ''}{state ? ` · ${state}` : ''}
+          {t('learn.study.reference')}{domain ? ` · ${domainName(domain)}` : ''}{state ? ` · ${state}` : ''}
         </p>
 
         {failed && (
           <p role="alert" className="mt-3 font-mono text-xs text-mathua-red">
-            Couldn&apos;t refresh this concept&apos;s status. You can still read the material
-            below.
+            {t('learn.study.statusFailed')}
           </p>
         )}
 
@@ -182,40 +183,39 @@ function StudyContent() {
           <aside className="min-w-0 space-y-6">
             <RelationList
               id="depends-on"
-              heading="Depends on"
+              heading={t('learn.study.dependsOn')}
               items={prereqItems}
-              emptyText="No prerequisites listed"
+              emptyText={t('learn.study.noPrereqs')}
               loading={readiness === null && !failed}
               returnStack={neighbourStack}
             />
             <RelationList
-              heading="Unlocks"
+              heading={t('learn.study.unlocks')}
               items={dependentItems}
-              emptyText="No dependent concepts listed"
+              emptyText={t('learn.study.noDependents')}
               returnStack={neighbourStack}
             />
           </aside>
         </div>
 
         <div className="mt-8 border-t border-mathua-border pt-5">
-          <p className="font-mono text-xs text-mathua-primary">Ready to practise?</p>
+          <p className="font-mono text-xs text-mathua-primary">{t('learn.study.ready.title')}</p>
           <p className="mt-1 font-mono text-[11px] text-mathua-secondary">
-            Work toward mastery in the assessed learning flow. Reading here does not count as
-            progress.
+            {t('learn.study.ready.body')}
           </p>
           <div className="mt-3 flex flex-wrap gap-3">
             <Link
               href={practiseHref}
               className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 py-2 font-mono text-xs min-h-[40px] inline-flex items-center"
             >
-              Practise this concept →
+              {t('learn.study.practise')}
             </Link>
             {back && (
               <Link
                 href={back.href}
                 className="border border-mathua-border px-5 py-2 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue min-h-[40px] inline-flex items-center"
               >
-                ← Back to {backLabel || 'previous topic'}
+                {backLabel ? t('learn.study.backTo', { label: backLabel }) : t('learn.study.backToPrevious')}
               </Link>
             )}
           </div>
@@ -226,11 +226,12 @@ function StudyContent() {
 }
 
 export default function StudyPage() {
+  const t = useT()
   return (
     <>
       <Header />
       <div className="pt-[var(--chrome-top)] lg:pt-0">
-        <Suspense fallback={<div className="p-6 font-mono text-xs text-mathua-muted">Loading…</div>}>
+        <Suspense fallback={<div className="p-6 font-mono text-xs text-mathua-muted">{t('common.status.loading')}</div>}>
           <StudyContent />
         </Suspense>
       </div>
