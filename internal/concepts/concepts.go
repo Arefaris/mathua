@@ -1,5 +1,7 @@
 package concepts
 
+import "github.com/chuma-beep/mathua/internal/i18n"
+
 type MasteryThreshold struct {
 	Streak         int     `json:"streak"`
 	AvgTimeSeconds float64 `json:"avg_time_seconds"`
@@ -26,6 +28,9 @@ type Concept struct {
 }
 
 type DAG struct {
+	// labels are the translated display names per locale; see SetLabels. English lives on
+	// the Concept itself.
+	labels        map[i18n.Locale]map[string]string
 	concepts      map[string]*Concept
 	order         []*Concept
 	domains       []string

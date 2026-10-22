@@ -29,6 +29,8 @@ type Planner struct {
 	courses  []*Course
 	byID     map[string]*Course
 	destByID map[string]*Destination
+	// translated holds the course and destination text; see LoadOverlays.
+	translated overlays
 }
 
 func Load(coursesPath string, dag *concepts.DAG) (*Planner, error) {

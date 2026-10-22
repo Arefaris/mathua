@@ -3,6 +3,7 @@ package lessons
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/chuma-beep/mathua/internal/i18n"
 	"github.com/chuma-beep/mathua/internal/latex"
 	"log"
 	"os"
@@ -52,6 +53,10 @@ type mapping struct {
 type Loader struct {
 	concepts map[string]*Lesson
 	kps      map[string][]KP
+	// kpText holds the translated step text per locale, keyed by concept id. It is kept apart
+	// from kps, and never merged into it, because the English Section is also a lookup key
+	// into the English lesson body: a translated heading would match nothing there.
+	kpText map[i18n.Locale]map[string][]KP
 }
 
 func Load(lessonsDir string) (*Loader, error) {
@@ -112,7 +117,7 @@ func Load(lessonsDir string) (*Loader, error) {
 		}
 	}
 
-	return &Loader{concepts: concepts, kps: loadKPs(lessonsDir)}, nil
+	return &Loader{concepts: concepts, kps: loadKPs(lessonsDir), kpText: loadKPOverlays(lessonsDir)}, nil
 }
 
 // loadKPs reads <dir>/kp/<concept_id>.json shard files (a JSON array of KP).
@@ -141,6 +146,51 @@ func loadKPs(dir string) map[string][]KP {
 		}
 		if len(kps) > 0 {
 			out[cid] = kps
+		}
+	}
+	return out
+}
+
+// loadKPOverlays reads <dir>/kp/<locale>/<concept_id>.json for every overlay locale. The shards
+// have the same shape as the English ones; only Label, Section and Subgoals are used.
+//
+// loadKPs skips directories, so these files are never mistaken for English content.
+func loadKPOverlays(dir string) map[i18n.Locale]map[string][]KP {
+	out := make(map[i18n.Locale]map[string][]KP)
+	for _, loc := range i18n.Overlays() {
+		if shards := loadKPs(filepath.Join(dir, "kp", string(loc))); len(shards) > 0 {
+			out[loc] = shards
+		}
+	}
+	return out
+}
+
+// KPsIn is KPs with each step's Label, Section and Subgoals in loc.
+//
+// The result has exactly the English steps' length and order, with everything but that text
+// copied from them. A step the overlay lacks, or whose overlay disagrees with the English one
+// about how many subgoals it has, keeps its English text: the client pairs subgoals with
+// questions by position, so a short translated list would be worse than an English one.
+//
+// Use KPs for any lookup into the lesson body. Section in this result is display text.
+func (l *Loader) KPsIn(conceptID string, loc i18n.Locale) []KP {
+	base := l.KPs(conceptID)
+	tr := l.kpText[loc][conceptID]
+	if len(tr) != len(base) {
+		return base
+	}
+	out := make([]KP, len(base))
+	copy(out, base)
+	for i := range out {
+		if tr[i].Label != "" {
+			out[i].Label = tr[i].Label
+		}
+		// An English step with no section stays without one: callers branch on it being empty.
+		if base[i].Section != "" && tr[i].Section != "" {
+			out[i].Section = tr[i].Section
+		}
+		if len(tr[i].Subgoals) == len(base[i].Subgoals) {
+			out[i].Subgoals = tr[i].Subgoals
 		}
 	}
 	return out
