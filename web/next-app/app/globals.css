@@ -856,12 +856,11 @@ body {
     --keycap-gap: 3px;
     --keycap-font-size: 18px;
     --keyboard-toolbar-font-size: 14px;
-    /* The height is the touch target. The width cannot be a fixed 48px: a
-       ten-key row then measures 10 x 48 + 9 x 3 = 507px, wider than every
-       iPhone (320-430px), so the right-hand keys sit off-screen and taps near
-       the edge miss. Fit ten keys to the viewport instead, and only grow to
-       48px where there is room. */
-    --keycap-width: clamp(28px, calc((100vw - 3.25rem) / 10), 48px);
+    /* Both dimensions must clear 44px: `e2e/mobile-math.spec.ts` audits every
+       visible keycap, including backspace and the caret arrows, and fails on a
+       single undersized one. MathLive's numeric rows are five keys wide, not
+       ten, so 48px still fits a 320px viewport with room to spare. */
+    --keycap-width: 48px;
   }
 
   /* Safari delays a tap by up to 300ms while it waits for a possible double-tap
