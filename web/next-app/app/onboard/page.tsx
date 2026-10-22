@@ -39,12 +39,6 @@ type Step = 'welcome' | 'diagnostic' | 'results'
 // session id persists in sessionStorage so Back/refresh resumes it.
 const DIAG_KEY = 'mathua_diag_session_onboard'
 
-// The picked domains, separately from the session id above. "Select everything"
-// then an accidental refresh used to leave the learner staring at an empty grid
-// with no way to tell what they had chosen. Cleared when the plan loads, because
-// by then the selection has done its job and a later visit is a fresh start.
-const SELECTION_KEY = 'mathua_onboard_domains'
-
 // A guest run is a demo: the server opens a session against a student row
 // created from a typed name, and nothing can sign back into that row. Session
 // storage keeps the fact, so a refresh mid-test still ends on a result that
@@ -109,22 +103,12 @@ export default function OnboardPage() {
       result.push({ name, count: concepts.length, concepts, selected: false })
     })
     result.sort((a, b) => domainOrder.indexOf(a.name) - domainOrder.indexOf(b.name))
-    // Restore a previous selection, but only over domains that still exist: a
-    // stale name from an older corpus is dropped rather than resurrected as an
-    // entry with no concepts behind it.
-    let restored: string[] = []
-    try {
-      const raw = sessionStorage.getItem(SELECTION_KEY)
-      if (raw) {
-        const parsed: unknown = JSON.parse(raw)
-        if (Array.isArray(parsed)) restored = parsed.filter((n): n is string => typeof n === 'string')
-      }
-    } catch {
-      restored = []
-    }
-    const known = new Set(result.map(d => d.name))
-    const keep = new Set(restored.filter(n => known.has(n)))
-    setDomains(result.map(d => ({ ...d, selected: keep.has(d.name) })))
+    // The selection is this visit's, not the browser's. Persisting it meant a
+    // learner who came back to pick algebra found machine learning still ticked
+    // and started a run covering both. A fresh entry starts with nothing chosen;
+    // the pause is still offered separately, and only for a run that has not had
+    // its scope changed underneath it.
+    setDomains(result)
     try {
       setHasPaused(!!sessionStorage.getItem(DIAG_KEY))
     } catch {
@@ -137,28 +121,25 @@ export default function OnboardPage() {
     }
   }, [mounted])
 
-  function persistSelection(next: DomainInfo[]) {
-    const chosen = next.flatMap(d => (d.selected ? [d.name] : []))
-    try {
-      if (chosen.length === 0) sessionStorage.removeItem(SELECTION_KEY)
-      else sessionStorage.setItem(SELECTION_KEY, JSON.stringify(chosen))
-    } catch { /* storage unavailable — the grid still works for this visit */ }
+  // A paused run covers the domains it was started on. Changing the scope makes
+  // that run no longer the one being asked for, so it is forgotten rather than
+  // offered above the Start button, where Continue used to resume the old
+  // subject after the learner had just picked a different one.
+  function dropPausedRun() {
+    if (!hasPaused) return
+    sessionId.current = ''
+    try { sessionStorage.removeItem(DIAG_KEY) } catch { /* ignore */ }
+    setHasPaused(false)
   }
 
   function toggleDomain(name: string) {
-    setDomains(prev => {
-      const next = prev.map(d => d.name === name ? { ...d, selected: !d.selected } : d)
-      persistSelection(next)
-      return next
-    })
+    dropPausedRun()
+    setDomains(prev => prev.map(d => d.name === name ? { ...d, selected: !d.selected } : d))
   }
 
   function selectAll() {
-    setDomains(prev => {
-      const next = prev.map(d => ({ ...d, selected: true }))
-      persistSelection(next)
-      return next
-    })
+    dropPausedRun()
+    setDomains(prev => prev.map(d => ({ ...d, selected: true })))
   }
 
   function selectedConceptIds(): string[] {
@@ -354,7 +335,6 @@ export default function OnboardPage() {
       setStep('results')
       try {
         sessionStorage.removeItem(DIAG_KEY)
-        sessionStorage.removeItem(SELECTION_KEY)
       } catch { /* ignore */ }
       setHasPaused(false)
     } catch (e) {

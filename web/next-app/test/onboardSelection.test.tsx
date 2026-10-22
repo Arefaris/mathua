@@ -26,8 +26,6 @@ vi.mock('../components/Footer', () => ({ default: () => null }))
 vi.mock('../components/BottomTabs', () => ({ default: () => null }))
 vi.mock('../components/Loading', () => ({ default: () => <div>Loading</div> }))
 
-const SELECTION_KEY = 'mathua_onboard_domains'
-
 function idsForDomain(domain: string): string[] {
   return concepts.filter(c => c.domain === domain).map(c => c.id)
 }
@@ -123,13 +121,30 @@ describe('/onboard domain selection', () => {
     expect(sent.sort()).toEqual([...idsForDomain('arithmetic')].sort())
   })
 
-  it('keeps a selection across a reload and drops names that no longer exist', async () => {
-    sessionStorage.setItem(SELECTION_KEY, JSON.stringify(['arithmetic', 'a_domain_that_was_removed']))
+  it('starts a later visit with nothing selected, whatever a previous visit picked', async () => {
+    // The selection belongs to the visit. Restoring it made a learner who came
+    // back for algebra find machine learning still ticked, and start a run
+    // covering both subjects.
+    sessionStorage.setItem('mathua_onboard_domains', JSON.stringify(['arithmetic', 'a_domain_that_was_removed']))
     render(<OnboardPage />)
     await waitFor(() => expect(screen.getByText(domainLabel('arithmetic'))).toBeTruthy())
-    expect(Number(scopeShown())).toBe(scopeSize(idsForDomain('arithmetic')))
-    // The unknown name is dropped rather than resurrecting an empty domain.
-    expect(scopeShown()).not.toBeNull()
+    expect(startButton().disabled).toBe(true)
+  })
+
+  it('forgets a paused run as soon as the chosen subject changes', async () => {
+    // Continue used to sit above Start as the primary action and resume the
+    // paused session in the old scope, so picking a different domain still
+    // showed the previous subject's question.
+    sessionStorage.setItem('mathua_diag_session_onboard', 's-old')
+    render(<OnboardPage />)
+    await waitFor(() => expect(screen.getByRole('button', { name: /Continue diagnostic/ })).toBeTruthy())
+
+    fireEvent.click(screen.getByText(domainLabel('geometry')))
+
+    expect(screen.queryByRole('button', { name: /Continue diagnostic/ })).toBeNull()
+    expect(startButton().disabled).toBe(false)
+    expect(Number(scopeShown())).toBe(scopeSize(idsForDomain('geometry')))
+    expect(sessionStorage.getItem('mathua_diag_session_onboard')).toBeNull()
   })
 
   it('offers a way into the topics without taking the test', async () => {
