@@ -736,6 +736,15 @@ type Repository interface {
 	// CountAdminUsers is the total number of accounts, for the overview.
 	CountAdminUsers() (int, error)
 
+	// ActiveLearnerCounts answers "is anyone using this right now" without a
+	// third-party analytics service. activeNow counts distinct learners whose
+	// active_sessions row was touched at or after since; activeToday counts
+	// distinct learners with an attempt at or after dayStart, which measures
+	// people who answered something rather than people with a tab open. Guests
+	// are reported separately because a guest-heavy number looks healthy while
+	// converting to nothing.
+	ActiveLearnerCounts(since, dayStart time.Time) (activeNow, activeNowGuests, activeToday, activeTodayGuests int, err error)
+
 	// CountStoredQuestions is how many question rows exist, for the overview.
 	CountStoredQuestions() (int, error)
 

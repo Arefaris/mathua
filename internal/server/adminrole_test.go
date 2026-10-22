@@ -724,18 +724,28 @@ func TestAdminOverviewReportsLiveCounts(t *testing.T) {
 		t.Fatalf("overview: got %d (%s)", rec.Code, rec.Body.String())
 	}
 	var out struct {
-		Users     int `json:"users"`
-		Staff     int `json:"staff"`
-		Owners    int `json:"owners"`
-		Concepts  int `json:"concepts"`
-		Domains   int `json:"domains"`
-		Questions int `json:"questions"`
+		Users             int `json:"users"`
+		ActiveNow         int `json:"active_now"`
+		ActiveNowGuests   int `json:"active_now_guests"`
+		ActiveToday       int `json:"active_today"`
+		ActiveTodayGuests int `json:"active_today_guests"`
+		Staff             int `json:"staff"`
+		Owners            int `json:"owners"`
+		Concepts          int `json:"concepts"`
+		Domains           int `json:"domains"`
+		Questions         int `json:"questions"`
 	}
 	if err := json.Unmarshal(rec.Body.Bytes(), &out); err != nil {
 		t.Fatalf("decode: %v", err)
 	}
 	if out.Users != 3 {
 		t.Errorf("users = %d, want 3", out.Users)
+	}
+	// The fixture has no sessions or attempts, so the live counts are zero
+	// rather than omitted: the page needs a number for every tile.
+	if out.ActiveNow != 0 || out.ActiveNowGuests != 0 || out.ActiveToday != 0 || out.ActiveTodayGuests != 0 {
+		t.Errorf("active counts = %d/%d now, %d/%d today, want all zero",
+			out.ActiveNow, out.ActiveNowGuests, out.ActiveToday, out.ActiveTodayGuests)
 	}
 	if out.Staff != 1 {
 		t.Errorf("staff = %d, want 1", out.Staff)

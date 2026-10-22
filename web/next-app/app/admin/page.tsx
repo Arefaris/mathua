@@ -69,6 +69,10 @@ export default function AdminOverviewPage() {
                 <Stat label="Open" value={data.reports.open} />
                 <Stat label="Reviewing" value={data.reports.reviewing} />
                 <Stat label="Resolved" value={data.reports.resolved} />
+                <Stat label="Active now" value={data.active_now} />
+                <Stat label="Guests now" value={data.active_now_guests} />
+                <Stat label="Active today" value={data.active_today} />
+                <Stat label="Guests today" value={data.active_today_guests} />
                 <Stat label="Staff" value={data.staff} />
                 <Stat label="Owners" value={data.owners} />
                 <Stat label="Accounts" value={data.users} />

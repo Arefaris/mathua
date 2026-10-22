@@ -1683,6 +1683,13 @@ const AdminAuditEventSchema = z.object({
 
 const AdminOverviewSchema = z.object({
 	users: z.number(),
+	// Live learner counts: a session seen in the last fifteen minutes, and an
+	// attempt since midnight UTC. Guests are separate because a page full of
+	// guest sessions is not the same as people who can come back tomorrow.
+	active_now: z.number(),
+	active_now_guests: z.number(),
+	active_today: z.number(),
+	active_today_guests: z.number(),
 	staff: z.number(),
 	owners: z.number(),
 	concepts: z.number(),

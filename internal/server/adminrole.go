@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/chuma-beep/mathua/internal/admin"
 	"github.com/chuma-beep/mathua/internal/storage"
@@ -156,13 +157,29 @@ func (s *Server) handleAdminOverview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	conceptCount, domainCount := s.eng.CorpusSize()
+	// Active learners are read from this deployment's own tables. A
+	// third-party traffic counter cannot tell a learner from a crawler or a
+	// static asset request, and it knows nothing about accounts.
+	now := time.Now().UTC()
+	activeNow, activeNowGuests, activeToday, activeTodayGuests, err := s.repo.ActiveLearnerCounts(
+		now.Add(-15*time.Minute),
+		time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC),
+	)
+	if err != nil {
+		writeError(w, "failed to count active learners", 500)
+		return
+	}
 	writeJSON(w, map[string]interface{}{
-		"users":     users,
-		"staff":     staff,
-		"owners":    owners,
-		"concepts":  conceptCount,
-		"domains":   domainCount,
-		"questions": questions,
+		"users":               users,
+		"active_now":          activeNow,
+		"active_now_guests":   activeNowGuests,
+		"active_today":        activeToday,
+		"active_today_guests": activeTodayGuests,
+		"staff":               staff,
+		"owners":              owners,
+		"concepts":            conceptCount,
+		"domains":             domainCount,
+		"questions":           questions,
 		"reports": map[string]int{
 			"open":      reportCounts["open"],
 			"reviewing": reportCounts["reviewing"],
