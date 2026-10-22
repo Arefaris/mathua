@@ -7,6 +7,7 @@ import ChromeToggle from '@/components/ChromeToggle'
 import AssistantDock from '@/components/AssistantDock'
 import ScrollToTopOnNavigate from '@/components/ScrollToTopOnNavigate'
 import { SITE_URL } from '@/lib/site'
+import { Analytics } from '@vercel/analytics/react'
 // MathLive's own stylesheet for the <math-field> rendering (MathML). Loaded here,
 // not in the lazily-loaded component, so the chunk has no CSS side-effect.
 import 'mathlive/static.css'
@@ -113,6 +114,7 @@ export default function RootLayout({
           {children}
         </div>
         <Toaster />
+        <Analytics />
         <ServiceWorkerRegistrar />
         {/* The chrome tap control, mounted here rather than inside Header: the
             header is `inert` while hidden, which would disable the one control
