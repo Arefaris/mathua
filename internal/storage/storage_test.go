@@ -385,14 +385,28 @@ func TestLeaderboardCarriesUsernameAndAvatar(t *testing.T) {
 	if custom || version != 3 || pick == nil || pick.Style != "bottts" || pick.Seed != "s1" {
 		t.Errorf("bad avatar bits: custom=%v pick=%+v version=%d", custom, pick, version)
 	}
-	members, err := store.GetLeagueStandings()
+	if err := store.AwardXP(st.ID, 20, "test", "ada:weekly"); err != nil {
+		t.Fatalf("award: %v", err)
+	}
+	now := time.Now().UTC()
+	start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC).
+		AddDate(0, 0, -((int(now.Weekday()) + 6) % 7))
+	week := start.Format("2006-01-02")
+	if err := store.ResolveLeagueWeek(week, start.AddDate(0, 0, -7), start); err != nil {
+		t.Fatalf("resolve week: %v", err)
+	}
+	tier, no, found, err := store.LeagueMembershipOf(st.ID, week)
+	if err != nil || !found {
+		t.Fatalf("membership: %v found=%v", err, found)
+	}
+	members, err := store.LeagueRoster(week, tier, no, start, start.AddDate(0, 0, 7))
 	if err != nil {
-		t.Fatalf("standings: %v", err)
+		t.Fatalf("roster: %v", err)
 	}
 	if len(members) != 1 || members[0].Username != "ada" {
 		t.Fatalf("expected username on member, got %+v", members)
 	}
-	if members[0].AvatarURL != "https://photo/x.jpg" || members[0].AvatarDicebear == nil {
+	if members[0].AvatarURL != "https://photo/x.jpg" || members[0].Settings == "" {
 		t.Errorf("expected avatar fields on member, got %+v", members[0])
 	}
 	if c, p, v := AvatarBits("not-json"); c || p != nil || v != 0 {

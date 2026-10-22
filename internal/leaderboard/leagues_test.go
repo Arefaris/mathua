@@ -1,125 +1,132 @@
 package leaderboard
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
-func leagueStore(t *testing.T) storage.Repository {
+func leagueRepo(t *testing.T) *storage.SQLiteStore {
 	t.Helper()
-	store, err := storage.NewSQLiteStore(":memory:")
+	repo, err := storage.NewSQLiteStore(":memory:")
 	if err != nil {
 		t.Fatalf("store: %v", err)
 	}
-	t.Cleanup(func() { store.Close() })
-	return store
+	t.Cleanup(func() { repo.Close() })
+	return repo
 }
 
-func seedLeague(t *testing.T, repo storage.Repository, names []string) {
-	t.Helper()
-	for _, n := range names {
-		st, err := repo.CreateStudent(n)
+// TestMyLeague_SeatsAndRanksTheCallersCohort covers the whole read: the first
+// reader of a week bootstraps the leagues, the caller is seated, and the
+// standings are ordered by this week's XP with the caller's place returned
+// separately rather than injected into the list.
+func TestMyLeague_SeatsAndRanksTheCallersCohort(t *testing.T) {
+	repo := leagueRepo(t)
+	var ids []string
+	for i := 0; i < 8; i++ {
+		st, err := repo.CreateStudent(fmt.Sprintf("learner%d", i))
 		if err != nil {
-			t.Fatalf("create %s: %v", n, err)
+			t.Fatalf("create %d: %v", i, err)
 		}
-		_ = repo.SetLeague(st.ID, "bronze", "", 0)
-	}
-}
-
-func TestWeekKey(t *testing.T) {
-	if got := weekKey(time.Date(2026, 8, 29, 12, 0, 0, 0, time.UTC)); got != "2026-W35" {
-		t.Errorf("expected 2026-W35, got %q", got)
-	}
-}
-
-func TestResolveWeeklyReset_PromotesTopAndDemotesBottom(t *testing.T) {
-	repo := leagueStore(t)
-	now := time.Now().UTC()
-	ids := make(map[string]string)
-	for _, n := range []string{"a", "b", "c", "d", "e", "f"} {
-		st, _ := repo.CreateStudent(n)
-		ids[n] = st.ID
-		_ = repo.SetLeague(st.ID, "bronze", "", 0)
-	}
-	// Weekly mastery: a=3, b=2 this week; others 0. Bronze has no lower tier,
-	// so nobody demotes; a and b promote to silver.
-	for i, n := range []string{"a", "b"} {
-		for k := 0; k <= i; k++ {
-			_ = repo.UpsertProgress(&storage.ConceptProgress{
-				StudentID: ids[n], ConceptID: string(rune('a' + k)), Status: "MASTERED", MasteredAt: &now,
-			})
+		if err := repo.SetUsername(st.ID, fmt.Sprintf("learner%d", i)); err != nil {
+			t.Fatalf("username %d: %v", i, err)
 		}
-	}
-	if _, err := ResolveWeeklyReset(repo, now); err != nil {
-		t.Fatalf("reset: %v", err)
-	}
-	for _, tc := range []struct{ name, want string }{{"a", "silver"}, {"b", "silver"}, {"c", "bronze"}} {
-		st, _ := repo.GetStudent(ids[tc.name])
-		if st.League != tc.want {
-			t.Errorf("%s: expected %s, got %s", tc.name, tc.want, st.League)
+		if err := repo.AwardXP(st.ID, 10*(i+1), "test", fmt.Sprintf("week:%d", i)); err != nil {
+			t.Fatalf("award %d: %v", i, err)
 		}
+		ids = append(ids, st.ID)
 	}
-	// a should carry the promoted badge.
-	a, _ := repo.GetStudent(ids["a"])
-	if a.LeagueMoved != 1 {
-		t.Errorf("expected promoted badge on a, got %d", a.LeagueMoved)
+
+	now := time.Date(2026, 10, 21, 12, 0, 0, 0, time.UTC)
+	board, err := NewComputer(repo).MyLeague(ids[0], now)
+	if err != nil {
+		t.Fatalf("my league: %v", err)
+	}
+	if board.Tier != "bronze" || board.LeagueNo != 1 {
+		t.Errorf("seat = %s/%d, want bronze/1", board.Tier, board.LeagueNo)
+	}
+	if board.Size != 8 || len(board.Members) != 8 {
+		t.Fatalf("size = %d members = %d, want 8/8", board.Size, len(board.Members))
+	}
+	if board.WeekStart.Format("2006-01-02") != "2026-10-19" {
+		t.Errorf("week start = %s, want 2026-10-19", board.WeekStart)
+	}
+	if board.Me == nil || board.Me.Rank != 8 || board.Me.XP != 10 {
+		t.Errorf("me = %+v, want rank 8 with 10 XP", board.Me)
+	}
+	// Highest XP first, and each row carries the public username instead of an
+	// account id.
+	if board.Members[0].XP != 80 || board.Members[0].ID != "learner7" {
+		t.Errorf("first row = %+v, want learner7 at 80 XP", board.Members[0])
+	}
+	if !board.Members[7].IsMe {
+		t.Error("caller's line is not marked")
+	}
+	// The rules travel with the payload so the interface cannot describe a
+	// different threshold from the one applied.
+	if board.Promote != storage.LeagueMovers(8) || board.Demote != board.Promote {
+		t.Errorf("rules = %d/%d, want %d", board.Promote, board.Demote, storage.LeagueMovers(8))
 	}
 }
 
-func TestStandings_BoardShape(t *testing.T) {
-	repo := leagueStore(t)
-	now := time.Now().UTC()
-	key := weekKey(now)
-	for _, n := range []string{"a", "b", "c"} {
-		st, _ := repo.CreateStudent(n)
-		// Seed at the current week so the reset leaves them in bronze.
-		_ = repo.SetLeague(st.ID, "bronze", key, 0)
-	}
-	board, err := Standings(repo, now)
+func TestMyLeague_GuestAndZeroXPGetNoSeat(t *testing.T) {
+	repo := leagueRepo(t)
+	now := time.Date(2026, 10, 21, 12, 0, 0, 0, time.UTC)
+	computer := NewComputer(repo)
+
+	guest, err := computer.MyLeague("guest_abc", now)
 	if err != nil {
-		t.Fatalf("standings: %v", err)
+		t.Fatalf("guest league: %v", err)
 	}
-	if board.Week == "" {
-		t.Error("expected week key")
+	if guest.Tier != "" || len(guest.Members) != 0 || guest.Me != nil {
+		t.Errorf("guest got a league: %+v", guest)
 	}
-	if len(board.Leagues) == 0 {
-		t.Fatal("expected at least the bronze league")
+
+	quiet, err := repo.CreateStudent("quiet")
+	if err != nil {
+		t.Fatalf("create quiet: %v", err)
 	}
-	if board.Leagues[0].Tier != "bronze" {
-		t.Errorf("expected bronze first, got %s", board.Leagues[0].Tier)
+	empty, err := computer.MyLeague(quiet.ID, now)
+	if err != nil {
+		t.Fatalf("zero-xp league: %v", err)
 	}
-	if len(board.Leagues[0].Members) != 3 {
-		t.Errorf("expected 3 bronze members, got %d", len(board.Leagues[0].Members))
+	if empty.Tier != "" || empty.Me != nil {
+		t.Errorf("zero-XP learner got a league: %+v", empty)
 	}
 }
 
-func TestResolveWeeklyReset_Idempotent(t *testing.T) {
-	repo := leagueStore(t)
-	st, _ := repo.CreateStudent("solo")
-	_ = repo.SetLeague(st.ID, "bronze", "", 0)
+// TestMyLeague_SecondReadDoesNotReseatAnyone pins the retry case: two reads of
+// the same week return the same seats and the same standings.
+func TestMyLeague_SecondReadDoesNotReseatAnyone(t *testing.T) {
+	repo := leagueRepo(t)
+	var ids []string
+	for i := 0; i < 12; i++ {
+		st, err := repo.CreateStudent(fmt.Sprintf("learner%d", i))
+		if err != nil {
+			t.Fatalf("create %d: %v", i, err)
+		}
+		if err := repo.AwardXP(st.ID, i+1, "test", fmt.Sprintf("twice:%d", i)); err != nil {
+			t.Fatalf("award %d: %v", i, err)
+		}
+		ids = append(ids, st.ID)
+	}
+	now := time.Date(2026, 10, 21, 12, 0, 0, 0, time.UTC)
+	computer := NewComputer(repo)
 
-	key1, err := ResolveWeeklyReset(repo, time.Now().UTC())
+	first, err := computer.MyLeague(ids[3], now)
 	if err != nil {
-		t.Fatalf("first reset: %v", err)
+		t.Fatalf("first: %v", err)
 	}
-	got, _ := repo.GetStudent(st.ID)
-	if got.LeagueWeek != key1 {
-		t.Errorf("expected league_week %s, got %s", key1, got.LeagueWeek)
-	}
-	// Second call in the same week must not touch the student again.
-	got2, _ := repo.GetStudent(st.ID)
-	_ = got2
-	key2, err := ResolveWeeklyReset(repo, time.Now().UTC())
+	second, err := computer.MyLeague(ids[3], now)
 	if err != nil {
-		t.Fatalf("second reset: %v", err)
+		t.Fatalf("second: %v", err)
 	}
-	if key2 != key1 {
-		t.Errorf("expected same week key, got %s vs %s", key1, key2)
+	if first.Tier != second.Tier || first.LeagueNo != second.LeagueNo || first.Size != second.Size {
+		t.Errorf("seat changed between reads: %+v then %+v", first, second)
 	}
-	final, _ := repo.GetStudent(st.ID)
-	if final.LeagueMoved != 0 {
-		t.Errorf("solo student must not move, got %d", final.LeagueMoved)
+	if first.Me == nil || second.Me == nil || first.Me.Rank != second.Me.Rank {
+		t.Errorf("rank changed between reads: %+v then %+v", first.Me, second.Me)
 	}
 }

@@ -741,12 +741,13 @@ func (s *Server) handleLeagues(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
 		return
 	}
-	board, err := s.eng.GetLeagues()
+	studentID, _ := r.Context().Value(authStudentKey{}).(string)
+	league, err := s.eng.GetMyLeague(studentID)
 	if err != nil {
 		writeError(w, "failed to get leagues", 500)
 		return
 	}
-	writeJSON(w, board)
+	writeJSON(w, league)
 }
 
 // GET /api/health

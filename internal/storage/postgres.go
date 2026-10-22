@@ -59,6 +59,25 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_events_event ON xp_events(student_id, e
 CREATE INDEX IF NOT EXISTS idx_xp_events_week ON xp_events(created_at);
 CREATE INDEX IF NOT EXISTS idx_xp_events_student_week ON xp_events(student_id, created_at);
 
+-- Weekly league membership. See the SQLite schema for why the week marker and
+-- the seats are written in one transaction.
+CREATE TABLE IF NOT EXISTS league_members (
+    week       TEXT    NOT NULL,
+    student_id TEXT    NOT NULL,
+    tier       TEXT    NOT NULL,
+    league_no  INTEGER NOT NULL,
+    xp         INTEGER NOT NULL DEFAULT 0,
+    rank       INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (week, student_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_league_members_cohort ON league_members(week, tier, league_no, xp DESC);
+
+CREATE TABLE IF NOT EXISTS league_weeks (
+    week      TEXT PRIMARY KEY,
+    closed_at BIGINT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS concept_progress (
     student_id       TEXT    NOT NULL,
     concept_id       TEXT    NOT NULL,
@@ -1784,53 +1803,6 @@ func (s *PostgresStore) GetWeeklyLeaderboard() ([]LeaderboardRow, error) {
 		out = append(out, r)
 	}
 	return out, rows.Err()
-}
-
-func (s *PostgresStore) GetLeagueStandings() ([]LeagueMember, error) {
-	monday := weekStart(time.Now().UTC())
-	rows, err := s.db.Query(`
-		SELECT s.id, s.name, s.username, s.avatar_url, s.settings, COALESCE(s.league, 'bronze'), s.league_moved,
-			COUNT(CASE WHEN cp.status = 'MASTERED' THEN 1 END),
-			COUNT(CASE WHEN cp.status = 'MASTERED' AND cp.mastered_at >= $1 THEN 1 END)
-		FROM students s
-		LEFT JOIN concept_progress cp ON cp.student_id = s.id
-		GROUP BY s.id, s.name, s.username, s.avatar_url, s.settings, s.league, s.league_moved
-	`, monday.Format(time.RFC3339))
-	if err != nil {
-		return nil, fmt.Errorf("get league standings: %w", err)
-	}
-	defer rows.Close()
-
-	var out []LeagueMember
-	for rows.Next() {
-		var m LeagueMember
-		var moved int
-		var username, avatarURL, settings sql.NullString
-		if err := rows.Scan(&m.StudentID, &m.Name, &username, &avatarURL, &settings, &m.Tier, &moved, &m.TotalMastered, &m.WeeklyMastered); err != nil {
-			return nil, fmt.Errorf("scan league member: %w", err)
-		}
-		m.Username = username.String
-		m.AvatarURL = avatarURL.String
-		m.AvatarSettings = settings.String
-		m.AvatarCustom, m.AvatarDicebear, m.AvatarVersion = AvatarBits(settings.String)
-		m.Moved = moved
-		if m.Tier == "" {
-			m.Tier = "bronze"
-		}
-		out = append(out, m)
-	}
-	return out, rows.Err()
-}
-
-func (s *PostgresStore) SetLeague(studentID, tier, week string, moved int) error {
-	_, err := s.db.Exec(
-		"UPDATE students SET league = $1, league_week = $2, league_moved = $3 WHERE id = $4",
-		tier, week, moved, studentID,
-	)
-	if err != nil {
-		return fmt.Errorf("set league: %w", err)
-	}
-	return nil
 }
 
 // DailyActivity

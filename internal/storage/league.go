@@ -1,0 +1,241 @@
+package storage
+
+import (
+	"fmt"
+	"sort"
+	"strings"
+	"time"
+)
+
+// Weekly leagues.
+//
+// A league is a fixed cohort for one week: membership is written once, at the
+// start of the week, and never changes while the competition runs. Standings are
+// read live from the XP ledger. That split is what makes the system safe to
+// retry: joining a cohort and closing one are both idempotent writes keyed by
+// (week, student), so a crash midway through a transition repeats work instead
+// of moving somebody twice.
+//
+// The previous model kept a single `students.league` string and recomputed
+// promotions on every read. Retrying after a partial failure therefore promoted
+// a different set of people, because the group it ranked had already shrunk.
+// Those columns remain in `students` for compatibility, but nothing reads them.
+
+// LeagueTiers, lowest first. Diamond is the ceiling: its top finishers stay.
+var LeagueTiers = []string{"bronze", "silver", "gold", "platinum", "diamond"}
+
+const (
+	// LeagueSize is the target cohort size. Leagues fill to this before a new
+	// one opens, and the last league of a tier may be short.
+	LeagueSize = 30
+	// PromoteCount and DemoteCount cap the movers per league per week. Short
+	// leagues move proportionally fewer: see moversFor.
+	PromoteCount = 5
+	DemoteCount  = 5
+	// minLeagueToMove keeps tiny cohorts still. With two or three learners,
+	// moving half of them would shuffle the same people between tiers every
+	// week without measuring anything.
+	minLeagueToMove = 6
+)
+
+// LeagueRow is one learner inside a cohort, already ranked.
+type LeagueRow struct {
+	StudentID string
+	Name      string
+	Username  string
+	AvatarURL string
+	Settings  string
+	XP        int
+	Rank      int
+}
+
+// LeagueMembership is where a learner sits this week.
+type LeagueMembership struct {
+	Tier     string
+	LeagueNo int
+	Rank     int
+	XP       int
+	Size     int
+}
+
+// moversFor decides how many learners leave a league upwards and downwards.
+//
+// The cap is five, so a full league behaves the way the product documents. A
+// short league moves a third of itself rather than half, which keeps promotion
+// and relegation disjoint without a special case: two thirds of a cohort cannot
+// fill both ends. Cohorts below minLeagueToMove do not move at all.
+// LeagueMovers is how many learners move between tiers from a league of this
+// size. It is exported so the API states the rule it actually applies rather
+// than restating the constant in a second place.
+func LeagueMovers(size int) int { return moversFor(size) }
+
+func moversFor(size int) int {
+	if size < minLeagueToMove {
+		return 0
+	}
+	k := size / 3
+	if k > PromoteCount {
+		k = PromoteCount
+	}
+	return k
+}
+
+// nextTier returns the tier above or below, clamped at the ends.
+func nextTier(tier string, delta int) string {
+	i := tierIndex(tier)
+	if i < 0 {
+		i = 0
+	}
+	j := i + delta
+	if j < 0 {
+		j = 0
+	}
+	if j >= len(LeagueTiers) {
+		j = len(LeagueTiers) - 1
+	}
+	return LeagueTiers[j]
+}
+
+func tierIndex(tier string) int {
+	for i, t := range LeagueTiers {
+		if t == tier {
+			return i
+		}
+	}
+	return -1
+}
+
+// validTier normalises a stored tier so a corrupt row cannot produce an
+// unrenderable league.
+func validTier(tier string) string {
+	t := strings.ToLower(strings.TrimSpace(tier))
+	if tierIndex(t) < 0 {
+		return LeagueTiers[0]
+	}
+	return t
+}
+
+// WeekFromString parses a competition week key (a Monday, YYYY-MM-DD, UTC).
+func WeekFromString(week string) (time.Time, error) {
+	t, err := time.ParseInLocation("2006-01-02", week, time.UTC)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("week key %q: %w", week, err)
+	}
+	if t.Weekday() != time.Monday {
+		return time.Time{}, fmt.Errorf("week key %q is not a Monday", week)
+	}
+	return t, nil
+}
+
+type leagueCohort struct {
+	Tier     string
+	LeagueNo int
+	Members  []leagueMember
+}
+
+type leagueMember struct {
+	StudentID string
+	Name      string
+	XP        int
+}
+
+// planWeek maps last week's cohorts to this week's tiers.
+//
+// Cohorts arrive with their final XP and a deterministic order (XP desc, name,
+// id). The result is one tier per learner. Pure and deterministic: the same
+// input always yields the same mapping, so a retried transition cannot quietly
+// move somebody else.
+func planWeek(cohorts []leagueCohort) map[string]string {
+	tierOf := make(map[string]string, len(cohorts)*LeagueSize)
+	for _, c := range cohorts {
+		k := moversFor(len(c.Members))
+		for i, m := range c.Members {
+			tier := validTier(c.Tier)
+			switch {
+			case k > 0 && i < k:
+				tier = nextTier(tier, +1)
+			case k > 0 && i >= len(c.Members)-k:
+				tier = nextTier(tier, -1)
+			}
+			tierOf[m.StudentID] = tier
+		}
+	}
+	return tierOf
+}
+
+// cutCohorts orders one tier's learners and cuts them into leagues of
+// LeagueSize. League numbers restart at 1 inside every tier.
+func cutCohorts(tier string, members []leagueMember) []leagueCohort {
+	leagueOrder(members)
+	var out []leagueCohort
+	for i := 0; i < len(members); i += LeagueSize {
+		end := i + LeagueSize
+		if end > len(members) {
+			end = len(members)
+		}
+		out = append(out, leagueCohort{
+			Tier:     tier,
+			LeagueNo: len(out) + 1,
+			Members:  append([]leagueMember(nil), members[i:end]...),
+		})
+	}
+	return out
+}
+
+// leagueOrder sorts members by the documented deterministic order: XP
+// descending, then display name, then student id. The last key is what keeps
+// two learners with the same name from swapping places between renders.
+func leagueOrder(m []leagueMember) {
+	sort.SliceStable(m, func(i, j int) bool {
+		if m[i].XP != m[j].XP {
+			return m[i].XP > m[j].XP
+		}
+		if m[i].Name != m[j].Name {
+			return m[i].Name < m[j].Name
+		}
+		return m[i].StudentID < m[j].StudentID
+	})
+}
+
+// leagueCohortRow is the flat shape the stores return from their standings
+// query, already ordered by tier, league, XP, name and id.
+type leagueCohortRow struct {
+	Tier      string
+	LeagueNo  int
+	StudentID string
+	Name      string
+	XP        int
+}
+
+// groupCohorts rebuilds cohorts from flat rows.
+func groupCohorts(rows []leagueCohortRow) []leagueCohort {
+	var out []leagueCohort
+	for _, r := range rows {
+		tier := validTier(r.Tier)
+		last := len(out) - 1
+		if last < 0 || out[last].Tier != tier || out[last].LeagueNo != r.LeagueNo {
+			out = append(out, leagueCohort{Tier: tier, LeagueNo: r.LeagueNo})
+			last = len(out) - 1
+		}
+		out[last].Members = append(out[last].Members, leagueMember{
+			StudentID: r.StudentID,
+			Name:      r.Name,
+			XP:        r.XP,
+		})
+	}
+	return out
+}
+
+// rankInCohort fills Rank for display: equal XP shares a rank and the next
+// distinct score skips the tied positions (1, 1, 3). The row order itself stays
+// the deterministic one, so the policy is about what the number says, not about
+// who appears first.
+func rankInCohort(rows []LeagueRow) {
+	for i := range rows {
+		if i > 0 && rows[i].XP == rows[i-1].XP {
+			rows[i].Rank = rows[i-1].Rank
+			continue
+		}
+		rows[i].Rank = i + 1
+	}
+}

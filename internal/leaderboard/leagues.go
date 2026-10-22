@@ -1,140 +1,114 @@
 package leaderboard
 
 import (
-	"sort"
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
-// Tier ladder, low → high. Students are grouped by tier; each week the top
-// performers promote and the bottom demote (improve.md:43 leagues weekly
-// promotion/demotion, fresh start).
-var Tiers = []string{"bronze", "silver", "gold", "platinum", "diamond"}
-
-// LeagueSize is the number of students grouped per league table.
-const LeagueSize = 10
-
-// PromoteCount / DemoteCount are how many move each weekly reset.
-const (
-	PromoteCount = 2
-	DemoteCount  = 2
-)
-
-// League is one tier's current standings after any pending reset.
-type League struct {
-	Tier    string                 `json:"tier"`
-	Members []storage.LeagueMember `json:"members"`
+// MyLeague is one learner's weekly league: the seat, the standings in it, and
+// their place among them. It is deliberately not a list of every tier — the
+// old page rendered the whole pyramid, which told a bronze learner nothing
+// about the thirty people they are actually competing with.
+//
+// Promotion and relegation counts travel with the payload so the interface can
+// state the rule without hardcoding it, and so the rule cannot drift between
+// the transition and the sentence describing it.
+type MyLeague struct {
+	Week      string             `json:"week"`
+	WeekStart time.Time          `json:"week_start"`
+	WeekEnd   time.Time          `json:"week_end"`
+	Tier      string             `json:"tier"`
+	LeagueNo  int                `json:"league_no"`
+	Size      int                `json:"size"`
+	Promote   int                `json:"promote"`
+	Demote    int                `json:"demote"`
+	Members   []LeagueMemberLine `json:"members"`
+	Me        *LeaguePlace       `json:"me,omitempty"`
 }
 
-// LeagueBoard is the full response for GET /api/leagues.
-type LeagueBoard struct {
-	Week    string   `json:"week"`
-	Leagues []League `json:"leagues"`
+// LeagueMemberLine is one seat. As on the public board, there is no account id
+// here: the public id is a username or a one-way derivation of the id, and the
+// avatar is resolved through it.
+type LeagueMemberLine struct {
+	Rank   int     `json:"rank"`
+	ID     string  `json:"id"`
+	Name   string  `json:"name"`
+	Avatar *Avatar `json:"avatar,omitempty"`
+	XP     int     `json:"xp"`
+	IsMe   bool    `json:"is_me,omitempty"`
 }
 
-// weekKey is the ISO week the standings are tracked against.
-func weekKey(t time.Time) string {
-	y, w := t.ISOWeek()
-	return time.Date(y, 1, 1, 0, 0, 0, 0, time.UTC).AddDate(0, 0, (w-1)*7).Format("2006") + "-W" + two(w)
+// LeaguePlace is the caller's own line, also present inside Members when they
+// are seated. Kept separate so a future interface can pin it without scanning.
+type LeaguePlace struct {
+	Rank int `json:"rank"`
+	XP   int `json:"xp"`
 }
 
-func two(n int) string {
-	if n < 10 {
-		return "0" + string(rune('0'+n))
+// MyLeague returns the caller's league for the week containing now.
+//
+// The transition runs here rather than on a schedule because there is no
+// scheduler that survives a quiet period: if nobody reads, nobody needs seats,
+// and the first reader of a new week is exactly the moment the previous week's
+// results must be settled. ResolveLeagueWeek is idempotent, so every reader can
+// run it.
+//
+// A guest or a learner with no XP that week gets an empty value rather than an
+// invented league: the interface explains how to enter, which is truer than
+// seating them alone in a league of one.
+func (c *Computer) MyLeague(studentID string, now time.Time) (*MyLeague, error) {
+	start := WeekStart(now)
+	week := start.Format("2006-01-02")
+	end := start.AddDate(0, 0, 7)
+
+	out := &MyLeague{Week: week, WeekStart: start, WeekEnd: end, Members: []LeagueMemberLine{}}
+	if studentID == "" || storage.IsGuestID(studentID) {
+		return out, nil
 	}
-	return string(rune('0'+n/10)) + string(rune('0'+n%10))
-}
-
-// ResolveWeeklyReset applies promotion/demotion for the previous week once
-// per student when the tracked league_week differs from the current week.
-// It reads all standings, groups by tier, sorts by weekly mastered, and
-// moves PromoteCount up / DemoteCount down within each tier.
-func ResolveWeeklyReset(repo storage.Repository, now time.Time) (string, error) {
-	key := weekKey(now)
-	members, err := repo.GetLeagueStandings()
-	if err != nil {
-		return "", err
+	if err := c.repo.ResolveLeagueWeek(week, start.AddDate(0, 0, -7), start); err != nil {
+		return nil, err
 	}
-	// Group by tier, skipping students whose league_week is already current.
-	byTier := make(map[string][]storage.LeagueMember)
-	for _, m := range members {
-		st, err := repo.GetStudent(m.StudentID)
-		if err != nil || st == nil {
-			continue
-		}
-		if st.LeagueWeek == key {
-			continue
-		}
-		byTier[m.Tier] = append(byTier[m.Tier], m)
+	if err := c.repo.EnsureLeagueMembership(studentID, week); err != nil {
+		return nil, err
 	}
-	for tier, list := range byTier {
-		sort.Slice(list, func(i, j int) bool {
-			if list[i].WeeklyMastered != list[j].WeeklyMastered {
-				return list[i].WeeklyMastered > list[j].WeeklyMastered
-			}
-			return list[i].Name < list[j].Name
-		})
-		tierIdx := indexOf(Tiers, tier)
-		if tierIdx < 0 {
-			tierIdx = 0
-		}
-		for i, m := range list {
-			moved := 0
-			newTier := tier
-			if len(list) >= PromoteCount*2 && i < PromoteCount && tierIdx < len(Tiers)-1 {
-				moved = 1
-				newTier = Tiers[tierIdx+1]
-			} else if len(list) > LeagueSize/2 && i >= len(list)-DemoteCount && tierIdx > 0 {
-				moved = -1
-				newTier = Tiers[tierIdx-1]
-			}
-			if err := repo.SetLeague(m.StudentID, newTier, key, moved); err != nil {
-				return "", err
-			}
-		}
-	}
-	return key, nil
-}
-
-// Standings returns the full league board (all tiers), resolving the weekly
-// reset first.
-func Standings(repo storage.Repository, now time.Time) (*LeagueBoard, error) {
-	key, err := ResolveWeeklyReset(repo, now)
+	tier, leagueNo, found, err := c.repo.LeagueMembershipOf(studentID, week)
 	if err != nil {
 		return nil, err
 	}
-	members, err := repo.GetLeagueStandings()
+	if !found {
+		return out, nil
+	}
+	rows, err := c.repo.LeagueRoster(week, tier, leagueNo, start, end)
 	if err != nil {
 		return nil, err
 	}
-	board := &LeagueBoard{Week: key}
-	for _, tier := range Tiers {
-		var list []storage.LeagueMember
-		for _, m := range members {
-			if m.Tier == tier {
-				list = append(list, m)
-			}
+	out.Tier = tier
+	out.LeagueNo = leagueNo
+	out.Size = len(rows)
+	out.Promote = storage.LeagueMovers(len(rows))
+	out.Demote = out.Promote
+	for _, r := range rows {
+		publicID := PublicID(r.Username, r.StudentID)
+		line := LeagueMemberLine{
+			Rank: r.Rank,
+			ID:   publicID,
+			Name: displayName(r.Name),
+			XP:   r.XP,
 		}
-		sort.Slice(list, func(i, j int) bool {
-			if list[i].WeeklyMastered != list[j].WeeklyMastered {
-				return list[i].WeeklyMastered > list[j].WeeklyMastered
-			}
-			return list[i].Name < list[j].Name
-		})
-		if len(list) == 0 {
-			continue
+		if av := avatarFor(storage.LeaderboardRow{
+			StudentID:      r.StudentID,
+			Username:       r.Username,
+			AvatarURL:      r.AvatarURL,
+			AvatarSettings: r.Settings,
+		}, publicID); av != nil {
+			line.Avatar = av
 		}
-		board.Leagues = append(board.Leagues, League{Tier: tier, Members: list})
+		if r.StudentID == studentID {
+			line.IsMe = true
+			out.Me = &LeaguePlace{Rank: r.Rank, XP: r.XP}
+		}
+		out.Members = append(out.Members, line)
 	}
-	return board, nil
-}
-
-func indexOf(s []string, v string) int {
-	for i, x := range s {
-		if x == v {
-			return i
-		}
-	}
-	return -1
+	return out, nil
 }

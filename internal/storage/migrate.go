@@ -43,6 +43,29 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_events_event ON xp_events(student_id, e
 CREATE INDEX IF NOT EXISTS idx_xp_events_week ON xp_events(created_at);
 CREATE INDEX IF NOT EXISTS idx_xp_events_student_week ON xp_events(student_id, created_at);
 
+-- Weekly league membership. A row is a learner's seat in one league for one
+-- week, written by the transition and never rewritten while the week is open:
+-- the seat is what makes "my league" stable even as XP moves the standings.
+-- league_weeks is the idempotency marker — the transition inserts it first in
+-- the same transaction, so a retry after a crash sees it and stops instead of
+-- promoting the same cohort twice.
+CREATE TABLE IF NOT EXISTS league_members (
+    week       TEXT    NOT NULL,
+    student_id TEXT    NOT NULL,
+    tier       TEXT    NOT NULL,
+    league_no  INTEGER NOT NULL,
+    xp         INTEGER NOT NULL DEFAULT 0,
+    rank       INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (week, student_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_league_members_cohort ON league_members(week, tier, league_no, xp DESC);
+
+CREATE TABLE IF NOT EXISTS league_weeks (
+    week      TEXT PRIMARY KEY,
+    closed_at INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS concept_progress (
     student_id       TEXT    NOT NULL,
     concept_id       TEXT    NOT NULL,

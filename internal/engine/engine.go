@@ -1708,8 +1708,10 @@ func (e *Engine) GetLeaderboardPage(studentID, view string, page, pageSize int) 
 	return e.lboard.Board(studentID, view, page, pageSize, nowUTC())
 }
 
-func (e *Engine) GetLeagues() (*leaderboard.LeagueBoard, error) {
-	return leaderboard.Standings(e.repo, nowUTC())
+// GetMyLeague returns the caller's weekly league. The transition for the week
+// runs inside this call; see leaderboard.Computer.MyLeague.
+func (e *Engine) GetMyLeague(studentID string) (*leaderboard.MyLeague, error) {
+	return e.lboard.MyLeague(studentID, nowUTC())
 }
 
 // ShareReport is the read-only parent/teacher view of a student.

@@ -655,32 +655,47 @@ func TestAvatarPublicAndLeaguesSnakeCase(t *testing.T) {
 	if rec := get("/api/avatar/me", ""); rec.Code != 401 {
 		t.Errorf("own photo anonymous: expected 401, got %d", rec.Code)
 	}
-	// Leagues serialize snake_case (regression: untagged struct emitted
-	// PascalCase keys the frontend could not read).
+	// Leagues: the caller's own cohort, snake_case, and no account ids. The
+	// old payload listed every tier and carried student_id on every seat.
+	if err := s.repo.AwardXP(st.ID, 10, "test", "avatar-league"); err != nil {
+		t.Fatalf("award for league: %v", err)
+	}
 	rec := get("/api/leagues", token)
 	if rec.Code != 200 {
 		t.Fatalf("leagues: expected 200, got %d", rec.Code)
 	}
-	var board map[string]interface{}
+	var board struct {
+		Tier     string                   `json:"tier"`
+		LeagueNo int                      `json:"league_no"`
+		Size     int                      `json:"size"`
+		Promote  int                      `json:"promote"`
+		Demote   int                      `json:"demote"`
+		Members  []map[string]interface{} `json:"members"`
+		Me       map[string]interface{}   `json:"me"`
+	}
 	if err := json.Unmarshal(rec.Body.Bytes(), &board); err != nil {
 		t.Fatalf("decode leagues: %v", err)
 	}
-	leagues, _ := board["leagues"].([]interface{})
-	if len(leagues) == 0 {
-		t.Fatal("expected at least one league tier")
+	if board.Tier != "bronze" || board.LeagueNo != 1 {
+		t.Errorf("seat = %s/%d, want bronze/1", board.Tier, board.LeagueNo)
 	}
-	members, _ := leagues[0].(map[string]interface{})["members"].([]interface{})
-	if len(members) == 0 {
-		t.Fatal("expected at least one league member")
+	if len(board.Members) == 0 {
+		t.Fatal("expected the caller's league to have members")
 	}
-	m := members[0].(map[string]interface{})
-	for _, k := range []string{"student_id", "name", "username", "tier", "total_mastered", "weekly_mastered", "moved"} {
+	m := board.Members[0]
+	for _, k := range []string{"rank", "id", "name", "xp"} {
 		if _, ok := m[k]; !ok {
 			t.Errorf("expected league member key %q, got keys %v", k, keysOf(m))
 		}
 	}
-	if m["name"] != "Ada" || m["username"] != "ada" {
+	if _, leaked := m["student_id"]; leaked {
+		t.Errorf("league member leaks student_id: %v", m)
+	}
+	if m["name"] != "Ada" || m["id"] != "ada" {
 		t.Errorf("expected Ada/ada on board, got %v", m)
+	}
+	if board.Me == nil || board.Me["rank"] != float64(1) {
+		t.Errorf("expected the caller's place, got %v", board.Me)
 	}
 	// Weekly board carries the public id (the username) and never the account id.
 	ada, err := s.repo.FindByUsername("ada")

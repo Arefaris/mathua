@@ -174,25 +174,6 @@ type LeaderboardRow struct {
 	CreatedAt string
 }
 
-// LeagueMember is a student's row inside a weekly league tier.
-// The snake_case tags matter: this struct is serialized straight into
-// GET /api/leagues, and without them the keys came out PascalCase, which
-// the frontend could not read — league names never rendered.
-type LeagueMember struct {
-	StudentID      string     `json:"student_id"`
-	Name           string     `json:"name"`
-	Username       string     `json:"username,omitempty"`
-	AvatarURL      string     `json:"avatar_url,omitempty"`
-	AvatarDicebear *AvatarRef `json:"avatar_dicebear,omitempty"`
-	AvatarCustom   bool       `json:"avatar_custom,omitempty"`
-	AvatarVersion  int        `json:"avatar_version,omitempty"`
-	AvatarSettings string     `json:"-"`
-	Tier           string     `json:"tier"`
-	TotalMastered  int        `json:"total_mastered"`
-	WeeklyMastered int        `json:"weekly_mastered"`
-	Moved          int        `json:"moved"` // +1 promoted, -1 demoted, 0 stayed (last reset)
-}
-
 // AvatarRef is the public dicebear pick surfaced on leaderboard entries.
 type AvatarRef struct {
 	Style string `json:"style"`
@@ -604,8 +585,16 @@ type Repository interface {
 	LeaderboardPage(view string, since time.Time, limit, offset int) ([]LeaderboardRow, int, error)
 	// LeaderboardPosition locates one learner without loading the board.
 	LeaderboardPosition(studentID, view string, since time.Time) (rank, xp int, found bool, err error)
-	GetLeagueStandings() ([]LeagueMember, error)
-	SetLeague(studentID, tier, week string, moved int) error
+	// ResolveLeagueWeek materialises week's league seats from the previous
+	// week's final standings, in one transaction. It is safe to call on every
+	// read: a completed week is recorded in league_weeks and a second call
+	// does nothing.
+	ResolveLeagueWeek(week string, prevFrom, prevTo time.Time) error
+	// EnsureLeagueMembership seats a learner who is not in this week's rows,
+	// used for accounts that first earn XP after the transition ran.
+	EnsureLeagueMembership(studentID, week string) error
+	LeagueMembershipOf(studentID, week string) (tier string, leagueNo int, found bool, err error)
+	LeagueRoster(week, tier string, leagueNo int, from, to time.Time) ([]LeagueRow, error)
 	SetShareToken(studentID, token string) error
 	GetStudentByShareToken(token string) (*Student, error)
 	GetDailyActivity(studentID string, days int) ([]DailyActivity, error)

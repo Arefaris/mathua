@@ -1579,55 +1579,6 @@ func (s *SQLiteStore) GetWeeklyLeaderboard() ([]LeaderboardRow, error) {
 	return out, rows.Err()
 }
 
-// GetLeagueStandings returns every student's league tier + weekly mastered
-// (partitioned into tiers by the caller).
-func (s *SQLiteStore) GetLeagueStandings() ([]LeagueMember, error) {
-	monday := weekStart(time.Now().UTC())
-	rows, err := s.db.Query(`
-		SELECT s.id, s.name, s.username, s.avatar_url, s.settings, COALESCE(s.league, 'bronze'), s.league_moved,
-			COUNT(CASE WHEN cp.status = 'MASTERED' THEN 1 END),
-			COUNT(CASE WHEN cp.status = 'MASTERED' AND cp.mastered_at >= ? THEN 1 END)
-		FROM students s
-		LEFT JOIN concept_progress cp ON cp.student_id = s.id
-		GROUP BY s.id, s.name, s.username, s.avatar_url, s.settings, s.league, s.league_moved
-	`, monday.Format(time.RFC3339))
-	if err != nil {
-		return nil, fmt.Errorf("get league standings: %w", err)
-	}
-	defer rows.Close()
-
-	var out []LeagueMember
-	for rows.Next() {
-		var m LeagueMember
-		var moved int
-		var username, avatarURL, settings sql.NullString
-		if err := rows.Scan(&m.StudentID, &m.Name, &username, &avatarURL, &settings, &m.Tier, &moved, &m.TotalMastered, &m.WeeklyMastered); err != nil {
-			return nil, fmt.Errorf("scan league member: %w", err)
-		}
-		m.Username = username.String
-		m.AvatarURL = avatarURL.String
-		m.AvatarSettings = settings.String
-		m.AvatarCustom, m.AvatarDicebear, m.AvatarVersion = AvatarBits(settings.String)
-		m.Moved = moved
-		if m.Tier == "" {
-			m.Tier = "bronze"
-		}
-		out = append(out, m)
-	}
-	return out, rows.Err()
-}
-
-func (s *SQLiteStore) SetLeague(studentID, tier, week string, moved int) error {
-	_, err := s.db.Exec(
-		"UPDATE students SET league = ?, league_week = ?, league_moved = ? WHERE id = ?",
-		tier, week, moved, studentID,
-	)
-	if err != nil {
-		return fmt.Errorf("set league: %w", err)
-	}
-	return nil
-}
-
 // DailyActivity
 
 func (s *SQLiteStore) GetDailyActivity(studentID string, days int) ([]DailyActivity, error) {
