@@ -19,8 +19,11 @@ import { Switch } from '../../components/ui/switch'
 import { Dices } from '../../components/icons'
 import Loading from '../../components/Loading'
 import Avatar from '../../components/Avatar'
+import LanguageSwitcher from '../../components/LanguageSwitcher'
+import { useT } from '../../lib/i18n'
 
 export default function SettingsPage() {
+  const t = useT()
   const { push } = useRouter()
   const [settings, setSettings] = useState<UserSettings>({})
   const [dailyGoal, setDailyGoal] = useState(10)
@@ -349,6 +352,11 @@ export default function SettingsPage() {
         <div className="max-w-container mx-auto px-4 sm:px-6 py-20 pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-20 text-center overflow-x-hidden min-w-0">
           <p className="font-mono text-xs text-mathua-secondary mb-4">Settings needs an account: your preferences are stored per account.</p>
           <Link href="/login" className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center">Sign in</Link>
+          {/* The language belongs to the browser, not the account, so a guest can change it. */}
+          <div className="mt-10 flex flex-col items-center gap-2">
+            <span className="font-mono text-sm text-mathua-primary">{t('common.language.label')}</span>
+            <LanguageSwitcher />
+          </div>
         </div>
         <BottomTabs />
         <Footer />
@@ -387,7 +395,15 @@ export default function SettingsPage() {
             </p>
 
             <div className="bg-mathua-surface border border-mathua-border rounded-none p-4 sm:p-6 space-y-6 w-full max-w-full min-w-0 overflow-hidden">
-              <div className="flex items-center justify-between gap-4 min-w-0">
+              <div className="min-w-0">
+                <span className="font-mono text-sm text-mathua-primary">{t('common.language.label')}</span>
+                <p className="text-mathua-muted text-xs mt-1">{t('common.language.hint')}</p>
+                <div className="mt-3">
+                  <LanguageSwitcher />
+                </div>
+              </div>
+
+              <div className="border-t border-mathua-border pt-6 flex items-center justify-between gap-4 min-w-0">
                 <div className="min-w-0 flex-1">
                   <span className="font-mono text-sm text-mathua-primary">Show answer timer</span>
                   <p className="text-mathua-muted text-xs mt-1">

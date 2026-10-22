@@ -6,6 +6,7 @@ import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import ChromeToggle from '@/components/ChromeToggle'
 import AssistantDock from '@/components/AssistantDock'
 import ScrollToTopOnNavigate from '@/components/ScrollToTopOnNavigate'
+import { LocaleRoot } from '@/lib/i18n'
 import { SITE_URL } from '@/lib/site'
 import { Analytics } from '@vercel/analytics/react'
 // MathLive's own stylesheet for the <math-field> rendering (MathML). Loaded here,
@@ -111,7 +112,9 @@ export default function RootLayout({
           // silently scrolling to compensate for it is not.
           className="relative z-10 [overflow-anchor:none]"
         >
-          {children}
+          {/* Remounts the page when the learner switches language, so localized server
+              data is fetched again. See LocaleRoot. */}
+          <LocaleRoot>{children}</LocaleRoot>
         </div>
         <Toaster />
         {/* Vercel serves the analytics script at /_vercel/insights. The static
