@@ -81,7 +81,7 @@ export default function DomainsPage() {
         setDomains([])
         setError(t('explore.domains.loadError'))
       })
-  }, [mounted])
+  }, [mounted, t])
 
   const ordered = useMemo(() => {
     if (!domains) return []

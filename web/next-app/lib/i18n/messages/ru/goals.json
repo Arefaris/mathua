@@ -259,7 +259,7 @@
       "other": "{count} темы"
     },
     "correctPercent": "{percent}% верно",
-    "cellTitle": "{date}: {questions} в., {percent}%",
+    "cellTitle": "{date}: {questions} вопр., {percent}%",
     "tooltipLine": {
       "one": "{count} вопрос · {percent}% верно",
       "few": "{count} вопроса · {percent}% верно",
