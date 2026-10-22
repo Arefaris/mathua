@@ -3721,10 +3721,70 @@ func (s *Server) handleEfficacyTrend(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, trend)
 }
 
+// requestIDHeader carries a correlation id through the whole request. The
+// browser mints one per call, the server echoes it, and the access log records
+// it, so a learner's "it failed" can be matched to one line in `fly logs`
+// without guessing from timestamps.
+const requestIDHeader = "X-Request-ID"
+
+// validRequestID rejects anything that is not a short opaque token, because the
+// value is echoed into a response header and a log line.
+func validRequestID(id string) bool {
+	if len(id) < 8 || len(id) > 64 {
+		return false
+	}
+	for _, r := range id {
+		ok := r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '-' || r == '_'
+		if !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func newRequestID() string {
+	var b [12]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		return fmt.Sprintf("%d", time.Now().UnixNano())
+	}
+	return fmt.Sprintf("%x", b[:])
+}
+
+// statusWriter remembers the status so the access log can report it; without
+// this the log line says a request happened but not how it ended.
+type statusWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *statusWriter) WriteHeader(code int) {
+	w.status = code
+	w.ResponseWriter.WriteHeader(code)
+}
+
+func (w *statusWriter) Write(b []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+	return w.ResponseWriter.Write(b)
+}
+
 func logRequest(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s", r.Method, r.URL.Path)
-		next(w, r)
+		start := time.Now()
+		id := r.Header.Get(requestIDHeader)
+		if !validRequestID(id) {
+			id = newRequestID()
+		}
+		w.Header().Set(requestIDHeader, id)
+		rec := &statusWriter{ResponseWriter: w}
+		next(rec, r)
+		status := rec.status
+		if status == 0 {
+			status = http.StatusOK
+		}
+		log.Printf("%s %s %d %s id=%s", r.Method, r.URL.Path, status,
+			time.Since(start).Round(time.Millisecond), id)
 	}
 }
 
