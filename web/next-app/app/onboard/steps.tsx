@@ -28,6 +28,11 @@ export function WelcomeStep({
   onResume,
   onBegin,
   onCancel,
+  needsName,
+  demoName,
+  onDemoName,
+  onStartDemo,
+  onCancelDemo,
 }: {
   domains: DomainInfo[]
   loading: boolean
@@ -40,6 +45,11 @@ export function WelcomeStep({
   onResume: () => void
   onBegin: () => void
   onCancel: () => void
+  needsName: boolean
+  demoName: string
+  onDemoName: (name: string) => void
+  onStartDemo: () => void
+  onCancelDemo: () => void
 }) {
   if (confirming) {
     const selected = domains.filter(d => d.selected)
@@ -78,6 +88,68 @@ export function WelcomeStep({
             ← Back
           </button>
         </div>
+      </div>
+    )
+  }
+  // A guest who has no token yet. The name is not an account: the server makes
+  // a student row so a session has an owner, and this screen says plainly that
+  // the row cannot be signed back into, rather than letting a guest believe
+  // their run was saved.
+  if (needsName) {
+    return (
+      <div className="max-w-2xl mx-auto px-2">
+        <div className="text-center mb-4 mt-6 sm:mt-8 min-w-0">
+          <div className="font-mono text-[11px] uppercase text-mathua-muted mb-3">Guest run</div>
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-mathua-primary px-2">
+            What should we call you?
+          </h1>
+          <p className="text-mathua-secondary text-sm mt-3 px-2">
+            You are not signed in, so this run is a demo. Mathua tests you against a temporary
+            profile with this name. Nothing here can be signed into later, and the result is not
+            attached to an account.
+          </p>
+        </div>
+        <div className="border border-mathua-border bg-mathua-surface p-4 sm:p-6">
+          <label htmlFor="demo-name" className="block font-mono text-[11px] uppercase text-mathua-muted mb-2">
+            Your name
+          </label>
+          <input
+            id="demo-name"
+            type="text"
+            value={demoName}
+            onChange={e => onDemoName(e.target.value)}
+            maxLength={40}
+            autoComplete="nickname"
+            placeholder="e.g. Sam"
+            className="w-full h-11 px-3 bg-mathua-bg border border-mathua-border text-mathua-primary text-sm rounded-none focus:outline-none focus:border-mathua-blue"
+          />
+          <p className="text-mathua-muted text-xs mt-2">
+            It only labels the demo. You can sign in later and take the diagnostic on a real account.
+          </p>
+        </div>
+        <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center px-2">
+          <button
+            type="button"
+            onClick={onStartDemo}
+            disabled={loading || demoName.trim() === ''}
+            className="border border-mathua-blue bg-mathua-blue text-white hover:opacity-90 rounded-none h-12 min-h-[44px] px-6 sm:px-10 font-medium text-sm disabled:opacity-50"
+          >
+            {loading ? (<><Loading inline size={13} /> Loading…</>) : 'Run the demo →'}
+          </button>
+          <button
+            type="button"
+            onClick={onCancelDemo}
+            disabled={loading}
+            className="font-mono text-xs text-mathua-muted hover:text-mathua-primary min-h-[44px] px-4 disabled:opacity-50"
+          >
+            ← Back
+          </button>
+        </div>
+        <p className="text-center mt-4">
+          <Link href="/login" className="font-mono text-xs text-mathua-blue hover:underline">
+            Sign in for a saved run →
+          </Link>
+        </p>
       </div>
     )
   }
@@ -355,10 +427,23 @@ export function DiagnosticStep({
   )
 }
 
-export function ResultsStep({ plan, onStartPractice }: { plan: GoalPlanRes; onStartPractice: () => void }) {
+export function ResultsStep({ plan, onStartPractice, demo }: { plan: GoalPlanRes; onStartPractice: () => void; demo?: boolean }) {
   return (
     <div className="max-w-3xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
       <SectionHeader label="Your results" title="Here's what we found" />
+      {demo && (
+        <div className="mt-4 border border-mathua-border bg-mathua-surface px-4 py-3">
+          <p className="text-mathua-secondary text-sm">
+            This was a demo run. The plan below is real, but it is not attached to an account, so
+            it will not be here when this browser session ends.
+          </p>
+          <p className="mt-2">
+            <Link href="/login" className="font-mono text-xs text-mathua-blue hover:underline">
+              Sign in to keep a plan →
+            </Link>
+          </p>
+        </div>
+      )}
       <div className="mt-6 min-w-0 overflow-hidden">
         <DiagnosticResults plan={plan} onStartPractice={onStartPractice} />
       </div>

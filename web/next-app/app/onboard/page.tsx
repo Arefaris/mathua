@@ -9,15 +9,17 @@ import BottomTabs from '../../components/BottomTabs'
 import Footer from '../../components/Footer'
 import {
   startGoalDiagnostic,
+  startGoalDiagnosticName,
   submitGoalAnswer,
   getGoalPlan,
   resumeGoalDiagnostic,
   skipGoalQuestion,
   retryGoalQuestion,
+  type GoalDiagStartRes,
   type GoalPlanRes,
   type DiagnosticProgress,
 } from '../../lib/api'
-import { getErrorMessage } from '../../lib/api'
+import { getErrorMessage, getErrorStatus } from '../../lib/api'
 import { formatForGradingType, type AnswerFormat } from '../../lib/answerFormat'
 import {
   MAX_SKIPS,
@@ -42,6 +44,12 @@ const DIAG_KEY = 'mathua_diag_session_onboard'
 // with no way to tell what they had chosen. Cleared when the plan loads, because
 // by then the selection has done its job and a later visit is a fresh start.
 const SELECTION_KEY = 'mathua_onboard_domains'
+
+// A guest run is a demo: the server opens a session against a student row
+// created from a typed name, and nothing can sign back into that row. Session
+// storage keeps the fact, so a refresh mid-test still ends on a result that
+// says it will not be here tomorrow.
+const DEMO_KEY = 'mathua_onboard_demo'
 
 export default function OnboardPage() {
   const { mounted } = useTheme()
@@ -68,6 +76,14 @@ export default function OnboardPage() {
   const [lastResult, setLastResult] = useState<{ correct: boolean; feedback: string } | null>(null)
   const [accuracy, setAccuracy] = useState<{ correct: number; total: number }>({ correct: 0, total: 0 })
   const [hasPaused, setHasPaused] = useState(false)
+  // A guest has no token until something mints one, and /onboard was one of the
+  // entry points that never did: pressing Begin sent an unauthenticated start,
+  // the server answered 401, and the catch showed "Something went wrong" for a
+  // screen that was working as designed. The 401 is now the signal to offer a
+  // named demo run instead of an error.
+  const [needsName, setNeedsName] = useState(false)
+  const [demoName, setDemoName] = useState('')
+  const [demo, setDemo] = useState(false)
   const [submitError, setSubmitError] = useState<SubmitError | null>(null)
   const [planError, setPlanError] = useState('')
   const [finished, setFinished] = useState(false)
@@ -114,6 +130,11 @@ export default function OnboardPage() {
     } catch {
       setHasPaused(false)
     }
+    try {
+      setDemo(sessionStorage.getItem(DEMO_KEY) === '1')
+    } catch {
+      setDemo(false)
+    }
   }, [mounted])
 
   function persistSelection(next: DomainInfo[]) {
@@ -156,6 +177,36 @@ export default function OnboardPage() {
     return scopeSize(selectedConceptIds())
   }
 
+  // Everything both a signed-in start and a demo start must do once the server
+  // has handed back a session. Kept in one place because the two paths differ
+  // only in which call opened it, and a field added to one but not the other is
+  // a bug that would only appear for guests.
+  function beginSession(res: GoalDiagStartRes) {
+    sessionId.current = res.session_id
+    try {
+      sessionStorage.setItem(DIAG_KEY, res.session_id)
+      setHasPaused(true)
+    } catch { /* storage unavailable — session simply won't resume */ }
+    setQuestion(res.question || '')
+    conceptId.current = res.concept_id || ''
+    questionShownAt.current = Date.now()
+    setConceptName(res.concept_name || '')
+    setAnswerFormat(formatForGradingType(res.grading_type))
+    setQuestionCount(1)
+    setProgress(res.progress ?? null)
+    setAccuracy({ correct: 0, total: 0 })
+    setLastResult(null)
+    setAnswerInput('')
+    pendingNext.current = null
+    setSubmitError(null)
+    setPlanError('')
+    setFinished(false)
+    setSkipCount(0)
+    setRetryAvailable(false)
+    setRetryConcept('')
+    setStep('diagnostic')
+  }
+
   async function startDiagnostic() {
     const ids = selectedConceptIds()
     if (ids.length === 0) return
@@ -164,32 +215,38 @@ export default function OnboardPage() {
       const res = await startGoalDiagnostic(ids)
       if (res.done) {
         toast.error('No diagnostic questions are available for the selected areas. Try selecting more domains.')
-        setLoading(false)
         return
       }
-      sessionId.current = res.session_id
-      try {
-        sessionStorage.setItem(DIAG_KEY, res.session_id)
-        setHasPaused(true)
-      } catch { /* storage unavailable — session simply won't resume */ }
-      setQuestion(res.question || '')
-      conceptId.current = res.concept_id || ''
-      questionShownAt.current = Date.now()
-      setConceptName(res.concept_name || '')
-      setAnswerFormat(formatForGradingType(res.grading_type))
-      setQuestionCount(1)
-      setProgress(res.progress ?? null)
-      setAccuracy({ correct: 0, total: 0 })
-      setLastResult(null)
-      setAnswerInput('')
-      pendingNext.current = null
-      setSubmitError(null)
-      setPlanError('')
-      setFinished(false)
-      setSkipCount(0)
-      setRetryAvailable(false)
-      setRetryConcept('')
-      setStep('diagnostic')
+      setDemo(false)
+      setNeedsName(false)
+      try { sessionStorage.removeItem(DEMO_KEY) } catch { /* ignore */ }
+      beginSession(res)
+    } catch (err) {
+      if (getErrorStatus(err) === 401) {
+        setNeedsName(true)
+        return
+      }
+      toast.error("Something went wrong, but we're working on it.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function startDemo() {
+    const ids = selectedConceptIds()
+    const name = demoName.trim()
+    if (ids.length === 0 || name === '') return
+    setLoading(true)
+    try {
+      const res = await startGoalDiagnosticName(name, ids)
+      if (res.done) {
+        toast.error('No diagnostic questions are available for the selected areas. Try selecting more domains.')
+        return
+      }
+      setDemo(true)
+      setNeedsName(false)
+      try { sessionStorage.setItem(DEMO_KEY, '1') } catch { /* ignore */ }
+      beginSession(res)
     } catch {
       toast.error("Something went wrong, but we're working on it.")
     } finally {
@@ -374,7 +431,11 @@ export default function OnboardPage() {
     setRetryAvailable(false)
     setRetryConcept('')
     setFinished(false)
-    void startDiagnostic()
+    // A demo restart must not fall back to the signed-in call: it would 401,
+    // and the learner would be asked for their name again after already giving
+    // it once for this run.
+    if (demo) void startDemo()
+    else void startDiagnostic()
   }
 
   function goNext() {
@@ -424,6 +485,11 @@ export default function OnboardPage() {
               onResume={resumeDiagnostic}
               onBegin={() => { setConfirming(false); void startDiagnostic() }}
               onCancel={() => setConfirming(false)}
+              needsName={needsName}
+              demoName={demoName}
+              onDemoName={setDemoName}
+              onStartDemo={() => { void startDemo() }}
+              onCancelDemo={() => setNeedsName(false)}
             />
           )}
 
@@ -458,7 +524,7 @@ export default function OnboardPage() {
           )}
 
           {step === 'results' && plan && (
-            <ResultsStep plan={plan} onStartPractice={finishOnboarding} />
+            <ResultsStep plan={plan} onStartPractice={finishOnboarding} demo={demo} />
           )}
         </section>
       </div>
