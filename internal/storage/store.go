@@ -621,6 +621,11 @@ type Repository interface {
 
 	CreateReport(r QuestionReport) (int64, error)
 	ListReports(status string, limit, offset int) ([]QuestionReport, error)
+	// ListUnsettledReportIDsForConcept returns the ids of a concept's reports
+	// that are still open or under review, oldest first. Bulk moderation closes
+	// a fixed bug's reports as a set, and selecting that set by concept is what
+	// makes the operation about the bug rather than about a hand-picked list.
+	ListUnsettledReportIDsForConcept(conceptID string) ([]int64, error)
 	UpdateReportStatus(id int64, status string) error
 
 	// ── Administration ────────────────────────────────────────────────────

@@ -403,6 +403,10 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/admin/me", logRequest(cors(s.requirePermission(admin.Access, s.handleAdminMe))))
 	mux.HandleFunc("/api/admin/overview", logRequest(cors(s.requirePermission(admin.Access, s.handleAdminOverview))))
 	mux.HandleFunc("/api/admin/reports", logRequest(cors(s.requirePermission(admin.ReportsRead, s.handleAdminReports))))
+	// One decision across a concept's unsettled reports. A write, so it names
+	// ReportsModerate rather than ReportsRead; the exact pattern wins over the
+	// /api/admin/reports/ subtree.
+	mux.HandleFunc("/api/admin/reports/bulk", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ReportsModerate, s.handleAdminReportsBulk)))))
 	mux.HandleFunc("/api/admin/reports/", logRequest(cors(s.requirePermission(admin.ReportsRead, s.handleAdminReport))))
 	mux.HandleFunc("/api/admin/users", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminUsers))))
 	mux.HandleFunc("/api/admin/users/", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminUser))))

@@ -53,6 +53,28 @@ func (s *PostgresStore) GetReport(id int64) (*QuestionReport, error) {
 	return &r, nil
 }
 
+// ListUnsettledReportIDsForConcept mirrors the SQLite query; see that comment
+// for why settled reports are excluded.
+func (s *PostgresStore) ListUnsettledReportIDsForConcept(conceptID string) ([]int64, error) {
+	rows, err := s.db.Query(
+		`SELECT id FROM question_reports
+		 WHERE concept_id = $1 AND status IN ('open','reviewing')
+		 ORDER BY id`, conceptID)
+	if err != nil {
+		return nil, fmt.Errorf("list unsettled reports: %w", err)
+	}
+	defer rows.Close()
+	var ids []int64
+	for rows.Next() {
+		var id int64
+		if err := rows.Scan(&id); err != nil {
+			return nil, fmt.Errorf("scan unsettled report: %w", err)
+		}
+		ids = append(ids, id)
+	}
+	return ids, rows.Err()
+}
+
 func (s *PostgresStore) UpdateReportStatusAudited(actorID string, id int64, status, resolution string) (QuestionReport, error) {
 	tx, err := s.db.Begin()
 	if err != nil {

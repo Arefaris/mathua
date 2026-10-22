@@ -65,6 +65,30 @@ func (s *SQLiteStore) GetReport(id int64) (*QuestionReport, error) {
 // and keeps the moderator's reason; reopening clears those stamps so the row never claims a
 // resolution that a later decision superseded. The audit event and the state change share one
 // transaction, so a decision cannot exist without a record of who made it.
+// ListUnsettledReportIDsForConcept selects the reports a bulk decision may
+// settle: open or reviewing, never one that already carries a verdict. Closing
+// a decided report again would overwrite the person and time of the decision
+// that actually settled it.
+func (s *SQLiteStore) ListUnsettledReportIDsForConcept(conceptID string) ([]int64, error) {
+	rows, err := s.db.Query(
+		`SELECT id FROM question_reports
+		 WHERE concept_id = ? AND status IN ('open','reviewing')
+		 ORDER BY id`, conceptID)
+	if err != nil {
+		return nil, fmt.Errorf("list unsettled reports: %w", err)
+	}
+	defer rows.Close()
+	var ids []int64
+	for rows.Next() {
+		var id int64
+		if err := rows.Scan(&id); err != nil {
+			return nil, fmt.Errorf("scan unsettled report: %w", err)
+		}
+		ids = append(ids, id)
+	}
+	return ids, rows.Err()
+}
+
 func (s *SQLiteStore) UpdateReportStatusAudited(actorID string, id int64, status, resolution string) (QuestionReport, error) {
 	tx, err := s.db.Begin()
 	if err != nil {

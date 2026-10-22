@@ -213,6 +213,85 @@ func (s *Server) handleAdminReportGrade(w http.ResponseWriter, r *http.Request, 
 	s.writeGradeResult(w, report.ConceptID, report.Expected, answer)
 }
 
+// POST /api/admin/reports/bulk — one decision across a concept's unsettled
+// reports.
+//
+// A fix is usually one bug, not one report: the answer-format defect produced
+// eleven reports across eight concepts, and closing them one at a time made the
+// operator retype the same reason and left eleven unrelated-looking audit rows.
+// This applies the same decision to a set while keeping each report's own
+// transaction, stamp and audit row, so the trail never becomes one row claiming
+// to speak for many. Settled reports are never revisited: closing a decided
+// report again would overwrite who decided it and when.
+func (s *Server) handleAdminReportsBulk(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, "method not allowed", 405)
+		return
+	}
+	var req struct {
+		IDs        []int64 `json:"ids"`
+		ConceptID  string  `json:"concept_id"`
+		Status     string  `json:"status"`
+		Resolution string  `json:"resolution"`
+	}
+	if err := decodeJSON(w, r, &req); err != nil {
+		writeError(w, "invalid request", 400)
+		return
+	}
+	status := strings.TrimSpace(req.Status)
+	if !moderationStatuses[status] {
+		writeError(w, "status must be open, reviewing, resolved or dismissed", 400)
+		return
+	}
+	resolution := strings.TrimSpace(req.Resolution)
+	if (status == "resolved" || status == "dismissed") && resolution == "" {
+		writeError(w, "a resolution is required when resolving or dismissing", 400)
+		return
+	}
+	ids := req.IDs
+	conceptID := strings.TrimSpace(req.ConceptID)
+	if len(ids) == 0 && conceptID != "" {
+		unsettled, err := s.repo.ListUnsettledReportIDsForConcept(conceptID)
+		if err != nil {
+			writeError(w, "failed to list reports", 500)
+			return
+		}
+		ids = unsettled
+	}
+	if len(ids) == 0 {
+		writeError(w, "select at least one report, or a concept with unsettled reports", 400)
+		return
+	}
+	if len(ids) > 200 {
+		writeError(w, "too many reports in one decision", 400)
+		return
+	}
+	for _, id := range ids {
+		if id <= 0 {
+			writeError(w, "invalid report id", 400)
+			return
+		}
+	}
+	actor := actorFrom(r).ID
+	updated, skipped := 0, 0
+	failed := []map[string]interface{}{}
+	for _, id := range ids {
+		_, err := s.repo.UpdateReportStatusAudited(actor, id, status, resolution)
+		switch {
+		case err == nil:
+			updated++
+		case errors.Is(err, storage.ErrReportUnchanged):
+			skipped++
+		case errors.Is(err, sql.ErrNoRows):
+			failed = append(failed, map[string]interface{}{"id": id, "error": "not found"})
+		default:
+			log.Printf("admin: bulk moderation of report %d failed: %v", id, err)
+			failed = append(failed, map[string]interface{}{"id": id, "error": "update failed"})
+		}
+	}
+	writeJSON(w, map[string]interface{}{"updated": updated, "skipped": skipped, "failed": failed})
+}
+
 // ── Admins and contributors ───────────────────────────────────────────────
 
 // GET /api/admin/admins — who currently holds a staff role, most privileged first.
