@@ -114,7 +114,10 @@ export default function RootLayout({
           {children}
         </div>
         <Toaster />
-        <Analytics />
+        {/* Vercel serves the analytics script at /_vercel/insights. The static
+            export that the e2e suite serves has no such route, and its 404 is a
+            console error, which the suite correctly fails on. */}
+        {process.env.VERCEL === '1' && <Analytics />}
         <ServiceWorkerRegistrar />
         {/* The chrome tap control, mounted here rather than inside Header: the
             header is `inert` while hidden, which would disable the one control
