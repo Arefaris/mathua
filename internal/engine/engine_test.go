@@ -240,11 +240,14 @@ func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	}
 }
 
-// A submission carrying the token of a previous question must be rejected, never
-// graded against the session's current question (stale/cross-question grading).
-func TestEngine_SubmitAnswer_StaleAttemptIDRejected(t *testing.T) {
+// A client that retries a submission it never saw acknowledged must get the
+// recorded result back, not an error: the answer was accepted, and the learner
+// should be told so. The attempt id is the idempotency key, so a duplicate
+// carrying different text still replays the first grading instead of grading
+// the new text against a question that has already moved on.
+func TestEngine_SubmitAnswer_ReplaysAnAcceptedAttempt(t *testing.T) {
 	e := testEngine(t)
-	st, _ := e.CreateStudent("stale")
+	st, _ := e.CreateStudent("replay")
 	sess, _ := e.repo.CreateSession(st.ID)
 
 	q1, err := e.NextQuestion(sess.ID, st.ID)
@@ -267,13 +270,14 @@ func TestEngine_SubmitAnswer_StaleAttemptIDRejected(t *testing.T) {
 		t.Fatalf("expected a fresh attempt id for the next question, got %q", q2.AttemptID)
 	}
 
-	// A stale submission for Q1 must be rejected — never graded against Q2.
-	if _, err := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "99", 3.0); !errors.Is(err, ErrNoActiveQuestion) {
-		t.Fatalf("expected stale submission rejected, got %v", err)
+	// The retry replays the accepted answer. Different text is ignored, because
+	// the key is the attempt id and that attempt has already been graded.
+	if _, err := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "99", 3.0); err != nil {
+		t.Fatalf("replay of an accepted attempt: %v", err)
 	}
 	progress, _ := e.GetProgress(st.ID)
 	if p := progress["a"]; p == nil || p.Attempts != 1 || p.Streak != 1 {
-		t.Fatalf("stale submission must not be graded: got %+v", progress["a"])
+		t.Fatalf("replay must not be graded twice: got %+v", progress["a"])
 	}
 
 	// The current question's token is still accepted.

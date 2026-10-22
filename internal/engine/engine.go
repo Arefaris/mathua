@@ -45,6 +45,12 @@ type activeSession struct {
 	isReview       bool
 	answered       bool
 	attemptID      string
+	// The result of the last accepted attempt, so a client retry of the same
+	// attemptID gets the same answer back instead of an error. Keyed by the id
+	// that was answered, not by the id currently being served: by the time the
+	// retry arrives the next question has already replaced attemptID.
+	lastAnsweredID string
+	lastResult     *AnswerResult
 	questionText   string
 	sessionReview  int
 	sessionNew     int
@@ -1027,7 +1033,7 @@ func (e *Engine) gradingTypeFor(conceptID string) string {
 	return ""
 }
 
-func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, elapsedSeconds float64) (*AnswerResult, error) {
+func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, elapsedSeconds float64) (result *AnswerResult, err error) {
 	// Narrow critical section: snapshot the active question under lock, mark
 	// answered to reject concurrent duplicates, then release before blocking
 	// I/O (grading + DB). This prevents a 12s SymPy grading call from
@@ -1042,10 +1048,30 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 			e.sessions[sessionID] = as
 		}
 	}
+	// A retry of an answer the server already accepted returns that answer
+	// rather than failing. The learner's client retries after a timeout it
+	// never saw resolved; the work is done, so the honest reply is the result
+	// of the first attempt, not a second grading and not an error.
+	if as != nil && as.lastAnsweredID == attemptID && as.lastResult != nil {
+		cached := *as.lastResult
+		e.mu.Unlock()
+		return &cached, nil
+	}
 	if as == nil || as.conceptID == "" || as.answered || as.attemptID != attemptID {
 		e.mu.Unlock()
 		return nil, fmt.Errorf("%w for session %q", ErrNoActiveQuestion, sessionID)
 	}
+	defer func() {
+		if err != nil || result == nil || result.Ungraded {
+			return
+		}
+		e.mu.Lock()
+		if e.sessions[sessionID] == as {
+			as.lastAnsweredID = attemptID
+			as.lastResult = result
+		}
+		e.mu.Unlock()
+	}()
 	// The generation travels with the served question, not with this call: a
 	// reset landing during grading must refuse the write below instead of
 	// resurrecting wiped rows.
