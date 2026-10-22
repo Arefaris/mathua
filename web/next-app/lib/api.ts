@@ -1559,6 +1559,12 @@ export interface SubmitReportInput {
 	attempt_id?: string
 	reason: ReportReason
 	detail?: string
+	// What the learner typed and the format the field offered. Sent from the
+	// payload already in hand so a moderator can rebuild the exact attempt.
+	answer_given?: string
+	grading_type?: string
+	answer_hint?: string
+	answer_input_mode?: string
 }
 
 export interface SubmitReportRes {
@@ -1735,6 +1741,13 @@ const QuestionReportSchema = z.object({
 	source: z.string(),
 	session_id: z.string(),
 	attempt_id: z.string(),
+	// Captured with the report so a moderator can replay the attempt rather
+	// than guess it: what the learner typed, and the field they typed it in.
+	// Older rows predate the capture, hence optional.
+	answer_given: z.string().optional(),
+	grading_type: z.string().optional(),
+	answer_hint: z.string().optional(),
+	answer_input_mode: z.enum(['numeric', 'text']).optional(),
 	reason: z.string(),
 	detail: z.string(),
 	status: z.string(),
@@ -1765,8 +1778,33 @@ export async function getAdminReport(id: number): Promise<{ report: QuestionRepo
 	}
 }
 
-export async function moderateReport(id: number, status: ModerationStatus, resolution: string): Promise<QuestionReport> {
-	const res = await authedFetch(`${API_BASE}/api/admin/reports/${id}`, {
+// Replays a stored attempt through the same grader the learner faced. The
+// endpoint is pure: it never enters SubmitAnswer, so no XP, streak, attempt or
+// mastery changes. `writes: false` in the response is the server saying so.
+export interface AdminGradeRes {
+	correct: boolean
+	score: number
+	feedback?: string
+	diagnosis?: string
+	unavailable?: boolean
+	graded_answer: string
+	expected: string
+	answer_hint?: string
+	answer_input_mode?: 'numeric' | 'text'
+	writes: boolean
+}
+
+export async function gradeAdminReport(id: number, answer: string): Promise<AdminGradeRes> {
+	const res = await authedFetch(`${API_BASE}/api/admin/reports/${id}/grade`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ answer }),
+	})
+	if (!res.ok) await throwWithResponse(res, 'Could not grade the reported answer')
+	return (await res.json()) as AdminGradeRes
+}
+
+export async function moderateReport(id: number, status: ModerationStatus, resolution: string): Promise<QuestionReport> {	const res = await authedFetch(`${API_BASE}/api/admin/reports/${id}`, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ status, resolution }),

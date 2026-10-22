@@ -115,6 +115,13 @@ func authMigrate(db *sql.DB) error {
 		"ALTER TABLE question_reports ADD COLUMN resolution TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN resolved_by TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN resolved_at TEXT NOT NULL DEFAULT ''",
+		// What the learner typed and the format the field offered. A report is
+		// reproduced from these, so a moderator can replay the exact attempt
+		// instead of guessing what the screen looked like.
+		"ALTER TABLE question_reports ADD COLUMN answer_given TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN grading_type TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN answer_hint TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN answer_input_mode TEXT NOT NULL DEFAULT ''",
 	}
 	for _, m := range migrations {
 		if _, err := db.Exec(m); err != nil {
@@ -1782,11 +1789,14 @@ func (s *SQLiteStore) CreateReport(r QuestionReport) (int64, error) {
 	res, err := s.db.Exec(`
 		INSERT INTO question_reports
 			(reporter_id, concept_id, kind, question, expected, explanation,
-			 lesson_id, source, session_id, attempt_id, reason, detail, status, created_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			 lesson_id, source, session_id, attempt_id, answer_given, grading_type,
+			 answer_hint, answer_input_mode, reason, detail, status, created_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`,
 		r.ReporterID, r.ConceptID, r.Kind, r.Question, r.Expected, r.Explanation,
-		r.LessonID, r.Source, r.SessionID, r.AttemptID, r.Reason, r.Detail, r.Status,
+		r.LessonID, r.Source, r.SessionID, r.AttemptID,
+		r.AnswerGiven, r.GradingType, r.AnswerHint, r.AnswerInputMode,
+		r.Reason, r.Detail, r.Status,
 		formatReportTime(r.CreatedAt),
 	)
 	if err != nil {
@@ -1811,7 +1821,9 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 	if status == "" || status == "all" {
 		rows, err = s.db.Query(`
 			SELECT id, reporter_id, concept_id, kind, question, expected, explanation,
-			       lesson_id, source, session_id, attempt_id, reason, detail, status,
+			       lesson_id, source, session_id, attempt_id,
+			       answer_given, grading_type, answer_hint, answer_input_mode,
+			       reason, detail, status,
 			       resolution, resolved_by, resolved_at, created_at
 			FROM question_reports
 			ORDER BY created_at DESC
@@ -1820,7 +1832,9 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 	} else {
 		rows, err = s.db.Query(`
 			SELECT id, reporter_id, concept_id, kind, question, expected, explanation,
-			       lesson_id, source, session_id, attempt_id, reason, detail, status,
+			       lesson_id, source, session_id, attempt_id,
+			       answer_given, grading_type, answer_hint, answer_input_mode,
+			       reason, detail, status,
 			       resolution, resolved_by, resolved_at, created_at
 			FROM question_reports
 			WHERE status = ?
@@ -1839,6 +1853,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 		if err := rows.Scan(
 			&r.ID, &r.ReporterID, &r.ConceptID, &r.Kind, &r.Question, &r.Expected,
 			&r.Explanation, &r.LessonID, &r.Source, &r.SessionID, &r.AttemptID,
+			&r.AnswerGiven, &r.GradingType, &r.AnswerHint, &r.AnswerInputMode,
 			&r.Reason, &r.Detail, &r.Status, &r.Resolution, &r.ResolvedBy, &r.ResolvedAt, &created,
 		); err != nil {
 			return nil, fmt.Errorf("scan report: %w", err)

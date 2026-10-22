@@ -8,6 +8,7 @@ import SectionHeader from '../../../components/SectionHeader'
 import AdminNav from '../../../components/AdminNav'
 import Loading from '../../../components/Loading'
 import KatexContent from '../../../components/KatexContent'
+import ReportReplay from '../../../components/ReportReplay'
 import {
   listAdminReports, moderateReport, getErrorMessage,
   type QuestionReport, type ModerationStatus,
@@ -167,6 +168,8 @@ function ReportCard({ report, canModerate, onChanged }: { report: QuestionReport
           {report.detail && (
             <p className="mt-3 border-l-2 border-mathua-border pl-3 font-mono text-[11px] text-mathua-secondary">{report.detail}</p>
           )}
+
+          <ReportReplay report={report} />
 
           {report.status === 'resolved' || report.status === 'dismissed' ? (
             <p className="mt-3 font-mono text-[11px] text-mathua-muted">

@@ -92,6 +92,22 @@ func (s *Server) handleAdminReports(w http.ResponseWriter, r *http.Request) {
 // nobody explained is not one the next moderator can learn from.
 func (s *Server) handleAdminReport(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.Trim(strings.TrimPrefix(r.URL.Path, "/api/admin/reports/"), "/")
+	// /api/admin/reports/{id}/grade is the one sub-resource, and it is handled
+	// here rather than as a second pattern so the permission boundary and the
+	// id parsing cannot drift apart.
+	if strings.HasSuffix(idStr, "/grade") {
+		id, err := strconv.ParseInt(strings.TrimSuffix(idStr, "/grade"), 10, 64)
+		if err != nil || id <= 0 {
+			writeError(w, "invalid report id", 400)
+			return
+		}
+		if r.Method != http.MethodPost {
+			writeError(w, "method not allowed", 405)
+			return
+		}
+		s.handleAdminReportGrade(w, r, id)
+		return
+	}
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil || id <= 0 {
 		writeError(w, "invalid report id", 400)
@@ -154,6 +170,60 @@ func (s *Server) handleAdminReport(w http.ResponseWriter, r *http.Request) {
 	default:
 		writeError(w, "method not allowed", 405)
 	}
+}
+
+// POST /api/admin/reports/{id}/grade — replay a report's answer through the
+// same grader the learner's submission used, and write nothing.
+//
+// The queue could show the question and the expected answer, but not whether an
+// answer was actually accepted, so "is this fixed?" was an opinion. This calls
+// engine.GradeAnswer, the single canonical entry point the learner's submission
+// calls, so a disagreement with the verdict stored on the report is evidence of
+// a bug rather than a re-grade by a different code path.
+//
+// It deliberately touches no session, attempt, XP or streak: GradeAnswer is
+// pure, and this handler never enters SubmitAnswer. Replaying a report is not
+// the learner answering it, and a moderation tool that moved a learner's
+// mastery would make the act of investigating a report change the evidence.
+func (s *Server) handleAdminReportGrade(w http.ResponseWriter, r *http.Request, id int64) {
+	var req struct {
+		Answer string `json:"answer"`
+	}
+	if err := decodeJSON(w, r, &req); err != nil {
+		writeError(w, "invalid request", 400)
+		return
+	}
+	report, err := s.repo.GetReport(id)
+	if err != nil {
+		writeError(w, "failed to read report", 500)
+		return
+	}
+	if report == nil {
+		writeError(w, "report not found", 404)
+		return
+	}
+	answer := strings.TrimSpace(req.Answer)
+	if answer == "" {
+		answer = strings.TrimSpace(report.AnswerGiven)
+	}
+	if report.ConceptID == "" || report.Expected == "" || answer == "" {
+		writeError(w, "this report has no concept, expected answer and given answer to replay", 400)
+		return
+	}
+	res := s.eng.GradeAnswer(report.ConceptID, report.Expected, answer)
+	format := s.answerFormatOf(report.ConceptID)
+	writeJSON(w, map[string]interface{}{
+		"correct":           res.Correct,
+		"score":             res.Score,
+		"feedback":          res.Feedback,
+		"diagnosis":         res.Diagnosis,
+		"unavailable":       res.Unavailable,
+		"graded_answer":     answer,
+		"expected":          report.Expected,
+		"answer_hint":       format.Hint,
+		"answer_input_mode": format.InputMode,
+		"writes":            false,
+	})
 }
 
 // ── Admins and contributors ───────────────────────────────────────────────

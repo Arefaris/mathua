@@ -271,6 +271,9 @@ export default function ReviewHost() {
                   source="review"
                   sessionId={reviewSessionId.current}
                   attemptId={reviewAttemptId.current}
+                  answerGiven={reviewAnswerInput}
+                  answerHint={answerFormat.hint}
+                  answerInputMode={answerFormat.inputMode}
                 />
               </div>
             </>

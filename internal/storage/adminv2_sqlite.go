@@ -260,7 +260,9 @@ func (s *SQLiteStore) ConsumeAdminInvitation(tokenHash, studentID string) (*Admi
 // ── shared scan helpers ───────────────────────────────────────────────────
 
 const reportSelectColumns = `SELECT id, reporter_id, concept_id, kind, question, expected, explanation,
-	lesson_id, source, session_id, attempt_id, reason, detail, status,
+	lesson_id, source, session_id, attempt_id,
+	answer_given, grading_type, answer_hint, answer_input_mode,
+	reason, detail, status,
 	resolution, resolved_by, resolved_at, created_at
 	FROM question_reports`
 
@@ -274,6 +276,7 @@ func scanReportRow(row rowScanner) (QuestionReport, error) {
 	err := row.Scan(
 		&r.ID, &r.ReporterID, &r.ConceptID, &r.Kind, &r.Question, &r.Expected,
 		&r.Explanation, &r.LessonID, &r.Source, &r.SessionID, &r.AttemptID,
+		&r.AnswerGiven, &r.GradingType, &r.AnswerHint, &r.AnswerInputMode,
 		&r.Reason, &r.Detail, &r.Status, &r.Resolution, &r.ResolvedBy, &r.ResolvedAt, &created,
 	)
 	if err != nil {

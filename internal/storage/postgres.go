@@ -158,6 +158,10 @@ CREATE TABLE IF NOT EXISTS question_reports (
     source      TEXT NOT NULL DEFAULT '',
     session_id  TEXT NOT NULL DEFAULT '',
     attempt_id  TEXT NOT NULL DEFAULT '',
+    answer_given      TEXT NOT NULL DEFAULT '',
+    grading_type      TEXT NOT NULL DEFAULT '',
+    answer_hint       TEXT NOT NULL DEFAULT '',
+    answer_input_mode TEXT NOT NULL DEFAULT '',
     reason      TEXT NOT NULL DEFAULT 'other',
     detail      TEXT NOT NULL DEFAULT '',
     status      TEXT NOT NULL DEFAULT 'open',
@@ -307,6 +311,10 @@ func pgAuthMigrate(db *sql.DB) error {
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS resolution TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS resolved_by TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS resolved_at TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_given TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS grading_type TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_hint TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_input_mode TEXT NOT NULL DEFAULT ''",
 		`CREATE TABLE IF NOT EXISTS avatar_images (
 			student_id TEXT PRIMARY KEY REFERENCES students(id) ON DELETE CASCADE,
 			content_type TEXT NOT NULL,
@@ -1880,12 +1888,15 @@ func (s *PostgresStore) CreateReport(r QuestionReport) (int64, error) {
 	err := s.db.QueryRow(`
 		INSERT INTO question_reports
 			(reporter_id, concept_id, kind, question, expected, explanation,
-			 lesson_id, source, session_id, attempt_id, reason, detail, status, created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+			 lesson_id, source, session_id, attempt_id, answer_given, grading_type,
+			 answer_hint, answer_input_mode, reason, detail, status, created_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
 		RETURNING id
 	`,
 		r.ReporterID, r.ConceptID, r.Kind, r.Question, r.Expected, r.Explanation,
-		r.LessonID, r.Source, r.SessionID, r.AttemptID, r.Reason, r.Detail, r.Status,
+		r.LessonID, r.Source, r.SessionID, r.AttemptID,
+		r.AnswerGiven, r.GradingType, r.AnswerHint, r.AnswerInputMode,
+		r.Reason, r.Detail, r.Status,
 		created,
 	).Scan(&id)
 	if err != nil {
@@ -1906,7 +1917,9 @@ func (s *PostgresStore) ListReports(status string, limit, offset int) ([]Questio
 	if status == "" || status == "all" {
 		rows, err = s.db.Query(`
 			SELECT id, reporter_id, concept_id, kind, question, expected, explanation,
-			       lesson_id, source, session_id, attempt_id, reason, detail, status,
+			       lesson_id, source, session_id, attempt_id,
+			       answer_given, grading_type, answer_hint, answer_input_mode,
+			       reason, detail, status,
 			       resolution, resolved_by, resolved_at, created_at
 			FROM question_reports
 			ORDER BY created_at DESC
@@ -1915,7 +1928,9 @@ func (s *PostgresStore) ListReports(status string, limit, offset int) ([]Questio
 	} else {
 		rows, err = s.db.Query(`
 			SELECT id, reporter_id, concept_id, kind, question, expected, explanation,
-			       lesson_id, source, session_id, attempt_id, reason, detail, status,
+			       lesson_id, source, session_id, attempt_id,
+			       answer_given, grading_type, answer_hint, answer_input_mode,
+			       reason, detail, status,
 			       resolution, resolved_by, resolved_at, created_at
 			FROM question_reports
 			WHERE status = $1
@@ -1934,6 +1949,7 @@ func (s *PostgresStore) ListReports(status string, limit, offset int) ([]Questio
 		if err := rows.Scan(
 			&r.ID, &r.ReporterID, &r.ConceptID, &r.Kind, &r.Question, &r.Expected,
 			&r.Explanation, &r.LessonID, &r.Source, &r.SessionID, &r.AttemptID,
+			&r.AnswerGiven, &r.GradingType, &r.AnswerHint, &r.AnswerInputMode,
 			&r.Reason, &r.Detail, &r.Status, &r.Resolution, &r.ResolvedBy, &r.ResolvedAt, &created,
 		); err != nil {
 			return nil, fmt.Errorf("scan report: %w", err)

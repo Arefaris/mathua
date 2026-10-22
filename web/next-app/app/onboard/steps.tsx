@@ -280,6 +280,9 @@ export function DiagnosticStep({
               question={question}
               source="diagnostic"
               sessionId={sessionId}
+              answerGiven={answerInput}
+              answerHint={answerFormat.hint}
+              answerInputMode={answerFormat.inputMode}
             />
           </div>
         </div>

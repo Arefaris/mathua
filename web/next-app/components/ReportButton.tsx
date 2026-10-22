@@ -13,6 +13,12 @@ interface ReportButtonProps {
   source?: string
   sessionId?: string
   attemptId?: string
+  /** What the learner has typed, and the format the field gave them, so a
+      moderator can rebuild the attempt instead of guessing at it. */
+  answerGiven?: string
+  gradingType?: string
+  answerHint?: string
+  answerInputMode?: string
   /** Button caption. Defaults to 'Report a problem'; pass a specific one
       whenever several report buttons share a row or card. */
   label?: string
@@ -51,6 +57,10 @@ export default function ReportButton(props: ReportButtonProps) {
         attempt_id: props.attemptId,
         reason,
         detail: detail.trim(),
+        answer_given: props.answerGiven,
+        grading_type: props.gradingType,
+        answer_hint: props.answerHint,
+        answer_input_mode: props.answerInputMode,
       })
       setSent(true)
       setOpen(false)

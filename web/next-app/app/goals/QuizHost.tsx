@@ -377,6 +377,10 @@ export default function QuizHost() {
                   question={quizQuestion}
                   source="quiz"
                   sessionId={quizSessionId.current}
+                  answerGiven={quizAnswerInput}
+                  gradingType={quizGradingType.current || undefined}
+                  answerHint={answerFormat.hint}
+                  answerInputMode={answerFormat.inputMode}
                 />
               </div>
             </>

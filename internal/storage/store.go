@@ -256,8 +256,18 @@ type QuestionReport struct {
 	Source      string `json:"source"`
 	SessionID   string `json:"session_id"`
 	AttemptID   string `json:"attempt_id"`
-	Reason      string `json:"reason"` // wrong_answer | bad_explanation | unclear | formatting | other
-	Detail      string `json:"detail"`
+	// The answer the learner actually typed, and the format the field offered
+	// when they typed it. A moderator could previously see the question and the
+	// expected answer but not what was on screen, so a report about an
+	// untypeable answer could not be reproduced: the input mode and the hint
+	// line are what the learner faced, and the answer given is what the grader
+	// judged. Empty on reports filed before these were captured.
+	AnswerGiven     string `json:"answer_given"`
+	GradingType     string `json:"grading_type"`
+	AnswerHint      string `json:"answer_hint"`
+	AnswerInputMode string `json:"answer_input_mode"`
+	Reason          string `json:"reason"` // wrong_answer | bad_explanation | unclear | formatting | other
+	Detail          string `json:"detail"`
 	// Status is the moderation state: open | reviewing | resolved | dismissed.
 	Status string `json:"status"`
 	// Resolution is the moderator's reason for the decision, written when the report leaves

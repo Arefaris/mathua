@@ -99,6 +99,13 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		Source      string `json:"source"`
 		SessionID   string `json:"session_id"`
 		AttemptID   string `json:"attempt_id"`
+		// What the learner typed and the format the field offered. The client
+		// already holds all four on the served question; sending them makes the
+		// report reproducible instead of a screenshot the moderator cannot see.
+		AnswerGiven     string `json:"answer_given"`
+		GradingType     string `json:"grading_type"`
+		AnswerHint      string `json:"answer_hint"`
+		AnswerInputMode string `json:"answer_input_mode"`
 		Reason      string `json:"reason"`
 		Detail      string `json:"detail"`
 		ReporterID  string `json:"reporter_id"`
@@ -135,6 +142,13 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "concept_id, lesson_id, or question required", 400)
 		return
 	}
+	// The input mode is an enum, so a bad value is a client bug worth reporting
+	// rather than storing: the moderation page reads it to rebuild the field.
+	inputMode := strings.TrimSpace(req.AnswerInputMode)
+	if inputMode != "" && inputMode != "numeric" && inputMode != "text" {
+		writeError(w, "answer_input_mode must be numeric or text", 400)
+		return
+	}
 	reporter := ""
 	if authID, _ := r.Context().Value(authStudentKey{}).(string); authID != "" {
 		reporter = authID
@@ -156,6 +170,10 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		Source:      truncate(source, 64),
 		SessionID:   truncate(req.SessionID, 128),
 		AttemptID:   truncate(req.AttemptID, 128),
+		AnswerGiven: truncate(req.AnswerGiven, 2000),
+		GradingType: truncate(req.GradingType, 64),
+		AnswerHint:  truncate(req.AnswerHint, 256),
+		AnswerInputMode: inputMode,
 		Reason:      reason,
 		Detail:      truncate(req.Detail, 2000),
 		Status:      "open",

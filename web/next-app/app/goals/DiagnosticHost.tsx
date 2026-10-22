@@ -426,6 +426,10 @@ export default function DiagnosticHost({
                   question={question}
                   source="diagnostic"
                   sessionId={sessionId.current}
+                  answerGiven={answerInput}
+                  gradingType={diagGradingType.current || undefined}
+                  answerHint={answerFormat.hint}
+                  answerInputMode={answerFormat.inputMode}
                 />
               </div>
             </>
