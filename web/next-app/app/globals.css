@@ -104,9 +104,10 @@
     box-sizing: border-box;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
+  /* No global `scroll-behavior: smooth`. It animated the scroll reset on every
+     route change, which on iOS reads as the new page gliding up from wherever
+     the old one ended. The deliberate smooth scrolls (glossary, contents,
+     stepper) ask for smooth explicitly and still get it. */
 
   body {
     background: var(--bg);
