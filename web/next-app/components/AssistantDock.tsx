@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { askAssistant, getConfig, type AssistantPart, type AssistantTurn } from '../lib/api'
 import { splitMath } from '../lib/assistantMath'
 import { ArrowUp, Close, MessagesSquare } from './icons'
+import { useT, type MessageKey, type TFunction } from '../lib/i18n'
 
 // KaTeX is a large dependency and the dock is mounted in the root layout, so it
 // would otherwise be pulled into every route's bundle. Loading it through a
@@ -59,17 +60,17 @@ function AssistantText({ text }: { text: string }) {
 
 type Bubble = AssistantTurn & { parts?: AssistantPart[] }
 
-const SUGGESTIONS = ['What is Mathua?', 'Where should I start?']
+const SUGGESTIONS: MessageKey[] = ['learn.assistant.suggestions.what', 'learn.assistant.suggestions.start']
 
 // AREAS is what the panel offers when the assistant cannot answer. These are
 // routes the app owns regardless of AI, so the dock is useful in a deployment
 // with no provider — which is every fresh checkout until a key is set.
-const AREAS = [
-	{ label: 'Start learning', href: '/learn' },
-	{ label: 'Take the diagnostic', href: '/diagnose' },
-	{ label: 'Plan a goal', href: '/plan' },
-	{ label: 'Concept graph', href: '/graph' },
-	{ label: 'Glossary', href: '/glossary' },
+const AREAS: { label: MessageKey; href: string }[] = [
+	{ label: 'learn.assistant.areas.learn', href: '/learn' },
+	{ label: 'learn.assistant.areas.diagnose', href: '/diagnose' },
+	{ label: 'learn.assistant.areas.plan', href: '/plan' },
+	{ label: 'learn.assistant.areas.graph', href: '/graph' },
+	{ label: 'learn.assistant.areas.glossary', href: '/glossary' },
 ]
 
 type Status = 'loading' | 'on' | 'off'
@@ -95,15 +96,16 @@ export const ASSISTANT_CONSENT_VERSION = 'v1'
 // is not 'given', because that would render an input nobody has agreed to yet.
 type Consent = 'unknown' | 'given' | 'needed'
 
-function failureCopy(e: unknown): string {
+function failureCopy(e: unknown, t: TFunction): string {
 	const message = e instanceof Error ? e.message : ''
 	if (message.includes('429')) {
-		return 'That is today\u2019s limit for the assistant. The rest of Mathua works as usual.'
+		return t('learn.assistant.limit')
 	}
-	return 'The assistant is unavailable right now. Everything else still works.'
+	return t('learn.assistant.unavailable')
 }
 
 export default function AssistantDock() {
+	const t = useT()
 	const [status, setStatus] = useState<Status>('loading')
 	const [open, setOpen] = useState(false)
 	const [consent, setConsent] = useState<Consent>('unknown')
@@ -188,12 +190,12 @@ export default function AssistantDock() {
 				const res = await askAssistant({ message, history })
 				setTurns(t => [...t, { role: 'assistant', content: res.reply, parts: res.segments }])
 			} catch (e) {
-				setError(failureCopy(e))
+				setError(failureCopy(e, t))
 			} finally {
 				setBusy(false)
 			}
 		},
-		[busy, status, turns, consent],
+		[busy, status, turns, consent, t],
 	)
 
 	return (
@@ -204,16 +206,16 @@ export default function AssistantDock() {
 			{open && (
 				<section
 					role="dialog"
-					aria-label="Mathua assistant"
+					aria-label={t('learn.assistant.dialogLabel')}
 					className="flex h-[min(28rem,70dvh)] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-none border border-mathua-border bg-mathua-bg shadow-xl"
 				>
 					<header className="flex items-center justify-between border-b border-mathua-border px-3 py-2">
-						<p className="font-mono text-[11px] tracking-wider text-mathua-muted uppercase">Assistant</p>
+						<p className="font-mono text-[11px] tracking-wider text-mathua-muted uppercase">{t('learn.assistant.title')}</p>
 						<button
 							type="button"
 							onClick={() => setOpen(false)}
 							className="rounded-none p-1 text-mathua-muted hover:bg-mathua-surface-elevated hover:text-mathua-primary"
-							aria-label="Close assistant"
+							aria-label={t('learn.assistant.close')}
 						>
 							<Close size={14} />
 						</button>
@@ -223,8 +225,8 @@ export default function AssistantDock() {
 						<div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
 							<p className="text-[13px] leading-relaxed text-mathua-muted">
 								{status === 'loading'
-									? 'Connecting to the assistant…'
-									: 'The assistant is unavailable right now. These go to the same places:'}
+									? t('learn.assistant.connecting')
+									: t('learn.assistant.offline')}
 							</p>
 							{status === 'off' && (
 								<div className="flex flex-wrap gap-2">
@@ -235,7 +237,7 @@ export default function AssistantDock() {
 											onClick={() => setOpen(false)}
 											className="rounded-none border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:border-mathua-blue hover:bg-mathua-surface-elevated"
 										>
-											{a.label}
+											{t(a.label)}
 										</Link>
 									))}
 								</div>
@@ -246,15 +248,16 @@ export default function AssistantDock() {
 					{status === 'on' && consent === 'needed' && (
 						<div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
 							<p className="font-mono text-[11px] tracking-wider text-mathua-muted uppercase">
-								Before you send a message
+																{t('learn.assistant.consent.title')}
+
 							</p>
 							<p className="text-[13px] leading-relaxed text-mathua-primary">
-								Your text goes to an AI provider so it can answer. Do not type names, email
-								addresses, school details, or anything about another person.
+																{t('learn.assistant.consent.body')}
+
 							</p>
 							<p className="text-[12px] leading-relaxed text-mathua-muted">
-								Your answers, progress and account details are not sent. The message is not
-								stored after it is answered. Replies can be wrong.
+																{t('learn.assistant.consent.notSent')}
+
 							</p>
 							<label className="flex cursor-pointer items-start gap-2 text-[12px] leading-relaxed text-mathua-primary">
 								<input
@@ -263,7 +266,7 @@ export default function AssistantDock() {
 									onChange={e => setConsentChecked(e.target.checked)}
 									className="mt-0.5 accent-mathua-blue"
 								/>
-								<span>I am 13 or older, and I understand this.</span>
+								<span>{t('learn.assistant.consent.checkbox')}</span>
 							</label>
 							<div className="flex items-center gap-2">
 								<button
@@ -272,14 +275,15 @@ export default function AssistantDock() {
 									disabled={!consentChecked}
 									className="rounded-none border border-mathua-blue bg-mathua-blue-faint px-3 py-1.5 font-mono text-[11px] text-mathua-blue disabled:border-mathua-border disabled:bg-transparent disabled:text-mathua-muted"
 								>
-									Start
+																		{t('common.action.start')}
 								</button>
 								<Link
 									href="/privacy"
 									onClick={() => setOpen(false)}
 									className="font-mono text-[11px] text-mathua-muted underline decoration-mathua-border underline-offset-2 hover:text-mathua-blue"
 								>
-									Privacy notice
+																		{t('learn.assistant.consent.privacy')}
+
 								</Link>
 							</div>
 						</div>
@@ -291,17 +295,18 @@ export default function AssistantDock() {
 						{turns.length === 0 && (
 							<div className="space-y-2">
 								<p className="text-[13px] leading-relaxed text-mathua-muted">
-									Ask what Mathua is, or where to begin. Answers are short, and you can follow the links.
+																		{t('learn.assistant.intro')}
+
 								</p>
 								<div className="flex flex-wrap gap-2">
 									{SUGGESTIONS.map(s => (
 										<button
 											key={s}
 											type="button"
-											onClick={() => void send(s)}
+											onClick={() => void send(t(s))}
 											className="rounded-none border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:border-mathua-blue hover:bg-mathua-surface-elevated"
 										>
-											{s}
+																					{t(s)}
 										</button>
 									))}
 								</div>
@@ -338,7 +343,7 @@ export default function AssistantDock() {
 							</div>
 						))}
 
-						{busy && <p className="font-mono text-[11px] text-mathua-muted">Thinking…</p>}
+						{busy && <p className="font-mono text-[11px] text-mathua-muted">{t('learn.assistant.thinking')}</p>}
 						{error && <p className="text-[12px] text-mathua-red">{error}</p>}
 					</div>
 
@@ -354,14 +359,14 @@ export default function AssistantDock() {
 							value={draft}
 							onChange={e => setDraft(e.target.value)}
 							maxLength={2000}
-							placeholder="Ask about Mathua"
-							aria-label="Your question"
+							placeholder={t('learn.assistant.placeholder')}
+							aria-label={t('learn.assistant.questionLabel')}
 							className="min-w-0 flex-1 bg-transparent px-1 text-[13px] text-mathua-primary outline-none placeholder:text-mathua-muted"
 						/>
 						<button
 							type="submit"
 							disabled={busy || !draft.trim()}
-							aria-label="Send"
+							aria-label={t('learn.assistant.send')}
 							className="rounded-none p-1.5 text-mathua-blue disabled:text-mathua-muted"
 						>
 							<ArrowUp size={16} />
@@ -376,7 +381,7 @@ export default function AssistantDock() {
 				type="button"
 				onClick={() => setOpen(v => !v)}
 				aria-expanded={open}
-				aria-label={open ? 'Close assistant' : 'Open assistant'}
+				aria-label={open ? t('learn.assistant.close') : t('learn.assistant.open')}
 				className="flex h-11 w-11 items-center justify-center rounded-none border border-mathua-border bg-mathua-surface text-mathua-primary shadow-lg hover:bg-mathua-surface-elevated"
 			>
 				{open ? <Close size={18} /> : <MessagesSquare size={18} />}

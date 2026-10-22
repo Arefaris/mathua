@@ -1,5 +1,7 @@
 'use client'
 
+import { useT } from '../lib/i18n'
+
 const SYMBOLS: { label: string; value: string }[] = [
   { label: 'π', value: 'π' }, { label: '±', value: '±' }, { label: '∞', value: '∞' },
   { label: '√', value: '√' }, { label: '∛', value: '∛' }, { label: '²', value: '²' },
@@ -23,6 +25,7 @@ interface Props {
 }
 
 export default function SymbolPalette({ targetRef, onInsert, compact }: Props) {
+  const t = useT()
   function insert(sym: string) {
     const el = targetRef.current
     if (!el) {
@@ -50,7 +53,7 @@ export default function SymbolPalette({ targetRef, onInsert, compact }: Props) {
           type="button"
           onClick={() => insert(s.value)}
           className="w-9 h-9 min-w-[36px] min-h-[36px] font-mono text-xs border border-mathua-border-strong bg-mathua-code text-mathua-primary hover:border-mathua-blue hover:text-mathua-blue shrink-0 inline-flex items-center justify-center"
-          aria-label={`Insert ${s.label}`}
+          aria-label={t('learn.symbols.insert', { symbol: s.label })}
         >
           {s.label}
         </button>

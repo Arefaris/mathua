@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import ReportButton from './ReportButton'
 import type { ReportKind } from '../lib/api'
+import { useT } from '../lib/i18n'
 
 interface ReportMenuProps {
   conceptId?: string
@@ -15,6 +16,7 @@ interface ReportMenuProps {
 // Icon-only per-block report menu. The block id is prefixed into the report
 // payload so moderators can locate the exact example with no extra schema.
 export default function ReportMenu({ conceptId, lessonId, kind, question, blockId }: ReportMenuProps) {
+  const t = useT()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -39,7 +41,7 @@ export default function ReportMenu({ conceptId, lessonId, kind, question, blockI
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
-        aria-label={`Report options, example ${blockId}`}
+        aria-label={t('learn.report.menuLabel', { blockId })}
         aria-expanded={open}
         className="w-9 h-9 min-w-[36px] min-h-[36px] inline-flex items-center justify-center font-mono text-sm text-mathua-muted hover:text-mathua-blue hover:border-mathua-blue border border-transparent transition-colors"
       >
@@ -52,7 +54,7 @@ export default function ReportMenu({ conceptId, lessonId, kind, question, blockI
             lessonId={lessonId}
             kind={kind}
             question={question ? `[block ${blockId}] ${question}` : `[block ${blockId}]`}
-            label="Report a problem"
+            label={t('learn.report.label')}
           />
         </div>
       )}

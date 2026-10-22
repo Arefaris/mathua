@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic'
 import { Component, lazy, Suspense, useEffect, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { Input } from '@/components/ui/input'
 import SymbolPalette from '@/components/SymbolPalette'
+import { useT } from '@/lib/i18n'
 import { presentationForQuestion } from './keyboards'
 import type { MathInputStatus, MathInputValue } from './types'
 import type { MathLiveFieldHandle } from './MathLiveField'
@@ -190,11 +191,13 @@ export default function MathInput({
   placeholder,
   mode = 'algebra',
   status = 'default',
-  ariaLabel = 'Your answer',
+  ariaLabel: ariaLabelProp,
   id,
   focusRef,
   className,
 }: Props) {
+  const t = useT()
+  const ariaLabel = ariaLabelProp ?? t('learn.answer.label')
   const fieldRef = useRef<MathLiveFieldHandle | null>(null)
   const fallbackRef = useRef<HTMLInputElement | null>(null)
   const [fallbackActive, setFallbackActive] = useState(false)
@@ -378,13 +381,15 @@ export function MathAnswerInput({
   conceptId,
   status = 'default',
   id,
-  ariaLabel = 'Your answer',
+  ariaLabel: ariaLabelProp,
   placeholder,
   className,
   inputMode,
   focusRef,
   showPalette = true,
 }: MathAnswerInputProps) {
+  const t = useT()
+  const ariaLabel = ariaLabelProp ?? t('learn.answer.label')
   const { editor, keyboard } = presentationForQuestion(gradingType, conceptId)
 
   // The plain input and the SymbolPalette share one element ref, owned here rather

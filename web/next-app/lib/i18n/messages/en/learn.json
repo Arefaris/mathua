@@ -187,5 +187,82 @@
     "fullLessonTitled": "Full lesson — {title}",
     "note": "Reference explains. It does not count as progress — only the questions below move this concept.",
     "summary": "Reference — the full lesson"
+  },
+  "report": {
+    "menuLabel": "Report options, example {blockId}",
+    "label": "Report a problem",
+    "thanks": "✓ Thanks — reported",
+    "title": "Complain about this question or explanation",
+    "whatsWrong": "What's wrong?",
+    "reasons": {
+      "wrong_answer": "Wrong answer",
+      "bad_explanation": "Bad explanation",
+      "unclear": "Unclear / confusing",
+      "formatting": "Formatting / math rendering",
+      "other": "Other"
+    },
+    "placeholder": "Optional details (what did you expect?)",
+    "error": "Could not send report",
+    "sending": "Sending…",
+    "send": "Send report"
+  },
+  "symbols": {
+    "insert": "Insert {symbol}"
+  },
+  "keyboard": {
+    "tooltip": {
+      "arithmetic": "Numbers, the four operations, fractions and powers",
+      "fractions": "Numerator and denominator, mixed numbers",
+      "algebra": "Letters, numbers, the four operations, structures",
+      "geometry": "Measures, angles, roots and powers",
+      "calculus": "Limits, derivatives, integrals, the four operations"
+    },
+    "aside": {
+      "space": "space",
+      "fraction": "fraction",
+      "squareRoot": "square root",
+      "exponent": "exponent",
+      "emptyFraction": "empty fraction",
+      "scientificNotation": "scientific notation",
+      "limit": "limit",
+      "derivative": "derivative",
+      "absoluteValue": "absolute value"
+    }
+  },
+  "math": {
+    "simplifies": "That simplifies to {value}."
+  },
+  "assistant": {
+    "suggestions": {
+      "what": "What is Mathua?",
+      "start": "Where should I start?"
+    },
+    "areas": {
+      "learn": "Start learning",
+      "diagnose": "Take the diagnostic",
+      "plan": "Plan a goal",
+      "graph": "Concept graph",
+      "glossary": "Glossary"
+    },
+    "limit": "That is today’s limit for the assistant. The rest of Mathua works as usual.",
+    "unavailable": "The assistant is unavailable right now. Everything else still works.",
+    "dialogLabel": "Mathua assistant",
+    "title": "Assistant",
+    "close": "Close assistant",
+    "open": "Open assistant",
+    "connecting": "Connecting to the assistant…",
+    "offline": "The assistant is unavailable right now. These go to the same places:",
+    "consent": {
+      "title": "Before you send a message",
+      "body": "Your text goes to an AI provider so it can answer. Do not type names, email addresses, school details, or anything about another person.",
+      "notSent": "Your answers, progress and account details are not sent. The message is not stored after it is answered. Replies can be wrong.",
+      "checkbox": "I am 13 or older, and I understand this.",
+      "privacy": "Privacy notice"
+    },
+    "intro": "Ask what Mathua is, or where to begin. Answers are short, and you can follow the links.",
+    "thinking": "Thinking…",
+    "placeholder": "Ask about Mathua",
+    "questionLabel": "Your question",
+    "send": "Send"
   }
 }
