@@ -10,6 +10,17 @@ primary_region = "ams"
   auto_stop_machines = false
   auto_start_machines = true
 
+  # The proxy refused connections for ~6s during the 2026-10-22 restart because
+  # nothing told it when the app was ready. The check gates traffic until the
+  # HTTP listener answers, and grace_period covers loading 1250 concepts and
+  # lessons before the first request. /api/health touches no database.
+  [[http_service.checks]]
+    method = "GET"
+    path = "/api/health"
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "20s"
+
 [[mounts]]
   source = "mathua_data"
   destination = "/data"
