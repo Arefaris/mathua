@@ -1543,7 +1543,7 @@ export async function validateToken(): Promise<{ valid: boolean; student_id: str
 
 // Content reports — users complain about questions, explanations,
 // lesson bodies, worked examples, or diagrams.
-export type ReportKind = 'question' | 'explanation' | 'lesson_body' | 'worked_example' | 'diagram'
+export type ReportKind = 'question' | 'explanation' | 'lesson_body' | 'worked_example' | 'diagram' | 'message'
 export type ReportReason = 'wrong_answer' | 'bad_explanation' | 'unclear' | 'formatting' | 'other'
 // The server's vocabulary, not the old confirmed/fixed pair, which the
 // moderation endpoint stopped accepting. A type that names a status the

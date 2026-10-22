@@ -248,7 +248,7 @@ type QuestionReport struct {
 	ID          int64  `json:"id"`
 	ReporterID  string `json:"reporter_id"`
 	ConceptID   string `json:"concept_id"`
-	Kind        string `json:"kind"` // question | explanation | lesson_body | worked_example | diagram
+	Kind        string `json:"kind"` // question | explanation | lesson_body | worked_example | diagram | message
 	Question    string `json:"question"`
 	Expected    string `json:"expected"`
 	Explanation string `json:"explanation"`

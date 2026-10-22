@@ -223,6 +223,7 @@ export default function Footer({ className = '' }: FooterProps) {
                 <li><Link href="/docs" className={linkClass}>Docs</Link></li>
                 <li><Link href="/docs/contributing" className={linkClass}>Contributing</Link></li>
                 <li><Link href="/note" className={linkClass}>Creator&apos;s Note</Link></li>
+                <li><Link href="/contact" className={linkClass}>Contact</Link></li>
                 <li>
                   <a
                     href="https://github.com/chuma-beep/mathua"

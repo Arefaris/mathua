@@ -18,6 +18,10 @@ var (
 	validReportKinds = map[string]bool{
 		"question": true, "explanation": true, "lesson_body": true,
 		"worked_example": true, "diagram": true,
+		// A message is not a complaint about one block. It is the contact box's
+		// only destination, and it rides this table so that it lands in the same
+		// audited queue instead of an inbox nobody remembers to open.
+		"message": true,
 	}
 	validReportReasons = map[string]bool{
 		"wrong_answer": true, "bad_explanation": true, "unclear": true,
@@ -25,7 +29,7 @@ var (
 	}
 	validReportSources = map[string]bool{
 		"study": true, "diagnostic": true, "quiz": true, "lesson": true,
-		"concept": true, "review": true,
+		"concept": true, "review": true, "contact": true,
 	}
 )
 
@@ -106,9 +110,9 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		GradingType     string `json:"grading_type"`
 		AnswerHint      string `json:"answer_hint"`
 		AnswerInputMode string `json:"answer_input_mode"`
-		Reason      string `json:"reason"`
-		Detail      string `json:"detail"`
-		ReporterID  string `json:"reporter_id"`
+		Reason          string `json:"reason"`
+		Detail          string `json:"detail"`
+		ReporterID      string `json:"reporter_id"`
 	}
 	if err := decodeJSON(w, r, &req); err != nil {
 		writeError(w, "invalid request", 400)
@@ -123,6 +127,11 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	reason := strings.TrimSpace(req.Reason)
+	// A message has no failure mode to classify; "other" is what the contact box
+	// sends and what a hand-written client gets if it sends nothing.
+	if kind == "message" && reason == "" {
+		reason = "other"
+	}
 	if !validReportReasons[reason] {
 		writeError(w, "invalid reason", 400)
 		return
@@ -138,7 +147,15 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "invalid source", 400)
 		return
 	}
-	if conceptID == "" && lessonID == "" && question == "" {
+	// A message names no concept, lesson or question, and putting a subject line
+	// into `question` would make the moderation card lie about what was asked.
+	// The text lives in detail, so a message is held to a length instead.
+	if kind == "message" {
+		if len(strings.TrimSpace(req.Detail)) < 10 {
+			writeError(w, "message is too short", 400)
+			return
+		}
+	} else if conceptID == "" && lessonID == "" && question == "" {
 		writeError(w, "concept_id, lesson_id, or question required", 400)
 		return
 	}
@@ -160,24 +177,24 @@ func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id, err := s.repo.CreateReport(storage.QuestionReport{
-		ReporterID:  truncate(reporter, 128),
-		ConceptID:   truncate(conceptID, 128),
-		Kind:        kind,
-		Question:    question,
-		Expected:    truncate(req.Expected, 2000),
-		Explanation: truncate(req.Explanation, 4000),
-		LessonID:    lessonID,
-		Source:      truncate(source, 64),
-		SessionID:   truncate(req.SessionID, 128),
-		AttemptID:   truncate(req.AttemptID, 128),
-		AnswerGiven: truncate(req.AnswerGiven, 2000),
-		GradingType: truncate(req.GradingType, 64),
-		AnswerHint:  truncate(req.AnswerHint, 256),
+		ReporterID:      truncate(reporter, 128),
+		ConceptID:       truncate(conceptID, 128),
+		Kind:            kind,
+		Question:        question,
+		Expected:        truncate(req.Expected, 2000),
+		Explanation:     truncate(req.Explanation, 4000),
+		LessonID:        lessonID,
+		Source:          truncate(source, 64),
+		SessionID:       truncate(req.SessionID, 128),
+		AttemptID:       truncate(req.AttemptID, 128),
+		AnswerGiven:     truncate(req.AnswerGiven, 2000),
+		GradingType:     truncate(req.GradingType, 64),
+		AnswerHint:      truncate(req.AnswerHint, 256),
 		AnswerInputMode: inputMode,
-		Reason:      reason,
-		Detail:      truncate(req.Detail, 2000),
-		Status:      "open",
-		CreatedAt:   time.Now().UTC(),
+		Reason:          reason,
+		Detail:          truncate(req.Detail, 2000),
+		Status:          "open",
+		CreatedAt:       time.Now().UTC(),
 	})
 	if err != nil {
 		writeError(w, "failed to save report", 500)

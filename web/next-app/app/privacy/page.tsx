@@ -100,6 +100,15 @@ export default function PrivacyPage() {
           leave it blank. Passwords are stored as bcrypt hashes, never as text.
         </p>
 
+        <h2 style={h2Style}>The contact box</h2>
+        <p style={textStyle}>
+          The box on the contact page writes your message into the same table as a report
+          about a question. The text you write is stored, and so is your account id if you
+          are signed in, or the guest id your browser already carries if you are not. It is
+          read in the moderation queue and kept so that the conversation about a fix has a
+          record. Do not put a password in it, and do not put anyone else&rsquo;s details in it.
+        </p>
+
         <h2 style={h2Style}>Age</h2>
         <p style={textStyle}>
           The assistant is for people aged 13 or older. If you are younger than that, do not

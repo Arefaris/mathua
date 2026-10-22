@@ -329,6 +329,17 @@ export default function Header({ links }: HeaderProps) {
             role="menuitem"
             onClick={() => {
               setOpen(false)
+              router.push('/contact')
+            }}
+            className="w-full text-left px-3 py-2 font-mono text-xs text-mathua-muted hover:text-mathua-blue hover:bg-mathua-surface-elevated transition-colors"
+          >
+            Contact
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false)
               signOut()
               router.push('/login')
             }}

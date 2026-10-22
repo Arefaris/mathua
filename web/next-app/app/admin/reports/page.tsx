@@ -102,7 +102,9 @@ export default function AdminReportsPage() {
               return (
                 <section key={concept} className="space-y-3">
                   <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-mathua-border pb-2">
-                    <h2 className="font-mono text-xs text-mathua-primary">{concept || '(no concept)'}</h2>
+                    <h2 className="font-mono text-xs text-mathua-primary">
+                      {concept || (items.every((r) => r.kind === 'message') ? 'Messages' : '(no concept)')}
+                    </h2>
                     <span className="font-mono text-[10px] text-mathua-muted">
                       {items.length} report{items.length === 1 ? '' : 's'}
                       {unsettled.length !== items.length ? `, ${unsettled.length} unsettled` : ''}

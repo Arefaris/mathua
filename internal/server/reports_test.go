@@ -214,3 +214,63 @@ func TestAdminReportGrade_ReplaysWithoutWriting(t *testing.T) {
 		t.Errorf("status = %q after replay, want open", after.Status)
 	}
 }
+
+// The contact box has to work for someone who cannot sign in — which is exactly
+// the person a question report cannot serve. A message therefore carries no
+// concept, lesson or question, and the test pins that it is still stored with its
+// text and kind, because a message the queue cannot show was never delivered.
+func TestCreateReport_MessageNeedsNoConcept(t *testing.T) {
+	s := testServer(t)
+	mux := http.NewServeMux()
+	s.Register(mux)
+
+	body, _ := json.Marshal(map[string]string{
+		"kind":        "message",
+		"source":      "contact",
+		"reason":      "other",
+		"detail":      "I cannot sign in and the reset link does nothing.",
+		"reporter_id": "guest_guest",
+	})
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, httptest.NewRequest("POST", "/api/reports", bytes.NewReader(body)))
+	if rec.Code != 200 {
+		t.Fatalf("expected 200, got %d: %s", rec.Code, rec.Body.String())
+	}
+
+	reports, err := s.repo.ListReports("open", 10, 0)
+	if err != nil {
+		t.Fatalf("list reports: %v", err)
+	}
+	var found *storage.QuestionReport
+	for i := range reports {
+		if reports[i].Kind == "message" {
+			found = &reports[i]
+		}
+	}
+	if found == nil {
+		t.Fatal("the message was accepted but is not in the queue")
+	}
+	if found.Detail != "I cannot sign in and the reset link does nothing." {
+		t.Errorf("detail = %q", found.Detail)
+	}
+	if found.Source != "contact" || found.ConceptID != "" || found.Question != "" {
+		t.Errorf("message should be sourced from contact and name no content: %+v", found)
+	}
+}
+
+func TestCreateReport_MessageMustSaySomething(t *testing.T) {
+	s := testServer(t)
+	mux := http.NewServeMux()
+	s.Register(mux)
+
+	body, _ := json.Marshal(map[string]string{
+		"kind":   "message",
+		"source": "contact",
+		"detail": "hi",
+	})
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, httptest.NewRequest("POST", "/api/reports", bytes.NewReader(body)))
+	if rec.Code != 400 {
+		t.Errorf("expected 400 for a two-letter message, got %d: %s", rec.Code, rec.Body.String())
+	}
+}
