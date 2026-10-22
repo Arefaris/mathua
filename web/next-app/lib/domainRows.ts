@@ -1,5 +1,8 @@
 import { countByDomain, masteryState, prereqMet } from './progress'
-import { DOMAIN_ORDER, domainLabel } from './graphDomains'
+import { DOMAIN_ORDER } from './graphDomains'
+import { domainName } from './domainName'
+import { getLocale } from './i18n/locale'
+import { getTranslator } from './i18n/react'
 import type { ConceptRecord } from './conceptData'
 import type { ConceptProgress } from './api'
 
@@ -40,6 +43,14 @@ export const DOMAIN_STATUS_LABEL: Record<DomainConceptStatus, string> = {
   dueForReview: 'Due for review',
   inProgress: 'In progress',
   unseen: 'Not started',
+}
+
+/**
+ * The status name in the learner's language. DOMAIN_STATUS_LABEL stays as the English source;
+ * a component that shows a status calls this and must itself read the locale (`useT`).
+ */
+export function domainStatusLabel(status: DomainConceptStatus): string {
+  return getTranslator(getLocale()).dynamic(`explore.domainStatus.${status}`, undefined, DOMAIN_STATUS_LABEL[status])
 }
 
 export const DOMAIN_STATUS_ORDER: DomainConceptStatus[] = [
@@ -98,7 +109,7 @@ export function buildDomainRows(
       concepts.find((c) => c.status === 'unseen')
     rows.push({
       domain,
-      label: domainLabel(domain),
+      label: domainName(domain),
       total: count.total,
       mastered: count.mastered,
       dueForReview: count.dueForReview,

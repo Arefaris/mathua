@@ -20,7 +20,9 @@ import {
   type TopicSummary,
   type EligibilityPrereq,
 } from '../../lib/api'
-import { DOMAIN_ORDER, domainLabel } from '../../lib/graphDomains'
+import { DOMAIN_ORDER } from '../../lib/graphDomains'
+import { domainName } from '../../lib/domainName'
+import { useT, type TFunction } from '../../lib/i18n'
 
 /**
  * The curriculum browser: domain -> topic, driven entirely by the server's
@@ -31,23 +33,19 @@ import { DOMAIN_ORDER, domainLabel } from '../../lib/graphDomains'
  * bottom tab, so this is reachable without going through Settings or Study.
  */
 
-function stateLabel(state: string): string {
-  switch (state) {
-    case 'mastered':
-      return 'Mastered'
-    case 'due_for_review':
-      return 'Due for review'
-    case 'in_progress':
-      return 'In progress'
-    case 'unlocked':
-      return 'Available'
-    case 'upcoming':
-      return 'Upcoming'
-    case 'locked':
-      return 'Locked'
-    default:
-      return state
-  }
+// The server's state ids, as dictionary keys. An id this list does not know is shown as sent.
+const STATE_KEYS: Record<string, string> = {
+  mastered: 'mastered',
+  due_for_review: 'dueForReview',
+  in_progress: 'inProgress',
+  unlocked: 'unlocked',
+  upcoming: 'upcoming',
+  locked: 'locked',
+}
+
+function stateLabel(t: TFunction, state: string): string {
+  const key = STATE_KEYS[state]
+  return key ? t.dynamic(`explore.domains.state.${key}`, undefined, state) : state
 }
 
 function available(row: DomainSummary): number {
@@ -55,6 +53,7 @@ function available(row: DomainSummary): number {
 }
 
 export default function DomainsPage() {
+  const t = useT()
   const { mounted } = useTheme()
   const router = useRouter()
 
@@ -80,7 +79,7 @@ export default function DomainsPage() {
       .then(setDomains)
       .catch(() => {
         setDomains([])
-        setError("Couldn't load the curriculum.")
+        setError(t('explore.domains.loadError'))
       })
   }, [mounted])
 
@@ -136,7 +135,7 @@ export default function DomainsPage() {
         setDlgError('')
       }
     } catch {
-      setError("Couldn't start this topic.")
+      setError(t('explore.domains.startError'))
     } finally {
       setBusy(null)
     }
@@ -165,7 +164,7 @@ export default function DomainsPage() {
     } catch {
       if (seqRef.current !== seq) return
       setDlgStatus('error')
-      setDlgError("Couldn't load this topic's prerequisites.")
+      setDlgError(t('explore.domains.prereqError'))
     } finally {
       if (seqRef.current === seq) setBusy(null)
     }
@@ -187,7 +186,7 @@ export default function DomainsPage() {
     triggerRef.current = null
   }
 
-  if (!mounted || domains === null) return <Loading label="Loading curriculum" full />
+  if (!mounted || domains === null) return <Loading label={t('explore.domains.loading')} full />
 
   const selectedRow = ordered.find((d) => d.id === selected) ?? null
 
@@ -197,10 +196,9 @@ export default function DomainsPage() {
       <main className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
         {selected === null ? (
           <>
-            <SectionHeader label="Curriculum" title="Choose what to learn" />
+            <SectionHeader label={t('explore.domains.label')} title={t('explore.domains.title')} />
             <p className="font-mono text-[11px] text-mathua-secondary mb-6">
-              Browse a domain and pick a topic. Eligibility is checked by Mathua; you cannot
-              start a topic whose prerequisites are unmet.
+              {t('explore.domains.intro')}
             </p>
 
             {error && (
@@ -219,10 +217,10 @@ export default function DomainsPage() {
                   >
                     <span className="flex items-baseline justify-between gap-3 min-w-0">
                       <span className="font-mono text-xs text-mathua-primary truncate">
-                        {domainLabel(d.id)}
+                        {domainName(d.id)}
                       </span>
                       <span className="shrink-0 font-mono text-[11px] text-mathua-secondary">
-                        {available(d)} / {d.conceptCount} concepts available
+                        {t('explore.domains.available', { available: available(d), count: d.conceptCount })}
                       </span>
                     </span>
                   </button>
@@ -237,39 +235,37 @@ export default function DomainsPage() {
               onClick={() => { setSelected(null); setDetail(null); setDialog(null) }}
               className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue"
             >
-              ← Domains
+              {t('explore.domains.back')}
             </button>
             <div className="mt-4">
               <SectionHeader
-                label="Curriculum"
-                title={selectedRow ? domainLabel(selectedRow.id) : selected}
+                label={t('explore.domains.label')}
+                title={selectedRow ? domainName(selectedRow.id) : selected}
               />
             </div>
 
             {selectedRow && (
               <p className="font-mono text-[11px] text-mathua-secondary mb-6">
-                Your progress: {available(selectedRow)} / {selectedRow.conceptCount} concepts available
-                {selectedRow.masteredCount > 0 && ` · ${selectedRow.masteredCount} mastered`}
+                {t('explore.domains.progress', { available: available(selectedRow), count: selectedRow.conceptCount })}
+                {selectedRow.masteredCount > 0 && t('explore.domains.masteredSuffix', { count: selectedRow.masteredCount })}
               </p>
             )}
 
-            {detailLoading && <p className="font-mono text-xs text-mathua-muted">Loading topics…</p>}
+            {detailLoading && <p className="font-mono text-xs text-mathua-muted">{t('explore.domains.loadingTopics')}</p>}
 
             {!detailLoading && detail && detail.topics.length === 0 && (
               <p className="font-mono text-xs text-mathua-secondary">
-                No topics are currently available here. Your prerequisite path will unlock
-                topics as you demonstrate mastery.
+                {t('explore.domains.noTopics')}
               </p>
             )}
 
             {!detailLoading && detail && detail.topics.length > 0 && (
               <>
-                {!detail.topics.some((t) =>
-                  ['unlocked', 'in_progress', 'mastered', 'due_for_review'].includes(t.state),
+                {!detail.topics.some((topic) =>
+                  ['unlocked', 'in_progress', 'mastered', 'due_for_review'].includes(topic.state),
                 ) && (
                   <p className="mb-4 border border-mathua-border bg-mathua-surface p-3 font-mono text-[11px] text-mathua-secondary">
-                    No topics are currently available here. Your prerequisite path will unlock
-                    topics as you demonstrate mastery.
+                    {t('explore.domains.noTopics')}
                   </p>
                 )}
                 <ul className="border border-mathua-border divide-y divide-mathua-border bg-mathua-surface">
@@ -285,7 +281,7 @@ export default function DomainsPage() {
                           </div>
                           {/* State is text first, so it survives without color. */}
                           <div className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted">
-                            {stateLabel(topic.state)}
+                            {stateLabel(t, topic.state)}
                           </div>
                         </div>
                         {learnable && (
@@ -295,7 +291,7 @@ export default function DomainsPage() {
                             onClick={() => void chooseTopic(topic)}
                             className="w-full sm:w-auto shrink-0 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center justify-center disabled:opacity-60"
                           >
-                            {busy === topic.conceptId ? 'Checking…' : 'Learn'}
+                            {busy === topic.conceptId ? t('explore.domains.checking') : t('explore.domains.learn')}
                           </button>
                         )}
                         {review && (
@@ -303,7 +299,7 @@ export default function DomainsPage() {
                             href="/review"
                             className="w-full sm:w-auto shrink-0 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center justify-center"
                           >
-                            Review
+                            {t('explore.domains.review')}
                           </Link>
                         )}
                         {!learnable && !review && (
@@ -312,7 +308,7 @@ export default function DomainsPage() {
                             onClick={(e) => void explainTopic(topic, e.currentTarget)}
                             className="w-full sm:w-auto shrink-0 border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center justify-center"
                           >
-                            View prerequisite path
+                            {t('explore.domains.prereqPath')}
                           </button>
                         )}
                       </div>
