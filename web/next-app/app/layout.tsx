@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: 'Master prerequisites before you advance. Open-source, 1250 concepts, spaced repetition, 50 XP mastery checks.',
     type: 'website',
     siteName: 'Mathua',
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Mathua concept graph' }],
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Mathua: an adaptive math learning platform' }],
   },
   twitter: {
     card: 'summary_large_image',
