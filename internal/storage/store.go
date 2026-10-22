@@ -100,6 +100,17 @@ type ActiveSession struct {
 	UpdatedAt      time.Time
 }
 
+// AttemptRow is the minimum a replay needs from the attempts table. The XP
+// amount was never stored there, but a correct attempt's award depends only on
+// the concept's time threshold, which the engine can read from the curriculum.
+type AttemptRow struct {
+	ID        int64
+	StudentID string
+	ConceptID string
+	Correct   bool
+	Source    string
+}
+
 type AttemptEntry struct {
 	// ID is the persistent row id (set on read; ignored on insert).
 	ID             int64     `json:"id,omitempty"`
@@ -608,6 +619,12 @@ type Repository interface {
 	AwardXP(studentID string, amount int, reason, eventKey string) error
 	// WeeklyXPByStudent sums the ledger from since (inclusive) to now.
 	WeeklyXPByStudent(since time.Time) (map[string]int, error)
+	// RecordXPEvent appends to the ledger without moving the lifetime or daily
+	// counters. It exists for replaying awards made before the ledger existed:
+	// the counters already contain them, so this must not add again.
+	RecordXPEvent(studentID string, amount int, reason, eventKey string) (bool, error)
+	// AttemptsSince returns attempts at or after since, oldest first.
+	AttemptsSince(since time.Time) ([]AttemptRow, error)
 	GetXP(studentID string) (total int, today int, err error)
 	SetDiagnosticCompleted(studentID string) error
 	// DiagnosticCompletedAt reports when placement completed. A separate call

@@ -2449,3 +2449,47 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	e.PropagateWeakness(o.studentID)
 	return newStatus, evidence, nil
 }
+
+// BackfillWeeklyXP replays this week's attempts into the XP ledger.
+//
+// The ledger started mid-week, so without this the weekly board would count only
+// the hours since the deploy and would hide the effort of everyone who worked
+// earlier in the week. A correct attempt's award depends only on the concept's
+// time threshold — the performance multiplier cannot change an integer award —
+// so a replay is faithful to what the award path would have paid.
+//
+// The lifetime and daily counters already include these awards, so the replay
+// writes ledger rows only. It uses the same `attempt:<id>` keys as the live
+// award, which means an attempt the ledger already recorded is skipped by the
+// unique index rather than counted twice.
+func (e *Engine) BackfillWeeklyXP(now time.Time) (int, error) {
+	start := leaderboard.WeekStart(now)
+	attempts, err := e.repo.AttemptsSince(start)
+	if err != nil {
+		return 0, err
+	}
+	replayed := 0
+	for _, a := range attempts {
+		if !a.Correct || a.Source == "diagnostic" || a.StudentID == "" || storage.IsGuestID(a.StudentID) {
+			continue
+		}
+		threshold := 10.0
+		if e.dag != nil {
+			if concept := e.dag.Concept(a.ConceptID); concept != nil && concept.MasteryThreshold.AvgTimeSeconds > 0 {
+				threshold = concept.MasteryThreshold.AvgTimeSeconds
+			}
+		}
+		amount := xppolicy.Award(true, 0, threshold, 0, TaskLesson)
+		if amount <= 0 {
+			continue
+		}
+		inserted, err := e.repo.RecordXPEvent(a.StudentID, amount, "replay", fmt.Sprintf("attempt:%d", a.ID))
+		if err != nil {
+			return replayed, err
+		}
+		if inserted {
+			replayed++
+		}
+	}
+	return replayed, nil
+}

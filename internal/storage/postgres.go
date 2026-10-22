@@ -2281,3 +2281,49 @@ func (s *PostgresStore) SetRoleAudited(actorID, studentID string, role Role) (Ro
 func (s *PostgresStore) GetAdminUser(studentID string) (*AdminUser, error) {
 	return adminUserByIDPG(s.db, studentID)
 }
+
+// RecordXPEvent appends to the ledger only; see the SQLite implementation for
+// why the counters must not move.
+func (s *PostgresStore) RecordXPEvent(studentID string, amount int, reason, eventKey string) (bool, error) {
+	if studentID == "" || eventKey == "" {
+		return false, fmt.Errorf("xp event needs a student and an event key")
+	}
+	res, err := s.db.Exec(`INSERT INTO xp_events (student_id, amount, reason, event_key, created_at)
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (student_id, event_key) DO NOTHING`,
+		studentID, amount, reason, eventKey, time.Now().UTC().UnixNano())
+	if err != nil {
+		return false, fmt.Errorf("record xp event: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("record xp event: %w", err)
+	}
+	return n > 0, nil
+}
+
+func (s *PostgresStore) AttemptsSince(since time.Time) ([]AttemptRow, error) {
+	rows, err := s.db.Query(
+		`SELECT id, student_id, concept_id, correct, source
+		 FROM attempts
+		 WHERE timestamp::timestamptz >= $1
+		 ORDER BY id ASC`, since.UTC())
+	if err != nil {
+		return nil, fmt.Errorf("read attempts since: %w", err)
+	}
+	defer rows.Close()
+	var out []AttemptRow
+	for rows.Next() {
+		var r AttemptRow
+		var correct int
+		if err := rows.Scan(&r.ID, &r.StudentID, &r.ConceptID, &correct, &r.Source); err != nil {
+			return nil, fmt.Errorf("scan attempt: %w", err)
+		}
+		r.Correct = correct != 0
+		out = append(out, r)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("read attempts since: %w", err)
+	}
+	return out, nil
+}

@@ -2197,3 +2197,53 @@ func (s *SQLiteStore) SetRoleAudited(actorID, studentID string, role Role) (Role
 func (s *SQLiteStore) GetAdminUser(studentID string) (*AdminUser, error) {
 	return adminUserByIDSQLite(s.db, studentID)
 }
+
+// RecordXPEvent appends to the ledger only. The award happened before the
+// ledger existed, so xp_total and xp_today already contain it; moving the
+// counters here would count the same effort twice.
+func (s *SQLiteStore) RecordXPEvent(studentID string, amount int, reason, eventKey string) (bool, error) {
+	if studentID == "" || eventKey == "" {
+		return false, fmt.Errorf("xp event needs a student and an event key")
+	}
+	res, err := s.db.Exec(`INSERT INTO xp_events (student_id, amount, reason, event_key, created_at)
+		VALUES (?, ?, ?, ?, ?)
+		ON CONFLICT(student_id, event_key) DO NOTHING`,
+		studentID, amount, reason, eventKey, time.Now().UTC().UnixNano())
+	if err != nil {
+		return false, fmt.Errorf("record xp event: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("record xp event: %w", err)
+	}
+	return n > 0, nil
+}
+
+// AttemptsSince reads the attempts a replay has to consider. datetime() parses
+// the stored RFC3339 text so a timestamp written with a local offset still
+// compares correctly against a UTC week start.
+func (s *SQLiteStore) AttemptsSince(since time.Time) ([]AttemptRow, error) {
+	rows, err := s.db.Query(
+		`SELECT id, student_id, concept_id, correct, source
+		 FROM attempts
+		 WHERE datetime(timestamp) >= datetime(?)
+		 ORDER BY id ASC`, since.UTC().Format("2006-01-02 15:04:05"))
+	if err != nil {
+		return nil, fmt.Errorf("read attempts since: %w", err)
+	}
+	defer rows.Close()
+	var out []AttemptRow
+	for rows.Next() {
+		var r AttemptRow
+		var correct int
+		if err := rows.Scan(&r.ID, &r.StudentID, &r.ConceptID, &correct, &r.Source); err != nil {
+			return nil, fmt.Errorf("scan attempt: %w", err)
+		}
+		r.Correct = correct != 0
+		out = append(out, r)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("read attempts since: %w", err)
+	}
+	return out, nil
+}

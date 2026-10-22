@@ -255,6 +255,13 @@ func main() {
 		}
 	}
 	eng := engine.New(repo, dag, reg, ll, planner)
+	// The ledger began mid-week; replay the week so the first board does not
+	// erase effort earned before it existed. Idempotent by attempt key.
+	if replayed, err := eng.BackfillWeeklyXP(time.Now().UTC()); err != nil {
+		log.Printf("warning: weekly xp replay failed: %v", err)
+	} else if replayed > 0 {
+		log.Printf("weekly xp replay: %d attempts restored", replayed)
+	}
 
 	// Data repair: re-grade persisted attempts and fix grader false negatives
 	// (streak/weakness corruption). Exit without starting the server.
