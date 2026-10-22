@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { getErrorMessage, getErrorStatus } from '../lib/api'
 
 export interface SubmitError {
@@ -35,7 +36,22 @@ export default function SubmitErrorBlock({
   retrying?: boolean
 }) {
   const sessionGone = error.status === 404
+  const throttled = error.status === 429
   const skipsExhausted = onSkip != null && (skipsLeft ?? MAX_SKIPS) <= 0
+
+  // A 429 means the answer was refused for pace, not for being wrong, so retry
+  // it once automatically rather than making the learner press a button for a
+  // condition the server clears in a couple of seconds. The ref stops a loop if
+  // the retry is refused again.
+  const autos = useRef<string | null>(null)
+  useEffect(() => {
+    if (!throttled || retrying) return
+    const key = `${error.status}:${error.message}`
+    if (autos.current === key) return
+    autos.current = key
+    const timer = setTimeout(onRetry, 2000)
+    return () => clearTimeout(timer)
+  }, [throttled, retrying, error.status, error.message, onRetry])
   return (
     <div
       role="alert"
@@ -44,7 +60,9 @@ export default function SubmitErrorBlock({
       <p className="font-mono text-xs text-mathua-red">
         {sessionGone
           ? 'Session expired — the server restarted and forgot this run.'
-          : "Couldn't submit your answer — it's still in the box."}
+          : throttled
+            ? 'Saving is catching up — your answer is kept and will be sent again.'
+            : "Couldn't submit your answer — it's still in the box."}
       </p>
       <p className="mt-1 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
         {error.status != null ? `(${error.status}) ` : ''}{error.message}
