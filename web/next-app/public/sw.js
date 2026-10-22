@@ -67,6 +67,47 @@ async function networkFirst(request, cacheName, fallbackUrls) {
   }
 }
 
+// Cloudflare injects a per-request Precursor token into the HTML:
+// `window.__CF$cv$params = {r, t, u, ut, i}` followed by a script that appends
+// /cdn-cgi/challenge-platform/scripts/precursor/main.js. The token is only valid
+// for the response it arrived with. Storing that page and replaying it later
+// makes the injected script post a dead token, and Cloudflare answers 400 to a
+// challenge the page can no longer complete — which is the `h/undefined/...`
+// request in the console, repeated on every visit because the cache never
+// refreshes. Store navigation HTML only when it carries no token, and never
+// serve a cached page that does.
+const CHALLENGE_MARKER = '__CF$cv$params'
+
+async function hasChallengeToken(response) {
+  try {
+    const type = response.headers.get('content-type') || ''
+    if (!type.includes('text/html')) return false
+    const text = await response.clone().text()
+    return text.includes(CHALLENGE_MARKER)
+  } catch {
+    // If the body cannot be read, treat the page as uncacheable: a missed
+    // offline page is a smaller harm than replaying a stale challenge.
+    return true
+  }
+}
+
+async function navigationNetworkFirst(request) {
+  const cache = await caches.open(SHELL_CACHE)
+  try {
+    const response = await fetch(request)
+    if (response.ok && !(await hasChallengeToken(response))) {
+      cache.put(request, response.clone())
+    }
+    return response
+  } catch (err) {
+    const cached = await cache.match(request)
+    if (cached && !(await hasChallengeToken(cached))) return cached
+    const offline = await caches.match('/offline')
+    if (offline) return offline
+    throw err
+  }
+}
+
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName)
   const cached = await cache.match(request)
@@ -84,7 +125,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return
 
   if (request.mode === 'navigate') {
-    event.respondWith(networkFirst(request, SHELL_CACHE, ['/offline', '/offline.html']))
+    event.respondWith(navigationNetworkFirst(request))
     return
   }
 

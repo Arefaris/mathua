@@ -6,6 +6,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/copy-mathlive-fonts.mjs && node scripts/build-graph.mjs && node scripts/build-flow-layout.mjs",
     "build": "next build",
+    "postbuild": "node scripts/stamp-sw.mjs",
     "start": "next start",
     "start:static": "serve out -l 3001",
     "lint": "next lint",
