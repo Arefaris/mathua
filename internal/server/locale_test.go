@@ -41,6 +41,18 @@ func TestLocaleMiddleware(t *testing.T) {
 	}
 }
 
+// The static frontend is the same bytes in every language, so it must not be told to vary.
+func TestLocaleMiddlewareLeavesStaticAssetsCacheable(t *testing.T) {
+	h := LocaleMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest("GET", "/_next/static/app.js", nil)
+	req.Header.Set("Accept-Language", "ru")
+	h.ServeHTTP(rec, req)
+	if got := rec.Header().Get("Vary"); got != "" {
+		t.Errorf("Vary = %q on a static asset", got)
+	}
+}
+
 // Without the middleware the server answers in English rather than failing.
 func TestLocaleOfDefaultsToEnglish(t *testing.T) {
 	req := httptest.NewRequest("GET", "/api/graph", nil)

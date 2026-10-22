@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/chuma-beep/mathua/internal/i18n"
 )
@@ -11,13 +12,16 @@ import (
 //
 // The client sends the header on every API call and the server trusts nothing else: there
 // is no cookie and no ?lang= parameter, so a response is a function of the URL, the body and
-// this one header. That is also why Vary is set. A cache or proxy between the browser and the
-// server that ignored it would serve one learner's Russian labels to the next learner's
-// English request.
+// this one header. That is also why API responses carry Vary: a cache or proxy between the
+// browser and the server that ignored it would serve one learner's Russian labels to the next
+// learner's English request. The static frontend does not vary by language, so it is left
+// alone and stays cacheable as one object.
 func LocaleMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		loc := i18n.ParseAcceptLanguage(r.Header.Get("Accept-Language"))
-		w.Header().Add("Vary", "Accept-Language")
+		if strings.HasPrefix(r.URL.Path, "/api/") {
+			w.Header().Add("Vary", "Accept-Language")
+		}
 		next.ServeHTTP(w, r.WithContext(i18n.WithLocale(r.Context(), loc)))
 	})
 }
