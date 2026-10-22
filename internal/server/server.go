@@ -49,13 +49,16 @@ var (
 )
 
 func parseAllowedOrigins() {
-	raw := os.Getenv("CORS_ALLOWED_ORIGINS")
-	raw = strings.TrimSpace(raw)
+	raw := strings.TrimSpace(os.Getenv("CORS_ALLOWED_ORIGINS"))
 	if raw == "" {
-		allowedOriginsAllowAll = true
-		allowedOriginsExact = nil
-		allowedOriginPatterns = nil
-		return
+		// Nothing configured used to mean "allow every origin", which turns a
+		// forgotten variable into an open API. Local development keeps working;
+		// a deployed app gets only the local origins and a warning naming the
+		// variable, so the mistake is visible in the first log lines.
+		if os.Getenv("FLY_APP_NAME") != "" || os.Getenv("MATHUA_ENV") == "production" {
+			log.Printf("warning: CORS_ALLOWED_ORIGINS is unset — only local development origins are allowed; set it to the public site origins")
+		}
+		raw = "http://localhost:3000,http://127.0.0.1:3000"
 	}
 	allowedOriginsAllowAll = false
 	allowedOriginsExact = make(map[string]bool)
@@ -75,7 +78,9 @@ func parseAllowedOrigins() {
 		}
 	}
 	if len(allowedOriginsExact) == 0 && len(allowedOriginPatterns) == 0 && !allowedOriginsAllowAll {
-		allowedOriginsAllowAll = true
+		log.Printf("warning: CORS_ALLOWED_ORIGINS listed no usable origin — only local development origins are allowed")
+		allowedOriginsExact["http://localhost:3000"] = true
+		allowedOriginsExact["http://127.0.0.1:3000"] = true
 	}
 }
 
@@ -452,7 +457,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/attempts", logRequest(cors(s.authMiddleware(s.handleAttempts))))
 	mux.HandleFunc("/api/goal", logRequest(cors(s.authMiddleware(s.handleGoal))))
 	mux.HandleFunc("/api/goal/diagnostic", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticStart)))))
-	mux.HandleFunc("/api/goal/diagnostic/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticAnswer)))))
+	mux.HandleFunc("/api/goal/diagnostic/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleGoalDiagnosticAnswer))))))
 	mux.HandleFunc("/api/goal/diagnostic/skip", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticSkip)))))
 	mux.HandleFunc("/api/goal/diagnostic/retry", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticRetry)))))
 	mux.HandleFunc("/api/goal/diagnostic/resume", logRequest(cors(s.optionalAuthMiddleware(s.handleGoalDiagnosticResume))))
@@ -473,7 +478,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// landing on the app gets the diagnostic recommendation rather than an error.
 	mux.HandleFunc("/api/next", logRequest(cors(s.optionalAuthMiddleware(s.handleNext))))
 	mux.HandleFunc("/api/reviews/session", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsSession)))))
-	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsAnswer)))))
+	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleReviewsAnswer))))))
 	// The lesson routes stay publicly readable — Study is reference and is
 	// indexed — so auth is optional, but it must be *present*: the practice
 	// branch writes the server-side answer anchor, and it can only key that
@@ -483,7 +488,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/lessons", logRequest(cors(s.optionalAuthMiddleware(s.handleLessons))))
 	mux.HandleFunc("/api/lessons/body", logRequest(cors(s.optionalAuthMiddleware(s.handleLessonBody))))
 	mux.HandleFunc("/api/lessons/", logRequest(cors(s.optionalAuthMiddleware(s.handleLessonConcept))))
-	mux.HandleFunc("/api/study/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleStudyAnswer)))))
+	mux.HandleFunc("/api/study/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleStudyAnswer))))))
 	// Report creation only. Listing and resolving reports is administration now and lives under
 	// /api/admin/reports behind the role boundary; the old shared-password triage endpoints were
 	// removed in V2 so there is exactly one moderation path.
@@ -518,7 +523,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/admin/lab/generate", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGenerate)))))
 	mux.HandleFunc("/api/admin/lab/grade", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGrade)))))
 	mux.HandleFunc("/api/quiz/session", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizSession)))))
-	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizAnswer)))))
+	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleQuizAnswer))))))
 	mux.HandleFunc("/api/quiz/skip", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizSkip)))))
 	mux.HandleFunc("/api/health", logRequest(cors(getOnly(s.handleHealth))))
 	mux.HandleFunc("/api/activity", logRequest(cors(s.authMiddleware(s.handleActivity))))
@@ -4379,4 +4384,21 @@ func GzipMiddleware(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(&gzipResponseWriter{ResponseWriter: w, gz: gz}, r)
 	})
+}
+
+// gradingDeadline is the server's own bound on grading. It sits below the
+// browser's answer timeout so a slow grade returns a JSON 503 the client can
+// retry instead of the browser aborting a request the server still holds.
+const gradingDeadline = 20 * time.Second
+
+// gradingTimeout converts a handler into one that answers 503 if it outlives
+// deadline. http.TimeoutHandler also cancels the request context, so the
+// grader and any database call under it stop rather than continuing to work
+// for a response nobody will read.
+func gradingTimeout(deadline time.Duration, h http.HandlerFunc) http.HandlerFunc {
+	th := http.TimeoutHandler(h, deadline, `{"error":"grading took too long — retry the same answer"}`)
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		th.ServeHTTP(w, r)
+	}
 }
