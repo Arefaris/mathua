@@ -27,6 +27,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/engine"
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/grader"
+	"github.com/chuma-beep/mathua/internal/leaderboard"
 	"github.com/chuma-beep/mathua/internal/lessons"
 	"github.com/chuma-beep/mathua/internal/mastery"
 	"github.com/chuma-beep/mathua/internal/quiz"
@@ -437,7 +438,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/graph", logRequest(cors(s.handleGraph)))
 	mux.HandleFunc("/api/curriculum/domains", logRequest(cors(s.optionalAuthMiddleware(s.handleCurriculumDomains))))
 	mux.HandleFunc("/api/curriculum/domains/", logRequest(cors(s.optionalAuthMiddleware(s.handleCurriculumDomain))))
-	mux.HandleFunc("/api/leaderboard", logRequest(cors(s.handleLeaderboard)))
+	mux.HandleFunc("/api/leaderboard", logRequest(cors(s.optionalAuthMiddleware(s.handleLeaderboard))))
 	mux.HandleFunc("/api/leagues", logRequest(cors(s.authMiddleware(s.handleLeagues))))
 	mux.HandleFunc("/api/share", logRequest(cors(s.authMiddleware(s.handleShareToggle))))
 	mux.HandleFunc("/api/share/", logRequest(cors(s.shareLimiter.middleware(s.handleShareReport))))
@@ -465,6 +466,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/avatar/me", logRequest(cors(s.authMiddleware(s.handleAvatarMe))))
 	// Public per-student photo for leaderboard avatars (custom uploads are
 	// board-visible by design; 404 when the student has none).
+	mux.HandleFunc("/api/avatar/u/", logRequest(cors(s.handleAvatarByUsername)))
 	mux.HandleFunc("/api/avatar/", logRequest(cors(s.handleAvatarPublic)))
 	mux.HandleFunc("/api/reviews/due", logRequest(cors(s.authMiddleware(s.handleDueReviews))))
 	// GET /api/next — the one answer to "what should I do now?". Optional auth so a guest
@@ -687,18 +689,50 @@ func (s *Server) handleCurriculumDomain(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
-// GET /api/leaderboard
+// GET /api/leaderboard?view=weekly|all_time&page=1&page_size=25
+//
+// Paging is server-side and validated here rather than clamped silently, so a
+// client that asks for page 0 learns it asked wrong instead of being handed
+// page 1 and believing it.
 func (s *Server) handleLeaderboard(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
 		return
 	}
-	entries, err := s.eng.GetLeaderboard()
+	q := r.URL.Query()
+	view := q.Get("view")
+	if view == "" {
+		view = leaderboard.ViewWeekly
+	}
+	if view != leaderboard.ViewWeekly && view != leaderboard.ViewAllTime {
+		writeError(w, "view must be weekly or all_time", 400)
+		return
+	}
+	page := 1
+	if raw := q.Get("page"); raw != "" {
+		n, err := strconv.Atoi(raw)
+		if err != nil || n < 1 {
+			writeError(w, "page must be a positive integer", 400)
+			return
+		}
+		page = n
+	}
+	pageSize := leaderboard.DefaultPageSize
+	if raw := q.Get("page_size"); raw != "" {
+		n, err := strconv.Atoi(raw)
+		if err != nil || n < 1 || n > leaderboard.MaxPageSize {
+			writeError(w, "page_size must be between 1 and 100", 400)
+			return
+		}
+		pageSize = n
+	}
+	studentID, _ := r.Context().Value(authStudentKey{}).(string)
+	board, err := s.eng.GetLeaderboardPage(studentID, view, page, pageSize)
 	if err != nil {
 		writeError(w, "failed to get leaderboard", 500)
 		return
 	}
-	writeJSON(w, entries)
+	writeJSON(w, board)
 }
 
 // GET /api/leagues — weekly league standings with promotion/demotion.
@@ -2129,6 +2163,37 @@ func (s *Server) handleAvatarMe(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", ct)
 	w.Header().Set("Cache-Control", "private, max-age=86400")
+	w.Write(data)
+}
+
+// GET /api/avatar/u/{username} serves a custom photo by the only identifier the
+// leaderboard is allowed to carry. Public, because the board is.
+func (s *Server) handleAvatarByUsername(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, `{"error":"method not allowed"}`, 405)
+		return
+	}
+	username := strings.TrimPrefix(r.URL.Path, "/api/avatar/u/")
+	if username == "" || strings.Contains(username, "/") {
+		writeError(w, "username is required", 400)
+		return
+	}
+	st, err := s.repo.FindByUsername(username)
+	if err != nil || st == nil {
+		writeError(w, "no such learner", 404)
+		return
+	}
+	ct, data, found, err := s.repo.GetAvatarImage(st.ID)
+	if err != nil {
+		writeError(w, "failed to load avatar", 500)
+		return
+	}
+	if !found {
+		writeError(w, "no custom avatar", 404)
+		return
+	}
+	w.Header().Set("Content-Type", ct)
+	w.Header().Set("Cache-Control", "public, max-age=86400")
 	w.Write(data)
 }
 

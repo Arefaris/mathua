@@ -682,17 +682,32 @@ func TestAvatarPublicAndLeaguesSnakeCase(t *testing.T) {
 	if m["name"] != "Ada" || m["username"] != "ada" {
 		t.Errorf("expected Ada/ada on board, got %v", m)
 	}
-	// Weekly board carries the username for the display fallback chain.
+	// Weekly board carries the public id (the username) and never the account id.
+	ada, err := s.repo.FindByUsername("ada")
+	if err != nil || ada == nil {
+		t.Fatalf("find ada: %v", err)
+	}
+	if err := s.repo.AwardXP(ada.ID, 10, "test", "avatar-board"); err != nil {
+		t.Fatalf("award: %v", err)
+	}
 	wrec := get("/api/leaderboard", "")
 	if wrec.Code != 200 {
 		t.Fatalf("leaderboard: expected 200, got %d", wrec.Code)
 	}
-	var entries []map[string]interface{}
-	if err := json.Unmarshal(wrec.Body.Bytes(), &entries); err != nil {
+	var ranking struct {
+		Entries []map[string]interface{} `json:"entries"`
+		Total   int                      `json:"total"`
+	}
+	if err := json.Unmarshal(wrec.Body.Bytes(), &ranking); err != nil {
 		t.Fatalf("decode leaderboard: %v", err)
 	}
-	if len(entries) == 0 || entries[0]["username"] != "ada" {
-		t.Errorf("expected username on weekly entry, got %v", entries)
+	if len(ranking.Entries) == 0 || ranking.Entries[0]["id"] != "ada" {
+		t.Errorf("expected ada's public id on the weekly board, got %v", ranking.Entries)
+	}
+	for _, e := range ranking.Entries {
+		if _, ok := e["student_id"]; ok {
+			t.Errorf("leaderboard entry exposes student_id: %v", e)
+		}
 	}
 }
 

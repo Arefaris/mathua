@@ -1,103 +1,206 @@
 package leaderboard
 
 import (
-	"sort"
-	"sync"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/levels"
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
+// Public views. "weekly" is the current competition, measured in XP earned
+// inside this week's UTC window; "all_time" is lifetime XP. They are separate
+// queries on purpose — the old board ranked lifetime mastery by this week's
+// count, so the two questions had one wrong answer between them.
+const (
+	ViewWeekly  = "weekly"
+	ViewAllTime = "all_time"
+
+	DefaultPageSize = 25
+	MaxPageSize     = 100
+)
+
+// Entry is one line of a public ranking. There is no student id here and there
+// must not be: a guest id is that client's credential, and an account id is an
+// internal key. PublicID is a username, or a one-way derivation of the id for
+// accounts that never set one.
 type Entry struct {
-	Rank           int                `json:"rank"`
-	StudentID      string             `json:"student_id"`
-	Name           string             `json:"name"`
-	Username       string             `json:"username,omitempty"`
-	AvatarURL      string             `json:"avatar_url,omitempty"`
-	AvatarDicebear *storage.AvatarRef `json:"avatar_dicebear,omitempty"`
-	AvatarCustom   bool               `json:"avatar_custom,omitempty"`
-	AvatarVersion  int                `json:"avatar_version,omitempty"`
-	Mastered       int                `json:"mastered"`
-	Streak         int                `json:"streak"`
-	Level          string             `json:"level"`
-	Score          int                `json:"score"`
+	Rank     int     `json:"rank"`
+	ID       string  `json:"id"`
+	Name     string  `json:"name"`
+	Avatar   *Avatar `json:"avatar,omitempty"`
+	XP       int     `json:"xp"`
+	XPTotal  int     `json:"xp_total"`
+	Mastered int     `json:"mastered"`
+	Level    string  `json:"level"`
+	IsMe     bool    `json:"is_me,omitempty"`
+}
+
+// Avatar is the small amount the board needs to draw a face. Generated avatars
+// are seeded from the public id, never from the account id.
+type Avatar struct {
+	Kind    string `json:"kind"` // "custom" or "generated"
+	URL     string `json:"url,omitempty"`
+	Style   string `json:"style,omitempty"`
+	Version int    `json:"version,omitempty"`
+}
+
+// Position is the learner's own place, kept out of Entries so the board never
+// contains a duplicate identity to make room for it.
+type Position struct {
+	Rank     int  `json:"rank"`
+	XP       int  `json:"xp"`
+	Eligible bool `json:"eligible"`
+	Guest    bool `json:"guest,omitempty"`
+	InPage   bool `json:"in_page"`
+}
+
+// Board is one page of one view.
+type Board struct {
+	View       string    `json:"view"`
+	Page       int       `json:"page"`
+	PageSize   int       `json:"page_size"`
+	Total      int       `json:"total"`
+	TotalPages int       `json:"total_pages"`
+	Entries    []Entry   `json:"entries"`
+	Me         *Position `json:"me,omitempty"`
+	WeekStart  string    `json:"week_start,omitempty"`
+	WeekEnd    string    `json:"week_end,omitempty"`
 }
 
 type Computer struct {
 	repo storage.Repository
-
-	// Weekly board is a full students×progress scan per call; cache it
-	// briefly so leaderboard polling under load doesn't queue behind
-	// the write path on the SQLite pool.
-	mu     sync.Mutex
-	cached []Entry
-	filled time.Time
-	ttl    time.Duration
 }
-
-// DefaultWeeklyTTL is the cache lifetime for the weekly board. Weekly
-// granularity data changes slowly; 30s keeps it fresh while absorbing
-// poll storms from concurrent readers.
-const DefaultWeeklyTTL = 30 * time.Second
 
 func NewComputer(repo storage.Repository) *Computer {
-	return NewComputerWithTTL(repo, DefaultWeeklyTTL)
+	return &Computer{repo: repo}
 }
 
-func NewComputerWithTTL(repo storage.Repository, ttl time.Duration) *Computer {
-	return &Computer{repo: repo, ttl: ttl}
-}
-
-func (c *Computer) Weekly() ([]Entry, error) {
-	c.mu.Lock()
-	if c.cached != nil && time.Since(c.filled) < c.ttl {
-		out := c.cached
-		c.mu.Unlock()
-		return out, nil
+// Board answers one page of one view, plus where the caller stands.
+//
+// Total and rank come from the store's own predicates. Nothing is cached: a
+// page query is one indexed read, and the previous 30-second whole-board cache
+// meant a learner could answer a question and watch their rank stay stale.
+func (c *Computer) Board(studentID, view string, page, pageSize int, now time.Time) (*Board, error) {
+	if view != ViewWeekly && view != ViewAllTime {
+		return nil, fmt.Errorf("unknown leaderboard view %q", view)
 	}
-	c.mu.Unlock()
+	if pageSize <= 0 || pageSize > MaxPageSize {
+		pageSize = DefaultPageSize
+	}
+	if page < 1 {
+		page = 1
+	}
+	week := WeekStart(now)
+	offset := (page - 1) * pageSize
 
-	rows, err := c.repo.GetWeeklyLeaderboard()
+	rows, total, err := c.repo.LeaderboardPage(view, week, pageSize, offset)
 	if err != nil {
 		return nil, err
 	}
-	entries := buildEntries(rows)
-
-	c.mu.Lock()
-	c.cached = entries
-	c.filled = time.Now()
-	c.mu.Unlock()
-	return entries, nil
+	board := &Board{
+		View:       view,
+		Page:       page,
+		PageSize:   pageSize,
+		Total:      total,
+		TotalPages: (total + pageSize - 1) / pageSize,
+		Entries:    make([]Entry, 0, len(rows)),
+	}
+	if view == ViewWeekly {
+		board.WeekStart = week.Format(time.RFC3339)
+		board.WeekEnd = week.Add(7 * 24 * time.Hour).Format(time.RFC3339)
+	}
+	for i, r := range rows {
+		board.Entries = append(board.Entries, entryFromRow(r, offset+i+1, studentID))
+	}
+	if studentID != "" {
+		board.Me = c.position(studentID, view, week, offset, pageSize)
+	}
+	return board, nil
 }
 
-func buildEntries(rows []storage.LeaderboardRow) []Entry {
-	entries := make([]Entry, 0, len(rows))
-	for _, r := range rows {
-		score := r.WeeklyMastered * 100
-		custom, pick, version := storage.AvatarBits(r.AvatarSettings)
-		entries = append(entries, Entry{
-			StudentID:      r.StudentID,
-			Name:           r.Name,
-			Username:       r.Username,
-			AvatarURL:      r.AvatarURL,
-			AvatarDicebear: pick,
-			AvatarCustom:   custom,
-			AvatarVersion:  version,
-			Mastered:       r.TotalMastered,
-			Level:          levels.Compute(r.TotalMastered),
-			Streak:         0,
-			Score:          score,
-		})
+// position never fails the page: a learner who cannot be located is simply not
+// shown a rank, which is better than a 500 on a board that did load.
+func (c *Computer) position(studentID, view string, week time.Time, offset, pageSize int) *Position {
+	me := &Position{}
+	if storage.IsGuestID(studentID) {
+		me.Guest = true
+		return me
 	}
-	sort.Slice(entries, func(i, j int) bool {
-		if entries[i].Score != entries[j].Score {
-			return entries[i].Score > entries[j].Score
-		}
-		return entries[i].Name < entries[j].Name
-	})
-	for i := range entries {
-		entries[i].Rank = i + 1
+	rank, xp, found, err := c.repo.LeaderboardPosition(studentID, view, week)
+	if err != nil || !found {
+		return me
 	}
-	return entries
+	me.Rank = rank
+	me.XP = xp
+	me.Eligible = true
+	me.InPage = rank > offset && rank <= offset+pageSize
+	return me
+}
+
+func entryFromRow(r storage.LeaderboardRow, rank int, meID string) Entry {
+	id := PublicID(r.Username, r.StudentID)
+	e := Entry{
+		Rank:     rank,
+		ID:       id,
+		Name:     displayName(r.Name),
+		XP:       r.XP,
+		XPTotal:  r.XPTotal,
+		Mastered: r.TotalMastered,
+		Level:    levels.Compute(r.TotalMastered),
+		IsMe:     meID != "" && r.StudentID == meID,
+		Avatar:   avatarFor(r, id),
+	}
+	return e
+}
+
+func avatarFor(r storage.LeaderboardRow, publicID string) *Avatar {
+	custom, pick, version := storage.AvatarBits(r.AvatarSettings)
+	u := r.AvatarURL
+	// A custom upload lives behind a public route keyed by username: the board
+	// must not need the account id, and the browser must not receive it.
+	if custom && r.Username != "" {
+		u = "/api/avatar/u/" + url.PathEscape(r.Username)
+	}
+	if u != "" {
+		return &Avatar{Kind: "custom", URL: u, Version: version}
+	}
+	if pick != nil && pick.Style != "" {
+		return &Avatar{Kind: "generated", Style: pick.Style, Version: version}
+	}
+	return &Avatar{Kind: "generated", Style: "notionists"}
+}
+
+// PublicID is what the outside world may call a learner. A username is already
+// public and unique; the hash is a stable stand-in for accounts created before
+// usernames were required, not a secret and not reversible in practice.
+func PublicID(username, studentID string) string {
+	if username != "" {
+		return username
+	}
+	sum := sha256.Sum256([]byte(studentID))
+	return "learner-" + hex.EncodeToString(sum[:4])
+}
+
+func displayName(name string) string {
+	if name == "" {
+		return "Learner"
+	}
+	return name
+}
+
+// WeekStart returns the Monday 00:00 UTC that opens the competition containing
+// t. UTC is the product rule (the existing weekly query used it), and Monday is
+// the boundary the UI has always counted down to.
+func WeekStart(t time.Time) time.Time {
+	t = t.UTC()
+	day := t.Weekday()
+	if day == time.Sunday {
+		day = 7
+	}
+	monday := t.AddDate(0, 0, -int(day-time.Monday))
+	return time.Date(monday.Year(), monday.Month(), monday.Day(), 0, 0, 0, 0, time.UTC)
 }

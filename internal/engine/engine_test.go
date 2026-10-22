@@ -299,14 +299,30 @@ func TestEngine_Diagnostic(t *testing.T) {
 
 func TestEngine_GetLeaderboard(t *testing.T) {
 	e := testEngine(t)
-	e.CreateStudent("alice")
-	e.CreateStudent("bob")
-	entries, err := e.GetLeaderboard()
+	alice, err := e.CreateStudent("alice")
+	if err != nil {
+		t.Fatalf("create alice: %v", err)
+	}
+	if _, err := e.CreateStudent("bob"); err != nil {
+		t.Fatalf("create bob: %v", err)
+	}
+	// The board ranks earned XP, so a learner with no ledger entries is not on
+	// it. Bob stays off until he answers something; Alice is the only entry.
+	if err := e.repo.AwardXP(alice.ID, 5, "test", "alice:1"); err != nil {
+		t.Fatalf("award: %v", err)
+	}
+	board, err := e.GetLeaderboardPage(alice.ID, "weekly", 1, 25)
 	if err != nil {
 		t.Fatalf("get leaderboard: %v", err)
 	}
-	if len(entries) != 2 {
-		t.Errorf("expected 2 entries, got %d", len(entries))
+	if board.Total != 1 {
+		t.Errorf("total = %d, want 1", board.Total)
+	}
+	if len(board.Entries) != 1 || board.Entries[0].Name != "alice" {
+		t.Fatalf("entries = %+v, want alice only", board.Entries)
+	}
+	if board.Me.Rank != 1 || board.Me.XP != 5 {
+		t.Errorf("me = %+v, want rank 1 with 5 XP", board.Me)
 	}
 }
 

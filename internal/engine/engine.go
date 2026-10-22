@@ -1702,8 +1702,10 @@ func (e *Engine) GetLessonLoader() *lessons.Loader {
 	return e.ll
 }
 
-func (e *Engine) GetLeaderboard() ([]leaderboard.Entry, error) {
-	return e.lboard.Weekly()
+// GetLeaderboardPage answers one page of the weekly or all-time board. The
+// caller's id is used only to mark their row and locate them outside it.
+func (e *Engine) GetLeaderboardPage(studentID, view string, page, pageSize int) (*leaderboard.Board, error) {
+	return e.lboard.Board(studentID, view, page, pageSize, nowUTC())
 }
 
 func (e *Engine) GetLeagues() (*leaderboard.LeagueBoard, error) {

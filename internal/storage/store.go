@@ -166,6 +166,12 @@ type LeaderboardRow struct {
 	AvatarSettings string
 	TotalMastered  int
 	WeeklyMastered int
+	// XP is the score for the requested view: the week's ledger sum for
+	// "weekly", lifetime total for "all_time". XPTotal is always the lifetime
+	// total, so a weekly board can break a tie on earned history.
+	XP        int
+	XPTotal   int
+	CreatedAt string
 }
 
 // LeagueMember is a student's row inside a weekly league tier.
@@ -592,6 +598,12 @@ type Repository interface {
 	PurgeGeneratedQuestions(conceptIDs map[string]bool) (int64, error)
 
 	GetWeeklyLeaderboard() ([]LeaderboardRow, error)
+	// LeaderboardPage returns one page and the count of eligible rows. The
+	// count comes from the same predicate as the rows, so "page 3 of 9" is a
+	// fact rather than a guess.
+	LeaderboardPage(view string, since time.Time, limit, offset int) ([]LeaderboardRow, int, error)
+	// LeaderboardPosition locates one learner without loading the board.
+	LeaderboardPosition(studentID, view string, since time.Time) (rank, xp int, found bool, err error)
 	GetLeagueStandings() ([]LeagueMember, error)
 	SetLeague(studentID, tier, week string, moved int) error
 	SetShareToken(studentID, token string) error
