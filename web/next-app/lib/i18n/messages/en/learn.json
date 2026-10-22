@@ -264,5 +264,55 @@
     "placeholder": "Ask about Mathua",
     "questionLabel": "Your question",
     "send": "Send"
+  },
+  "stepper": {
+    "loading": "Loading lesson…",
+    "loadFailed": "Failed to load lesson",
+    "chooseAnother": "← Choose another topic",
+    "prereqIntro": {
+      "dueCheck": "You have already learned {names} — a short check is due, or continue anyway.",
+      "allLearned": "You have already learned what this builds on. You can revisit it any time.",
+      "unmet": "This builds on {names}. A quick study helps — or continue anyway."
+    },
+    "section": "Section {number} of {total}",
+    "correctSoFar": "· {correct}/{answered} correct",
+    "xpGained": "· +{xp} XP",
+    "bandTitle": "How you're doing on this concept, from your recent answers. Progress only — mastery is decided separately.",
+    "introFallbackLabel": "Learn",
+    "workedExampleMissing": "Worked example unavailable — start practicing instead.",
+    "diagramAlt": "Diagram for {label}",
+    "thisTopic": "this topic",
+    "subgoals": "Steps ({count})",
+    "subgoal": "Step {number}: ",
+    "next": "Next →",
+    "nextSection": "Next: {label} (worked example)",
+    "kpFallback": "Knowledge point {number}",
+    "halt": "Stepping down a level — easier question below.",
+    "studyPrereq": "Study {title}",
+    "otherTask": "Other task →",
+    "check": "Check",
+    "verdictXp": "✓ +{xp} XP",
+    "verdictCorrect": "✓ Correct",
+    "verdictWrong": "✗ Not quite.",
+    "youAnswered": "you answered “{answer}”",
+    "answerLabel": "Answer: ",
+    "whyCorrect": "Why",
+    "howWrong": "How",
+    "errors": {
+      "exhaustedEnd": "This topic ran out of new questions, so the section ended here.",
+      "exhaustedNothingLeft": "This topic ran out of new questions, so there was nothing left to work through.",
+      "noQuestion": "Could not load a question — check your connection and reload.",
+      "expiredFresh": "That question had expired on the server, so it could not be graded. Here is a fresh one — nothing was recorded.",
+      "expiredNoReplacement": "That question had expired and no replacement could be loaded. Reload to continue.",
+      "unreachable": "Could not reach the server to grade that answer. Check your connection and submit again — nothing was recorded."
+    }
+  },
+  "done": {
+    "complete": "✓ Complete — {correct}/{answered} correct · +{xp} XP · {band}",
+    "scrollUp": "Scroll up to review anything. Reviews are scheduled automatically.",
+    "findingNext": "Finding what's next…",
+    "practiceAgain": "Practice again",
+    "comingUp": "Coming up — unlocks once this concept is mastered",
+    "needs": "Needs: {names}"
   }
 }

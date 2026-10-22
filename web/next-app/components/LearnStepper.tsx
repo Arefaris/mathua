@@ -5,35 +5,25 @@ import Link from 'next/link'
 import KatexContent from './KatexContent'
 import LessonDiagram from './LessonDiagram'
 import LessonAssets from './LessonAssets'
-import ChoiceOptions from './ChoiceOptions'
 import ConceptReference from './ConceptReference'
 import PrerequisitePanel from './PrerequisitePanel'
+import LearnDoneCard from './LearnDoneCard'
+import LearnQuestionCard, { type QEntry } from './LearnQuestionCard'
 import { getLessonKPs, getLessonPractice, getLessonReadiness, submitStudyAnswer, getProgress, getErrorStatus, type EligibilityPrereq, type KpInfo, type PracticeQuestion, type ReadinessRes, type ConceptProgress } from '../lib/api'
 import { getUserInfo } from '../lib/auth'
-import { upcomingLocked, hrefConceptId, type Shelf, type LockedSuccessor } from '../lib/nextUp'
+import { hrefConceptId, type Shelf } from '../lib/nextUp'
 import { backTarget, learnConceptPath, pushReturn, studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/learnReturn'
 import { fetchShelf } from '../lib/recommendations'
 import { REQUIRED_IN_A_ROW } from '../lib/progression'
 import { formatForGradingType, type AnswerFormat } from '../lib/answerFormat'
 import { countsAsMastered } from '../lib/progress'
-import { MathAnswerInput } from './math/MathInput'
 import { concepts } from '../lib/conceptData'
+import { useT } from '../lib/i18n'
 
 // Append-only learning feed: intro once, then each submit locks its card and
 // the next question opens below. Scrollback IS the performance history —
 // there are no gating buttons between questions and no pre-answer hints.
 // Post-mistake explanations render inline in the locked card.
-interface QEntry {
-  key: number
-  kind: 'q'
-  kpIndex: number
-  q: PracticeQuestion
-  answer: string
-  checking: boolean
-  servedAt: number
-  feedback: { correct: boolean; text: string; diagnosis?: string; xp: number } | null
-}
-
 type Entry =
   | { key: number; kind: 'intro'; kpIndex: number }
   | QEntry
@@ -75,10 +65,6 @@ function prereqStateFromStatus(status: string | undefined): string {
 // (Practice again + Back to Profile) renders instead of a stale spinner.
 const SHELF_TIMEOUT_MS = 8000
 
-function catalogEntries() {
-  return concepts.map(c => ({ id: c.id, label: c.label, prerequisites: c.prerequisites ?? [], avgTimeSeconds: c.mastery_threshold?.avg_time_seconds }))
-}
-
 // The done guard compares concept ids, never raw href strings: live URLs may
 // carry &seed=/&difficulty=/&exclude= while the stepper still won't reset,
 // so only a real concept change may render a navigating <Link>. Shared with
@@ -86,6 +72,7 @@ function catalogEntries() {
 export { hrefConceptId as headConceptId }
 
 export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
+  const t = useT()
   const [entries, setEntries] = useState<Entry[]>([])
   const [kps, setKps] = useState<KpInfo[]>([])
   // The concept's own diagram. The KP endpoint has always returned it and the client has
@@ -185,11 +172,11 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
       }
       setEntries([{ key: nextKey(), kind: 'intro', kpIndex: 0 }])
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load lesson')
+      setError(e instanceof Error ? e.message : t('learn.stepper.loadFailed'))
     } finally {
       setLoading(false)
     }
-  }, [conceptId])
+  }, [conceptId, t])
 
   useEffect(() => {
     setEntries([])
@@ -295,7 +282,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   async function startPracticing() {
     const q = await takeNext(difficulty)
     if (!q) {
-      setError('Could not load a question — check your connection and reload.')
+      setError(t('learn.stepper.errors.noQuestion'))
       return
     }
     const entry: QEntry = { key: nextKey(), kind: 'q', kpIndex, q, answer: '', checking: false, servedAt: Date.now(), feedback: null }
@@ -316,7 +303,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   async function advanceSection(from: QEntry, why: 'complete' | 'exhausted') {
     const total = Math.max(kps.length, 1)
     const note = why === 'exhausted'
-      ? 'This topic ran out of new questions, so the section ended here.'
+      ? t('learn.stepper.errors.exhaustedEnd')
       : undefined
     if (from.kpIndex + 1 >= total) {
       setEntries(prev => [...prev, { key: nextKey(), kind: 'done', note }])
@@ -343,7 +330,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
         {
           key: nextKey(),
           kind: 'done',
-          note: note ?? 'This topic ran out of new questions, so there was nothing left to work through.',
+          note: note ?? t('learn.stepper.errors.exhaustedNothingLeft'),
         },
       ])
     }
@@ -473,15 +460,15 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
           seenRef.current = [...seenRef.current, fresh[0].question].slice(-20)
           setEntry(key, { checking: false, q: fresh[0], answer: '', servedAt: Date.now() })
           setBuffer(prev => [...prev, ...fresh.slice(1)].slice(0, 6))
-          setError('That question had expired on the server, so it could not be graded. Here is a fresh one — nothing was recorded.')
+          setError(t('learn.stepper.errors.expiredFresh'))
           return
         }
-        setError('That question had expired and no replacement could be loaded. Reload to continue.')
+        setError(t('learn.stepper.errors.expiredNoReplacement'))
         setEntry(key, { checking: false })
         return
       }
       setEntry(key, { checking: false })
-      setError('Could not reach the server to grade that answer. Check your connection and submit again — nothing was recorded.')
+      setError(t('learn.stepper.errors.unreachable'))
     }
   }
 
@@ -496,7 +483,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   }, [entries])
 
   if (loading && entries.length === 0) {
-    return <div className="p-6 border border-mathua-border bg-mathua-surface"><p className="font-mono text-xs text-mathua-muted">Loading lesson…</p></div>
+    return <div className="p-6 border border-mathua-border bg-mathua-surface"><p className="font-mono text-xs text-mathua-muted">{t('learn.stepper.loading')}</p></div>
   }
 
   // A locked topic is explained, never started. The server refused the questions;
@@ -512,10 +499,10 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
         />
         <div className="mt-4 flex flex-wrap gap-3">
           <Link href="/domains" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue">
-            ← Choose another topic
+            {t('learn.stepper.chooseAnother')}
           </Link>
           <Link href="/profile" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue">
-            Back to Profile
+            {t('learn.answer.backToProfile')}
           </Link>
         </div>
       </div>
@@ -542,12 +529,12 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
     const names = (unmetPrereqs.length > 0 ? unmetPrereqs : dueReviewPrereqs)
       .slice(0, 3).map(p => p.title).join(', ')
     if (unmetPrereqs.length === 0 && dueReviewPrereqs.length > 0) {
-      return `You have already learned ${names} — a short check is due, or continue anyway.`
+      return t('learn.stepper.prereqIntro.dueCheck', { names })
     }
     if (unmetPrereqs.length === 0) {
-      return 'You have already learned what this builds on. You can revisit it any time.'
+      return t('learn.stepper.prereqIntro.allLearned')
     }
-    return `This builds on ${names}. A quick study helps — or continue anyway.`
+    return t('learn.stepper.prereqIntro.unmet', { names })
   })()
   const totalAnswered = answeredCount
   const totalCorrect = correctCount
@@ -556,11 +543,11 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="sticky top-0 z-10 bg-mathua-bg backdrop-blur py-2 mb-4 flex items-center gap-2 font-mono text-[11px] text-mathua-muted border-b border-mathua-border">
-        <span>Section {Math.min(kpIndex + 1, Math.max(kps.length, 1))} of {Math.max(kps.length, 1)}</span>
-        {totalAnswered > 0 && <span>· {totalCorrect}/{totalAnswered} correct</span>}
-        {totalXP > 0 && <span className="text-yellow-400">· +{totalXP} XP</span>}
+        <span>{t('learn.stepper.section', { number: Math.min(kpIndex + 1, Math.max(kps.length, 1)), total: Math.max(kps.length, 1) })}</span>
+        {totalAnswered > 0 && <span>{t('learn.stepper.correctSoFar', { correct: totalCorrect, answered: totalAnswered })}</span>}
+        {totalXP > 0 && <span className="text-yellow-400">{t('learn.stepper.xpGained', { xp: totalXP })}</span>}
         {band && (
-          <span title="How you're doing on this concept, from your recent answers. Progress only — mastery is decided separately.">
+          <span title={t('learn.stepper.bandTitle')}>
             · {band}
           </span>
         )}
@@ -570,7 +557,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
         <PrerequisitePanel
           prerequisites={prerequisites}
           returnStack={prereqStack}
-          heading={`Prerequisites (${prerequisites.length})`}
+          heading={t('learn.prereq.heading', { count: prerequisites.length })}
           intro={prereqIntro}
           onDismiss={() => setBannerDismissed(true)}
         />
@@ -593,8 +580,8 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
             const ikp = kps[e.kpIndex]
             return (
               <div key={e.key} className="border border-mathua-border bg-mathua-surface p-6">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{ikp?.label || 'Learn'}</p>
-                <KatexContent className="mt-3 text-sm text-mathua-primary whitespace-pre-wrap">{ikp?.worked_example || 'Worked example unavailable — start practicing instead.'}</KatexContent>
+                <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{ikp?.label || t('learn.stepper.introFallbackLabel')}</p>
+                <KatexContent className="mt-3 text-sm text-mathua-primary whitespace-pre-wrap">{ikp?.worked_example || t('learn.stepper.workedExampleMissing')}</KatexContent>
                 {/* Figures for this knowledge point, plus the concept's own diagram. The
                     worked example is text lifted out of the lesson body, so its figures do
                     not come with it; selecting them per knowledge point is what keeps the
@@ -602,7 +589,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
                 <LessonAssets assets={ikp?.assets} />
                 {diagram && (
                   <figure className="mt-4">
-                    <LessonDiagram src={diagram} alt={`Diagram for ${ikp?.label || 'this topic'}`} />
+                    <LessonDiagram src={diagram} alt={t('learn.stepper.diagramAlt', { label: ikp?.label || t('learn.stepper.thisTopic') })} />
                   </figure>
                 )}
                 {/* Steps appear once this section has been attempted. Listed before the
@@ -612,9 +599,9 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
                     in sync and no way for the two to disagree. */}
                 {ikp?.subgoals && ikp.subgoals.length > 0 && answeredSections.has(e.kpIndex) && (
                   <details className="mt-3">
-                    <summary className="font-mono text-[11px] text-mathua-muted cursor-pointer hover:text-mathua-blue">Steps ({ikp.subgoals.length})</summary>
+                    <summary className="font-mono text-[11px] text-mathua-muted cursor-pointer hover:text-mathua-blue">{t('learn.stepper.subgoals', { count: ikp.subgoals.length })}</summary>
                     <ol className="mt-2 space-y-1.5">
-                      {ikp.subgoals.map((s, i) => <li key={i} className="font-mono text-xs text-mathua-secondary">Step {i + 1}: <KatexContent>{s}</KatexContent></li>)}
+                      {ikp.subgoals.map((s, i) => <li key={i} className="font-mono text-xs text-mathua-secondary">{t('learn.stepper.subgoal', { number: i + 1 })}<KatexContent>{s}</KatexContent></li>)}
                     </ol>
                   </details>
                 )}
@@ -624,7 +611,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
                     MA has no skip affordance at all: the worked example is the
                     scaffolding for the question that follows (example-problem
                     pair), so the label must not invite bypassing it. */}
-                <button type="button" onClick={startPracticing} className="mt-5 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2.5 font-mono text-xs min-h-[44px]">Next →</button>
+                <button type="button" onClick={startPracticing} className="mt-5 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2.5 font-mono text-xs min-h-[44px]">{t('learn.stepper.next')}</button>
               </div>
             )
           }
@@ -633,7 +620,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
             return (
               <div key={e.key} className="border-t-2 border-mathua-blue pt-4">
                 <details>
-                  <summary className="font-mono text-[11px] uppercase tracking-wider text-mathua-blue cursor-pointer">Next: {ikp?.label || `Knowledge point ${e.kpIndex + 1}`} (worked example)</summary>
+                  <summary className="font-mono text-[11px] uppercase tracking-wider text-mathua-blue cursor-pointer">{t('learn.stepper.nextSection', { label: ikp?.label || t('learn.stepper.kpFallback', { number: e.kpIndex + 1 }) })}</summary>
                   <KatexContent className="mt-2 text-sm text-mathua-primary whitespace-pre-wrap">{ikp?.worked_example || ''}</KatexContent>
                   <LessonAssets assets={ikp?.assets} />
                 </details>
@@ -643,141 +630,49 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
           if (e.kind === 'halt') {
             return (
               <div key={e.key} className="border border-mathua-red-faint bg-mathua-surface p-5">
-                <p className="font-mono text-xs text-red-400">Stepping down a level — easier question below.</p>
+                <p className="font-mono text-xs text-red-400">{t('learn.stepper.halt')}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {/* A prerequisite is reference here too: study the material rather than being
                       sent to a tutorial under the name of a check. Practising it is a separate,
                       eligibility-gated step on that concept's own page. */}
                   {prerequisites.slice(0, 2).map(p => (
-                    <Link key={p.conceptId} href={withReturnStack(studyConceptPath(p.conceptId), prereqStack)} className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">Study {p.title}</Link>
+                    <Link key={p.conceptId} href={withReturnStack(studyConceptPath(p.conceptId), prereqStack)} className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">{t('learn.stepper.studyPrereq', { title: p.title })}</Link>
                   ))}
-                  <Link href="/profile" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">Other task →</Link>
+                  <Link href="/profile" className="border border-mathua-border px-4 py-2 font-mono text-[11px] text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center">{t('learn.stepper.otherTask')}</Link>
                 </div>
               </div>
             )
           }
           if (e.kind === 'done') {
-            const headId = nextShelf ? hrefConceptId(nextShelf.next.href) : null
-            // Only a real concept change may render a navigating <Link>: the
-            // stepper keys everything off conceptId, so a same-concept href
-            // (however many query params it carries) would scroll to top and
-            // strand the learner.
-            const canContinue = !nextLoading && nextShelf && headId !== null && headId !== conceptId
-            const upcoming: LockedSuccessor[] = upcomingLocked(catalogEntries(), shelfProgress, conceptId)
             return (
-              <div key={e.key} className="border border-mathua-green-faint bg-mathua-surface p-6">
-                <p className="font-mono text-xs text-green-400">✓ Complete — {totalCorrect}/{totalAnswered} correct · +{totalXP} XP · {band}</p>
-                {e.note && <p role="status" className="mt-2 font-mono text-[11px] text-mathua-secondary">{e.note}</p>}
-                <p className="mt-2 font-mono text-[11px] text-mathua-secondary">Scroll up to review anything. Reviews are scheduled automatically.</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {back && <Link href={back.href} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 py-2 font-mono text-xs inline-flex items-center min-h-[40px]">← Back to {returnToLabel}</Link>}
-                  {nextLoading && <span className="font-mono text-xs text-mathua-muted inline-flex items-center min-h-[40px]">Finding what&apos;s next…</span>}
-                  {canContinue && nextShelf && (
-                    <Link href={nextShelf.next.href} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 py-2 font-mono text-xs inline-flex items-center min-h-[40px]">{nextShelf.next.badge}: {nextShelf.next.title} →</Link>
-                  )}
-                  {!nextLoading && !nextShelf && (
-                    <Link href="/profile" className="border border-mathua-border px-5 py-2 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center min-h-[40px]">Back to Profile</Link>
-                  )}
-                  <button type="button" onClick={practiceAgain} className="border border-mathua-border px-5 py-2 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue inline-flex items-center min-h-[40px]">Practice again</button>
-                </div>
-                {!nextLoading && nextShelf && nextShelf.alternatives.length > 0 && (
-                  <details className="mt-3 border border-mathua-border">
-                    <summary className="font-mono text-[11px] text-mathua-secondary cursor-pointer px-4 py-2.5">
-                      Or pick something else ({nextShelf.alternatives.length})
-                    </summary>
-                    <div className="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {nextShelf.alternatives.map((it, i) => (
-                        <Link
-                          key={`${it.kind}:${it.href}:${i}`}
-                          href={it.href}
-                          className="border border-mathua-border p-3 hover:border-mathua-blue transition-colors block min-w-0"
-                        >
-                          <div className="font-mono text-xs text-mathua-primary truncate">{it.title}</div>
-                          <div className="mt-1 font-mono text-[11px] text-mathua-blue">{it.cta}</div>
-                        </Link>
-                      ))}
-                    </div>
-                  </details>
-                )}
-                {upcoming.length > 0 && (
-                  <div className="mt-3 border border-mathua-border">
-                    <p className="font-mono text-[11px] text-mathua-secondary px-4 py-2.5">
-                      Coming up — unlocks once this concept is mastered
-                    </p>
-                    <div className="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {upcoming.map(u => (
-                        <Link
-                          key={u.id}
-                          href={`/learn?concept=${encodeURIComponent(u.id)}`}
-                          className="border border-mathua-border p-3 hover:border-mathua-blue transition-colors block min-w-0"
-                        >
-                          <div className="font-mono text-xs text-mathua-primary truncate">{u.label}</div>
-                          <div className="mt-1 font-mono text-[11px] text-mathua-muted">Needs: {u.missing.join(', ')}</div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <LearnDoneCard
+                key={e.key}
+                conceptId={conceptId}
+                note={e.note}
+                correct={totalCorrect}
+                answered={totalAnswered}
+                xp={totalXP}
+                band={band}
+                back={back}
+                returnToLabel={returnToLabel}
+                nextShelf={nextShelf}
+                nextLoading={nextLoading}
+                shelfProgress={shelfProgress}
+                onPracticeAgain={practiceAgain}
+              />
             )
           }
           const qe = e as QEntry
-          const locked = qe.feedback !== null
           return (
-            <div key={qe.key} className={`border bg-mathua-surface p-6 ${qe.feedback?.correct ? 'border-mathua-green-faint' : qe.feedback ? 'border-mathua-red-faint' : 'border-mathua-border'}`}>
-              <KatexContent className="text-sm text-mathua-primary font-mono whitespace-pre-wrap">{qe.q.question}</KatexContent>
-              <ChoiceOptions question={qe.q.question} value={qe.answer} onPick={v => setEntry(qe.key, { answer: v })} disabled={locked || qe.checking} />
-              {!locked && (
-                <form onSubmit={ev => { ev.preventDefault(); handleCheck(qe.key) }} className="mt-3 flex flex-col sm:flex-row gap-2">
-                  <label htmlFor={`learn-answer-${qe.key}`} className="sr-only">Your answer</label>
-                  <MathAnswerInput
-                    id={`learn-answer-${qe.key}`}
-                    value={qe.answer}
-                    onChange={v => setEntry(qe.key, { answer: v })}
-                    onSubmit={() => handleCheck(qe.key)}
-                    gradingType={conceptGradingType}
-                    conceptId={conceptId}
-                    disabled={qe.checking}
-                    status={qe.feedback ? (qe.feedback.correct ? 'correct' : 'incorrect') : 'default'}
-                    inputMode={format.inputMode}
-                  placeholder="Your answer"
-                    className="sm:flex-1"
-                  />
-                  <button type="submit" disabled={qe.checking || !qe.answer.trim()} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 h-12 text-sm font-mono disabled:opacity-50 w-auto self-end sm:self-auto shrink-0">Check</button>
-                </form>
-              )}
-              {!locked && <p className="mt-2 font-mono text-[11px] text-mathua-muted">{format.hint}</p>}
-              {locked && qe.feedback && (
-                <div className="mt-3">
-                  <p className={`font-mono text-xs ${qe.feedback.correct ? 'text-green-400' : 'text-red-400'}`}>
-                    {qe.feedback.correct ? `✓ ${qe.feedback.xp ? `+${qe.feedback.xp} XP` : 'Correct'}` : '✗ Not quite.'}{' '}
-                    <span className="text-mathua-muted">you answered “{qe.answer}”</span>
-                  </p>
-                  <p className="mt-1.5 font-mono text-xs text-mathua-primary">
-                    Answer: <KatexContent>{qe.q.answer}</KatexContent>
-                  </p>
-                  {/* The explanation is the solution for *this* instance, shown
-                      on both verdicts: a correct answer still needs the
-                      reasoning that made it right. Guarded on a non-empty
-                      string so a server that returns nothing leaves no empty
-                      section behind. */}
-                  {/* The mistake, when it can be named with certainty. It is
-                      a description of what happened, never a hint about what
-                      to do, and it is empty far more often than not. */}
-                  {qe.feedback.diagnosis && (
-                    <p data-diagnosis className="mt-2 font-mono text-[11px] text-mathua-muted">{qe.feedback.diagnosis}</p>
-                  )}
-                  {qe.feedback.text && (
-                    <div className="mt-1.5">
-                      <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-                        {qe.feedback.correct ? 'Why' : 'How'}
-                      </p>
-                      <KatexContent className="mt-1 text-xs font-mono text-mathua-secondary whitespace-pre-wrap">{qe.feedback.text}</KatexContent>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            <LearnQuestionCard
+              key={qe.key}
+              entry={qe}
+              conceptId={conceptId}
+              gradingType={conceptGradingType}
+              format={format}
+              onAnswerChange={v => setEntry(qe.key, { answer: v })}
+              onCheck={() => handleCheck(qe.key)}
+            />
           )
         })}
         <div ref={bottomRef} aria-hidden="true" />
