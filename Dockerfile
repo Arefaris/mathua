@@ -1,4 +1,9 @@
-FROM node:24-bookworm AS webbuilder
+# Pinned to the 2026-10-21 security release (CVE-2026-111497, CVE-2026-106069,
+# CVE-2026-105483, CVE-2026-105482, and the medium fixes). The major-only tag
+# `node:24-bookworm` is whatever the builder has cached, so a rebuild could ship
+# the previous, vulnerable patch. Node is build-time only; the runtime image
+# below does not contain it.
+FROM node:24.22.1-bookworm AS webbuilder
 
 WORKDIR /app
 COPY web/next-app/package.json web/next-app/package-lock.json ./web/next-app/
