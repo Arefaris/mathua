@@ -303,7 +303,10 @@ test.describe('administrator management', () => {
     await signIn(page, 'owner')
 
     await page.goto('/admin/reports')
-    await expect(page.getByText('arith.add.single')).toBeVisible()
+    // The queue is grouped by concept, so the concept name now appears twice: once as the
+    // section heading and once inside the report's own button. Naming the role picks the
+    // heading on purpose; a bare getByText is ambiguous and fails strict mode.
+    await expect(page.getByRole('heading', { name: 'arith.add.single' })).toBeVisible()
     await page.getByRole('button', { name: /arith\.add\.single/ }).click()
     await page.getByLabel(/Decision reason/).fill('fixed the answer')
     await page.getByRole('button', { name: 'Resolve', exact: true }).click()
