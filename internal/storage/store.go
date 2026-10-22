@@ -655,6 +655,16 @@ type Repository interface {
 	CreateReport(r QuestionReport) (int64, error)
 	ListReports(status string, limit, offset int) ([]QuestionReport, error)
 
+	// ImportReport copies a report that came from another installation into this one.
+	//
+	// originID is that report's id where it was filed, and the unique index on it is what
+	// makes re-running an export a no-op: a partially applied import can be retried without
+	// duplicating the queue. The returned bool is false when the report was already present.
+	//
+	// There is deliberately no write-back. The import exists so the person fixing a reported
+	// question can reproduce it against a local database; the fix still travels as a commit.
+	ImportReport(originID string, r QuestionReport) (bool, error)
+
 	// Diagnostic sessions outlive the process that started them.
 	//
 	// They used to live only in the server's memory, so every deploy erased the

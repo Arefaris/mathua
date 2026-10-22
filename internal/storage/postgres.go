@@ -211,7 +211,8 @@ CREATE TABLE IF NOT EXISTS question_reports (
     resolution  TEXT NOT NULL DEFAULT '',
     resolved_by TEXT NOT NULL DEFAULT '',
     resolved_at TEXT NOT NULL DEFAULT '',
-    created_at  TEXT NOT NULL DEFAULT (now()::text)
+    created_at  TEXT NOT NULL DEFAULT (now()::text),
+    origin_report_id TEXT NOT NULL DEFAULT '',
 );
 
 CREATE INDEX IF NOT EXISTS idx_reports_status  ON question_reports(status, created_at);
@@ -370,6 +371,8 @@ func pgAuthMigrate(db *sql.DB) error {
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS grading_type TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_hint TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_input_mode TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS origin_report_id TEXT NOT NULL DEFAULT ''",
+		"CREATE UNIQUE INDEX IF NOT EXISTS idx_reports_origin ON question_reports(origin_report_id) WHERE origin_report_id != ''",
 		`CREATE TABLE IF NOT EXISTS avatar_images (
 			student_id TEXT PRIMARY KEY REFERENCES students(id) ON DELETE CASCADE,
 			content_type TEXT NOT NULL,
@@ -1964,6 +1967,45 @@ func (s *PostgresStore) CreateReport(r QuestionReport) (int64, error) {
 		return 0, fmt.Errorf("create report: %w", err)
 	}
 	return id, nil
+}
+
+// ImportReport mirrors the SQLite implementation: the origin id is what makes
+// a repeated import a no-op, and the row is otherwise an ordinary report.
+func (s *PostgresStore) ImportReport(originID string, r QuestionReport) (bool, error) {
+	originID = strings.TrimSpace(originID)
+	if originID == "" {
+		return false, fmt.Errorf("import report: origin id is required")
+	}
+	if r.Status == "" {
+		r.Status = "open"
+	}
+	created := r.CreatedAt.UTC().Format(time.RFC3339)
+	if r.CreatedAt.IsZero() {
+		created = time.Now().UTC().Format(time.RFC3339)
+	}
+	res, err := s.db.Exec(`
+		INSERT INTO question_reports
+			(reporter_id, concept_id, kind, question, expected, explanation,
+			 lesson_id, source, session_id, attempt_id, answer_given, grading_type,
+			 answer_hint, answer_input_mode, reason, detail, status, created_at,
+			 origin_report_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+		ON CONFLICT DO NOTHING
+	`,
+		r.ReporterID, r.ConceptID, r.Kind, r.Question, r.Expected, r.Explanation,
+		r.LessonID, r.Source, r.SessionID, r.AttemptID,
+		r.AnswerGiven, r.GradingType, r.AnswerHint, r.AnswerInputMode,
+		r.Reason, r.Detail, r.Status,
+		created, originID,
+	)
+	if err != nil {
+		return false, fmt.Errorf("import report: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("import report: %w", err)
+	}
+	return n > 0, nil
 }
 
 func (s *PostgresStore) ListReports(status string, limit, offset int) ([]QuestionReport, error) {
