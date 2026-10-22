@@ -50,14 +50,27 @@ self.addEventListener('activate', event => {
   )
 })
 
+// An API answer depends on the language it was asked in: concept labels and course names are
+// served translated. The browser cache would key on the URL alone, so a Russian learner who
+// went offline could be handed the English copy. The language the page asked for is part of
+// the key; the key is never sent anywhere, so it can be any URL that stays unique.
+function dataKey(request) {
+  const lang = request.headers && request.headers.get ? request.headers.get('Accept-Language') : null
+  if (!lang) return request
+  const keyed = new URL(request.url)
+  keyed.searchParams.set('__lang', lang)
+  return keyed.href
+}
+
 async function networkFirst(request, cacheName, fallbackUrls) {
   const cache = await caches.open(cacheName)
+  const key = dataKey(request)
   try {
     const response = await fetch(request)
-    if (response.ok) cache.put(request, response.clone())
+    if (response.ok) cache.put(key, response.clone())
     return response
   } catch (err) {
-    const cached = await cache.match(request)
+    const cached = await cache.match(key)
     if (cached) return cached
     for (const url of fallbackUrls ?? []) {
       const fallback = await caches.match(url)

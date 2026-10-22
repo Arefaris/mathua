@@ -1,3 +1,5 @@
+import { getLocale } from './i18n/locale'
+
 const TOKEN_KEY = 'mathua_token'
 const USER_KEY = 'mathua_user'
 const GUEST_KEY = 'mathua_guest_id'
@@ -23,6 +25,13 @@ export function clearToken() {
 export function isLoggedIn(): boolean {
   if (typeof window === 'undefined') return false
   return localStorage.getItem(TOKEN_KEY) !== null
+}
+
+// The language the server should answer in. `Accept-Language` is a CORS-safelisted request
+// header, so sending it adds no preflight to a cross-origin API call. The server reads exactly
+// `en` or `ru` and falls back to English for anything else.
+function languageHeader(): Record<string, string> {
+  return { 'Accept-Language': getLocale() }
 }
 
 export function getAuthHeaders(): Record<string, string> {
@@ -52,6 +61,9 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
     : new Headers(init.headers).get('Authorization')
   const { timeoutMs, ...fetchInit } = init
   const headers = new Headers(fetchInit.headers)
+  // Set here, at the one choke point, so a new endpoint cannot forget it. A caller that sets
+  // its own value (a test, a future export) keeps it.
+  if (!headers.has('Accept-Language')) headers.set('Accept-Language', getLocale())
   if (!sent) {
     const token = registered || guest
     if (token) {
@@ -229,7 +241,7 @@ export async function ensureGuestToken(): Promise<string | null> {
   try {
     const res = await fetch(`${API_BASE}/api/auth/guest`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...languageHeader() },
       body: JSON.stringify({ student_id: guestId }),
       signal: ctrl.signal,
     })
@@ -273,7 +285,7 @@ export async function establishSession(
   setToken(token)
   try {
     const res = await fetch(`${API_BASE}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}`, ...languageHeader() },
     })
     if (res.ok) {
       const me = (await res.json()) as Partial<UserInfo>
@@ -320,7 +332,7 @@ export async function fetchMe(token?: string): Promise<UserInfo | null> {
   if (!bearer) return null
   try {
     const res = await fetch(`${API_BASE}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${bearer}` },
+      headers: { Authorization: `Bearer ${bearer}`, ...languageHeader() },
       cache: 'no-store',
     })
     if (!res.ok) return null

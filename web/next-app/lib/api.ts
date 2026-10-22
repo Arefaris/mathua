@@ -1,6 +1,7 @@
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
 import { getAuthHeaders, authedFetch } from './auth'
+import { getLocale } from './i18n/locale'
 import { z } from 'zod'
 
 // Dev-only heads-up: an unset NEXT_PUBLIC_API_URL falls back to relative
@@ -1200,16 +1201,19 @@ export async function getLessonPractice(conceptId: string, count = 5, opts?: { s
 const lessonKPsInFlight = new Map<string, Promise<LessonKpsRes>>()
 
 export function getLessonKPs(conceptId: string): Promise<LessonKpsRes> {
-	const existing = lessonKPsInFlight.get(conceptId)
+	// The shard's labels and subgoals are served in the learner's language, so the language is
+	// part of what makes two requests the same request.
+	const flightKey = `${getLocale()}|${conceptId}`
+	const existing = lessonKPsInFlight.get(flightKey)
 	if (existing) return existing
 	const p = (async () => {
 		const res = await authedFetch(`${API_BASE}/api/lessons/${encodeURIComponent(conceptId)}/kp`, { cache: 'no-store' })
 		if (!res.ok) return { concept_id: conceptId, kps: [] }
 		return res.json() as Promise<LessonKpsRes>
 	})().finally(() => {
-		lessonKPsInFlight.delete(conceptId)
+		lessonKPsInFlight.delete(flightKey)
 	})
-	lessonKPsInFlight.set(conceptId, p)
+	lessonKPsInFlight.set(flightKey, p)
 	return p
 }
 

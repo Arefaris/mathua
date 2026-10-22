@@ -22,12 +22,21 @@
  * - `dedupeInFlight` for anything derived from the learner's history: progress, scores,
  *   weaknesses, lessons. These change the moment an answer is graded, and a stale copy is
  *   not a slow refresh, it is a wrong number.
+ *
+ * Both caches key on the locale as well. The concept graph and the course list come back
+ * already translated, so an entry made in English must not answer a request made after the
+ * learner switched to Russian. The locale is read when the call is made, not when the cache is
+ * created, because the cache outlives the switch.
  */
+import { getLocale } from './i18n/locale'
+
+const localized = (key: string) => `${getLocale()}|${key}`
 
 /** Runs `key` at most once per JavaScript session, sharing the promise with later callers. */
 export function createSessionCache() {
   const settled = new Map<string, Promise<unknown>>()
-  return function oncePerSession<T>(key: string, run: () => Promise<T>): Promise<T> {
+  return function oncePerSession<T>(rawKey: string, run: () => Promise<T>): Promise<T> {
+    const key = localized(rawKey)
     const existing = settled.get(key)
     if (existing) return existing as Promise<T>
     // A rejection is *not* kept: the caller has already been told it failed, and leaving a
@@ -44,7 +53,8 @@ export function createSessionCache() {
 /** Shares one in-flight request between concurrent callers, and forgets it on settle. */
 export function createInflightCache() {
   const inflight = new Map<string, Promise<unknown>>()
-  return function dedupeInFlight<T>(key: string, run: () => Promise<T>): Promise<T> {
+  return function dedupeInFlight<T>(rawKey: string, run: () => Promise<T>): Promise<T> {
+    const key = localized(rawKey)
     const existing = inflight.get(key)
     if (existing) return existing as Promise<T>
     const p = run().finally(() => {
