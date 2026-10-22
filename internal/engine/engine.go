@@ -16,6 +16,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/diagnostic"
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/grader"
+	"github.com/chuma-beep/mathua/internal/i18n"
 	"github.com/chuma-beep/mathua/internal/leaderboard"
 	"github.com/chuma-beep/mathua/internal/lessons"
 	"github.com/chuma-beep/mathua/internal/mastery"
@@ -527,6 +528,12 @@ func (e *Engine) accommodatedThreshold(studentID string, base float64) float64 {
 }
 
 func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
+	return e.NextQuestionIn(i18n.Default, sessionID, studentID)
+}
+
+// NextQuestionIn is NextQuestion for a learner who asked for loc: the concept name is
+// localized and the generator is told which language to write in.
+func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*Question, error) {
 	progress, err := e.repo.GetAllProgress(studentID)
 	if err != nil {
 		return nil, fmt.Errorf("load progress: %w", err)
@@ -565,14 +572,14 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		if c == nil {
 			return nil, nil
 		}
-		as.conceptName = c.Label
+		as.conceptName = e.dag.Label(c, loc)
 		as.requiredStreak = c.MasteryThreshold.Streak
 		as.timeThreshold = e.accommodatedThreshold(studentID, c.MasteryThreshold.AvgTimeSeconds)
 		diff := 0.3
 		if as.remedialDifficulty > 0 {
 			diff = as.remedialDifficulty
 		}
-		ctx := generator.GeneratorContext{Difficulty: diff, Seed: hashSeed(studentID + "|" + cid + "|" + as.attemptID)}
+		ctx := generator.GeneratorContext{Difficulty: diff, Seed: hashSeed(studentID + "|" + cid + "|" + as.attemptID), Locale: loc}
 		prob, err := e.registry.GenerateContext(cid, ctx)
 		if err != nil {
 			return nil, fmt.Errorf("generate remedial problem: %w", err)
@@ -592,7 +599,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		}
 		return &Question{
 			ConceptID:   cid,
-			ConceptName: c.Label,
+			ConceptName: as.conceptName,
 			Question:    prob.Question,
 			GradingType: e.gradingTypeFor(cid),
 			IsReview:    false,
@@ -621,7 +628,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 	prevQuestion := as.questionText
 	attemptID := newAttemptID()
 	seedBase := hashSeed(studentID + "|" + next.Concept.ID + "|" + attemptID)
-	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase}
+	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase, Locale: loc}
 	prob, err := e.registry.GenerateContext(next.Concept.ID, ctx)
 	if err != nil {
 		return nil, fmt.Errorf("generate problem: %w", err)
@@ -634,7 +641,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		}
 	}
 	as.conceptID = next.Concept.ID
-	as.conceptName = next.Concept.Label
+	as.conceptName = e.dag.Label(next.Concept, loc)
 	as.expectedAnswer = prob.Answer
 	as.explanation = prob.Explanation
 	as.requiredStreak = next.Concept.MasteryThreshold.Streak
@@ -662,7 +669,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 
 	return &Question{
 		ConceptID:   next.Concept.ID,
-		ConceptName: next.Concept.Label,
+		ConceptName: as.conceptName,
 		Question:    prob.Question,
 		GradingType: e.gradingTypeFor(next.Concept.ID),
 		IsReview:    next.IsReview,
@@ -674,6 +681,11 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 
 // NextReviewQuestion only serves concepts due for spaced-repetition review.
 func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, error) {
+	return e.NextReviewQuestionIn(i18n.Default, sessionID, studentID)
+}
+
+// NextReviewQuestionIn is NextReviewQuestion for a learner who asked for loc.
+func (e *Engine) NextReviewQuestionIn(loc i18n.Locale, sessionID, studentID string) (*Question, error) {
 	progress, err := e.repo.GetAllProgress(studentID)
 	if err != nil {
 		return nil, fmt.Errorf("load progress: %w", err)
@@ -695,7 +707,7 @@ func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, err
 	prevQuestion := as.questionText
 	attemptID := newAttemptID()
 	seedBase := hashSeed(studentID + "|" + next.Concept.ID + "|" + attemptID)
-	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase}
+	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase, Locale: loc}
 	prob, err := e.registry.GenerateContext(next.Concept.ID, ctx)
 	if err != nil {
 		return nil, fmt.Errorf("generate problem: %w", err)
@@ -707,7 +719,7 @@ func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, err
 		}
 	}
 	as.conceptID = next.Concept.ID
-	as.conceptName = next.Concept.Label
+	as.conceptName = e.dag.Label(next.Concept, loc)
 	as.expectedAnswer = prob.Answer
 	as.explanation = prob.Explanation
 	as.requiredStreak = next.Concept.MasteryThreshold.Streak
@@ -730,7 +742,7 @@ func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, err
 
 	return &Question{
 		ConceptID:   next.Concept.ID,
-		ConceptName: next.Concept.Label,
+		ConceptName: as.conceptName,
 		Question:    prob.Question,
 		GradingType: e.gradingTypeFor(next.Concept.ID),
 		IsReview:    true,
@@ -1797,7 +1809,12 @@ func (e *Engine) StartDiagnostic() *diagnostic.Session {
 }
 
 func (e *Engine) NextDiagnosticQuestion(s *diagnostic.Session) (*generator.Problem, string, error) {
-	return e.diag.NextQuestion(s)
+	return e.NextDiagnosticQuestionIn(i18n.Default, s)
+}
+
+// NextDiagnosticQuestionIn generates the next diagnostic question for loc.
+func (e *Engine) NextDiagnosticQuestionIn(loc i18n.Locale, s *diagnostic.Session) (*generator.Problem, string, error) {
+	return e.diag.NextQuestionIn(loc, s)
 }
 
 // SubmitDiagnosticAnswerTimed is the MA-parity path: elapsed seconds + the
@@ -1856,7 +1873,12 @@ func (e *Engine) DiagnosticProgress(s *diagnostic.Session) diagnostic.Progress {
 }
 
 func (e *Engine) DiagnosticReport(s *diagnostic.Session) *diagnostic.DiagnosticReport {
-	return e.diag.Report(s)
+	return e.DiagnosticReportIn(i18n.Default, s)
+}
+
+// DiagnosticReportIn is DiagnosticReport with concept labels in loc.
+func (e *Engine) DiagnosticReportIn(loc i18n.Locale, s *diagnostic.Session) *diagnostic.DiagnosticReport {
+	return e.diag.ReportIn(loc, s)
 }
 
 func (e *Engine) DiagnosticFrontier(s *diagnostic.Session) int {
@@ -1864,6 +1886,11 @@ func (e *Engine) DiagnosticFrontier(s *diagnostic.Session) int {
 }
 
 func (e *Engine) StartGoalDiagnostic(studentID string, conceptIDs []string) (*diagnostic.Session, *Question, error) {
+	return e.StartGoalDiagnosticIn(i18n.Default, studentID, conceptIDs)
+}
+
+// StartGoalDiagnosticIn is StartGoalDiagnostic for a learner who asked for loc.
+func (e *Engine) StartGoalDiagnosticIn(loc i18n.Locale, studentID string, conceptIDs []string) (*diagnostic.Session, *Question, error) {
 	if e.planner == nil {
 		return nil, nil, fmt.Errorf("no planner configured")
 	}
@@ -1875,14 +1902,14 @@ func (e *Engine) StartGoalDiagnostic(studentID string, conceptIDs []string) (*di
 	if session.State == diagnostic.StateDone || len(path.Concepts) == 0 {
 		return session, nil, nil
 	}
-	prob, cid, err := e.diag.NextQuestion(session)
+	prob, cid, err := e.diag.NextQuestionIn(loc, session)
 	if err != nil {
 		return nil, nil, err
 	}
 	c := e.dag.Concept(cid)
 	label := cid
 	if c != nil {
-		label = c.Label
+		label = e.dag.Label(c, loc)
 	}
 	return session, &Question{
 		ConceptID:   cid,
@@ -2184,6 +2211,13 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 // GetCurrentQuestion returns the verbatim active question for the session
 // without advancing. Used for same-session auto-recovery on 409.
 func (e *Engine) GetCurrentQuestion(sessionID, studentID string) (*Question, error) {
+	return e.GetCurrentQuestionIn(i18n.Default, sessionID, studentID)
+}
+
+// GetCurrentQuestionIn is GetCurrentQuestion with the concept name in loc. The question text
+// is returned verbatim, in whatever language it was generated in: it is the text the answer
+// anchor was written against.
+func (e *Engine) GetCurrentQuestionIn(loc i18n.Locale, sessionID, studentID string) (*Question, error) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 	as := e.sessions[sessionID]
@@ -2202,9 +2236,13 @@ func (e *Engine) GetCurrentQuestion(sessionID, studentID string) (*Question, err
 	if e.ll != nil {
 		lesson = e.ll.Lesson(as.conceptID)
 	}
+	name := as.conceptName
+	if c := e.dag.Concept(as.conceptID); c != nil {
+		name = e.dag.Label(c, loc)
+	}
 	return &Question{
 		ConceptID:   as.conceptID,
-		ConceptName: as.conceptName,
+		ConceptName: name,
 		Question:    as.questionText,
 		GradingType: e.gradingTypeFor(as.conceptID),
 		IsReview:    as.isReview,

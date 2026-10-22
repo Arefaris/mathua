@@ -6,6 +6,7 @@ import (
 
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/generator"
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 // Session is an actionable quiz every ~150 XP, own grading path (attemptID).
@@ -56,6 +57,11 @@ func (e *Engine) Start(concepts []*concepts.Concept) *Session {
 }
 
 func (e *Engine) NextQuestion(s *Session) (*generator.Problem, string, error) {
+	return e.NextQuestionIn(i18n.Default, s)
+}
+
+// NextQuestionIn is NextQuestion with the question generated for loc.
+func (e *Engine) NextQuestionIn(loc i18n.Locale, s *Session) (*generator.Problem, string, error) {
 	s.Lock()
 	defer s.Unlock()
 	if s.Index >= len(s.Order) {
@@ -68,7 +74,7 @@ func (e *Engine) NextQuestion(s *Session) (*generator.Problem, string, error) {
 	if d, ok := s.Difficulties[c.ID]; ok && d > 0 {
 		difficulty = d
 	}
-	p, err := e.registry.Generate(c.ID, difficulty)
+	p, err := e.registry.GenerateIn(loc, c.ID, difficulty)
 	if err != nil {
 		return nil, "", err
 	}

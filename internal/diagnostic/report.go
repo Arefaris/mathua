@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/chuma-beep/mathua/internal/concepts"
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 // DiagnosticReport is the adaptive-exam summary (improve.md:126).
@@ -37,6 +38,11 @@ type DiagnosticReport struct {
 
 // Report builds the done-branch summary for a session.
 func (e *Engine) Report(s *Session) *DiagnosticReport {
+	return e.ReportIn(i18n.Default, s)
+}
+
+// ReportIn is Report with the concept labels (gaps, conditionally completed, frontier) in loc.
+func (e *Engine) ReportIn(loc i18n.Locale, s *Session) *DiagnosticReport {
 	s.Lock()
 	defer s.Unlock()
 
@@ -60,17 +66,17 @@ func (e *Engine) Report(s *Session) *DiagnosticReport {
 		confSum += s.confidence[c.ID]
 		confCount++
 		if b < beliefThreshold {
-			rep.GapsByDomain[c.Domain] = append(rep.GapsByDomain[c.Domain], c.Label)
+			rep.GapsByDomain[c.Domain] = append(rep.GapsByDomain[c.Domain], e.dag.Label(c, loc))
 		}
 		// MA "conditionally completed": probed, barely above the known
 		// cutoff — assumed known, but first in line for fall-back.
 		if s.confidence[c.ID] > 0 && b >= beliefThreshold && b < beliefThreshold+0.15 {
 			conditional[c.ID] = true
-			rep.ConditionallyCompleted = append(rep.ConditionallyCompleted, c.Label)
+			rep.ConditionallyCompleted = append(rep.ConditionallyCompleted, e.dag.Label(c, loc))
 		}
 		if b >= beliefThreshold && s.index(c.ID) > rep.FrontierIdx {
 			rep.FrontierIdx = s.index(c.ID)
-			rep.FrontierLabel = c.Label
+			rep.FrontierLabel = e.dag.Label(c, loc)
 		}
 	}
 	if confCount > 0 {

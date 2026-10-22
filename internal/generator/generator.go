@@ -1,10 +1,18 @@
 package generator
 
-import "github.com/chuma-beep/mathua/internal/grader"
+import (
+	"github.com/chuma-beep/mathua/internal/grader"
+	"github.com/chuma-beep/mathua/internal/i18n"
+)
 
 type GeneratorContext struct {
 	Difficulty float64
 	Seed       int64
+	// Locale is the language the learner asked for. A generator that has no translation
+	// ignores it and writes English, which is every generator today; the registry fills in
+	// i18n.Default for a zero value, so a generator can compare against i18n.RU without
+	// first checking for the empty string.
+	Locale i18n.Locale
 }
 
 type Problem struct {

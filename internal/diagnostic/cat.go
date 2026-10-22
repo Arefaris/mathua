@@ -10,6 +10,7 @@ import (
 
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/generator"
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 type State string
@@ -402,6 +403,11 @@ func (e *Engine) pickByInfoGain(s *Session) string {
 }
 
 func (e *Engine) NextQuestion(s *Session) (*generator.Problem, string, error) {
+	return e.NextQuestionIn(i18n.Default, s)
+}
+
+// NextQuestionIn is NextQuestion with the question generated for loc.
+func (e *Engine) NextQuestionIn(loc i18n.Locale, s *Session) (*generator.Problem, string, error) {
 	s.Lock()
 	defer s.Unlock()
 	if s.State == StateDone {
@@ -429,7 +435,7 @@ func (e *Engine) NextQuestion(s *Session) (*generator.Problem, string, error) {
 	if s.probeCounts[cid] >= 3 {
 		difficulty = 0.8
 	}
-	p, err := e.registry.Generate(cid, difficulty)
+	p, err := e.registry.GenerateIn(loc, cid, difficulty)
 	if err != nil {
 		return nil, "", err
 	}

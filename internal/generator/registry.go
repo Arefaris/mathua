@@ -6,6 +6,7 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/chuma-beep/mathua/internal/i18n"
 	"github.com/chuma-beep/mathua/internal/latex"
 	"github.com/chuma-beep/mathua/internal/solutions"
 )
@@ -96,16 +97,22 @@ func (r *Registry) Get(conceptID string) (Generator, error) {
 }
 
 func (r *Registry) Generate(conceptID string, difficulty float64) (Problem, error) {
+	return r.GenerateIn(i18n.Default, conceptID, difficulty)
+}
+
+// GenerateIn is Generate for a learner who asked for loc.
+func (r *Registry) GenerateIn(loc i18n.Locale, conceptID string, difficulty float64) (Problem, error) {
 	if difficulty < 0 {
 		difficulty = 0
 	}
 	if difficulty > 1 {
 		difficulty = 1
 	}
-	return r.GenerateContext(conceptID, GeneratorContext{Difficulty: difficulty})
+	return r.GenerateContext(conceptID, GeneratorContext{Difficulty: difficulty, Locale: loc})
 }
 
 func (r *Registry) GenerateContext(conceptID string, ctx GeneratorContext) (Problem, error) {
+	ctx = normalizeLocale(ctx)
 	r.mu.RLock()
 	gen, exists := r.gens[conceptID]
 	r.mu.RUnlock()
@@ -128,6 +135,15 @@ func (r *Registry) GenerateContext(conceptID string, ctx GeneratorContext) (Prob
 		fmt.Printf("latex warning in generator %q: %s\n", conceptID, w)
 	}
 	return p, nil
+}
+
+// normalizeLocale replaces a missing or unsupported locale with the default, so a generator
+// sees one of the supported values and never has to guard against "".
+func normalizeLocale(ctx GeneratorContext) GeneratorContext {
+	if !ctx.Locale.Valid() {
+		ctx.Locale = i18n.Default
+	}
+	return ctx
 }
 
 // difficultyOf normalises a generator difficulty into the pointer form Problem carries.
@@ -154,6 +170,7 @@ func (r *Registry) BatchGenerateContext(conceptID string, count int, ctx Generat
 	if count > 20 {
 		count = 20
 	}
+	ctx = normalizeLocale(ctx)
 	r.mu.RLock()
 	gen, exists := r.gens[conceptID]
 	r.mu.RUnlock()
