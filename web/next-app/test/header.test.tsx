@@ -386,3 +386,17 @@ describe('Header compass menu and the Admin entry', () => {
     expect(leaderboard.getAttribute('href')).toBe('/leaderboard')
   })
 })
+
+// The beta sign is information a learner acts on: it says the curriculum and the fixes are
+// still moving. It lives next to the wordmark rather than in the footer so it is on the first
+// screen of every page, and it names its meaning in a title rather than leaving a bare label.
+describe('the beta sign', () => {
+  it('sits with the wordmark and says what beta means here', () => {
+    render(<Header />)
+    const badge = screen.getByText('beta')
+    expect(badge).toBeVisible()
+    expect(badge.getAttribute('title')).toMatch(/still moving/)
+    const wordmark = screen.getByRole('link', { name: /Mathua/ })
+    expect(wordmark.parentElement?.contains(badge)).toBe(true)
+  })
+})

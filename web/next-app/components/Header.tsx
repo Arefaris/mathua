@@ -158,12 +158,23 @@ export default function Header({ links }: HeaderProps) {
         <div className="border-b border-mathua-border">
         <div className="max-w-container mx-auto flex items-center justify-between px-4 md:px-6 py-3">
           <div className="flex items-center gap-4 md:gap-6 min-w-0">
-            <Link
-              href={loggedIn ? '/profile' : '/'}
-              className="link-underline font-mono text-sm text-mathua-blue whitespace-nowrap shrink-0"
-            >
-              λ Mathua
-            </Link>
+            <span className="flex items-center gap-2 shrink-0">
+              <Link
+                href={loggedIn ? '/profile' : '/'}
+                className="link-underline font-mono text-sm text-mathua-blue whitespace-nowrap"
+              >
+                λ Mathua
+              </Link>
+              {/* The sign says where the app is, not what the learner is. It is small, next to
+                  the wordmark on every page, and it will come down when it stops being true —
+                  rather than being a decoration nobody can date. */}
+              <span
+                className="border border-mathua-border px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-mathua-muted leading-none"
+                title="Mathua is in beta: the curriculum, the app and its fixes are still moving."
+              >
+                beta
+              </span>
+            </span>
 
             <nav className="hidden md:flex items-center gap-2">
               {displayLinks.map((link, i) => (
