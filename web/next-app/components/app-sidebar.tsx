@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
   BookOpen,
   ChartNoAxesColumn,
+  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
   FileText,
@@ -14,7 +15,6 @@ import {
   Layers,
   LogOut,
   Mail,
-  MessagesSquare,
   Shield,
   Network,
   Pencil,
@@ -34,6 +34,9 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -78,8 +81,6 @@ const NAV_ITEMS: SidebarNavItem[] = [
     { label: 'Contribute', href: '/docs/contributing', icon: Handshake },
     { label: "Creator's note", href: '/note', icon: Pencil },
     { label: 'How it works', href: '/how-it-works', icon: House },
-    { label: 'Contact', href: '/contact', icon: Mail },
-    { label: 'Discord', href: 'https://discord.gg/qXPeQ2jys', icon: MessagesSquare },
   ]
 
 const ADMIN_ITEM: SidebarNavItem = {
@@ -120,6 +121,9 @@ export function AppSidebar({
   isAdmin = false,
 }: AppSidebarProps) {
   const pathname = usePathname()
+  // Contact is one control, not two destinations: the page and the Discord
+  // server answer different needs, so the choice belongs after the click.
+  const [contactOpen, setContactOpen] = useState(false)
   const router = useRouter()
   const { toggleSidebar } = useSidebar()
   // The theme control used to live only in Header, and /profile does not render one, so this
@@ -237,6 +241,39 @@ export function AppSidebar({
                   </SidebarMenuItem>
                 )
               })}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  type="button"
+                  isActive={pathname === '/contact'}
+                  tooltip="Contact admins"
+                  aria-expanded={contactOpen}
+                  onClick={() => setContactOpen((open) => !open)}
+                >
+                  <Mail className="shrink-0" />
+                  <span className="group-data-[collapsible=icon]:hidden">Contact admins</span>
+                  <ChevronDown
+                    className={`ml-auto shrink-0 transition-transform group-data-[collapsible=icon]:hidden ${contactOpen ? 'rotate-180' : ''}`}
+                  />
+                </SidebarMenuButton>
+                {contactOpen && (
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <Link href="/contact">
+                          <span>Contact page</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <a href="https://discord.gg/qXPeQ2jys" target="_blank" rel="noreferrer">
+                          <span>Discord server</span>
+                        </a>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                )}
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
