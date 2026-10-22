@@ -14,12 +14,14 @@ import { resolveAvatar } from '../lib/dicebear'
 import Avatar from './Avatar'
 import { getSettings } from '../lib/api'
 import { desktopLinks, overflowLinks, type HeaderLink } from '../lib/nav'
+import { useT } from '../lib/i18n'
 
 interface HeaderProps {
   links?: HeaderLink[]
 }
 
 export default function Header({ links }: HeaderProps) {
+  const t = useT()
   const { mounted, toggleTheme } = useTheme()
   const { loggedIn, user } = useAuthState()
   const { visible: chromeVisible } = useChrome()
@@ -127,6 +129,9 @@ export default function Header({ links }: HeaderProps) {
   // offered it. The role comes from `/api/auth/me` via the session, and offering it
   // grants nothing — the admin routes re-check it server-side.
   const compassLinks = links || overflowLinks(loggedIn, isStaffRole(user?.role))
+  // The shared list names each link by dictionary key; a list a page passes in carries its own
+  // text, already in the right language.
+  const linkText = (l: HeaderLink) => (l.labelKey ? t(l.labelKey) : l.label)
 
   return (
     // The header is sticky and therefore in flow, so hiding it with a transform
@@ -170,9 +175,9 @@ export default function Header({ links }: HeaderProps) {
                   rather than being a decoration nobody can date. */}
               <span
                 className="border border-mathua-border px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-mathua-muted leading-none"
-                title="Mathua is in beta: the curriculum, the app and its fixes are still moving."
+                title={t('shell.header.betaHint')}
               >
-                beta
+                {t('shell.header.beta')}
               </span>
             </span>
 
@@ -186,7 +191,7 @@ export default function Header({ links }: HeaderProps) {
                     href={link.href}
                     className="link-underline font-mono text-xs text-mathua-muted hover:text-mathua-blue whitespace-nowrap transition-colors"
                   >
-                    {link.label}
+                    {linkText(link)}
                   </Link>
                 </span>
               ))}
@@ -209,7 +214,7 @@ export default function Header({ links }: HeaderProps) {
               <button
                 type="button"
                 onClick={handleThemeToggle}
-                aria-label="Toggle theme"
+                aria-label={t('shell.header.toggleTheme')}
                 className="flex items-center justify-center min-h-[44px] min-w-[44px] text-mathua-muted bg-transparent border-none cursor-pointer hover:text-mathua-blue transition-colors"
               >
                 <SunMoon ref={sunMoonRef} size={15} isAnimated={false} />
@@ -221,7 +226,7 @@ export default function Header({ links }: HeaderProps) {
                 <button
                   type="button"
                   onClick={toggleNav}
-                  aria-label="Open navigation menu"
+                  aria-label={t('shell.header.openNav')}
                   aria-expanded={navOpen}
                   aria-haspopup="menu"
                   className="flex items-center justify-center min-h-[44px] min-w-[44px] text-mathua-muted bg-transparent border-none cursor-pointer hover:text-mathua-blue transition-colors"
@@ -234,7 +239,7 @@ export default function Header({ links }: HeaderProps) {
                 <button
                   type="button"
                   onClick={() => setOpen(o => !o)}
-                  aria-label="Open profile menu"
+                  aria-label={t('shell.header.openProfileMenu')}
                   aria-expanded={open}
                   aria-haspopup="menu"
                   className="rounded-full p-0.5 border border-transparent hover:border-mathua-border focus:outline-none focus:border-mathua-blue transition-colors"
@@ -265,7 +270,7 @@ export default function Header({ links }: HeaderProps) {
                   <div className="absolute inset-y-0 left-1/2 w-full max-w-container -translate-x-1/2 pointer-events-none">
                     <div
                       role="menu"
-                      aria-label="Site navigation"
+                      aria-label={t('shell.header.siteNav')}
                       ref={navPanelRef}
                       className="pointer-events-auto absolute right-4 md:right-6 top-full min-w-[200px] bg-mathua-surface border border-mathua-border shadow-lg py-1 z-50 md:hidden"
                     >
@@ -282,7 +287,7 @@ export default function Header({ links }: HeaderProps) {
                               active ? 'text-mathua-blue' : 'text-mathua-muted hover:text-mathua-blue hover:bg-mathua-surface-elevated'
                             }`}
                           >
-                            {link.label}
+                            {linkText(link)}
                           </Link>
                         )
                       })}
@@ -327,7 +332,7 @@ export default function Header({ links }: HeaderProps) {
         <div
           ref={menuPanelRef}
           role="menu"
-          aria-label="Profile"
+          aria-label={t('shell.header.profileMenu')}
           className="pointer-events-auto absolute right-4 md:right-6 top-full min-w-[160px] bg-mathua-surface border border-mathua-border shadow-lg py-1 z-50"
         >
           <div className="px-3 py-2 border-b border-mathua-border">
@@ -343,7 +348,7 @@ export default function Header({ links }: HeaderProps) {
             }}
             className="w-full text-left px-3 py-2 font-mono text-xs text-mathua-muted hover:text-mathua-blue hover:bg-mathua-surface-elevated transition-colors"
           >
-            Profile
+            {t('shell.header.profile')}
           </button>
           <button
             type="button"
@@ -354,7 +359,7 @@ export default function Header({ links }: HeaderProps) {
             }}
             className="w-full text-left px-3 py-2 font-mono text-xs text-mathua-muted hover:text-mathua-blue hover:bg-mathua-surface-elevated transition-colors"
           >
-            Contact
+            {t('shell.header.contact')}
           </button>
           <button
             type="button"
@@ -366,7 +371,7 @@ export default function Header({ links }: HeaderProps) {
             }}
             className="w-full text-left px-3 py-2 font-mono text-xs text-mathua-muted hover:text-mathua-red hover:bg-mathua-surface-elevated transition-colors"
           >
-            Sign out
+            {t('shell.header.signOut')}
           </button>
         </div>
         </div>

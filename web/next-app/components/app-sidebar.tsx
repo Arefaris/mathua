@@ -46,6 +46,9 @@ import {
 import Avatar from './Avatar'
 import { useTheme } from '../hooks/useTheme'
 import { signOut } from '../lib/auth'
+import { useT } from '../lib/i18n'
+import type { MessageKey } from '../lib/i18n/keys'
+import { levelName } from '../lib/accountNames'
 
 // Navigate group: destinations only. Never Diagnostic / Quiz / Review —
 // those have dedicated cards in main content (no CTA duplication). Review is
@@ -57,18 +60,18 @@ import { signOut } from '../lib/auth'
 // div rather than an svg, so a `size-4` class here would silently size nothing and the
 // collapsed 44px rail would go ragged.
 interface SidebarNavItem {
-  label: string
+  labelKey: MessageKey
   href: string
   icon: IconComponent
 }
 
 const NAV_ITEMS: SidebarNavItem[] = [
-  { label: 'Learn', href: '/learn', icon: Play },
-  { label: 'Graph', href: '/graph', icon: Network },
-  { label: 'Domains', href: '/domains', icon: Layers },
-  { label: 'Leaderboard', href: '/leaderboard', icon: Trophy },
-  { label: 'History', href: '/history', icon: ChartNoAxesColumn },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { labelKey: 'shell.nav.learn', href: '/learn', icon: Play },
+  { labelKey: 'shell.nav.graph', href: '/graph', icon: Network },
+  { labelKey: 'shell.nav.domains', href: '/domains', icon: Layers },
+  { labelKey: 'shell.nav.leaderboard', href: '/leaderboard', icon: Trophy },
+  { labelKey: 'shell.nav.history', href: '/history', icon: ChartNoAxesColumn },
+  { labelKey: 'shell.nav.settings', href: '/settings', icon: Settings },
 ]
 
 // Resources group: docs, glossary, contributing, creator's note, how it works.
@@ -76,15 +79,15 @@ const NAV_ITEMS: SidebarNavItem[] = [
   // duplication). The glossary is a standalone reference with no progress,
   // XP or gating, so it sits here rather than beside Learn.
   const RESOURCE_ITEMS: SidebarNavItem[] = [
-    { label: 'Docs', href: '/docs', icon: FileText },
-    { label: 'Glossary', href: '/glossary', icon: BookOpen },
-    { label: 'Contribute', href: '/docs/contributing', icon: Handshake },
-    { label: "Creator's note", href: '/note', icon: Pencil },
-    { label: 'How it works', href: '/how-it-works', icon: House },
+    { labelKey: 'shell.nav.docs', href: '/docs', icon: FileText },
+    { labelKey: 'shell.nav.glossary', href: '/glossary', icon: BookOpen },
+    { labelKey: 'shell.nav.contribute', href: '/docs/contributing', icon: Handshake },
+    { labelKey: 'shell.nav.creatorsNote', href: '/note', icon: Pencil },
+    { labelKey: 'shell.nav.howItWorks', href: '/how-it-works', icon: House },
   ]
 
 const ADMIN_ITEM: SidebarNavItem = {
-  label: 'Admin',
+  labelKey: 'shell.nav.admin',
   href: '/admin',
   icon: Shield,
 }
@@ -120,6 +123,7 @@ export function AppSidebar({
   dueReviews = 0,
   isAdmin = false,
 }: AppSidebarProps) {
+  const t = useT()
   const pathname = usePathname()
   // Contact is one control, not two destinations: the page and the Discord
   // server answer different needs, so the choice belongs after the click.
@@ -157,8 +161,8 @@ export function AppSidebar({
           <button
             type="button"
             onClick={toggleSidebar}
-            aria-label="Expand sidebar"
-            title="Expand sidebar"
+            aria-label={t('shell.sidebar.expand')}
+            title={t('shell.sidebar.expand')}
             className="hidden size-11 shrink-0 flex-col items-center justify-center gap-0.5 font-mono text-sm text-mathua-blue hover:bg-sidebar-accent group-data-[collapsible=icon]:flex"
           >
             <span aria-hidden="true">λ</span>
@@ -166,7 +170,7 @@ export function AppSidebar({
           </button>
           <SidebarMenu className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
             <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild tooltip="Mathua hub">
+              <SidebarMenuButton size="lg" asChild tooltip={t('shell.sidebar.hub')}>
                 <Link href="/profile">
                   <span className="flex size-6 shrink-0 items-center justify-center font-mono text-sm text-mathua-blue" aria-hidden="true">λ</span>
                   <span className="font-mono text-sm text-mathua-blue group-data-[collapsible=icon]:hidden">Mathua</span>
@@ -178,8 +182,8 @@ export function AppSidebar({
           <button
             type="button"
             onClick={toggleSidebar}
-            aria-label="Collapse sidebar"
-            title="Collapse sidebar"
+            aria-label={t('shell.sidebar.collapse')}
+            title={t('shell.sidebar.collapse')}
             className="flex size-8 shrink-0 items-center justify-center text-mathua-muted hover:bg-sidebar-accent hover:text-mathua-blue group-data-[collapsible=icon]:hidden"
           >
             <ChevronsLeft />
@@ -189,7 +193,7 @@ export function AppSidebar({
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigate</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('shell.sidebar.navigate')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {/* Admin last, and only for an administrator. Last because it is a different
@@ -199,18 +203,19 @@ export function AppSidebar({
               {(isAdmin ? [...NAV_ITEMS, ADMIN_ITEM] : NAV_ITEMS).map((item) => {
                 const active = pathname === item.href || pathname.startsWith(item.href + '/')
                 const Icon = item.icon
+                const label = t(item.labelKey)
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={active} tooltip={item.label}>
+                    <SidebarMenuButton asChild isActive={active} tooltip={label}>
                       {item.href.startsWith('http') ? (
                         <a href={item.href} target="_blank" rel="noreferrer">
                           <Icon className="shrink-0" />
-                          <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                          <span className="group-data-[collapsible=icon]:hidden">{label}</span>
                         </a>
                       ) : (
                         <Link href={item.href}>
                           <Icon className="shrink-0" />
-                          <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                          <span className="group-data-[collapsible=icon]:hidden">{label}</span>
                         </Link>
                       )}
                     </SidebarMenuButton>
@@ -224,18 +229,19 @@ export function AppSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Resources</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('shell.sidebar.resources')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {RESOURCE_ITEMS.map((item) => {
                 const active = pathname === item.href || pathname.startsWith(item.href + '/')
                 const Icon = item.icon
+                const label = t(item.labelKey)
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={active} tooltip={item.label}>
+                    <SidebarMenuButton asChild isActive={active} tooltip={label}>
                       <Link href={item.href}>
                         <Icon className="shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                        <span className="group-data-[collapsible=icon]:hidden">{label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -245,12 +251,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   type="button"
                   isActive={pathname === '/contact'}
-                  tooltip="Contact admins"
+                  tooltip={t('shell.sidebar.contactAdmins')}
                   aria-expanded={contactOpen}
                   onClick={() => setContactOpen((open) => !open)}
                 >
                   <Mail className="shrink-0" />
-                  <span className="group-data-[collapsible=icon]:hidden">Contact admins</span>
+                  <span className="group-data-[collapsible=icon]:hidden">{t('shell.sidebar.contactAdmins')}</span>
                   <ChevronDown
                     className={`ml-auto shrink-0 transition-transform group-data-[collapsible=icon]:hidden ${contactOpen ? 'rotate-180' : ''}`}
                   />
@@ -260,14 +266,14 @@ export function AppSidebar({
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild>
                         <Link href="/contact">
-                          <span>Contact page</span>
+                          <span>{t('shell.sidebar.contactPage')}</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild>
                         <a href="https://discord.gg/qXPeQ2jys" target="_blank" rel="noreferrer">
-                          <span>Discord server</span>
+                          <span>{t('shell.sidebar.discordServer')}</span>
                         </a>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -294,7 +300,7 @@ export function AppSidebar({
                 <span className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
                   <span className="block truncate font-mono text-xs text-mathua-primary">{name}</span>
                   <span className="block truncate font-mono text-[10px] text-mathua-muted">
-                    {[username ? `@${username}` : null, level, typeof streak === 'number' ? `${streak}d` : null]
+                    {[username ? `@${username}` : null, level ? levelName(level) : null, typeof streak === 'number' ? t('shell.sidebar.streakDays', { count: streak }) : null]
                       .filter(Boolean)
                       .join(' · ')}
                   </span>
@@ -308,25 +314,25 @@ export function AppSidebar({
                   rail and the tooltip is a description, so without this the icon-only button has
                   no accessible name in the state most desktop users leave the sidebar in. */}
               <SidebarMenuButton
-                tooltip="Toggle theme"
-                aria-label="Toggle theme"
+                tooltip={t('shell.sidebar.toggleTheme')}
+                aria-label={t('shell.sidebar.toggleTheme')}
                 onClick={handleThemeToggle}
               >
                 <SunMoon ref={sunMoonRef} size={16} isAnimated={false} aria-hidden="true" />
-                <span className="group-data-[collapsible=icon]:hidden">Toggle theme</span>
+                <span className="group-data-[collapsible=icon]:hidden">{t('shell.sidebar.toggleTheme')}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
           <SidebarMenuItem>
             <SidebarMenuButton
-              tooltip="Sign out"
+              tooltip={t('shell.sidebar.signOut')}
               onClick={() => {
                 signOut()
                 router.push('/login')
               }}
             >
               <LogOut aria-hidden="true" />
-              <span className="group-data-[collapsible=icon]:hidden">Sign out</span>
+              <span className="group-data-[collapsible=icon]:hidden">{t('shell.sidebar.signOut')}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

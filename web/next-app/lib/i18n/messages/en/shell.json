@@ -1,1 +1,200 @@
-{}
+{
+  "nav": {
+    "home": "Home",
+    "learn": "Learn",
+    "review": "Review",
+    "graph": "Graph",
+    "domains": "Domains",
+    "leaderboard": "Leaderboard",
+    "glossary": "Glossary",
+    "contact": "Contact",
+    "profile": "Profile",
+    "settings": "Settings",
+    "history": "History",
+    "login": "Login",
+    "admin": "Admin",
+    "docs": "Docs",
+    "architecture": "Architecture",
+    "contributing": "Contributing",
+    "note": "Note",
+    "contribute": "Contribute",
+    "creatorsNote": "Creator's note",
+    "howItWorks": "How it works"
+  },
+  "header": {
+    "beta": "beta",
+    "betaHint": "Mathua is in beta: the curriculum, the app and its fixes are still moving.",
+    "toggleTheme": "Toggle theme",
+    "openNav": "Open navigation menu",
+    "siteNav": "Site navigation",
+    "openProfileMenu": "Open profile menu",
+    "profileMenu": "Profile",
+    "profile": "Profile",
+    "contact": "Contact",
+    "signOut": "Sign out"
+  },
+  "tabs": {
+    "primary": "Primary"
+  },
+  "chrome": {
+    "hide": "Hide navigation",
+    "show": "Show navigation"
+  },
+  "sidebar": {
+    "navigate": "Navigate",
+    "resources": "Resources",
+    "expand": "Expand sidebar",
+    "collapse": "Collapse sidebar",
+    "toggle": "Toggle sidebar",
+    "hub": "Mathua hub",
+    "contactAdmins": "Contact admins",
+    "contactPage": "Contact page",
+    "discordServer": "Discord server",
+    "toggleTheme": "Toggle theme",
+    "signOut": "Sign out",
+    "streakDays": "{count}d"
+  },
+  "footer": {
+    "tagline": "Open-source adaptive math learning engine.",
+    "learn": "Learn",
+    "resources": "Resources",
+    "domains": "Domains",
+    "leaderboard": "Leaderboard",
+    "conceptGraph": "Concept graph",
+    "howItWorks": "How it works",
+    "docs": "Docs",
+    "contributing": "Contributing",
+    "creatorsNote": "Creator's Note",
+    "contactAdmins": "Contact admins",
+    "licenses": "Licenses",
+    "privacy": "Privacy",
+    "credits": {
+      "mit": "MIT License",
+      "avatars": "Avatars by DiceBear",
+      "algebrica": "Lesson content: Algebrica (CC BY-NC 4.0)",
+      "openstax": "Lesson content: OpenStax (CC BY-NC-SA 4.0)",
+      "glossary": "Glossary: OpenStax, DLMF and others"
+    }
+  },
+  "confirm": {
+    "working": "Working…"
+  },
+  "toc": {
+    "onThisPage": "On this page",
+    "label": "Table of contents",
+    "contents": "Contents"
+  },
+  "docPage": {
+    "docs": "Documentation",
+    "licenses": "Licenses",
+    "back": "← Docs",
+    "source": "Source:"
+  },
+  "docsIndex": {
+    "back": "← Back",
+    "title": "Documentation",
+    "intro": "Architecture, design and the contributing guide. Every page is generated from the same markdown the repository holds, so the two cannot drift apart.",
+    "englishOnly": "The articles themselves are in English.",
+    "quickstart": "Quickstart",
+    "forContributors": "(for contributors)",
+    "requirements": "Requirements: Go 1.26+ · New to Mathua? Start with {howItWorks}. Licenses are at {licenses}.",
+    "items": {
+      "architecture": {
+        "title": "Architecture",
+        "blurb": "The five-layer stack — UI, API, core engine, grading and storage — and the computerised adaptive diagnostic."
+      },
+      "systemDesign": {
+        "title": "System design",
+        "blurb": "Schema, scheduler, SM-2, grading, the API surface, and the trade-offs behind each."
+      },
+      "administration": {
+        "title": "Administration",
+        "blurb": "Roles, the permission model, staff invitations, the last-owner invariant and the audit trail."
+      },
+      "mathInput": {
+        "title": "Math input",
+        "blurb": "How a typed answer reaches a verdict: MathLive, MathJSON, the plain-text shim, and the mobile keypad."
+      },
+      "contributing": {
+        "title": "Contributing",
+        "blurb": "Add a concept, write a generator, pass the validator."
+      },
+      "efficacy": {
+        "title": "Efficacy",
+        "blurb": "How Mathua measures learning, and the honest limits of those measurements."
+      }
+    }
+  },
+  "errorPage": {
+    "crumb": "Mathua / error",
+    "heading": "Something broke on this page.",
+    "fallbackMessage": "An unexpected error interrupted rendering.",
+    "ref": "(ref {digest})",
+    "tryAgain": "↻ Try again",
+    "returnHome": "← Return home"
+  },
+  "globalError": {
+    "crumb": "Mathua / error § 500",
+    "heading": "Something broke."
+  },
+  "notFound": {
+    "crumb": "Mathua / error",
+    "heading": "This route is undefined.",
+    "body": "The concept you requested isn’t in the graph: it may have been moved, renamed or never existed in this domain.",
+    "returnHome": "← Return home",
+    "goBack": "Go back"
+  },
+  "contact": {
+    "back": "← Back",
+    "eyebrow": "WHO TO TELL",
+    "title": "Contact",
+    "intro": "Mathua is built and run by one person, so the same person reads all of this. Which channel to use depends on what went wrong: a question, the site, or your account.",
+    "message": {
+      "title": "Leave a message",
+      "body": "If you would rather write here than on another site, use the box. It reaches the same queue as a report about a question, and one person reads it. There is no automatic reply, so use X below if you need an answer."
+    },
+    "discord": {
+      "title": "Discord",
+      "link": "Mathua Discord server",
+      "body": "The {link} is the fastest way to reach other learners and the administrator. Ask about a lesson, say what you are working on, or explain a problem that is easier to talk through than to type into a form. Keep anything private — an account problem, a password, a message meant for one person — to the box above, not the public server."
+    },
+    "wrong": {
+      "title": "A question is wrong",
+      "report": "Report a problem",
+      "body": "Use the report control on the question itself. Choose {report}, then say what you expected. The report keeps the question, the answer you gave, the answer Mathua expected and how your answer was being read, so the problem can be replayed exactly instead of guessed at from a description.",
+      "body2": "That is the right route for a wrong expected answer, a question that cannot be typed into the box, a figure that does not load, or a mistake in an explanation."
+    },
+    "broken": {
+      "title": "The site is broken, or your account is",
+      "body": "Message me on X: {x}. Account problems do not belong in a public issue tracker, because everything posted there is visible to everyone. If you cannot sign in, say which page you were on and what you saw.",
+      "body2": "Never send your password to anyone, including me. Nothing in Mathua will ask for it."
+    },
+    "bug": {
+      "title": "A bug in Mathua itself",
+      "body": "If a page does not load, a layout breaks, or a button does nothing, and the problem is safe to discuss in public, open an issue: {link}. Include the page address, what you did, what you expected, what happened, and your browser and device if you know them."
+    },
+    "notSend": {
+      "title": "What not to send",
+      "body": "Do not put an email address, a password or anything private in a public issue. Mathua will not ask for them."
+    },
+    "next": {
+      "title": "What happens next",
+      "body": "Every report is read. Mathua is in beta and maintained by one person, so a reply can take a while. When a fix ships, the reports that led to it are closed with the reason recorded against each one, so the trail says what was wrong and what changed."
+    },
+    "box": {
+      "label": "Your message",
+      "hint": "Say what happened and where. Do not include a password, yours or anyone else’s. If you need an answer, message me on X instead.",
+      "placeholder": "What went wrong, and on which page.",
+      "minLength": {
+        "one": "at least {count} character",
+        "other": "at least {count} characters"
+      },
+      "send": "Send message",
+      "sending": "Sending...",
+      "tooMany": "Too many messages in the last hour. Try again later.",
+      "failed": "The message did not send. Try again, or use the X link below.",
+      "received": "Message received. It is in the queue and will be read.",
+      "writeAnother": "Write another"
+    }
+  }
+}

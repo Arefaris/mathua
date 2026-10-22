@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { DICEBEAR_VERSION } from '../lib/dicebear'
+import { LOCALES, LOCALE_NAMES, setLocale, useLocale, useT } from '../lib/i18n'
+import type { MessageKey } from '../lib/i18n/keys'
 
 interface FooterProps {
   className?: string
@@ -106,12 +108,12 @@ const headingClass = 'font-mono text-[10px] uppercase tracking-[0.2em] text-[var
 // DLMF and others without reusing their text. A short line cannot carry title, author, source
 // and license for every source, so the line names them and "Licenses" links to /licenses, which
 // renders THIRD_PARTY_NOTICES.md in full.
-const CREDITS = [
-  'MIT License',
-  'Avatars by DiceBear',
-  'Lesson content: Algebrica (CC BY-NC 4.0)',
-  'Lesson content: OpenStax (CC BY-NC-SA 4.0)',
-  'Glossary: OpenStax, DLMF and others',
+const CREDITS: MessageKey[] = [
+  'shell.footer.credits.mit',
+  'shell.footer.credits.avatars',
+  'shell.footer.credits.algebrica',
+  'shell.footer.credits.openstax',
+  'shell.footer.credits.glossary',
 ]
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
@@ -135,6 +137,8 @@ function useFooterArt(): FooterArt {
 }
 
 export default function Footer({ className = '' }: FooterProps) {
+  const t = useT()
+  const locale = useLocale()
   const art = useFooterArt()
 
   return (
@@ -202,28 +206,28 @@ export default function Footer({ className = '' }: FooterProps) {
               </div>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-[var(--footer-ink-muted)]">
-              Open-source adaptive math learning engine.
+              {t('shell.footer.tagline')}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:gap-x-16">
             <nav aria-labelledby="footer-learn">
-              <h2 id="footer-learn" className={headingClass}>Learn</h2>
+              <h2 id="footer-learn" className={headingClass}>{t('shell.footer.learn')}</h2>
               <ul className="mt-3 space-y-2 font-mono text-xs">
-                <li><Link href="/domains" className={linkClass}>Domains</Link></li>
-                <li><Link href="/leaderboard" className={linkClass}>Leaderboard</Link></li>
-                <li><Link href="/graph" className={linkClass}>Concept graph</Link></li>
+                <li><Link href="/domains" className={linkClass}>{t('shell.footer.domains')}</Link></li>
+                <li><Link href="/leaderboard" className={linkClass}>{t('shell.footer.leaderboard')}</Link></li>
+                <li><Link href="/graph" className={linkClass}>{t('shell.footer.conceptGraph')}</Link></li>
               </ul>
             </nav>
 
             <nav aria-labelledby="footer-resources">
-              <h2 id="footer-resources" className={headingClass}>Resources</h2>
+              <h2 id="footer-resources" className={headingClass}>{t('shell.footer.resources')}</h2>
               <ul className="mt-3 space-y-2 font-mono text-xs">
-                <li><Link href="/how-it-works" className={linkClass}>How it works</Link></li>
-                <li><Link href="/docs" className={linkClass}>Docs</Link></li>
-                <li><Link href="/docs/contributing" className={linkClass}>Contributing</Link></li>
-                <li><Link href="/note" className={linkClass}>Creator&apos;s Note</Link></li>
-                <li><Link href="/contact" className={linkClass}>Contact admins</Link></li>
+                <li><Link href="/how-it-works" className={linkClass}>{t('shell.footer.howItWorks')}</Link></li>
+                <li><Link href="/docs" className={linkClass}>{t('shell.footer.docs')}</Link></li>
+                <li><Link href="/docs/contributing" className={linkClass}>{t('shell.footer.contributing')}</Link></li>
+                <li><Link href="/note" className={linkClass}>{t('shell.footer.creatorsNote')}</Link></li>
+                <li><Link href="/contact" className={linkClass}>{t('shell.footer.contactAdmins')}</Link></li>
                 <li>
                   <a
                     href="https://discord.gg/qXPeQ2jys"
@@ -252,16 +256,35 @@ export default function Footer({ className = '' }: FooterProps) {
         <div className="footer-credits border-t pt-5 font-mono text-[10px] opacity-80">
           {CREDITS.map(credit => (
             <span key={credit} className="after:ml-3 after:content-['·']">
-              {credit}
+              {t(credit)}
             </span>
           ))}
           <Link href="/licenses" className="underline hover:no-underline">
-            Licenses
+            {t('shell.footer.licenses')}
           </Link>
           {' · '}
           <Link href="/privacy" className="underline hover:no-underline">
-            Privacy
+            {t('shell.footer.privacy')}
           </Link>
+          {/* The language is offered here as well as in /settings: a visitor who landed in the
+              wrong one should not have to find a page that, for a guest, says "needs an account". */}
+          {' · '}
+          <span role="group" aria-label={t('common.language.label')}>
+            {LOCALES.map((l, i) => (
+              <span key={l}>
+                {i > 0 && ' / '}
+                <button
+                  type="button"
+                  lang={l}
+                  aria-pressed={l === locale}
+                  onClick={() => setLocale(l)}
+                  className={`underline hover:no-underline ${l === locale ? 'font-semibold' : ''}`}
+                >
+                  {LOCALE_NAMES[l]}
+                </button>
+              </span>
+            ))}
+          </span>
         </div>
       </div>
     </footer>
