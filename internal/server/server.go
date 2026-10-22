@@ -131,7 +131,18 @@ func cors(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		// A browser refuses a cross-origin request whose headers are not all
+		// listed here, and the failure is silent in the app: the fetch dies
+		// before it leaves the browser. X-Request-ID was added to every client
+		// request without being listed, which would have taken the whole
+		// cross-origin API down. Reflect what the browser asks for when the
+		// origin is allowed, and keep a static list for a bare preflight, so a
+		// future client header cannot repeat this.
+		allowedHeaders := "Content-Type, Authorization, X-Request-ID"
+		if requested := r.Header.Get("Access-Control-Request-Headers"); requested != "" && isAllowedOrigin(origin) {
+			allowedHeaders = requested
+		}
+		w.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
 		w.Header().Set("Access-Control-Max-Age", "86400")
 		if r.Method == http.MethodOptions {
 			// Preflight: 204 with CORS headers already set
