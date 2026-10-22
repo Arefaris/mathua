@@ -23,3 +23,10 @@ describe('resolveAPIBase', () => {
     expect(resolveAPIBase(undefined)).toBe('')
   })
 })
+
+// The Go image serves the export and the API together: the same empty base that
+// is fatal on a static host is correct there, and only an explicit flag may say so.
+it('accepts an explicit same-origin build', () => {
+  vi.stubEnv('NODE_ENV', 'production')
+  expect(resolveAPIBase('', true)).toBe('')
+})
