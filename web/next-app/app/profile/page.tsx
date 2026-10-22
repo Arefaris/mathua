@@ -83,6 +83,7 @@ export default function ProfilePage() {
   const [efficacy, setEfficacy] = useState<EfficacyReport | null>(null)
   const [dueReviews, setDueReviews] = useState(0)
   const [shelf, setShelf] = useState<Shelf | null>(null)
+  const [shelfFailed, setShelfFailed] = useState(false)
   // Placement is the server's record, not local storage's. `isLoggedIn` accounts
   // fetch it from /api/auth/me; a stale `mathua_user` must not resurrect the
   // diagnostic as an active task.
@@ -194,7 +195,15 @@ export default function ProfilePage() {
           // The recommendation is the engine's answer, not a re-ranking of the fetches above.
           // Fetched beside them rather than derived from them: the report's numbers and the
           // recommendation come from one authority each, and neither is computed from the other.
-          fetchShelf().then(setShelf).catch(() => setShelf(null))
+          fetchShelf()
+            .then((next) => {
+              setShelf(next)
+              setShelfFailed(false)
+            })
+            .catch(() => {
+              setShelf(null)
+              setShelfFailed(true)
+            })
         } else {
           // Guest: fetch progress via ephemeral guest_id so Study answers are visible
           const guestId = getGuestId() || ''
@@ -445,7 +454,11 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <RecommendedTaskList shelf={head} loading={shelf === null} />
+        <RecommendedTaskList
+          shelf={head}
+          loading={shelf === null && !shelfFailed}
+          failed={shelfFailed}
+        />
 
         {efficacy && efficacy.concepts_touched > 0 && (
           <section id="how-doing" aria-label="How you are doing" className="mt-6 min-w-0 scroll-mt-28">
