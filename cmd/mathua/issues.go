@@ -27,8 +27,8 @@ import (
 // them every session.
 const issuesUsage = `usage:
   mathua issues list   [--status open] [--limit 50] [--json]
-  mathua issues show   <id> [--json]
-  mathua issues resolve <id> [--status resolved] [--note "what changed"]
+  mathua issues show   <id> [--origin] [--json]
+  mathua issues resolve <id> [--origin] [--status resolved] [--note "what changed"]
   mathua issues export  [--status resolved] [--out reports.json]
   mathua issues import  <file>`
 
@@ -96,10 +96,13 @@ func issuesList(args []string) error {
 			fmt.Println("No reports match.")
 			return nil
 		}
+		// Two ids, because they are different numbers. LOCAL names this copy and is what
+		// show/resolve take by default; PROD is the id the admin page and a colleague use.
+		fmt.Printf("%-5s %-5s %-9s %-26s %-14s %s\n", "LOCAL", "PROD", "STATUS", "CONCEPT", "KIND", "QUESTION")
 		for _, r := range reports {
-			fmt.Printf("%-5d %-9s %-26s %-14s %s\n",
-				r.ID, r.Status, orDash(r.ConceptID), r.Kind,
-				oneLine(r.Question, 64))
+			fmt.Printf("%-5d %-5s %-9s %-26s %-14s %s\n",
+				r.ID, orDash(r.OriginReportID), r.Status, orDash(r.ConceptID), r.Kind,
+				oneLine(r.Question, 56))
 		}
 		fmt.Printf("\n%d report(s)\n", len(reports))
 		return nil
@@ -109,6 +112,7 @@ func issuesList(args []string) error {
 func issuesShow(args []string) error {
 	fs := flag.NewFlagSet("issues show", flag.ContinueOnError)
 	asJSON := fs.Bool("json", false, "print the report as JSON")
+	byOrigin := fs.Bool("origin", false, "treat <id> as the id it had in production")
 	positional, rest := splitID(args)
 	if err := fs.Parse(rest); err != nil {
 		return err
@@ -121,7 +125,7 @@ func issuesShow(args []string) error {
 		return fmt.Errorf("report id %q is not a number", positional)
 	}
 	return withRepo(func(repo storage.Repository) error {
-		r, err := repo.GetReport(id)
+		r, err := findReport(repo, id, *byOrigin)
 		if err != nil {
 			return err
 		}
@@ -132,6 +136,9 @@ func issuesShow(args []string) error {
 			return printJSON(r)
 		}
 		fmt.Printf("#%d  %s  %s\n", r.ID, r.Status, r.Kind)
+		if r.OriginReportID != "" {
+			fmt.Printf("origin:   #%s in the database this came from\n", r.OriginReportID)
+		}
 		fmt.Printf("concept:  %s\n", orDash(r.ConceptID))
 		fmt.Printf("lesson:   %s\n", orDash(r.LessonID))
 		fmt.Printf("source:   %s\n", orDash(r.Source))
@@ -155,6 +162,7 @@ func issuesResolve(args []string) error {
 	fs := flag.NewFlagSet("issues resolve", flag.ContinueOnError)
 	status := fs.String("status", "resolved", "new state: resolved or dismissed")
 	note := fs.String("note", "", "what was decided, recorded on the report")
+	byOrigin := fs.Bool("origin", false, "treat <id> as the id it had in production")
 	positional, rest := splitID(args)
 	if err := fs.Parse(rest); err != nil {
 		return err
@@ -170,13 +178,34 @@ func issuesResolve(args []string) error {
 		return fmt.Errorf("status %q is not one of open, reviewing, resolved, dismissed", *status)
 	}
 	return withRepo(func(repo storage.Repository) error {
-		updated, err := repo.UpdateReportStatusAudited(adminActorCLI, id, *status, strings.TrimSpace(*note))
+		target := id
+		if *byOrigin {
+			found, err := findReport(repo, id, true)
+			if err != nil {
+				return err
+			}
+			if found == nil {
+				return fmt.Errorf("no report %d", id)
+			}
+			target = found.ID
+		}
+		updated, err := repo.UpdateReportStatusAudited(adminActorCLI, target, *status, strings.TrimSpace(*note))
 		if err != nil {
 			return err
 		}
 		fmt.Printf("#%d is now %s\n", updated.ID, updated.Status)
 		return nil
 	})
+}
+
+// findReport resolves the id the operator typed. The default is the local row
+// id; --origin switches to the id the report had in production, which is the
+// number on the admin page and the one a colleague would quote.
+func findReport(repo storage.Repository, id int64, byOrigin bool) (*storage.QuestionReport, error) {
+	if !byOrigin {
+		return repo.GetReport(id)
+	}
+	return repo.GetReportByOrigin(strconv.FormatInt(id, 10))
 }
 
 // issuesExportFile is the file both ends agree on. The version is checked on

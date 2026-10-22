@@ -1876,7 +1876,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 			       lesson_id, source, session_id, attempt_id,
 			       answer_given, grading_type, answer_hint, answer_input_mode,
 			       reason, detail, status,
-			       resolution, resolved_by, resolved_at, created_at
+			       resolution, resolved_by, resolved_at, created_at, origin_report_id
 			FROM question_reports
 			ORDER BY created_at DESC
 			LIMIT ? OFFSET ?
@@ -1887,7 +1887,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 			       lesson_id, source, session_id, attempt_id,
 			       answer_given, grading_type, answer_hint, answer_input_mode,
 			       reason, detail, status,
-			       resolution, resolved_by, resolved_at, created_at
+			       resolution, resolved_by, resolved_at, created_at, origin_report_id
 			FROM question_reports
 			WHERE status = ?
 			ORDER BY created_at DESC
@@ -1907,6 +1907,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 			&r.Explanation, &r.LessonID, &r.Source, &r.SessionID, &r.AttemptID,
 			&r.AnswerGiven, &r.GradingType, &r.AnswerHint, &r.AnswerInputMode,
 			&r.Reason, &r.Detail, &r.Status, &r.Resolution, &r.ResolvedBy, &r.ResolvedAt, &created,
+			&r.OriginReportID,
 		); err != nil {
 			return nil, fmt.Errorf("scan report: %w", err)
 		}

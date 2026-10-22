@@ -89,3 +89,48 @@ func TestImportReport_DoesNotConstrainLocallyFiledReports(t *testing.T) {
 		t.Fatalf("queue has %d reports, want 2", len(reports))
 	}
 }
+
+// TestImportReport_KeepsTheOriginIDReadable is about the number a person quotes.
+// The local row id is not the production id — SQLite burns ids on rolled-back
+// inserts, so a local #94 and the production #94 can be different reports. The
+// origin column must therefore survive the import and be findable both in a list
+// and by direct lookup, which is what makes "look at production #94" work here.
+func TestImportReport_KeepsTheOriginIDReadable(t *testing.T) {
+	store := newTestStore(t)
+	if _, err := store.ImportReport("94", QuestionReport{
+		ConceptID: "precalc.series.geom_infinite",
+		Kind:      "question",
+		Status:    "open",
+	}); err != nil {
+		t.Fatalf("import: %v", err)
+	}
+	rows, err := store.ListReports("open", 10, 0)
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if len(rows) != 1 || rows[0].OriginReportID != "94" {
+		t.Fatalf("list did not carry the origin id: %+v", rows)
+	}
+	found, err := store.GetReportByOrigin("94")
+	if err != nil || found == nil {
+		t.Fatalf("lookup by origin: %v found=%v", err, found)
+	}
+	if found.ConceptID != "precalc.series.geom_infinite" {
+		t.Errorf("wrong report for origin 94: %+v", found)
+	}
+	if missing, err := store.GetReportByOrigin("no-such-origin"); err != nil || missing != nil {
+		t.Errorf("unknown origin = %+v, %v; want nil, nil", missing, err)
+	}
+	// A locally filed report has no origin and must not be forced to invent one.
+	local, err := store.CreateReport(QuestionReport{Kind: "message", Detail: "local", Status: "open"})
+	if err != nil {
+		t.Fatalf("create local: %v", err)
+	}
+	row, err := store.GetReport(local)
+	if err != nil || row == nil {
+		t.Fatalf("get local: %v %v", err, row)
+	}
+	if row.OriginReportID != "" {
+		t.Errorf("locally filed report claims origin %q", row.OriginReportID)
+	}
+}
