@@ -51,6 +51,10 @@ type activeSession struct {
 	// retry arrives the next question has already replaced attemptID.
 	lastAnsweredID string
 	lastResult     *AnswerResult
+	// Closed when the in-flight answer for lastAnsweredID finishes. A duplicate
+	// that arrives while the first is still being graded waits on this instead
+	// of being told there is no active question.
+	answerDone     chan struct{}
 	questionText   string
 	sessionReview  int
 	sessionNew     int
@@ -1052,23 +1056,42 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	// rather than failing. The learner's client retries after a timeout it
 	// never saw resolved; the work is done, so the honest reply is the result
 	// of the first attempt, not a second grading and not an error.
-	if as != nil && as.lastAnsweredID == attemptID && as.lastResult != nil {
-		cached := *as.lastResult
+	if as != nil && as.lastAnsweredID == attemptID {
+		if as.lastResult != nil {
+			cached := *as.lastResult
+			e.mu.Unlock()
+			return &cached, nil
+		}
+		// The first submission is still being graded. Wait for it rather than
+		// reporting failure: the learner's retry was caused by a lost response.
+		done := as.answerDone
 		e.mu.Unlock()
-		return &cached, nil
+		if done != nil {
+			<-done
+		}
+		e.mu.Lock()
+		if as.lastResult != nil && as.lastAnsweredID == attemptID {
+			cached := *as.lastResult
+			e.mu.Unlock()
+			return &cached, nil
+		}
+		e.mu.Unlock()
+		return nil, fmt.Errorf("%w for session %q", ErrNoActiveQuestion, sessionID)
 	}
 	if as == nil || as.conceptID == "" || as.answered || as.attemptID != attemptID {
 		e.mu.Unlock()
 		return nil, fmt.Errorf("%w for session %q", ErrNoActiveQuestion, sessionID)
 	}
 	defer func() {
-		if err != nil || result == nil || result.Ungraded {
-			return
-		}
 		e.mu.Lock()
 		if e.sessions[sessionID] == as {
-			as.lastAnsweredID = attemptID
-			as.lastResult = result
+			if err == nil && result != nil && !result.Ungraded {
+				as.lastResult = result
+			}
+			if as.answerDone != nil {
+				close(as.answerDone)
+				as.answerDone = nil
+			}
 		}
 		e.mu.Unlock()
 	}()
@@ -1098,6 +1121,9 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	// Mark answered while still holding the lock so a concurrent
 	// SubmitAnswer for the same attemptID is rejected as ErrNoActiveQuestion.
 	as.answered = true
+	as.lastAnsweredID = attemptID
+	as.lastResult = nil
+	as.answerDone = make(chan struct{})
 	e.mu.Unlock()
 
 	gr := e.gradeAnswer(sessionFields.conceptID, sessionFields.expectedAnswer, answer)

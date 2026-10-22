@@ -198,8 +198,10 @@ func TestEngine_GetScores(t *testing.T) {
 	}
 }
 
-// A duplicate/stale submission racing the real one must be rejected, never
-// graded against a question the client was not shown (cross-question grading).
+// A duplicate of one attempt may race the real submission. Every caller must
+// get the recorded result back — a retry the learner made because the first
+// response was lost is not an error — but only one grading may happen, so the
+// progress is written once and no second attempt is recorded.
 func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("grace")
@@ -209,34 +211,35 @@ func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	const workers = 8
 	var wg sync.WaitGroup
 	results := make([]error, workers)
+	out := make([]*AnswerResult, workers)
 	for i := 0; i < workers; i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			_, results[i] = e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "42", 3.0)
+			out[i], results[i] = e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "42", 3.0)
 		}(i)
 	}
 	wg.Wait()
 
-	var ok, rejected int
-	for _, err := range results {
-		switch {
-		case err == nil:
-			ok++
-		case errors.Is(err, ErrNoActiveQuestion):
-			rejected++
-		default:
-			t.Fatalf("unexpected error: %v", err)
+	for i, err := range results {
+		if err != nil {
+			t.Fatalf("duplicate %d was rejected: %v", i, err)
 		}
 	}
-	if ok != 1 {
-		t.Errorf("expected exactly 1 successful submission, got %d (rejected %d)", ok, rejected)
+	// Every duplicate must report the same accepted answer, not a fresh grade.
+	for i := 1; i < workers; i++ {
+		if out[i] == nil || out[0] == nil {
+			t.Fatalf("duplicate %d returned no result", i)
+		}
+		if out[i].Correct != out[0].Correct || out[i].XP != out[0].XP {
+			t.Errorf("duplicate %d = correct:%v xp:%d, want %v/%d", i, out[i].Correct, out[i].XP, out[0].Correct, out[0].XP)
+		}
 	}
 
-	// The winning grade must match the question that was displayed (concept "a", answer "42").
+	// The grade happened once: same streak, one attempt, answer "42".
 	progress, _ := e.GetProgress(st.ID)
-	if p, ok := progress["a"]; !ok || p.Streak != 1 {
-		t.Errorf("expected concept a to be graded once with streak 1, got %+v", progress["a"])
+	if p, ok := progress["a"]; !ok || p.Streak != 1 || p.Attempts != 1 {
+		t.Errorf("expected concept a graded once, got %+v", progress["a"])
 	}
 }
 
