@@ -45,12 +45,22 @@ type pointsLinesGen struct{}
 
 func (g *pointsLinesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	items := []string{"point", "line", "ray", "line segment"}
-	descs := []string{"an exact location with no size", "goes forever in two directions", "has one endpoint and goes forever", "has two endpoints"}
+	// Predicates, not noun phrases, because the stem supplies the noun. The
+	// earlier stem was `What is: %s?` with `has two endpoints`, which asked
+	// "What is: has two endpoints?" — a sentence with its subject missing, on a
+	// screen where the learner had one field and no way to say "the question,
+	// not me, is broken".
+	descs := []string{
+		"is an exact location with no size",
+		"goes forever in two directions",
+		"has one endpoint and goes forever",
+		"has two endpoints",
+	}
 	i := rand.Intn(4)
 	return generator.Problem{
-		Question:    fmt.Sprintf("What is: %s?", descs[i]),
+		Question:    fmt.Sprintf("Which geometric term describes something that %s?", descs[i]),
 		Answer:      items[i],
-		Explanation: fmt.Sprintf("A %s is %s.", items[i], descs[i]),
+		Explanation: fmt.Sprintf("A %s is a figure that %s.", items[i], descs[i]),
 		Facts:       map[string]string{"term": items[i], "desc": descs[i]},
 	}
 }
