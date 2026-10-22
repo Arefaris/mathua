@@ -58,6 +58,14 @@ func dataPath(name string) string {
 	return filepath.Join("data", name)
 }
 
+// i18nDir is the directory holding the translation overlays (<dir>/<locale>/concepts.json and
+// friends). dataPath only resolves files, so the directory is found through a file that is
+// always present in it, and an install with no overlays gets the cwd-relative default, where
+// the loaders find nothing and every label stays English.
+func i18nDir() string {
+	return filepath.Dir(filepath.Dir(dataPath("i18n/ru/concepts.json")))
+}
+
 // openRepo opens the configured store and reports which path it used.
 //
 // Extracted because `mathua admin …` needs a store and does not need a generator registry, a
@@ -183,6 +191,11 @@ func main() {
 		log.Fatalf("load concepts: %v", err)
 	}
 	fmt.Printf("loaded %d concepts across %d domains\n", dag.Count(), len(dag.Domains()))
+	// Translations are optional enrichment: a bad overlay costs the learner their language,
+	// not the server its start.
+	if err := dag.LoadOverlays(i18nDir()); err != nil {
+		log.Printf("WARNING: concept translations unavailable (%v) — labels stay in English", err)
+	}
 
 	repo, dsn, err := openRepo()
 	if err != nil {
@@ -252,6 +265,9 @@ func main() {
 				"return 404 until this is fixed", err)
 		} else {
 			planner.SetDestinations(ds)
+		}
+		if err := planner.LoadOverlays(i18nDir()); err != nil {
+			log.Printf("WARNING: course translations unavailable (%v) — courses stay in English", err)
 		}
 	}
 	eng := engine.New(repo, dag, reg, ll, planner)

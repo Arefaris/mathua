@@ -30,6 +30,7 @@ import (
 	"github.com/chuma-beep/mathua/internal/leaderboard"
 	"github.com/chuma-beep/mathua/internal/lessons"
 	"github.com/chuma-beep/mathua/internal/mastery"
+	"github.com/chuma-beep/mathua/internal/planning"
 	"github.com/chuma-beep/mathua/internal/quiz"
 	"github.com/chuma-beep/mathua/internal/scoring"
 	"github.com/chuma-beep/mathua/internal/storage"
@@ -639,11 +640,12 @@ func (s *Server) handleGraph(w http.ResponseWriter, r *http.Request) {
 		Prerequisites []string `json:"prerequisites"`
 		GradingType   string   `json:"grading_type"`
 	}
+	loc := localeOf(r)
 	nodes := make([]node, 0, dag.Count())
 	for _, c := range dag.Order() {
 		nodes = append(nodes, node{
 			ID:            c.ID,
-			Label:         c.Label,
+			Label:         dag.Label(c, loc),
 			Domain:        c.Domain,
 			Prerequisites: c.Prerequisites,
 			GradingType:   c.GradingType,
@@ -682,6 +684,10 @@ func (s *Server) handleCurriculumDomain(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		writeError(w, "domain not found", 404)
 		return
+	}
+	for i := range curriculum.Topics {
+		t := &curriculum.Topics[i]
+		t.Title = s.eng.GetDAG().LabelByID(t.ConceptID, localeOf(r), t.Title)
 	}
 	writeJSON(w, map[string]interface{}{
 		"domain": map[string]string{"id": curriculum.Domain},
@@ -822,11 +828,12 @@ func (s *Server) handleGoal(w http.ResponseWriter, r *http.Request) {
 		Domain  string   `json:"domain"`
 		Prereqs []string `json:"prerequisites"`
 	}
+	dag, loc := s.eng.GetDAG(), localeOf(r)
 	chain := make([]conceptInfo, 0, len(path.Concepts))
 	for _, c := range path.Concepts {
 		chain = append(chain, conceptInfo{
 			ID:      c.ID,
-			Label:   c.Label,
+			Label:   dag.Label(c, loc),
 			Domain:  c.Domain,
 			Prereqs: c.Prerequisites,
 		})
@@ -910,7 +917,7 @@ func (s *Server) handleGoalDiagnosticStart(w http.ResponseWriter, r *http.Reques
 		writeError(w, "not authenticated: provide Authorization Bearer token or name", 401)
 		return
 	}
-	session, question, err := s.eng.StartGoalDiagnostic(studentID, req.ConceptIDs)
+	session, question, err := s.eng.StartGoalDiagnosticIn(localeOf(r), studentID, req.ConceptIDs)
 	if err != nil {
 		writeError(w, err.Error(), 500)
 		return
@@ -1056,7 +1063,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		// rows and only then deletes it. Dropping it here would 404 the plan
 		// the learner is about to request.
 		s.persistDiagnosticSession(session)
-		report := s.eng.DiagnosticReport(session)
+		report := s.eng.DiagnosticReportIn(localeOf(r), session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeAssessmentVerdict(w, map[string]interface{}{
 			"done":     true,
@@ -1067,7 +1074,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		})
 		return
 	}
-	nextProb, cid, err := s.eng.NextDiagnosticQuestion(session)
+	nextProb, cid, err := s.eng.NextDiagnosticQuestionIn(localeOf(r), session)
 	if err != nil {
 		writeError(w, "failed to get next question", 500)
 		return
@@ -1079,7 +1086,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		// rows and only then deletes it. Dropping it here would 404 the plan
 		// the learner is about to request.
 		s.persistDiagnosticSession(session)
-		report := s.eng.DiagnosticReport(session)
+		report := s.eng.DiagnosticReportIn(localeOf(r), session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeAssessmentVerdict(w, map[string]interface{}{
 			"done":     true,
@@ -1093,11 +1100,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	// Methodology gate, evaluated against the staged next question: the
 	// offer covers the just-answered miss given what CAT serves next.
 	retryAvailable := s.eng.DiagnosticRetryAvailableFor(session, req.ConceptID, cid)
-	c := s.eng.GetDAG().Concept(cid)
-	name := cid
-	if c != nil {
-		name = c.Label
-	}
+	name := s.eng.GetDAG().LabelByID(cid, localeOf(r), cid)
 	// Save the state the next request will load: the answer is recorded and the
 	// next question is staged. A crash after this line costs nothing.
 	s.persistDiagnosticSession(session)
@@ -1167,7 +1170,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		// rows and only then deletes it. Dropping it here would 404 the plan
 		// the learner is about to request.
 		s.persistDiagnosticSession(session)
-		report := s.eng.DiagnosticReport(session)
+		report := s.eng.DiagnosticReportIn(localeOf(r), session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeJSON(w, map[string]interface{}{
 			"done":     true,
@@ -1178,7 +1181,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		})
 		return
 	}
-	nextProb, cid, err := s.eng.NextDiagnosticQuestion(session)
+	nextProb, cid, err := s.eng.NextDiagnosticQuestionIn(localeOf(r), session)
 	if err != nil {
 		writeError(w, "failed to get next question", 500)
 		return
@@ -1188,7 +1191,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		// rows and only then deletes it. Dropping it here would 404 the plan
 		// the learner is about to request.
 		s.persistDiagnosticSession(session)
-		report := s.eng.DiagnosticReport(session)
+		report := s.eng.DiagnosticReportIn(localeOf(r), session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeJSON(w, map[string]interface{}{
 			"done":     true,
@@ -1199,11 +1202,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		})
 		return
 	}
-	c := s.eng.GetDAG().Concept(cid)
-	name := cid
-	if c != nil {
-		name = c.Label
-	}
+	name := s.eng.GetDAG().LabelByID(cid, localeOf(r), cid)
 	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
@@ -1268,6 +1267,7 @@ func (s *Server) handleGoalDiagnosticRetry(w http.ResponseWriter, r *http.Reques
 	}
 	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
+	name = s.eng.GetDAG().LabelByID(cid, localeOf(r), name)
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":         false,
 		"concept_id":   cid,
@@ -1319,7 +1319,7 @@ func (s *Server) handleGoalDiagnosticResume(w http.ResponseWriter, r *http.Reque
 	name := session.LastConceptName
 	session.Unlock()
 	if prob == nil {
-		nextProb, nc, err := s.eng.NextDiagnosticQuestion(session)
+		nextProb, nc, err := s.eng.NextDiagnosticQuestionIn(localeOf(r), session)
 		if err != nil {
 			writeError(w, "failed to get next question", 500)
 			return
@@ -1334,12 +1334,11 @@ func (s *Server) handleGoalDiagnosticResume(w http.ResponseWriter, r *http.Reque
 		}
 		prob = nextProb
 		cid = nc
-		if c := s.eng.GetDAG().Concept(nc); c != nil {
-			name = c.Label
-		} else {
-			name = nc
-		}
+		name = nc
 	}
+	// Re-derive the name from the id: LastConceptName was stored, in whichever language the
+	// previous request asked for.
+	name = s.eng.GetDAG().LabelByID(cid, localeOf(r), name)
 	// Sliding expiry: an actively resumed session doesn't age out mid-test.
 	s.mu.Lock()
 	s.diagCreated[sid] = time.Now()
@@ -1393,7 +1392,7 @@ func (s *Server) handleGoalPlan(w http.ResponseWriter, r *http.Request) {
 
 	// MA-parity report fields: placement + completion estimates from the
 	// adaptive session (frontier, course recommendation, dates).
-	report := s.eng.DiagnosticReport(session)
+	report := s.eng.DiagnosticReportIn(localeOf(r), session)
 	// The dates need a destination to be an estimate of anything. Fill them from
 	// the planner when the learner has saved one; otherwise the field stays null
 	// and the results card omits the line, which is better than a number that
@@ -1422,7 +1421,7 @@ func (s *Server) handleGoalPlan(w http.ResponseWriter, r *http.Request) {
 		label := att.ConceptID
 		if c != nil {
 			domain = c.Domain
-			label = c.Label
+			label = s.eng.GetDAG().Label(c, localeOf(r))
 		}
 		isWeak := (!att.Correct || !att.Fast)
 		if isWeak {
@@ -1542,7 +1541,7 @@ func (s *Server) handleWeaknesses(w http.ResponseWriter, r *http.Request) {
 		if w > 0.2 {
 			byDomain[c.Domain] = append(byDomain[c.Domain], map[string]interface{}{
 				"id":       c.ID,
-				"label":    c.Label,
+				"label":    s.eng.GetDAG().Label(c, localeOf(r)),
 				"weakness": w,
 			})
 		}
@@ -1670,7 +1669,7 @@ func (s *Server) handleLessons(w http.ResponseWriter, r *http.Request) {
 				for i, p := range prereqs {
 					info.Prerequisites[i] = prereqInfo{
 						ID:         p.ID,
-						Label:      p.Label,
+						Label:      s.eng.GetDAG().LabelByID(p.ID, localeOf(r), p.Label),
 						Status:     p.Status,
 						MasteryPct: p.MasteryPct,
 					}
@@ -1683,7 +1682,7 @@ func (s *Server) handleLessons(w http.ResponseWriter, r *http.Request) {
 				for i, d := range deps {
 					info.Dependents[i] = prereqInfo{
 						ID:         d.ID,
-						Label:      d.Label,
+						Label:      s.eng.GetDAG().LabelByID(d.ID, localeOf(r), d.Label),
 						Status:     d.Status,
 						MasteryPct: d.MasteryPct,
 					}
@@ -1767,6 +1766,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		prereqs := s.eng.LessonPrerequisites([]string{conceptID}, rawProgress)
+		s.localizePrereqs(r, prereqs)
 		weak := []engine.PrereqInfo{}
 		missing := []engine.PrereqInfo{}
 		for _, p := range prereqs {
@@ -1800,6 +1800,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			"missing":    missing,
 		}
 		if el, err := s.eng.EligibilityFor(sid, conceptID); err == nil {
+			s.localizeEligibility(r, el)
 			resp["eligible"] = el.Eligible
 			resp["state"] = el.State
 			resp["reason"] = el.Reason
@@ -1816,7 +1817,10 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, `{"error":"lessons unavailable"}`, 503)
 			return
 		}
+		// Lookups into the lesson body use the English steps; the learner is shown the
+		// translated text for the same step, which has the same length and order.
 		kps := ll.KPs(conceptID)
+		shown := ll.KPsIn(conceptID, localeOf(r))
 		type kpInfo struct {
 			Label         string          `json:"label"`
 			Section       string          `json:"section"`
@@ -1825,7 +1829,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			Assets        []lessons.Asset `json:"assets"`
 		}
 		out := make([]kpInfo, 0, len(kps))
-		for _, kp := range kps {
+		for i, kp := range kps {
 			// TeachingSlice never falls back to the lesson body. It used to: when a shard's
 			// section was empty the server substituted l.Body, so 69 of 1,971 steps across 43
 			// concepts served the whole reference article to a learner who asked for one
@@ -1838,9 +1842,9 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 				assets = []lessons.Asset{}
 			}
 			out = append(out, kpInfo{
-				Label:         kp.Label,
-				Section:       kp.Section,
-				Subgoals:      kp.Subgoals,
+				Label:         shown[i].Label,
+				Section:       shown[i].Section,
+				Subgoals:      shown[i].Subgoals,
 				WorkedExample: we,
 				Assets:        assets,
 			})
@@ -1871,6 +1875,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "unknown concept", 404)
 		return
 	} else if !el.Eligible {
+		s.localizeEligibility(r, el)
 		writeTopicLocked(w, el)
 		return
 	}
@@ -1957,7 +1962,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, map[string]interface{}{"questions": []interface{}{}})
 		return
 	}
-	problems, err := reg.BatchGenerateContext(conceptID, count+len(excluded)+5, generator.GeneratorContext{Difficulty: diff, Seed: seed})
+	problems, err := reg.BatchGenerateContext(conceptID, count+len(excluded)+5, generator.GeneratorContext{Difficulty: diff, Seed: seed, Locale: localeOf(r)})
 	if err != nil {
 		writeError(w, err.Error(), 404)
 		return
@@ -2278,6 +2283,7 @@ func (s *Server) handleNext(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	resp, err := s.eng.RecommendNext(studentID, exclude)
+	s.localizeRecommendations(r, &resp)
 	if err != nil {
 		writeJSON(w, map[string]interface{}{
 			"primary":      nil,
@@ -2425,7 +2431,7 @@ func (s *Server) handleReviewsSession(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "failed to create session", 500)
 		return
 	}
-	q, err := s.eng.NextReviewQuestion(sess.ID, studentID)
+	q, err := s.eng.NextReviewQuestionIn(localeOf(r), sess.ID, studentID)
 	if err != nil {
 		writeError(w, "failed to get review question", 500)
 		return
@@ -2467,7 +2473,7 @@ func (s *Server) handleReviewsAnswer(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "failed to submit answer", 500)
 		return
 	}
-	next, err := s.eng.NextReviewQuestion(req.SessionID, studentID)
+	next, err := s.eng.NextReviewQuestionIn(localeOf(r), req.SessionID, studentID)
 	if err != nil {
 		log.Printf("handleReviewsAnswer: NextReviewQuestion failed for session %s: %v (returning result without next question)", req.SessionID, err)
 		writeJSON(w, answerRes{Result: result, NextQuestion: nil, Done: true})
@@ -2483,6 +2489,13 @@ func (s *Server) handleCourses(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	courses := s.eng.PlannerCourses()
+	if p := s.eng.GetPlanner(); p != nil {
+		localized := make([]*planning.Course, len(courses))
+		for i, c := range courses {
+			localized[i] = p.CourseIn(c, localeOf(r))
+		}
+		courses = localized
+	}
 	writeJSON(w, map[string]interface{}{"courses": courses})
 }
 
@@ -2507,6 +2520,9 @@ func (s *Server) handleDestinations(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeError(w, "failed to load destinations", 500)
 		return
+	}
+	for i := range list {
+		list[i].Destination = s.eng.GetPlanner().DestinationIn(list[i].Destination, localeOf(r))
 	}
 	writeJSON(w, map[string]interface{}{"destinations": list})
 }
@@ -2727,6 +2743,7 @@ func (s *Server) handleCourseDetail(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "failed to load courses", 500)
 		return
 	}
+	s.localizeCatalog(r, catalog)
 	for _, cs := range catalog {
 		if cs.ID == courseID {
 			writeJSON(w, cs)
@@ -2788,10 +2805,7 @@ func (s *Server) handleAttempts(w http.ResponseWriter, r *http.Request) {
 		if incorrectOnly && a.Correct {
 			continue
 		}
-		name := a.ConceptID
-		if c := s.eng.GetDAG().Concept(a.ConceptID); c != nil {
-			name = c.Label
-		}
+		name := s.eng.GetDAG().LabelByID(a.ConceptID, localeOf(r), a.ConceptID)
 		filtered = append(filtered, attemptRow{AttemptEntry: a, ConceptName: name})
 	}
 	sort.SliceStable(filtered, func(i, j int) bool {
@@ -2825,6 +2839,7 @@ func (s *Server) handleTranscript(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "failed to load transcript", 500)
 		return
 	}
+	s.localizeCatalog(r, catalog)
 	if r.URL.Query().Get("format") == "csv" {
 		writeTranscriptCSV(w, catalog)
 		return
@@ -3123,7 +3138,7 @@ func (s *Server) handleSession(w http.ResponseWriter, r *http.Request) {
 			writeError(w, "failed to create session", 500)
 			return
 		}
-		q, err := s.eng.NextQuestion(sess.ID, studentID)
+		q, err := s.eng.NextQuestionIn(localeOf(r), sess.ID, studentID)
 		if err != nil {
 			writeError(w, "failed to get question", 500)
 			return
@@ -3158,7 +3173,7 @@ func (s *Server) handleSession(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "failed to create session", 500)
 		return
 	}
-	q, err := s.eng.NextQuestion(sess.ID, sid)
+	q, err := s.eng.NextQuestionIn(localeOf(r), sess.ID, sid)
 	if err != nil {
 		writeError(w, "failed to get question", 500)
 		return
@@ -3212,7 +3227,7 @@ func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 	s.quizSessions[sess.ID] = sess
 	s.quizCreated[sess.ID] = time.Now()
 	s.mu.Unlock()
-	prob, cid, err := qEng.NextQuestion(sess)
+	prob, cid, err := qEng.NextQuestionIn(localeOf(r), sess)
 	if err != nil {
 		writeError(w, "failed to get quiz question", 500)
 		return
@@ -3221,11 +3236,7 @@ func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, map[string]interface{}{"session_id": sess.ID, "done": true})
 		return
 	}
-	c := s.eng.GetDAG().Concept(cid)
-	name := cid
-	if c != nil {
-		name = c.Label
-	}
+	name := s.eng.GetDAG().LabelByID(cid, localeOf(r), cid)
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"session_id":   sess.ID,
 		"student_id":   studentID,
@@ -3387,16 +3398,12 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 		writeAssessmentVerdict(w, map[string]interface{}{"done": true, "correct": gr.Correct, "feedback": feedback, "diagnosis": gr.Diagnosis, "explanation": explanation, "xp": xp, "new_status": newStatus, "remedial": remedial, "retake_available": true})
 		return
 	}
-	prob, cid, err := qEng.NextQuestion(sess)
+	prob, cid, err := qEng.NextQuestionIn(localeOf(r), sess)
 	if err != nil {
 		writeError(w, "failed to get next quiz question", 500)
 		return
 	}
-	c2 := s.eng.GetDAG().Concept(cid)
-	name2 := cid
-	if c2 != nil {
-		name2 = c2.Label
-	}
+	name2 := s.eng.GetDAG().LabelByID(cid, localeOf(r), cid)
 	writeAssessmentVerdict(w, s.withAnswerFormat(map[string]interface{}{
 		"done":               false,
 		"correct":            gr.Correct,
@@ -3485,16 +3492,12 @@ func (s *Server) handleQuizSkip(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, map[string]interface{}{"done": true, "correct": false, "feedback": "Skipped — no XP awarded.", "xp": 0, "retake_available": true})
 		return
 	}
-	prob, cid, err := qEng.NextQuestion(sess)
+	prob, cid, err := qEng.NextQuestionIn(localeOf(r), sess)
 	if err != nil {
 		writeError(w, "failed to get next quiz question", 500)
 		return
 	}
-	c2 := s.eng.GetDAG().Concept(cid)
-	name2 := cid
-	if c2 != nil {
-		name2 = c2.Label
-	}
+	name2 := s.eng.GetDAG().LabelByID(cid, localeOf(r), cid)
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":               false,
 		"correct":            false,

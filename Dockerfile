@@ -52,6 +52,7 @@ ENV PATH=/opt/venv/bin:$PATH
 COPY --from=builder /mathua /mathua
 COPY data/concepts/ /app/data/concepts/
 COPY data/lessons/ /app/data/lessons/
+COPY data/i18n/ /app/data/i18n/
 COPY data/courses.json /app/data/courses.json
 COPY data/destinations.json /app/data/destinations.json
 COPY --from=webbuilder /app/web/next-app/out /app/web/next-app/out

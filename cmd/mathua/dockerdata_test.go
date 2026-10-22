@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -43,9 +44,20 @@ func TestDockerfileCopiesEveryDataFileTheServerLoads(t *testing.T) {
 		if name == "" {
 			continue
 		}
-		if !copied[name] {
+		if !covered(copied, name) {
 			t.Errorf("main.go loads data/%s but the Dockerfile never copies it into /app/data; "+
 				"the deployed server will warn and carry on without it", name)
 		}
 	}
+}
+
+// covered reports whether name is copied itself or lives under a copied directory, so
+// "i18n/ru/concepts.json" is satisfied by "COPY data/i18n/".
+func covered(copied map[string]bool, name string) bool {
+	for p := name; p != "." && p != "/"; p = path.Dir(p) {
+		if copied[p] {
+			return true
+		}
+	}
+	return false
 }
