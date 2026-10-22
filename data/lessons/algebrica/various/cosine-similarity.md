@@ -115,7 +115,7 @@ Since the numerator of the cosine similarity formula is equal to zero, the cosin
 
 ## Python implementation
 
-Below is an example of Python code for calculating the cosine similarity of vectors \(V_x\) and \(V_y\) that you can [test](https://trinket.io/python3/cd31924b04) on an online IDE.
+Below is an example of Python code for calculating the cosine similarity of vectors \(V_x\) and \(V_y\). It needs only NumPy, so it runs in any Python environment with `numpy` installed.
     
     
     import numpy as np
