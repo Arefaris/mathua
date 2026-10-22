@@ -212,7 +212,7 @@ CREATE TABLE IF NOT EXISTS question_reports (
     resolved_by TEXT NOT NULL DEFAULT '',
     resolved_at TEXT NOT NULL DEFAULT '',
     created_at  TEXT NOT NULL DEFAULT (now()::text),
-    origin_report_id TEXT NOT NULL DEFAULT '',
+    origin_report_id TEXT NOT NULL DEFAULT ''
 );
 
 CREATE INDEX IF NOT EXISTS idx_reports_status  ON question_reports(status, created_at);
