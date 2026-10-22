@@ -19,10 +19,15 @@ type rateLimiter struct {
 	// header is trusted and the socket address is used. See
 	// resolveTrustedIPHeader.
 	ipHeader string
+	// now is the clock, replaced in tests so refill can be measured instead of
+	// slept through.
+	now func() time.Time
 }
 
 type visitor struct {
-	tokens    int
+	// tokens is fractional: a bucket that only credited whole intervals let a
+	// learner answering every second earn nothing at all.
+	tokens    float64
 	lastCheck time.Time
 }
 
@@ -33,6 +38,7 @@ func newRateLimiter(rate, burst int, interval time.Duration, ipHeader string) *r
 		burst:    burst,
 		interval: interval,
 		ipHeader: ipHeader,
+		now:      time.Now,
 	}
 	go rl.cleanup()
 	return rl
@@ -52,35 +58,55 @@ func (rl *rateLimiter) cleanup() {
 	}
 }
 
-func (rl *rateLimiter) allow(ip string) bool {
+func (rl *rateLimiter) allow(key string) bool {
 	rl.mu.Lock()
 	defer rl.mu.Unlock()
 
-	v, ok := rl.visitors[ip]
-	now := time.Now()
+	v, ok := rl.visitors[key]
+	now := rl.now()
 
 	if !ok {
-		rl.visitors[ip] = &visitor{tokens: rl.burst - 1, lastCheck: now}
+		rl.visitors[key] = &visitor{tokens: float64(rl.burst - 1), lastCheck: now}
 		return true
 	}
 
-	elapsed := now.Sub(v.lastCheck)
-	v.lastCheck = now
-	v.tokens += int(elapsed / rl.interval)
-	if v.tokens > rl.burst {
-		v.tokens = rl.burst
+	// Refill continuously. The old arithmetic added int(elapsed/interval)
+	// tokens, which is zero for every request less than an interval after the
+	// previous one, so a normal answering pace never refilled the bucket and
+	// the twentieth answer of a diagnostic was rejected.
+	if elapsed := now.Sub(v.lastCheck).Seconds(); elapsed > 0 {
+		v.tokens += elapsed * float64(rl.rate) / rl.interval.Seconds()
+		if max := float64(rl.burst); v.tokens > max {
+			v.tokens = max
+		}
 	}
-	if v.tokens <= 0 {
+	v.lastCheck = now
+	if v.tokens < 1 {
 		return false
 	}
 	v.tokens--
 	return true
 }
 
+// key names the bucket for a request: the signed-in learner when there is one,
+// otherwise the client address.
+//
+// IP keying alone rationed an account by everyone who shares its address, which
+// on a school network or a carrier NAT is a whole class. The identity is only
+// visible to this middleware when the auth wrapper runs first, so the practice
+// routes are registered that way.
+func (rl *rateLimiter) key(r *http.Request) string {
+	if id, _ := r.Context().Value(authStudentKey{}).(string); id != "" {
+		return "student:" + id
+	}
+	return "ip:" + clientIP(r, rl.ipHeader)
+}
+
 func (rl *rateLimiter) middleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if !rl.allow(clientIP(r, rl.ipHeader)) {
-			http.Error(w, `{"error":"too many attempts — try again in a minute"}`, 429)
+		if !rl.allow(rl.key(r)) {
+			w.Header().Set("Retry-After", "2")
+			http.Error(w, `{"error":"too many answers at once — retrying in a moment"}`, 429)
 			return
 		}
 		next(w, r)

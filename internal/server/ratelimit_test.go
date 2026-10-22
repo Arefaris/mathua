@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -34,7 +35,7 @@ func TestRateLimiter_IgnoresSpoofableXForwardedFor(t *testing.T) {
 		t.Fatalf("forged X-Forwarded-For sharded the limiter: %d buckets, want 1", len(rl.visitors))
 	}
 	for ip := range rl.visitors {
-		if ip != "10.0.0.1" {
+		if ip != "ip:10.0.0.1" {
 			t.Errorf("bucket = %q, want the socket address 10.0.0.1", ip)
 		}
 	}
@@ -58,7 +59,7 @@ func TestRateLimiter_PrefersFlyClientIP(t *testing.T) {
 		t.Fatalf("expected pass-through, got %d", rec.Code)
 	}
 	for ip := range rl.visitors {
-		if ip != "203.0.113.7" {
+		if ip != "ip:203.0.113.7" {
 			t.Errorf("bucket = %q, want Fly-Client-IP 203.0.113.7", ip)
 		}
 	}
@@ -87,7 +88,7 @@ func TestRateLimiter_UntrustedHeaderIsIgnored(t *testing.T) {
 		t.Fatalf("an untrusted header sharded the limiter: %d buckets, want 1", len(rl.visitors))
 	}
 	for ip := range rl.visitors {
-		if ip != "10.0.0.1" {
+		if ip != "ip:10.0.0.1" {
 			t.Errorf("bucket = %q, want the socket address 10.0.0.1", ip)
 		}
 	}
@@ -148,5 +149,82 @@ func TestRateLimiter_Friendly429(t *testing.T) {
 	body := rec.Body.String()
 	if body == "" || strings.Contains(body, "rate limit exceeded") {
 		t.Errorf("expected friendly 429 copy, got %q", body)
+	}
+}
+
+// testLimiter returns a limiter on a clock the test advances by hand. The refill
+// bug lived in elapsed time, so a test that sleeps would be both slow and
+// imprecise.
+func testLimiter(rate, burst int, interval time.Duration) (*rateLimiter, *time.Time) {
+	rl := newRateLimiter(rate, burst, interval, "")
+	now := time.Date(2026, 10, 22, 12, 0, 0, 0, time.UTC)
+	rl.now = func() time.Time { return now }
+	return rl, &now
+}
+
+// TestRateLimiter_AllowsAHumanAnsweringPace is the regression for the reported
+// freeze: 60 answers two seconds apart — a whole diagnostic plus practice — must
+// all pass the limiter the server actually configures.
+func TestRateLimiter_AllowsAHumanAnsweringPace(t *testing.T) {
+	rl, now := testLimiter(20, 20, 3*time.Second)
+	for i := 0; i < 60; i++ {
+		if !rl.allow("student:ada") {
+			t.Fatalf("answer %d was limited at %s into the run", i+1, time.Duration(i)*2*time.Second)
+		}
+		*now = now.Add(2 * time.Second)
+	}
+}
+
+// TestRateLimiter_StillStopsABurst keeps the protection honest: twenty instant
+// requests pass, the twenty-first does not, and one refill interval lets the
+// caller through again.
+func TestRateLimiter_StillStopsABurst(t *testing.T) {
+	rl, now := testLimiter(20, 20, 3*time.Second)
+	for i := 0; i < 20; i++ {
+		if !rl.allow("student:ada") {
+			t.Fatalf("burst request %d was limited", i+1)
+		}
+	}
+	if rl.allow("student:ada") {
+		t.Fatal("the 21st instant request passed; burst is not bounded")
+	}
+	*now = now.Add(3 * time.Second)
+	if !rl.allow("student:ada") {
+		t.Fatal("no token after a full refill interval")
+	}
+}
+
+// TestRateLimiter_KeysLearnersApart pins the per-learner bucket: two accounts
+// behind one address do not spend each other's budget.
+func TestRateLimiter_KeysLearnersApart(t *testing.T) {
+	rl, _ := testLimiter(1, 1, time.Hour)
+	h := rl.middleware(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(200) })
+	req := func(student string) *http.Request {
+		r := httptest.NewRequest("POST", "/api/study/answer", nil)
+		r.RemoteAddr = "10.0.0.7:1"
+		if student != "" {
+			r = r.WithContext(context.WithValue(r.Context(), authStudentKey{}, student))
+		}
+		return r
+	}
+	first := httptest.NewRecorder()
+	h(first, req("ada"))
+	if first.Code != 200 {
+		t.Fatalf("ada's first request = %d, want 200", first.Code)
+	}
+	sameAgain := httptest.NewRecorder()
+	h(sameAgain, req("ada"))
+	if sameAgain.Code != 429 {
+		t.Errorf("ada's second request = %d, want 429", sameAgain.Code)
+	}
+	other := httptest.NewRecorder()
+	h(other, req("grace"))
+	if other.Code != 200 {
+		t.Errorf("grace was limited by ada's spend: %d", other.Code)
+	}
+	anonymous := httptest.NewRecorder()
+	h(anonymous, req(""))
+	if anonymous.Code != 200 {
+		t.Errorf("anonymous caller was limited by a learner's spend: %d", anonymous.Code)
 	}
 }

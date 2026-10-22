@@ -451,12 +451,12 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/transcript", logRequest(cors(s.authMiddleware(s.handleTranscript))))
 	mux.HandleFunc("/api/attempts", logRequest(cors(s.authMiddleware(s.handleAttempts))))
 	mux.HandleFunc("/api/goal", logRequest(cors(s.authMiddleware(s.handleGoal))))
-	mux.HandleFunc("/api/goal/diagnostic", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleGoalDiagnosticStart)))))
-	mux.HandleFunc("/api/goal/diagnostic/answer", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleGoalDiagnosticAnswer)))))
-	mux.HandleFunc("/api/goal/diagnostic/skip", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleGoalDiagnosticSkip)))))
-	mux.HandleFunc("/api/goal/diagnostic/retry", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleGoalDiagnosticRetry)))))
+	mux.HandleFunc("/api/goal/diagnostic", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticStart)))))
+	mux.HandleFunc("/api/goal/diagnostic/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticAnswer)))))
+	mux.HandleFunc("/api/goal/diagnostic/skip", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticSkip)))))
+	mux.HandleFunc("/api/goal/diagnostic/retry", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticRetry)))))
 	mux.HandleFunc("/api/goal/diagnostic/resume", logRequest(cors(s.optionalAuthMiddleware(s.handleGoalDiagnosticResume))))
-	mux.HandleFunc("/api/goal/plan", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleGoalPlan)))))
+	mux.HandleFunc("/api/goal/plan", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalPlan)))))
 	mux.HandleFunc("/api/weaknesses", logRequest(cors(s.authMiddleware(s.handleWeaknesses))))
 	mux.HandleFunc("/api/goals/xp", logRequest(cors(s.authMiddleware(s.handleSetDailyXPGoal))))
 	mux.HandleFunc("/api/account/reset", logRequest(cors(s.writeLimiter.middleware(s.authMiddleware(s.handleAccountReset)))))
@@ -472,8 +472,8 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// GET /api/next — the one answer to "what should I do now?". Optional auth so a guest
 	// landing on the app gets the diagnostic recommendation rather than an error.
 	mux.HandleFunc("/api/next", logRequest(cors(s.optionalAuthMiddleware(s.handleNext))))
-	mux.HandleFunc("/api/reviews/session", logRequest(cors(s.writeLimiter.middleware(s.authMiddleware(s.handleReviewsSession)))))
-	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.writeLimiter.middleware(s.authMiddleware(s.handleReviewsAnswer)))))
+	mux.HandleFunc("/api/reviews/session", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsSession)))))
+	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsAnswer)))))
 	// The lesson routes stay publicly readable — Study is reference and is
 	// indexed — so auth is optional, but it must be *present*: the practice
 	// branch writes the server-side answer anchor, and it can only key that
@@ -483,7 +483,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/lessons", logRequest(cors(s.optionalAuthMiddleware(s.handleLessons))))
 	mux.HandleFunc("/api/lessons/body", logRequest(cors(s.optionalAuthMiddleware(s.handleLessonBody))))
 	mux.HandleFunc("/api/lessons/", logRequest(cors(s.optionalAuthMiddleware(s.handleLessonConcept))))
-	mux.HandleFunc("/api/study/answer", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleStudyAnswer)))))
+	mux.HandleFunc("/api/study/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleStudyAnswer)))))
 	// Report creation only. Listing and resolving reports is administration now and lives under
 	// /api/admin/reports behind the role boundary; the old shared-password triage endpoints were
 	// removed in V2 so there is exactly one moderation path.
@@ -517,9 +517,9 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// which is exactly what this is.
 	mux.HandleFunc("/api/admin/lab/generate", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGenerate)))))
 	mux.HandleFunc("/api/admin/lab/grade", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGrade)))))
-	mux.HandleFunc("/api/quiz/session", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleQuizSession)))))
-	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleQuizAnswer)))))
-	mux.HandleFunc("/api/quiz/skip", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleQuizSkip)))))
+	mux.HandleFunc("/api/quiz/session", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizSession)))))
+	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizAnswer)))))
+	mux.HandleFunc("/api/quiz/skip", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizSkip)))))
 	mux.HandleFunc("/api/health", logRequest(cors(getOnly(s.handleHealth))))
 	mux.HandleFunc("/api/activity", logRequest(cors(s.authMiddleware(s.handleActivity))))
 	mux.HandleFunc("/api/efficacy", logRequest(cors(s.authMiddleware(s.handleEfficacy))))
