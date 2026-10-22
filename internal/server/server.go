@@ -248,6 +248,11 @@ func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService, op
 				}
 			}
 			s.mu.Unlock()
+			if n, err := s.repo.SweepDiagnosticSessions(cutoff); err != nil {
+				log.Printf("warning: sweep diagnostic sessions: %v", err)
+			} else if n > 0 {
+				log.Printf("pruned %d expired diagnostic session(s)", n)
+			}
 			if err := s.repo.SweepServerSessions(); err != nil {
 				log.Printf("warning: sweep server sessions: %v", err)
 			}
@@ -296,7 +301,6 @@ func aiUsageCutoff(now time.Time) string {
 // eagerly — a wipe that a stale in-memory session can undo is not a wipe.
 func (s *Server) dropStudentLiveSessions(studentID string) {
 	s.mu.Lock()
-	defer s.mu.Unlock()
 	for id, sess := range s.diagSessions {
 		if sess != nil && sess.StudentID == studentID {
 			delete(s.diagSessions, id)
@@ -308,6 +312,92 @@ func (s *Server) dropStudentLiveSessions(studentID string) {
 			delete(s.quizSessions, id)
 			delete(s.quizCreated, id)
 		}
+	}
+	s.mu.Unlock()
+	// The durable copy is part of the live session, not history: leaving it
+	// would let a wiped learner reopen the tab and answer the question the map
+	// just forgot.
+	if err := s.repo.DeleteDiagnosticSessionsForStudent(studentID); err != nil {
+		log.Printf("warning: delete student diagnostic sessions: %v", err)
+	}
+}
+
+// loadDiagnosticSession returns the live run for id, restoring it from storage
+// when this process has never seen it — the ordinary case after a deploy.
+//
+// The map stays the fast path: a run is answered at human speed and read on
+// every request, while a reload costs one row read and a JSON decode. A row that
+// no longer decodes (the corpus changed under it, or the write was truncated) is
+// treated as absent and deleted, because a run that cannot be resumed should 404
+// once and then stop occupying space.
+func (s *Server) loadDiagnosticSession(id string) *diagnostic.Session {
+	if id == "" {
+		return nil
+	}
+	s.mu.Lock()
+	session := s.diagSessions[id]
+	s.mu.Unlock()
+	if session != nil {
+		return session
+	}
+	data, found, err := s.repo.LoadDiagnosticSession(id)
+	if err != nil {
+		log.Printf("warning: load diagnostic session %s: %v", id, err)
+		return nil
+	}
+	if !found {
+		return nil
+	}
+	session, err = s.eng.DecodeDiagnosticSession(data)
+	if err != nil {
+		log.Printf("warning: diagnostic session %s is unreadable, dropping: %v", id, err)
+		if delErr := s.repo.DeleteDiagnosticSession(id); delErr != nil {
+			log.Printf("warning: delete unreadable diagnostic session %s: %v", id, delErr)
+		}
+		return nil
+	}
+	s.mu.Lock()
+	// A concurrent request may have restored it first. Prefer that object: two
+	// goroutines mutating two copies of one adaptive model would each persist
+	// their own answers and the last write would erase the other.
+	if existing := s.diagSessions[id]; existing != nil {
+		s.mu.Unlock()
+		return existing
+	}
+	s.diagSessions[id] = session
+	s.diagCreated[id] = time.Now()
+	s.mu.Unlock()
+	return session
+}
+
+// persistDiagnosticSession saves the run after a mutation. Failure is logged,
+// not returned: the answer was already graded, and failing the request would
+// lose the very work this protects. The next mutation retries, and the map
+// still holds the truth for this process.
+func (s *Server) persistDiagnosticSession(session *diagnostic.Session) {
+	if session == nil || session.ID == "" {
+		return
+	}
+	data, err := session.Encode()
+	if err != nil {
+		log.Printf("warning: encode diagnostic session %s: %v", session.ID, err)
+		return
+	}
+	if err := s.repo.SaveDiagnosticSession(session.ID, session.StudentID, data); err != nil {
+		log.Printf("warning: persist diagnostic session %s: %v", session.ID, err)
+	}
+}
+
+// endDiagnosticSession removes a finished run from memory and storage. The
+// report is already in the response, so keeping the row would leak a snapshot
+// that can never be resumed.
+func (s *Server) endDiagnosticSession(id string) {
+	s.mu.Lock()
+	delete(s.diagSessions, id)
+	delete(s.diagCreated, id)
+	s.mu.Unlock()
+	if err := s.repo.DeleteDiagnosticSession(id); err != nil {
+		log.Printf("warning: delete finished diagnostic session %s: %v", id, err)
 	}
 }
 
@@ -796,6 +886,9 @@ func (s *Server) handleGoalDiagnosticStart(w http.ResponseWriter, r *http.Reques
 	s.diagSessions[session.ID] = session
 	s.diagCreated[session.ID] = time.Now()
 	s.mu.Unlock()
+	// Write before the first question leaves the building: a session that is
+	// only in memory is the bug this table exists to fix.
+	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
 	if question == nil {
 		writeJSON(w, map[string]interface{}{"session_id": session.ID, "done": true, "progress": prog})
@@ -836,9 +929,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		writeError(w, "answer submitted too quickly", 400)
 		return
 	}
-	s.mu.Lock()
-	session := s.diagSessions[req.SessionID]
-	s.mu.Unlock()
+	session := s.loadDiagnosticSession(req.SessionID)
 	if session == nil {
 		writeError(w, "diagnostic session not found", 404)
 		return
@@ -926,6 +1017,10 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		}
 	}
 	if s.eng.IsDiagnosticComplete(session) {
+		// Keep the finished run: the plan endpoint turns it into placement
+		// rows and only then deletes it. Dropping it here would 404 the plan
+		// the learner is about to request.
+		s.persistDiagnosticSession(session)
 		report := s.eng.DiagnosticReport(session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeAssessmentVerdict(w, map[string]interface{}{
@@ -945,6 +1040,10 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	if cid == "" || nextProb == nil {
 		// Cover exhausted (incl. supplemental): close with the report,
 		// never serve an empty question with done:false.
+		// Keep the finished run: the plan endpoint turns it into placement
+		// rows and only then deletes it. Dropping it here would 404 the plan
+		// the learner is about to request.
+		s.persistDiagnosticSession(session)
 		report := s.eng.DiagnosticReport(session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeAssessmentVerdict(w, map[string]interface{}{
@@ -964,6 +1063,9 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	if c != nil {
 		name = c.Label
 	}
+	// Save the state the next request will load: the answer is recorded and the
+	// next question is staged. A crash after this line costs nothing.
+	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
 	writeAssessmentVerdict(w, s.withAnswerFormat(map[string]interface{}{
 		"done":            false,
@@ -996,9 +1098,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		writeError(w, "invalid request", 400)
 		return
 	}
-	s.mu.Lock()
-	session := s.diagSessions[req.SessionID]
-	s.mu.Unlock()
+	session := s.loadDiagnosticSession(req.SessionID)
 	if session == nil {
 		writeError(w, "diagnostic session not found", 404)
 		return
@@ -1028,6 +1128,10 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		return
 	}
 	if s.eng.IsDiagnosticComplete(session) {
+		// Keep the finished run: the plan endpoint turns it into placement
+		// rows and only then deletes it. Dropping it here would 404 the plan
+		// the learner is about to request.
+		s.persistDiagnosticSession(session)
 		report := s.eng.DiagnosticReport(session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeJSON(w, map[string]interface{}{
@@ -1045,6 +1149,10 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		return
 	}
 	if cid == "" || nextProb == nil {
+		// Keep the finished run: the plan endpoint turns it into placement
+		// rows and only then deletes it. Dropping it here would 404 the plan
+		// the learner is about to request.
+		s.persistDiagnosticSession(session)
 		report := s.eng.DiagnosticReport(session)
 		prog := s.eng.DiagnosticProgress(session)
 		writeJSON(w, map[string]interface{}{
@@ -1061,6 +1169,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 	if c != nil {
 		name = c.Label
 	}
+	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":         false,
@@ -1098,9 +1207,7 @@ func (s *Server) handleGoalDiagnosticRetry(w http.ResponseWriter, r *http.Reques
 		writeError(w, "concept_id required", 400)
 		return
 	}
-	s.mu.Lock()
-	session := s.diagSessions[req.SessionID]
-	s.mu.Unlock()
+	session := s.loadDiagnosticSession(req.SessionID)
 	if session == nil {
 		writeError(w, "diagnostic session not found", 404)
 		return
@@ -1124,6 +1231,7 @@ func (s *Server) handleGoalDiagnosticRetry(w http.ResponseWriter, r *http.Reques
 		writeError(w, err.Error(), 400)
 		return
 	}
+	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":         false,
@@ -1148,9 +1256,7 @@ func (s *Server) handleGoalDiagnosticResume(w http.ResponseWriter, r *http.Reque
 		writeError(w, "session_id required", 400)
 		return
 	}
-	s.mu.Lock()
-	session := s.diagSessions[sid]
-	s.mu.Unlock()
+	session := s.loadDiagnosticSession(sid)
 	if session == nil {
 		writeError(w, "diagnostic session not found", 404)
 		return
@@ -1229,9 +1335,7 @@ func (s *Server) handleGoalPlan(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "invalid request", 400)
 		return
 	}
-	s.mu.Lock()
-	session := s.diagSessions[req.SessionID]
-	s.mu.Unlock()
+	session := s.loadDiagnosticSession(req.SessionID)
 	if session == nil {
 		writeError(w, "diagnostic session not found", 404)
 		return
@@ -1270,11 +1374,8 @@ func (s *Server) handleGoalPlan(w http.ResponseWriter, r *http.Request) {
 		log.Printf("warning: failed to set diagnostic completed: %v", err)
 	}
 
-	// Clean up session
-	s.mu.Lock()
-	delete(s.diagSessions, req.SessionID)
-	delete(s.diagCreated, req.SessionID)
-	s.mu.Unlock()
+	// Clean up session: the plan is now the durable record of this run.
+	s.endDiagnosticSession(req.SessionID)
 
 	// Compute readiness and weak areas (use copied attempts for thread safety)
 	weakByDomain := make(map[string][]map[string]interface{})

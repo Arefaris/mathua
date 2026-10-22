@@ -621,6 +621,20 @@ type Repository interface {
 
 	CreateReport(r QuestionReport) (int64, error)
 	ListReports(status string, limit, offset int) ([]QuestionReport, error)
+
+	// Diagnostic sessions outlive the process that started them.
+	//
+	// They used to live only in the server's memory, so every deploy erased the
+	// run behind every open tab and the learner got "Session expired — the
+	// server restarted and forgot this run" on their next answer. Eight deploys
+	// in a day made that a routine event rather than an edge case. The encoded
+	// snapshot is opaque here: the diagnostic package owns its format, and a
+	// store that parsed it would have to change whenever the adaptive model did.
+	SaveDiagnosticSession(id, studentID string, data []byte) error
+	LoadDiagnosticSession(id string) (data []byte, found bool, err error)
+	DeleteDiagnosticSession(id string) error
+	DeleteDiagnosticSessionsForStudent(studentID string) error
+	SweepDiagnosticSessions(before time.Time) (int, error)
 	// ListUnsettledReportIDsForConcept returns the ids of a concept's reports
 	// that are still open or under review, oldest first. Bulk moderation closes
 	// a fixed bug's reports as a set, and selecting that set by concept is what

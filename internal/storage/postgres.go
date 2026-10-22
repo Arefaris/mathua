@@ -174,6 +174,18 @@ CREATE TABLE IF NOT EXISTS question_reports (
 CREATE INDEX IF NOT EXISTS idx_reports_status  ON question_reports(status, created_at);
 CREATE INDEX IF NOT EXISTS idx_reports_concept ON question_reports(concept_id);
 
+-- Live diagnostic runs. See the SQLite schema for why the adaptive model is
+-- stored as an opaque snapshot rather than derived from attempts.
+CREATE TABLE IF NOT EXISTS diagnostic_sessions (
+    id         TEXT PRIMARY KEY,
+    student_id TEXT NOT NULL DEFAULT '',
+    data       BYTEA NOT NULL,
+    updated_at BIGINT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_diagnostic_sessions_student ON diagnostic_sessions(student_id);
+CREATE INDEX IF NOT EXISTS idx_diagnostic_sessions_updated ON diagnostic_sessions(updated_at);
+
 -- Staff invitations. Only the token hash is stored; a database read cannot yield a usable
 -- credential. Rows are never deleted, so the history of who offered access survives.
 CREATE TABLE IF NOT EXISTS admin_invitations (

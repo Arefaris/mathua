@@ -1834,6 +1834,13 @@ func (e *Engine) RetryDiagnosticQuestion(s *diagnostic.Session, conceptID string
 	return e.diag.RetryServe(s, conceptID)
 }
 
+// DecodeDiagnosticSession restores a run encoded by Session.Encode. The server
+// calls it when a session id it does not hold in memory arrives — the ordinary
+// case after a deploy, and the reason that deploy no longer ends a run.
+func (e *Engine) DecodeDiagnosticSession(data []byte) (*diagnostic.Session, error) {
+	return e.diag.Decode(data)
+}
+
 func (e *Engine) IsDiagnosticComplete(s *diagnostic.Session) bool {
 	return e.diag.IsComplete(s)
 }

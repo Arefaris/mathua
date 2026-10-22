@@ -1,6 +1,7 @@
 package diagnostic
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"sort"
@@ -127,6 +128,160 @@ type Engine struct {
 
 func NewEngine(dag *concepts.DAG, reg *generator.Registry) *Engine {
 	return &Engine{dag: dag, registry: reg}
+}
+
+// Snapshot is the durable form of a Session.
+//
+// It exists because the adaptive model is private: encoding a Session directly
+// would persist its id and attempts and silently drop every unexported field,
+// so a restored run would believe all concepts sit at the 0.5 prior and would
+// re-ask questions the learner had already answered. The snapshot names each
+// field, and Decode rebuilds the path through the DAG so the session keeps
+// pointing at real concepts rather than at strings.
+type Snapshot struct {
+	ID        string    `json:"id"`
+	StudentID string    `json:"student_id"`
+	State     State     `json:"state"`
+	Attempts  []Attempt `json:"attempts"`
+
+	// Order is the session's frozen path, by concept id.
+	Order []string `json:"order"`
+
+	LastProblem     *generator.Problem `json:"last_problem,omitempty"`
+	LastConceptID   string             `json:"last_concept_id"`
+	LastConceptName string             `json:"last_concept_name"`
+	PrevProblem     *generator.Problem `json:"prev_problem,omitempty"`
+	PrevConceptID   string             `json:"prev_concept_id"`
+	PrevConceptName string             `json:"prev_concept_name"`
+
+	Beliefs           map[string]float64 `json:"beliefs"`
+	Confidence        map[string]float64 `json:"confidence"`
+	ProbeCounts       map[string]int     `json:"probe_counts"`
+	CorrectCount      map[string]int     `json:"correct_count"`
+	TotalCount        map[string]int     `json:"total_count"`
+	DoneSet           map[string]bool    `json:"done_set"`
+	SupplementalCount map[string]int     `json:"supplemental_count"`
+	TotalAsked        int                `json:"total_asked"`
+	RetryUsed         bool               `json:"retry_used"`
+}
+
+// Encode renders the session for storage. The lock is held across marshaling,
+// not merely while copying: an answer arriving mid-encode must not produce a
+// snapshot that pairs a new attempt count with old beliefs.
+//
+// Only the newest attempt keeps its belief snapshot. RetryServe restores the
+// last miss, and nothing reads an older one, so carrying one per attempt would
+// write a full belief map for every question answered — a megabyte or more by
+// the end of a run, rewritten on every answer.
+func (s *Session) Encode() ([]byte, error) {
+	s.Lock()
+	defer s.Unlock()
+	order := make([]string, 0, len(s.order))
+	for _, c := range s.order {
+		order = append(order, c.ID)
+	}
+	attempts := make([]Attempt, len(s.Attempts))
+	copy(attempts, s.Attempts)
+	for i := 0; i < len(attempts)-1; i++ {
+		attempts[i].BeliefSnapshot = nil
+	}
+	snap := Snapshot{
+		ID:                s.ID,
+		StudentID:         s.StudentID,
+		State:             s.State,
+		Attempts:          attempts,
+		Order:             order,
+		LastProblem:       s.LastProblem,
+		LastConceptID:     s.LastConceptID,
+		LastConceptName:   s.LastConceptName,
+		PrevProblem:       s.prevProblem,
+		PrevConceptID:     s.prevConceptID,
+		PrevConceptName:   s.prevConceptName,
+		Beliefs:           s.beliefs,
+		Confidence:        s.confidence,
+		ProbeCounts:       s.probeCounts,
+		CorrectCount:      s.correctCount,
+		TotalCount:        s.totalCount,
+		DoneSet:           s.doneSet,
+		SupplementalCount: s.supplementalCount,
+		TotalAsked:        s.totalAsked,
+		RetryUsed:         s.retryUsed,
+	}
+	return json.Marshal(snap)
+}
+
+// Decode rebuilds a session from a snapshot written by Encode.
+//
+// A concept the current corpus no longer knows is dropped from the path rather
+// than restored as a nil pointer; if none survive, the caller must treat the
+// session as gone instead of resuming a run that can never serve a question.
+func (e *Engine) Decode(data []byte) (*Session, error) {
+	var snap Snapshot
+	if err := json.Unmarshal(data, &snap); err != nil {
+		return nil, fmt.Errorf("decode diagnostic snapshot: %w", err)
+	}
+	if snap.ID == "" {
+		return nil, fmt.Errorf("diagnostic snapshot has no id")
+	}
+	order := make([]*concepts.Concept, 0, len(snap.Order))
+	for _, id := range snap.Order {
+		c := e.dag.Concept(id)
+		if c == nil {
+			continue
+		}
+		order = append(order, c)
+	}
+	if len(order) == 0 {
+		return nil, fmt.Errorf("diagnostic snapshot %s has no concepts the corpus still knows", snap.ID)
+	}
+	state := snap.State
+	if state == "" {
+		state = StateProbing
+	}
+	s := &Session{
+		ID:                snap.ID,
+		StudentID:         snap.StudentID,
+		State:             state,
+		Attempts:          snap.Attempts,
+		order:             order,
+		LastProblem:       snap.LastProblem,
+		LastConceptID:     snap.LastConceptID,
+		LastConceptName:   snap.LastConceptName,
+		prevProblem:       snap.PrevProblem,
+		prevConceptID:     snap.PrevConceptID,
+		prevConceptName:   snap.PrevConceptName,
+		beliefs:           orZero(snap.Beliefs),
+		confidence:        orZero(snap.Confidence),
+		probeCounts:       orZeroInt(snap.ProbeCounts),
+		correctCount:      orZeroInt(snap.CorrectCount),
+		totalCount:        orZeroInt(snap.TotalCount),
+		doneSet:           orFalse(snap.DoneSet),
+		supplementalCount: orZeroInt(snap.SupplementalCount),
+		totalAsked:        snap.TotalAsked,
+		retryUsed:         snap.RetryUsed,
+	}
+	return s, nil
+}
+
+func orZero(m map[string]float64) map[string]float64 {
+	if m == nil {
+		return map[string]float64{}
+	}
+	return m
+}
+
+func orZeroInt(m map[string]int) map[string]int {
+	if m == nil {
+		return map[string]int{}
+	}
+	return m
+}
+
+func orFalse(m map[string]bool) map[string]bool {
+	if m == nil {
+		return map[string]bool{}
+	}
+	return m
 }
 
 func (e *Engine) Start() *Session {

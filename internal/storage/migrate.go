@@ -205,6 +205,22 @@ CREATE TABLE IF NOT EXISTS question_reports (
 CREATE INDEX IF NOT EXISTS idx_reports_status  ON question_reports(status, created_at);
 CREATE INDEX IF NOT EXISTS idx_reports_concept ON question_reports(concept_id);
 
+-- Live diagnostic runs. The adaptive model is a graph of beliefs over the whole
+-- path, so it cannot be rebuilt from the attempts table; it is stored as the
+-- diagnostic package's own encoded snapshot. Before this table the run lived
+-- only in memory and every deploy answered the next question with
+-- "diagnostic session not found". student_id is indexed because ResetProgress
+-- and account deletion must evict the rows, not just the map entries.
+CREATE TABLE IF NOT EXISTS diagnostic_sessions (
+    id         TEXT PRIMARY KEY,
+    student_id TEXT NOT NULL DEFAULT '',
+    data       BLOB NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_diagnostic_sessions_student ON diagnostic_sessions(student_id);
+CREATE INDEX IF NOT EXISTS idx_diagnostic_sessions_updated ON diagnostic_sessions(updated_at);
+
 -- Staff invitations. The raw token is never stored, only its SHA-256 hash, so a database read
 -- cannot yield a usable credential. A row is never deleted: a revoked or expired invitation is
 -- history, and deleting it would erase the record of who offered production access and to whom.
