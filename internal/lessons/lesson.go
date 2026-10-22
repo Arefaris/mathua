@@ -123,7 +123,11 @@ func Load(lessonsDir string) (*Loader, error) {
 // loadKPs reads <dir>/kp/<concept_id>.json shard files (a JSON array of KP).
 // A missing kp directory is not an error — shards are optional enrichment.
 func loadKPs(dir string) map[string][]KP {
-	kpDir := filepath.Join(dir, "kp")
+	return loadKPDir(filepath.Join(dir, "kp"))
+}
+
+// loadKPDir reads every <concept_id>.json shard file directly inside kpDir.
+func loadKPDir(kpDir string) map[string][]KP {
 	entries, err := os.ReadDir(kpDir)
 	if err != nil {
 		return nil
@@ -158,7 +162,7 @@ func loadKPs(dir string) map[string][]KP {
 func loadKPOverlays(dir string) map[i18n.Locale]map[string][]KP {
 	out := make(map[i18n.Locale]map[string][]KP)
 	for _, loc := range i18n.Overlays() {
-		if shards := loadKPs(filepath.Join(dir, "kp", string(loc))); len(shards) > 0 {
+		if shards := loadKPDir(filepath.Join(dir, "kp", string(loc))); len(shards) > 0 {
 			out[loc] = shards
 		}
 	}
@@ -176,7 +180,7 @@ func loadKPOverlays(dir string) map[i18n.Locale]map[string][]KP {
 func (l *Loader) KPsIn(conceptID string, loc i18n.Locale) []KP {
 	base := l.KPs(conceptID)
 	tr := l.kpText[loc][conceptID]
-	if len(tr) != len(base) {
+	if len(base) == 0 || len(tr) != len(base) {
 		return base
 	}
 	out := make([]KP, len(base))
