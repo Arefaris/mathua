@@ -84,7 +84,7 @@ export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
           style={{ animationDelay: '160ms' }}
         >
           Mathua is an open-source adaptive math learning engine. You cannot advance until you
-          have truly mastered the prerequisite — both speed and accuracy must be proven.
+          have truly mastered the prerequisite, both speed and accuracy must be proven.
         </p>
         <div className="reveal mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center" style={{ animationDelay: '240ms' }}>
           <button type="button" onClick={onGetStarted} className={CTA_PRIMARY}>
