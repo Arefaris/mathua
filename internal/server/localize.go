@@ -1,10 +1,13 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/chuma-beep/mathua/internal/engine"
+	"github.com/chuma-beep/mathua/internal/i18n"
 	"github.com/chuma-beep/mathua/internal/scheduler"
+	"github.com/chuma-beep/mathua/internal/xp"
 )
 
 // The engine builds every response in English, the language of the corpus. The helpers below
@@ -31,17 +34,53 @@ func (s *Server) localizeEligibility(r *http.Request, el *engine.ConceptEligibil
 	}
 }
 
-// localizeRecommendations relabels the concept titles of a recommendation in place. The
-// badge, detail and call-to-action strings are the scheduler's own wording and are not
-// translated here; kind and reason identify them.
+// recommendationRU words a recommendation card in Russian, keyed by the English badge. Each
+// badge belongs to exactly one wording in scheduler and engine recommend.go, so the badge
+// identifies the whole card; a badge missing here keeps its English wording.
+var recommendationRU = map[string]struct{ badge, detail, cta string }{
+	"Recommended":   {"Рекомендуем", "Короткая адаптивная диагностика покажет, с чего начать", "Пройти диагностику →"},
+	"Mastery check": {"Проверка освоения", fmt.Sprintf("С прошлой проверки вы набрали %d XP — пройдите её, чтобы закрепить изученное", xp.QuizGateXP), "Пройти проверку →"},
+	"All learned":   {"Всё изучено", "Сейчас ничего не нужно повторять — на графе видно, что строится на ваших темах", "Открыть граф →"},
+	"Paused":        {"На паузе", "Повторения отложены, пока вы не продолжите, — темы к повторению скрыты", "Изменить или продолжить →"},
+	"Review":        {"Повторение", "Пора проверить то, что вы уже изучили", "Повторить →"},
+	"Practice":      {"Практика", "Стоит попробовать ещё раз — эта тема пока не закрепилась", "Продолжить практику →"},
+	"New":           {"Новая тема", "Можно начинать — всё, что для неё нужно, вы уже прошли", "Начать →"},
+}
+
+// recommendationTitlesRU names the cards that are not a concept and so carry no concept title;
+// the client would otherwise show the bare id ("diagnostic").
+var recommendationTitlesRU = map[string]string{
+	"diagnostic":    "Диагностика",
+	"mastery-check": "Проверка освоения",
+	"graph":         "Граф тем",
+	"paused":        "Пауза",
+}
+
+// localizeRecommendations relabels the concept titles of a recommendation in place and, for a
+// Russian request, its badge, detail and call to action.
 func (s *Server) localizeRecommendations(r *http.Request, resp *scheduler.RecommendationResponse) {
 	dag, loc := s.eng.GetDAG(), localeOf(r)
+	localize := func(rec *scheduler.Recommendation) {
+		rec.ConceptTitle = dag.LabelByID(rec.ConceptID, loc, rec.ConceptTitle)
+		if loc == i18n.RU {
+			wordRecommendationRU(rec)
+		}
+	}
 	if resp.Primary != nil {
-		resp.Primary.ConceptTitle = dag.LabelByID(resp.Primary.ConceptID, loc, resp.Primary.ConceptTitle)
+		localize(resp.Primary)
 	}
 	for i := range resp.Alternatives {
-		a := &resp.Alternatives[i]
-		a.ConceptTitle = dag.LabelByID(a.ConceptID, loc, a.ConceptTitle)
+		localize(&resp.Alternatives[i])
+	}
+}
+
+// wordRecommendationRU swaps a card's English wording for the Russian one.
+func wordRecommendationRU(rec *scheduler.Recommendation) {
+	if w, ok := recommendationRU[rec.Badge]; ok {
+		rec.Badge, rec.Detail, rec.CTA = w.badge, w.detail, w.cta
+	}
+	if rec.ConceptTitle == "" {
+		rec.ConceptTitle = recommendationTitlesRU[rec.ID]
 	}
 }
 
