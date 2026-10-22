@@ -31,6 +31,116 @@ const h2Style: React.CSSProperties = {
   paddingBottom: '0.5rem',
 }
 
+const quoteStyle: React.CSSProperties = {
+  fontFamily: bodyFont,
+  fontSize: '1.05rem',
+  fontStyle: 'italic',
+  color: 'var(--text-primary)',
+  lineHeight: 1.7,
+  borderLeft: '2px solid var(--accent-blue)',
+  paddingLeft: '1rem',
+  margin: '1.5rem 0',
+}
+
+const citeStyle: React.CSSProperties = {
+  display: 'block',
+  fontFamily: monoFont,
+  fontSize: '12px',
+  fontStyle: 'normal',
+  color: 'var(--text-muted)',
+  marginTop: '0.5rem',
+}
+
+const ipaStyle: React.CSSProperties = {
+  fontFamily: monoFont,
+  fontSize: '13px',
+  color: 'var(--text-muted)',
+  marginBottom: '0.75rem',
+}
+
+// The note is the creator's own words, kept as written: sentence shape, capitalisation
+// and spelling are part of the voice, so nothing here is edited for house style. The
+// structure only marks what the author marked — headings, a quotation and one bolded
+// phrase — because those carry meaning in the original.
+type Block =
+  | { text: string }
+  | { parts: Array<string | { strong: string }> }
+  | { quote: string; cite: string }
+  | { ipa: string }
+
+type Section = { heading: string; blocks: Block[] }
+
+const SECTIONS: Section[] = [
+  {
+    heading: 'Hello',
+    blocks: [
+      {
+        text: "it's 4:23am, and a '3rd worlder' who doesnt really have any deep experience in maths is writing about a platform he is creating in hopes that it will help people such as myself learn maths.",
+      },
+    ],
+  },
+  {
+    heading: 'Pitstop',
+    blocks: [
+      {
+        text: "Why did I start this? I started this because I was really desperate to learn maths (gain automaticity) and I couldnt find any better platform other than mathacademy and it was pricey for me. 50 dollars might not be much for most countries in the western world but it is about 66,000 in my countries currency where the minimum wage per month is 77,000... dont mind me just talking economics here. :|",
+      },
+      {
+        text: "This project really is a pitstop. my aim is that with enough support from kind people we'll be able to create something as good as mathacademy, and it will be a project that improves overtime as the community supports it.",
+      },
+      {
+        text: 'Okay so i have been trying to read research papers why? I am transitioning into AI Robotics Engineering. So to know or gain knowledge I have met a lot of maths I have either forgotten, do not understand or have never seen in my life.',
+      },
+      {
+        text: "my honest thought was this 'okay something has to be done about this' I went to look for platforms to fill up the knowledge gap places like khanacademy,educare, openstax are cool but in those places you just encounter lessons and move along nothing else, I understand that things like active recall, spaced repetition and interleaving are meant to be your duty but what if the person is 'lazy' but still wants to try? or has never even heard of those terms. Thanks to people like Justin sung and Justin Skycak I just learnt about them myself while researching on how to be a better learner.",
+      },
+      {
+        text: 'I was progressing along the lines until I stumbled on mathacademy, it really is an excellent learning platform. Most of the things I tried to do here are things that are on mathacademy I am trying to create something just as good and over time it can probably even be better. From the first beta version I also added some aspects i think they are missing.',
+      },
+    ],
+  },
+  {
+    heading: 'an ODE for the learner',
+    blocks: [
+      {
+        quote: 'as long as i am alive i have infinite chances',
+        cite: 'Monkey D. Luffy',
+      },
+      {
+        text: 'The truth is that math is brutally hierarchical, I mean take out time to ask the real geniuses around you, assuming you have one of course, they always give the same advice you have to start from the basics.',
+      },
+      {
+        text: 'This makes a question come to mind where exactly? arithmetic? counting? prealgebra? or algebra? anyways that problem is one of the problems I am trying to solve. One thing I want the learner to note is that you get to go much quicker than you would expect if you just show up everyday and practice the right way I mean The brain is a sucker for repetition.',
+      },
+      {
+        text: 'One analogy is this, imagine you want to write proper english or be creative with english like writing a novel. how far can you go with out never learning consonants or vowels, what an action word is? or what an adjective is? how far can one go in creativity? For the sky scrapper to stand tall the foundations have to be sturdy right?.',
+      },
+    ],
+  },
+  {
+    heading: 'Automaticity and grunt work',
+    blocks: [
+      { ipa: '/ˌɔːtəməˈtɪsɪti/' },
+      {
+        text: 'Automaticity is the ability to perform tasks, behaviors, or mental processes effortlessly and without conscious thought as a result of extensive practice, repetition, and learning.',
+      },
+      {
+        text: "Can we do maths with this ability on display? what is required in order to do maths like this? is it just Genius? I acknowledge that there are intellectual differences in individuals but dont count your self short. All great individuals have a period of doing low-level grunt work in a whatever manner some structured or in a disciplined and passionate way, because of intellectual differences some people might make it look easy but the grunt work was done regardless.",
+      },
+      {
+        parts: [
+          "Luffy didn't immediately go striaght to gear 5 remember? instead he went through gear 1 2 3 4 then gear 5, and gear 4 even had ",
+          { strong: 'Bounceman/Boundman, Tankman, and Snakeman' },
+          '.',
+        ],
+      },
+      {
+        text: 'how far we can go with delibrate practice and focused effort?',
+      },
+    ],
+  },
+]
+
 export default function NotePage() {
   return (
     <>
@@ -54,66 +164,43 @@ export default function NotePage() {
           Creator&apos;s Note
         </h1>
 
-        <section>
-          <h2 style={h2Style}>Motivation</h2>
-          <p style={textStyle}>
-            Mathua started from a simple observation: most math software lets you
-            move on whether or not you actually learned the thing. A student can
-            score 70 percent on a chapter test, get pushed into the next chapter,
-            and carry the missing 30 percent as a quiet debt that compounds for
-            years. Math Academy showed there is another way: never advance until
-            the prerequisite is truly mastered. Mathua is an independent, open
-            implementation of that idea, built so anyone can run it, inspect it,
-            and improve it.
-          </p>
-        </section>
+        {SECTIONS.map(section => (
+          <section key={section.heading}>
+            <h2 style={h2Style}>{section.heading}</h2>
+            {section.blocks.map((block, i) => {
+              if ('quote' in block) {
+                return (
+                  <blockquote key={i} style={quoteStyle}>
+                    {`\u201c${block.quote}\u201d`}
+                    <cite style={citeStyle}>{block.cite}</cite>
+                  </blockquote>
+                )
+              }
+              if ('ipa' in block) {
+                return <p key={i} style={ipaStyle}>{block.ipa}</p>
+              }
+              if ('parts' in block) {
+                return (
+                  <p key={i} style={textStyle}>
+                    {block.parts.map((part, j) =>
+                      typeof part === 'string' ? part : <strong key={j}>{part.strong}</strong>,
+                    )}
+                  </p>
+                )
+              }
+              return <p key={i} style={textStyle}>{block.text}</p>
+            })}
+          </section>
+        ))}
 
-        <section>
-          <h2 style={h2Style}>Frustration</h2>
-          <p style={textStyle}>
-            Three things were broken enough to build around. First, advancement
-            without mastery: curricula move by calendar, not by understanding.
-            Second, accuracy without fluency: getting the right answer in 45
-            seconds is not the same as knowing it, and fragile knowledge collapses
-            under the next topic. Third, forgetting without review: even solid
-            knowledge decays, and almost nothing students use schedules reviews
-            before that happens. Add memorizable problem banks on top, and you get
-            grades that certify exposure instead of ability.
-          </p>
-        </section>
-
-        <section>
-          <h2 style={h2Style}>The bet</h2>
-          <p style={textStyle}>
-            The bet is that three mechanisms, combined, fix most of that. A
-            concept graph that refuses to surface anything whose prerequisites
-            you have not mastered. Gating on speed and accuracy together, so
-            advancement means fluency, not luck. And spaced repetition woven into
-            normal practice, so old concepts resurface before they decay. Each
-            one is old science (Bloom, mastery learning, SM-2). The combination,
-            enforced without exceptions, is the whole product.
-          </p>
-        </section>
-
-        <section>
-          <h2 style={h2Style}>Invitation</h2>
-          <p style={textStyle}>
-            Mathua is for self-learners working through math on their own, and
-            for parents and teachers who want an honest picture of where a
-            student stands. Take the diagnostic to find your starting point, then
-            work through it in Learn — each step teaches, asks a question and explains
-            the answer. If something is wrong, report it from
-            any question: every report goes to a real triage queue.
-          </p>
-          <div className="flex gap-3 justify-center mt-6 max-sm:flex-col max-sm:items-center">
-            <Link href="/onboard" style={{ fontFamily: monoFont, fontSize: '13px', color: 'var(--bg)', background: 'var(--accent-blue)', padding: '10px 22px', textDecoration: 'none' }}>
-              Start diagnostic test →
-            </Link>
-            <Link href="/learn" style={{ fontFamily: monoFont, fontSize: '13px', color: 'var(--text-secondary)', border: '0.5px solid var(--border-strong)', padding: '10px 22px', textDecoration: 'none' }}>
-              Start learning →
-            </Link>
-          </div>
-        </section>
+        <div className="flex gap-3 justify-center mt-10 max-sm:flex-col max-sm:items-center">
+          <Link href="/onboard" style={{ fontFamily: monoFont, fontSize: '13px', color: 'var(--bg)', background: 'var(--accent-blue)', padding: '10px 22px', textDecoration: 'none' }}>
+            Start diagnostic test →
+          </Link>
+          <Link href="/learn" style={{ fontFamily: monoFont, fontSize: '13px', color: 'var(--text-secondary)', border: '0.5px solid var(--border-strong)', padding: '10px 22px', textDecoration: 'none' }}>
+            Start learning →
+          </Link>
+        </div>
       </div>
       <Footer />
       <BottomTabs />
