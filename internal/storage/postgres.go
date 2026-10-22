@@ -271,6 +271,59 @@ CREATE TABLE IF NOT EXISTS ai_usage (
 
 CREATE INDEX IF NOT EXISTS idx_ai_usage_day ON ai_usage(day);
 
+-- FIRe-inspired implicit credit, shadow only. See the SQLite schema.
+CREATE TABLE IF NOT EXISTS implicit_credit_targets (
+    student_id        TEXT    NOT NULL,
+    target_concept_id TEXT    NOT NULL,
+    credit_epoch      BIGINT  NOT NULL DEFAULT 1,
+    created_at        BIGINT  NOT NULL,
+    PRIMARY KEY (student_id, target_concept_id)
+);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_allocations (
+    student_id        TEXT   NOT NULL,
+    source_attempt_id TEXT   NOT NULL,
+    raw_units         BIGINT NOT NULL,
+    allocated_units   BIGINT NOT NULL,
+    target_count      INTEGER NOT NULL,
+    dropped_count     INTEGER NOT NULL,
+    created_at        BIGINT NOT NULL,
+    PRIMARY KEY (student_id, source_attempt_id)
+);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_events (
+    student_id        TEXT   NOT NULL,
+    source_attempt_id TEXT   NOT NULL,
+    target_concept_id TEXT   NOT NULL,
+    credit_epoch      BIGINT NOT NULL,
+    scaled_units      BIGINT NOT NULL,
+    retained_units    BIGINT NOT NULL,
+    discarded_units   BIGINT NOT NULL,
+    discard_reason    TEXT   NOT NULL DEFAULT '',
+    voided_at         BIGINT,
+    voided_by         TEXT   NOT NULL DEFAULT '',
+    void_reason       TEXT   NOT NULL DEFAULT '',
+    created_at        BIGINT NOT NULL,
+    PRIMARY KEY (student_id, source_attempt_id, target_concept_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_credit_events_target
+    ON implicit_credit_events(student_id, target_concept_id, credit_epoch);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_ordinals (
+    student_id         TEXT   NOT NULL,
+    target_concept_id  TEXT   NOT NULL,
+    credit_epoch       BIGINT NOT NULL,
+    ordinal            INTEGER NOT NULL,
+    state              TEXT   NOT NULL CHECK (state IN ('banked','projected','stale')),
+    banked_at          BIGINT NOT NULL,
+    projected_at       BIGINT,
+    baseline_due       TEXT,
+    counterfactual_due TEXT,
+    attempts           INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (student_id, target_concept_id, credit_epoch, ordinal)
+);
+
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version    INTEGER PRIMARY KEY,
     applied_at TEXT NOT NULL DEFAULT (now()::text)
