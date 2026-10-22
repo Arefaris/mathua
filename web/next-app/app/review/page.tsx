@@ -5,8 +5,10 @@ import Header from '../../components/Header'
 import BottomTabs from '../../components/BottomTabs'
 import Footer from '../../components/Footer'
 import ReviewHost from './ReviewHost'
+import { useT } from '../../lib/i18n'
 
 export default function ReviewPage() {
+  const t = useT()
   return (
     <>
       <Header />
@@ -14,12 +16,12 @@ export default function ReviewPage() {
         <section className="pt-8 min-w-0 overflow-hidden">
           <span className="flex mb-4">
             <Link href="/profile" className="text-mathua-secondary text-sm hover:text-mathua-primary">
-              ← Back
+              {t('learn.review.back')}
             </Link>
           </span>
           <ReviewHost />
           <p className="text-mathua-muted text-xs font-mono text-center mt-6">
-            Reviews record progress and XP like practice.
+            {t('learn.review.footnote')}
           </p>
         </section>
       </div>

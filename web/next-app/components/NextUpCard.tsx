@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import type { Shelf } from '../lib/nextUp'
+import { useT } from '../lib/i18n'
 
 /**
  * NextUpCard: one primary "Next up" head card, with the remaining shelf
@@ -10,11 +11,12 @@ import type { Shelf } from '../lib/nextUp'
  * disposes (ADR-017) via the alternatives or by ignoring the head.
  */
 export default function NextUpCard({ shelf }: { shelf: Shelf }) {
+  const t = useT()
   const { next, alternatives } = shelf
   return (
-    <section aria-label="Next up" className="mt-6 w-full max-w-full min-w-0 overflow-hidden">
+    <section aria-label={t('learn.nextUp.heading')} className="mt-6 w-full max-w-full min-w-0 overflow-hidden">
       <h2 className="font-mono text-[11px] text-mathua-muted uppercase tracking-wider mb-3">
-        Next up
+        {t('learn.nextUp.heading')}
       </h2>
       <Link
         href={next.href}
@@ -39,7 +41,7 @@ export default function NextUpCard({ shelf }: { shelf: Shelf }) {
       {alternatives.length > 0 && (
         <details className="mt-3 border border-mathua-border bg-mathua-surface">
           <summary className="font-mono text-[11px] text-mathua-secondary cursor-pointer px-4 py-3">
-            Or pick something else ({alternatives.length})
+            {t('learn.nextUp.more', { count: alternatives.length })}
           </summary>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 px-4 pb-4">
             {alternatives.map((it, i) => (

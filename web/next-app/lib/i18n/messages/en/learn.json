@@ -1,1 +1,115 @@
-{}
+{
+  "page": {
+    "backToProfile": "← Profile"
+  },
+  "review": {
+    "back": "← Back",
+    "footnote": "Reviews record progress and XP like practice."
+  },
+  "nextUp": {
+    "heading": "Next up",
+    "more": "Or pick something else ({count})"
+  },
+  "briefing": {
+    "diagnostic": {
+      "pace": {
+        "title": "25–45 questions · about 30–45 minutes",
+        "detail": "The test adapts to you. Clear answers mean fewer questions."
+      },
+      "honest": {
+        "title": "Answer from what you know — no searching",
+        "detail": "Honest answers put you at the right starting point. Looked-up answers put you in the wrong place."
+      },
+      "speed": {
+        "title": "Speed counts",
+        "detail": "Fast correct answers show mastery and shorten the test."
+      },
+      "pause": {
+        "title": "Pause anytime",
+        "detail": "Leave and pick up where you stopped."
+      }
+    },
+    "quiz": {
+      "format": {
+        "title": "Up to 5 questions · timed · closed book",
+        "detail": "Each question has its own timer. Keep books and notes shut."
+      },
+      "scope": {
+        "title": "Covers what you just learned",
+        "detail": "Questions come from your recent lessons."
+      },
+      "miss": {
+        "title": "A wrong answer shows you why",
+        "detail": "The worked solution appears straight away, and anything worth revisiting is listed when the quiz ends."
+      },
+      "xp": {
+        "title": "XP for each correct answer · retake anytime",
+        "detail": "Faster answers and longer streaks earn more. No penalty for retaking."
+      }
+    },
+    "review": {
+      "due": {
+        "title": "Only what is due for review",
+        "detail": "Questions come from concepts whose memory is fading."
+      },
+      "honest": {
+        "title": "Answer from what you remember — no searching",
+        "detail": "Honest answers recalibrate your next review date."
+      },
+      "speed": {
+        "title": "Speed counts",
+        "detail": "Fast correct answers show the memory is solid."
+      },
+      "xp": {
+        "title": "XP for each correct answer",
+        "detail": "Reviews record progress and XP like practice."
+      }
+    }
+  },
+  "relation": {
+    "study": "Study →"
+  },
+  "shelf": {
+    "allLearned": {
+      "badge": "All learned",
+      "title": "Concept graph",
+      "detail": "Nothing is due right now — the graph shows what builds on what you have",
+      "cta": "See the graph →"
+    }
+  },
+  "prereq": {
+    "ariaLabel": "Prerequisites",
+    "heading": "Prerequisites ({count})",
+    "defaultIntro": "You're not ready to practise this topic yet. Study the prerequisites below, then return to check your readiness.",
+    "required": "Required prerequisite",
+    "study": "Study →",
+    "state": {
+      "mastered": "Mastered",
+      "dueForReview": "Mastered · due a check",
+      "inProgress": "In progress",
+      "notStarted": "Not started",
+      "locked": "Locked"
+    }
+  },
+  "prereqDialog": {
+    "title": "Prerequisite path",
+    "description": "You're not ready to practise this topic yet. Study the prerequisites below, then return to check readiness.",
+    "heading": "Prerequisites",
+    "loading": "Loading prerequisites…",
+    "error": "Couldn't load this topic's prerequisites.",
+    "retry": "Retry",
+    "empty": "No prerequisites listed"
+  },
+  "choices": {
+    "ariaLabel": "Answer choices"
+  },
+  "submitError": {
+    "sessionGone": "Session expired — the server restarted and forgot this run.",
+    "throttled": "Saving is catching up — your answer is kept and will be sent again.",
+    "failed": "Couldn't submit your answer — it's still in the box.",
+    "retry": "Retry",
+    "retrying": "Retrying…",
+    "skip": "Skip →",
+    "noSkips": "No skips left — restart for a fresh run."
+  }
+}

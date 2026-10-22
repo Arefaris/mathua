@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import type { EligibilityPrereq } from '../lib/api'
 import { studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/learnReturn'
+import { tNow, useT } from '../lib/i18n'
 
 /**
  * The prerequisite list, shared by the learning loop and the curriculum browser.
@@ -25,26 +26,28 @@ export function prereqHref(p: EligibilityPrereq, returnStack: ReturnEntry[] = []
   return withReturnStack(studyConceptPath(p.conceptId), returnStack)
 }
 
+// The two helpers below return display text from outside a component. Their callers
+// (PrerequisitePanel and the path dialog) read the locale through useT, so they re-render on a switch.
 export function prereqCta(_p: EligibilityPrereq): string {
-  return 'Study →'
+  return tNow('learn.prereq.study')
 }
 
 /** The learner-facing words for a prerequisite's state, from the server's verdict. */
 export function prereqStateWord(p: EligibilityPrereq): string {
   switch (p.state) {
     case 'mastered':
-      return 'Mastered'
+      return tNow('learn.prereq.state.mastered')
     case 'due_for_review':
-      return 'Mastered · due a check'
+      return tNow('learn.prereq.state.dueForReview')
     case 'in_progress':
-      return 'In progress'
+      return tNow('learn.prereq.state.inProgress')
     case 'unlocked':
     case 'upcoming':
-      return 'Not started'
+      return tNow('learn.prereq.state.notStarted')
     case 'locked':
-      return 'Locked'
+      return tNow('learn.prereq.state.locked')
     default:
-      return p.met ? 'Mastered' : 'Not started'
+      return p.met ? tNow('learn.prereq.state.mastered') : tNow('learn.prereq.state.notStarted')
   }
 }
 
@@ -63,14 +66,15 @@ export default function PrerequisitePanel({
   returnStack?: ReturnEntry[]
   onDismiss?: () => void
 }) {
-  const title = heading ?? `Prerequisites (${prerequisites.length})`
+  const t = useT()
+  const title = heading ?? t('learn.prereq.heading', { count: prerequisites.length })
   // The default copy is the "not ready yet" case: the panel is shown when a target is locked, or
   // as an advisory on an eligible one (which passes its own `intro`). Either way it must say that
   // the learner can *study* a prerequisite they cannot yet practise.
-  const body = intro ?? "You're not ready to practise this topic yet. Study the prerequisites below, then return to check your readiness."
+  const body = intro ?? t('learn.prereq.defaultIntro')
   return (
     <section
-      aria-label="Prerequisites"
+      aria-label={t('learn.prereq.ariaLabel')}
       role="note"
       className="mt-4 border border-mathua-border bg-mathua-surface p-4 min-w-0"
     >
@@ -95,7 +99,7 @@ export default function PrerequisitePanel({
                 {p.title}
               </span>
               <span className="block font-mono text-[10px] uppercase tracking-wider text-mathua-muted">
-                {prereqStateWord(p)} · Required prerequisite
+                {prereqStateWord(p)} · {t('learn.prereq.required')}
               </span>
             </span>
             <Link
@@ -113,7 +117,7 @@ export default function PrerequisitePanel({
           onClick={onDismiss}
           className="mt-3 font-mono text-[10px] uppercase tracking-wider text-mathua-muted hover:text-mathua-blue"
         >
-          Close
+          {t('common.action.close')}
         </button>
       )}
     </section>

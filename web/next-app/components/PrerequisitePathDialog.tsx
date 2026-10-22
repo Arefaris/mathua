@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { EligibilityPrereq } from '../lib/api'
 import type { ReturnEntry } from '../lib/learnReturn'
 import { prereqHref, prereqStateWord } from './PrerequisitePanel'
+import { useT } from '../lib/i18n'
 
 /**
  * The prerequisite-path dialog for one locked or upcoming curriculum topic.
@@ -38,6 +39,7 @@ export default function PrerequisitePathDialog({
   onClose,
   onRetry,
 }: Props) {
+  const t = useT()
   return (
     <Dialog.Root
       open={open}
@@ -52,7 +54,7 @@ export default function PrerequisitePathDialog({
           className="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[calc(100vw-2rem)] max-w-[520px] -translate-x-1/2 -translate-y-1/2 overflow-y-auto border border-mathua-border bg-mathua-surface p-5"
         >
           <Dialog.Title className="font-mono text-xs uppercase tracking-wider text-mathua-primary">
-            Prerequisite path
+            {t('learn.prereqDialog.title')}
           </Dialog.Title>
           <p className="mt-1 font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere]">
             {targetTitle}
@@ -61,16 +63,15 @@ export default function PrerequisitePathDialog({
             id="prereq-path-desc"
             className="mt-2 font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]"
           >
-            You&apos;re not ready to practise this topic yet. Study the prerequisites below, then
-            return to check readiness.
+            {t('learn.prereqDialog.description')}
           </Dialog.Description>
 
           <h3 className="mt-4 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-            Prerequisites
+            {t('learn.prereqDialog.heading')}
           </h3>
 
           {status === 'loading' && (
-            <p className="mt-2 font-mono text-[11px] text-mathua-muted">Loading prerequisites…</p>
+            <p className="mt-2 font-mono text-[11px] text-mathua-muted">{t('learn.prereqDialog.loading')}</p>
           )}
 
           {status === 'error' && (
@@ -79,7 +80,7 @@ export default function PrerequisitePathDialog({
                 role="alert"
                 className="font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]"
               >
-                {error || "Couldn't load this topic's prerequisites."}
+                {error || t('learn.prereqDialog.error')}
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {onRetry && (
@@ -88,7 +89,7 @@ export default function PrerequisitePathDialog({
                     onClick={onRetry}
                     className="border border-mathua-blue px-4 py-2 font-mono text-[11px] text-mathua-blue hover:bg-mathua-blue-faint min-h-[36px]"
                   >
-                    Retry
+                    {t('learn.prereqDialog.retry')}
                   </button>
                 )}
               </div>
@@ -96,7 +97,7 @@ export default function PrerequisitePathDialog({
           )}
 
           {status === 'empty' && (
-            <p className="mt-2 font-mono text-[11px] text-mathua-muted">No prerequisites listed</p>
+            <p className="mt-2 font-mono text-[11px] text-mathua-muted">{t('learn.prereqDialog.empty')}</p>
           )}
 
           {status === 'ready' && (
@@ -111,14 +112,14 @@ export default function PrerequisitePathDialog({
                       {p.title}
                     </span>
                     <span className="block font-mono text-[10px] uppercase tracking-wider text-mathua-muted">
-                      {prereqStateWord(p)} · Required prerequisite
+                      {prereqStateWord(p)} · {t('learn.prereq.required')}
                     </span>
                   </span>
                   <Link
                     href={prereqHref(p, returnStack)}
                     className="w-full sm:w-auto shrink-0 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap"
                   >
-                    Study →
+                    {t('learn.prereq.study')}
                   </Link>
                 </li>
               ))}
@@ -131,7 +132,7 @@ export default function PrerequisitePathDialog({
                 type="button"
                 className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted hover:text-mathua-blue min-h-[36px] px-2"
               >
-                Close
+                {t('common.action.close')}
               </button>
             </Dialog.Close>
           </div>

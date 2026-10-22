@@ -12,6 +12,7 @@ import NextUpCard from '../../components/NextUpCard'
 import type { Shelf } from '../../lib/nextUp'
 import { fetchShelf } from '../../lib/recommendations'
 import { parseReturnStack } from '../../lib/learnReturn'
+import { useT } from '../../lib/i18n'
 
 /**
  * The learner's entry point: whatever the engine recommends, rendered as one card plus the
@@ -21,6 +22,7 @@ import { parseReturnStack } from '../../lib/learnReturn'
  * engine chooses; the learner disposes.
  */
 function LearnEntry() {
+  const t = useT()
   const [shelf, setShelf] = useState<Shelf | null>(null)
 
   useEffect(() => {
@@ -34,20 +36,21 @@ function LearnEntry() {
   const loading = shelf === null
 
   if (loading) {
-    return <div className="p-6 font-mono text-xs text-mathua-muted">Loading…</div>
+    return <div className="p-6 font-mono text-xs text-mathua-muted">{t('common.status.loading')}</div>
   }
 
   return (
     <div className="mt-6 mb-16 px-4">
       <div className="max-w-2xl mx-auto">
         <NextUpCard shelf={shelf} />
-        <Link href="/profile" className="mt-4 inline-block font-mono text-xs text-mathua-secondary hover:text-mathua-blue">← Profile</Link>
+        <Link href="/profile" className="mt-4 inline-block font-mono text-xs text-mathua-secondary hover:text-mathua-blue">{t('learn.page.backToProfile')}</Link>
       </div>
     </div>
   )
 }
 
 function LearnContent() {
+  const t = useT()
   const searchParams = useSearchParams()
   const concept = searchParams.get('concept') || ''
   const returnStack = parseReturnStack(searchParams)
@@ -59,7 +62,7 @@ function LearnContent() {
   return (
     <div className="mt-6 mb-16 px-4">
       <div className="max-w-2xl mx-auto mb-4">
-        <Link href="/profile" className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue">← Profile</Link>
+        <Link href="/profile" className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue">{t('learn.page.backToProfile')}</Link>
       </div>
       <LearnStepper conceptId={concept} returnStack={returnStack} />
       <div className="max-w-2xl mx-auto">
@@ -70,11 +73,12 @@ function LearnContent() {
 }
 
 export default function LearnPage() {
+  const t = useT()
   return (
     <>
       <Header />
       <div className="pt-[var(--chrome-top)] lg:pt-0">
-        <Suspense fallback={<div className="p-6 font-mono text-xs text-mathua-muted">Loading…</div>}>
+        <Suspense fallback={<div className="p-6 font-mono text-xs text-mathua-muted">{t('common.status.loading')}</div>}>
           <LearnContent />
         </Suspense>
       </div>

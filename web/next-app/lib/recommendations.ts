@@ -1,5 +1,6 @@
 import { getNext, type Recommendation, type RecommendationRes } from './api'
 import type { Shelf, ShelfItem } from './nextUp'
+import { tNow } from './i18n'
 
 /**
  * The engine's recommendation, in the shape the surfaces already render.
@@ -49,11 +50,11 @@ export function recommendationResToShelf(res: RecommendationRes): Shelf {
     ? recommendationToShelfItem(res.primary)
     : {
         kind: 'new' as const,
-        badge: 'All learned',
-        title: 'Concept graph',
-        detail: 'Nothing is due right now — the graph shows what builds on what you have',
+        badge: tNow('learn.shelf.allLearned.badge'),
+        title: tNow('learn.shelf.allLearned.title'),
+        detail: tNow('learn.shelf.allLearned.detail'),
         href: '/graph',
-        cta: 'See the graph →',
+        cta: tNow('learn.shelf.allLearned.cta'),
         xp: 0,
       }
   return {
