@@ -230,7 +230,8 @@
     }
   },
   "math": {
-    "simplifies": "That simplifies to {value}."
+    "simplifies": "That simplifies to {value}.",
+    "renderFailed": "Math failed to render ({detail})"
   },
   "assistant": {
     "suggestions": {
@@ -314,5 +315,16 @@
     "practiceAgain": "Practice again",
     "comingUp": "Coming up — unlocks once this concept is mastered",
     "needs": "Needs: {names}"
+  },
+  "answerFormat": {
+    "numeric": "Answer with a number, fraction, or mixed number (e.g. 4 1/10)",
+    "expression": "Answer as an expression",
+    "symbolic": "Answer in simplest form",
+    "multipleChoice": "Type the exact answer",
+    "comparison": "Answer <, >, or =",
+    "ordering": "Answer in order, separated by commas",
+    "tuple": "Separate values with commas, e.g. 2, 3 or (2, 3)",
+    "complex": "Answer as a + bi",
+    "default": "Answer in the form shown"
   }
 }

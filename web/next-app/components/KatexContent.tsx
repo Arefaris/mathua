@@ -9,6 +9,7 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import rehypeCollapseEmptyColumns from '../lib/rehypeCollapseEmptyColumns'
 import 'katex/dist/katex.min.css'
 import { lessonMacros, prepareLessonMath } from '../lib/lessonMath'
+import { tNow, useLocale } from '../lib/i18n'
 
 // Resolve a lesson-image reference to a served URL.
 //
@@ -141,7 +142,7 @@ function rehypeKatexFallback() {
           tagName: 'span',
           properties: {
             className: ['math-fallback'],
-            title: `Math failed to render (${detail.slice(0, 200)})`,
+            title: tNow('learn.math.renderFailed', { detail: detail.slice(0, 200) }),
           },
           children: [{ type: 'text', value: source }],
         }
@@ -156,6 +157,8 @@ function rehypeKatexFallback() {
 }
 
 export default function KatexContent({ children, className = '' }: { children: string; className?: string }) {
+  // Read so the fallback tooltip is rebuilt in the new language after a switch.
+  useLocale()
   const content = prepareLessonMath(children)
   // In production KaTeX errors are still non-throwing (labeled fallback via
   // rehypeKatexFallback below) but we emit a console warning for telemetry —
