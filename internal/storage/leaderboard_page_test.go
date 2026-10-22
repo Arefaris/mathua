@@ -219,3 +219,38 @@ func TestLeaderboardPage_UnknownViewIsRefused(t *testing.T) {
 		t.Fatal("unknown view accepted")
 	}
 }
+
+// TestMigrate_KeepsExistingXP is the assurance an existing learner needs before
+// a leaderboard rewrite: the schema change is additive. Lifetime XP lives on
+// students.xp_total and is read by the all-time board; xp_events is a new table
+// beside it, not a replacement. Nothing deletes or rescales a counter, and a
+// second migration cannot subtract from one.
+func TestMigrate_KeepsExistingXP(t *testing.T) {
+	store := newTestStore(t)
+	st, err := store.CreateStudent("veteran")
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+	if err := store.AwardXP(st.ID, 175, "legacy", "legacy:1"); err != nil {
+		t.Fatalf("award: %v", err)
+	}
+	// Re-running the migration must not touch what is already stored.
+	if err := store.Migrate(); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	total, _, err := store.GetXP(st.ID)
+	if err != nil {
+		t.Fatalf("get xp: %v", err)
+	}
+	if total != 175 {
+		t.Errorf("lifetime XP = %d after migration, want 175", total)
+	}
+	// And it is what the all-time board ranks.
+	rows, _, err := store.LeaderboardPage("all_time", time.Now().UTC(), 25, 0)
+	if err != nil {
+		t.Fatalf("all-time page: %v", err)
+	}
+	if len(rows) != 1 || rows[0].XP != 175 {
+		t.Errorf("all-time board = %+v, want the 175 XP learner", rows)
+	}
+}
