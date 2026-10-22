@@ -37,6 +37,11 @@ describe('toPlainAnswer', () => {
       // implicit-multiplication pass, which only matches `sin(`.
       ['sin (x)+cos (x)', 'sin(x)+cos(x)'],
       ['sin ^2(x)+cos ^2(x)', 'sin^2(x)+cos^2(x)'],
+      // A word phrase arrives with every letter spaced, because math mode treats
+      // adjacent letters as a product. Rejoining the runs is right for the field
+      // but destroys the word boundary, so the phrase reaches the server as
+      // `linesegment`. Recorded here because the choice grader has to accept it.
+      ['l i n e s e g m e n t', 'linesegment'],
     ]
     for (const [raw, want] of rows) expect(toPlainAnswer(raw)).toBe(want)
   })
