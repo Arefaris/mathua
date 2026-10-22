@@ -169,9 +169,10 @@ export function WelcomeStep({
         <button
           type="button"
           onClick={onSelectAll}
+          aria-pressed={domains.length > 0 && domains.every(d => d.selected)}
           className="bg-mathua-surface border border-mathua-border rounded-none h-10 min-h-[36px] px-6 text-sm text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue"
         >
-          Select everything
+          {domains.length > 0 && domains.every(d => d.selected) ? 'Deselect everything' : 'Select everything'}
         </button>
       </div>
 
