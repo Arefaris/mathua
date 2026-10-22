@@ -417,5 +417,20 @@
     "disableShare": "Отключить доступ",
     "generating": "Создание ссылки…",
     "enableShare": "Включить ссылку для просмотра"
+  },
+  "errors": {
+    "leaderboardLoad": "Не удалось загрузить рейтинг",
+    "leagueLoad": "Не удалось загрузить вашу лигу",
+    "signupFailed": "Не удалось зарегистрироваться",
+    "tooManyAttempts": "Слишком много попыток — повторите чуть позже",
+    "invalidCredentials": "Неверное имя пользователя или пароль",
+    "updateProfile": "Не удалось обновить профиль: {status}",
+    "resetRequest": "Не удалось запросить сброс пароля: {status}",
+    "resetComplete": "Не удалось сбросить пароль: {status}",
+    "changePassword": "Не удалось сменить пароль: {status}",
+    "disconnect": "Не удалось отключить: {status}",
+    "link": "Не удалось подключить: {status}",
+    "verifyRequest": "Не удалось запросить подтверждение: {status}",
+    "verify": "Не удалось подтвердить: {status}"
   }
 }

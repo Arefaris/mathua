@@ -405,5 +405,20 @@
     "disableShare": "Disable share",
     "generating": "Generating…",
     "enableShare": "Enable share link"
+  },
+  "errors": {
+    "leaderboardLoad": "Could not load the leaderboard",
+    "leagueLoad": "Could not load your league",
+    "signupFailed": "Signup failed",
+    "tooManyAttempts": "Too many attempts — try again shortly",
+    "invalidCredentials": "Invalid credentials",
+    "updateProfile": "Update profile failed: {status}",
+    "resetRequest": "Reset request failed: {status}",
+    "resetComplete": "Reset failed: {status}",
+    "changePassword": "Change password failed: {status}",
+    "disconnect": "Disconnect failed: {status}",
+    "link": "Link failed: {status}",
+    "verifyRequest": "Verification request failed: {status}",
+    "verify": "Verification failed: {status}"
   }
 }

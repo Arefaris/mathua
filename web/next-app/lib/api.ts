@@ -2,6 +2,7 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
 import { getAuthHeaders, authedFetch } from './auth'
 import { getLocale } from './i18n/locale'
+import { tNow } from './i18n/react'
 import { z } from 'zod'
 
 // Dev-only heads-up: an unset NEXT_PUBLIC_API_URL falls back to relative
@@ -353,7 +354,7 @@ export async function getLeaderboard(
 ): Promise<LeaderboardBoard> {
   const params = new URLSearchParams({ view, page: String(page), page_size: String(pageSize) })
   const res = await authedFetch(`${API_BASE}/api/leaderboard?${params.toString()}`, { cache: 'no-store' })
-  if (!res.ok) await throwWithResponse(res, 'Could not load the leaderboard')
+  if (!res.ok) await throwWithResponse(res, tNow('account.errors.leaderboardLoad'))
   const data = (await res.json()) as Partial<LeaderboardBoard>
   // A deploy in progress can pair this bundle with the previous API, whose
   // response was a bare array. Render the error state rather than crash on
@@ -391,7 +392,7 @@ export interface MyLeague {
 export async function getMyLeague(): Promise<MyLeague | null> {
   const res = await authedFetch(`${API_BASE}/api/leagues`, { cache: 'no-store' })
   if (res.status === 401) return null
-  if (!res.ok) await throwWithResponse(res, 'Could not load your league')
+  if (!res.ok) await throwWithResponse(res, tNow('account.errors.leagueLoad'))
   return res.json() as Promise<MyLeague>
 }
 
@@ -553,7 +554,7 @@ export async function getConfig(): Promise<ConfigRes | null> {
 
 export async function googleOneTap(idToken: string): Promise<AuthRes> {
 	const res = await authedFetch(`${API_BASE}/api/auth/google`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id_token: idToken }) })
-	if (!res.ok) throw new Error('Google sign-in failed')
+	if (!res.ok) throw new Error(tNow('account.login.googleFailed'))
 	return validateResponse(AuthResSchema, await res.json(), 'googleOneTap') as AuthRes
 }
 
@@ -579,7 +580,7 @@ export async function signup(name: string, username: string, password: string, e
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ name, username, password, email: email ?? '' }),
 	})
-	if (!res.ok) await throwWithResponse(res, `Signup failed`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.signupFailed'))
 	return validateResponse(AuthResSchema, await res.json(), 'signup') as AuthRes
 }
 
@@ -589,8 +590,8 @@ export async function login(username: string, password: string): Promise<AuthRes
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ username, password }),
 	})
-	if (res.status === 429) throw new Error('Too many attempts — try again shortly')
-	if (!res.ok) throw new Error('Invalid credentials')
+	if (res.status === 429) throw new Error(tNow('account.errors.tooManyAttempts'))
+	if (!res.ok) throw new Error(tNow('account.errors.invalidCredentials'))
 	return validateResponse(AuthResSchema, await res.json(), 'login') as AuthRes
 }
 
@@ -853,7 +854,7 @@ export async function resetAccount(phrase: string): Promise<void> {
 	// Read the {error} envelope rather than res.text(): throwing the raw body
 	// put a literal `{"error":"…"}` in the danger zone, which reads as a
 	// broken app instead of an explanation.
-	if (!res.ok) await throwWithResponse(res, 'Reset failed')
+	if (!res.ok) await throwWithResponse(res, tNow('account.dangerZone.resetFailed'))
 }
 
 // The server's own account payload. `role` was missing here and zod strips unknown keys, so the
@@ -891,7 +892,7 @@ export async function deleteAccount(body: { phrase: string; password?: string })
 		body: JSON.stringify(body),
 	})
 	// Same reason as resetAccount: never surface the raw JSON envelope.
-	if (!res.ok) await throwWithResponse(res, 'Delete failed')
+	if (!res.ok) await throwWithResponse(res, tNow('account.deleteAccount.deleteFailed'))
 }
 
 export async function getWeaknesses(): Promise<WeaknessRes> {
@@ -940,7 +941,7 @@ export async function updateProfileName(name: string, email?: string): Promise<P
 		headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
 		body: JSON.stringify(email === undefined ? { name } : { name, email }),
 	})
-	if (!res.ok) await throwWithResponse(res, `Update profile failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.updateProfile', { status: res.status }))
 	return res.json()
 }
 
@@ -950,7 +951,7 @@ export async function requestPasswordReset(identifier: string): Promise<void> {
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ identifier }),
 	})
-	if (!res.ok) await throwWithResponse(res, `Reset request failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.resetRequest', { status: res.status }))
 }
 
 export async function completePasswordReset(token: string, password: string): Promise<AuthRes> {
@@ -959,7 +960,7 @@ export async function completePasswordReset(token: string, password: string): Pr
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ token, password }),
 	})
-	if (!res.ok) await throwWithResponse(res, `Reset failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.resetComplete', { status: res.status }))
 	return validateResponse(AuthResSchema, await res.json(), 'resetComplete') as AuthRes
 }
 
@@ -969,7 +970,7 @@ export async function changePassword(currentPassword: string, newPassword: strin
 		headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
 		body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
 	})
-	if (!res.ok) await throwWithResponse(res, `Change password failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.changePassword', { status: res.status }))
 }
 
 export const OAUTH_PROVIDERS = ['google', 'github', 'facebook', 'microsoft', 'apple'] as const
@@ -1011,7 +1012,7 @@ export async function deleteIdentity(provider: string): Promise<void> {
 		method: 'DELETE',
 		headers: { ...getAuthHeaders() },
 	})
-	if (!res.ok) await throwWithResponse(res, `Disconnect failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.disconnect', { status: res.status }))
 }
 
 export async function createLinkToken(): Promise<string> {
@@ -1019,7 +1020,7 @@ export async function createLinkToken(): Promise<string> {
 		method: 'POST',
 		headers: { ...getAuthHeaders() },
 	})
-	if (!res.ok) await throwWithResponse(res, `Link failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.link', { status: res.status }))
 	const data = await res.json()
 	return data.link_token as string
 }
@@ -1029,7 +1030,7 @@ export async function requestEmailVerification(): Promise<void> {
 		method: 'POST',
 		headers: { ...getAuthHeaders() },
 	})
-	if (!res.ok) await throwWithResponse(res, `Verification request failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.verifyRequest', { status: res.status }))
 }
 
 export async function verifyEmail(token: string): Promise<void> {
@@ -1038,7 +1039,7 @@ export async function verifyEmail(token: string): Promise<void> {
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ token }),
 	})
-	if (!res.ok) await throwWithResponse(res, `Verification failed: ${res.status}`)
+	if (!res.ok) await throwWithResponse(res, tNow('account.errors.verify', { status: res.status }))
 }
 
 export async function uploadAvatar(file: File): Promise<void> {
