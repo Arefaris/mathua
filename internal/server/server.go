@@ -999,7 +999,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		// never fail the graded answer.
 		if err := s.repo.EnsureSession(req.SessionID, diagStudentID); err != nil {
 			log.Printf("handleGoalDiagnosticAnswer: ensure session failed for %s: %v", diagStudentID, err)
-		} else if err := s.repo.RecordAttempt(storage.AttemptEntry{
+		} else if _, err := s.repo.RecordAttempt(storage.AttemptEntry{
 			SessionID:      req.SessionID,
 			StudentID:      diagStudentID,
 			ConceptID:      req.ConceptID,

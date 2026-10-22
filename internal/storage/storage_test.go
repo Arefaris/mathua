@@ -207,7 +207,7 @@ func TestRecordAndGetAttempts(t *testing.T) {
 		ElapsedSeconds: 3.5,
 		Timestamp:      time.Now().UTC(),
 	}
-	if err := store.RecordAttempt(entry); err != nil {
+	if _, err := store.RecordAttempt(entry); err != nil {
 		t.Fatalf("record attempt: %v", err)
 	}
 
@@ -261,7 +261,7 @@ func TestRecordAttempt_WithContent(t *testing.T) {
 		Source:         "diagnostic",
 		Explanation:    "5 + 7 = 12",
 	}
-	if err := store.RecordAttempt(full); err != nil {
+	if _, err := store.RecordAttempt(full); err != nil {
 		t.Fatalf("record attempt: %v", err)
 	}
 	legacy := AttemptEntry{
@@ -269,7 +269,7 @@ func TestRecordAttempt_WithContent(t *testing.T) {
 		Answer: "12", Expected: "12", Correct: true,
 		ElapsedSeconds: 2.0, Timestamp: time.Now().UTC(),
 	}
-	if err := store.RecordAttempt(legacy); err != nil {
+	if _, err := store.RecordAttempt(legacy); err != nil {
 		t.Fatalf("record legacy attempt: %v", err)
 	}
 
@@ -668,7 +668,7 @@ func TestQuizCompletion_RoundTrip(t *testing.T) {
 	if got, err := store.LastQuizCompletion(st.ID); err != nil || got != nil {
 		t.Fatalf("expected nil completion, got %+v err=%v", got, err)
 	}
-	if err := store.AddXP(st.ID, 175); err != nil {
+	if err := store.AwardXP(st.ID, 175, "test", "seed-175"); err != nil {
 		t.Fatalf("add xp: %v", err)
 	}
 	if err := store.RecordQuizCompletion(st.ID, 175); err != nil {
@@ -697,7 +697,7 @@ func TestResetProgress_RoundTrip(t *testing.T) {
 	if err := store.UpsertProgress(&ConceptProgress{StudentID: st.ID, ConceptID: "a", Status: "PRACTICING", Streak: 3}); err != nil {
 		t.Fatalf("seed progress: %v", err)
 	}
-	if err := store.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: st.ID, ConceptID: "a", Answer: "1", Expected: "2", Correct: false, ElapsedSeconds: 4, Timestamp: time.Now().UTC()}); err != nil {
+	if _, err := store.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: st.ID, ConceptID: "a", Answer: "1", Expected: "2", Correct: false, ElapsedSeconds: 4, Timestamp: time.Now().UTC()}); err != nil {
 		t.Fatalf("seed attempt: %v", err)
 	}
 	if err := store.UpsertTopicSpeed(&TopicSpeed{StudentID: st.ID, ConceptID: "a", EFactor: 2.5, Interval: 1, Repetitions: 1, LearningSpeed: 1.0}); err != nil {
@@ -706,7 +706,7 @@ func TestResetProgress_RoundTrip(t *testing.T) {
 	if err := store.RecordQuizCompletion(st.ID, 60); err != nil {
 		t.Fatalf("seed quiz: %v", err)
 	}
-	if err := store.AddXP(st.ID, 42); err != nil {
+	if err := store.AwardXP(st.ID, 42, "test", "seed-42"); err != nil {
 		t.Fatalf("seed xp: %v", err)
 	}
 	if err := store.UpsertServerSession("study_expected", st.ID+"|a", `{"q":"1"}`, time.Now().UTC().Add(time.Hour).Format(time.RFC3339)); err != nil {
@@ -781,7 +781,7 @@ func TestAttemptDifficulty_DistinguishesUnknownFromTrivial(t *testing.T) {
 	base := time.Now().UTC().Add(-time.Hour)
 
 	// Unknown: no difficulty recorded.
-	if err := store.RecordAttempt(AttemptEntry{
+	if _, err := store.RecordAttempt(AttemptEntry{
 		SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
 		Answer: "1", Expected: "1", Correct: true, Timestamp: base,
 	}); err != nil {
@@ -789,7 +789,7 @@ func TestAttemptDifficulty_DistinguishesUnknownFromTrivial(t *testing.T) {
 	}
 	// Generated at 0.8.
 	d := 0.8
-	if err := store.RecordAttempt(AttemptEntry{
+	if _, err := store.RecordAttempt(AttemptEntry{
 		SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
 		Answer: "2", Expected: "2", Correct: true, Timestamp: base.Add(time.Minute),
 		Difficulty: &d,

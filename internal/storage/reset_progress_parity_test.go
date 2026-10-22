@@ -37,10 +37,13 @@ func TestResetProgress_RoundTrip_Parity(t *testing.T) {
 		sess, err := store.CreateSession(st.ID)
 		run("create session", err)
 		run("seed progress", store.UpsertProgress(&ConceptProgress{StudentID: st.ID, ConceptID: "a", Status: "PRACTICING", Streak: 3}))
-		run("seed attempt", store.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: st.ID, ConceptID: "a", Answer: "1", Expected: "2", Correct: false, ElapsedSeconds: 4, Timestamp: time.Now().UTC()}))
+		run("seed attempt", func() error {
+			_, err := store.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: st.ID, ConceptID: "a", Answer: "1", Expected: "2", Correct: false, ElapsedSeconds: 4, Timestamp: time.Now().UTC()})
+			return err
+		}())
 		run("seed speed", store.UpsertTopicSpeed(&TopicSpeed{StudentID: st.ID, ConceptID: "a", EFactor: 2.5, Interval: 1, Repetitions: 1, LearningSpeed: 1.0}))
 		run("seed quiz", store.RecordQuizCompletion(st.ID, 60))
-		run("seed xp", store.AddXP(st.ID, 42))
+		run("seed xp", store.AwardXP(st.ID, 42, "test", "seed-42"))
 		run("seed diagnostic", store.SetDiagnosticCompleted(st.ID))
 		if _, found, err := store.DiagnosticCompletedAt(st.ID); err != nil || !found {
 			t.Fatalf("[%s] diagnostic timestamp missing before reset: found=%v err=%v", tag, found, err)

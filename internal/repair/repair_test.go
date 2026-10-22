@@ -41,17 +41,23 @@ func TestRepair_FlipsFalseNegative(t *testing.T) {
 	base := time.Now().UTC().Add(-time.Hour)
 
 	// False negative: the old numeric grader rejected the spoken mixed number.
-	must(t, repo.RecordAttempt(storage.AttemptEntry{
-		SessionID: sess, StudentID: sid, ConceptID: "t",
-		Answer: "4 and 1/10", Expected: "4 1/10", Correct: false,
-		ElapsedSeconds: 5, Timestamp: base,
-	}))
+	must(t, func() error {
+		_, err := repo.RecordAttempt(storage.AttemptEntry{
+			SessionID: sess, StudentID: sid, ConceptID: "t",
+			Answer: "4 and 1/10", Expected: "4 1/10", Correct: false,
+			ElapsedSeconds: 5, Timestamp: base,
+		})
+		return err
+	}())
 	// Genuine miss: must stay incorrect after repair.
-	must(t, repo.RecordAttempt(storage.AttemptEntry{
-		SessionID: sess, StudentID: sid, ConceptID: "t",
-		Answer: "5", Expected: "4 1/10", Correct: false,
-		ElapsedSeconds: 9, Timestamp: base.Add(time.Minute),
-	}))
+	must(t, func() error {
+		_, err := repo.RecordAttempt(storage.AttemptEntry{
+			SessionID: sess, StudentID: sid, ConceptID: "t",
+			Answer: "5", Expected: "4 1/10", Correct: false,
+			ElapsedSeconds: 9, Timestamp: base.Add(time.Minute),
+		})
+		return err
+	}())
 
 	reg := generator.NewRegistry()
 	eng := engine.New(repo, dag, reg, nil, nil)

@@ -1503,7 +1503,7 @@ func TestQuizMiss_RemedialAndGateDue(t *testing.T) {
 	}
 
 	// Earn 150 XP of study: gate flips due (completion earlier baselined 0).
-	if err := store.AddXP(sid, 150); err != nil {
+	if err := store.AwardXP(sid, 150, "test", "seed-150"); err != nil {
 		t.Fatalf("add xp: %v", err)
 	}
 	rec := httptest.NewRecorder()

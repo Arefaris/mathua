@@ -44,6 +44,21 @@ CREATE TABLE IF NOT EXISTS students (
     role                 TEXT NOT NULL DEFAULT 'student'
 );
 
+-- The XP ledger; see the SQLite schema for why UNIQUE(student_id, event_key)
+-- is the duplicate-award guard and why amounts may be negative.
+CREATE TABLE IF NOT EXISTS xp_events (
+    id         BIGSERIAL PRIMARY KEY,
+    student_id TEXT NOT NULL,
+    amount     INTEGER NOT NULL,
+    reason     TEXT NOT NULL DEFAULT '',
+    event_key  TEXT NOT NULL,
+    created_at BIGINT NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_events_event ON xp_events(student_id, event_key);
+CREATE INDEX IF NOT EXISTS idx_xp_events_week ON xp_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_xp_events_student_week ON xp_events(student_id, created_at);
+
 CREATE TABLE IF NOT EXISTS concept_progress (
     student_id       TEXT    NOT NULL,
     concept_id       TEXT    NOT NULL,
@@ -740,19 +755,70 @@ func (s *PostgresStore) SetCourseID(studentID, courseID string) error {
 	return nil
 }
 
-func (s *PostgresStore) AddXP(studentID string, amount int) error {
+func (s *PostgresStore) AwardXP(studentID string, amount int, reason, eventKey string) error {
+	if studentID == "" {
+		return fmt.Errorf("award xp: empty student")
+	}
+	if eventKey == "" {
+		return fmt.Errorf("award xp: empty event key")
+	}
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("award xp: %w", err)
+	}
+	defer tx.Rollback()
+
+	// ON CONFLICT DO NOTHING plus the unique index is the concurrency guard;
+	// see the SQLite implementation for the reasoning.
+	res, err := tx.Exec(`
+		INSERT INTO xp_events (student_id, amount, reason, event_key, created_at)
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (student_id, event_key) DO NOTHING
+	`, studentID, amount, reason, eventKey, time.Now().UTC().UnixNano())
+	if err != nil {
+		return fmt.Errorf("award xp: insert event: %w", err)
+	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		return tx.Commit()
+	}
+
 	today := time.Now().UTC().Format("2006-01-02")
-	_, err := s.db.Exec(`
+	if _, err := tx.Exec(`
 		UPDATE students
 		SET xp_total = GREATEST(0, xp_total + $1),
 		    xp_today = CASE WHEN xp_date = $2 THEN GREATEST(0, xp_today + $3) ELSE GREATEST(0, $4) END,
 		    xp_date  = $5
 		WHERE id = $6
-	`, amount, today, amount, amount, today, studentID)
-	if err != nil {
-		return fmt.Errorf("add xp: %w", err)
+	`, amount, today, amount, amount, today, studentID); err != nil {
+		return fmt.Errorf("award xp: update counters: %w", err)
+	}
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("award xp: %w", err)
 	}
 	return nil
+}
+
+func (s *PostgresStore) WeeklyXPByStudent(since time.Time) (map[string]int, error) {
+	rows, err := s.db.Query(`
+		SELECT student_id, COALESCE(SUM(amount), 0)
+		FROM xp_events
+		WHERE created_at >= $1
+		GROUP BY student_id
+	`, since.UTC().UnixNano())
+	if err != nil {
+		return nil, fmt.Errorf("weekly xp: %w", err)
+	}
+	defer rows.Close()
+	out := map[string]int{}
+	for rows.Next() {
+		var id string
+		var sum int
+		if err := rows.Scan(&id, &sum); err != nil {
+			return nil, fmt.Errorf("weekly xp: %w", err)
+		}
+		out[id] = sum
+	}
+	return out, rows.Err()
 }
 
 func (s *PostgresStore) GetXP(studentID string) (int, int, error) {
@@ -1416,23 +1482,25 @@ func (s *PostgresStore) DeleteAccount(studentID string) error {
 
 // Attempts
 
-func (s *PostgresStore) RecordAttempt(entry AttemptEntry) error {
-	_, err := s.db.Exec(`
+func (s *PostgresStore) RecordAttempt(entry AttemptEntry) (int64, error) {
+	var id int64
+	err := s.db.QueryRow(`
 		INSERT INTO attempts
 			(session_id, student_id, concept_id, answer, expected,
 			 correct, elapsed_seconds, timestamp, question, source, explanation, difficulty)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+		RETURNING id
 	`,
 		entry.SessionID, entry.StudentID, entry.ConceptID,
 		entry.Answer, entry.Expected,
 		boolToInt(entry.Correct), entry.ElapsedSeconds,
 		entry.Timestamp.Format(time.RFC3339),
 		entry.Question, entry.Source, entry.Explanation, entry.Difficulty,
-	)
+	).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("record attempt: %w", err)
+		return 0, fmt.Errorf("record attempt: %w", err)
 	}
-	return nil
+	return id, nil
 }
 
 // GetRecentAttemptsForConcept implements the bounded per-concept window the evidence

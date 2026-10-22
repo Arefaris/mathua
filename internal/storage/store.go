@@ -552,7 +552,10 @@ type Repository interface {
 	GetActiveSession(sessionID string) (*ActiveSession, error)
 	UpsertActiveSession(a *ActiveSession) error
 	DeleteActiveSession(sessionID string) error
-	RecordAttempt(entry AttemptEntry) error
+	// RecordAttempt returns the id of the row it wrote. The id is the event key
+	// for the XP award: it is unique per answer, so the award and the attempt it
+	// rewards cannot drift apart under retries.
+	RecordAttempt(entry AttemptEntry) (int64, error)
 	// UpdateAttemptCorrect flips a recorded attempt's correctness. Used by the
 	// grading data-repair pass to fix false negatives.
 	UpdateAttemptCorrect(id int64, correct bool) error
@@ -595,7 +598,15 @@ type Repository interface {
 	GetStudentByShareToken(token string) (*Student, error)
 	GetDailyActivity(studentID string, days int) ([]DailyActivity, error)
 
-	AddXP(studentID string, amount int) error
+	// AwardXP appends to the XP ledger and moves the counters in one
+	// transaction. event_key identifies the learning event that justifies the
+	// award; a second award for the same key is a no-op, so a retried request
+	// cannot pay twice. The ledger is what makes "XP earned this week" a query
+	// rather than a guess, and it is append-only: a negative rush penalty is a
+	// row with a negative amount, not an edit of an earlier one.
+	AwardXP(studentID string, amount int, reason, eventKey string) error
+	// WeeklyXPByStudent sums the ledger from since (inclusive) to now.
+	WeeklyXPByStudent(since time.Time) (map[string]int, error)
 	GetXP(studentID string) (total int, today int, err error)
 	SetDiagnosticCompleted(studentID string) error
 	// DiagnosticCompletedAt reports when placement completed. A separate call

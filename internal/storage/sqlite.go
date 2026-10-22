@@ -562,19 +562,74 @@ func (s *SQLiteStore) SetCourseID(studentID, courseID string) error {
 	return nil
 }
 
-func (s *SQLiteStore) AddXP(studentID string, amount int) error {
+func (s *SQLiteStore) AwardXP(studentID string, amount int, reason, eventKey string) error {
+	if studentID == "" {
+		return fmt.Errorf("award xp: empty student")
+	}
+	if eventKey == "" {
+		return fmt.Errorf("award xp: empty event key")
+	}
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("award xp: %w", err)
+	}
+	defer tx.Rollback()
+
+	// The insert decides whether the award happens at all. Two concurrent
+	// requests carrying the same key: one inserts, the other inserts nothing,
+	// and only the winner's transaction touches the counters. This is why the
+	// guard is a unique index rather than a read-then-write check.
+	res, err := tx.Exec(`
+		INSERT INTO xp_events (student_id, amount, reason, event_key, created_at)
+		VALUES (?, ?, ?, ?, ?)
+		ON CONFLICT(student_id, event_key) DO NOTHING
+	`, studentID, amount, reason, eventKey, time.Now().UTC().UnixNano())
+	if err != nil {
+		return fmt.Errorf("award xp: insert event: %w", err)
+	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		// Already awarded. Committing the empty transaction is honest: the
+		// caller asked for an idempotent award and got one.
+		return tx.Commit()
+	}
+
 	today := time.Now().UTC().Format("2006-01-02")
-	_, err := s.db.Exec(`
+	if _, err := tx.Exec(`
 		UPDATE students
 		SET xp_total = MAX(0, xp_total + ?),
 		    xp_today = CASE WHEN xp_date = ? THEN MAX(0, xp_today + ?) ELSE MAX(0, ?) END,
 		    xp_date  = ?
 		WHERE id = ?
-	`, amount, today, amount, amount, today, studentID)
-	if err != nil {
-		return fmt.Errorf("add xp: %w", err)
+	`, amount, today, amount, amount, today, studentID); err != nil {
+		return fmt.Errorf("award xp: update counters: %w", err)
+	}
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("award xp: %w", err)
 	}
 	return nil
+}
+
+func (s *SQLiteStore) WeeklyXPByStudent(since time.Time) (map[string]int, error) {
+	rows, err := s.db.Query(`
+		SELECT student_id, COALESCE(SUM(amount), 0)
+		FROM xp_events
+		WHERE created_at >= ?
+		GROUP BY student_id
+	`, since.UTC().UnixNano())
+	if err != nil {
+		return nil, fmt.Errorf("weekly xp: %w", err)
+	}
+	defer rows.Close()
+	out := map[string]int{}
+	for rows.Next() {
+		var id string
+		var sum int
+		if err := rows.Scan(&id, &sum); err != nil {
+			return nil, fmt.Errorf("weekly xp: %w", err)
+		}
+		out[id] = sum
+	}
+	return out, rows.Err()
 }
 
 func (s *SQLiteStore) GetXP(studentID string) (int, int, error) {
@@ -1248,8 +1303,8 @@ func (s *SQLiteStore) DeleteAccount(studentID string) error {
 
 // Attempts
 
-func (s *SQLiteStore) RecordAttempt(entry AttemptEntry) error {
-	_, err := s.db.Exec(`
+func (s *SQLiteStore) RecordAttempt(entry AttemptEntry) (int64, error) {
+	res, err := s.db.Exec(`
 		INSERT INTO attempts
 			(session_id, student_id, concept_id, answer, expected,
 			 correct, elapsed_seconds, timestamp, question, source, explanation, difficulty)
@@ -1262,9 +1317,13 @@ func (s *SQLiteStore) RecordAttempt(entry AttemptEntry) error {
 		entry.Question, entry.Source, entry.Explanation, entry.Difficulty,
 	)
 	if err != nil {
-		return fmt.Errorf("record attempt: %w", err)
+		return 0, fmt.Errorf("record attempt: %w", err)
 	}
-	return nil
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("record attempt: id: %w", err)
+	}
+	return id, nil
 }
 
 // GetRecentAttemptsForConcept implements the bounded per-concept window the evidence

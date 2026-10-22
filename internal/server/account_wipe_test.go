@@ -59,7 +59,7 @@ func seedWipeState(t *testing.T, store storage.Repository, sid string) {
 	if err != nil {
 		t.Fatalf("seed session: %v", err)
 	}
-	if err := store.RecordAttempt(storage.AttemptEntry{SessionID: sess.ID, StudentID: sid, ConceptID: "a", Answer: "1", Expected: "2", Correct: false, ElapsedSeconds: 4, Timestamp: time.Now().UTC()}); err != nil {
+	if _, err := store.RecordAttempt(storage.AttemptEntry{SessionID: sess.ID, StudentID: sid, ConceptID: "a", Answer: "1", Expected: "2", Correct: false, ElapsedSeconds: 4, Timestamp: time.Now().UTC()}); err != nil {
 		t.Fatalf("seed attempt: %v", err)
 	}
 	if err := store.UpsertTopicSpeed(&storage.TopicSpeed{StudentID: sid, ConceptID: "a", EFactor: 2.5, Interval: 1, Repetitions: 1, LearningSpeed: 1.0}); err != nil {
@@ -68,7 +68,7 @@ func seedWipeState(t *testing.T, store storage.Repository, sid string) {
 	if err := store.RecordQuizCompletion(sid, 60); err != nil {
 		t.Fatalf("seed quiz: %v", err)
 	}
-	if err := store.AddXP(sid, 42); err != nil {
+	if err := store.AwardXP(sid, 42, "test", "seed-42"); err != nil {
 		t.Fatalf("seed xp: %v", err)
 	}
 }

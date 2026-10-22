@@ -232,7 +232,7 @@ func TestAdminUserProjectionHasNoCredentialFields(t *testing.T) {
 	if err := s.SetShareToken(st.ID, "share-secret"); err != nil {
 		t.Fatalf("set share token: %v", err)
 	}
-	if err := s.AddXP(st.ID, 4200); err != nil {
+	if err := s.AwardXP(st.ID, 4200, "test", "seed-4200"); err != nil {
 		t.Fatalf("add xp: %v", err)
 	}
 

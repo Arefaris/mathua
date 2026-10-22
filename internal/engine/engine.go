@@ -1119,8 +1119,9 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		return nil, fmt.Errorf("save progress: %w", err)
 	}
 
-	// Record attempt
-	if err := e.repo.RecordAttempt(storage.AttemptEntry{
+	// Record attempt. Its id is the XP ledger's event key: one answer, one
+	// award, and a replayed award for that id is refused by the unique index.
+	xpAttemptID, err := e.repo.RecordAttempt(storage.AttemptEntry{
 		SessionID:      sessionID,
 		StudentID:      studentID,
 		ConceptID:      sessionFields.conceptID,
@@ -1133,7 +1134,8 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		Source:         sourceForTask(sessionFields.isReview),
 		Explanation:    sessionFields.explanation,
 		Difficulty:     difficultyOrNil(sessionFields.questionDifficulty),
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, fmt.Errorf("record attempt: %w", err)
 	}
 
@@ -1197,7 +1199,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		}
 	}
 	if xp != 0 {
-		if err := e.repo.AddXP(studentID, xp); err != nil {
+		if err := e.repo.AwardXP(studentID, xp, "study", fmt.Sprintf("attempt:%d", xpAttemptID)); err != nil {
 			log.Printf("warning: failed to add XP for student %s: %v", studentID, err)
 		}
 	}
@@ -1391,7 +1393,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	if explanation == "" {
 		explanation = gr.Feedback
 	}
-	if err := e.repo.RecordAttempt(storage.AttemptEntry{
+	xpAttemptID, err := e.repo.RecordAttempt(storage.AttemptEntry{
 		SessionID:      sessionID,
 		StudentID:      studentID,
 		ConceptID:      conceptID,
@@ -1407,7 +1409,8 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 		// decision it fed cannot disagree. This column used to be left NULL on this path,
 		// which is what made quiz and study evidence incomparable.
 		Difficulty: difficulty,
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, fmt.Errorf("record attempt: %w", err)
 	}
 	xp := computeXPForTask(gr.Correct, elapsedSeconds, timeThreshold, progress.Streak, taskType)
@@ -1444,7 +1447,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	}
 	e.mu.Unlock()
 	if xp != 0 {
-		if err := e.repo.AddXP(studentID, xp); err != nil {
+		if err := e.repo.AwardXP(studentID, xp, "answer", fmt.Sprintf("attempt:%d", xpAttemptID)); err != nil {
 			log.Printf("warning: failed to add XP for student %s: %v", studentID, err)
 		}
 	}

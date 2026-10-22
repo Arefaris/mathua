@@ -552,7 +552,7 @@ func TestAttemptsEndpoint(t *testing.T) {
 	}
 	for _, e := range seed {
 		e.Timestamp = time.Now().UTC()
-		if err := store.RecordAttempt(e); err != nil {
+		if _, err := store.RecordAttempt(e); err != nil {
 			t.Fatalf("seed: %v", err)
 		}
 	}

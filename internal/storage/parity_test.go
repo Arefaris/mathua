@@ -74,9 +74,9 @@ func exercise(t *testing.T, repo Repository, tag string) snapshot {
 	base := time.Now().UTC().Add(-time.Hour)
 	// First attempt has no difficulty — the pre-migration shape, and the case a store
 	// could quietly coerce to 0. Second is generated at 0.8.
-	_ = repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
+	_, _ = repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
 		Answer: "4 and 1/10", Expected: "4 1/10", Correct: false, ElapsedSeconds: 5, Timestamp: base})
-	_ = repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
+	_, _ = repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
 		Answer: "5", Expected: "4 1/10", Correct: false, ElapsedSeconds: 9, Timestamp: base.Add(time.Minute),
 		Difficulty: difficultyPtr(0.8)})
 
@@ -160,7 +160,7 @@ func TestDeleteAccount_RemovesEveryOwnedRow(t *testing.T) {
 		if err := repo.UpsertProgress(&ConceptProgress{StudentID: stu.ID, ConceptID: "c1", Status: "LEARNING", Streak: 1}); err != nil {
 			t.Fatalf("[%s] upsert progress: %v", tag, err)
 		}
-		if err := repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1", Answer: "1", Expected: "1", Correct: true, Timestamp: time.Now().UTC()}); err != nil {
+		if _, err := repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1", Answer: "1", Expected: "1", Correct: true, Timestamp: time.Now().UTC()}); err != nil {
 			t.Fatalf("[%s] record attempt: %v", tag, err)
 		}
 		if err := repo.RecordQuizCompletion(stu.ID, 60); err != nil {

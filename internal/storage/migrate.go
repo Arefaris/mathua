@@ -24,6 +24,25 @@ CREATE TABLE IF NOT EXISTS students (
     email_verified       INTEGER NOT NULL DEFAULT 0
 );
 
+-- The XP ledger. xp_total and xp_today are running counters for the profile;
+-- this table is the history behind them, and the only honest source for "XP
+-- earned this week". Without it a weekly board can only count mastered
+-- concepts, which is not effort. UNIQUE(student_id, event_key) is the
+-- duplicate-award guard: the key names the attempt, and the insert is part of
+-- the same transaction that moves the counters.
+CREATE TABLE IF NOT EXISTS xp_events (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id TEXT NOT NULL,
+    amount     INTEGER NOT NULL,
+    reason     TEXT NOT NULL DEFAULT '',
+    event_key  TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_events_event ON xp_events(student_id, event_key);
+CREATE INDEX IF NOT EXISTS idx_xp_events_week ON xp_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_xp_events_student_week ON xp_events(student_id, created_at);
+
 CREATE TABLE IF NOT EXISTS concept_progress (
     student_id       TEXT    NOT NULL,
     concept_id       TEXT    NOT NULL,

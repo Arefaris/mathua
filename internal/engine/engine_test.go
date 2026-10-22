@@ -1013,13 +1013,13 @@ func TestEngine_QuizGate_DueAndReset(t *testing.T) {
 	if err != nil || due {
 		t.Fatalf("expected not due at 0 XP, due=%v err=%v", due, err)
 	}
-	if err := e.repo.AddXP(st.ID, 49); err != nil {
+	if err := e.repo.AwardXP(st.ID, 49, "test", "seed-49"); err != nil {
 		t.Fatalf("add xp: %v", err)
 	}
 	if due, _ := e.QuizDue(st.ID); due {
 		t.Error("expected not due at 49 XP since quiz")
 	}
-	if err := e.repo.AddXP(st.ID, 1); err != nil {
+	if err := e.repo.AwardXP(st.ID, 1, "test", "seed-1"); err != nil {
 		t.Fatalf("add xp: %v", err)
 	}
 	if since, _ := e.QuizXPSince(st.ID); since != 50 {
