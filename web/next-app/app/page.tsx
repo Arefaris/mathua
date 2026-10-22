@@ -5,6 +5,7 @@ import { useTheme } from '../hooks/useTheme'
 import { ensureGuestId, ensureGuestToken } from '../lib/auth'
 import { useHomeRedirect } from '../hooks/useHomeRedirect'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useT } from '../lib/i18n'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {
@@ -18,6 +19,7 @@ import {
 } from './home/sections'
 
 export default function HomePage() {
+  const t = useT()
   const { mounted } = useTheme()
   const { push } = useRouter()
   // Logged-in visits bounce to /profile; explicit Home clicks stay put.
@@ -42,7 +44,14 @@ export default function HomePage() {
           because a marketing page wants Docs and How it works inline. Learn is
           still listed first: the primary destination of the product should not
           vanish on the page that introduces it. */}
-      <Header links={[{ label: 'Learn', href: '/learn' }, { label: 'How it works', href: '/how-it-works' }, { label: 'Docs', href: '/docs' }, { label: 'Note', href: '/note' }, { label: 'Leaderboard', href: '/leaderboard' }, { label: 'Login', href: '/login' }]} />
+      <Header links={[
+        { label: t('explore.nav.learn'), href: '/learn' },
+        { label: t('explore.nav.howItWorks'), href: '/how-it-works' },
+        { label: t('explore.nav.docs'), href: '/docs' },
+        { label: t('explore.nav.note'), href: '/note' },
+        { label: t('explore.nav.leaderboard'), href: '/leaderboard' },
+        { label: t('explore.nav.login'), href: '/login' },
+      ]} />
       <main className="max-w-container mx-auto px-4 sm:px-6 overflow-x-clip min-w-0">
         <HeroSection onGetStarted={handleGetStarted} />
         <TrustSection />

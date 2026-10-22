@@ -1,16 +1,18 @@
 'use client'
 
 import FlowDiagram, { type FlowNodeDef, type FlowEdgeDef } from './FlowDiagram'
+import { useT } from '../lib/i18n'
 
 export default function SchedulerFlow() {
+  const t = useT()
   const nodes: FlowNodeDef[] = [
-    { id: 'submit', label: 'Question\nsubmitted' },
-    { id: 'score', label: 'Compute priority\nfor each concept' },
-    { id: 'enforce', label: 'Enforce\nhard rules', variant: 'decision' },
-    { id: 'r1', label: 'Prerequisites\nmust be MASTERED' },
-    { id: 'r2', label: 'No same concept\ntwice in a row' },
-    { id: 'r3', label: '70% practice\n30% review' },
-    { id: 'select', label: 'Select highest\npriority concept', variant: 'terminal' },
+    { id: 'submit', label: t('explore.howItWorks.flow.question') },
+    { id: 'score', label: t('explore.howItWorks.flow.score') },
+    { id: 'enforce', label: t('explore.howItWorks.flow.enforce'), variant: 'decision' },
+    { id: 'r1', label: t('explore.howItWorks.flow.r1') },
+    { id: 'r2', label: t('explore.howItWorks.flow.r2') },
+    { id: 'r3', label: t('explore.howItWorks.flow.r3') },
+    { id: 'select', label: t('explore.howItWorks.flow.select'), variant: 'terminal' },
   ]
 
   const edges: FlowEdgeDef[] = [

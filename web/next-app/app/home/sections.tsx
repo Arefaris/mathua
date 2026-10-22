@@ -3,12 +3,13 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { LOGIN_HERO } from '../../lib/loginHero'
+import { useT, useLocale } from '../../lib/i18n'
+import { domainName } from '../../lib/domainName'
 import {
   PIPELINE_STATES,
   conceptCount,
   quizGateXP,
   domainCounts,
-  domainLabels,
   domainOrder,
   levels,
 } from './data'
@@ -35,6 +36,7 @@ const CTA_GHOST_ON_ART =
   'group relative inline-flex min-h-[44px] items-center justify-center overflow-hidden border border-white/45 bg-transparent px-6 py-3 text-sm font-medium text-white transition-colors hover:border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
 
 export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
+  const t = useT()
   return (
     // One responsive hero, not two stacked variants. Below lg it is the full-bleed
     // treatment (B): art behind the copy under a scrim. At lg and up it is the
@@ -72,23 +74,22 @@ export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/35 lg:hidden" />
       </div>
       <div className="relative max-w-[72ch] px-4 py-16 [text-shadow:0_1px_14px_rgba(0,0,0,0.45)] md:py-24 lg:order-1 lg:px-0 lg:[text-shadow:none]">
-        <div className="section-label hero-label reveal">( 01 · Title Block )</div>
+        <div className="section-label hero-label reveal">{t('explore.landing.hero.label')}</div>
         <h1
           className="reveal mt-5 max-w-[18ch] text-balance font-serif text-[clamp(2.5rem,6vw,4.5rem)] font-normal leading-[1.05] sm:leading-[0.95] tracking-tight text-white lg:text-mathua-primary"
           style={{ animationDelay: '80ms' }}
         >
-          Adaptive math learning platform
+          {t('explore.landing.hero.title')}
         </h1>
         <p
           className="reveal mt-6 max-w-[46ch] text-pretty text-base sm:text-[15px] leading-relaxed text-white/85 lg:text-mathua-secondary"
           style={{ animationDelay: '160ms' }}
         >
-          Mathua is an open-source adaptive math learning engine. You cannot advance until you
-          have truly mastered the prerequisite, both speed and accuracy must be proven.
+          {t('explore.landing.hero.body')}
         </p>
         <div className="reveal mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center" style={{ animationDelay: '240ms' }}>
           <button type="button" onClick={onGetStarted} className={CTA_PRIMARY}>
-            Get started
+            {t('explore.landing.hero.getStarted')}
           </button>
           <a
             href="https://github.com/chuma-beep/mathua"
@@ -98,11 +99,11 @@ export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
               aria-hidden="true"
               className="absolute inset-0 origin-left scale-x-0 bg-mathua-blue transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none"
             />
-            <span className="relative group-hover:text-white">View on GitHub</span>
+            <span className="relative group-hover:text-white">{t('explore.landing.hero.github')}</span>
           </a>
         </div>
         <p className="reveal mt-4 font-mono text-[11px] text-white/60 lg:text-mathua-muted" style={{ animationDelay: '320ms' }}>
-          No account needed to start.
+          {t('explore.landing.hero.noAccount')}
         </p>
       </div>
     </section>
@@ -144,28 +145,26 @@ function CountUp({ target, duration = 1200 }: { target: number; duration?: numbe
 }
 
 export function TrustSection() {
+  const t = useT()
   return (
     <section data-reveal className="border-b border-mathua-division py-16">
-      <div className="section-label">( 02 · Why it is trusted )</div>
+      <div className="section-label">{t('explore.landing.trust.label')}</div>
       <div className="mt-5 grid gap-10 md:grid-cols-12 md:items-start">
         <p className="max-w-[52ch] text-sm leading-relaxed text-mathua-secondary md:col-span-7">
-          Open-source under MIT. Sequencing inspired by Math Academy, with MIT OpenCourseWare and
-          Art of Problem Solving consulted for curriculum structure and problem quality. Lessons
-          build on OpenStax (CC BY-NC-SA 4.0) and Algebrica (CC BY-NC 4.0). No accounts to start,
-          no paywall on the graph.
+          {t('explore.landing.trust.body')}
         </p>
         <div className="grid grid-cols-3 divide-x divide-mathua-division border border-mathua-border md:col-span-5">
           <div className="p-5">
             <div className="font-serif text-3xl tracking-tight text-mathua-primary"><CountUp target={conceptCount} /></div>
-            <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">worked concepts</div>
+            <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">{t('explore.landing.trust.concepts')}</div>
           </div>
           <div className="p-5">
             <div className="font-serif text-3xl tracking-tight text-mathua-primary">∞</div>
-            <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">generated problems</div>
+            <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">{t('explore.landing.trust.problems')}</div>
           </div>
           <div className="p-5">
             <div className="font-serif text-3xl tracking-tight text-mathua-primary">{quizGateXP}</div>
-            <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">XP mastery check</div>
+            <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-mathua-muted">{t('explore.landing.trust.xp')}</div>
           </div>
         </div>
       </div>
@@ -174,33 +173,22 @@ export function TrustSection() {
 }
 
 const FEATURES = [
-  {
-    numeral: 'I.',
-    title: 'Mastery gating',
-    body: 'You cannot advance until your streak and response time both meet the threshold. Knowing the answer is not enough; you must know it fast.',
-  },
-  {
-    numeral: 'II.',
-    title: 'Concept graph',
-    body: 'Every concept is a node with explicit prerequisites. Mathua reads the graph and your progress together, and picks what you see next from the two.',
-  },
-  {
-    numeral: 'III.',
-    title: 'Spaced repetition',
-    body: 'Concepts you master resurface automatically before they decay. Reviews are woven into your session; there is no separate review mode.',
-  },
-]
+  { numeral: 'I.', key: 'mastery' },
+  { numeral: 'II.', key: 'graph' },
+  { numeral: 'III.', key: 'spaced' },
+] as const
 
 export function FeaturesSection() {
+  const t = useT()
   return (
     <section data-reveal className="border-b border-mathua-division py-16">
-      <div className="section-label">( 03 · 3 Main Features )</div>
+      <div className="section-label">{t('explore.landing.features.label')}</div>
       <div className="mt-6 grid gap-px border border-mathua-division bg-mathua-division md:grid-cols-3">
         {FEATURES.map(f => (
-          <div key={f.title} className="bg-mathua-bg p-6">
+          <div key={f.key} className="bg-mathua-bg p-6">
             <div className="font-mono text-xs text-mathua-blue">{f.numeral}</div>
-            <h4 className="mt-3 font-serif text-lg text-mathua-primary">{f.title}</h4>
-            <p className="mt-2 text-[13px] leading-relaxed text-mathua-secondary">{f.body}</p>
+            <h4 className="mt-3 font-serif text-lg text-mathua-primary">{t(`explore.landing.features.${f.key}.title`)}</h4>
+            <p className="mt-2 text-[13px] leading-relaxed text-mathua-secondary">{t(`explore.landing.features.${f.key}.body`)}</p>
           </div>
         ))}
       </div>
@@ -215,19 +203,21 @@ const chipClass = (status: string) => {
 }
 
 export function StatesSection() {
+  const t = useT()
+  const locale = useLocale()
   return (
     <section data-reveal className="border-b border-mathua-division py-16">
-      <div className="section-label">( 04 · The States )</div>
+      <div className="section-label">{t('explore.landing.states.label')}</div>
       <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-xs">
         {PIPELINE_STATES.map((s, i) => (
           <span key={s.label} className="flex items-center gap-2">
             {i > 0 && <span className="text-mathua-muted">→</span>}
-            <span className={`px-3 py-1.5 ${chipClass(s.status)}`}>{s.label}</span>
+            <span className={`px-3 py-1.5 ${chipClass(s.status)}`}>{t(`common.state.${s.status}`).toLocaleUpperCase(locale)}</span>
           </span>
         ))}
       </div>
       <p className="mt-4 font-mono text-[11px] text-mathua-muted">
-        example · <span className="text-mathua-blue">arith.add.single</span> · 10 correct in a row at ≤8s → MASTERED
+        {t('explore.landing.states.example')} · <span className="text-mathua-blue">arith.add.single</span> · {t('explore.landing.states.exampleRule')} → {t('common.state.mastered').toLocaleUpperCase(locale)}
       </p>
       <div className="mt-6 overflow-x-auto border border-mathua-border bg-mathua-primary p-8 font-mono text-[13px] leading-loose text-mathua-bg dark:bg-mathua-code dark:text-mathua-primary">
         <span className="opacity-40">priority</span> = (0.7 × days_since_last_seen)
@@ -245,9 +235,7 @@ export function StatesSection() {
         </span>
       </div>
       <p className="mt-4 max-w-[60ch] text-[13px] leading-relaxed text-mathua-secondary">
-        The scheduler enforces three hard rules: prerequisites must be mastered before a concept
-        unlocks, the same concept never appears twice in a row and roughly 70% of each session
-        is new material.
+        {t('explore.landing.states.scheduler')}
       </p>
     </section>
   )
@@ -269,17 +257,18 @@ function DomainTable({ rows }: { rows: [string, number][] }) {
 }
 
 export function CoverageSection() {
-  const rows: [string, number][] = domainOrder.map(d => [domainLabels[d], domainCounts[d]])
+  const t = useT()
+  const rows: [string, number][] = domainOrder.map(d => [domainName(d), domainCounts[d]])
   const half = Math.ceil(rows.length / 2)
   return (
     <section data-reveal className="border-b border-mathua-division py-16">
       <div className="flex flex-wrap items-end justify-between gap-2">
-        <div className="section-label">( 05 · What Mathua covers )</div>
+        <div className="section-label">{t('explore.landing.coverage.label')}</div>
         <Link
           href="/domains"
           className="font-mono text-[11px] text-mathua-muted transition-colors hover:text-mathua-blue"
         >
-          All {conceptCount} concepts by subject →
+          {t('explore.landing.coverage.all', { count: conceptCount })}
         </Link>
       </div>
       <div className="mt-6 grid gap-x-12 gap-y-6 md:grid-cols-2">
@@ -287,19 +276,19 @@ export function CoverageSection() {
         <DomainTable rows={rows.slice(half)} />
       </div>
       <p className="mt-4 font-mono text-[11px] text-mathua-muted">
-        Problems are generated on demand, never stored. There is nothing to memorise.
+        {t('explore.landing.coverage.note')}
       </p>
     </section>
   )
 }
 
 export function RankingSection() {
+  const t = useT()
   return (
     <section data-reveal className="border-b border-mathua-division py-16">
-      <div className="section-label">( 06 · Ranking System )</div>
+      <div className="section-label">{t('explore.landing.ranking.label')}</div>
       <p className="mt-4 max-w-[52ch] text-sm text-mathua-secondary">
-        The leaderboard resets every Monday at 00:00 UTC. Your score is calculated from three
-        components:
+        {t('explore.landing.ranking.intro')}
       </p>
       <div className="mt-4 overflow-x-auto border border-mathua-border bg-mathua-primary p-6 font-mono text-[13px] leading-loose text-mathua-bg dark:bg-mathua-code dark:text-mathua-primary">
         <span className="opacity-40">score</span> = (mastered_count × 100)
@@ -309,7 +298,7 @@ export function RankingSection() {
         <span className="pl-6">+ (current_streak × 10)</span>
       </div>
       <div className="mt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-mathua-muted">
-        Levels of mastery
+        {t('explore.landing.ranking.levelsTitle')}
       </div>
       <div className="mt-3 grid grid-cols-3 gap-px border border-mathua-division bg-mathua-division md:grid-cols-9">
         {levels.map(l => {
@@ -319,7 +308,7 @@ export function RankingSection() {
               <div className={elite ? 'font-mono text-[10px] opacity-50' : 'font-mono text-[10px] text-mathua-muted'}>
                 {l.num}
               </div>
-              <div className={`mt-1 font-serif text-[13px] ${elite ? '' : 'text-mathua-primary'}`}>{l.name}</div>
+              <div className={`mt-1 font-serif text-[13px] ${elite ? '' : 'text-mathua-primary'}`}>{t.dynamic(`explore.landing.ranking.levels.${l.key}`, undefined, l.name)}</div>
               <div className={elite ? 'mt-1 font-mono text-[10px] opacity-50' : 'mt-1 font-mono text-[10px] text-mathua-muted'}>
                 {l.range}
               </div>
@@ -331,48 +320,30 @@ export function RankingSection() {
   )
 }
 
-const FAQS = [
-  {
-    q: 'Do I need an account to start?',
-    a: 'No. Begin studying immediately — accounts are optional and only needed to sync progress across devices.',
-  },
-  {
-    q: 'Why does speed matter, not just accuracy?',
-    a: 'Fluency requires retrieval under time pressure. Knowing the answer is not enough; you must know it fast, or the foundation will not hold the next concept.',
-  },
-  {
-    q: 'What happens every 50 XP?',
-    a: 'A mastery-check quiz verifies retention across your recent concepts before new material continues.',
-  },
-  {
-    q: 'Is Mathua free and open-source?',
-    a: 'Yes — MIT licensed, with no paywall on the graph. Every concept and generator is in the repository.',
-  },
-]
+const FAQS = ['account', 'speed', 'quiz', 'free'] as const
 
 export function FaqSection() {
+  const t = useT()
   return (
     <section data-reveal className="grid gap-10 py-16 md:grid-cols-2">
       <div className="min-w-0">
-        <div className="section-label">( 07 · Questions, answered. )</div>
+        <div className="section-label">{t('explore.landing.faq.label')}</div>
         <div className="mt-5 divide-y divide-mathua-division border-y border-mathua-division">
           {FAQS.map(f => (
-            <details key={f.q} className="group py-3">
+            <details key={f} className="group py-3">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-serif text-[15px] text-mathua-primary">
-                <span>{f.q}</span>
+                <span>{t(`explore.landing.faq.${f}.q`)}</span>
                 <span className="font-mono text-mathua-muted transition-transform group-open:rotate-45">+</span>
               </summary>
-              <p className="mt-2 text-[13px] leading-relaxed text-mathua-secondary">{f.a}</p>
+              <p className="mt-2 text-[13px] leading-relaxed text-mathua-secondary">{t(`explore.landing.faq.${f}.a`)}</p>
             </details>
           ))}
         </div>
       </div>
       <div className="min-w-0">
-        <div className="section-label">( 08 · How it is extended. )</div>
+        <div className="section-label">{t('explore.landing.faq.extendLabel')}</div>
         <p className="mt-4 text-[13px] leading-relaxed text-mathua-secondary">
-          Every concept is a JSON node. Every problem is a Go generator function. Every
-          contribution goes through a graph validator that rejects cycles and orphaned nodes
-          automatically.
+          {t('explore.landing.faq.extendBody')}
         </p>
         <pre className="mt-4 overflow-x-auto overscroll-x-contain whitespace-pre border border-mathua-border bg-mathua-primary p-4 font-mono text-[11px] leading-relaxed text-mathua-bg sm:p-5 dark:bg-mathua-code dark:text-mathua-primary">
 {`{
@@ -391,7 +362,7 @@ export function FaqSection() {
           href="/docs/contributing"
           className="mt-4 inline-block font-mono text-[11px] text-mathua-muted transition-colors hover:text-mathua-blue"
         >
-          Read the contributing guide →
+          {t('explore.landing.faq.guide')}
         </Link>
       </div>
     </section>
