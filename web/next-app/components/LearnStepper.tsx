@@ -14,7 +14,7 @@ import { upcomingLocked, hrefConceptId, type Shelf, type LockedSuccessor } from 
 import { backTarget, learnConceptPath, pushReturn, studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/learnReturn'
 import { fetchShelf } from '../lib/recommendations'
 import { REQUIRED_IN_A_ROW } from '../lib/progression'
-import { formatForGradingType } from '../lib/answerFormat'
+import { formatForGradingType, type AnswerFormat } from '../lib/answerFormat'
 import { countsAsMastered } from '../lib/progress'
 import { MathAnswerInput } from './math/MathInput'
 import { concepts } from '../lib/conceptData'
@@ -127,7 +127,11 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useRef(false)
   const conceptGradingType = concepts.find(c => c.id === conceptId)?.grading_type
-  const format = formatForGradingType(conceptGradingType)
+  // The served question carries the format its answer actually needs. The
+  // concept record only names the grading type, which is why a numeric concept
+  // whose answer is "5 R 2" used to get a digits-only keypad.
+  const [servedFormat, setServedFormat] = useState<AnswerFormat | null>(null)
+  const format = servedFormat ?? formatForGradingType(conceptGradingType)
   // Where "back" goes, and the label a learner reads. The label is resolved from the concept the
   // return path names, never printed as the raw id a storage key would show.
   const back = backTarget(returnStack)
@@ -149,7 +153,12 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   const refill = useCallback(async (diff: number, exclude: string[]): Promise<PracticeQuestion[]> => {
     const pr = await getLessonPractice(conceptId, 3, { seed: Date.now() % 100000, exclude, difficulty: diff })
     const fresh = pr.questions.filter(q => !exclude.includes(q.question))
-    return fresh.length > 0 ? fresh : pr.questions
+    const answerable = fresh.length > 0 ? fresh : pr.questions
+    const first = answerable[0]
+    if (first?.answer_hint) {
+      setServedFormat({ hint: first.answer_hint, inputMode: first.answer_input_mode === 'numeric' ? 'numeric' : 'text' })
+    }
+    return answerable
   }, [conceptId])
 
   const load = useCallback(async () => {
@@ -170,6 +179,10 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
       const pr = await getLessonPractice(conceptId, 3, { seed: Date.now() % 100000, difficulty: 0.4 })
       seenRef.current = pr.questions.map(q => q.question)
       setBuffer(pr.questions)
+      const first = pr.questions[0]
+      if (first?.answer_hint) {
+        setServedFormat({ hint: first.answer_hint, inputMode: first.answer_input_mode === 'numeric' ? 'numeric' : 'text' })
+      }
       setEntries([{ key: nextKey(), kind: 'intro', kpIndex: 0 }])
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load lesson')

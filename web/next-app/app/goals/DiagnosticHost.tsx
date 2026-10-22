@@ -18,7 +18,7 @@ import {
   type DiagnosticProgress,
 } from '../../lib/api'
 import { getErrorMessage } from '../../lib/api'
-import { formatForGradingType, type AnswerFormat } from '../../lib/answerFormat'
+import { formatForGradingType, formatForQuestion, type AnswerFormat, type QuestionFormatFields } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
 import SubmitErrorBlock, {
   MAX_SKIPS,
@@ -60,7 +60,14 @@ export default function DiagnosticHost({
   const [conceptName, setConceptName] = useState('')
   // Next question staged from the submit response — revealed by goNext(),
   // never fetched. Cleared on advance, so double-press is a no-op.
-  const pendingNext = useRef<{ question: string; conceptId: string; conceptName: string; gradingType: string } | null>(null)
+  const pendingNext = useRef<{
+    question: string
+    conceptId: string
+    conceptName: string
+    gradingType: string
+    answerHint?: string
+    answerInputMode?: string
+  } | null>(null)
   const [questionCount, setQuestionCount] = useState(0)
   const [estimatedTotal, setEstimatedTotal] = useState(0)
   const [progress, setProgress] = useState<DiagnosticProgress | null>(null)
@@ -99,7 +106,7 @@ export default function DiagnosticHost({
       setQuestion(res.question || '')
       conceptId.current = res.concept_id || ''
       setConceptName(res.concept_name || '')
-      setAnswerFormat(formatForGradingType(res.grading_type))
+      setAnswerFormat(formatForQuestion(res))
     diagGradingType.current = res.grading_type
       setQuestionCount(1)
       // Backend truth first; frontend estimate as fallback for older servers.
@@ -150,7 +157,7 @@ export default function DiagnosticHost({
       setQuestion(data.question || '')
       conceptId.current = data.concept_id || ''
       setConceptName(data.concept_name || '')
-      setAnswerFormat(formatForGradingType(data.grading_type))
+      setAnswerFormat(formatForQuestion(data))
     diagGradingType.current = data.grading_type
       if (data.progress) {
         setProgress(data.progress)
@@ -228,6 +235,8 @@ export default function DiagnosticHost({
         conceptId: data.concept_id || '',
         conceptName: data.concept_name || '',
         gradingType: data.grading_type || '',
+        answerHint: data.answer_hint,
+        answerInputMode: data.answer_input_mode,
       }
       setLoading(false)
     } catch (e) {
@@ -251,11 +260,11 @@ export default function DiagnosticHost({
     }
   }
 
-  function applyQuestion(question: string, cid: string, name: string, gradingType: string) {
+  function applyQuestion(question: string, cid: string, name: string, gradingType: string, format?: QuestionFormatFields) {
     setQuestion(question)
     conceptId.current = cid
     setConceptName(name)
-    setAnswerFormat(formatForGradingType(gradingType))
+    setAnswerFormat(format ? formatForQuestion(format) : formatForGradingType(gradingType))
     diagGradingType.current = gradingType
     setQuestionCount(prev => prev + 1)
     setLastResult(null)
@@ -284,7 +293,7 @@ export default function DiagnosticHost({
         setProgress(data.progress)
         setEstimatedTotal(data.progress.cover_size)
       }
-      applyQuestion(data.question || '', data.concept_id || '', data.concept_name || '', data.grading_type || '')
+      applyQuestion(data.question || '', data.concept_id || '', data.concept_name || '', data.grading_type || '', data)
     } catch (e) {
       setSubmitError(toSubmitError(e, 'Failed to skip question.'))
     } finally {
@@ -314,7 +323,7 @@ export default function DiagnosticHost({
       setQuestion(data.question || '')
       conceptId.current = data.concept_id || ''
       setConceptName(data.concept_name || '')
-      setAnswerFormat(formatForGradingType(data.grading_type || ''))
+      setAnswerFormat(formatForQuestion(data))
     diagGradingType.current = data.grading_type || ''
       setLastResult(null)
       setAnswerInput('')
@@ -329,7 +338,11 @@ export default function DiagnosticHost({
     const staged = pendingNext.current
     if (!staged) return
     pendingNext.current = null
-    applyQuestion(staged.question, staged.conceptId, staged.conceptName, staged.gradingType)
+    applyQuestion(staged.question, staged.conceptId, staged.conceptName, staged.gradingType, {
+      grading_type: staged.gradingType,
+      answer_hint: staged.answerHint,
+      answer_input_mode: staged.answerInputMode,
+    })
   }
 
   return (

@@ -715,6 +715,31 @@ func (s *Server) gradingTypeOf(cid string) string {
 	return ""
 }
 
+// answerFormatOf is the format the learner's field must accept, which is not
+// the same question as how the answer is graded. Several generators grade their
+// own syntax — "5 R 2", "2 sqrt(5)", "4:7", "[[1,2],[3,4]]" — while the concept
+// is declared numeric, and a numeric keypad cannot produce any of them. The
+// generator's declaration wins; the grading type is only the fallback.
+func (s *Server) answerFormatOf(cid string) generator.AnswerFormat {
+	gt := s.gradingTypeOf(cid)
+	if reg := s.eng.GetGeneratorRegistry(); reg != nil {
+		if gen, err := reg.Get(cid); err == nil {
+			return generator.AnswerFormatFor(gen, gt)
+		}
+	}
+	return generator.DefaultAnswerFormat(gt)
+}
+
+// withAnswerFormat adds the hint and input mode to a question payload. Every
+// payload that carries grading_type goes through it, so a new serve path cannot
+// quietly omit what the field needs.
+func (s *Server) withAnswerFormat(payload map[string]interface{}, cid string) map[string]interface{} {
+	f := s.answerFormatOf(cid)
+	payload["answer_hint"] = f.Hint
+	payload["answer_input_mode"] = f.InputMode
+	return payload
+}
+
 func (s *Server) handleGoalDiagnosticStart(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -766,7 +791,7 @@ func (s *Server) handleGoalDiagnosticStart(w http.ResponseWriter, r *http.Reques
 		writeJSON(w, map[string]interface{}{"session_id": session.ID, "done": true, "progress": prog})
 		return
 	}
-	writeJSON(w, map[string]interface{}{
+	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"session_id":   session.ID,
 		"student_id":   studentID,
 		"concept_id":   question.ConceptID,
@@ -774,7 +799,7 @@ func (s *Server) handleGoalDiagnosticStart(w http.ResponseWriter, r *http.Reques
 		"question":     question.Question,
 		"grading_type": s.gradingTypeOf(question.ConceptID),
 		"progress":     prog,
-	})
+	}, question.ConceptID))
 }
 
 // POST /api/goal/diagnostic/answer
@@ -930,7 +955,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		name = c.Label
 	}
 	prog := s.eng.DiagnosticProgress(session)
-	writeAssessmentVerdict(w, map[string]interface{}{
+	writeAssessmentVerdict(w, s.withAnswerFormat(map[string]interface{}{
 		"done":            false,
 		"correct":         correct,
 		"feedback":        explanation,
@@ -940,7 +965,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		"grading_type":    s.gradingTypeOf(cid),
 		"progress":        prog,
 		"retry_available": retryAvailable,
-	})
+	}, cid))
 }
 
 // POST /api/goal/diagnostic/skip
@@ -1027,7 +1052,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		name = c.Label
 	}
 	prog := s.eng.DiagnosticProgress(session)
-	writeJSON(w, map[string]interface{}{
+	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":         false,
 		"correct":      false,
 		"feedback":     "Skipped — no evidence recorded.",
@@ -1036,7 +1061,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		"question":     nextProb.Question,
 		"grading_type": s.gradingTypeOf(cid),
 		"progress":     prog,
-	})
+	}, cid))
 }
 
 // POST /api/goal/diagnostic/retry
@@ -1090,14 +1115,14 @@ func (s *Server) handleGoalDiagnosticRetry(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	prog := s.eng.DiagnosticProgress(session)
-	writeJSON(w, map[string]interface{}{
+	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":         false,
 		"concept_id":   cid,
 		"concept_name": name,
 		"question":     prob.Question,
 		"grading_type": s.gradingTypeOf(cid),
 		"progress":     prog,
-	})
+	}, cid))
 }
 
 // GET /api/goal/diagnostic/resume?session_id=...
@@ -1168,7 +1193,7 @@ func (s *Server) handleGoalDiagnosticResume(w http.ResponseWriter, r *http.Reque
 	s.mu.Lock()
 	s.diagCreated[sid] = time.Now()
 	s.mu.Unlock()
-	writeJSON(w, map[string]interface{}{
+	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"session_id":   sid,
 		"done":         false,
 		"concept_id":   cid,
@@ -1176,7 +1201,7 @@ func (s *Server) handleGoalDiagnosticResume(w http.ResponseWriter, r *http.Reque
 		"question":     prob.Question,
 		"grading_type": s.gradingTypeOf(cid),
 		"progress":     s.eng.DiagnosticProgress(session),
-	})
+	}, cid))
 }
 
 // POST /api/goal/plan
@@ -1728,11 +1753,17 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type qInfo struct {
-		Question    string `json:"question"`
-		Answer      string `json:"answer"`
-		Explanation string `json:"explanation"`
-		Source      string `json:"source,omitempty"`
+		Question        string `json:"question"`
+		Answer          string `json:"answer"`
+		Explanation     string `json:"explanation"`
+		Source          string `json:"source,omitempty"`
+		AnswerHint      string `json:"answer_hint,omitempty"`
+		AnswerInputMode string `json:"answer_input_mode,omitempty"`
 	}
+	// Every question in this response carries the format its answer needs, not
+	// only the concept's grading type. LearnStepper used the concept record,
+	// which is where the digits-only keypad in front of "5 R 2" came from.
+	qFormat := s.answerFormatOf(conceptID)
 
 	// Try DB first (filtered by exclude so retries vary)
 	dbQs, err := s.eng.GetQuestions(conceptID, count+len(excluded)+5)
@@ -1754,7 +1785,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 				if src == "" {
 					src = "curated"
 				}
-				questions[i] = qInfo{Question: q.Question, Answer: q.Answer, Explanation: q.Explanation, Source: src}
+				questions[i] = qInfo{Question: q.Question, Answer: q.Answer, Explanation: q.Explanation, Source: src, AnswerHint: qFormat.Hint, AnswerInputMode: qFormat.InputMode}
 			}
 			qa := make(map[string]engine.Anchor, len(dbQs))
 			for _, q := range dbQs {
@@ -1831,7 +1862,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 	}
 	questions := make([]qInfo, len(problems))
 	for i, p := range problems {
-		questions[i] = qInfo{Question: p.Question, Answer: p.Answer, Explanation: p.Explanation, Source: "generator"}
+		questions[i] = qInfo{Question: p.Question, Answer: p.Answer, Explanation: p.Explanation, Source: "generator", AnswerHint: qFormat.Hint, AnswerInputMode: qFormat.InputMode}
 	}
 	writeJSON(w, map[string]interface{}{"questions": questions, "concept_id": conceptID})
 }
@@ -3018,7 +3049,7 @@ func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 	if c != nil {
 		name = c.Label
 	}
-	writeJSON(w, map[string]interface{}{
+	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"session_id":   sess.ID,
 		"student_id":   studentID,
 		"concept_id":   cid,
@@ -3031,7 +3062,7 @@ func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 		"closed_book":        true,
 		"time_limit_seconds": s.eng.TimeLimitFor(studentID, cid),
 		"questions_total":    len(sess.Order),
-	})
+	}, cid))
 }
 
 // POST /api/quiz/answer — own grading path via SubmitStudyAnswer with TaskQuiz 20
@@ -3189,7 +3220,7 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 	if c2 != nil {
 		name2 = c2.Label
 	}
-	writeAssessmentVerdict(w, map[string]interface{}{
+	writeAssessmentVerdict(w, s.withAnswerFormat(map[string]interface{}{
 		"done":               false,
 		"correct":            gr.Correct,
 		"feedback":           feedback,
@@ -3205,7 +3236,7 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 		"closed_book":        true,
 		"time_limit_seconds": s.eng.TimeLimitFor(studentID, cid),
 		"questions_total":    len(sess.Order),
-	})
+	}, cid))
 }
 
 // POST /api/quiz/skip — escape hatch for unanswerable quiz questions.
@@ -3287,7 +3318,7 @@ func (s *Server) handleQuizSkip(w http.ResponseWriter, r *http.Request) {
 	if c2 != nil {
 		name2 = c2.Label
 	}
-	writeJSON(w, map[string]interface{}{
+	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":               false,
 		"correct":            false,
 		"feedback":           "Skipped — no XP awarded.",
@@ -3301,7 +3332,7 @@ func (s *Server) handleQuizSkip(w http.ResponseWriter, r *http.Request) {
 		"closed_book":        true,
 		"time_limit_seconds": s.eng.TimeLimitFor(studentID, cid),
 		"questions_total":    len(sess.Order),
-	})
+	}, cid))
 }
 
 const maxBodySize int64 = 1 << 20 // 1 MB

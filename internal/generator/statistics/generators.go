@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/chuma-beep/mathua/internal/generator"
+	"github.com/chuma-beep/mathua/internal/grader"
 	"github.com/chuma-beep/mathua/internal/mathutil"
 )
 
@@ -330,16 +331,29 @@ func (g *sampleSpaceGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	}
 }
 
+// distinctColors returns n different colour names.
+//
+// The bag questions used to draw each colour independently, so a bag could read
+// "2 blue, 11 blue, 11 yellow". That was not only odd prose: pick selected one
+// of the two blue groups, so the stored answer was the probability of that group
+// while a reader naturally sums both, and a correct answer was marked wrong.
+func distinctColors(n int) []string {
+	pool := []string{"red", "blue", "green", "yellow", "orange", "purple"}
+	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	if n > len(pool) {
+		n = len(pool)
+	}
+	return pool[:n]
+}
+
 type basicProbGen struct{}
 
 func (g *basicProbGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
-	colors := []string{"red", "blue", "green", "yellow", "orange", "purple"}
+	colorNames := distinctColors(3)
 	counts := make([]int, 3)
 	total := 0
-	colorNames := make([]string, 3)
 	for i := 0; i < 3; i++ {
-		colorNames[i] = colors[rand.Intn(len(colors))]
 		counts[i] = rand.Intn(max(4, scale*4)) + 1
 		total += counts[i]
 	}
@@ -361,12 +375,10 @@ type complementProbGen struct{}
 
 func (g *complementProbGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
-	colors := []string{"red", "blue", "green", "yellow", "orange", "purple"}
+	colorNames := distinctColors(3)
 	counts := make([]int, 3)
 	total := 0
-	colorNames := make([]string, 3)
 	for i := 0; i < 3; i++ {
-		colorNames[i] = colors[rand.Intn(len(colors))]
 		counts[i] = rand.Intn(max(4, scale*4)) + 1
 		total += counts[i]
 	}
@@ -388,12 +400,10 @@ type compoundProbGen struct{}
 
 func (g *compoundProbGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
-	colors := []string{"red", "blue", "green", "yellow"}
+	colorNames := distinctColors(3)
 	counts := make([]int, 3)
 	total := 0
-	colorNames := make([]string, 3)
 	for i := 0; i < 3; i++ {
-		colorNames[i] = colors[rand.Intn(len(colors))]
 		counts[i] = rand.Intn(max(4, scale*4)) + 2
 		total += counts[i]
 	}
@@ -819,6 +829,31 @@ func (g *poissonGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 }
 
 type studentTGen struct{}
+
+// The answers here are "yes", "no", "standard Normal" and plain numbers, and the
+// concept is declared symbolic, whose hint says "Answer in simplest form" — so a
+// learner was asked a yes/no question and told to simplify. Text is the honest
+// hint, and the grader has to accept words because SymPy cannot.
+func (g *studentTGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Answer with the word or number the question asks for", InputMode: "text"}
+}
+
+func (g *studentTGen) Grade(expected, userAnswer string) grader.Result {
+	e := strings.Join(strings.Fields(strings.ToLower(strings.TrimSpace(expected))), " ")
+	a := strings.Join(strings.Fields(strings.ToLower(strings.TrimSpace(userAnswer))), " ")
+	if a == "" {
+		return grader.Result{Correct: false, Score: 0, Feedback: "Type the answer"}
+	}
+	if e == a {
+		return grader.Result{Correct: true, Score: 1}
+	}
+	if ef, errE := strconv.ParseFloat(e, 64); errE == nil {
+		if af, errA := strconv.ParseFloat(a, 64); errA == nil && af == ef {
+			return grader.Result{Correct: true, Score: 1}
+		}
+	}
+	return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect"}
+}
 
 func (g *studentTGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	type entry struct {

@@ -2070,3 +2070,38 @@ func TestNext_UnauthenticatedStillAnswers(t *testing.T) {
 		t.Errorf("no primary for a signed-out visitor: %s", rec.Body.String())
 	}
 }
+
+// A question payload has to carry the format the generator declared, not only
+// the concept's grading type. The concept in this test is "numeric" and the
+// generator answers "5 R 2", which is exactly the pair that put a digits-only
+// keypad in front of an answer that needs a letter: two learners reported it as
+// "formatting" and one asked how to type a comma the question never requested.
+type formattedTestGen struct{ testGen }
+
+func (g *formattedTestGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Quotient and remainder, e.g. 5 R 2", InputMode: "text"}
+}
+
+func TestQuestionPayloadCarriesTheDeclaredAnswerFormat(t *testing.T) {
+	// Built here rather than through testServer so the registry holds the
+	// formatted generator for "a" from the start: re-registering a concept the
+	// server already knows is refused, and a refused registration would leave
+	// this test measuring the numeric default instead of the declaration.
+	d, _ := concepts.Build([]concepts.Concept{
+		{ID: "a", Label: "A", Domain: "d", GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60}},
+	})
+	store, _ := storage.NewSQLiteStore(":memory:")
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &formattedTestGen{})
+	s := New(engine.New(store, d, reg, nil, nil), store, nil)
+
+	payload := s.withAnswerFormat(map[string]interface{}{}, "a")
+	if got := payload["answer_hint"]; got != "Quotient and remainder, e.g. 5 R 2" {
+		t.Errorf("answer_hint = %v, want the generator's declaration", got)
+	}
+	if got := payload["answer_input_mode"]; got != "text" {
+		t.Errorf("answer_input_mode = %v, want text rather than the numeric default", got)
+	}
+}

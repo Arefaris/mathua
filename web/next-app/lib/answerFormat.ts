@@ -8,6 +8,27 @@ export interface AnswerFormat {
   inputMode: 'numeric' | 'text'
 }
 
+// The server sends the hint and input mode the generator itself declared,
+// because the grading type describes the grader and not the answer: "5 R 2",
+// "2 sqrt(5)", "4:7", "(0, -2)" and "[[1,2],[3,4]]" are all numeric concepts,
+// and a digits-only keypad cannot produce any of them. The type is the
+// fallback for payloads that predate the declaration.
+export interface QuestionFormatFields {
+  grading_type?: string
+  answer_hint?: string
+  answer_input_mode?: string
+}
+
+export function formatForQuestion(q: QuestionFormatFields): AnswerFormat {
+  const fallback = formatForGradingType(q.grading_type)
+  const hint = q.answer_hint?.trim()
+  const mode =
+    q.answer_input_mode === 'numeric' || q.answer_input_mode === 'text'
+      ? q.answer_input_mode
+      : fallback.inputMode
+  return { hint: hint || fallback.hint, inputMode: mode }
+}
+
 export function formatForGradingType(gradingType?: string): AnswerFormat {
   switch (gradingType) {
     case 'numeric':

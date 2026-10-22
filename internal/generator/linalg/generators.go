@@ -144,6 +144,13 @@ func (g *matrixConceptGen) Generate(ctx generator.GeneratorContext) generator.Pr
 
 type matrixAddGen struct{}
 
+// A matrix answer is written with brackets and commas. The concept is numeric,
+// so the field offered digits only: the syntax existed in the accepted answer
+// and nowhere in the interface.
+func (g *matrixAddGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Matrix with rows in brackets, e.g. [[1,2],[3,4]]", InputMode: "text"}
+}
+
 func (g *matrixAddGen) Grade(expected, userAnswer string) grader.Result {
 	return gradeMatrix(expected, userAnswer)
 }
@@ -194,6 +201,10 @@ func (g *matrixAddGen) Generate(ctx generator.GeneratorContext) generator.Proble
 
 type matrixMultGen struct{}
 
+func (g *matrixMultGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Matrix with rows in brackets, e.g. [[1,2],[3,4]]", InputMode: "text"}
+}
+
 func (g *matrixMultGen) Grade(expected, userAnswer string) grader.Result {
 	return gradeMatrix(expected, userAnswer)
 }
@@ -226,6 +237,10 @@ func (g *matrixMultGen) Generate(ctx generator.GeneratorContext) generator.Probl
 }
 
 type matrixIdentityGen struct{}
+
+func (g *matrixIdentityGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Matrix with rows in brackets, e.g. [[1,2],[3,4]]", InputMode: "text"}
+}
 
 func (g *matrixIdentityGen) Grade(expected, userAnswer string) grader.Result {
 	return gradeMatrix(expected, userAnswer)

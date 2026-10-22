@@ -575,6 +575,8 @@ export interface GoalDiagStartRes {
   concept_name?: string
   question?: string
   grading_type?: string
+  answer_hint?: string
+  answer_input_mode?: 'numeric' | 'text'
   done?: boolean
   progress?: DiagnosticProgress
 }
@@ -587,6 +589,8 @@ export interface GoalDiagAnswerRes {
   concept_name?: string
   question?: string
   grading_type?: string
+  answer_hint?: string
+  answer_input_mode?: 'numeric' | 'text'
   retry_available?: boolean
   progress?: DiagnosticProgress
 }
@@ -1105,6 +1109,10 @@ export interface PracticeQuestion {
 	question: string
 	answer: string
 	explanation: string
+	// Declared by the generator that produced the question, because the
+	// concept's grading type describes the grader and not the answer syntax.
+	answer_hint?: string
+	answer_input_mode?: 'numeric' | 'text'
 }
 
 export interface LessonPracticeRes {
@@ -1416,6 +1424,8 @@ export interface QuizStartRes {
   question?: string
   done?: boolean
   grading_type?: string
+  answer_hint?: string
+  answer_input_mode?: 'numeric' | 'text'
   // Timed closed-book contract (Batch 1 backend).
   closed_book?: boolean
   time_limit_seconds?: number
@@ -1443,6 +1453,8 @@ export interface QuizAnswerRes {
   concept_name?: string
   question?: string
   grading_type?: string
+  answer_hint?: string
+  answer_input_mode?: 'numeric' | 'text'
 	// Batch 1: immediate remedial concepts + retake flag.
 	remedial?: string[]
 	retake_available?: boolean

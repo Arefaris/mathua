@@ -187,6 +187,13 @@ func isqrt(n int) int {
 
 type vectorOpsGen struct{}
 
+// A vector answer is a pair in parentheses. Declared numeric, the concept put a
+// keypad in front of it that cannot type a bracket or a minus sign in the shape
+// the grader expects.
+func (g *vectorOpsGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Vector as (x, y), e.g. (3, -2)", InputMode: "text"}
+}
+
 func (g *vectorOpsGen) Grade(expected, userAnswer string) grader.Result {
 	return gradeVec(expected, userAnswer)
 }

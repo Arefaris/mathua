@@ -363,6 +363,14 @@ func (g *divBasicGen) Generate(ctx generator.GeneratorContext) generator.Problem
 
 type divRemainderGen struct{}
 
+// AnswerFormat declares the syntax its Grade method accepts. The concept is
+// declared numeric, which used to put a digits-only keypad in front of an
+// answer that needs a letter and a space: two learners reported the question
+// as badly formatted, one asking how to type the comma it never asked for.
+func (g *divRemainderGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Quotient and remainder, e.g. 5 R 2", InputMode: "text"}
+}
+
 var remainderRe = regexp.MustCompile(`^(-?\d+)\s*R\s*(\d+)$`)
 
 func (g *divRemainderGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -696,6 +704,12 @@ func (g *sqrtPerfectGen) Generate(ctx generator.GeneratorContext) generator.Prob
 }
 
 type sqrtSimplifyGen struct{}
+
+// The answer is a coefficient and a radical, e.g. 5 sqrt(2). A numeric keypad
+// cannot produce it, which is what the two "formatting" reports were about.
+func (g *sqrtSimplifyGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Coefficient and radical, e.g. 5 sqrt(2)", InputMode: "text"}
+}
 
 var sqrtRe = regexp.MustCompile(`^(-?\d+)\s*sqrt\(\s*(\d+)\s*\)$`)
 

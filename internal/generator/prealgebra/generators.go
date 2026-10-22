@@ -511,6 +511,12 @@ func (g *negOrderOpsGen) Generate(ctx generator.GeneratorContext) generator.Prob
 
 type ratioConceptGen struct{}
 
+// The answer is a ratio, and the grader already rejects anything without a
+// colon. Numeric grading put a keypad with no colon in front of it.
+func (g *ratioConceptGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Ratio as a:b, e.g. 4:7", InputMode: "text"}
+}
+
 func (g *ratioConceptGen) Grade(expected, userAnswer string) grader.Result {
 	eParts := strings.SplitN(expected, ":", 2)
 	aParts := strings.SplitN(userAnswer, ":", 2)
@@ -546,6 +552,10 @@ func (g *ratioConceptGen) Generate(ctx generator.GeneratorContext) generator.Pro
 }
 
 type ratioSimplifyGen struct{}
+
+func (g *ratioSimplifyGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Ratio as a:b, e.g. 4:7", InputMode: "text"}
+}
 
 func (g *ratioSimplifyGen) Grade(expected, userAnswer string) grader.Result {
 	eParts := strings.SplitN(expected, ":", 2)
@@ -753,6 +763,14 @@ func (g *expZeroGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 
 type sciNotationGen struct{}
 
+// Two of this generator's three branches answer in scientific notation, and the
+// question itself asks the learner to "type like 3.7x10^4". The concept is
+// declared numeric, so the field used to be a keypad with no ^ or letter on it:
+// the syntax was stated and simultaneously made impossible to enter.
+func (g *sciNotationGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Scientific notation, e.g. 3.7x10^4", InputMode: "text"}
+}
+
 func (g *sciNotationGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	coeff := float64(rand.Intn(scale*20)+10) / 10
@@ -821,6 +839,12 @@ func (g *sciNotationGen) Grade(expected, userAnswer string) grader.Result {
 
 type sciNotationOpsGen struct{}
 
+// Same syntax as sciNotationGen: the answer is a coefficient and an exponent,
+// not a number that a numeric keypad can produce.
+func (g *sciNotationOpsGen) AnswerFormat() generator.AnswerFormat {
+	return generator.AnswerFormat{Hint: "Scientific notation, e.g. 3.7x10^4", InputMode: "text"}
+}
+
 func (g *sciNotationOpsGen) Grade(expected, userAnswer string) grader.Result {
 	normE := normalizeSciNotation(expected)
 	normA := normalizeSciNotation(userAnswer)
@@ -875,6 +899,10 @@ func (g *sciNotationOpsGen) Generate(ctx generator.GeneratorContext) generator.P
 	ea := rand.Intn(max(1, scale)) + 1
 	eb := rand.Intn(max(1, scale/2+1))
 	coeff := a * b
+	// a and b are one-decimal numbers, so their product is exact in decimal but
+	// not in binary: it printed as 5.015000000000001 and the learner was asked
+	// to match it. Four decimal places is far beyond what the exercise uses.
+	coeff = math.Round(coeff*1e4) / 1e4
 	totalExp := ea + eb
 	for coeff >= 10 {
 		coeff /= 10

@@ -9,7 +9,7 @@ import SectionHeader from '../../components/SectionHeader'
 import BriefingCard, { QUIZ_BRIEFING } from '../../components/BriefingCard'
 import ReportButton from '../../components/ReportButton'
 import { startQuizSession, submitQuizAnswer, skipQuizQuestion } from '../../lib/api'
-import { formatForGradingType, type AnswerFormat } from '../../lib/answerFormat'
+import { formatForGradingType, formatForQuestion, type AnswerFormat, type QuestionFormatFields } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
 import SubmitErrorBlock, {
   MAX_SKIPS,
@@ -70,6 +70,8 @@ export default function QuizHost() {
     conceptId: string
     conceptName: string
     gradingType: string
+    answerHint?: string
+    answerInputMode?: string
   } | null>(null)
 
   async function startQuiz() {
@@ -87,7 +89,7 @@ export default function QuizHost() {
       quizConceptId.current = res.concept_id || ''
       setQuizConceptName(res.concept_name || '')
       quizShownAt.current = Date.now()
-      setAnswerFormat(formatForGradingType(res.grading_type))
+      setAnswerFormat(formatForQuestion(res))
     quizGradingType.current = res.grading_type
       setQuizCount(1)
       setQuizAccuracy({ correct: 0, total: 0 })
@@ -154,6 +156,8 @@ export default function QuizHost() {
         conceptId: data.concept_id || '',
         conceptName: data.concept_name || '',
         gradingType: data.grading_type || '',
+        answerHint: data.answer_hint,
+        answerInputMode: data.answer_input_mode,
       }
       setLoading(false)
     } catch (e) {
@@ -162,7 +166,7 @@ export default function QuizHost() {
     }
   }
 
-  function applyQuizQuestion(question: string, cid: string, name: string, gradingType: string) {
+  function applyQuizQuestion(question: string, cid: string, name: string, gradingType: string, format?: QuestionFormatFields) {
     setQuizQuestion(question)
     quizConceptId.current = cid
     quizShownAt.current = Date.now()
@@ -170,7 +174,7 @@ export default function QuizHost() {
     setQuizCount(prev => prev + 1)
     setQuizLastResult(null)
     setQuizAnswerInput('')
-    setAnswerFormat(formatForGradingType(gradingType))
+    setAnswerFormat(format ? formatForQuestion(format) : formatForGradingType(gradingType))
     quizGradingType.current = gradingType
     setSubmitError(null)
   }
@@ -196,6 +200,7 @@ export default function QuizHost() {
         data.concept_id || '',
         data.concept_name || '',
         data.grading_type || '',
+        data,
       )
     } catch (e) {
       setSubmitError(toSubmitError(e, 'Failed to skip quiz question.'))
@@ -215,7 +220,17 @@ export default function QuizHost() {
     const staged = pendingQuizNext.current
     if (!staged) return
     pendingQuizNext.current = null
-    applyQuizQuestion(staged.question, staged.conceptId, staged.conceptName, staged.gradingType)
+    applyQuizQuestion(
+      staged.question,
+      staged.conceptId,
+      staged.conceptName,
+      staged.gradingType,
+      {
+        grading_type: staged.gradingType,
+        answer_hint: staged.answerHint,
+        answer_input_mode: staged.answerInputMode,
+      },
+    )
   }
 
   if (phase === 'intro') {
