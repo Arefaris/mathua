@@ -1,3 +1,5 @@
+import { tNow } from './i18n'
+
 // Expected-answer-form microcopy for typed inputs. The server passes the
 // concept's grading_type alongside every question; this table turns it into
 // a one-line hint plus the right mobile keyboard. Unknown types fall back
@@ -32,23 +34,23 @@ export function formatForQuestion(q: QuestionFormatFields): AnswerFormat {
 export function formatForGradingType(gradingType?: string): AnswerFormat {
   switch (gradingType) {
     case 'numeric':
-      return { hint: 'Answer with a number, fraction, or mixed number (e.g. 4 1/10)', inputMode: 'numeric' }
+      return { hint: tNow('learn.answerFormat.numeric'), inputMode: 'numeric' }
     case 'expression':
     case 'polynomial':
-      return { hint: 'Answer as an expression', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.expression'), inputMode: 'text' }
     case 'symbolic':
-      return { hint: 'Answer in simplest form', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.symbolic'), inputMode: 'text' }
     case 'multiple_choice':
-      return { hint: 'Type the exact answer', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.multipleChoice'), inputMode: 'text' }
     case 'comparison':
-      return { hint: 'Answer <, >, or =', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.comparison'), inputMode: 'text' }
     case 'ordering':
-      return { hint: 'Answer in order, separated by commas', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.ordering'), inputMode: 'text' }
     case 'tuple':
-      return { hint: 'Separate values with commas, e.g. 2, 3 or (2, 3)', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.tuple'), inputMode: 'text' }
     case 'complex':
-      return { hint: 'Answer as a + bi', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.complex'), inputMode: 'text' }
     default:
-      return { hint: 'Answer in the form shown', inputMode: 'text' }
+      return { hint: tNow('learn.answerFormat.default'), inputMode: 'text' }
   }
 }

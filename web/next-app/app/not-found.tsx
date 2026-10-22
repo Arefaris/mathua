@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { useT } from '@/lib/i18n'
 
 export default function NotFound() {
+  const t = useT()
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-mathua-bg px-6 py-16">
       <div
@@ -18,7 +20,7 @@ export default function NotFound() {
 
       <section className="relative z-10 w-full max-w-2xl">
         <div className="flex items-center justify-between border-b border-mathua-border pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-mathua-secondary">
-          <span>Mathua / error</span>
+          <span>{t('shell.notFound.crumb')}</span>
           <span aria-hidden="true">§ 404</span>
         </div>
 
@@ -34,11 +36,10 @@ export default function NotFound() {
         </div>
 
         <h2 className="mt-8 font-serif text-2xl font-semibold text-mathua-primary">
-          This route is undefined.
+          {t('shell.notFound.heading')}
         </h2>
         <p className="mt-3 max-w-md font-mono text-sm leading-relaxed text-mathua-muted">
-          The concept you requested isn&apos;t in the graph: it may have been moved,
-          renamed or never existed in this domain.
+          {t('shell.notFound.body')}
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -46,14 +47,14 @@ export default function NotFound() {
             href="/"
             className="inline-flex items-center justify-center border border-mathua-blue px-5 py-2.5 font-mono text-xs uppercase tracking-[0.18em] text-mathua-blue transition-colors hover:bg-mathua-blue hover:text-mathua-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-primary"
           >
-            ← Return home
+            {t('shell.notFound.returnHome')}
           </Link>
           <button
             type="button"
             onClick={() => history.back()}
             className="inline-flex items-center justify-center border border-mathua-border bg-transparent px-5 py-2.5 font-mono text-xs uppercase tracking-[0.18em] text-mathua-primary transition-colors hover:bg-mathua-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-primary"
           >
-            Go back
+            {t('shell.notFound.goBack')}
           </button>
         </div>
 

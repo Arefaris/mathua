@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { submitReport, type ReportKind, type ReportReason } from '../lib/api'
+import { useT } from '../lib/i18n'
 
 interface ReportButtonProps {
   conceptId?: string
@@ -24,15 +25,11 @@ interface ReportButtonProps {
   label?: string
 }
 
-const REASONS: { value: ReportReason; label: string }[] = [
-  { value: 'wrong_answer', label: 'Wrong answer' },
-  { value: 'bad_explanation', label: 'Bad explanation' },
-  { value: 'unclear', label: 'Unclear / confusing' },
-  { value: 'formatting', label: 'Formatting / math rendering' },
-  { value: 'other', label: 'Other' },
-]
+// The values are what the server stores; the wording shown for each is in the dictionary.
+const REASONS: ReportReason[] = ['wrong_answer', 'bad_explanation', 'unclear', 'formatting', 'other']
 
 export default function ReportButton(props: ReportButtonProps) {
+  const t = useT()
   const [open, setOpen] = useState(false)
   const [reason, setReason] = useState<ReportReason>('wrong_answer')
   const [detail, setDetail] = useState('')
@@ -65,7 +62,7 @@ export default function ReportButton(props: ReportButtonProps) {
       setSent(true)
       setOpen(false)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not send report')
+      setError(e instanceof Error ? e.message : t('learn.report.error'))
     } finally {
       setSending(false)
     }
@@ -74,7 +71,7 @@ export default function ReportButton(props: ReportButtonProps) {
   if (sent) {
     return (
       <span className="font-mono text-[10px] text-mathua-green uppercase tracking-wider">
-        ✓ Thanks — reported
+        {t('learn.report.thanks')}
       </span>
     )
   }
@@ -84,10 +81,10 @@ export default function ReportButton(props: ReportButtonProps) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        title="Complain about this question or explanation"
+        title={t('learn.report.title')}
         className="font-mono text-[10px] text-mathua-muted hover:text-mathua-blue transition-colors uppercase tracking-wider"
       >
-        {props.label ?? 'Report a problem'}
+        {props.label ?? t('learn.report.label')}
       </button>
     )
   }
@@ -96,14 +93,14 @@ export default function ReportButton(props: ReportButtonProps) {
     <div className="mt-2 border border-mathua-border bg-mathua-bg p-3">
       <div className="flex items-center justify-between mb-2">
         <span className="font-mono text-[10px] text-mathua-secondary uppercase tracking-wider">
-          What&apos;s wrong?
+          {t('learn.report.whatsWrong')}
         </span>
         <button
           type="button"
           onClick={() => setOpen(false)}
           className="font-mono text-[10px] text-mathua-muted hover:text-mathua-primary"
         >
-          Cancel
+          {t('common.action.cancel')}
         </button>
       </div>
       <select
@@ -112,13 +109,13 @@ export default function ReportButton(props: ReportButtonProps) {
         className="w-full bg-mathua-surface border border-mathua-border px-2 h-9 text-xs font-mono text-mathua-primary outline-none"
       >
         {REASONS.map(r => (
-          <option key={r.value} value={r.value}>{r.label}</option>
+          <option key={r} value={r}>{t(`learn.report.reasons.${r}`)}</option>
         ))}
       </select>
       <textarea
         value={detail}
         onChange={e => setDetail(e.target.value)}
-        placeholder="Optional details (what did you expect?)"
+        placeholder={t('learn.report.placeholder')}
         rows={2}
         maxLength={2000}
         className="mt-2 w-full bg-mathua-surface border border-mathua-border px-2 py-2 text-xs font-mono text-mathua-primary placeholder:text-mathua-muted outline-none resize-y"
@@ -132,7 +129,7 @@ export default function ReportButton(props: ReportButtonProps) {
         disabled={sending}
         className="mt-2 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint transition-colors px-3 h-9 text-xs font-mono disabled:opacity-50"
       >
-        {sending ? 'Sending…' : 'Send report'}
+        {sending ? t('learn.report.sending') : t('learn.report.send')}
       </button>
     </div>
   )

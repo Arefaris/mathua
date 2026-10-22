@@ -15,7 +15,10 @@ import { getScores, getGraph, getProgress, getWeaknesses, healthCheck, type Grap
 import { getUserInfo } from '../../lib/auth'
 import { useAuthState } from '../../hooks/useAuthState'
 import { deriveStatuses } from '../../lib/graphStatus'
-import { DOMAIN_ORDER, domainLabel } from '../../lib/graphDomains'
+import { DOMAIN_ORDER } from '../../lib/graphDomains'
+import { domainName } from '../../lib/domainName'
+import { useT } from '../../lib/i18n'
+import SlotText from '../../components/explore/SlotText'
 import { createInflightCache, createSessionCache } from '../../lib/requestCache'
 import Loading from '../../components/Loading'
 
@@ -33,19 +36,28 @@ const graphLoadingStyle: React.CSSProperties = {
 
 const conceptGraphFlowChunk = import('../../components/ConceptGraphFlow')
 
+// A component, so the label can follow the language: `dynamic`'s `loading` runs outside the
+// page's own render.
+function GraphLoading() {
+  const t = useT()
+  return (
+    <div style={graphLoadingStyle}>
+      <Loading label={t('explore.graph.loading')} />
+    </div>
+  )
+}
+
 const ConceptGraphFlow = dynamic(
   () => conceptGraphFlowChunk,
   {
     ssr: false,
-    loading: () => (
-      <div style={graphLoadingStyle}>
-        <Loading label="LOADING GRAPH" />
-      </div>
-    ),
+    loading: () => <GraphLoading />,
   }
 )
 
-const fallbackConcepts = conceptsData.map((c) => ({
+// Built inside the page, not at import time: `concept.label` follows the locale, so a list built
+// once at module load would keep the language the module happened to load in.
+const bundledConcepts = () => conceptsData.map((c) => ({
   id: c.id, label: c.label, domain: c.domain, prerequisites: c.prerequisites,
 }))
 
@@ -56,6 +68,8 @@ const oncePerSession = createSessionCache()
 const dedupeInFlight = createInflightCache()
 
 function GraphContent() {
+  const t = useT()
+  const fallbackConcepts = useMemo(bundledConcepts, [t])
   const { theme, mounted } = useTheme()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
@@ -128,7 +142,7 @@ function GraphContent() {
 
   const statusSource = useMemo(() => (
     concepts.length > 0 ? concepts : fallbackConcepts
-  ), [concepts])
+  ), [concepts, fallbackConcepts])
 
   const conceptStatuses = useMemo(
     () => deriveStatuses(statusSource, rawProgress),
@@ -188,7 +202,7 @@ function GraphContent() {
   const conceptById = useMemo(() => {
     const source = concepts.length > 0 ? concepts : fallbackConcepts
     return new Map(source.map(c => [c.id, c] as const))
-  }, [concepts])
+  }, [concepts, fallbackConcepts])
 
   // A deep link (?concept=) wins over the persisted/default domain filter, but
   // only once: afterwards the user's chip choice is authoritative.
@@ -218,22 +232,25 @@ function GraphContent() {
       <section className="pt-8 min-w-0 overflow-hidden">
         <span className="flex justify-between mb-4">
           <button type="button" onClick={() => { if (window.history.length > 1) window.history.back() }} className="text-mathua-secondary text-sm hover:text-mathua-blue">
-            ← Back
+            ← {t('common.action.back')}
           </button>
         </span>
-        <SectionHeader label="Your knowledge graph" title="Explore the concept map" />
+        <SectionHeader label={t('explore.graph.label')} title={t('explore.graph.title')} />
         {connected && loggedIn && scores ? (
           <ProgressSummary scores={scores} weakByDomain={weakByDomain} />
         ) : connected && !loggedIn ? (
           <p className="text-mathua-secondary text-sm text-center max-w-[600px] mx-auto mt-4 mb-8">
-            Sign in or{' '}
-            <Link href="/learn" className="text-mathua-blue hover:underline">start learning</Link>
-            {' '}to track your progress across the concept map.
+            <SlotText
+              text={t('explore.graph.signInPrompt')}
+              slots={{ link: <Link href="/learn" className="text-mathua-blue hover:underline">{t('explore.graph.startLearningLower')}</Link> }}
+            />
           </p>
         ) : (
           <p className="text-mathua-secondary text-sm text-center max-w-[600px] mx-auto mt-4 mb-8">
-            <Link href="/learn" className="text-mathua-blue hover:underline">Start learning</Link>
-            {' '}to track your progress across the concept map.
+            <SlotText
+              text={t('explore.graph.startPrompt')}
+              slots={{ link: <Link href="/learn" className="text-mathua-blue hover:underline">{t('explore.graph.startLearning')}</Link> }}
+            />
           </p>
         )}
       </section>
@@ -249,7 +266,7 @@ function GraphContent() {
                 : 'border-mathua-border text-mathua-muted hover:text-mathua-blue hover:border-mathua-secondary'
             }`}
           >
-            All
+            {t('explore.graph.all')}
           </button>
           {domains.map(d => (
             <button
@@ -262,7 +279,7 @@ function GraphContent() {
                   : 'border-mathua-border text-mathua-muted hover:text-mathua-blue hover:border-mathua-secondary'
               }`}
             >
-              {domainLabel(d)}
+              {domainName(d)}
             </button>
           ))}
         </div>
@@ -271,13 +288,13 @@ function GraphContent() {
       <div className="my-6 sm:my-8 w-full max-w-full min-w-0 overflow-hidden">
         {graphError && (
           <div role="alert" className="mb-4 flex flex-wrap items-center gap-3 border border-mathua-red bg-mathua-surface px-4 py-3">
-            <span className="font-mono text-xs text-mathua-red">Couldn&apos;t load the live graph: showing the bundled fallback.</span>
+            <span className="font-mono text-xs text-mathua-red">{t('explore.graph.loadError')}</span>
             <button
               type="button"
               onClick={loadGraph}
               className="font-mono text-xs text-mathua-blue hover:text-mathua-blue-hover uppercase tracking-wider"
             >
-              Retry →
+              {t('explore.graph.retry')}
             </button>
           </div>
         )}

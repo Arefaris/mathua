@@ -11,19 +11,22 @@ import { useAuthState } from '../hooks/useAuthState'
 import { resolveAvatar } from '../lib/dicebear'
 import { getSettings } from '../lib/api'
 import Avatar from './Avatar'
+import { useT } from '../lib/i18n'
+import type { MessageKey } from '../lib/i18n/keys'
 
 // The tab bar is the mobile primary nav. Learn is the only tab that asks a
 // question, so it leads; Domains holds the orientation slot that the closed
 // Study route used to occupy. Order is mirrored in lib/nav.ts.
-const TABS: { label: string; href: string; icon: IconComponent }[] = [
-  { label: 'Home', href: '/', icon: House },
-  { label: 'Learn', href: '/learn', icon: Play },
-  { label: 'Domains', href: '/domains', icon: Layers },
-  { label: 'Profile', href: '/profile', icon: User },
-  { label: 'Graph', href: '/graph', icon: Network },
+const TABS: { labelKey: MessageKey; href: string; icon: IconComponent }[] = [
+  { labelKey: 'shell.nav.home', href: '/', icon: House },
+  { labelKey: 'shell.nav.learn', href: '/learn', icon: Play },
+  { labelKey: 'shell.nav.domains', href: '/domains', icon: Layers },
+  { labelKey: 'shell.nav.profile', href: '/profile', icon: User },
+  { labelKey: 'shell.nav.graph', href: '/graph', icon: Network },
 ]
 
 export default function BottomTabs() {
+  const t = useT()
   const pathname = usePathname()
   // Chrome visibility is shared with the header so the two always agree --
   // a header that hid while the tab bar stayed would read as a bug, not a
@@ -62,7 +65,7 @@ export default function BottomTabs() {
   return (
     <nav
       ref={navRef}
-      aria-label="Primary"
+      aria-label={t('shell.tabs.primary')}
       data-chrome-part="tabs"
       className={`lg:hidden fixed inset-x-3 z-40 flex h-[56px] border-[0.5px] border-mathua-border bg-mathua-surface shadow-none transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none ${
         hidden ? 'translate-y-[calc(100%+20px)] opacity-0' : 'translate-y-0 opacity-100'
@@ -77,15 +80,16 @@ export default function BottomTabs() {
         marginRight: 'auto',
       }}
     >
-      {TABS.map((t) => {
-        const active = pathname === t.href || pathname.startsWith(t.href + '/')
-        const showAvatar = t.href === '/profile' && loggedIn && user
-        const Icon = t.icon
+      {TABS.map((tab) => {
+        const active = pathname === tab.href || pathname.startsWith(tab.href + '/')
+        const showAvatar = tab.href === '/profile' && loggedIn && user
+        const Icon = tab.icon
+        const label = t(tab.labelKey)
         return (
           <Link
-            key={t.href}
-            href={t.href}
-            aria-label={t.label}
+            key={tab.href}
+            href={tab.href}
+            aria-label={label}
             aria-current={active ? 'page' : undefined}
             className={`flex-1 flex flex-col items-center justify-center gap-0.5 font-mono border-t-[2px] min-h-[44px] transition-colors ${
               active ? 'border-mathua-blue text-mathua-blue' : 'border-transparent text-mathua-muted hover:text-mathua-primary'
@@ -104,7 +108,7 @@ export default function BottomTabs() {
             ) : (
               <Icon size={18} />
             )}
-            <span className="text-[9px] uppercase tracking-wide">{t.label}</span>
+            <span className="text-[9px] uppercase tracking-wide">{label}</span>
           </Link>
         )
       })}

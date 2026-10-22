@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getAttempts, resetAccount, type AttemptRecord } from '../lib/api'
+import { useT } from '../lib/i18n'
+import RichText from './RichText'
 
 const RESET_PHRASE = 'reset my progress'
 
@@ -39,13 +41,18 @@ export function attemptsToCSV(rows: AttemptRecord[]): string {
 // learning evidence; choices (account, settings, goal, course,
 // destination/deadline/pace) survive.
 export default function DangerZone() {
+  const t = useT()
   const { push } = useRouter()
   const [phrase, setPhrase] = useState('')
   const [busy, setBusy] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [exported, setExported] = useState(false)
   const [error, setError] = useState('')
-  const armed = phraseConfirms(phrase, RESET_PHRASE)
+  // The learner types the phrase in their own language; the canonical English one is sent to the
+  // server either way, and typing it is still accepted.
+  const localPhrase = t('account.dangerZone.phrase')
+  const matches = (typed: string) => phraseConfirms(typed, localPhrase) || phraseConfirms(typed, RESET_PHRASE)
+  const armed = matches(phrase)
 
   async function handleExport() {
     setExporting(true)
@@ -68,7 +75,7 @@ export default function DangerZone() {
       URL.revokeObjectURL(url)
       setExported(true)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Export failed')
+      setError(e instanceof Error ? e.message : t('account.dangerZone.exportFailed'))
     } finally {
       setExporting(false)
     }
@@ -84,33 +91,33 @@ export default function DangerZone() {
       await resetAccount(RESET_PHRASE)
       push('/profile')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Reset failed')
+      setError(err instanceof Error ? err.message : t('account.dangerZone.resetFailed'))
       setBusy(false)
     }
   }
 
   return (
     <div className="border border-mathua-red bg-mathua-surface p-4 sm:p-6 min-w-0">
-      <span className="font-mono text-sm text-mathua-red">Reset progress</span>
+      <span className="font-mono text-sm text-mathua-red">{t('account.dangerZone.title')}</span>
       <p className="text-mathua-muted text-xs mt-1">
-        Wipes your learning record. This cannot be undone.
+        {t('account.dangerZone.intro')}
       </p>
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">Wiped</p>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">{t('account.dangerZone.wiped')}</p>
           <ul className="font-mono text-[11px] text-mathua-secondary space-y-0.5">
-            <li>Concept mastery, streaks, review schedule</li>
-            <li>Attempts log and sessions</li>
-            <li>XP — profile and leaderboard</li>
-            <li>Diagnostic flag and plan evidence</li>
+            <li>{t('account.dangerZone.wipedMastery')}</li>
+            <li>{t('account.dangerZone.wipedAttempts')}</li>
+            <li>{t('account.dangerZone.wipedXp')}</li>
+            <li>{t('account.dangerZone.wipedDiagnostic')}</li>
           </ul>
         </div>
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">Kept</p>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">{t('account.dangerZone.kept')}</p>
           <ul className="font-mono text-[11px] text-mathua-secondary space-y-0.5">
-            <li>Account, avatar, settings, daily goal</li>
-            <li>Course enrollment</li>
-            <li>Destination, deadline and pace</li>
+            <li>{t('account.dangerZone.keptAccount')}</li>
+            <li>{t('account.dangerZone.keptCourse')}</li>
+            <li>{t('account.dangerZone.keptDestination')}</li>
           </ul>
         </div>
       </div>
@@ -121,12 +128,15 @@ export default function DangerZone() {
           disabled={exporting}
           className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none px-4 h-9 text-xs font-mono disabled:opacity-40"
         >
-          {exporting ? 'Exporting…' : exported ? 'Export again' : 'Export attempts log (CSV)'}
+          {exporting ? t('account.dangerZone.exporting') : exported ? t('account.dangerZone.exportAgain') : t('account.dangerZone.export')}
         </button>
       </div>
       <form onSubmit={handleReset} className="mt-4">
         <label htmlFor="reset-phrase" className="font-mono text-[11px] uppercase text-mathua-muted">
-          Type <span className="text-mathua-primary">reset my progress</span> to confirm
+          <RichText
+            text={t('account.dangerZone.typeToConfirm')}
+            slots={{ phrase: <span className="text-mathua-primary">{localPhrase}</span> }}
+          />
         </label>
         <div className="flex flex-col sm:flex-row gap-2 mt-2">
           <input
@@ -134,7 +144,7 @@ export default function DangerZone() {
             type="text"
             value={phrase}
             onChange={e => setPhrase(e.target.value)}
-            placeholder="reset my progress"
+            placeholder={localPhrase}
             autoComplete="off"
             autoCapitalize="none"
             autoCorrect="off"
@@ -148,7 +158,7 @@ export default function DangerZone() {
             disabled={!armed || busy}
             className="border border-mathua-red text-mathua-red hover:bg-mathua-red hover:text-white rounded-none px-4 h-10 text-xs font-mono disabled:opacity-40 min-h-[40px]"
           >
-            {busy ? 'Resetting…' : 'Reset everything above'}
+            {busy ? t('account.dangerZone.resetting') : t('account.dangerZone.reset')}
           </button>
         </div>
       </form>
@@ -156,7 +166,10 @@ export default function DangerZone() {
           one, which is how this hid for as long as it did. */}
       {phrase && !armed && (
         <p id="reset-phrase-hint" role="status" className="mt-2 font-mono text-[11px] text-mathua-secondary">
-          That does not match. Type <span className="text-mathua-primary">{RESET_PHRASE}</span> exactly.
+          <RichText
+            text={t('account.dangerZone.mismatch')}
+            slots={{ phrase: <span className="text-mathua-primary">{localPhrase}</span> }}
+          />
         </p>
       )}
       {error && <p className="mt-2 font-mono text-[11px] text-mathua-red">{error}</p>}

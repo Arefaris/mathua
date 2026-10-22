@@ -27,6 +27,8 @@ import type { MathKeyboardMode } from './keyboards'
 // hand-rolled `{ width?: number }` would happily accept and then render wrong, so
 // the library's own type is the one worth having.
 import type { VirtualKeyboardKeycap } from 'mathlive'
+import { getRenderLocale } from '../../lib/i18n/locale'
+import { getTranslator } from '../../lib/i18n/react'
 
 export type Keycap = string | Partial<VirtualKeyboardKeycap>
 
@@ -320,6 +322,30 @@ const LAYOUTS: Record<MathKeyboardMode, Layout> = {
   calculus: CALCULUS,
 }
 
+// The caption under a keycap, English source -> dictionary key. The English text stays in the
+// keycap definitions above so `layoutForMode` (and the tests that read it) keep working without a
+// locale; only the copy handed to MathLive is translated.
+const ASIDE_KEYS: Record<string, string> = {
+  space: 'space',
+  fraction: 'fraction',
+  'square root': 'squareRoot',
+  exponent: 'exponent',
+  'empty fraction': 'emptyFraction',
+  'scientific notation': 'scientificNotation',
+  limit: 'limit',
+  derivative: 'derivative',
+  'absolute value': 'absoluteValue',
+}
+
+function localizeKeycap(keycap: Keycap): Keycap {
+  if (typeof keycap === 'string') return keycap
+  const out = { ...keycap }
+  const key = out.aside ? ASIDE_KEYS[out.aside] : undefined
+  if (key) out.aside = getTranslator(getRenderLocale()).dynamic(`learn.keyboard.aside.${key}`, undefined, out.aside)
+  if (Array.isArray(out.variants)) out.variants = out.variants.map(v => localizeKeycap(v) as typeof v)
+  return out
+}
+
 export function layoutForMode(mode: MathKeyboardMode): Layout {
   return LAYOUTS[mode] ?? LAYOUTS.algebra
 }
@@ -332,9 +358,11 @@ export function layoutForMode(mode: MathKeyboardMode): Layout {
  * than the originals because MathLive freezes the array it is given.
  */
 export function layoutsForMode(mode: MathKeyboardMode): Layout[] {
-  return layoutForMode(mode).layers.map(layer => ({
+  const layout = layoutForMode(mode)
+  const t = getTranslator(getRenderLocale())
+  return layout.layers.map(layer => ({
     label: layer.label,
-    tooltip: layoutForMode(mode).tooltip,
-    layers: [{ ...layer }],
+    tooltip: t.dynamic(`learn.keyboard.tooltip.${mode}`, undefined, layout.tooltip),
+    layers: [{ ...layer, rows: layer.rows.map(row => row.map(localizeKeycap)) }],
   }))
 }

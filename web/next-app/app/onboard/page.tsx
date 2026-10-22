@@ -29,6 +29,7 @@ import {
 import { setUserInfo, getUserInfo } from '../../lib/auth'
 import { concepts as conceptsData } from '../../lib/conceptData'
 import { scopeSize } from '../../lib/diagnosticScope'
+import { useT } from '../../lib/i18n'
 import type { MathFocusHandle } from '@/components/math/MathInput'
 import { domainOrder, type DomainInfo } from './domains'
 import { DiagnosticStep, ResultsStep, WelcomeStep } from './steps'
@@ -46,6 +47,7 @@ const DIAG_KEY = 'mathua_diag_session_onboard'
 const DEMO_KEY = 'mathua_onboard_demo'
 
 export default function OnboardPage() {
+  const t = useT()
   const { mounted } = useTheme()
   const { push } = useRouter()
 
@@ -195,7 +197,7 @@ export default function OnboardPage() {
     try {
       const res = await startGoalDiagnostic(ids)
       if (res.done) {
-        toast.error('No diagnostic questions are available for the selected areas. Try selecting more domains.')
+        toast.error(t('goals.diagnostic.noQuestions'))
         return
       }
       setDemo(false)
@@ -207,7 +209,7 @@ export default function OnboardPage() {
         setNeedsName(true)
         return
       }
-      toast.error("Something went wrong, but we're working on it.")
+      toast.error(t('goals.diagnostic.startFailed'))
     } finally {
       setLoading(false)
     }
@@ -221,7 +223,7 @@ export default function OnboardPage() {
     try {
       const res = await startGoalDiagnosticName(name, ids)
       if (res.done) {
-        toast.error('No diagnostic questions are available for the selected areas. Try selecting more domains.')
+        toast.error(t('goals.diagnostic.noQuestions'))
         return
       }
       setDemo(true)
@@ -229,7 +231,7 @@ export default function OnboardPage() {
       try { sessionStorage.setItem(DEMO_KEY, '1') } catch { /* ignore */ }
       beginSession(res)
     } catch {
-      toast.error("Something went wrong, but we're working on it.")
+      toast.error(t('goals.diagnostic.startFailed'))
     } finally {
       setLoading(false)
     }
@@ -251,7 +253,7 @@ export default function OnboardPage() {
           sessionStorage.removeItem(DIAG_KEY)
         } catch { /* ignore */ }
         setHasPaused(false)
-        toast.error('That diagnostic already finished — start a fresh one below.')
+        toast.error(t('goals.diagnostic.alreadyFinished'))
         setLoading(false)
         return
       }
@@ -280,7 +282,7 @@ export default function OnboardPage() {
         sessionStorage.removeItem(DIAG_KEY)
       } catch { /* ignore */ }
       setHasPaused(false)
-      toast.error('Could not resume — that session expired. Start a fresh diagnostic.')
+      toast.error(t('goals.diagnostic.resumeExpired'))
     } finally {
       setLoading(false)
     }
@@ -297,7 +299,7 @@ export default function OnboardPage() {
       const correct = data.correct || false
       // An admitted unknown is not a wrong answer, so it does not get the wrong answer's words.
       // This step renders the feedback and no separate verdict line, so the label goes here.
-      const feedback = dontKnow ? 'No answer' : data.feedback || (correct ? 'Correct!' : 'Not quite.')
+      const feedback = dontKnow ? t('goals.verdict.noAnswer') : data.feedback || (correct ? t('goals.verdict.correct') : t('goals.verdict.notQuite'))
       setAccuracy(prev => ({ correct: prev.correct + (correct ? 1 : 0), total: prev.total + 1 }))
       setLastResult({ correct, feedback })
       setRetryAvailable(data.done ? false : data.retry_available === true)
@@ -322,7 +324,7 @@ export default function OnboardPage() {
       }
       setLoading(false)
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to submit answer.'))
+      setSubmitError(toSubmitError(e, t('goals.diagnostic.submitFailed')))
       setLoading(false)
     }
   }
@@ -338,7 +340,7 @@ export default function OnboardPage() {
       } catch { /* ignore */ }
       setHasPaused(false)
     } catch (e) {
-      setPlanError(getErrorMessage(e) || 'Could not generate plan.')
+      setPlanError(getErrorMessage(e) || t('goals.diagnostic.planFailed'))
     } finally {
       setLoading(false)
     }
@@ -375,7 +377,7 @@ export default function OnboardPage() {
       setLastResult(null)
       setAnswerInput('')
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to retry question.'))
+      setSubmitError(toSubmitError(e, t('goals.diagnostic.retryFailed')))
     } finally {
       setLoading(false)
     }
@@ -390,7 +392,7 @@ export default function OnboardPage() {
       setSkipCount(c => c + 1)
       if (data.done) {
         setFinished(true)
-        setLastResult({ correct: false, feedback: 'Skipped — no evidence recorded.' })
+        setLastResult({ correct: false, feedback: t('goals.diagnostic.skipped') })
         setTimeout(() => {
           void fetchPlan()
         }, 800)
@@ -398,7 +400,7 @@ export default function OnboardPage() {
       }
       applyQuestion(data.question || '', data.concept_id || '', data.concept_name || '', data.grading_type || '')
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to skip question.'))
+      setSubmitError(toSubmitError(e, t('goals.diagnostic.skipFailed')))
     } finally {
       setLoading(false)
     }
@@ -448,7 +450,7 @@ export default function OnboardPage() {
         <section className="pt-8 min-w-0 overflow-hidden">
           {step !== 'welcome' && (
             <span className="flex mb-4">
-              <button type="button" onClick={() => setStep('welcome')} className="text-mathua-secondary text-sm hover:text-mathua-primary">← Back</button>
+              <button type="button" onClick={() => setStep('welcome')} className="text-mathua-secondary text-sm hover:text-mathua-primary">{t('goals.onboard.back')}</button>
             </span>
           )}
 

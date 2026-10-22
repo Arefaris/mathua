@@ -18,6 +18,8 @@
 // it is reported as such rather than being rounded to "different", because a learner
 // told "these differ" when the tool simply could not tell would be misled.
 
+import { tNow } from '../../lib/i18n'
+
 /** A lazily-created Compute Engine, or null if it could not be loaded. */
 export interface Engine {
   parse(latex: string): Expression
@@ -176,7 +178,7 @@ export function simplificationHint(
 
   return {
     latex: simplified,
-    text: `That simplifies to ${simplified}.`,
+    text: tNow('learn.math.simplifies', { value: simplified }),
   }
 }
 

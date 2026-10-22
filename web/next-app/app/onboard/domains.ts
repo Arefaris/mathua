@@ -1,4 +1,5 @@
-import { DOMAIN_ORDER, domainLabel } from '../../lib/graphDomains'
+import { DOMAIN_ORDER } from '../../lib/graphDomains'
+import { domainName } from '../../lib/domainName'
 
 export interface DomainInfo {
   name: string
@@ -14,4 +15,4 @@ export interface DomainInfo {
 // Widened to string[]: DOMAIN_ORDER is `as const`, so its element type is a literal union and
 // `.indexOf(someString)` stops compiling for callers that treat this as an open list.
 export const domainOrder: string[] = [...DOMAIN_ORDER]
-export const domainLabels = domainLabel
+export const domainLabels = domainName

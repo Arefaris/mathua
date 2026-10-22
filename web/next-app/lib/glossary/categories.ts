@@ -1,4 +1,6 @@
 import type { GlossaryCategoryId } from './types'
+import { getRenderLocale } from '../i18n/locale'
+import { getTranslator } from '../i18n/react'
 
 export interface GlossaryCategory {
   id: GlossaryCategoryId
@@ -55,5 +57,13 @@ export const GLOSSARY_CATEGORIES: GlossaryCategory[] = [
   },
 ]
 
+const english = (id: GlossaryCategoryId) => GLOSSARY_CATEGORIES.find(c => c.id === id)
+
+// The names and descriptions are interface text and follow the language; the entries themselves
+// are reference content and stay as written. GLOSSARY_CATEGORIES is the English source. The
+// caller must be a component that reads the locale (`useT`), or it will not re-render on a switch.
 export const categoryLabel = (id: GlossaryCategoryId): string =>
-  GLOSSARY_CATEGORIES.find(c => c.id === id)?.label ?? id
+  getTranslator(getRenderLocale()).dynamic(`explore.glossary.categories.${id}.label`, undefined, english(id)?.label ?? id)
+
+export const categoryDescription = (id: GlossaryCategoryId): string =>
+  getTranslator(getRenderLocale()).dynamic(`explore.glossary.categories.${id}.description`, undefined, english(id)?.description ?? '')

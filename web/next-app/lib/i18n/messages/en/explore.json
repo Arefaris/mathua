@@ -1,0 +1,425 @@
+{
+  "nav": {
+    "learn": "Learn",
+    "howItWorks": "How it works",
+    "docs": "Docs",
+    "note": "Note",
+    "leaderboard": "Leaderboard",
+    "login": "Login"
+  },
+  "landing": {
+    "hero": {
+      "label": "( 01 · Title Block )",
+      "title": "Adaptive math learning platform",
+      "body": "Mathua is an open-source adaptive math learning engine. You cannot advance until you have truly mastered the prerequisite, both speed and accuracy must be proven.",
+      "getStarted": "Get started",
+      "github": "View on GitHub",
+      "noAccount": "No account needed to start."
+    },
+    "trust": {
+      "label": "( 02 · Why it is trusted )",
+      "body": "Open-source under MIT. Sequencing inspired by Math Academy, with MIT OpenCourseWare and Art of Problem Solving consulted for curriculum structure and problem quality. Lessons build on OpenStax (CC BY-NC-SA 4.0) and Algebrica (CC BY-NC 4.0). No accounts to start, no paywall on the graph.",
+      "concepts": "worked concepts",
+      "problems": "generated problems",
+      "xp": "XP mastery check"
+    },
+    "features": {
+      "label": "( 03 · 3 Main Features )",
+      "mastery": {
+        "title": "Mastery gating",
+        "body": "You cannot advance until your streak and response time both meet the threshold. Knowing the answer is not enough; you must know it fast."
+      },
+      "graph": {
+        "title": "Concept graph",
+        "body": "Every concept is a node with explicit prerequisites. Mathua reads the graph and your progress together, and picks what you see next from the two."
+      },
+      "spaced": {
+        "title": "Spaced repetition",
+        "body": "Concepts you master resurface automatically before they decay. Reviews are woven into your session; there is no separate review mode."
+      }
+    },
+    "states": {
+      "label": "( 04 · The States )",
+      "example": "example",
+      "exampleRule": "10 correct in a row at ≤8s",
+      "scheduler": "The scheduler enforces three hard rules: prerequisites must be mastered before a concept unlocks, the same concept never appears twice in a row and roughly 70% of each session is new material."
+    },
+    "coverage": {
+      "label": "( 05 · What Mathua covers )",
+      "all": {
+        "one": "All {count} concept by subject →",
+        "other": "All {count} concepts by subject →"
+      },
+      "note": "Problems are generated on demand, never stored. There is nothing to memorise."
+    },
+    "ranking": {
+      "label": "( 06 · Ranking System )",
+      "intro": "The leaderboard resets every Monday at 00:00 UTC. Your score is calculated from three components:",
+      "levelsTitle": "Levels of mastery",
+      "levels": {
+        "novice": "Novice",
+        "apprentice": "Apprentice",
+        "student": "Student",
+        "scholar": "Scholar",
+        "adept": "Adept",
+        "expert": "Expert",
+        "master": "Master",
+        "grandmaster": "Grandmaster",
+        "architect": "Math Architect"
+      }
+    },
+    "faq": {
+      "label": "( 07 · Questions, answered. )",
+      "account": {
+        "q": "Do I need an account to start?",
+        "a": "No. Begin studying immediately — accounts are optional and only needed to sync progress across devices."
+      },
+      "speed": {
+        "q": "Why does speed matter, not just accuracy?",
+        "a": "Fluency requires retrieval under time pressure. Knowing the answer is not enough; you must know it fast, or the foundation will not hold the next concept."
+      },
+      "quiz": {
+        "q": "What happens every 50 XP?",
+        "a": "A mastery-check quiz verifies retention across your recent concepts before new material continues."
+      },
+      "free": {
+        "q": "Is Mathua free and open-source?",
+        "a": "Yes — MIT licensed, with no paywall on the graph. Every concept and generator is in the repository."
+      },
+      "extendLabel": "( 08 · How it is extended. )",
+      "extendBody": "Every concept is a JSON node. Every problem is a Go generator function. Every contribution goes through a graph validator that rejects cycles and orphaned nodes automatically.",
+      "guide": "Read the contributing guide →"
+    }
+  },
+  "howItWorks": {
+    "sections": {
+      "concept-graph": "Concept graph",
+      "student-model": "Student model",
+      "spaced-repetition": "Spaced repetition",
+      "diagnostic": "Diagnostic",
+      "scheduler": "Scheduler",
+      "scoring": "Scoring",
+      "generators": "Generators",
+      "symbolic-grading": "Expression grading",
+      "measuring-learning": "Measuring learning"
+    },
+    "intro": {
+      "title": "How Mathua Works",
+      "body": "The engine behind the learning: a technical explanation of the concept graph, student model, diagnostic algorithm, task selection and scoring system."
+    },
+    "cta": {
+      "ready": "Ready to find your starting point?",
+      "diagnostic": "Start diagnostic test →",
+      "learn": "Start learning →"
+    },
+    "conceptGraph": {
+      "title": "The Concept Graph",
+      "p1": "Mathua represents all mathematical knowledge as a directed acyclic graph (a DAG). Each node in the graph is an atomic concept: the smallest unit of mathematical knowledge that can be practiced and mastered independently. Each directed edge is a prerequisite relationship. If concept B has an edge from concept A, then A must be mastered before B is ever shown to the student.",
+      "p2": "The graph currently contains {concepts} spanning {domains}: from early Counting through Calculus, Linear Algebra and Topology.",
+      "concepts": {
+        "one": "{count} concept",
+        "other": "{count} concepts"
+      },
+      "domains": {
+        "one": "{count} domain",
+        "other": "{count} domains"
+      },
+      "p3": "The graph is stored as a flat JSON file: {file}, and is community-editable. A graph validator runs on every pull request and rejects the change if it introduces a cycle."
+    },
+    "studentModel": {
+      "title": "The Student Model",
+      "intro": "Every concept in the graph has a state for each student:",
+      "skill": "Skill",
+      "streakHeader": "Correct answers in a row needed",
+      "timeHeader": "Time per question",
+      "streak": {
+        "one": "{count} correct in a row",
+        "other": "{count} correct in a row"
+      },
+      "seconds": {
+        "one": "{count} second",
+        "other": "{count} seconds"
+      },
+      "rows": {
+        "singleDigit": "Single-digit addition",
+        "tables": "Multiplication tables",
+        "fractions": "Add fractions with different denominators",
+        "equations": "Solve one-step addition equations",
+        "division": "Long division"
+      }
+    },
+    "spaced": {
+      "title": "Spaced Repetition",
+      "p1": "When a concept reaches MASTERED, Mathua immediately schedules its next review using a simplified SM-2 algorithm.",
+      "schedule": "first review:   1 day\nsecond review:  3 days\nthird review:  interval × ease_factor\nease_factor: starts at 2.5\ndecreases by 0.2 on each failed review\nminimum value: 1.3",
+      "p2": "Reviews are never presented as a separate \"review mode.\" They are woven into every session by the scheduler, which manages the 70/30 balance between new material and review automatically."
+    },
+    "diagnostic": {
+      "title": "The Diagnostic Algorithm",
+      "p1": "When a student first opens Mathua, they enter a Computerised Adaptive Testing (CAT) session. The goal is to find the student's starting point using as few questions as possible.",
+      "steps": {
+        "sort": "The concept graph is sorted topologically. The diagnostic builds a covering set from the graph roots and evenly spaced concepts.",
+        "forward": "If the student answers correctly within the time limit, the algorithm moves forward: it next tests a concept further along the prerequisite chain.",
+        "backward": "If the student answers incorrectly or exceeds twice the expected time, the algorithm moves backward: it tests a concept earlier in the chain.",
+        "probes": "The assessment continues with multiple probes per concept until the student's starting point is clearly established.",
+        "record": "The diagnostic records a starting mastery estimate for every concept the student passed through. Concepts answered correctly count as LEARNING. Concepts answered quickly and accurately count as conditionally MASTERED and are skipped in early sessions."
+      },
+      "p2": "The diagnostic test asks as few questions as possible. Without this algorithm, a naive assessment of {concepts} would require up to {questions}. The CAT approach, picking each question by information gain over a covering set, reduces this by roughly 94%.",
+      "conceptsOf": {
+        "one": "{count} concept",
+        "other": "{count} concepts"
+      },
+      "questionsUpTo": {
+        "one": "{count} question",
+        "other": "{count} questions"
+      },
+      "p3": "The diagnostic test can be retaken at any time from your profile. Retaking does not delete progress: it creates a new knowledge estimate that is merged with existing data, always preferring the more optimistic estimate so students are never penalised for reassessing."
+    },
+    "scheduler": {
+      "title": "The Task Selection Algorithm",
+      "p1": "The scheduler runs after every question is submitted. It selects the next concept by computing a priority score for every eligible concept.",
+      "p2": "Three hard rules the scheduler enforces regardless of priority scores:",
+      "rules": {
+        "prerequisites": "A concept whose prerequisites are not all MASTERED is never surfaced.",
+        "repeat": "The same concept is never shown twice in a row.",
+        "mix": "The scheduler targets a session composition of 70% new and practicing material, 30% review."
+      }
+    },
+    "scoring": {
+      "title": "Scoring and Ranking",
+      "p1": "Mathua tracks two separate scoring systems:"
+    },
+    "generators": {
+      "title": "Generator-Based Problems",
+      "p1": "Every problem in Mathua is generated on demand by a parameterised Go function: a generator. There is no static question bank.",
+      "p2": "The {code} parameter scales operand size from 0.0 to 1.0. The scheduler passes a difficulty value based on the student's current mastery score."
+    },
+    "grading": {
+      "title": "Expression Grading with SymPy",
+      "p1": "From algebra onward, answers are expressions: {examples} where numeric comparison is no longer sufficient. Mathua uses a mixed Go/Python grading system: the router dispatches nine grading types — six pure-Go graders — and mathematical equivalence for algebra, calculus, differential equations and trigonometry is handled by a Python subprocess running {sympy}, bundled into the production image.",
+      "p2": "The {router} selects the grader by {gradingType}. Concepts with type {symbolic}, {polynomial} or {expression} route to {gradeSymPy}, which runs a long-lived Python 3 subprocess. The production image installs SymPy (pinned) and fails the build if it cannot grade, so there is no fallback path.",
+      "p3": "The Go client sends JSON requests to the Python subprocess via stdin. SymPy parses both expressions into trees and checks equivalence with {check}. This catches identities that string or coefficient comparison never could:",
+      "p4": "Examples of equivalences SymPy can detect:"
+    },
+    "measuring": {
+      "title": "Measuring Learning",
+      "p1": "Every answer in Mathua writes one row to an attempt log: student, concept, correctness, elapsed seconds, timestamp. Nothing is sampled or aggregated at write time — every metric below is computed from that raw log, per student or product-wide.",
+      "metric": "Metric",
+      "meaning": "What it means",
+      "rows": {
+        "firstPass": {
+          "name": "First-pass rate",
+          "text": "Share of concepts answered correctly on the very first attempt."
+        },
+        "secondPass": {
+          "name": "Second-pass rate",
+          "text": "Share correct within the first two attempts — the recovery metric. A gap between first- and second-pass means material is learnable with feedback but not yet automatic."
+        },
+        "attempts": {
+          "name": "Average attempts per concept",
+          "text": "Mean attempts across concepts; falls as fluency builds."
+        },
+        "retention": {
+          "name": "Retention",
+          "text": "Students active in two or more distinct weeks ÷ all students who ever attempted. A coarse cohort signal, not a week-over-week curve."
+        },
+        "trend": {
+          "name": "First-pass trend",
+          "text": "Last week minus first week. Positive means accuracy improved across the observed window; noisy at small N."
+        }
+      },
+      "figureAlt": "First-pass and second-pass rates across all learners, with Math Academy parity markers",
+      "p2": "These are usage metrics, not an efficacy claim: no control group, no randomisation. Compare within a student over weeks, not across learners at different frontiers — and always read a weekly rate alongside its active-student count, since a week with three attempts can show 0% or 100% by accident.",
+      "p3": "The figure above refreshes weekly from the live product-wide log — read it with its sample size, which rides in the caption. Early numbers move a lot; that is normal, not a verdict. Your live per-student numbers are on your {profile}, and the full methodology with regeneration commands lives in {docs}.",
+      "profileLink": "Profile",
+      "docsLink": "Docs"
+    },
+    "flow": {
+      "firstCorrect": "first\ncorrect",
+      "consistent": "consistent\nattempts",
+      "evidence": "evidence\nreached",
+      "idle": "14 days\nidle",
+      "reviewCorrect": "review\ncorrect",
+      "question": "Question\nsubmitted",
+      "score": "Compute priority\nfor each concept",
+      "enforce": "Enforce\nhard rules",
+      "r1": "Prerequisites\nmust be MASTERED",
+      "r2": "No same concept\ntwice in a row",
+      "r3": "70% practice\n30% review",
+      "select": "Select highest\npriority concept",
+      "answer": "Student\nAnswer",
+      "numeric": "Numeric\nGo",
+      "sympy": "SymPy\nPython",
+      "choice": "Choice\nGo",
+      "comparison": "Comparison\nGo",
+      "ordering": "Ordering\nGo"
+    }
+  },
+  "domains": {
+    "label": "Curriculum",
+    "title": "Choose what to learn",
+    "intro": "Browse a domain and pick a topic. Eligibility is checked by Mathua; you cannot start a topic whose prerequisites are unmet.",
+    "loading": "Loading curriculum",
+    "loadError": "Couldn't load the curriculum.",
+    "available": {
+      "one": "{available} / {count} concept available",
+      "other": "{available} / {count} concepts available"
+    },
+    "back": "← Domains",
+    "progress": {
+      "one": "Your progress: {available} / {count} concept available",
+      "other": "Your progress: {available} / {count} concepts available"
+    },
+    "masteredSuffix": " · {count} mastered",
+    "loadingTopics": "Loading topics…",
+    "noTopics": "No topics are currently available here. Your prerequisite path will unlock topics as you demonstrate mastery.",
+    "learn": "Learn",
+    "checking": "Checking…",
+    "review": "Review",
+    "prereqPath": "View prerequisite path",
+    "startError": "Couldn't start this topic.",
+    "prereqError": "Couldn't load this topic's prerequisites.",
+    "state": {
+      "mastered": "Mastered",
+      "dueForReview": "Due for review",
+      "inProgress": "In progress",
+      "unlocked": "Available",
+      "upcoming": "Upcoming",
+      "locked": "Locked"
+    }
+  },
+  "domainStatus": {
+    "mastered": "Mastered",
+    "dueForReview": "Due for review",
+    "inProgress": "In progress",
+    "unseen": "Not started"
+  },
+  "domainTable": {
+    "due": "{count} due",
+    "continue": "Continue: {label}",
+    "start": "Start: {label}",
+    "hide": "Hide concepts"
+  },
+  "graph": {
+    "label": "Your knowledge graph",
+    "title": "Explore the concept map",
+    "loading": "LOADING GRAPH",
+    "signInPrompt": "Sign in or {link} to track your progress across the concept map.",
+    "startPrompt": "{link} to track your progress across the concept map.",
+    "startLearningLower": "start learning",
+    "startLearning": "Start learning",
+    "all": "All",
+    "loadError": "Couldn't load the live graph: showing the bundled fallback.",
+    "retry": "Retry →",
+    "flow": {
+      "status": {
+        "mastered": "Mastered",
+        "decaying": "Due for review",
+        "practicing": "Practicing",
+        "learning": "Learning",
+        "unseen": "Unseen",
+        "locked": "Locked"
+      },
+      "nodeAria": "{label}, {domain} domain, {status}",
+      "towardMastery": "{pct}% toward mastery",
+      "notStarted": "Not started",
+      "searchLabel": "Search concepts",
+      "searchPlaceholder": "Search concepts…",
+      "flowToggle": "Toggle edge flow animation",
+      "flowButton": "Flow",
+      "listButton": "List",
+      "listTitle": "Browse concepts as a keyboard-accessible list",
+      "listOpen": "Open concept list",
+      "listClose": "Close concept list",
+      "listDialog": "Concept list",
+      "filterPlaceholder": "Filter concepts…",
+      "filterLabel": "Filter concepts",
+      "noMatch": "No matching concepts",
+      "noConcepts": "No concepts to display",
+      "keys": "+ − zoom · 0 fit · ← → ↑ ↓ pan · Esc clear",
+      "learnThis": "Learn this →",
+      "checkThis": "Check this →",
+      "requires": "requires",
+      "unlocks": "unlocks"
+    }
+  },
+  "glossary": {
+    "label": "Reference",
+    "title": "Mathematical glossary",
+    "loading": "Loading glossary",
+    "noMatch": "No entries match.",
+    "noMatchQuery": "No entries match “{query}”.",
+    "hint": "Try a symbol (∀, ∫, λ), a name (integral, lambda) or a word from a definition.",
+    "clear": "Clear search and filters",
+    "pagesNav": "Glossary pages",
+    "previous": "Previous page",
+    "next": "Next page",
+    "goTo": "Go to page {page}",
+    "search": {
+      "inputType": "Search input type",
+      "text": "Text",
+      "math": "Math: f(x)",
+      "label": "Search symbols, names or meanings",
+      "placeholder": "Search a symbol, name or meaning — e.g. ∀, integral, lambda",
+      "mathLabel": "Search by math notation",
+      "mathPlaceholder": "Type a symbol, e.g. ∫ or \\alpha",
+      "tags": "Tags",
+      "filterGroup": "Filter by category",
+      "all": "All",
+      "entries": {
+        "one": "{count} entry",
+        "other": "{count} entries"
+      },
+      "showing": {
+        "one": "Showing {start}–{end} of {count} entry",
+        "other": "Showing {start}–{end} of {count} entries"
+      }
+    },
+    "entry": {
+      "symbolLabel": "{name} symbol: {symbol}",
+      "readAs": "Read as {reading}",
+      "mistake": "Common mistake: ",
+      "related": "Related:",
+      "show": "Show {name}",
+      "sources": " · Sources: "
+    },
+    "categories": {
+      "greek": {
+        "label": "Greek letters",
+        "description": "The 24 Greek letters, their forms and common mathematical uses. Meanings vary by context."
+      },
+      "arithmetic": {
+        "label": "Arithmetic",
+        "description": "Elementary operations, comparison, fractions, powers, roots and basic notation."
+      },
+      "algebra": {
+        "label": "Algebra and functions",
+        "description": "Variables, equations, functions, exponentials, logarithms, sums and sequences."
+      },
+      "logic-sets": {
+        "label": "Sets, logic and proof",
+        "description": "Set notation, quantifiers, logical connectives and proof language."
+      },
+      "geometry-trig": {
+        "label": "Geometry and trigonometry",
+        "description": "Angles, shapes, congruence, coordinates and trigonometric functions."
+      },
+      "calculus": {
+        "label": "Calculus and analysis",
+        "description": "Limits, derivatives, integrals, series and epsilon-delta language."
+      },
+      "linear-discrete": {
+        "label": "Linear algebra and discrete math",
+        "description": "Vectors, matrices, eigenvalues, combinatorics, graphs and modular arithmetic."
+      },
+      "probability": {
+        "label": "Probability and statistics",
+        "description": "Events, random variables, expectation, distributions and inference."
+      },
+      "advanced": {
+        "label": "Number theory and advanced math",
+        "description": "Number sets, complex numbers, abstract algebra, topology and transforms."
+      }
+    }
+  }
+}

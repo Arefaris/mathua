@@ -1,0 +1,72 @@
+{
+  "language": {
+    "label": "Язык",
+    "hint": "Язык интерфейса и переведённых учебных материалов."
+  },
+  "action": {
+    "check": "Проверить",
+    "skip": "Пропустить",
+    "next": "Дальше",
+    "continue": "Продолжить",
+    "back": "Назад",
+    "retry": "Попробовать ещё раз",
+    "save": "Сохранить",
+    "saving": "Сохранение…",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "confirm": "Подтвердить",
+    "delete": "Удалить",
+    "copy": "Копировать",
+    "copied": "Скопировано!",
+    "signIn": "Войти",
+    "signUp": "Зарегистрироваться",
+    "start": "Начать",
+    "done": "Готово",
+    "open": "Открыть",
+    "seeAll": "Показать все"
+  },
+  "status": {
+    "loading": "Загрузка…",
+    "error": "Что-то пошло не так",
+    "offline": "Похоже, нет соединения с интернетом.",
+    "empty": "Здесь пока ничего нет."
+  },
+  "state": {
+    "unseen": "Не начата",
+    "learning": "Изучается",
+    "practicing": "Закрепляется",
+    "mastered": "Освоена",
+    "decaying": "Забывается",
+    "locked": "Закрыта"
+  },
+  "domain": {
+    "arithmetic": "Арифметика",
+    "fractions": "Дроби",
+    "prealgebra": "Введение в алгебру",
+    "algebra": "Алгебра",
+    "geometry": "Геометрия",
+    "trigonometry": "Тригонометрия",
+    "complex_numbers": "Комплексные числа",
+    "precalculus": "Начала анализа",
+    "calculus": "Математический анализ",
+    "linear_algebra": "Линейная алгебра",
+    "statistics": "Статистика",
+    "machine_learning": "Машинное обучение",
+    "discrete_math": "Дискретная математика",
+    "number_theory": "Теория чисел",
+    "differential_equations": "Дифференциальные уравнения",
+    "abstract_algebra": "Общая алгебра",
+    "topology": "Топология",
+    "graph_theory": "Теория графов",
+    "probability_theory": "Теория вероятностей",
+    "numerical_analysis": "Численные методы",
+    "real_analysis": "Вещественный анализ"
+  },
+  "count": {
+    "concepts": { "one": "{count} тема", "few": "{count} темы", "many": "{count} тем", "other": "{count} темы" },
+    "questions": { "one": "{count} вопрос", "few": "{count} вопроса", "many": "{count} вопросов", "other": "{count} вопроса" },
+    "days": { "one": "{count} день", "few": "{count} дня", "many": "{count} дней", "other": "{count} дня" },
+    "minutes": { "one": "{count} минута", "few": "{count} минуты", "many": "{count} минут", "other": "{count} минуты" },
+    "attempts": { "one": "{count} попытка", "few": "{count} попытки", "many": "{count} попыток", "other": "{count} попытки" }
+  }
+}

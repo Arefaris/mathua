@@ -16,41 +16,53 @@ import {
   bodyFont,
 } from './styles'
 import { CONCEPT_COUNT, DOMAIN_COUNT } from '../../lib/curriculumFacts'
+import { useT } from '../../lib/i18n'
+import SlotText from '../../components/explore/SlotText'
+
+// Shown while a diagram's chunk loads. A component rather than inline JSX so it can read the
+// language: `dynamic`'s `loading` option runs outside the page's own render.
+function FlowPlaceholder({ height }: { height: number }) {
+  const t = useT()
+  return (
+    <div style={{ height, border: '0.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontFamily: monoFont, fontSize: '13px' }}>
+      {t('common.status.loading')}
+    </div>
+  )
+}
 
 const StudentModelFlow = dynamic(() => import('../../components/StudentModelFlow'), {
   ssr: false,
-  loading: () => <div style={{ height: 320, border: '0.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontFamily: monoFont, fontSize: '13px' }}>Loading&hellip;</div>,
+  loading: () => <FlowPlaceholder height={320} />,
 })
 
 const DiagnosticFlow = dynamic(() => import('../../components/DiagnosticFlow'), {
   ssr: false,
-  loading: () => <div style={{ height: 420, border: '0.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontFamily: monoFont, fontSize: '13px' }}>Loading&hellip;</div>,
+  loading: () => <FlowPlaceholder height={420} />,
 })
 
 const SchedulerFlow = dynamic(() => import('../../components/SchedulerFlow'), {
   ssr: false,
-  loading: () => <div style={{ height: 320, border: '0.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontFamily: monoFont, fontSize: '13px' }}>Loading&hellip;</div>,
+  loading: () => <FlowPlaceholder height={320} />,
 })
 
 const GradingFlow = dynamic(() => import('../../components/GradingFlow'), {
   ssr: false,
-  loading: () => <div style={{ height: 300, border: '0.5px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontFamily: monoFont, fontSize: '13px' }}>Loading&hellip;</div>,
+  loading: () => <FlowPlaceholder height={300} />,
 })
 
 export function ConceptGraphSection() {
+  const t = useT()
   return (
     <section id="concept-graph" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>The Concept Graph</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.conceptGraph.title')}</h2>
       <p style={bodyStyle}>
-        Mathua represents all mathematical knowledge as a directed acyclic graph (a DAG). Each
-        node in the graph is an atomic concept: the smallest unit of mathematical knowledge
-        that can be practiced and mastered independently. Each directed edge is a prerequisite
-        relationship. If concept B has an edge from concept A, then A must be mastered before
-        B is ever shown to the student.
+        {t('explore.howItWorks.conceptGraph.p1')}
       </p>
       <p style={bodyStyle}>
-        The graph currently contains {CONCEPT_COUNT} concepts spanning {DOMAIN_COUNT} domains:
-        from early Counting through Calculus, Linear Algebra and Topology.
+        {t('explore.howItWorks.conceptGraph.p2', {
+          concepts: t('explore.howItWorks.conceptGraph.concepts', { count: CONCEPT_COUNT }),
+          domains: t('explore.howItWorks.conceptGraph.domains', { count: DOMAIN_COUNT }),
+        })}
       </p>
       <pre style={codeBlockStyle}>
 {`{
@@ -63,10 +75,10 @@ export function ConceptGraphSection() {
 }`}
       </pre>
       <p style={bodyStyle}>
-        The graph is stored as a flat JSON file:{' '}
-        <code style={inlineCodeStyle}>data/concepts.json</code>, and{' '}
-        is community-editable. A graph validator runs on every pull request and rejects the
-        change if it introduces a cycle.
+        <SlotText
+          text={t('explore.howItWorks.conceptGraph.p3')}
+          slots={{ file: <code style={inlineCodeStyle}>data/concepts.json</code> }}
+        />
       </p>
       <div className="flex items-center gap-2 flex-wrap my-6">
         <span style={{ fontFamily: monoFont, fontSize: '13px', color: 'var(--accent-blue)' }}>arith.factor.gcf</span>
@@ -81,31 +93,34 @@ export function ConceptGraphSection() {
   )
 }
 
+// Skill key, correct answers in a row, seconds per question. The names are translated.
+const STUDENT_ROWS = [
+  ['singleDigit', 5, 8],
+  ['tables', 7, 6],
+  ['fractions', 5, 18],
+  ['equations', 5, 12],
+  ['division', 5, 20],
+] as const
+
 export function StudentModelSection() {
-  const rows: [string, string, string][] = [
-    ['Single-digit addition', '5', '8 seconds'],
-    ['Multiplication tables', '7', '6 seconds'],
-    ['Add fractions with different denominators', '5', '18 seconds'],
-    ['Solve one-step addition equations', '5', '12 seconds'],
-    ['Long division', '5', '20 seconds'],
-  ]
+  const t = useT()
   return (
     <section id="student-model" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>The Student Model</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.studentModel.title')}</h2>
       <p style={bodyStyle}>
-        Every concept in the graph has a state for each student:
+        {t('explore.howItWorks.studentModel.intro')}
       </p>
 
       <StudentModelFlow />
 
       {/* Mobile: stacked labeled cards */}
       <div className="sm:hidden space-y-2 w-full max-w-[720px] mx-auto min-w-0 my-6">
-        {rows.map(([concept, streak, time]) => (
-          <div key={`card-${concept}`} className="border-[0.5px] border-mathua-border p-3 min-w-0 overflow-hidden text-center">
-            <div className="font-mono text-[12px] text-mathua-primary mb-1 break-words">{concept}</div>
+        {STUDENT_ROWS.map(([skill, streak, seconds]) => (
+          <div key={`card-${skill}`} className="border-[0.5px] border-mathua-border p-3 min-w-0 overflow-hidden text-center">
+            <div className="font-mono text-[12px] text-mathua-primary mb-1 break-words">{t(`explore.howItWorks.studentModel.rows.${skill}`)}</div>
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-0.5 font-mono text-[11px] text-mathua-muted">
-              <span>{streak} correct in a row</span>
-              <span>{time}</span>
+              <span>{t('explore.howItWorks.studentModel.streak', { count: streak })}</span>
+              <span>{t('explore.howItWorks.studentModel.seconds', { count: seconds })}</span>
             </div>
           </div>
         ))}
@@ -123,17 +138,17 @@ export function StudentModelSection() {
         >
           <thead>
             <tr style={{ background: 'transparent' }}>
-              <th style={tableHeaderStyle}>Skill</th>
-              <th style={tableHeaderStyle}>Correct answers in a row needed</th>
-              <th style={tableHeaderStyle}>Time per question</th>
+              <th style={tableHeaderStyle}>{t('explore.howItWorks.studentModel.skill')}</th>
+              <th style={tableHeaderStyle}>{t('explore.howItWorks.studentModel.streakHeader')}</th>
+              <th style={tableHeaderStyle}>{t('explore.howItWorks.studentModel.timeHeader')}</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map(([concept, streak, time]) => (
-              <tr key={`row-${concept}`} style={{ background: 'transparent' }}>
-                <td style={tableCellStyle}>{concept}</td>
+            {STUDENT_ROWS.map(([skill, streak, seconds]) => (
+              <tr key={`row-${skill}`} style={{ background: 'transparent' }}>
+                <td style={tableCellStyle}>{t(`explore.howItWorks.studentModel.rows.${skill}`)}</td>
                 <td style={tableCellStyle}>{streak}</td>
-                <td style={tableCellStyle}>{time}</td>
+                <td style={tableCellStyle}>{t('explore.howItWorks.studentModel.seconds', { count: seconds })}</td>
               </tr>
             ))}
           </tbody>
@@ -144,48 +159,35 @@ export function StudentModelSection() {
 }
 
 export function SpacedRepetitionSection() {
+  const t = useT()
   return (
     <section id="spaced-repetition" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>Spaced Repetition</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.spaced.title')}</h2>
       <p style={bodyStyle}>
-        When a concept reaches MASTERED, Mathua immediately schedules its next review using a
-        simplified SM-2 algorithm.
+        {t('explore.howItWorks.spaced.p1')}
       </p>
       <pre style={codeBlockStyle}>
-{`first review:   1 day
-second review:  3 days
-third review:  interval × ease_factor
-ease_factor: starts at 2.5
-decreases by 0.2 on each failed review
-minimum value: 1.3`}
+{t('explore.howItWorks.spaced.schedule')}
       </pre>
       <p style={bodyStyle}>
-        Reviews are never presented as a separate &quot;review mode.&quot; They are woven into every
-        session by the scheduler, which manages the 70/30 balance between new material and
-        review automatically.
+        {t('explore.howItWorks.spaced.p2')}
       </p>
     </section>
   )
 }
 
+const DIAGNOSTIC_STEPS = ['sort', 'forward', 'backward', 'probes', 'record'] as const
+
 export function DiagnosticSection() {
-  const steps = [
-    'The concept graph is sorted topologically. The diagnostic builds a covering set from the graph roots and evenly spaced concepts.',
-    'If the student answers correctly within the time limit, the algorithm moves forward: it next tests a concept further along the prerequisite chain.',
-    'If the student answers incorrectly or exceeds twice the expected time, the algorithm moves backward: it tests a concept earlier in the chain.',
-    'The assessment continues with multiple probes per concept until the student\'s starting point is clearly established.',
-    'The diagnostic records a starting mastery estimate for every concept the student passed through. Concepts answered correctly count as LEARNING. Concepts answered quickly and accurately count as conditionally MASTERED and are skipped in early sessions.',
-  ]
+  const t = useT()
   return (
     <section id="diagnostic" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>The Diagnostic Algorithm</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.diagnostic.title')}</h2>
       <p style={bodyStyle}>
-        When a student first opens Mathua, they enter a Computerised Adaptive Testing (CAT)
-        session. The goal is to find the student&apos;s starting point using as few questions
-        as possible.
+        {t('explore.howItWorks.diagnostic.p1')}
       </p>
       <ol className="list-none my-4">
-        {steps.map((step, i) => (
+        {DIAGNOSTIC_STEPS.map((step, i) => (
           <li key={step} style={stepLiStyle}>
             <span
               style={{
@@ -198,40 +200,34 @@ export function DiagnosticSection() {
             >
               {roman(i + 1)}.
             </span>
-            {step}
+            {t(`explore.howItWorks.diagnostic.steps.${step}`)}
           </li>
         ))}
       </ol>
       <DiagnosticFlow />
       <p style={bodyStyle}>
-        The diagnostic test asks as few questions as possible. Without this algorithm, a
-        naive assessment of {CONCEPT_COUNT} concepts would require up to {CONCEPT_COUNT} questions.
-        The CAT approach,
-        picking each question by information gain over a covering set, reduces this by roughly 94%.
+        {t('explore.howItWorks.diagnostic.p2', {
+          concepts: t('explore.howItWorks.diagnostic.conceptsOf', { count: CONCEPT_COUNT }),
+          questions: t('explore.howItWorks.diagnostic.questionsUpTo', { count: CONCEPT_COUNT }),
+        })}
       </p>
       <p style={bodyStyle}>
-        The diagnostic test can be retaken at any time from your profile. Retaking does not
-        delete progress: it creates a new knowledge estimate that is merged with existing
-        data, always preferring the more optimistic estimate so students are never penalised
-        for reassessing.
+        {t('explore.howItWorks.diagnostic.p3')}
       </p>
       <style>{`ol { counter-reset: step-counter; }`}</style>
     </section>
   )
 }
 
+const SCHEDULER_RULES = ['prerequisites', 'repeat', 'mix'] as const
+
 export function SchedulerSection() {
-  const rules = [
-    'A concept whose prerequisites are not all MASTERED is never surfaced.',
-    'The same concept is never shown twice in a row.',
-    'The scheduler targets a session composition of 70% new and practicing material, 30% review.',
-  ]
+  const t = useT()
   return (
     <section id="scheduler" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>The Task Selection Algorithm</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.scheduler.title')}</h2>
       <p style={bodyStyle}>
-        The scheduler runs after every question is submitted. It selects the next concept by
-        computing a priority score for every eligible concept.
+        {t('explore.howItWorks.scheduler.p1')}
       </p>
       <pre style={codeBlockStyle}>
 {`priority = (0.7 × days_since_last_seen)
@@ -240,9 +236,9 @@ export function SchedulerSection() {
 + 2.0   if newly unlocked this session`}
       </pre>
       <p style={bodyStyle}>
-        Three hard rules the scheduler enforces regardless of priority scores:
+        {t('explore.howItWorks.scheduler.p2')}
       </p>
-      {rules.map((rule) => (
+      {SCHEDULER_RULES.map((rule) => (
         <div
           key={rule}
           style={{
@@ -255,7 +251,7 @@ export function SchedulerSection() {
             margin: '0.5rem 0',
           }}
         >
-          {rule}
+          {t(`explore.howItWorks.scheduler.rules.${rule}`)}
         </div>
       ))}
       <SchedulerFlow />
@@ -264,11 +260,12 @@ export function SchedulerSection() {
 }
 
 export function ScoringSection() {
+  const t = useT()
   return (
     <section id="scoring" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>Scoring and Ranking</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.scoring.title')}</h2>
       <p style={bodyStyle}>
-        Mathua tracks two separate scoring systems:
+        {t('explore.howItWorks.scoring.p1')}
       </p>
       <pre style={codeBlockStyle}>
 {`topic_score = (mastered_concepts × 100)
@@ -286,12 +283,12 @@ speed_bonus = max(0, (time_limit − avg_time) / time_limit × 50)`}
 }
 
 export function GeneratorsSection() {
+  const t = useT()
   return (
     <section id="generators" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>Generator-Based Problems</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.generators.title')}</h2>
       <p style={bodyStyle}>
-        Every problem in Mathua is generated on demand by a parameterised Go function: a
-        generator. There is no static question bank.
+        {t('explore.howItWorks.generators.p1')}
       </p>
       <pre style={{ ...codeBlockStyle, whiteSpace: 'pre', overflowX: 'auto' }}>
 {`// internal/generator/arithmetic/add.go
@@ -310,37 +307,47 @@ func (g *AddSingleGen) Generate(difficulty float64) generator.Problem {
 }`}
       </pre>
       <p style={bodyStyle}>
-        The <code style={inlineCodeStyle}>difficulty</code> parameter scales operand size from 0.0 to 1.0.
-        The scheduler passes a difficulty value based on the student&apos;s current mastery score.
+        <SlotText
+          text={t('explore.howItWorks.generators.p2')}
+          slots={{ code: <code style={inlineCodeStyle}>difficulty</code> }}
+        />
       </p>
     </section>
   )
 }
 
 export function SymbolicGradingSection() {
+  const t = useT()
   return (
     <section id="symbolic-grading" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>Expression Grading with SymPy</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.grading.title')}</h2>
       <p style={bodyStyle}>
-        From algebra onward, answers are expressions:{' '}
-        <code style={mutedCodeStyle}>x = 4</code>,{' '}
-        <code style={mutedCodeStyle}>(x+2)(x+3)</code>,{' '}
-        <code style={mutedCodeStyle}>2x&#178; + 3x - 5</code>{' '}
-        where numeric comparison is no longer sufficient. Mathua uses a mixed Go/Python
-        grading system: the router dispatches nine grading types — six pure-Go graders — and
-        mathematical equivalence for algebra, calculus, differential equations and
-        trigonometry is handled by a Python subprocess running{' '}
-        <code style={inlineCodeStyle}>sympy</code>, bundled into the production image.
+        <SlotText
+          text={t('explore.howItWorks.grading.p1')}
+          slots={{
+            examples: (
+              <>
+                <code style={mutedCodeStyle}>x = 4</code>,{' '}
+                <code style={mutedCodeStyle}>(x+2)(x+3)</code>,{' '}
+                <code style={mutedCodeStyle}>2x&#178; + 3x - 5</code>
+              </>
+            ),
+            sympy: <code style={inlineCodeStyle}>sympy</code>,
+          }}
+        />
       </p>
       <p style={bodyStyle}>
-        The <code style={inlineCodeStyle}>Router</code> selects the
-        grader by <code style={mutedCodeStyle}>grading_type</code>.
-        Concepts with type <code style={mutedCodeStyle}>symbolic</code>,{' '}
-        <code style={mutedCodeStyle}>polynomial</code> or{' '}
-        <code style={mutedCodeStyle}>expression</code> route to{' '}
-        <code style={inlineCodeStyle}>gradeSymPy</code>, which
-        runs a long-lived Python 3 subprocess. The production image installs SymPy
-        (pinned) and fails the build if it cannot grade, so there is no fallback path.
+        <SlotText
+          text={t('explore.howItWorks.grading.p2')}
+          slots={{
+            router: <code style={inlineCodeStyle}>Router</code>,
+            gradingType: <code style={mutedCodeStyle}>grading_type</code>,
+            symbolic: <code style={mutedCodeStyle}>symbolic</code>,
+            polynomial: <code style={mutedCodeStyle}>polynomial</code>,
+            expression: <code style={mutedCodeStyle}>expression</code>,
+            gradeSymPy: <code style={inlineCodeStyle}>gradeSymPy</code>,
+          }}
+        />
       </p>
       <GradingFlow />
       <pre style={{ ...codeBlockStyle, whiteSpace: 'pre', overflowX: 'auto' }}>
@@ -375,10 +382,10 @@ func (e *Engine) gradeAnswer(conceptID, expected, answer string) grader.Result {
 }`}
       </pre>
       <p style={bodyStyle}>
-        The Go client sends JSON requests to the Python subprocess via stdin. SymPy parses
-        both expressions into trees and checks equivalence with{' '}
-        <code style={inlineCodeStyle}>simplify(expected - answer) == 0</code>.
-        This catches identities that string or coefficient comparison never could:
+        <SlotText
+          text={t('explore.howItWorks.grading.p3')}
+          slots={{ check: <code style={inlineCodeStyle}>simplify(expected - answer) == 0</code> }}
+        />
       </p>
       <pre style={codeBlockStyle}>
 {`# grading/sympy_service.py
@@ -393,7 +400,7 @@ for line in sys.stdin:
     print(json.dumps({"id": req["id"], "correct": correct}))`}
       </pre>
       <p style={bodyStyle}>
-        Examples of equivalences SymPy can detect:
+        {t('explore.howItWorks.grading.p4')}
         <span style={{ display: 'block', fontFamily: monoFont, fontSize: '13px', marginTop: '0.5rem', color: 'var(--text-muted)' }}>
           x² + 2x + 1 == (x+1)²{' · '}
           sin²(x) + cos²(x) == 1{' · '}
@@ -405,30 +412,23 @@ for line in sys.stdin:
   )
 }
 
+const METRIC_ROWS = ['firstPass', 'secondPass', 'attempts', 'retention', 'trend'] as const
+
 export function MeasuringLearningSection() {
-  const rows: [string, string][] = [
-    ['First-pass rate', 'Share of concepts answered correctly on the very first attempt.'],
-    ['Second-pass rate', 'Share correct within the first two attempts — the recovery metric. A gap between first- and second-pass means material is learnable with feedback but not yet automatic.'],
-    ['Average attempts per concept', 'Mean attempts across concepts; falls as fluency builds.'],
-    ['Retention', 'Students active in two or more distinct weeks ÷ all students who ever attempted. A coarse cohort signal, not a week-over-week curve.'],
-    ['First-pass trend', 'Last week minus first week. Positive means accuracy improved across the observed window; noisy at small N.'],
-  ]
+  const t = useT()
   return (
     <section id="measuring-learning" className="mt-12 pt-6 scroll-mt-28">
-      <h2 style={h2Style}>Measuring Learning</h2>
+      <h2 style={h2Style}>{t('explore.howItWorks.measuring.title')}</h2>
       <p style={bodyStyle}>
-        Every answer in Mathua writes one row to an attempt log: student, concept,
-        correctness, elapsed seconds, timestamp. Nothing is sampled or aggregated
-        at write time — every metric below is computed from that raw log, per
-        student or product-wide.
+        {t('explore.howItWorks.measuring.p1')}
       </p>
 
       {/* Mobile: stacked labeled cards */}
       <div className="sm:hidden space-y-2 w-full max-w-[720px] mx-auto min-w-0 my-6">
-        {rows.map(([metric, meaning]) => (
+        {METRIC_ROWS.map((metric) => (
           <div key={`card-${metric}`} className="border-[0.5px] border-mathua-border p-3 min-w-0 overflow-hidden">
-            <div className="font-mono text-[12px] text-mathua-primary mb-1 break-words">{metric}</div>
-            <div className="font-mono text-[11px] text-mathua-muted">{meaning}</div>
+            <div className="font-mono text-[12px] text-mathua-primary mb-1 break-words">{t(`explore.howItWorks.measuring.rows.${metric}.name`)}</div>
+            <div className="font-mono text-[11px] text-mathua-muted">{t(`explore.howItWorks.measuring.rows.${metric}.text`)}</div>
           </div>
         ))}
       </div>
@@ -445,15 +445,15 @@ export function MeasuringLearningSection() {
         >
           <thead>
             <tr style={{ background: 'transparent' }}>
-              <th style={tableHeaderStyle}>Metric</th>
-              <th style={tableHeaderStyle}>What it means</th>
+              <th style={tableHeaderStyle}>{t('explore.howItWorks.measuring.metric')}</th>
+              <th style={tableHeaderStyle}>{t('explore.howItWorks.measuring.meaning')}</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map(([metric, meaning]) => (
+            {METRIC_ROWS.map((metric) => (
               <tr key={`row-${metric}`} style={{ background: 'transparent' }}>
-                <td style={tableCellStyle}>{metric}</td>
-                <td style={tableCellStyle}>{meaning}</td>
+                <td style={tableCellStyle}>{t(`explore.howItWorks.measuring.rows.${metric}.name`)}</td>
+                <td style={tableCellStyle}>{t(`explore.howItWorks.measuring.rows.${metric}.text`)}</td>
               </tr>
             ))}
           </tbody>
@@ -467,27 +467,23 @@ export function MeasuringLearningSection() {
       }}>
         <Image
           src="/figures/efficacy-overview.svg"
-          alt="First-pass and second-pass rates across all learners, with Math Academy parity markers"
+          alt={t('explore.howItWorks.measuring.figureAlt')}
           width={1198}
           height={778}
           style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
         />
       </div>
       <p style={bodyStyle}>
-        These are usage metrics, not an efficacy claim: no control group, no
-        randomisation. Compare within a student over weeks, not across learners
-        at different frontiers — and always read a weekly rate alongside its
-        active-student count, since a week with three attempts can show 0% or
-        100% by accident.
+        {t('explore.howItWorks.measuring.p2')}
       </p>
       <p style={{ fontFamily: monoFont, fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.7 }}>
-        The figure above refreshes weekly from the live product-wide log — read
-        it with its sample size, which rides in the caption. Early numbers move
-        a lot; that is normal, not a verdict. Your live per-student numbers are
-        on your{' '}
-        <a href="/profile#efficacy" className="link-underline" style={{ color: 'var(--accent-blue)' }}>Profile</a>,
-        and the full methodology with regeneration commands lives in{' '}
-        <a href="/docs/efficacy" className="link-underline" style={{ color: 'var(--accent-blue)' }}>Docs</a>.
+        <SlotText
+          text={t('explore.howItWorks.measuring.p3')}
+          slots={{
+            profile: <a href="/profile#efficacy" className="link-underline" style={{ color: 'var(--accent-blue)' }}>{t('explore.howItWorks.measuring.profileLink')}</a>,
+            docs: <a href="/docs/efficacy" className="link-underline" style={{ color: 'var(--accent-blue)' }}>{t('explore.howItWorks.measuring.docsLink')}</a>,
+          }}
+        />
       </p>
     </section>
   )

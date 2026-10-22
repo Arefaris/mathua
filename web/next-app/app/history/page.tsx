@@ -9,12 +9,15 @@ import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
 import AttemptList from '../../components/AttemptList'
 import { getAttempts, type AttemptRecord } from '../../lib/api'
+import { useT } from '../../lib/i18n'
+import { sourceName } from '../../lib/accountNames'
 
 const PAGE_SIZE = 50
 
 const SOURCES = ['all', 'diagnostic', 'quiz', 'practice', 'review'] as const
 
 export default function HistoryPage() {
+  const t = useT()
   const [incorrectOnly, setIncorrectOnly] = useState(true)
   const [source, setSource] = useState<(typeof SOURCES)[number]>('all')
   const [attempts, setAttempts] = useState<AttemptRecord[]>([])
@@ -37,12 +40,12 @@ export default function HistoryPage() {
       setTotal(res.total)
       setAttempts(prev => (append ? [...prev, ...res.attempts] : res.attempts))
     } catch {
-      setError('Couldn\u2019t load your history. Sign in to see answers tied to your account.')
+      setError(t('account.history.error'))
     } finally {
       setLoading(false)
       setLoadingMore(false)
     }
-  }, [source, incorrectOnly])
+  }, [source, incorrectOnly, t])
 
   useEffect(() => {
     void load(0, false)
@@ -55,12 +58,12 @@ export default function HistoryPage() {
         <section className="pt-8 min-w-0 overflow-hidden">
           <span className="flex mb-4">
             <Link href="/profile" className="text-mathua-secondary text-sm hover:text-mathua-primary">
-              ← Back
+              ← {t('common.action.back')}
             </Link>
           </span>
-          <SectionHeader label="History" title="Every question you've answered" />
+          <SectionHeader label={t('account.history.label')} title={t('account.history.title')} />
           <p className="text-mathua-secondary text-sm text-center max-w-[600px] mx-auto mt-2 mb-6 px-2">
-            Every question you have answered, with your answer next to the correct one and the worked solution. Filter to the ones you missed to see what is worth revisiting.
+            {t('account.history.intro')}
           </p>
 
           <div className="max-w-2xl mx-auto min-w-0">
@@ -78,13 +81,13 @@ export default function HistoryPage() {
                         : 'border-mathua-border text-mathua-muted hover:text-mathua-primary'
                     }`}
                   >
-                    {m === 'incorrect' ? 'Missed' : 'All'}
+                    {m === 'incorrect' ? t('account.history.missed') : t('account.history.all')}
                   </button>
                 )
               })}
             </div>
             <div className="flex gap-2 flex-wrap mb-6 items-center">
-              <span className="font-mono text-[10px] text-mathua-muted uppercase tracking-wider">Source:</span>
+              <span className="font-mono text-[10px] text-mathua-muted uppercase tracking-wider">{t('account.history.source')}</span>
               {SOURCES.map(s => (
                 <button
                   key={s}
@@ -96,26 +99,26 @@ export default function HistoryPage() {
                       : 'border-mathua-border text-mathua-muted hover:text-mathua-primary'
                   }`}
                 >
-                  {s}
+                  {sourceName(s)}
                 </button>
               ))}
             </div>
 
             {loading ? (
               <div className="text-center py-8">
-                <Loading label="LOADING HISTORY" />
+                <Loading label={t('account.history.loading')} />
               </div>
             ) : error ? (
               <div className="text-center py-8">
                 <p className="text-mathua-muted text-sm">{error}</p>
                 <Link href="/login" className="text-mathua-blue text-sm hover:underline mt-4 inline-block">
-                  Sign in →
+                  {t('common.action.signIn')} →
                 </Link>
               </div>
             ) : (
               <>
                 <p className="font-mono text-[11px] text-mathua-muted mb-3">
-                  Showing {attempts.length} of {total}
+                  {t('account.history.showing', { shown: attempts.length, total })}
                 </p>
                 <AttemptList attempts={attempts} />
                 {attempts.length < total && (
@@ -126,7 +129,7 @@ export default function HistoryPage() {
                       disabled={loadingMore}
                       className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 h-11 font-mono text-xs disabled:opacity-50"
                     >
-                      {loadingMore ? 'Loading…' : 'Load more'}
+                      {loadingMore ? t('common.status.loading') : t('account.history.loadMore')}
                     </button>
                   </div>
                 )}

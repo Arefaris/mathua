@@ -2,6 +2,7 @@
 
 import { ChevronDown, ChevronUp } from './icons'
 import { useChrome } from '../hooks/useChrome'
+import { useT } from '../lib/i18n'
 
 // The chrome's tap control. It has to outlive the bars it controls: when they
 // are off screen there is nothing left to tap, so both of these stay put and one
@@ -18,6 +19,7 @@ const BAR_OFFSET = 'max(12px, env(safe-area-inset-bottom))'
 const BAR_HEIGHT = 56
 
 export default function ChromeToggle() {
+  const t = useT()
   const { visible, toggle, hasChrome, hasTabs } = useChrome()
 
   // Nothing to hide on a page without chrome (mobile /profile has neither a
@@ -48,7 +50,7 @@ export default function ChromeToggle() {
         type="button"
         onClick={toggle}
         aria-expanded={visible}
-        aria-label={visible ? 'Hide navigation' : 'Show navigation'}
+        aria-label={visible ? t('shell.chrome.hide') : t('shell.chrome.show')}
         data-testid="chrome-toggle"
         className="lg:hidden fixed left-1/2 z-40 flex size-11 -translate-x-1/2 items-center justify-center rounded-full border border-mathua-border bg-transparent text-mathua-muted transition-[bottom] duration-300 ease-out active:text-mathua-blue motion-reduce:transition-none"
         style={{ bottom: chevronBottom }}

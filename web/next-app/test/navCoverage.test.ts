@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { en } from '../lib/i18n/messages/en'
 
 // Every page must offer a way off itself. A page that renders neither a Header nor the bottom
 // tabs is a navigation dead end: the learner arrives there and cannot reach anything else.
@@ -35,6 +36,39 @@ const REDIRECT_STUBS = new Set(['concept', 'session', 'study'])
  * redirect, or a back link. `←` is the project's documented back-link glyph (AGENTS.md allows
  * arrows as typography), so its presence is the signal.
  */
+// The text of the interface moved into the dictionary, so a scan of the source for a glyph or a
+// label has to resolve the key it passes to t(). Keys whose English value carries the arrow are
+// the back links; this is the same invariant, read one step further.
+function dictionaryEntries(tree: unknown, prefix = ''): [string, string][] {
+  return Object.entries(tree as Record<string, unknown>).flatMap(([k, v]) => {
+    const key = prefix ? `${prefix}.${k}` : k
+    if (typeof v === 'string') return [[key, v] as [string, string]]
+    return v && typeof v === 'object' ? dictionaryEntries(v, key) : []
+  })
+}
+const ENGLISH = new Map(dictionaryEntries(en))
+const usesKey = (src: string, key: string) => src.includes(`'${key}'`)
+const usesArrowKey = (src: string) => [...ENGLISH].some(([key, text]) => text.includes('←') && usesKey(src, key))
+
+/**
+ * A page that exports `metadata` cannot call hooks, so its body can live in a client component
+ * beside it (contact/ContactContent.tsx). The way off is then in that file, so a route is read as
+ * its page plus the route-local modules the page imports. Only those: a sibling file the page does
+ * not import renders nothing for this route.
+ */
+function routeSource(page: string): string {
+  const src = readFileSync(page, 'utf8')
+  const local = [...src.matchAll(/from '\.\/([A-Za-z0-9]+)'/g)].map(m => join(dirname(page), `${m[1]}.tsx`))
+  const found = local.filter(f => {
+    try {
+      return statSync(f).isFile()
+    } catch {
+      return false
+    }
+  })
+  return [src, ...found.map(f => readFileSync(f, 'utf8'))].join('\n')
+}
+
 function hasWayOff(src: string): boolean {
   // Imports are stripped first, and the two chrome components are matched as rendered tags.
   // Both details were found by testing this guard against a deliberate regression: matching the
@@ -48,7 +82,7 @@ function hasWayOff(src: string): boolean {
   // back-link glyph. The exemption is verified, not assumed.
   const body = src.replace(/^import .*$/gm, '')
   return /<Header\b/.test(body) || /<BottomTabs\b/.test(body) || /\bredirect\(/.test(body)
-    || /←/.test(body) || /<DocPage\b/.test(body)
+    || /←/.test(body) || usesArrowKey(body) || /<DocPage\b/.test(body)
 }
 
 function pageFiles(dir: string): string[] {
@@ -72,7 +106,7 @@ describe('every page offers navigation', () => {
   it('renders Header or BottomTabs on every page that is not a redirect stub', () => {
     const bare = routes
       .filter(r => !REDIRECT_STUBS.has(r.split('/').slice(-2)[0]))
-      .filter(r => !hasWayOff(readFileSync(r, 'utf8')))
+      .filter(r => !hasWayOff(routeSource(r)))
       .map(r => '/' + r.split('/').slice(1, -1).join('/'))
 
     // The sidebar shell carries no navigation of its own on mobile, so it does not satisfy this.
@@ -83,7 +117,7 @@ describe('every page offers navigation', () => {
     // The pages above satisfy this guard by rendering <DocPage>, so the shell has to carry the
     // way off. Without this, the exemption would pass pages that render no navigation at all.
     const shell = readFileSync(join(process.cwd(), 'components/DocPage.tsx'), 'utf8')
-    expect(shell, 'DocPage must render the ← back link').toMatch(/←/)
+    expect(shell, 'DocPage must render the ← back link').toSatisfy((src: string) => /←/.test(src) || usesArrowKey(src))
   })
 
   it('treats the exempt routes as redirect stubs, so the allowance cannot rot', () => {
@@ -113,12 +147,15 @@ describe('theme switching is reachable where it is needed', () => {
     // hole above: valid code, no error, a capability gone.
     const header = readFileSync(join(process.cwd(), 'components/Header.tsx'), 'utf8')
     expect(header).toMatch(/toggleTheme/)
-    expect(header).toMatch(/aria-label="Toggle theme"/)
+    // The name is a dictionary key now; resolve it so the guard still asserts the English text.
+    expect(header).toMatch(/aria-label=\{t\('shell\.header\.toggleTheme'\)\}/)
+    expect(ENGLISH.get('shell.header.toggleTheme')).toBe('Toggle theme')
   })
 
   it('gives the profile sidebar its own theme control', () => {
     const sidebar = readFileSync(join(process.cwd(), 'components/app-sidebar.tsx'), 'utf8')
     expect(sidebar).toMatch(/toggleTheme/)
-    expect(sidebar).toMatch(/aria-label="Toggle theme"/)
+    expect(sidebar).toMatch(/aria-label=\{t\('shell\.sidebar\.toggleTheme'\)\}/)
+    expect(ENGLISH.get('shell.sidebar.toggleTheme')).toBe('Toggle theme')
   })
 })

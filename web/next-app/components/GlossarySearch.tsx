@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import MathInput from './math/MathInput'
 import { Plus } from './icons'
-import { GLOSSARY_CATEGORIES } from '../lib/glossary/categories'
+import { GLOSSARY_CATEGORIES, categoryDescription, categoryLabel } from '../lib/glossary/categories'
+import { useT } from '../lib/i18n'
 import type { GlossaryCategoryId } from '../lib/glossary/types'
 
 export type GlossaryCategoryFilter = GlossaryCategoryId | 'all'
@@ -46,6 +47,7 @@ export default function GlossarySearch({
   onMathChange,
   onClear,
 }: GlossarySearchProps) {
+  const t = useT()
   const active = query.trim() !== '' || mathLatex.trim() !== '' || category !== 'all'
   // Category chips hide behind a Tags toggle: nine chips eat a full phone
   // screen before a single result. The toggle is a real button (keyboard
@@ -53,7 +55,7 @@ export default function GlossarySearch({
   const [tagsOpen, setTagsOpen] = useState(false)
   return (
     <div className="space-y-3">
-      <div role="group" aria-label="Search input type" className="flex gap-2">
+      <div role="group" aria-label={t('explore.glossary.search.inputType')} className="flex gap-2">
         {(['text', 'math'] as const).map(m => (
           <button
             key={m}
@@ -66,7 +68,7 @@ export default function GlossarySearch({
                 : 'border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue'
             }`}
           >
-            {m === 'text' ? 'Text' : 'Math: f(x)'}
+            {m === 'text' ? t('explore.glossary.search.text') : t('explore.glossary.search.math')}
           </button>
         ))}
       </div>
@@ -75,7 +77,7 @@ export default function GlossarySearch({
           {mode === 'text' ? (
             <>
               <label htmlFor="glossary-search" className="sr-only">
-                Search symbols, names or meanings
+                {t('explore.glossary.search.label')}
               </label>
               <input
                 id="glossary-search"
@@ -84,7 +86,7 @@ export default function GlossarySearch({
                 spellCheck={false}
                 value={query}
                 onChange={e => onQueryChange(e.target.value)}
-                placeholder="Search a symbol, name or meaning — e.g. ∀, integral, lambda"
+                placeholder={t('explore.glossary.search.placeholder')}
                 className="w-full border border-mathua-border bg-mathua-surface px-4 py-2 font-mono text-sm text-mathua-primary placeholder:text-mathua-muted focus:border-mathua-blue focus:outline-none min-h-[44px]"
               />
             </>
@@ -92,8 +94,8 @@ export default function GlossarySearch({
             <MathInput
               value={mathLatex}
               mode="algebra"
-              ariaLabel="Search by math notation"
-              placeholder="Type a symbol, e.g. ∫ or \alpha"
+              ariaLabel={t('explore.glossary.search.mathLabel')}
+              placeholder={t('explore.glossary.search.mathPlaceholder')}
               onChange={v => onMathChange(v.latex)}
             />
           )}
@@ -104,7 +106,7 @@ export default function GlossarySearch({
             onClick={onClear}
             className="shrink-0 border border-mathua-border px-4 py-2 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue min-h-[44px]"
           >
-            Clear search and filters
+            {t('explore.glossary.clear')}
           </button>
         )}
       </div>
@@ -122,10 +124,10 @@ export default function GlossarySearch({
             aria-hidden="true"
             className={`transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none ${tagsOpen ? 'rotate-45' : ''}`}
           />
-          Tags
+          {t('explore.glossary.search.tags')}
         </button>
         {tagsOpen && (
-          <div id="glossary-tags" className="flex flex-wrap gap-2 mt-2" role="group" aria-label="Filter by category">
+          <div id="glossary-tags" className="flex flex-wrap gap-2 mt-2" role="group" aria-label={t('explore.glossary.search.filterGroup')}>
         <button
           type="button"
           onClick={() => onCategoryChange('all')}
@@ -136,7 +138,7 @@ export default function GlossarySearch({
               : 'border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue'
           }`}
         >
-          All
+          {t('explore.glossary.search.all')}
         </button>
         {GLOSSARY_CATEGORIES.map(c => (
           <button
@@ -144,14 +146,14 @@ export default function GlossarySearch({
             type="button"
             onClick={() => onCategoryChange(c.id)}
             aria-pressed={category === c.id}
-            title={c.description}
+            title={categoryDescription(c.id)}
             className={`border px-3 py-1 font-mono text-[11px] min-h-[36px] transition-colors ${
               category === c.id
                 ? 'border-mathua-blue text-mathua-blue'
                 : 'border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue'
             }`}
           >
-            {c.label}
+            {categoryLabel(c.id)}
           </button>
         ))}
           </div>
@@ -159,13 +161,9 @@ export default function GlossarySearch({
       </div>
 
       <p role="status" aria-live="polite" className="font-mono text-[11px] text-mathua-muted">
-        {resultCount === 0
-          ? '0 entries'
-          : resultCount === 1
-            ? '1 entry'
-            : rangeEnd - rangeStart + 1 === resultCount
-              ? `${resultCount} entries`
-              : `Showing ${rangeStart}–${rangeEnd} of ${resultCount} entries`}
+        {rangeEnd - rangeStart + 1 === resultCount || resultCount === 0
+          ? t('explore.glossary.search.entries', { count: resultCount })
+          : t('explore.glossary.search.showing', { start: rangeStart, end: rangeEnd, count: resultCount })}
       </p>
     </div>
   )

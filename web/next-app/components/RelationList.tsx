@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/learnReturn'
+import { useT } from '../lib/i18n'
 
 /**
  * One DAG-neighbourhood list on the reference page: the direct prerequisites ("Depends on") or
@@ -34,13 +35,14 @@ interface Props {
 }
 
 export default function RelationList({ id, heading, items, emptyText, loading = false, returnStack = [] }: Props) {
+  const t = useT()
   return (
     <section id={id} aria-label={heading} className="min-w-0 scroll-mt-24">
       <h2 className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted">
         {heading}
       </h2>
       {loading ? (
-        <p className="mt-2 font-mono text-[11px] text-mathua-muted">Loading…</p>
+        <p className="mt-2 font-mono text-[11px] text-mathua-muted">{t('common.status.loading')}</p>
       ) : items.length === 0 ? (
         <p className="mt-2 font-mono text-[11px] text-mathua-muted">{emptyText}</p>
       ) : (
@@ -65,7 +67,7 @@ export default function RelationList({ id, heading, items, emptyText, loading = 
                   )}
                 </span>
                 <span className="shrink-0 font-mono text-[11px] text-mathua-blue whitespace-nowrap group-hover:underline">
-                  Study →
+                  {t('learn.relation.study')}
                 </span>
               </Link>
             </li>

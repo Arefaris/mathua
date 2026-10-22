@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from 'react'
 import { submitReport } from '../lib/api'
+import { useT } from '../lib/i18n'
 
 const MAX = 2000
 const MIN = 10
@@ -20,6 +21,7 @@ const MIN = 10
 // server's per-reporter limiter and the per-IP write limiter cover the abuse that
 // follows from accepting anonymous text.
 export default function ContactBox() {
+  const t = useT()
   const fieldId = useId()
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
@@ -47,8 +49,8 @@ export default function ContactBox() {
       const message = err instanceof Error ? err.message : ''
       setError(
         message.includes('429')
-          ? 'Too many messages in the last hour. Try again later.'
-          : 'The message did not send. Try again, or use the X link below.',
+          ? t('shell.contact.box.tooMany')
+          : t('shell.contact.box.failed'),
       )
     } finally {
       setBusy(false)
@@ -59,14 +61,14 @@ export default function ContactBox() {
     return (
       <div className="border border-mathua-border bg-mathua-surface p-4">
         <p role="status" className="font-mono text-xs text-mathua-primary">
-          Message received. It is in the queue and will be read.
+          {t('shell.contact.box.received')}
         </p>
         <button
           type="button"
           onClick={() => setSent(false)}
           className="mt-3 border border-mathua-border px-3 h-9 font-mono text-xs text-mathua-muted hover:text-mathua-blue transition-colors"
         >
-          Write another
+          {t('shell.contact.box.writeAnother')}
         </button>
       </div>
     )
@@ -75,11 +77,10 @@ export default function ContactBox() {
   return (
     <form onSubmit={send} className="border border-mathua-border bg-mathua-surface p-4">
       <label htmlFor={fieldId} className="font-mono text-[10px] uppercase tracking-wider text-mathua-secondary">
-        Your message
+        {t('shell.contact.box.label')}
       </label>
       <p id={`${fieldId}-hint`} className="mt-1 font-mono text-[10px] leading-relaxed text-mathua-muted">
-        Say what happened and where. Do not include a password, yours or anyone else&rsquo;s.
-        If you need an answer, message me on X instead.
+        {t('shell.contact.box.hint')}
       </p>
       <textarea
         id={fieldId}
@@ -90,13 +91,13 @@ export default function ContactBox() {
         required
         aria-describedby={`${fieldId}-hint ${fieldId}-count`}
         className="mt-2 w-full resize-y border border-mathua-border bg-mathua-bg px-2 py-2 font-mono text-xs text-mathua-primary outline-none placeholder:text-mathua-muted focus:border-mathua-blue"
-        placeholder="What went wrong, and on which page."
+        placeholder={t('shell.contact.box.placeholder')}
       />
       <div className="mt-1 flex items-baseline justify-between gap-3 font-mono text-[10px] text-mathua-muted">
         <span id={`${fieldId}-count`}>
           {text.length}/{MAX}
         </span>
-        <span>{trimmed.length > 0 && trimmed.length < MIN ? `at least ${MIN} characters` : ''}</span>
+        <span>{trimmed.length > 0 && trimmed.length < MIN ? t('shell.contact.box.minLength', { count: MIN }) : ''}</span>
       </div>
       {error && (
         <p role="alert" className="mt-2 font-mono text-[11px] text-mathua-red">
@@ -108,7 +109,7 @@ export default function ContactBox() {
         disabled={!canSend}
         className="mt-3 border border-mathua-blue px-3 h-9 font-mono text-xs text-mathua-blue hover:bg-mathua-blue-faint transition-colors disabled:border-mathua-border disabled:text-mathua-muted disabled:hover:bg-transparent"
       >
-        {busy ? 'Sending...' : 'Send message'}
+        {busy ? t('shell.contact.box.sending') : t('shell.contact.box.send')}
       </button>
     </form>
   )

@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
@@ -254,6 +255,7 @@ const SidebarTrigger = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, onClick, children, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
+  const t = useT()
   return (
     <Button
       ref={ref}
@@ -265,13 +267,13 @@ const SidebarTrigger = React.forwardRef<
         onClick?.(event)
         toggleSidebar()
       }}
-      aria-label="Toggle sidebar"
+      aria-label={t('shell.sidebar.toggle')}
       {...props}
     >
       {children ?? (
         <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center font-mono text-sm text-mathua-blue">λ</span>
       )}
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">{t('shell.sidebar.toggle')}</span>
     </Button>
   )
 })
@@ -280,14 +282,15 @@ SidebarTrigger.displayName = 'SidebarTrigger'
 const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<'button'>>(
   ({ className, ...props }, ref) => {
     const { toggleSidebar } = useSidebar()
+    const t = useT()
     return (
       <button
         ref={ref}
         data-sidebar="rail"
-        aria-label="Toggle Sidebar"
+        aria-label={t('shell.sidebar.toggle')}
         tabIndex={-1}
         onClick={toggleSidebar}
-        title="Toggle Sidebar"
+        title={t('shell.sidebar.toggle')}
         className={cn(
           'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex',
           '[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize',

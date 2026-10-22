@@ -14,6 +14,7 @@ import {
 import '@xyflow/react/dist/base.css'
 import { useTheme } from '../hooks/useTheme'
 import { themeColors } from './FlowDiagram'
+import { useT } from '../lib/i18n'
 
 const monoFont = "var(--font-jetbrains-mono), 'JetBrains Mono', monospace"
 
@@ -96,6 +97,7 @@ const nodeTypes = {
 }
 
 export default function DiagnosticFlow() {
+  const t = useT()
   const { theme, mounted } = useTheme()
   const isDark = theme === 'dark'
   const c = themeColors[isDark ? 'dark' : 'light']
@@ -117,12 +119,12 @@ export default function DiagnosticFlow() {
 
   const initialNodes: Node[] = [
     { id: 'start', type: 'startNode', position: { x: CX - 14, y: yStart }, data: { label: '' } },
-    { id: 'cover', type: 'decisionNode', position: { x: midX, y: yCover }, data: { label: 'Build covering set\nroots + evenly spaced\ntarget 30 concepts' } },
-    { id: 'pick', type: 'processNode', position: { x: midX, y: yPick }, data: { label: 'Pick highest\ninformation gain' } },
-    { id: 'question', type: 'processNode', position: { x: midX, y: yQuestion }, data: { label: 'Ask one question\nrecord evidence' } },
-    { id: 'propagate', type: 'processNode', position: { x: midX, y: yPropagate }, data: { label: 'Propagate evidence\n±0.3 to neighbours' } },
-    { id: 'stop', type: 'decisionNode', position: { x: midX, y: yStop }, data: { label: 'Cover done AND\nasked ≥ 25,\nor asked ≥ 45' } },
-    { id: 'frontier', type: 'terminalNode', position: { x: midX, y: yFrontier }, data: { label: 'FRONTIER AT\nLARGEST BELIEF DROP' } },
+    { id: 'cover', type: 'decisionNode', position: { x: midX, y: yCover }, data: { label: t('goals.flow.cover') } },
+    { id: 'pick', type: 'processNode', position: { x: midX, y: yPick }, data: { label: t('goals.flow.pick') } },
+    { id: 'question', type: 'processNode', position: { x: midX, y: yQuestion }, data: { label: t('goals.flow.question') } },
+    { id: 'propagate', type: 'processNode', position: { x: midX, y: yPropagate }, data: { label: t('goals.flow.propagate') } },
+    { id: 'stop', type: 'decisionNode', position: { x: midX, y: yStop }, data: { label: t('goals.flow.stop') } },
+    { id: 'frontier', type: 'terminalNode', position: { x: midX, y: yFrontier }, data: { label: t('goals.flow.frontier') } },
   ]
 
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
@@ -139,19 +141,19 @@ export default function DiagnosticFlow() {
       { id: 'e-propagate-stop', source: 'propagate', target: 'stop', style: edgeStyle(c.borderStrong) },
       {
         id: 'e-stop-frontier', source: 'stop', target: 'frontier',
-        label: 'Yes', animated: true,
+        label: t('goals.flow.yes'), animated: true,
         labelStyle: labelStyle(c.accentGreen),
         style: edgeStyle(c.accentGreen),
       },
       {
         id: 'e-stop-pick', source: 'stop', target: 'pick',
-        label: 'No',
+        label: t('goals.flow.no'),
         labelStyle: labelStyle(c.accentBlue),
         style: { ...edgeStyle(c.accentBlue), strokeDasharray: '5 5' },
         type: 'smoothstep',
       },
     ]
-  }, [c])
+  }, [c, t])
 
   const [edges, setEdges, onEdgesChange] = useEdgesState(styledEdges)
 

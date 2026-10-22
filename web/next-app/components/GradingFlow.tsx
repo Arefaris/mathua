@@ -1,16 +1,18 @@
 'use client'
 
 import FlowDiagram, { type FlowNodeDef, type FlowEdgeDef } from './FlowDiagram'
+import { useT } from '../lib/i18n'
 
 export default function GradingFlow() {
+  const t = useT()
   const nodes: FlowNodeDef[] = [
-    { id: 'input', label: 'Student\nAnswer' },
+    { id: 'input', label: t('explore.howItWorks.flow.answer') },
     { id: 'router', label: 'Router', variant: 'decision' },
-    { id: 'numeric', label: 'Numeric\nGo' },
-    { id: 'sympy', label: 'SymPy\nPython' },
-    { id: 'choice', label: 'Choice\nGo' },
-    { id: 'comp', label: 'Comparison\nGo' },
-    { id: 'order', label: 'Ordering\nGo' },
+    { id: 'numeric', label: t('explore.howItWorks.flow.numeric') },
+    { id: 'sympy', label: t('explore.howItWorks.flow.sympy') },
+    { id: 'choice', label: t('explore.howItWorks.flow.choice') },
+    { id: 'comp', label: t('explore.howItWorks.flow.comparison') },
+    { id: 'order', label: t('explore.howItWorks.flow.ordering') },
   ]
 
   const edges: FlowEdgeDef[] = [

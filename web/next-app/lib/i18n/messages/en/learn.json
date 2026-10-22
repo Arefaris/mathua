@@ -1,0 +1,330 @@
+{
+  "page": {
+    "backToProfile": "← Profile"
+  },
+  "review": {
+    "back": "← Back",
+    "footnote": "Reviews record progress and XP like practice.",
+    "header": {
+      "label": "Review",
+      "title": "Due for review"
+    },
+    "briefingEyebrow": "Before you start",
+    "start": "Start review →",
+    "loading": "LOADING REVIEW",
+    "empty": {
+      "title": "All caught up",
+      "body": "Nothing is due for review right now. New reviews appear here as memories fade.",
+      "more": "Answer more questions →"
+    },
+    "backToProfileArrow": "Back to Profile →",
+    "done": {
+      "label": "Review complete",
+      "summary": "Reviews record progress like practice.",
+      "summaryXp": "Reviews record progress like practice · +{xp} XP this run.",
+      "again": "Review again →",
+      "history": "Every question you've answered →"
+    },
+    "questionLabel": "Review question {number}",
+    "check": "Check Answer",
+    "verdictCorrect": "✓ Correct!",
+    "verdictWrong": "✗ Not quite",
+    "restart": "Restart review",
+    "wrappingUp": "Wrapping up…",
+    "errors": {
+      "start": "Review failed to start — try again.",
+      "ungraded": "Grading is temporarily unavailable — please try again.",
+      "submit": "Failed to submit review answer."
+    }
+  },
+  "nextUp": {
+    "heading": "Next up",
+    "more": "Or pick something else ({count})"
+  },
+  "briefing": {
+    "diagnostic": {
+      "pace": {
+        "title": "25–45 questions · about 30–45 minutes",
+        "detail": "The test adapts to you. Clear answers mean fewer questions."
+      },
+      "honest": {
+        "title": "Answer from what you know — no searching",
+        "detail": "Honest answers put you at the right starting point. Looked-up answers put you in the wrong place."
+      },
+      "speed": {
+        "title": "Speed counts",
+        "detail": "Fast correct answers show mastery and shorten the test."
+      },
+      "pause": {
+        "title": "Pause anytime",
+        "detail": "Leave and pick up where you stopped."
+      }
+    },
+    "quiz": {
+      "format": {
+        "title": "Up to 5 questions · timed · closed book",
+        "detail": "Each question has its own timer. Keep books and notes shut."
+      },
+      "scope": {
+        "title": "Covers what you just learned",
+        "detail": "Questions come from your recent lessons."
+      },
+      "miss": {
+        "title": "A wrong answer shows you why",
+        "detail": "The worked solution appears straight away, and anything worth revisiting is listed when the quiz ends."
+      },
+      "xp": {
+        "title": "XP for each correct answer · retake anytime",
+        "detail": "Faster answers and longer streaks earn more. No penalty for retaking."
+      }
+    },
+    "review": {
+      "due": {
+        "title": "Only what is due for review",
+        "detail": "Questions come from concepts whose memory is fading."
+      },
+      "honest": {
+        "title": "Answer from what you remember — no searching",
+        "detail": "Honest answers recalibrate your next review date."
+      },
+      "speed": {
+        "title": "Speed counts",
+        "detail": "Fast correct answers show the memory is solid."
+      },
+      "xp": {
+        "title": "XP for each correct answer",
+        "detail": "Reviews record progress and XP like practice."
+      }
+    }
+  },
+  "relation": {
+    "study": "Study →"
+  },
+  "shelf": {
+    "allLearned": {
+      "badge": "All learned",
+      "title": "Concept graph",
+      "detail": "Nothing is due right now — the graph shows what builds on what you have",
+      "cta": "See the graph →"
+    }
+  },
+  "prereq": {
+    "ariaLabel": "Prerequisites",
+    "heading": "Prerequisites ({count})",
+    "defaultIntro": "You're not ready to practise this topic yet. Study the prerequisites below, then return to check your readiness.",
+    "required": "Required prerequisite",
+    "study": "Study →",
+    "state": {
+      "mastered": "Mastered",
+      "dueForReview": "Mastered · due a check",
+      "inProgress": "In progress",
+      "notStarted": "Not started",
+      "locked": "Locked"
+    }
+  },
+  "prereqDialog": {
+    "title": "Prerequisite path",
+    "description": "You're not ready to practise this topic yet. Study the prerequisites below, then return to check readiness.",
+    "heading": "Prerequisites",
+    "loading": "Loading prerequisites…",
+    "error": "Couldn't load this topic's prerequisites.",
+    "retry": "Retry",
+    "empty": "No prerequisites listed"
+  },
+  "choices": {
+    "ariaLabel": "Answer choices"
+  },
+  "submitError": {
+    "sessionGone": "Session expired — the server restarted and forgot this run.",
+    "throttled": "Saving is catching up — your answer is kept and will be sent again.",
+    "failed": "Couldn't submit your answer — it's still in the box.",
+    "retry": "Retry",
+    "retrying": "Retrying…",
+    "skip": "Skip →",
+    "noSkips": "No skips left — restart for a fresh run."
+  },
+  "answer": {
+    "label": "Your answer",
+    "placeholder": "Your answer",
+    "placeholderDots": "Your answer...",
+    "correct": "Correct!",
+    "notQuite": "Not quite.",
+    "nextArrow": "Next →",
+    "backToProfile": "Back to Profile",
+    "correctCount": "{correct}/{total} correct"
+  },
+  "study": {
+    "backTo": "← Back to {label}",
+    "backToPrevious": "← Back to previous topic",
+    "reference": "Reference",
+    "state": {
+      "mastered": "Mastered",
+      "dueCheck": "Due a check",
+      "inProgress": "In progress",
+      "notStarted": "Not started",
+      "locked": "Locked"
+    },
+    "explorePrereqs": "Explore prerequisites",
+    "practise": "Practise this concept →",
+    "statusFailed": "Couldn't refresh this concept's status. You can still read the material below.",
+    "dependsOn": "Depends on",
+    "noPrereqs": "No prerequisites listed",
+    "unlocks": "Unlocks",
+    "noDependents": "No dependent concepts listed",
+    "ready": {
+      "title": "Ready to practise?",
+      "body": "Work toward mastery in the assessed learning flow. Reading here does not count as progress."
+    }
+  },
+  "reference": {
+    "loadFailed": "Couldn't load the reference for {label}. The questions below still work.",
+    "unavailable": "Detailed study material is not available for this concept yet. You can still explore its prerequisites and related concepts, return to your original topic, or check whether practice is available.",
+    "workedExamples": "Worked examples ({count})",
+    "workedExample": "Worked example",
+    "also": " · also {names}",
+    "diagramAlt": "Worked diagram for {label}",
+    "fullLesson": "Full lesson",
+    "fullLessonTitled": "Full lesson — {title}",
+    "note": "Reference explains. It does not count as progress — only the questions below move this concept.",
+    "summary": "Reference — the full lesson"
+  },
+  "report": {
+    "menuLabel": "Report options, example {blockId}",
+    "label": "Report a problem",
+    "thanks": "✓ Thanks — reported",
+    "title": "Complain about this question or explanation",
+    "whatsWrong": "What's wrong?",
+    "reasons": {
+      "wrong_answer": "Wrong answer",
+      "bad_explanation": "Bad explanation",
+      "unclear": "Unclear / confusing",
+      "formatting": "Formatting / math rendering",
+      "other": "Other"
+    },
+    "placeholder": "Optional details (what did you expect?)",
+    "error": "Could not send report",
+    "sending": "Sending…",
+    "send": "Send report"
+  },
+  "symbols": {
+    "insert": "Insert {symbol}"
+  },
+  "keyboard": {
+    "tooltip": {
+      "arithmetic": "Numbers, the four operations, fractions and powers",
+      "fractions": "Numerator and denominator, mixed numbers",
+      "algebra": "Letters, numbers, the four operations, structures",
+      "geometry": "Measures, angles, roots and powers",
+      "calculus": "Limits, derivatives, integrals, the four operations"
+    },
+    "aside": {
+      "space": "space",
+      "fraction": "fraction",
+      "squareRoot": "square root",
+      "exponent": "exponent",
+      "emptyFraction": "empty fraction",
+      "scientificNotation": "scientific notation",
+      "limit": "limit",
+      "derivative": "derivative",
+      "absoluteValue": "absolute value"
+    }
+  },
+  "math": {
+    "simplifies": "That simplifies to {value}.",
+    "renderFailed": "Math failed to render ({detail})"
+  },
+  "assistant": {
+    "suggestions": {
+      "what": "What is Mathua?",
+      "start": "Where should I start?"
+    },
+    "areas": {
+      "learn": "Start learning",
+      "diagnose": "Take the diagnostic",
+      "plan": "Plan a goal",
+      "graph": "Concept graph",
+      "glossary": "Glossary"
+    },
+    "limit": "That is today’s limit for the assistant. The rest of Mathua works as usual.",
+    "unavailable": "The assistant is unavailable right now. Everything else still works.",
+    "dialogLabel": "Mathua assistant",
+    "title": "Assistant",
+    "close": "Close assistant",
+    "open": "Open assistant",
+    "connecting": "Connecting to the assistant…",
+    "offline": "The assistant is unavailable right now. These go to the same places:",
+    "consent": {
+      "title": "Before you send a message",
+      "body": "Your text goes to an AI provider so it can answer. Do not type names, email addresses, school details, or anything about another person.",
+      "notSent": "Your answers, progress and account details are not sent. The message is not stored after it is answered. Replies can be wrong.",
+      "checkbox": "I am 13 or older, and I understand this.",
+      "privacy": "Privacy notice"
+    },
+    "intro": "Ask what Mathua is, or where to begin. Answers are short, and you can follow the links.",
+    "thinking": "Thinking…",
+    "placeholder": "Ask about Mathua",
+    "questionLabel": "Your question",
+    "send": "Send"
+  },
+  "stepper": {
+    "loading": "Loading lesson…",
+    "loadFailed": "Failed to load lesson",
+    "chooseAnother": "← Choose another topic",
+    "prereqIntro": {
+      "dueCheck": "You have already learned {names} — a short check is due, or continue anyway.",
+      "allLearned": "You have already learned what this builds on. You can revisit it any time.",
+      "unmet": "This builds on {names}. A quick study helps — or continue anyway."
+    },
+    "section": "Section {number} of {total}",
+    "correctSoFar": "· {correct}/{answered} correct",
+    "xpGained": "· +{xp} XP",
+    "bandTitle": "How you're doing on this concept, from your recent answers. Progress only — mastery is decided separately.",
+    "introFallbackLabel": "Learn",
+    "workedExampleMissing": "Worked example unavailable — start practicing instead.",
+    "diagramAlt": "Diagram for {label}",
+    "thisTopic": "this topic",
+    "subgoals": "Steps ({count})",
+    "subgoal": "Step {number}: ",
+    "next": "Next →",
+    "nextSection": "Next: {label} (worked example)",
+    "kpFallback": "Knowledge point {number}",
+    "halt": "Stepping down a level — easier question below.",
+    "studyPrereq": "Study {title}",
+    "otherTask": "Other task →",
+    "check": "Check",
+    "verdictXp": "✓ +{xp} XP",
+    "verdictCorrect": "✓ Correct",
+    "verdictWrong": "✗ Not quite.",
+    "youAnswered": "you answered “{answer}”",
+    "answerLabel": "Answer: ",
+    "whyCorrect": "Why",
+    "howWrong": "How",
+    "errors": {
+      "exhaustedEnd": "This topic ran out of new questions, so the section ended here.",
+      "exhaustedNothingLeft": "This topic ran out of new questions, so there was nothing left to work through.",
+      "noQuestion": "Could not load a question — check your connection and reload.",
+      "expiredFresh": "That question had expired on the server, so it could not be graded. Here is a fresh one — nothing was recorded.",
+      "expiredNoReplacement": "That question had expired and no replacement could be loaded. Reload to continue.",
+      "unreachable": "Could not reach the server to grade that answer. Check your connection and submit again — nothing was recorded."
+    }
+  },
+  "done": {
+    "complete": "✓ Complete — {correct}/{answered} correct · +{xp} XP · {band}",
+    "scrollUp": "Scroll up to review anything. Reviews are scheduled automatically.",
+    "findingNext": "Finding what's next…",
+    "practiceAgain": "Practice again",
+    "comingUp": "Coming up — unlocks once this concept is mastered",
+    "needs": "Needs: {names}"
+  },
+  "answerFormat": {
+    "numeric": "Answer with a number, fraction, or mixed number (e.g. 4 1/10)",
+    "expression": "Answer as an expression",
+    "symbolic": "Answer in simplest form",
+    "multipleChoice": "Type the exact answer",
+    "comparison": "Answer <, >, or =",
+    "ordering": "Answer in order, separated by commas",
+    "tuple": "Separate values with commas, e.g. 2, 3 or (2, 3)",
+    "complex": "Answer as a + bi",
+    "default": "Answer in the form shown"
+  }
+}

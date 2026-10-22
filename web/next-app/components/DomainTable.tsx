@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import type { DomainRow, DomainConceptStatus } from '../lib/domainRows'
-import { DOMAIN_STATUS_LABEL, DOMAIN_STATUS_ORDER } from '../lib/domainRows'
+import { DOMAIN_STATUS_ORDER, domainStatusLabel } from '../lib/domainRows'
+import { useT } from '../lib/i18n'
 
 interface Props {
   rows: DomainRow[]
@@ -20,6 +21,7 @@ interface Props {
 // the figure Phase 3 removed from PositionBlock as the one number a learner can neither act on nor
 // change today. Both are fixed upstream in lib/domainRows; nothing here chooses a domain list.
 export default function DomainTable({ rows, onToggle, expanded, links = true }: Props) {
+  const t = useT()
   if (rows.length === 0) return null
 
   return (
@@ -30,7 +32,7 @@ export default function DomainTable({ rows, onToggle, expanded, links = true }: 
         const counts = (
           <>
             {r.mastered}/{r.total} · {pct}%
-            {r.dueForReview > 0 && ` · ${r.dueForReview} due`}
+            {r.dueForReview > 0 && ` · ${t('explore.domainTable.due', { count: r.dueForReview })}`}
           </>
         )
         return (
@@ -69,7 +71,7 @@ export default function DomainTable({ rows, onToggle, expanded, links = true }: 
                     href={`/learn?concept=${encodeURIComponent(r.nextId)}`}
                     className="font-mono text-[10px] text-mathua-blue hover:underline min-w-0 truncate"
                   >
-                    {r.inProgress > 0 || r.dueForReview > 0 ? 'Continue' : 'Start'}: {r.nextLabel}
+                    {t(r.inProgress > 0 || r.dueForReview > 0 ? 'explore.domainTable.continue' : 'explore.domainTable.start', { label: r.nextLabel ?? '' })}
                   </Link>
                 )}
                 {onToggle && (
@@ -79,7 +81,7 @@ export default function DomainTable({ rows, onToggle, expanded, links = true }: 
                     aria-expanded={open}
                     className="font-mono text-[10px] text-mathua-muted hover:text-mathua-blue transition-colors"
                   >
-                    {open ? 'Hide concepts' : `${r.concepts.length} concepts`}
+                    {open ? t('explore.domainTable.hide') : t('common.count.concepts', { count: r.concepts.length })}
                   </button>
                 )}
               </div>
@@ -92,7 +94,7 @@ export default function DomainTable({ rows, onToggle, expanded, links = true }: 
                 return (
                   <div key={st} className="px-3 pb-2 sm:px-[10px] min-w-0">
                     <div className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted mb-1">
-                      {DOMAIN_STATUS_LABEL[st]} ({group.length})
+                      {domainStatusLabel(st)} ({group.length})
                     </div>
                     <ul className="space-y-0.5">
                       {group.map((c) =>

@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import KatexContent from './KatexContent'
 import { parseChoices } from '../lib/choices'
+import { useT } from '../lib/i18n'
 
 interface Props {
   question: string
@@ -14,12 +15,13 @@ interface Props {
 // Tappable options for `multiple_choice` questions that carry an "A) …" list.
 // Renders nothing (caller keeps the free-text input) when there are no options.
 export default function ChoiceOptions({ question, value, onPick, disabled }: Props) {
+  const t = useT()
   const options = useMemo(() => parseChoices(question), [question])
   if (!options) return null
   return (
     <div
       role="group"
-      aria-label="Answer choices"
+      aria-label={t('learn.choices.ariaLabel')}
       className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0"
     >
       {options.map(o => {

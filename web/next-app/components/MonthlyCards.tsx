@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { DailyActivity } from '../lib/api'
-import MonthCard, { MONTH_NAMES } from './MonthCard'
+import MonthCard, { monthName } from './MonthCard'
+import { useLocale, useT } from '../lib/i18n'
 
 interface Props {
   data: DailyActivity[]
@@ -13,6 +14,8 @@ function monthKey(year: number, month: number): string {
 }
 
 export default function MonthlyCards({ data }: Props) {
+  const t = useT()
+  const locale = useLocale()
   // Horizontal month strip, oldest → newest: only months with activity plus
   // the current month as an anchor — never a wall of empty accordions. Every
   // visible month shows its grid (no expand/collapse); the strip opens
@@ -54,22 +57,22 @@ export default function MonthlyCards({ data }: Props) {
             type="button"
             onClick={() => setSelected(clamped - 1)}
             disabled={clamped <= 0}
-            aria-label="Previous month"
+            aria-label={t('goals.activity.previousMonth')}
             className="border border-mathua-border px-4 py-2 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue disabled:opacity-40 min-h-[44px] inline-flex items-center"
           >
-            ‹ Prev
+            {t('goals.activity.prev')}
           </button>
           <span className="font-mono text-xs text-mathua-primary" aria-live="polite">
-            {months.length > 0 ? `${MONTH_NAMES[shown.month]} ${shown.year}` : ''}
+            {months.length > 0 ? `${monthName(shown.month, locale)} ${shown.year}` : ''}
           </span>
           <button
             type="button"
             onClick={() => setSelected(clamped + 1)}
             disabled={clamped >= months.length - 1}
-            aria-label="Next month"
+            aria-label={t('goals.activity.nextMonth')}
             className="border border-mathua-border px-4 py-2 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue disabled:opacity-40 min-h-[44px] inline-flex items-center"
           >
-            Next ›
+            {t('goals.activity.next')}
           </button>
         </div>
         {shown && (

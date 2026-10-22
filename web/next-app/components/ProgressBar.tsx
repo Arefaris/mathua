@@ -1,5 +1,7 @@
 'use client'
 
+import { useT } from '../lib/i18n'
+
 interface ProgressBarProps {
   answered: number
   coverDone: number
@@ -12,17 +14,19 @@ interface ProgressBarProps {
 // (coverDone/coverSize, never decreases); visible copy is just the
 // "Progress bar" label and the question number.
 export default function ProgressBar({ answered, coverDone, coverSize, className = '' }: ProgressBarProps) {
+  const t = useT()
   const safeAnswered = Math.max(0, answered)
   const size = Math.max(0, coverSize)
   const done = Math.min(Math.max(0, coverDone), Math.max(size, 1))
   const pct = size > 0 ? Math.min((done / size) * 100, 100) : 0
   const indeterminate = size <= 0
-  const questionLabel = `Question ${Math.max(safeAnswered, 1)}`
+  const questionLabel = t('account.progressBar.question', { number: Math.max(safeAnswered, 1) })
+  const barLabel = t('account.progressBar.label')
 
   return (
     <div className={`mb-4 ${className}`}>
       <div className="flex justify-between text-[10px] font-mono text-mathua-muted mb-1">
-        <span>Progress bar</span>
+        <span>{barLabel}</span>
         <span aria-live="polite">
           {questionLabel}
         </span>
@@ -30,7 +34,7 @@ export default function ProgressBar({ answered, coverDone, coverSize, className 
       {indeterminate ? (
         <div
           role="progressbar"
-          aria-label="Progress bar"
+          aria-label={barLabel}
           aria-busy="true"
           className="h-1.5 bg-mathua-code rounded-full overflow-hidden relative"
         >
@@ -40,7 +44,7 @@ export default function ProgressBar({ answered, coverDone, coverSize, className 
       ) : (
         <div
           role="progressbar"
-          aria-label="Progress bar"
+          aria-label={barLabel}
           aria-valuemin={0}
           aria-valuemax={size}
           aria-valuenow={done}

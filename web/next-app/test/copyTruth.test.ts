@@ -137,7 +137,9 @@ describe('navigation labels name where they actually go', () => {
     // Review is a Learn sub-mode; "nothing is due" is not a reason to send
     // someone from doing into browsing.
     const host = read(join('app', 'review', 'ReviewHost.tsx'))
-    const emptyState = host.slice(host.indexOf('All caught up'))
+    // The empty state starts at the key for its title ("All caught up" in the dictionary): the
+    // words themselves moved out of the component when the page was translated.
+    const emptyState = host.slice(host.indexOf('learn.review.empty.title'))
     expect(emptyState).not.toMatch(/Open Study/)
     expect(emptyState).not.toMatch(/\/study/)
     expect(emptyState).toMatch(/href="\/learn"/)

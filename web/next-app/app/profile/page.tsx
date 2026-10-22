@@ -21,6 +21,7 @@ import { isNewUser, type Shelf } from '../../lib/nextUp'
 import { fetchShelf } from '../../lib/recommendations'
 import { concepts as conceptCatalog } from '../../lib/conceptData'
 import { HourglassIcon, PauseIcon } from '@animateicons/react/lucide'
+import { useT } from '../../lib/i18n'
 
 // UserInfo is imported rather than redeclared. This page had its own copy of the shape, which
 // is ADR-043's failure mode in its smallest form: a second schema describing the same payload,
@@ -73,6 +74,7 @@ function ProfileShell({
 }
 
 export default function ProfilePage() {
+  const t = useT()
   const { mounted } = useTheme()
 
   const [user, setUser] = useState<UserInfo | null>(null)
@@ -178,7 +180,7 @@ export default function ProfilePage() {
           if (!scoresRes) {
             // 401 or fetch failure — token likely expired (JWT_SECRET rotated) or network.
             // Keep guest-like state so page doesn't hang on "Loading scores…"
-            setError('Session expired or scores unavailable — please sign in again')
+            setError(t('account.profile.sessionExpired'))
           }
           setScores(scoresRes as Scores | null)
           setActivity(activityRes)
@@ -208,14 +210,14 @@ export default function ProfilePage() {
           setWeaknesses(null)
         }
       } catch {
-        if (info) setError('Failed to load profile data')
+        if (info) setError(t('account.profile.loadFailed'))
       } finally {
         setLoading(false)
       }
     }
 
     fetchData()
-  }, [mounted])
+  }, [mounted, t])
 
   const monoFont = "var(--font-jetbrains-mono), 'JetBrains Mono', monospace"
 
@@ -252,21 +254,21 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <ProfileShell name="Guest" studentId={getGuestId() || 'guest'}>
+      <ProfileShell name={t('account.profile.guest')} studentId={getGuestId() || 'guest'}>
           <div id="profile-main" className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
           <div className="border border-mathua-border p-6 text-center bg-mathua-surface min-w-0">
-            <h2 className="font-serif text-[1.2rem] text-mathua-primary mb-2">Welcome to your profile</h2>
-            <p className="font-mono text-xs text-mathua-secondary mb-4">Sign in to track XP, streaks and mastery. Your activity heatmap will appear here once you start practicing.</p>
+            <h2 className="font-serif text-[1.2rem] text-mathua-primary mb-2">{t('account.profile.welcomeTitle')}</h2>
+            <p className="font-mono text-xs text-mathua-secondary mb-4">{t('account.profile.welcomeBody')}</p>
             <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
-              <Link href="/login" className="w-full sm:w-auto border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Sign in</Link>
-              <Link href="/onboard" className="w-full sm:w-auto border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Start diagnostic test →</Link>
-              <Link href="/learn" className="w-full sm:w-auto border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">Try as guest →</Link>
+              <Link href="/login" className="w-full sm:w-auto border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">{t('common.action.signIn')}</Link>
+              <Link href="/onboard" className="w-full sm:w-auto border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">{t('account.profile.startDiagnostic')}</Link>
+              <Link href="/learn" className="w-full sm:w-auto border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">{t('account.profile.tryAsGuest')}</Link>
             </div>
           </div>
 
-          <section id="activity" aria-label="Activity" className="mt-6 min-w-0 scroll-mt-28">
+          <section id="activity" aria-label={t('account.profile.activity')} className="mt-6 min-w-0 scroll-mt-28">
             <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-              Activity
+              {t('account.profile.activity')}
             </h2>
             <div className="w-full max-w-full min-w-0 overflow-hidden">
               <ActivityHeatmap data={activity} />
@@ -288,8 +290,8 @@ export default function ProfilePage() {
             <div style={{ fontFamily: monoFont, fontSize: 13, color: 'var(--text-muted)', textAlign: 'center' }}>
               {error}
               <div className="mt-4 flex gap-3 justify-center">
-                <Link href="/login" className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center">Sign in</Link>
-                <button type="button" onClick={() => window.location.reload()} className="border border-mathua-border text-mathua-secondary px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center">Retry</button>
+                <Link href="/login" className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center">{t('common.action.signIn')}</Link>
+                <button type="button" onClick={() => window.location.reload()} className="border border-mathua-border text-mathua-secondary px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center">{t('account.profile.retry')}</button>
               </div>
             </div>
           </div>
@@ -300,7 +302,7 @@ export default function ProfilePage() {
       <ProfileShell name={user.name} studentId={user.student_id} isAdmin={isStaffRole(user.role)}>
         <div className="mx-auto px-4 sm:px-6 py-20 overflow-x-hidden min-w-0">
           <div style={{ fontFamily: monoFont, fontSize: 13, color: 'var(--text-muted)', textAlign: 'center' }}>
-            Loading scores…
+            {t('account.profile.loadingScores')}
           </div>
         </div>
       </ProfileShell>
@@ -320,7 +322,7 @@ export default function ProfilePage() {
       isAdmin={isStaffRole(user.role)}
     >
         <a href="#profile-main" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-mathua-surface focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-mathua-blue">
-          Skip to profile content
+          {t('account.profile.skipToContent')}
         </a>
         <div id="profile-main" className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden">
           <div className="min-w-0">
@@ -339,17 +341,17 @@ export default function ProfilePage() {
             <>
               {(isNew && placementCompleted === false) && (
                 <Link href="/onboard" className="text-mathua-blue hover:text-mathua-blue-hover">
-                  New here? Take the diagnostic →
+                  {t('account.profile.newHere')}
                 </Link>
               )}
               <Link href="/plan" className="text-mathua-blue hover:text-mathua-blue-hover">
-                Plan your learning →
+                {t('account.profile.plan')}
               </Link>
               {/* /how-it-works was reachable only from the landing-page header and a line on the
                   docs index, so once a learner was inside the app there was no path to the page
                   that explains the numbers on this one. It belongs here, next to Plan. */}
               <Link href="/how-it-works" className="text-mathua-blue hover:text-mathua-blue-hover">
-                How Mathua works →
+                {t('account.profile.howItWorks')}
               </Link>
               {effScores && !isLoggedIn() && (
                 <DailyGoalControl
@@ -368,9 +370,9 @@ export default function ProfilePage() {
         />
 
         {/* Activity is the second thing on the page. */}
-        <section id="activity" aria-label="Activity" className="mt-6 min-w-0 scroll-mt-28">
+        <section id="activity" aria-label={t('account.profile.activity')} className="mt-6 min-w-0 scroll-mt-28">
           <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-            Activity
+            {t('account.profile.activity')}
           </h2>
           <div className="w-full max-w-full min-w-0 overflow-hidden">
             <ActivityHeatmap data={activity} />
@@ -387,11 +389,11 @@ export default function ProfilePage() {
                 aria-hidden="true"
               />
               <span className="min-w-0 break-words [overflow-wrap:anywhere] leading-snug">
-                Paused until {scores.paused_until}: due reviews are hidden
+                {t('account.profile.pausedUntil', { date: scores.paused_until })}
               </span>
             </p>
             <Link href="/settings" className="w-full sm:w-auto sm:shrink-0 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">
-              Resume
+              {t('account.profile.resume')}
             </Link>
           </div>
         )}
@@ -412,11 +414,11 @@ export default function ProfilePage() {
                 aria-hidden="true"
               />
               <span className="min-w-0 break-words [overflow-wrap:anywhere] leading-snug">
-                {dueReviews} concept{dueReviews !== 1 ? 's' : ''} due for review
+                {t('account.profile.dueForReview', { count: dueReviews })}
               </span>
             </span>
             <span className="font-mono text-[11px] text-mathua-blue border border-mathua-blue-faint px-3 py-1.5 shrink-0 inline-flex items-center justify-center min-h-[36px] w-full sm:w-auto text-center whitespace-nowrap">
-              Review Now →
+              {t('account.profile.reviewNow')}
             </span>
           </Link>
         )}
@@ -430,8 +432,8 @@ export default function ProfilePage() {
           <div className="mt-6 w-full min-w-0 overflow-hidden border border-mathua-blue bg-mathua-surface p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="w-full sm:flex-1 min-w-0">
               <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:items-center sm:gap-2 flex-wrap">
-                <span className="shrink-0 bg-mathua-blue text-white px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider">Quiz due</span>
-                <span className="break-words font-mono text-[11px] sm:text-xs text-mathua-primary">{quizGate ? `${quizGate} XP reached: mastery check recommended` : 'mastery check recommended'}</span>
+                <span className="shrink-0 bg-mathua-blue text-white px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider">{t('account.profile.quizDue')}</span>
+                <span className="break-words font-mono text-[11px] sm:text-xs text-mathua-primary">{quizGate ? t('account.profile.quizReached', { xp: quizGate }) : t('account.profile.quizRecommended')}</span>
               </div>
               {quizGate && (
                 <div className="mt-2 h-1 bg-mathua-code overflow-hidden">
@@ -440,7 +442,7 @@ export default function ProfilePage() {
               )}
             </div>
             <Link href="/goals?quiz=1" className="w-full sm:w-auto sm:shrink-0 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2 font-mono text-xs min-h-[36px] inline-flex items-center justify-center text-center whitespace-nowrap">
-              Start the quiz →
+              {t('account.profile.startQuiz')}
             </Link>
           </div>
         )}
@@ -448,16 +450,16 @@ export default function ProfilePage() {
         <RecommendedTaskList shelf={head} loading={shelf === null} />
 
         {efficacy && efficacy.concepts_touched > 0 && (
-          <section id="how-doing" aria-label="How you are doing" className="mt-6 min-w-0 scroll-mt-28">
+          <section id="how-doing" aria-label={t('account.profile.howDoingLabel')} className="mt-6 min-w-0 scroll-mt-28">
             <h2 className="mb-2 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-              How you&apos;re doing
+              {t('account.profile.howDoing')}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 min-w-0">
               {[
-                { label: 'First-pass', value: `${Math.round(efficacy.first_pass_rate * 100)}%`, hint: 'correct on attempt 1' },
-                { label: 'Second-pass', value: `${Math.round(efficacy.second_pass_rate * 100)}%`, hint: 'correct within 2 tries' },
-                { label: 'Avg attempts', value: efficacy.avg_attempts_per_concept.toFixed(2), hint: 'per concept' },
-                { label: 'Concepts', value: String(efficacy.concepts_touched), hint: `${efficacy.total_attempts} attempts` },
+                { label: t('account.profile.firstPass'), value: `${Math.round(efficacy.first_pass_rate * 100)}%`, hint: t('account.profile.firstPassHint') },
+                { label: t('account.profile.secondPass'), value: `${Math.round(efficacy.second_pass_rate * 100)}%`, hint: t('account.profile.secondPassHint') },
+                { label: t('account.profile.avgAttempts'), value: efficacy.avg_attempts_per_concept.toFixed(2), hint: t('account.profile.avgAttemptsHint') },
+                { label: t('account.profile.concepts'), value: String(efficacy.concepts_touched), hint: t('common.count.attempts', { count: efficacy.total_attempts }) },
               ].map(m => (
                 <div key={m.label} className="border border-mathua-border bg-mathua-surface p-3 min-w-0">
                   <div className="font-mono text-[10px] uppercase text-mathua-muted">{m.label}</div>
@@ -469,11 +471,11 @@ export default function ProfilePage() {
           </section>
         )}
 
-        <section id="struggles" aria-label="Struggles" className="mt-6 min-w-0 scroll-mt-28">
+        <section id="struggles" aria-label={t('account.profile.struggles')} className="mt-6 min-w-0 scroll-mt-28">
           <StrugglesSection weaknesses={weaknesses} />
           <div className="mt-2">
             <Link href="/history" className="font-mono text-[11px] text-mathua-blue hover:text-mathua-blue-hover">
-              Every question you&apos;ve answered →
+              {t('account.profile.everyQuestion')}
             </Link>
           </div>
         </section>

@@ -1,6 +1,11 @@
-import { afterEach } from 'vitest'
+import { afterEach, beforeEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
+import { resetLocaleForTests } from '../lib/i18n/locale'
+import { loadMessages } from '../lib/i18n/messages'
+
+// Russian is a separate chunk in the app. Tests switch language synchronously, so load it up front.
+await loadMessages('ru')
 
 class MemoryStorage {
   private map = new Map<string, string>()
@@ -67,6 +72,13 @@ if (typeof globalThis.IntersectionObserver === 'undefined') {
     configurable: true,
   })
 }
+
+// The suite asserts on English text. jsdom reports `en-US` as its language, so that is already
+// the default, but a test that switches to Russian must not leak the choice into the next one,
+// and a stored `mathua_locale` must not decide which language an unrelated test reads.
+beforeEach(() => {
+  resetLocaleForTests('en')
+})
 
 afterEach(() => {
   cleanup()

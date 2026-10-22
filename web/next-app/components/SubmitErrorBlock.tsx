@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { getErrorMessage, getErrorStatus } from '../lib/api'
+import { useT } from '../lib/i18n'
 
 export interface SubmitError {
   message: string
@@ -35,6 +36,7 @@ export default function SubmitErrorBlock({
   restartLabel: string
   retrying?: boolean
 }) {
+  const t = useT()
   const sessionGone = error.status === 404
   const throttled = error.status === 429
   const skipsExhausted = onSkip != null && (skipsLeft ?? MAX_SKIPS) <= 0
@@ -59,10 +61,10 @@ export default function SubmitErrorBlock({
     >
       <p className="font-mono text-xs text-mathua-red">
         {sessionGone
-          ? 'Session expired — the server restarted and forgot this run.'
+          ? t('learn.submitError.sessionGone')
           : throttled
-            ? 'Saving is catching up — your answer is kept and will be sent again.'
-            : "Couldn't submit your answer — it's still in the box."}
+            ? t('learn.submitError.throttled')
+            : t('learn.submitError.failed')}
       </p>
       <p className="mt-1 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
         {error.status != null ? `(${error.status}) ` : ''}{error.message}
@@ -75,7 +77,7 @@ export default function SubmitErrorBlock({
             disabled={retrying}
             className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 h-10 font-mono text-xs disabled:opacity-50"
           >
-            {retrying ? 'Retrying…' : 'Retry'}
+            {retrying ? t('learn.submitError.retrying') : t('learn.submitError.retry')}
           </button>
         )}
         {!sessionGone && onSkip && !skipsExhausted && (
@@ -84,7 +86,7 @@ export default function SubmitErrorBlock({
             onClick={onSkip}
             className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue px-4 h-10 font-mono text-xs"
           >
-            Skip →
+            {t('learn.submitError.skip')}
           </button>
         )}
         <button
@@ -97,7 +99,7 @@ export default function SubmitErrorBlock({
       </div>
       {!sessionGone && skipsExhausted && (
         <p className="mt-2 font-mono text-[10px] text-mathua-muted">
-          No skips left — restart for a fresh run.
+          {t('learn.submitError.noSkips')}
         </p>
       )}
     </div>

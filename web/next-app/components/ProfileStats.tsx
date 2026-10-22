@@ -2,6 +2,8 @@
 
 import type { Scores } from '../lib/api'
 import Avatar from './Avatar'
+import { useLocale, useT, formatNumber } from '../lib/i18n'
+import { levelName } from '../lib/accountNames'
 
 interface Props {
   name: string
@@ -28,6 +30,8 @@ export const LEVEL_NAMES = {
 } satisfies Record<string, string>
 
 export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avatarPreset, bare, hideMastered }: Props) {
+  const t = useT()
+  const locale = useLocale()
   const xpPct = scores.daily_xp_goal > 0
     ? Math.min(100, Math.round((scores.xp_today / scores.daily_xp_goal) * 100))
     : 0
@@ -41,13 +45,13 @@ export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avat
         </div>
         <div className="border-[0.5px] border-mathua-border-strong px-4 py-3.5 text-center min-w-[72px] sm:min-w-[80px] shrink-0 self-start">
           <div className="font-mono text-[9px] text-mathua-muted mb-1">
-            LV
+            {t('account.level.short')}
           </div>
           <div className="font-mono text-[36px] font-normal text-mathua-blue leading-none">
             {levelNum}
           </div>
           <div className="font-mono text-[10px] text-mathua-primary mt-1">
-            {scores.level}
+            {levelName(scores.level)}
           </div>
         </div>
       </div>
@@ -59,7 +63,7 @@ export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avat
 
         <div className="flex flex-wrap gap-x-6 gap-y-3 mt-2.5">
           <div className="min-w-0">
-            <div className="font-mono text-[11px] text-mathua-muted">XP TODAY</div>
+            <div className="font-mono text-[11px] text-mathua-muted">{t('account.profileStats.xpToday')}</div>
             <div className="font-mono text-[16px] text-mathua-primary">
               {scores.xp_today}
               <span className="font-mono text-[11px] text-mathua-muted"> / {scores.daily_xp_goal}</span>
@@ -73,22 +77,22 @@ export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avat
           </div>
 
           <div className="min-w-0">
-            <div className="font-mono text-[11px] text-mathua-muted">TOTAL XP</div>
+            <div className="font-mono text-[11px] text-mathua-muted">{t('account.profileStats.totalXp')}</div>
             <div className="font-mono text-[16px] text-mathua-primary">
-              {scores.lifetime_points.toLocaleString()}
+              {formatNumber(scores.lifetime_points, locale)}
             </div>
           </div>
 
           <div className="min-w-0">
-            <div className="font-mono text-[11px] text-mathua-muted">STREAK</div>
+            <div className="font-mono text-[11px] text-mathua-muted">{t('account.profileStats.streak')}</div>
             <div className={`font-mono text-[16px] ${scores.current_streak > 0 ? 'text-mathua-blue' : 'text-mathua-muted'}`}>
-              {scores.current_streak} day{scores.current_streak !== 1 ? 's' : ''}
+              {t('common.count.days', { count: scores.current_streak })}
             </div>
           </div>
 
           {!hideMastered && (
             <div className="min-w-0">
-              <div className="font-mono text-[11px] text-mathua-muted">MASTERED</div>
+              <div className="font-mono text-[11px] text-mathua-muted">{t('account.profileStats.mastered')}</div>
               <div className="font-mono text-[16px] text-mathua-primary">
                 {scores.concepts_mastered}
               </div>
@@ -97,10 +101,10 @@ export default function ProfileStats({ name, scores, avatarSeed, avatarUrl, avat
 
           <div className="min-w-0">
             <a href="/leaderboard" className="font-mono text-[11px] text-mathua-muted hover:text-mathua-blue no-underline inline-flex items-center min-h-[20px]">
-              WEEKLY →
+              {t('account.profileStats.weekly')}
             </a>
             <div className="font-mono text-[16px] text-mathua-primary">
-              {scores.weekly_score.toLocaleString()}
+              {formatNumber(scores.weekly_score, locale)}
             </div>
           </div>
         </div>

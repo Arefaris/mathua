@@ -3,6 +3,7 @@
 import KatexContent from './KatexContent'
 import { categoryLabel } from '../lib/glossary/categories'
 import { glossaryById } from '../lib/glossary/data'
+import { useT } from '../lib/i18n'
 import type { GlossaryEntry } from '../lib/glossary/types'
 
 interface GlossaryEntryProps {
@@ -13,6 +14,7 @@ interface GlossaryEntryProps {
 // One glossary result. The symbol is always paired with its spoken name —
 // never symbol-alone — so the meaning survives without the glyph rendering.
 export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEntryProps) {
+  const t = useT()
   return (
     <article
       id={`glossary-${entry.id}`}
@@ -22,7 +24,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <span
           role="img"
-          aria-label={`${entry.name} symbol: ${entry.symbol}`}
+          aria-label={t('explore.glossary.entry.symbolLabel', { name: entry.name, symbol: entry.symbol })}
           className="font-mono text-2xl text-mathua-blue"
         >
           {entry.symbol}
@@ -41,7 +43,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
 
       {entry.reading && (
         <p className="mt-1 font-mono text-[11px] text-mathua-muted">
-          Read as {entry.reading}
+          {t('explore.glossary.entry.readAs', { reading: entry.reading })}
         </p>
       )}
 
@@ -73,7 +75,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
         <ul className="mt-3 space-y-1">
           {entry.commonMistakes.map((m, i) => (
             <li key={i} className="font-mono text-[11px] text-mathua-secondary">
-              <span className="text-mathua-muted">Common mistake: </span>
+              <span className="text-mathua-muted">{t('explore.glossary.entry.mistake')}</span>
               {m}
             </li>
           ))}
@@ -83,7 +85,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
       {entry.relatedSymbols && entry.relatedSymbols.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-            Related:
+            {t('explore.glossary.entry.related')}
           </span>
           {entry.relatedSymbols.map(id => {
             const target = glossaryById(id)
@@ -93,7 +95,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
                 key={id}
                 type="button"
                 onClick={() => onSelectRelated(id)}
-                aria-label={`Show ${target.name}`}
+                aria-label={t('explore.glossary.entry.show', { name: target.name })}
                 className="border border-mathua-border px-2 py-1 font-mono text-[11px] text-mathua-blue hover:bg-mathua-blue-faint min-h-[36px]"
               >
                 {target.symbol} {target.name}
@@ -106,7 +108,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
       <p className="mt-3 font-mono text-[10px] text-mathua-muted">
         {categoryLabel(entry.category)}
         {entry.latex && <span> · LaTeX: <code>{entry.latex}</code></span>}
-        {' · Sources: '}
+        {t('explore.glossary.entry.sources')}
         {entry.sources.map((s, i) => (
           <span key={i}>
             {i > 0 && '; '}

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { hrefConceptId, type Shelf, type ShelfItem } from '../lib/nextUp'
 import { getLessonEligibility, type EligibilityPrereq } from '../lib/api'
 import PrerequisitePanel from './PrerequisitePanel'
+import { useT } from '../lib/i18n'
 
 /**
  * The adaptive task set, presented as a small group of equally actionable cards.
@@ -49,6 +50,7 @@ export default function RecommendedTaskList({
   shelf: Shelf | null
   loading?: boolean
 }) {
+  const t = useT()
   const router = useRouter()
   const [busy, setBusy] = useState<string | null>(null)
   const [blocked, setBlocked] = useState<Blocked | null>(null)
@@ -77,7 +79,7 @@ export default function RecommendedTaskList({
       }
       router.push(`/learn?concept=${encodeURIComponent(conceptId)}`)
     } catch {
-      setError("Couldn't start this topic.")
+      setError(t('account.tasks.startFailed'))
     } finally {
       setBusy(null)
     }
@@ -86,11 +88,11 @@ export default function RecommendedTaskList({
   const items = taskItems(shelf)
 
   return (
-    <section aria-label="Your learning" className="mt-6 min-w-0">
+    <section aria-label={t('account.tasks.title')} className="mt-6 min-w-0">
       <h2 className="mb-1 font-mono text-[11px] uppercase tracking-wider text-mathua-muted">
-        Your learning
+        {t('account.tasks.title')}
       </h2>
-      <p className="font-mono text-[11px] text-mathua-muted mb-3">Recommended tasks</p>
+      <p className="font-mono text-[11px] text-mathua-muted mb-3">{t('account.tasks.subtitle')}</p>
 
       {loading && (
         <div
@@ -98,20 +100,20 @@ export default function RecommendedTaskList({
           aria-live="polite"
           className="border border-mathua-border bg-mathua-surface p-4 font-mono text-xs text-mathua-muted"
         >
-          Loading recommended tasks…
+          {t('account.tasks.loading')}
         </div>
       )}
 
       {!loading && items.length === 0 && (
         <div className="border border-mathua-border bg-mathua-surface p-4 min-w-0">
           <p className="font-mono text-xs text-mathua-secondary">
-            No learning tasks are available right now.
+            {t('account.tasks.none')}
           </p>
           <Link
             href="/domains"
             className="mt-3 inline-flex border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-xs min-h-[36px] items-center"
           >
-            Choose what to learn
+            {t('account.tasks.choose')}
           </Link>
         </div>
       )}
@@ -150,7 +152,7 @@ export default function RecommendedTaskList({
                       {item.detail}
                     </span>
                     <span className="shrink-0 font-mono text-[11px] text-mathua-blue whitespace-nowrap">
-                      {isBusy ? 'Starting…' : item.cta}
+                      {isBusy ? t('account.tasks.starting') : item.cta}
                     </span>
                   </span>
                 </button>
@@ -164,7 +166,7 @@ export default function RecommendedTaskList({
         <p role="alert" className="mt-3 font-mono text-[11px] text-mathua-secondary">
           {error}{' '}
           <button type="button" onClick={() => setError('')} className="text-mathua-blue hover:underline">
-            Try again
+            {t('common.action.retry')}
           </button>
         </p>
       )}
@@ -181,7 +183,7 @@ export default function RecommendedTaskList({
         href="/domains"
         className="mt-4 inline-flex font-mono text-xs text-mathua-blue hover:text-mathua-blue-hover"
       >
-        Choose what to learn →
+        {t('account.tasks.chooseArrow')}
       </Link>
     </section>
   )

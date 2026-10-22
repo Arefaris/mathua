@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { getAttempts, deleteAccount, getMe, type AttemptRecord } from '../lib/api'
 import { getUserInfo, signOut, clearGuest } from '../lib/auth'
 import { attemptsToCSV } from './DangerZone'
+import { useT } from '../lib/i18n'
+import RichText from './RichText'
 
 const DELETE_PHRASE = 'delete my account'
 
@@ -19,6 +21,7 @@ export function phraseConfirms(typed: string, expected: string): boolean {
 // is kept. Password accounts additionally confirm the current password;
 // OAuth-only and guest rows need the phrase alone.
 export default function DeleteAccount() {
+  const t = useT()
   const { push } = useRouter()
   const [phrase, setPhrase] = useState('')
   const [password, setPassword] = useState('')
@@ -33,7 +36,10 @@ export default function DeleteAccount() {
   const [busy, setBusy] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [exported, setExported] = useState(false)
-  const armed = phraseConfirms(phrase, DELETE_PHRASE) && (needsPassword !== true || password !== '')
+  // Typed in the learner's language; the canonical English phrase is sent either way.
+  const localPhrase = t('account.deleteAccount.phrase')
+  const phraseOk = phraseConfirms(phrase, localPhrase) || phraseConfirms(phrase, DELETE_PHRASE)
+  const armed = phraseOk && (needsPassword !== true || password !== '')
 
   useEffect(() => {
     const cached = getUserInfo()?.has_password
@@ -64,7 +70,7 @@ export default function DeleteAccount() {
       URL.revokeObjectURL(url)
       setExported(true)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Export failed')
+      setError(e instanceof Error ? e.message : t('account.dangerZone.exportFailed'))
     } finally {
       setExporting(false)
     }
@@ -89,31 +95,31 @@ export default function DeleteAccount() {
       clearGuest()
       push('/')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Delete failed')
+      setError(err instanceof Error ? err.message : t('account.deleteAccount.deleteFailed'))
       setBusy(false)
     }
   }
 
   return (
     <div className="border border-mathua-red bg-mathua-surface p-4 sm:p-6 min-w-0">
-      <span className="font-mono text-sm text-mathua-red">Delete account</span>
+      <span className="font-mono text-sm text-mathua-red">{t('account.deleteAccount.title')}</span>
       <p className="text-mathua-muted text-xs mt-1">
-        Deletes your account and everything in it. This cannot be undone.
+        {t('account.deleteAccount.intro')}
       </p>
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">Wiped</p>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">{t('account.deleteAccount.wiped')}</p>
           <ul className="font-mono text-[11px] text-mathua-secondary space-y-0.5">
-            <li>Account, avatar, settings, daily goal</li>
-            <li>Concept mastery, streaks, review schedule</li>
-            <li>Attempts log, sessions and quizzes</li>
-            <li>Plans, filed reports and XP — profile and leaderboard</li>
+            <li>{t('account.deleteAccount.wipedAccount')}</li>
+            <li>{t('account.deleteAccount.wipedMastery')}</li>
+            <li>{t('account.deleteAccount.wipedAttempts')}</li>
+            <li>{t('account.deleteAccount.wipedPlans')}</li>
           </ul>
         </div>
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">Kept</p>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">{t('account.deleteAccount.kept')}</p>
           <ul className="font-mono text-[11px] text-mathua-secondary space-y-0.5">
-            <li>Nothing — deletion is total</li>
+            <li>{t('account.deleteAccount.keptNothing')}</li>
           </ul>
         </div>
       </div>
@@ -124,12 +130,15 @@ export default function DeleteAccount() {
           disabled={exporting}
           className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none px-4 h-9 text-xs font-mono disabled:opacity-40"
         >
-          {exporting ? 'Exporting…' : exported ? 'Export again' : 'Export attempts log (CSV) first'}
+          {exporting ? t('account.dangerZone.exporting') : exported ? t('account.dangerZone.exportAgain') : t('account.deleteAccount.exportFirst')}
         </button>
       </div>
       <form onSubmit={handleDelete} className="mt-4">
         <label htmlFor="delete-phrase" className="font-mono text-[11px] uppercase text-mathua-muted">
-          Type <span className="text-mathua-primary">delete my account</span> to confirm
+          <RichText
+            text={t('account.dangerZone.typeToConfirm')}
+            slots={{ phrase: <span className="text-mathua-primary">{localPhrase}</span> }}
+          />
         </label>
         <div className="flex flex-col sm:flex-row gap-2 mt-2">
           <input
@@ -137,12 +146,12 @@ export default function DeleteAccount() {
             type="text"
             value={phrase}
             onChange={e => setPhrase(e.target.value)}
-            placeholder="delete my account"
+            placeholder={localPhrase}
             autoComplete="off"
             autoCapitalize="none"
             autoCorrect="off"
             spellCheck={false}
-            aria-describedby={phrase && !phraseConfirms(phrase, DELETE_PHRASE) ? 'delete-phrase-hint' : undefined}
+            aria-describedby={phrase && !phraseOk ? 'delete-phrase-hint' : undefined}
             className="flex-1 min-w-0 bg-mathua-bg border border-mathua-border px-3 py-2 font-mono text-xs text-mathua-primary"
           />
           {needsPassword !== false && (
@@ -151,12 +160,12 @@ export default function DeleteAccount() {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Current password"
+              placeholder={t('account.deleteAccount.password')}
               autoComplete="current-password"
               // Distinct from the change-password field higher up this page:
               // two controls sharing an accessible name made the Settings
               // page ambiguous for screen readers and for tests.
-              aria-label="Current password, to confirm deletion"
+              aria-label={t('account.deleteAccount.passwordLabel')}
               className="flex-1 min-w-0 bg-mathua-bg border border-mathua-border px-3 py-2 font-mono text-xs text-mathua-primary"
             />
           )}
@@ -165,13 +174,16 @@ export default function DeleteAccount() {
             disabled={!armed || busy}
             className="border border-mathua-red text-mathua-red hover:bg-mathua-red hover:text-white rounded-none px-4 h-10 text-xs font-mono disabled:opacity-40 min-h-[40px]"
           >
-            {busy ? 'Deleting…' : 'Delete my account'}
+            {busy ? t('account.deleteAccount.deleting') : t('account.deleteAccount.delete')}
           </button>
         </div>
       </form>
-      {phrase && !phraseConfirms(phrase, DELETE_PHRASE) && (
+      {phrase && !phraseOk && (
         <p id="delete-phrase-hint" role="status" className="mt-2 font-mono text-[11px] text-mathua-secondary">
-          That does not match. Type <span className="text-mathua-primary">{DELETE_PHRASE}</span> exactly.
+          <RichText
+            text={t('account.dangerZone.mismatch')}
+            slots={{ phrase: <span className="text-mathua-primary">{localPhrase}</span> }}
+          />
         </p>
       )}
       {error && <p className="mt-2 font-mono text-[11px] text-mathua-red">{error}</p>}

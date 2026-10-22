@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useActiveHeading } from '../hooks/useActiveHeading'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet'
 import { Layers } from './icons'
+import { useT } from '../lib/i18n'
 
 // The table of contents, in one place for the docs pages and app/how-it-works.
 //
@@ -22,11 +23,13 @@ const mono = "var(--font-jetbrains-mono), 'JetBrains Mono', monospace"
 
 export default function TableOfContents({
   headings,
-  label = 'On this page',
+  label,
 }: {
   headings: TocItem[]
   label?: string
 }) {
+  const t = useT()
+  const heading = label ?? t('shell.toc.onThisPage')
   const active = useActiveHeading(headings.map(h => h.id))
   const [open, setOpen] = useState(false)
 
@@ -43,11 +46,11 @@ export default function TableOfContents({
   return (
     <>
       <nav
-        aria-label="Table of contents"
+        aria-label={t('shell.toc.label')}
         className="hidden lg:block w-[220px] flex-shrink-0 sticky top-[100px] h-fit max-h-[calc(100vh-130px)] overflow-y-auto"
       >
         <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: 'var(--text-muted)' }}>
-          {label}
+          {heading}
         </div>
         {headings.map(h => {
           const isActive = active === h.id
@@ -74,7 +77,7 @@ export default function TableOfContents({
         <SheetTrigger asChild>
           <button
             type="button"
-            aria-label="Table of contents"
+            aria-label={t('shell.toc.label')}
             className="lg:hidden fixed right-4 z-40 flex items-center gap-2 border border-mathua-border bg-mathua-surface px-3 font-mono text-[11px] text-mathua-secondary min-h-[44px]"
             // Clear the bottom tab bar, which is itself fixed at the safe-area bottom,
             // and clear the assistant trigger above it: both float in this corner, and
@@ -84,14 +87,14 @@ export default function TableOfContents({
             style={{ bottom: 'calc(136px + env(safe-area-inset-bottom))' }}
           >
             <Layers size={16} />
-            Contents
+            {t('shell.toc.contents')}
           </button>
         </SheetTrigger>
         <SheetContent side="bottom" className="max-h-[70vh] overflow-y-auto">
           <SheetTitle style={{ fontFamily: mono, fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-            {label}
+            {heading}
           </SheetTitle>
-          <nav aria-label="Table of contents" className="mt-2 flex flex-col">
+          <nav aria-label={t('shell.toc.label')} className="mt-2 flex flex-col">
             {headings.map(h => (
               <button
                 key={h.id}

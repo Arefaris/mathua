@@ -18,6 +18,7 @@ import SubmitErrorBlock, {
 } from '../../components/SubmitErrorBlock'
 import { concepts as conceptsData } from '../../lib/conceptData'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
+import { useT } from '../../lib/i18n'
 
 // 'failed' exists because 'done' used to carry two meanings. Any thrown request
 // set phase to 'done', and the done screen reads "No questions available" while
@@ -32,6 +33,7 @@ type Phase = 'loading' | 'intro' | 'quiz' | 'done' | 'failed'
 // grading path, guest unlimited retake. Self-contained so the goals page only
 // mounts it.
 export default function QuizHost() {
+  const t = useT()
   const [phase, setPhase] = useState<Phase>('intro')
   const [loading, setLoading] = useState(false)
   // Carried separately from the phase so the failed screen can say what went
@@ -104,8 +106,8 @@ export default function QuizHost() {
       setFinished(false)
       setPhase('quiz')
     } catch {
-      toast.error('Quiz failed to start — try again.')
-      setStartError('The quiz could not start. That is a request problem, not a missing topic.')
+      toast.error(t('goals.quiz.startToast'))
+      setStartError(t('goals.quiz.startError'))
       setPhase('failed')
     } finally {
       setLoading(false)
@@ -133,7 +135,7 @@ export default function QuizHost() {
       const data = await submitQuizAnswer(quizSessionId.current, quizConceptId.current, answer, elapsed, dontKnow)
       const correct = data.correct || false
       // An admitted unknown is not a wrong answer, so it does not get the wrong answer's words.
-      const feedback = dontKnow ? '' : data.feedback || (correct ? 'Correct!' : 'Not quite.')
+      const feedback = dontKnow ? '' : data.feedback || (correct ? t('goals.verdict.correct') : t('goals.verdict.notQuite'))
       setQuizAccuracy(prev => ({ correct: prev.correct + (correct ? 1 : 0), total: prev.total + 1 }))
       setQuizLastResult({ correct, feedback, conceptId: quizConceptId.current, xp: data.xp, dontKnow })
       if (data.remedial?.length) {
@@ -161,7 +163,7 @@ export default function QuizHost() {
       }
       setLoading(false)
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to submit quiz answer.'))
+      setSubmitError(toSubmitError(e, t('goals.quiz.submitFailed')))
       setLoading(false)
     }
   }
@@ -188,7 +190,7 @@ export default function QuizHost() {
       setSkipCount(c => c + 1)
       if (data.done) {
         setFinished(true)
-        setQuizLastResult({ correct: false, feedback: 'Skipped — no XP awarded.', conceptId: quizConceptId.current, xp: 0 })
+        setQuizLastResult({ correct: false, feedback: t('goals.quiz.skipped'), conceptId: quizConceptId.current, xp: 0 })
         setTimeout(() => {
           setPhase('done')
           setLoading(false)
@@ -203,7 +205,7 @@ export default function QuizHost() {
         data,
       )
     } catch (e) {
-      setSubmitError(toSubmitError(e, 'Failed to skip quiz question.'))
+      setSubmitError(toSubmitError(e, t('goals.quiz.skipFailed')))
     } finally {
       setLoading(false)
     }
@@ -236,9 +238,9 @@ export default function QuizHost() {
   if (phase === 'intro') {
     return (
       <>
-        <SectionHeader label="Quiz" title="Mastery check" />
+        <SectionHeader label={t('goals.quiz.label')} title={t('goals.quiz.introTitle')} />
         <div className="max-w-2xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
-          <BriefingCard eyebrow="Before you start" items={QUIZ_BRIEFING} />
+          <BriefingCard eyebrow={t('goals.quiz.briefingEyebrow')} items={QUIZ_BRIEFING} />
           <div className="mt-6 text-center">
             <button
               type="button"
@@ -246,7 +248,7 @@ export default function QuizHost() {
               disabled={loading}
               className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm disabled:opacity-50"
             >
-              Start quiz →
+              {t('goals.quiz.start')}
             </button>
           </div>
         </div>
@@ -257,7 +259,7 @@ export default function QuizHost() {
   if (phase === 'loading') {
     return (
       <div className="py-20 text-center">
-        <Loading label="LOADING QUIZ" />
+        <Loading label={t('goals.quiz.loading')} />
       </div>
     )
   }
@@ -265,14 +267,13 @@ export default function QuizHost() {
   if (phase === 'failed') {
     return (
       <div className="max-w-2xl mx-auto text-center">
-        <SectionHeader label="Quiz" title="Quiz could not start" />
+        <SectionHeader label={t('goals.quiz.label')} title={t('goals.quiz.failedTitle')} />
         <p role="alert" className="font-mono text-sm text-mathua-secondary mt-4">
-          {startError || 'The quiz could not start.'} Nothing is wrong with the topics — the
-          request failed.
+          {startError || t('goals.quiz.failedFallback')} {t('goals.quiz.failedNote')}
         </p>
         <div className="mt-6 flex gap-3 justify-center">
-          <button type="button" onClick={() => { void startQuiz() }} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">Try again →</button>
-          <Link href="/learn" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">Practice in Learn →</Link>
+          <button type="button" onClick={() => { void startQuiz() }} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">{t('goals.quiz.retry')}</button>
+          <Link href="/learn" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">{t('goals.quiz.practiceInLearn')}</Link>
         </div>
       </div>
     )
@@ -283,20 +284,20 @@ export default function QuizHost() {
       <div className="max-w-2xl mx-auto text-center">
         {quizAccuracy.total === 0 && skipCount === 0 ? (
           <>
-            <SectionHeader label="Quiz" title="No questions available" />
-            <p className="font-mono text-sm text-mathua-secondary mt-4">There are no quiz questions available right now, try again later.</p>
+            <SectionHeader label={t('goals.quiz.label')} title={t('goals.quiz.emptyTitle')} />
+            <p className="font-mono text-sm text-mathua-secondary mt-4">{t('goals.quiz.emptyBody')}</p>
             <div className="mt-6 flex gap-3 justify-center">
-              <button type="button" onClick={startQuiz} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">Try again →</button>
-              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">Back to Profile →</Link>
+              <button type="button" onClick={startQuiz} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">{t('goals.quiz.retry')}</button>
+              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">{t('goals.quiz.backToProfile')}</Link>
             </div>
           </>
         ) : (
           <>
-            <SectionHeader label="Quiz complete" title={`${quizAccuracy.correct}/${quizAccuracy.total} correct`} />
-            <p className="font-mono text-sm text-mathua-secondary mt-4">XP awarded per correct answer, more for faster answers. Retake anytime.</p>
+            <SectionHeader label={t('goals.quiz.completeLabel')} title={t('goals.question.correctOf', { correct: quizAccuracy.correct, total: quizAccuracy.total })} />
+            <p className="font-mono text-sm text-mathua-secondary mt-4">{t('goals.quiz.completeNote')}</p>
             {quizRemedial.length > 0 && (
               <div className="mt-6 border border-mathua-border bg-mathua-surface p-4 text-left">
-                <p className="font-mono text-xs uppercase tracking-wider text-mathua-muted mb-2">Focus next in Study</p>
+                <p className="font-mono text-xs uppercase tracking-wider text-mathua-muted mb-2">{t('goals.quiz.focusNext')}</p>
                 <ul className="space-y-1">
                   {quizRemedial.map(id => {
                     const label = conceptsData.find(c => c.id === id)?.label ?? id
@@ -312,11 +313,11 @@ export default function QuizHost() {
               </div>
             )}
             <div className="mt-6 flex gap-3 justify-center">
-              <button type="button" onClick={startQuiz} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">Retake Quiz →</button>
-              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">Back to Profile →</Link>
+              <button type="button" onClick={startQuiz} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 text-sm">{t('goals.quiz.retake')}</button>
+              <Link href="/profile" className="border border-mathua-border text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue rounded-none h-12 px-8 text-sm inline-flex items-center">{t('goals.quiz.backToProfile')}</Link>
             </div>
             <div className="mt-3 text-center">
-              <Link href="/history" className="font-mono text-xs text-mathua-muted hover:text-mathua-blue">Every question you&apos;ve answered →</Link>
+              <Link href="/history" className="font-mono text-xs text-mathua-muted hover:text-mathua-blue">{t('goals.question.historyLink')}</Link>
             </div>
           </>
         )}
@@ -326,12 +327,12 @@ export default function QuizHost() {
 
   return (
     <>
-      <SectionHeader label={`Quiz question ${quizCount}${quizQuestionsTotal > 0 ? ` of ${quizQuestionsTotal}` : ''}`} title={quizConceptName} />
+      <SectionHeader label={quizQuestionsTotal > 0 ? t('goals.quiz.questionOfLabel', { count: quizCount, total: quizQuestionsTotal }) : t('goals.quiz.questionLabel', { count: quizCount })} title={quizConceptName} />
       <div className="max-w-2xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
         <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-mathua-muted justify-center">
-          <span className={quizAccuracy.correct / Math.max(quizAccuracy.total, 1) >= 0.7 ? 'text-mathua-green' : ''}>{quizAccuracy.correct}/{quizAccuracy.total} correct</span>
-          {quizLastResult?.xp ? <span className="text-yellow-400">+{quizLastResult.xp} XP (TaskQuiz 20)</span> : null}
-          {quizClosedBook ? <span className="text-mathua-muted">Closed book</span> : null}
+          <span className={quizAccuracy.correct / Math.max(quizAccuracy.total, 1) >= 0.7 ? 'text-mathua-green' : ''}>{t('goals.question.correctOf', { correct: quizAccuracy.correct, total: quizAccuracy.total })}</span>
+          {quizLastResult?.xp ? <span className="text-yellow-400">{t('goals.quiz.xp', { xp: quizLastResult.xp })}</span> : null}
+          {quizClosedBook ? <span className="text-mathua-muted">{t('goals.quiz.closedBook')}</span> : null}
         </div>
         <div className={`bg-mathua-surface border rounded-none p-4 sm:p-6 mb-6 transition-colors w-full max-w-full min-w-0 overflow-hidden ${quizLastResult ? (quizLastResult.correct ? 'border-mathua-green-faint' : 'border-mathua-red-faint') : 'border-mathua-border'}`}>
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4">
@@ -341,7 +342,7 @@ export default function QuizHost() {
           {!quizLastResult ? (
             <>
               <form onSubmit={e => { e.preventDefault(); void submitQuizAnswerFn(false) }} className="flex flex-col sm:flex-row gap-3 min-w-0">
-                <label htmlFor="quiz-answer" className="sr-only">Your answer</label>
+                <label htmlFor="quiz-answer" className="sr-only">{t('goals.question.yourAnswer')}</label>
                 <MathAnswerInput
                   id="quiz-answer"
                   value={quizAnswerInput}
@@ -352,11 +353,11 @@ export default function QuizHost() {
                   disabled={loading}
                   status={quizLastResult ? (quizLastResult.correct ? 'correct' : 'incorrect') : 'default'}
                   inputMode={answerFormat.inputMode}
-              placeholder="Your answer..."
+              placeholder={t('goals.question.placeholder')}
                   className="sm:flex-1"
                   focusRef={quizInputRef}
                 />
-                <button type="submit" disabled={!quizAnswerInput.trim() || loading} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-6 font-medium text-sm disabled:opacity-50 shrink-0 w-auto self-end sm:self-auto">Check Answer</button>
+                <button type="submit" disabled={!quizAnswerInput.trim() || loading} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-6 font-medium text-sm disabled:opacity-50 shrink-0 w-auto self-end sm:self-auto">{t('goals.question.checkAnswer')}</button>
               </form>
               <div className="mt-2 flex items-center justify-between gap-2">
                 <p className="font-mono text-[11px] text-mathua-muted">{answerFormat.hint}</p>
@@ -366,7 +367,7 @@ export default function QuizHost() {
                   disabled={loading}
                   className="shrink-0 font-mono text-[11px] text-mathua-muted hover:text-mathua-red underline underline-offset-2 disabled:opacity-50"
                 >
-                  I don&apos;t know
+                  {t('goals.question.dontKnow')}
                 </button>
               </div>
               <div className="mt-2 flex justify-end">
@@ -386,7 +387,7 @@ export default function QuizHost() {
             </>
           ) : (
             <div className="animate-fadeIn">
-              <p className={`text-base font-medium mb-2 ${quizLastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}`}>{quizLastResult.dontKnow ? 'No answer' : quizLastResult.correct ? '✓ Correct!' : '✗ Not quite'}</p>
+              <p className={`text-base font-medium mb-2 ${quizLastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}`}>{quizLastResult.dontKnow ? t('goals.verdict.noAnswer') : quizLastResult.correct ? t('goals.verdict.markCorrect') : t('goals.verdict.markWrong')}</p>
               {/* Assessment state, and nothing else. This used to render the served worked
                   solution and a one-sentence diagnosis on both verdicts; the diagnosis was
                   answer-revealing on its own ("you are exactly one away"), and the solution
@@ -399,7 +400,7 @@ export default function QuizHost() {
                   href={`/learn?concept=${encodeURIComponent(quizLastResult.conceptId)}`}
                   className="mt-3 inline-flex items-center border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em]"
                 >
-                  Learn this concept →
+                  {t('goals.question.learnThis')}
                 </Link>
               )}
             </div>
@@ -414,7 +415,7 @@ export default function QuizHost() {
               onSkip={skipQuiz}
               skipsLeft={MAX_SKIPS - skipCount}
               onRestart={restartQuiz}
-              restartLabel="Restart quiz"
+              restartLabel={t('goals.quiz.restart')}
               retrying={loading}
             />
           </div>
@@ -426,12 +427,12 @@ export default function QuizHost() {
               onClick={goNextQuiz}
               className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
             >
-              Next →
+              {t('goals.question.next')}
             </button>
           </div>
         ) : quizLastResult && finished ? (
           <div className="mb-6 text-center text-mathua-muted text-xs font-mono">
-            Wrapping up…
+            {t('goals.quiz.wrappingUp')}
           </div>
         ) : null}
       </div>

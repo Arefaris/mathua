@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useT } from '../lib/i18n'
 
 /**
  * A confirmation step for a privileged action.
@@ -44,6 +45,7 @@ export default function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const t = useT()
   const cancelRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function ConfirmDialog({
           explicit cancel rather than a dead zone that silently swallows the click. */}
       <button
         type="button"
-        aria-label="Cancel"
+        aria-label={t('common.action.cancel')}
         tabIndex={-1}
         onClick={() => { if (!busy) onCancel() }}
         className="absolute inset-0 cursor-default"
@@ -99,7 +101,7 @@ export default function ConfirmDialog({
             disabled={busy}
             className="border border-mathua-border px-4 h-11 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue disabled:opacity-40"
           >
-            Cancel
+            {t('common.action.cancel')}
           </button>
           <button
             type="button"
@@ -107,7 +109,7 @@ export default function ConfirmDialog({
             disabled={busy}
             className={`px-4 h-11 font-mono text-xs disabled:opacity-40 ${confirmClass}`}
           >
-            {busy ? 'Working…' : confirmLabel}
+            {busy ? t('shell.confirm.working') : confirmLabel}
           </button>
         </div>
       </div>

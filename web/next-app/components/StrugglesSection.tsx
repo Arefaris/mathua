@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import type { WeaknessRes } from '../lib/api'
+import { useT } from '../lib/i18n'
 
 interface Props {
   weaknesses: WeaknessRes | null
@@ -11,6 +12,7 @@ interface Props {
 // It was a boxed panel with a per-concept bar list and a per-domain expander — the heaviest block
 // on the page — and every number in it was decided by the same count this now states outright.
 export default function StrugglesSection({ weaknesses }: Props) {
+  const t = useT()
   const entries = weaknesses?.by_domain ?? {}
   const domains = Object.keys(entries)
   if (domains.length === 0) return null
@@ -28,22 +30,22 @@ export default function StrugglesSection({ weaknesses }: Props) {
   return (
     <div className="min-w-0">
       <h3 className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-2">
-        Needs attention
+        {t('account.struggles.title')}
       </h3>
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-[0.5px] border-mathua-border px-3 py-2 min-w-0">
         <span className="font-mono text-[11px] min-w-0">
-          {struggling > 0 && <span className="text-mathua-red">{struggling} struggling</span>}
+          {struggling > 0 && <span className="text-mathua-red">{t('account.struggles.struggling', { count: struggling })}</span>}
           {struggling > 0 && needsPractice > 0 && <span className="text-mathua-muted"> · </span>}
-          {needsPractice > 0 && <span className="text-mathua-muted">{needsPractice} need practice</span>}
+          {needsPractice > 0 && <span className="text-mathua-muted">{t('account.struggles.needPractice', { count: needsPractice })}</span>}
           <span className="text-mathua-muted">
-            {total > 0 ? ' · ' : ''}{total} concept{total !== 1 ? 's' : ''} · {domains.length} domain{domains.length !== 1 ? 's' : ''}
+            {total > 0 ? ' · ' : ''}{t('common.count.concepts', { count: total })} · {t('account.struggles.domains', { count: domains.length })}
           </span>
         </span>
         <Link
           href="/review"
           className="shrink-0 font-mono text-[11px] text-mathua-blue hover:text-mathua-blue-hover whitespace-nowrap"
         >
-          Review now →
+          {t('account.struggles.reviewNow')}
         </Link>
       </div>
     </div>

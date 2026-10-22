@@ -1,71 +1,40 @@
 'use client'
 
+import { useT, type MessageKey } from '../lib/i18n'
+
+// Each item names two dictionary keys rather than carrying text, so the same constants render in
+// either language and the callers (the quiz, the diagnostic, reviews) pass them on unchanged.
 export interface BriefingItem {
-  title: string
-  detail: string
+  titleKey: MessageKey
+  detailKey: MessageKey
 }
 
 // Pre-test expectations, MA-grounded: diagnostics run 25–45 adaptive
 // questions (~30–45 min per engine bounds), quizzes are timed + closed-book.
 // Stated once up front so the test itself stays distraction-free.
 export const DIAGNOSTIC_BRIEFING: BriefingItem[] = [
-  {
-    title: '25–45 questions · about 30–45 minutes',
-    detail: 'The test adapts to you. Clear answers mean fewer questions.',
-  },
-  {
-    title: 'Answer from what you know — no searching',
-    detail: 'Honest answers put you at the right starting point. Looked-up answers put you in the wrong place.',
-  },
-  {
-    title: 'Speed counts',
-    detail: 'Fast correct answers show mastery and shorten the test.',
-  },
-  {
-    title: 'Pause anytime',
-    detail: 'Leave and pick up where you stopped.',
-  },
+  { titleKey: 'learn.briefing.diagnostic.pace.title', detailKey: 'learn.briefing.diagnostic.pace.detail' },
+  { titleKey: 'learn.briefing.diagnostic.honest.title', detailKey: 'learn.briefing.diagnostic.honest.detail' },
+  { titleKey: 'learn.briefing.diagnostic.speed.title', detailKey: 'learn.briefing.diagnostic.speed.detail' },
+  { titleKey: 'learn.briefing.diagnostic.pause.title', detailKey: 'learn.briefing.diagnostic.pause.detail' },
 ]
 
 export const QUIZ_BRIEFING: BriefingItem[] = [
-  {
-    title: 'Up to 5 questions · timed · closed book',
-    detail: 'Each question has its own timer. Keep books and notes shut.',
-  },
-  {
-    title: 'Covers what you just learned',
-    detail: 'Questions come from your recent lessons.',
-  },
-  {
-    title: 'A wrong answer shows you why',
-    detail: 'The worked solution appears straight away, and anything worth revisiting is listed when the quiz ends.',
-  },
-  {
-    title: 'XP for each correct answer · retake anytime',
-    detail: 'Faster answers and longer streaks earn more. No penalty for retaking.',
-  },
+  { titleKey: 'learn.briefing.quiz.format.title', detailKey: 'learn.briefing.quiz.format.detail' },
+  { titleKey: 'learn.briefing.quiz.scope.title', detailKey: 'learn.briefing.quiz.scope.detail' },
+  { titleKey: 'learn.briefing.quiz.miss.title', detailKey: 'learn.briefing.quiz.miss.detail' },
+  { titleKey: 'learn.briefing.quiz.xp.title', detailKey: 'learn.briefing.quiz.xp.detail' },
 ]
 
 export const REVIEW_BRIEFING: BriefingItem[] = [
-  {
-    title: 'Only what is due for review',
-    detail: 'Questions come from concepts whose memory is fading.',
-  },
-  {
-    title: 'Answer from what you remember — no searching',
-    detail: 'Honest answers recalibrate your next review date.',
-  },
-  {
-    title: 'Speed counts',
-    detail: 'Fast correct answers show the memory is solid.',
-  },
-  {
-    title: 'XP for each correct answer',
-    detail: 'Reviews record progress and XP like practice.',
-  },
+  { titleKey: 'learn.briefing.review.due.title', detailKey: 'learn.briefing.review.due.detail' },
+  { titleKey: 'learn.briefing.review.honest.title', detailKey: 'learn.briefing.review.honest.detail' },
+  { titleKey: 'learn.briefing.review.speed.title', detailKey: 'learn.briefing.review.speed.detail' },
+  { titleKey: 'learn.briefing.review.xp.title', detailKey: 'learn.briefing.review.xp.detail' },
 ]
 
 export default function BriefingCard({ eyebrow, items }: { eyebrow: string; items: BriefingItem[] }) {
+  const t = useT()
   return (
     <div className="border border-mathua-border bg-mathua-surface p-4 text-left">
       <p className="font-mono text-[10px] uppercase tracking-wider text-mathua-muted mb-3">
@@ -73,10 +42,10 @@ export default function BriefingCard({ eyebrow, items }: { eyebrow: string; item
       </p>
       <ul className="space-y-3">
         {items.map(item => (
-          <li key={item.title} className="min-w-0">
-            <p className="font-mono text-xs text-mathua-primary">{item.title}</p>
+          <li key={item.titleKey} className="min-w-0">
+            <p className="font-mono text-xs text-mathua-primary">{t(item.titleKey)}</p>
             <p className="font-mono text-[11px] text-mathua-muted mt-0.5 break-words [overflow-wrap:anywhere]">
-              {item.detail}
+              {t(item.detailKey)}
             </p>
           </li>
         ))}
