@@ -1,15 +1,8 @@
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
-
+import { API_BASE } from './apiBase'
 import { getAuthHeaders, authedFetch } from './auth'
 import { z } from 'zod'
 
-// Dev-only heads-up: an unset NEXT_PUBLIC_API_URL falls back to relative
-// /api/*, which breaks under static hosting (output: export). Production
-// stays silent — the deployment is assumed intentional.
-if (typeof window !== 'undefined' && !process.env.NEXT_PUBLIC_API_URL && process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line no-console
-  console.warn('[mathua] NEXT_PUBLIC_API_URL is unset — API calls use relative /api/*, which breaks static hosting. Set it to your API origin.')
-}
+export { API_BASE }
 
 export const PrereqInfoSchema = z.object({
   id: z.string(),

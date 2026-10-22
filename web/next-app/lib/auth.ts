@@ -1,8 +1,9 @@
+import { API_BASE } from './apiBase'
+
 const TOKEN_KEY = 'mathua_token'
 const USER_KEY = 'mathua_user'
 const GUEST_KEY = 'mathua_guest_id'
 const GUEST_TOKEN_KEY = 'mathua_guest_token'
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
 export function getToken(): string | null {
   if (typeof window === 'undefined') return null
@@ -44,6 +45,15 @@ export type FetchInit = RequestInit & { timeoutMs?: number }
 
 const DEFAULT_TIMEOUT_MS = 30000
 
+export const REQUEST_ID_HEADER = 'X-Request-ID'
+
+export function newRequestID(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID()
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+}
+
 export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}): Promise<Response> {
   const registered = getToken()
   const guest = !registered ? getGuestToken() : null
@@ -52,6 +62,11 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
     : new Headers(init.headers).get('Authorization')
   const { timeoutMs, ...fetchInit } = init
   const headers = new Headers(fetchInit.headers)
+  // One id per call, echoed by the API and printed in its access log, so a
+  // report of "it failed" names the exact request instead of a timestamp.
+  if (!headers.has(REQUEST_ID_HEADER)) {
+    headers.set(REQUEST_ID_HEADER, newRequestID())
+  }
   if (!sent) {
     const token = registered || guest
     if (token) {
