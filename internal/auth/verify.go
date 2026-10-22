@@ -16,6 +16,9 @@ const EmailVerifyTTL = 24 * time.Hour
 const LinkTokenTTL = 10 * time.Minute
 
 func sendMail(to, subject, body string) error {
+	if sendByteConfigured() {
+		return sendSendByte(to, subject, body)
+	}
 	host := strings.TrimSpace(os.Getenv("SMTP_HOST"))
 	port := strings.TrimSpace(os.Getenv("SMTP_PORT"))
 	if port == "" {

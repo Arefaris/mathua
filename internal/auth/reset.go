@@ -32,9 +32,11 @@ func newResetToken() (string, error) {
 	return hex.EncodeToString(b), nil
 }
 
-// smtpConfigured reports whether outbound reset mail can be sent.
+// smtpConfigured reports whether outbound reset mail can be sent. The name is
+// historical: the deployment can use either the SMTP credentials or SendByte's
+// HTTP API, and either one is enough.
 func smtpConfigured() bool {
-	return strings.TrimSpace(os.Getenv("SMTP_HOST")) != ""
+	return sendByteConfigured() || strings.TrimSpace(os.Getenv("SMTP_HOST")) != ""
 }
 
 // SMTPConfigured is the exported gate for the reset-request handler.
@@ -65,7 +67,7 @@ func (a *AuthService) RequestPasswordReset(identifier string) (bool, error) {
 		return false, nil
 	}
 	if !smtpConfigured() {
-		log.Println("auth: password reset requested but SMTP_HOST unset — skipping send")
+		log.Println("auth: password reset requested but no mail provider is configured — skipping send")
 		return false, nil
 	}
 	base := frontendBase()
