@@ -8,6 +8,7 @@ import BottomTabs from '../../components/BottomTabs'
 import Footer from '../../components/Footer'
 import PlanEditor from '../../components/PlanEditor'
 import { isLoggedIn } from '../../lib/auth'
+import { useT } from '../../lib/i18n'
 
 // Learning planner: destination + (daily effort XOR deadline) → estimate.
 // Dates render as months (estimates, never promises); quiz eligibility and
@@ -21,6 +22,7 @@ import { isLoggedIn } from '../../lib/auth'
 // the bottom is the missing next step, and it is shown to everyone because
 // /learn and /onboard both work for a guest.
 function PlanContent() {
+  const t = useT()
   const params = useSearchParams()
   // Set by an assistant link, so "start with calculus" lands on the planner
   // with calculus selected instead of on whatever sorts first.
@@ -35,42 +37,40 @@ function PlanContent() {
 
   return (
     <div className="max-w-2xl mx-auto mt-6 mb-16 px-4">
-      <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Learning planner</p>
-      <h1 className="font-serif text-2xl text-mathua-primary mt-1">Plan your learning</h1>
+      <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.plan.label')}</p>
+      <h1 className="font-serif text-2xl text-mathua-primary mt-1">{t('goals.plan.title')}</h1>
       <PlanEditor initialDestination={destination} onSaved={() => setJustSaved(true)} />
 
       {justSaved && (
         <p role="status" className="mt-5 border border-mathua-border bg-mathua-surface px-3 py-2.5 font-mono text-xs text-mathua-secondary">
-          Plan saved. A pace is not a starting point — use the diagnostic below to find out
-          which concept you belong at.
+          {t('goals.plan.saved')}
         </p>
       )}
 
       <section className="mt-8 border-t border-mathua-border pt-4">
-        <h2 className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">What to do next</h2>
+        <h2 className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.plan.next')}</h2>
         <p className="mt-1 text-sm text-mathua-secondary">
-          A plan sets how much you study per day. It does not say where to begin: the
-          diagnostic measures what you already know, then starts you at the right concept.
+          {t('goals.plan.nextBody')}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Link
             href="/onboard"
             className="inline-flex min-h-[44px] items-center border border-mathua-blue px-4 py-2.5 font-mono text-xs text-mathua-blue hover:bg-mathua-blue-faint"
           >
-            Take the diagnostic
+            {t('goals.plan.takeDiagnostic')}
           </Link>
           <Link
             href="/learn"
             className="inline-flex min-h-[44px] items-center border border-mathua-border px-4 py-2.5 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue"
           >
-            Start learning
+            {t('goals.plan.startLearning')}
           </Link>
           {registered && (
             <Link
               href="/profile"
               className="inline-flex min-h-[44px] items-center border border-mathua-border px-4 py-2.5 font-mono text-xs text-mathua-secondary hover:border-mathua-blue hover:text-mathua-blue"
             >
-              Back to profile
+              {t('goals.plan.backToProfile')}
             </Link>
           )}
         </div>
@@ -80,11 +80,12 @@ function PlanContent() {
 }
 
 export default function PlanPage() {
+  const t = useT()
   return (
     <>
       <Header />
       <div className="pt-[var(--chrome-top)] lg:pt-0">
-        <Suspense fallback={<div className="p-6 font-mono text-xs text-mathua-muted">Loading…</div>}>
+        <Suspense fallback={<div className="p-6 font-mono text-xs text-mathua-muted">{t('common.status.loading')}</div>}>
           <PlanContent />
         </Suspense>
       </div>

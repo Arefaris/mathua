@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { setDailyXPGoal } from '../lib/api'
 import { isLoggedIn } from '../lib/auth'
 import { clampGoal, GOAL_PRESETS } from '../lib/plan'
+import { useT } from '../lib/i18n'
 
 const GUEST_KEY = 'mathua_daily_goal'
 
@@ -16,6 +17,7 @@ export function getGuestGoal(): number | null {
 // DailyGoalControl: presets + custom target. Authed users write through to
 // the server; guests persist locally. Calls back so the page can refresh.
 export default function DailyGoalControl({ current, onSaved, bare }: { current: number; onSaved: (goal: number) => void; bare?: boolean }) {
+  const t = useT()
   const [custom, setCustom] = useState('')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
@@ -31,10 +33,10 @@ export default function DailyGoalControl({ current, onSaved, bare }: { current: 
         window.localStorage.setItem(GUEST_KEY, String(g))
       }
       onSaved(g)
-      setMsg(`Goal set to ${g} XP/day`)
+      setMsg(t('goals.dailyGoal.goalSet', { goal: g }))
       setCustom('')
     } catch (e) {
-      setMsg(e instanceof Error ? e.message : 'Could not save goal')
+      setMsg(e instanceof Error ? e.message : t('goals.dailyGoal.saveFailed'))
     } finally {
       setBusy(false)
     }
@@ -42,7 +44,7 @@ export default function DailyGoalControl({ current, onSaved, bare }: { current: 
 
   return (
     <div className={bare ? undefined : 'mt-4 border border-mathua-border bg-mathua-surface p-4'}>
-      <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Daily XP target · currently {current}/day</p>
+      <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.dailyGoal.heading', { current })}</p>
       <div className="mt-2 flex flex-wrap gap-2">
         {GOAL_PRESETS.map(p => (
           <button
@@ -68,17 +70,17 @@ export default function DailyGoalControl({ current, onSaved, bare }: { current: 
           if (custom.trim()) save(Number(custom))
         }}
       >
-        <label htmlFor="daily-goal-custom" className="sr-only">Custom daily XP target</label>
+        <label htmlFor="daily-goal-custom" className="sr-only">{t('goals.dailyGoal.customLabel')}</label>
         <input
           id="daily-goal-custom"
           value={custom}
           onChange={e => setCustom(e.target.value)}
-          placeholder="Custom (1–10000)…"
+          placeholder={t('goals.dailyGoal.placeholder')}
           inputMode="numeric"
           className="flex-1 min-w-0 bg-mathua-bg border border-mathua-border px-3 py-2 font-mono text-xs text-mathua-primary"
         />
         <button type="submit" disabled={busy || !custom.trim()} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-5 font-mono text-xs min-h-[40px] disabled:opacity-50">
-          Set
+          {t('goals.dailyGoal.set')}
         </button>
       </form>
       {/* The "≈ N questions/day at ~2 XP each" this replaced was a client guess: XP is
@@ -86,7 +88,7 @@ export default function DailyGoalControl({ current, onSaved, bare }: { current: 
           there is no single per-question figure to divide by, and the guess was ~2x too
           optimistic — 73% of the corpus prices at 1 XP. Rather than reintroduce a second
           copy of the award formula here, say what is actually true. */}
-      <p className="mt-2 font-mono text-[11px] text-mathua-muted">XP is earned per question, sized by how much work that question takes (1-5 XP), so the number of questions a day varies by topic. Changing your target never moves quiz eligibility or mastery.</p>
+      <p className="mt-2 font-mono text-[11px] text-mathua-muted">{t('goals.dailyGoal.note')}</p>
       {msg && <p className="mt-1 font-mono text-[11px] text-mathua-secondary">{msg}</p>}
     </div>
   )

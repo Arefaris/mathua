@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getDestinations, getEstimate, getScores, savePlan, getCurrentPlan, type DestinationStatus, type EstimateRes, type StudyPlan } from '../lib/api'
 import { getUserInfo, getGuestId } from '../lib/auth'
 import { clampGoal, daysFor, monthLabel, DEFAULT_DAILY_GOAL, GOAL_PRESETS } from '../lib/plan'
+import { formatNumber, useT } from '../lib/i18n'
 
 // Learning planner: destination + (daily effort XOR deadline) → estimate.
 // Dates render as months (estimates, never promises); quiz eligibility and
@@ -11,6 +12,7 @@ import { clampGoal, daysFor, monthLabel, DEFAULT_DAILY_GOAL, GOAL_PRESETS } from
 // Settings (compact): compact hides the workload detail list, the what-if
 // slider, and the plan-delta line, keeping destination/mode/inputs/save.
 export default function PlanEditor({ compact = false, initialDestination, onSaved }: { compact?: boolean; initialDestination?: string; onSaved?: () => void }) {
+  const t = useT()
   const [dests, setDests] = useState<DestinationStatus[]>([])
   const [destId, setDestId] = useState('')
   const [mode, setMode] = useState<'effort' | 'deadline'>('effort')
@@ -35,7 +37,7 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
     Promise.all([
       getDestinations().then(d => ({ dests: d, err: null as string | null })).catch(e => ({
         dests: [] as DestinationStatus[],
-        err: e instanceof Error ? e.message : 'Could not load destinations',
+        err: e instanceof Error ? e.message : t('goals.planner.destinationsFailed'),
       })),
       (sid ? getScores(sid) : Promise.resolve(null)).catch(() => null),
       getCurrentPlan().catch(() => ({ plan: null as StudyPlan | null })),
@@ -60,7 +62,7 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
       if (p.plan) setSaved(p.plan)
       setLoading(false)
     })
-  }, [initialDestination])
+  }, [initialDestination, t])
 
   const fetchEst = useCallback(async (id: string, goal: number, deadline: number, rest: number) => {
     if (!id) return
@@ -75,9 +77,9 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
       setEst(r)
     } catch (e) {
       setEst(null)
-      setError(e instanceof Error ? e.message : 'Estimate failed')
+      setError(e instanceof Error ? e.message : t('goals.planner.estimateFailed'))
     }
-  }, [mode])
+  }, [mode, t])
 
   useEffect(() => {
     if (destId) fetchEst(destId, dailyGoal, deadlineDays, restDays)
@@ -101,62 +103,60 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
       // show it.
       onSaved?.()
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Save failed')
+      setError(e instanceof Error ? e.message : t('goals.planner.saveFailed'))
     } finally {
       setSaving(false)
     }
   }
 
-  if (loading) return <div className="p-6 font-mono text-xs text-mathua-muted">Loading planner…</div>
+  if (loading) return <div className="p-6 font-mono text-xs text-mathua-muted">{t('goals.planner.loading')}</div>
 
   const e = est?.estimate
   return (
     <div>
-      <label htmlFor="plan-dest" className="mt-5 block font-mono text-[11px] uppercase tracking-wider text-mathua-muted">What do you want to learn?</label>
+      <label htmlFor="plan-dest" className="mt-5 block font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.planner.destinationLabel')}</label>
       {dests.length === 0 ? (
         <p role="status" className="mt-1 border border-mathua-border bg-mathua-surface px-3 py-2.5 font-mono text-xs text-mathua-secondary">
-          No learning paths are available right now. This usually means the server could not
-          load its course catalog — check the server log for &quot;courses unavailable&quot; or
-          &quot;destinations unavailable&quot;.
+          {t('goals.planner.noPaths')}
         </p>
       ) : (
         <select id="plan-dest" value={destId} onChange={ev => setDestId(ev.target.value)} className="mt-1 w-full bg-mathua-surface border border-mathua-border px-3 py-2.5 font-mono text-sm text-mathua-primary min-h-[44px]">
-          {dests.map(d => <option key={d.id} value={d.id}>{d.name} ({Math.round(d.pct * 100)}% done)</option>)}
+          {dests.map(d => <option key={d.id} value={d.id}>{t('goals.planner.destinationOption', { name: d.name, percent: Math.round(d.pct * 100) })}</option>)}
         </select>
       )}
 
-      <div className="mt-4 flex gap-2" role="group" aria-label="Planning direction">
+      <div className="mt-4 flex gap-2" role="group" aria-label={t('goals.planner.direction')}>
         {(['effort', 'deadline'] as const).map(m => (
           <button key={m} type="button" onClick={() => setMode(m)} aria-pressed={mode === m} className={`flex-1 border px-4 py-2.5 font-mono text-xs min-h-[44px] transition-colors ${mode === m ? 'border-mathua-blue text-mathua-blue' : 'border-mathua-border text-mathua-secondary hover:border-mathua-blue'}`}>
-            {m === 'effort' ? 'Plan by daily effort' : 'Plan by deadline'}
+            {m === 'effort' ? t('goals.planner.byEffort') : t('goals.planner.byDeadline')}
           </button>
         ))}
       </div>
 
       {mode === 'effort' ? (
         <div className="mt-3">
-          <label htmlFor="plan-goal" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Daily XP target</label>
+          <label htmlFor="plan-goal" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.planner.dailyTarget')}</label>
           <div className="mt-1 flex gap-2">
             {GOAL_PRESETS.map(p => (
               <button key={p} type="button" onClick={() => setDailyGoal(p)} aria-pressed={dailyGoal === p} className={`flex-1 border px-2 py-2 font-mono text-xs min-h-[40px] ${dailyGoal === p ? 'border-mathua-blue text-mathua-blue' : 'border-mathua-border text-mathua-secondary'}`}>{p}</button>
             ))}
-            <input id="plan-goal" value={dailyGoal} onChange={ev => setDailyGoal(clampGoal(Number(ev.target.value) || 0))} inputMode="numeric" className="w-20 bg-mathua-surface border border-mathua-border px-2 py-2 font-mono text-xs text-mathua-primary text-center" aria-label="Custom daily XP target" />
+            <input id="plan-goal" value={dailyGoal} onChange={ev => setDailyGoal(clampGoal(Number(ev.target.value) || 0))} inputMode="numeric" className="w-20 bg-mathua-surface border border-mathua-border px-2 py-2 font-mono text-xs text-mathua-primary text-center" aria-label={t('goals.planner.customTarget')} />
           </div>
         </div>
       ) : (
         <div className="mt-3">
-          <label htmlFor="plan-deadline" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Target completion (days from now)</label>
+          <label htmlFor="plan-deadline" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.planner.deadlineLabel')}</label>
           <div className="mt-1 flex gap-2">
             {[30, 90, 180, 365].map(p => (
-              <button key={p} type="button" onClick={() => setDeadlineDays(p)} aria-pressed={deadlineDays === p} className={`flex-1 border px-2 py-2 font-mono text-xs min-h-[40px] ${deadlineDays === p ? 'border-mathua-blue text-mathua-blue' : 'border-mathua-border text-mathua-secondary'}`}>{p >= 365 ? '1 year' : p >= 30 ? `${Math.round(p / 30)} mo` : `${p}d`}</button>
+              <button key={p} type="button" onClick={() => setDeadlineDays(p)} aria-pressed={deadlineDays === p} className={`flex-1 border px-2 py-2 font-mono text-xs min-h-[40px] ${deadlineDays === p ? 'border-mathua-blue text-mathua-blue' : 'border-mathua-border text-mathua-secondary'}`}>{p >= 365 ? t('goals.planner.presetYear') : p >= 30 ? t('goals.planner.presetMonths', { count: Math.round(p / 30) }) : `${p}d`}</button>
             ))}
-            <input id="plan-deadline" value={deadlineDays} onChange={ev => setDeadlineDays(Math.max(1, Number(ev.target.value) || 1))} inputMode="numeric" className="w-20 bg-mathua-surface border border-mathua-border px-2 py-2 font-mono text-xs text-mathua-primary text-center" aria-label="Custom deadline in days" />
+            <input id="plan-deadline" value={deadlineDays} onChange={ev => setDeadlineDays(Math.max(1, Number(ev.target.value) || 1))} inputMode="numeric" className="w-20 bg-mathua-surface border border-mathua-border px-2 py-2 font-mono text-xs text-mathua-primary text-center" aria-label={t('goals.planner.customDeadline')} />
           </div>
         </div>
       )}
 
       <div className="mt-3">
-        <label htmlFor="plan-rest" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Rest days per week: {restDays}</label>
+        <label htmlFor="plan-rest" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.planner.restDays', { count: restDays })}</label>
         <input id="plan-rest" type="range" min={0} max={3} value={restDays} onChange={ev => setRestDays(Number(ev.target.value))} className="mt-1 w-full" />
       </div>
 
@@ -165,49 +165,49 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
       {e && (
         <div className="mt-5 border border-mathua-border bg-mathua-surface p-5">
           <div className="flex items-baseline justify-between gap-2 flex-wrap">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">Remaining workload</p>
-            <p className="font-mono text-sm text-mathua-primary">≈ {Math.round(e.xp_remaining).toLocaleString()} XP</p>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.planner.remaining')}</p>
+            <p className="font-mono text-sm text-mathua-primary">{t('goals.planner.xpApprox', { xp: formatNumber(Math.round(e.xp_remaining), t.locale) })}</p>
           </div>
           {mode === 'effort' ? (
             <p className="mt-3 font-serif text-2xl text-mathua-primary">
-              ≈ {e.days > 0 ? Math.ceil(e.days) : '–'} days
+              {e.days > 0 ? t('goals.planner.daysApprox', { count: Math.ceil(e.days) }) : t('goals.planner.daysUnknown')}
               {e.finish_date && <span className="text-mathua-secondary text-lg"> · {monthLabel(e.finish_date)}</span>}
             </p>
           ) : (
             <div className="mt-3">
-              <p className="font-serif text-2xl text-mathua-primary">≈ {Math.ceil(e.required_per_day)} XP/day needed</p>
-              {!e.feasible && <p className="mt-1 font-mono text-xs text-red-400">Above 3× your recent pace — extend the deadline or raise daily effort gradually.</p>}
+              <p className="font-serif text-2xl text-mathua-primary">{t('goals.planner.perDayNeeded', { value: Math.ceil(e.required_per_day) })}</p>
+              {!e.feasible && <p className="mt-1 font-mono text-xs text-red-400">{t('goals.planner.infeasible')}</p>}
             </div>
           )}
           <p className="mt-1 font-mono text-[11px] text-mathua-muted">
             {est?.pace.source === 'measured'
-              ? `At your recent pace (${est.pace.rate.toFixed(0)} XP/day, ${est.pace.active_days}/${est.pace.trailing_days} active days).`
-              : 'No history yet — assuming you hit your target every day.'}
+              ? t('goals.planner.paceMeasured', { rate: est.pace.rate.toFixed(0), active: est.pace.active_days, days: est.pace.trailing_days })
+              : t('goals.planner.paceNone')}
           </p>
           {!compact && (
             <dl className="mt-4 space-y-1 font-mono text-xs text-mathua-secondary">
-              <div className="flex justify-between"><dt>Topics remaining</dt><dd className="text-mathua-primary">{e.remaining.length} of {e.total}</dd></div>
-              <div className="flex justify-between"><dt>Focused time remaining</dt><dd className="text-mathua-primary">≈ {Math.round(e.time_min_remaining / 60)}h {(Math.round(e.time_min_remaining % 60))}m</dd></div>
-              <div className="flex justify-between"><dt>Reviews due</dt><dd className="text-mathua-primary">{e.reviews_due}</dd></div>
-              <div className="flex justify-between"><dt>Mastery checks ahead</dt><dd className="text-mathua-primary">{e.quizzes_ahead}</dd></div>
-              <div className="flex justify-between"><dt>Diagnostic + planning time</dt><dd className="text-mathua-primary">≈ {e.diagnostic_min} min</dd></div>
-              <div className="flex justify-between"><dt>Initial estimate coverage</dt><dd className="text-mathua-primary">{est?.probes.length} probe topics</dd></div>
+              <div className="flex justify-between"><dt>{t('goals.planner.topicsRemaining')}</dt><dd className="text-mathua-primary">{t('goals.planner.topicsOf', { remaining: e.remaining.length, total: e.total })}</dd></div>
+              <div className="flex justify-between"><dt>{t('goals.planner.focusedTime')}</dt><dd className="text-mathua-primary">{t('goals.planner.hoursMinutes', { hours: Math.round(e.time_min_remaining / 60), minutes: Math.round(e.time_min_remaining % 60) })}</dd></div>
+              <div className="flex justify-between"><dt>{t('goals.planner.reviewsDue')}</dt><dd className="text-mathua-primary">{e.reviews_due}</dd></div>
+              <div className="flex justify-between"><dt>{t('goals.planner.checksAhead')}</dt><dd className="text-mathua-primary">{e.quizzes_ahead}</dd></div>
+              <div className="flex justify-between"><dt>{t('goals.planner.diagnosticTime')}</dt><dd className="text-mathua-primary">{t('goals.planner.minutes', { count: e.diagnostic_min })}</dd></div>
+              <div className="flex justify-between"><dt>{t('goals.planner.coverage')}</dt><dd className="text-mathua-primary">{t('goals.planner.probes', { count: est?.probes.length ?? 0 })}</dd></div>
             </dl>
           )}
           {est?.fresh_start ? (
             <p className="mt-3 font-mono text-xs text-mathua-secondary">
-              Fresh start — complete a few questions and your estimate will sharpen. No behind-schedule figure until a new baseline lands.
+              {t('goals.planner.freshStart')}
             </p>
           ) : (
             !compact && est?.plan_delta_days !== undefined && est.plan_delta_days !== null && (
               <p className="mt-3 font-mono text-xs text-mathua-blue">
-                {(est.plan_delta_days >= 0 ? '≈' + Math.abs(est.plan_delta_days).toFixed(0) + ' days ahead of' : '≈' + Math.abs(est.plan_delta_days).toFixed(0) + ' days behind') + ' your saved plan'}
+                {t(est.plan_delta_days >= 0 ? 'goals.planner.ahead' : 'goals.planner.behind', { count: Number(Math.abs(est.plan_delta_days).toFixed(0)) })}
               </p>
             )
           )}
           {!compact && (
             <div className="mt-4">
-              <label htmlFor="plan-whatif" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">What if {whatIf} XP/day? {whatIfDays > 0 && <span className="text-mathua-primary">→ ≈ {Math.ceil(whatIfDays)} days</span>}</label>
+              <label htmlFor="plan-whatif" className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{t('goals.planner.whatIf', { value: whatIf })} {whatIfDays > 0 && <span className="text-mathua-primary">{t('goals.planner.whatIfDays', { count: Math.ceil(whatIfDays) })}</span>}</label>
               <input id="plan-whatif" type="range" min={2} max={60} step={1} value={whatIf} onChange={ev => setWhatIf(Number(ev.target.value))} className="mt-1 w-full" />
             </div>
           )}
@@ -220,16 +220,15 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
           it must not be unreachable because a projection failed. */}
       <div className={e ? 'mt-4' : 'mt-5'}>
         <button type="button" onClick={handleSave} disabled={saving || !destId} className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-6 py-2.5 font-mono text-xs min-h-[44px] disabled:opacity-50">
-          {saving ? 'Saving…' : saved ? 'Update my plan' : 'Plan my learning'}
+          {saving ? t('common.action.saving') : saved ? t('goals.planner.update') : t('goals.planner.create')}
         </button>
       </div>
 
       {e ? (
-        <p className="mt-3 font-mono text-[11px] text-mathua-muted">Illustrative estimate from Mathua&apos;s measured curriculum workload — actual completion depends on pace, reviews, and checks. It never changes quiz eligibility or mastery rules.</p>
+        <p className="mt-3 font-mono text-[11px] text-mathua-muted">{t('goals.planner.illustrative')}</p>
       ) : (
         <p className="mt-3 font-mono text-[11px] text-mathua-muted">
-          Your plan is saved as a destination and a daily pace. The workload estimate is not
-          available right now — your answers still count toward it.
+          {t('goals.planner.noEstimate')}
         </p>
       )}
     </div>

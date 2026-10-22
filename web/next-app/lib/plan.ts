@@ -1,3 +1,5 @@
+import { getLocale } from './i18n/locale'
+
 // Small pure helpers for goal + planner math (client-side what-if).
 // Server remains the authority for estimates; these only recompute
 // displayed days from an already-fetched xp_remaining.
@@ -33,10 +35,12 @@ export function daysFor(xpRemaining: number, dailyRate: number, restDaysPerWeek:
   return xpRemaining / effective
 }
 
-// monthLabel renders a YYYY-MM-DD date as "June 2026" — estimates are
-// ranges, never promises, so day precision is deliberately dropped.
+// monthLabel renders a YYYY-MM-DD date as "June 2026" ("июнь 2026 г." in Russian) — estimates
+// are ranges, never promises, so day precision is deliberately dropped. The caller must be a
+// component that reads the locale, or the label will not follow a switch.
 export function monthLabel(isoDate: string): string {
   const d = new Date(`${isoDate}T12:00:00Z`)
   if (Number.isNaN(d.getTime())) return ''
-  return d.toLocaleString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+  const locale = getLocale()
+  return d.toLocaleString(locale === 'en' ? 'en-US' : locale, { month: 'long', year: 'numeric', timeZone: 'UTC' })
 }
