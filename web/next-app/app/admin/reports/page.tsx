@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Header from '../../../components/Header'
 import BottomTabs from '../../../components/BottomTabs'
 import Footer from '../../../components/Footer'
@@ -10,7 +10,7 @@ import Loading from '../../../components/Loading'
 import KatexContent from '../../../components/KatexContent'
 import ReportReplay from '../../../components/ReportReplay'
 import {
-  listAdminReports, moderateReport, getErrorMessage,
+  listAdminReports, moderateReport, bulkModerateReports, getErrorMessage,
   type QuestionReport, type ModerationStatus,
 } from '../../../lib/api'
 import { useAdminMe } from '../../../hooks/useAdminMe'
@@ -35,6 +35,21 @@ export default function AdminReportsPage() {
   const [filter, setFilter] = useState('open')
   const [reports, setReports] = useState<QuestionReport[] | null>(null)
   const [error, setError] = useState('')
+
+  // One bug produces many reports. Grouping the queue by concept is what makes
+  // that visible, and what gives the bulk decision a subject: closing "these
+  // eleven" is closing the bug, not eleven unrelated complaints. Order is the
+  // first appearance in the server's newest-first list.
+  const groups = useMemo(() => {
+    const byConcept = new Map<string, QuestionReport[]>()
+    for (const r of reports ?? []) {
+      const key = r.concept_id || ''
+      const bucket = byConcept.get(key)
+      if (bucket) bucket.push(r)
+      else byConcept.set(key, [r])
+    }
+    return [...byConcept.entries()]
+  }, [reports])
 
   const load = useCallback(() => {
     setError('')
@@ -81,11 +96,30 @@ export default function AdminReportsPage() {
             </p>
           )}
 
-          <ul className="space-y-3">
-            {reports?.map((r) => (
-              <ReportCard key={r.id} report={r} canModerate={can('reports.moderate')} onChanged={load} />
-            ))}
-          </ul>
+          <div className="space-y-6">
+            {groups.map(([concept, items]) => {
+              const unsettled = items.filter((r) => r.status === 'open' || r.status === 'reviewing')
+              return (
+                <section key={concept} className="space-y-3">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-mathua-border pb-2">
+                    <h2 className="font-mono text-xs text-mathua-primary">{concept || '(no concept)'}</h2>
+                    <span className="font-mono text-[10px] text-mathua-muted">
+                      {items.length} report{items.length === 1 ? '' : 's'}
+                      {unsettled.length !== items.length ? `, ${unsettled.length} unsettled` : ''}
+                    </span>
+                  </div>
+                  {can('reports.moderate') && concept && unsettled.length > 1 && (
+                    <BulkClose conceptId={concept} count={unsettled.length} onDone={load} />
+                  )}
+                  <ul className="space-y-3">
+                    {items.map((r) => (
+                      <ReportCard key={r.id} report={r} canModerate={can('reports.moderate')} onChanged={load} />
+                    ))}
+                  </ul>
+                </section>
+              )
+            })}
+          </div>
         </main>
       </div>
       <BottomTabs />
@@ -213,5 +247,90 @@ function ReportCard({ report, canModerate, onChanged }: { report: QuestionReport
         </div>
       )}
     </li>
+  )
+}
+
+// Closing a concept's reports after the fix ships. The action names the concept
+// rather than the ids on screen, so a report that arrived while the operator was
+// reading is closed too — it is the same bug. The server still writes one
+// decision record per report, and never revisits one that already has a verdict.
+function BulkClose({ conceptId, count, onDone }: { conceptId: string; count: number; onDone: () => void }) {
+  const [armed, setArmed] = useState<ModerationStatus | null>(null)
+  const [resolution, setResolution] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+
+  async function close(status: ModerationStatus) {
+    if (!resolution.trim()) {
+      setError('A reason is required to resolve or dismiss.')
+      return
+    }
+    setBusy(true)
+    setError('')
+    setNotice('')
+    try {
+      const res = await bulkModerateReports({ concept_id: conceptId }, status, resolution.trim())
+      const failed = res.failed.length ? ` ${res.failed.length} could not be updated (${res.failed.map((f) => '#' + f.id).join(', ')}).` : ''
+      setNotice(`Closed ${res.updated} report${res.updated === 1 ? '' : 's'}${res.skipped ? `, ${res.skipped} already settled` : ''}.${failed}`)
+      setArmed(null)
+      setResolution('')
+      onDone()
+    } catch (e) {
+      setError(getErrorMessage(e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="border border-mathua-border bg-mathua-code p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="font-mono text-[11px] text-mathua-secondary">
+          {count} unsettled report{count === 1 ? '' : 's'} for this concept. Closing here settles every open or reviewing one.
+        </p>
+        {!armed && (
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => setArmed('resolved')}
+              className="border border-mathua-green text-mathua-green hover:bg-mathua-green-faint px-3 h-8 font-mono text-[11px]">
+              Resolve all
+            </button>
+            <button type="button" onClick={() => setArmed('dismissed')}
+              className="border border-mathua-border text-mathua-secondary hover:text-mathua-red px-3 h-8 font-mono text-[11px]">
+              Dismiss all
+            </button>
+          </div>
+        )}
+      </div>
+
+      {armed && (
+        <div className="mt-3">
+          <label htmlFor={`bulk-res-${conceptId}`} className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-mathua-muted">
+            Reason for closing {count} report{count === 1 ? '' : 's'} as {armed}
+          </label>
+          <textarea
+            id={`bulk-res-${conceptId}`}
+            value={resolution}
+            onChange={(e) => setResolution(e.target.value)}
+            rows={2}
+            className="w-full border border-mathua-border bg-mathua-surface p-2 font-mono text-xs text-mathua-primary"
+            placeholder="What changed, and where?"
+          />
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button type="button" disabled={busy} onClick={() => close(armed)}
+              className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-3 h-8 font-mono text-[11px] disabled:opacity-50">
+              {busy ? 'Closing...' : `Confirm ${armed}`}
+            </button>
+            <button type="button" disabled={busy} onClick={() => { setArmed(null); setError('') }}
+              className="border border-mathua-border text-mathua-secondary px-3 h-8 font-mono text-[11px] disabled:opacity-50">
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {error && <p role="alert" className="mt-2 font-mono text-[11px] text-mathua-red">{error}</p>}
+      {notice && <p role="status" className="mt-2 font-mono text-[11px] text-mathua-green">{notice}</p>}
+    </div>
   )
 }

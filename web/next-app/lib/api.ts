@@ -1545,7 +1545,10 @@ export async function validateToken(): Promise<{ valid: boolean; student_id: str
 // lesson bodies, worked examples, or diagrams.
 export type ReportKind = 'question' | 'explanation' | 'lesson_body' | 'worked_example' | 'diagram'
 export type ReportReason = 'wrong_answer' | 'bad_explanation' | 'unclear' | 'formatting' | 'other'
-export type ReportStatus = 'open' | 'confirmed' | 'fixed' | 'dismissed'
+// The server's vocabulary, not the old confirmed/fixed pair, which the
+// moderation endpoint stopped accepting. A type that names a status the
+// server rejects is a bug waiting for a caller.
+export type ReportStatus = 'open' | 'reviewing' | 'resolved' | 'dismissed'
 
 export interface SubmitReportInput {
 	concept_id?: string
@@ -1804,7 +1807,8 @@ export async function gradeAdminReport(id: number, answer: string): Promise<Admi
 	return (await res.json()) as AdminGradeRes
 }
 
-export async function moderateReport(id: number, status: ModerationStatus, resolution: string): Promise<QuestionReport> {	const res = await authedFetch(`${API_BASE}/api/admin/reports/${id}`, {
+export async function moderateReport(id: number, status: ModerationStatus, resolution: string): Promise<QuestionReport> {
+	const res = await authedFetch(`${API_BASE}/api/admin/reports/${id}`, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ status, resolution }),
@@ -1812,6 +1816,34 @@ export async function moderateReport(id: number, status: ModerationStatus, resol
 	if (!res.ok) await throwWithResponse(res, 'Could not update the report')
 	const data = (await res.json()) as { report?: unknown }
 	return validateResponse(QuestionReportSchema, data.report, 'adminReportUpdate')
+}
+
+export interface BulkModerationRes {
+	updated: number
+	skipped: number
+	failed: { id: number; error: string }[]
+}
+
+// One decision across a concept's unsettled reports: a fix is usually one bug,
+// not one report. The server still writes one transaction, stamp and audit row
+// per report — this call only saves the operator from retyping the same reason.
+export async function bulkModerateReports(
+	selector: { ids?: number[]; concept_id?: string },
+	status: ModerationStatus,
+	resolution: string,
+): Promise<BulkModerationRes> {
+	const res = await authedFetch(`${API_BASE}/api/admin/reports/bulk`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ ...selector, status, resolution }),
+	})
+	if (!res.ok) await throwWithResponse(res, 'Could not close the reports')
+	const data = (await res.json()) as Partial<BulkModerationRes>
+	return {
+		updated: data.updated ?? 0,
+		skipped: data.skipped ?? 0,
+		failed: Array.isArray(data.failed) ? data.failed : [],
+	}
 }
 
 export async function listAdmins(): Promise<{ admins: AdminUser[] }> {
