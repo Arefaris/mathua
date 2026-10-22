@@ -686,9 +686,10 @@ export async function submitGoalAnswer(
 	dontKnow?: boolean,
 ): Promise<GoalDiagAnswerRes> {
 	const res = await authedFetch(`${API_BASE}/api/goal/diagnostic/answer`, {
-    // The engine replays an attempt id it has already graded, so repeating
-    // this exact body cannot grade or award twice.
-    retryAttempts: 1,
+		// No attempt id on this path, so the request is not idempotent: it gets a
+		// deadline shorter than the server's 20s grade bound, but never an
+		// automatic retry. A retry here is the learner's explicit choice.
+		timeoutMs: 25000,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
 		body: JSON.stringify({ session_id: sessionId, concept_id: conceptId, answer, elapsed, dont_know: dontKnow ?? false }),
@@ -1391,6 +1392,7 @@ export async function submitStudyAnswer(conceptId: string, answer: string, elaps
     // The engine replays an attempt id it has already graded, so repeating
     // this exact body cannot grade or award twice.
     retryAttempts: 1,
+		timeoutMs: 25000,
 		method: 'POST',
 		headers,
 		body: JSON.stringify(body),
@@ -1450,6 +1452,7 @@ export async function submitReviewAnswer(
 	const res = await authedFetch(`${API_BASE}/api/reviews/answer`, {
 		method: 'POST',
 		retryAttempts: 1,
+		timeoutMs: 25000,
 		headers,
 		body: JSON.stringify({ session_id: sessionID, attempt_id: attemptID, answer, elapsed }),
 	})
@@ -1541,6 +1544,7 @@ export async function submitQuizAnswer(sessionId: string, conceptId: string, ans
     // The engine replays an attempt id it has already graded, so repeating
     // this exact body cannot grade or award twice.
     retryAttempts: 1,
+		timeoutMs: 25000,
 		method: 'POST',
 		headers,
 		body: JSON.stringify(body),
