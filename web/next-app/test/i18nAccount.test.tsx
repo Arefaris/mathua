@@ -165,7 +165,7 @@ describe('leaderboard in Russian', () => {
     expect(screen.getByRole('heading', { name: 'Рейтинг' })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Эта неделя' })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Моя лига' })).toBeInTheDocument()
-    await screen.findAllByText('Эрудит')
+    await screen.findAllByText('Учёный')
     expect(screen.getAllByText('вы').length).toBeGreaterThan(0)
     noRawKeys(container)
   })

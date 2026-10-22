@@ -6,6 +6,8 @@ import DocsMarkdown from './DocsMarkdown'
 import TableOfContents from './TableOfContents'
 import { TOC_MIN_HEADINGS } from '../lib/docsToc'
 import docs from '../content/docs.generated.json'
+import { useT } from '../lib/i18n'
+import type { MessageKey } from '../lib/i18n/keys'
 
 // The shell every rendered documentation page shares: a back link, the heading, a table of
 // contents for a long document, and the body built from the repository markdown. The pages
@@ -25,7 +27,14 @@ type DocEntry = {
   headings: { id: string; text: string; level: number }[]
 }
 
-export default function DocPage({ slug, label = 'Documentation' }: { slug: string; label?: string }) {
+export default function DocPage({
+  slug,
+  labelKey = 'shell.docPage.docs',
+}: {
+  slug: string
+  labelKey?: MessageKey
+}) {
+  const t = useT()
   const doc = (docs as Record<string, DocEntry>)[slug]
   if (!doc) return null
 
@@ -40,10 +49,10 @@ export default function DocPage({ slug, label = 'Documentation' }: { slug: strin
         className="inline-block mt-8"
         style={{ fontFamily: monoFont, fontSize: '13px', color: 'var(--text-muted)' }}
       >
-        ← Docs
+        {t('shell.docPage.back')}
       </Link>
       <section className="pt-8 min-w-0 overflow-hidden">
-        <SectionHeader label={label} title={doc.title} />
+        <SectionHeader label={t(labelKey)} title={doc.title} />
         <p style={{
           fontFamily: "var(--font-space-grotesk), 'Space Grotesk', serif",
           fontSize: 'clamp(0.9rem, 0.85rem + 0.5vw, 1rem)',
@@ -63,7 +72,7 @@ export default function DocPage({ slug, label = 'Documentation' }: { slug: strin
           <DocsMarkdown body={doc.body} />
 
           <p style={{ marginTop: '2.5rem', fontFamily: monoFont, fontSize: '12px', color: 'var(--text-muted)' }}>
-            Source:{' '}
+            {t('shell.docPage.source')}{' '}
             <a href={REPO_BLOB + doc.source} target="_blank" rel="noreferrer" className="link-underline" style={{ color: 'var(--accent-blue)' }}>
               {doc.source}
             </a>

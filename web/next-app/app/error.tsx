@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect } from 'react'
+import { useT } from '@/lib/i18n'
 
 // Route error boundary: catches render/data throws in this segment and
 // offers a reset (re-render) instead of Next's bare default crash page.
@@ -13,6 +14,7 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const t = useT()
   useEffect(() => {
     // eslint-disable-next-line no-console
     console.error('route error:', error)
@@ -33,7 +35,7 @@ export default function Error({
 
       <section className="relative z-10 w-full max-w-2xl">
         <div className="flex items-center justify-between border-b border-mathua-border pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-mathua-secondary">
-          <span>Mathua / error</span>
+          <span>{t('shell.errorPage.crumb')}</span>
           <span aria-hidden="true">§ 500</span>
         </div>
 
@@ -49,11 +51,11 @@ export default function Error({
         </div>
 
         <h2 className="mt-8 font-serif text-2xl font-semibold text-mathua-primary">
-          Something broke on this page.
+          {t('shell.errorPage.heading')}
         </h2>
         <p role="alert" className="mt-3 max-w-md font-mono text-sm leading-relaxed text-mathua-muted">
-          {error?.message || 'An unexpected error interrupted rendering.'}
-          {error?.digest ? ` (ref ${error.digest})` : ''}
+          {error?.message || t('shell.errorPage.fallbackMessage')}
+          {error?.digest ? ` ${t('shell.errorPage.ref', { digest: error.digest })}` : ''}
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -62,13 +64,13 @@ export default function Error({
             onClick={() => reset()}
             className="inline-flex items-center justify-center border border-mathua-blue px-5 py-2.5 font-mono text-xs uppercase tracking-[0.18em] text-mathua-blue transition-colors hover:bg-mathua-blue hover:text-mathua-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-primary"
           >
-            ↻ Try again
+            {t('shell.errorPage.tryAgain')}
           </button>
           <Link
             href="/"
             className="inline-flex items-center justify-center border border-mathua-border bg-transparent px-5 py-2.5 font-mono text-xs uppercase tracking-[0.18em] text-mathua-primary transition-colors hover:bg-mathua-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mathua-primary"
           >
-            ← Return home
+            {t('shell.errorPage.returnHome')}
           </Link>
         </div>
 
