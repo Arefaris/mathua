@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import type { DailyActivity } from '../lib/api'
 import YearlyGrid from './YearlyGrid'
 import MonthlyCards from './MonthlyCards'
+import { useT } from '../lib/i18n'
 
 const STORAGE_KEY = 'mathua-activity-view'
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function ActivityHeatmap({ data }: Props) {
+  const t = useT()
   const [view, setView] = useState<'yearly' | 'monthly'>('monthly')
 
   useEffect(() => {
@@ -34,8 +36,11 @@ export default function ActivityHeatmap({ data }: Props) {
     <div className="w-full max-w-full min-w-0 overflow-hidden">
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
         <div className="font-mono text-[11px] text-mathua-muted min-w-0 truncate">
-          {totalDays} active days · {totalQuestions} questions ·{' '}
-          {totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0}% correct
+          {t('account.activity.summary', {
+            days: t('account.activity.activeDays', { count: totalDays }),
+            questions: t('common.count.questions', { count: totalQuestions }),
+            percent: totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0,
+          })}
         </div>
 
         <div className="inline-flex shrink-0 self-start sm:self-auto border-[0.5px] border-mathua-border-strong rounded-none overflow-hidden">
@@ -47,7 +52,7 @@ export default function ActivityHeatmap({ data }: Props) {
               view === 'monthly' ? 'bg-mathua-blue text-white' : 'bg-transparent text-mathua-muted hover:text-mathua-primary'
             }`}
           >
-            Monthly
+            {t('account.activity.monthly')}
           </button>
           <button
             type="button"
@@ -57,7 +62,7 @@ export default function ActivityHeatmap({ data }: Props) {
               view === 'yearly' ? 'bg-mathua-blue text-white' : 'bg-transparent text-mathua-muted hover:text-mathua-primary'
             }`}
           >
-            Yearly
+            {t('account.activity.yearly')}
           </button>
         </div>
       </div>

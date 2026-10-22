@@ -1,1 +1,95 @@
-{}
+{
+  "level": {
+    "short": "LV",
+    "novice": "Novice",
+    "apprentice": "Apprentice",
+    "student": "Student",
+    "scholar": "Scholar",
+    "adept": "Adept",
+    "expert": "Expert",
+    "master": "Master",
+    "grandmaster": "Grandmaster",
+    "mathArchitect": "Math Architect"
+  },
+  "tier": {
+    "bronze": "Bronze",
+    "silver": "Silver",
+    "gold": "Gold",
+    "platinum": "Platinum",
+    "diamond": "Diamond",
+    "emerald": "Emerald",
+    "ruby": "Ruby",
+    "sapphire": "Sapphire"
+  },
+  "source": {
+    "all": "all",
+    "diagnostic": "diagnostic",
+    "quiz": "quiz",
+    "practice": "practice",
+    "review": "review"
+  },
+  "profileHeader": {
+    "whereYouAre": "Where you are",
+    "reach": "{mastered} of {unlocked} you can reach",
+    "xpToday": "{today}/{goal} XP today",
+    "streakDays": {
+      "one": "{count} day streak",
+      "other": "{count} days streak"
+    },
+    "tally": "Mastered {mastered} · Unlocked {unlocked} · In progress {inProgress}",
+    "workingTowards": "Currently working towards: {label}",
+    "startHere": "Start here: {label}",
+    "dueForReview": "{count} due for review — still learned, worth a retrieval check.",
+    "review": "Review →"
+  },
+  "profileStats": {
+    "xpToday": "XP TODAY",
+    "totalXp": "TOTAL XP",
+    "streak": "STREAK",
+    "mastered": "MASTERED",
+    "weekly": "WEEKLY →"
+  },
+  "progressBar": {
+    "label": "Progress bar",
+    "question": "Question {number}"
+  },
+  "progressSummary": {
+    "mastered": "Concepts mastered",
+    "streak": "Day streak",
+    "level": "Level",
+    "weekly": "Weekly score",
+    "needReview": "{count} need review"
+  },
+  "activity": {
+    "summary": "{days} · {questions} · {percent}% correct",
+    "activeDays": {
+      "one": "{count} active day",
+      "other": "{count} active days"
+    },
+    "monthly": "Monthly",
+    "yearly": "Yearly"
+  },
+  "struggles": {
+    "title": "Needs attention",
+    "struggling": "{count} struggling",
+    "needPractice": "{count} need practice",
+    "domains": {
+      "one": "{count} domain",
+      "other": "{count} domains"
+    },
+    "reviewNow": "Review now →"
+  },
+  "attempts": {
+    "none": "No answered questions yet.",
+    "unavailable": "Question unavailable (recorded before history).",
+    "you": "You: {answer}",
+    "correct": "Correct: {expected}"
+  },
+  "avatar": {
+    "alt": "{name} avatar"
+  },
+  "skeleton": {
+    "loadingLeagues": "Loading leagues",
+    "loadingProfile": "Loading profile"
+  }
+}

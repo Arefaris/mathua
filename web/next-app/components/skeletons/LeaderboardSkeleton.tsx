@@ -1,6 +1,7 @@
 'use client'
 
 import { Skeleton } from '../ui/skeleton'
+import { useT } from '../../lib/i18n'
 
 // Row-level skeletons for leaderboard/page.tsx: table body + leagues.
 // Page keeps its static header/countdown/formula rendered — only the
@@ -35,12 +36,13 @@ export function LeaderboardTableSkeleton({ rows = 8 }: { rows?: number }) {
 }
 
 export function LeaguesSkeleton() {
+  const t = useT()
   return (
     <div
       role="status"
       aria-live="polite"
       aria-busy="true"
-      aria-label="Loading leagues"
+      aria-label={t('account.skeleton.loadingLeagues')}
       className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-full min-w-0 overflow-hidden"
     >
       {Array.from({ length: 2 }).map((_, c) => (

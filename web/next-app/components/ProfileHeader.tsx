@@ -6,6 +6,8 @@ import type { ConceptProgress, Scores } from '../lib/api'
 import { countOverall, type CatalogueConcept } from '../lib/progress'
 import { LEVEL_NAMES } from './ProfileStats'
 import Avatar from './Avatar'
+import { useT } from '../lib/i18n'
+import { levelName } from '../lib/accountNames'
 
 /**
  * The learner header as a few short sentences, not a wall of tiles.
@@ -42,6 +44,7 @@ export default function ProfileHeader({
   /** Small actions that belong on the header line rather than as their own blocks. */
   footer?: ReactNode
 }) {
+  const t = useT()
   const counts = countOverall(catalogue, progress)
   if (counts.total === 0) return null
   const levelNum = LEVEL_NAMES[scores.level] ?? '·'
@@ -60,22 +63,22 @@ export default function ProfileHeader({
             className="!rounded-none"
           />
         </div>
-        <section id="position" aria-label="Where you are" className="min-w-0 flex-1">
+        <section id="position" aria-label={t('account.profileHeader.whereYouAre')} className="min-w-0 flex-1">
           <p className="font-mono text-xs text-mathua-primary break-words [overflow-wrap:anywhere]">
-            {name} · LV {levelNum} {scores.level}
+            {name} · {t('account.level.short')} {levelNum} {levelName(scores.level)}
           </p>
           <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary break-words [overflow-wrap:anywhere]">
-            {counts.mastered} of {counts.unlocked} you can reach · {scores.xp_today}/{scores.daily_xp_goal} XP today · {scores.current_streak} day{scores.current_streak !== 1 ? 's' : ''} streak
+            {t('account.profileHeader.reach', { mastered: counts.mastered, unlocked: counts.unlocked })} · {t('account.profileHeader.xpToday', { today: scores.xp_today, goal: scores.daily_xp_goal })} · {t('account.profileHeader.streakDays', { count: scores.current_streak })}
           </p>
           <p className="mt-1.5 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
-            Mastered {counts.mastered} · Unlocked {counts.unlocked} · In progress {counts.learning + counts.completed}
-            {frontierLabel ? ` · ${counts.mastered > 0 ? 'Currently working towards' : 'Start here'}: ${frontierLabel}` : ''}
+            {t('account.profileHeader.tally', { mastered: counts.mastered, unlocked: counts.unlocked, inProgress: counts.learning + counts.completed })}
+            {frontierLabel ? ` · ${t(counts.mastered > 0 ? 'account.profileHeader.workingTowards' : 'account.profileHeader.startHere', { label: frontierLabel })}` : ''}
           </p>
           {counts.dueForReview > 0 && (
             <p className="mt-1.5 font-mono text-[11px] text-mathua-secondary">
-              {counts.dueForReview} due for review — still learned, worth a retrieval check.{' '}
+              {t('account.profileHeader.dueForReview', { count: counts.dueForReview })}{' '}
               <Link href="/review" className="text-mathua-blue hover:underline">
-                Review →
+                {t('account.profileHeader.review')}
               </Link>
             </p>
           )}

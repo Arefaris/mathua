@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useT } from '../lib/i18n'
 
 interface AvatarProps {
   seed: string
@@ -44,6 +45,8 @@ export function initialFor(name: string): string {
 }
 
 export default function Avatar({ seed, name, size = 64, url, preset, className }: AvatarProps) {
+  const t = useT()
+  const alt = t('account.avatar.alt', { name })
   const palette = preset != null ? PALETTES[preset % PALETTES.length] : avatarPalette(seed)
   const initial = initialFor(name)
   const fontSize = Math.round(size * 0.42)
@@ -59,7 +62,7 @@ export default function Avatar({ seed, name, size = 64, url, preset, className }
     return (
       <img
         src={url}
-        alt={`${name} avatar`}
+        alt={alt}
         width={size}
         height={size}
         className={`rounded-full object-cover shrink-0 ${className ?? ''}`}
@@ -73,7 +76,7 @@ export default function Avatar({ seed, name, size = 64, url, preset, className }
 
   return (
     <div
-      aria-label={`${name} avatar`}
+      aria-label={alt}
       className={`rounded-full flex items-center justify-center shrink-0 select-none ${className ?? ''}`}
       style={{
         width: size,

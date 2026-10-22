@@ -1,16 +1,18 @@
 'use client'
 
 import { Skeleton } from '../ui/skeleton'
+import { useT } from '../../lib/i18n'
 
 // Mirrors the authed /profile layout (max-w-[820px]): one ProfileHeader card (identity + XP +
 // where you are), the recommended-task rows, then the Activity heatmap.
 export default function ProfileSkeleton() {
+  const t = useT()
   return (
     <div
       role="status"
       aria-live="polite"
       aria-busy="true"
-      aria-label="Loading profile"
+      aria-label={t('account.skeleton.loadingProfile')}
       className="mx-auto w-full max-w-[820px] min-w-0 px-4 sm:px-6 py-8 sm:py-12 overflow-x-hidden"
     >
       {/* ProfileHeader: short sentences with the square avatar box on the left. */}

@@ -1,5 +1,7 @@
 import type { Scores } from '../lib/api'
-import { domainLabel } from '../lib/graphDomains'
+import { domainName } from '../lib/domainName'
+import { useT } from '../lib/i18n'
+import { levelName } from '../lib/accountNames'
 
 interface ProgressSummaryProps {
   scores: Scores
@@ -9,11 +11,12 @@ interface ProgressSummaryProps {
 
 
 export default function ProgressSummary({ scores, weakByDomain }: ProgressSummaryProps) {
+  const t = useT()
   const stats = [
-    { label: 'Concepts mastered', value: scores.concepts_mastered, color: 'var(--accent-blue)' },
-    { label: 'Day streak', value: scores.current_streak, color: 'var(--accent-teal)' },
-    { label: 'Level', value: scores.level, color: 'var(--accent-blue)' },
-    { label: 'Weekly score', value: scores.weekly_score, color: 'var(--accent-blue)' },
+    { label: t('account.progressSummary.mastered'), value: scores.concepts_mastered, color: 'var(--accent-blue)' },
+    { label: t('account.progressSummary.streak'), value: scores.current_streak, color: 'var(--accent-teal)' },
+    { label: t('account.progressSummary.level'), value: levelName(scores.level), color: 'var(--accent-blue)' },
+    { label: t('account.progressSummary.weekly'), value: scores.weekly_score, color: 'var(--accent-blue)' },
   ]
 
   const weakDomains = weakByDomain
@@ -43,11 +46,11 @@ export default function ProgressSummary({ scores, weakByDomain }: ProgressSummar
       {weakDomains.length > 0 && (
         <div className="flex flex-wrap gap-3 justify-center mb-6">
           {weakDomains.map(([domain, concepts]) => {
-            const label = domainLabel(domain)
+            const label = domainName(domain)
             return (
               <div key={domain} className="bg-mathua-surface border border-mathua-border px-4 py-2 text-center min-w-[120px]">
                 <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-mathua-muted">{label}</div>
-                <div className="font-mono text-sm text-mathua-red mt-0.5">{concepts.length} need review</div>
+                <div className="font-mono text-sm text-mathua-red mt-0.5">{t('account.progressSummary.needReview', { count: concepts.length })}</div>
               </div>
             )
           })}

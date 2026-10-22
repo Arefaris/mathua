@@ -1,1 +1,101 @@
-{}
+{
+  "level": {
+    "short": "Ур.",
+    "novice": "Новичок",
+    "apprentice": "Подмастерье",
+    "student": "Ученик",
+    "scholar": "Эрудит",
+    "adept": "Адепт",
+    "expert": "Эксперт",
+    "master": "Мастер",
+    "grandmaster": "Гроссмейстер",
+    "mathArchitect": "Архитектор математики"
+  },
+  "tier": {
+    "bronze": "Бронза",
+    "silver": "Серебро",
+    "gold": "Золото",
+    "platinum": "Платина",
+    "diamond": "Алмаз",
+    "emerald": "Изумруд",
+    "ruby": "Рубин",
+    "sapphire": "Сапфир"
+  },
+  "source": {
+    "all": "все",
+    "diagnostic": "диагностика",
+    "quiz": "контрольная",
+    "practice": "практика",
+    "review": "повторение"
+  },
+  "profileHeader": {
+    "whereYouAre": "Где вы сейчас",
+    "reach": "{mastered} из {unlocked} доступных вам",
+    "xpToday": "{today}/{goal} XP сегодня",
+    "streakDays": {
+      "one": "{count} день подряд",
+      "few": "{count} дня подряд",
+      "many": "{count} дней подряд",
+      "other": "{count} дня подряд"
+    },
+    "tally": "Освоено: {mastered} · Открыто: {unlocked} · В процессе: {inProgress}",
+    "workingTowards": "Сейчас вы работаете над темой: {label}",
+    "startHere": "Начните здесь: {label}",
+    "dueForReview": "Пора повторить: {count}. Тема уже изучена, но стоит проверить, помните ли вы её.",
+    "review": "Повторить →"
+  },
+  "profileStats": {
+    "xpToday": "XP сегодня",
+    "totalXp": "Всего XP",
+    "streak": "Серия",
+    "mastered": "Освоено",
+    "weekly": "За неделю →"
+  },
+  "progressBar": {
+    "label": "Прогресс",
+    "question": "Вопрос {number}"
+  },
+  "progressSummary": {
+    "mastered": "Освоено тем",
+    "streak": "Дней подряд",
+    "level": "Уровень",
+    "weekly": "Очки за неделю",
+    "needReview": "Повторить: {count}"
+  },
+  "activity": {
+    "summary": "{days} · {questions} · верных ответов: {percent}%",
+    "activeDays": {
+      "one": "{count} активный день",
+      "few": "{count} активных дня",
+      "many": "{count} активных дней",
+      "other": "{count} активных дня"
+    },
+    "monthly": "По месяцам",
+    "yearly": "По годам"
+  },
+  "struggles": {
+    "title": "Нужно внимание",
+    "struggling": "Трудно: {count}",
+    "needPractice": "Нужна практика: {count}",
+    "domains": {
+      "one": "{count} раздел",
+      "few": "{count} раздела",
+      "many": "{count} разделов",
+      "other": "{count} раздела"
+    },
+    "reviewNow": "Повторить сейчас →"
+  },
+  "attempts": {
+    "none": "Вы ещё не ответили ни на один вопрос.",
+    "unavailable": "Вопрос недоступен (записан до появления истории).",
+    "you": "Вы: {answer}",
+    "correct": "Верно: {expected}"
+  },
+  "avatar": {
+    "alt": "Аватар: {name}"
+  },
+  "skeleton": {
+    "loadingLeagues": "Загрузка лиг",
+    "loadingProfile": "Загрузка профиля"
+  }
+}
