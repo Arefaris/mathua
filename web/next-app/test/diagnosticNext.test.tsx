@@ -149,6 +149,11 @@ describe('WelcomeStep briefing', () => {
     onResume: () => {},
     onBegin: () => {},
     onCancel: () => {},
+    needsName: false,
+    demoName: '',
+    onDemoName: () => {},
+    onStartDemo: () => {},
+    onCancelDemo: () => {},
   }
 
   it('states duration and expectations in the review step', () => {
