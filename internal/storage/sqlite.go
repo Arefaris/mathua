@@ -2247,3 +2247,31 @@ func (s *SQLiteStore) AttemptsSince(since time.Time) ([]AttemptRow, error) {
 	}
 	return out, nil
 }
+
+// RecordDiagnosticAttempt keeps the first verdict for an answered diagnostic
+// question. A duplicate stores nothing, so the original answer stands.
+func (s *SQLiteStore) RecordDiagnosticAttempt(attemptID, response string) error {
+	if attemptID == "" || response == "" {
+		return fmt.Errorf("diagnostic attempt: empty id or response")
+	}
+	_, err := s.db.Exec(
+		`INSERT INTO diagnostic_answers (attempt_id, response, created_at) VALUES (?, ?, ?)
+		 ON CONFLICT(attempt_id) DO NOTHING`,
+		attemptID, response, time.Now().UTC().UnixNano())
+	if err != nil {
+		return fmt.Errorf("record diagnostic attempt: %w", err)
+	}
+	return nil
+}
+
+func (s *SQLiteStore) DiagnosticAttemptResponse(attemptID string) (string, bool, error) {
+	var response string
+	err := s.db.QueryRow(`SELECT response FROM diagnostic_answers WHERE attempt_id = ?`, attemptID).Scan(&response)
+	if err == sql.ErrNoRows {
+		return "", false, nil
+	}
+	if err != nil {
+		return "", false, fmt.Errorf("read diagnostic attempt: %w", err)
+	}
+	return response, true, nil
+}

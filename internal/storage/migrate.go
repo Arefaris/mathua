@@ -61,6 +61,15 @@ CREATE TABLE IF NOT EXISTS league_members (
 
 CREATE INDEX IF NOT EXISTS idx_league_members_cohort ON league_members(week, tier, league_no, xp DESC);
 
+-- One row per answered diagnostic question, keyed by session and concept.
+-- The diagnostic has no attempt token in its wire format, so the pair is the
+-- identity; replaying it returns the same verdict instead of grading twice.
+CREATE TABLE IF NOT EXISTS diagnostic_answers (
+    attempt_id TEXT PRIMARY KEY,
+    response   TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS league_weeks (
     week      TEXT PRIMARY KEY,
     closed_at INTEGER NOT NULL

@@ -999,6 +999,27 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		})
 		return
 	}
+	// The diagnostic has no attempt token in its wire format, so the pair of
+	// session and concept is the identity of one answer: the run never serves a
+	// concept twice. A retry after a timeout, a duplicate POST or a retry after
+	// a restart therefore replays the stored verdict instead of grading again.
+	answerKey := session.ID + ":" + req.ConceptID
+	// Only a concept the session has already moved past can be a duplicate. A
+	// retry deliberately re-serves the same concept as a new question, and
+	// replaying it there would return the first attempt's verdict instead of
+	// grading the retry.
+	if req.ConceptID != session.LastConceptID {
+		if raw, found, err := s.repo.DiagnosticAttemptResponse(answerKey); err != nil {
+			writeError(w, "failed to read the previous answer", 500)
+			return
+		} else if found {
+			var replayed map[string]interface{}
+			if err := json.Unmarshal([]byte(raw), &replayed); err == nil {
+				writeAssessmentVerdict(w, replayed)
+				return
+			}
+		}
+	}
 	if session.LastConceptID != "" && session.LastConceptID != req.ConceptID {
 		writeError(w, "concept_id does not match the current question", 400)
 		return
@@ -1063,13 +1084,15 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		s.persistDiagnosticSession(session)
 		report := s.eng.DiagnosticReport(session)
 		prog := s.eng.DiagnosticProgress(session)
-		writeAssessmentVerdict(w, map[string]interface{}{
+		verdict := map[string]interface{}{
 			"done":     true,
 			"correct":  correct,
 			"feedback": explanation,
 			"report":   report,
 			"progress": prog,
-		})
+		}
+		s.recordDiagnosticVerdict(answerKey, verdict)
+		writeAssessmentVerdict(w, verdict)
 		return
 	}
 	nextProb, cid, err := s.eng.NextDiagnosticQuestion(session)
@@ -1107,7 +1130,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	// next question is staged. A crash after this line costs nothing.
 	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
-	writeAssessmentVerdict(w, s.withAnswerFormat(map[string]interface{}{
+	verdict := s.withAnswerFormat(map[string]interface{}{
 		"done":            false,
 		"correct":         correct,
 		"feedback":        explanation,
@@ -1117,7 +1140,9 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		"grading_type":    s.gradingTypeOf(cid),
 		"progress":        prog,
 		"retry_available": retryAvailable,
-	}, cid))
+	}, cid)
+	s.recordDiagnosticVerdict(answerKey, verdict)
+	writeAssessmentVerdict(w, verdict)
 }
 
 // POST /api/goal/diagnostic/skip
@@ -4400,5 +4425,18 @@ func gradingTimeout(deadline time.Duration, h http.HandlerFunc) http.HandlerFunc
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		th.ServeHTTP(w, r)
+	}
+}
+
+// recordDiagnosticVerdict remembers what the learner was told. It is
+// best-effort: losing the row costs a duplicate grade on a retry, while
+// failing the request would throw away an answer that was already accepted.
+func (s *Server) recordDiagnosticVerdict(answerKey string, verdict map[string]interface{}) {
+	raw, err := json.Marshal(verdict)
+	if err != nil {
+		return
+	}
+	if err := s.repo.RecordDiagnosticAttempt(answerKey, string(raw)); err != nil {
+		log.Printf("warning: diagnostic verdict not stored: %v", err)
 	}
 }

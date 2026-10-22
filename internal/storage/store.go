@@ -625,6 +625,10 @@ type Repository interface {
 	RecordXPEvent(studentID string, amount int, reason, eventKey string) (bool, error)
 	// AttemptsSince returns attempts at or after since, oldest first.
 	AttemptsSince(since time.Time) ([]AttemptRow, error)
+	// RecordDiagnosticAttempt stores the verdict for one answered diagnostic
+	// question so a retry can replay it instead of grading again.
+	RecordDiagnosticAttempt(attemptID, response string) error
+	DiagnosticAttemptResponse(attemptID string) (string, bool, error)
 	GetXP(studentID string) (total int, today int, err error)
 	SetDiagnosticCompleted(studentID string) error
 	// DiagnosticCompletedAt reports when placement completed. A separate call

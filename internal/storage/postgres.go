@@ -73,6 +73,15 @@ CREATE TABLE IF NOT EXISTS league_members (
 
 CREATE INDEX IF NOT EXISTS idx_league_members_cohort ON league_members(week, tier, league_no, xp DESC);
 
+-- One row per answered diagnostic question, keyed by session and concept.
+-- The diagnostic has no attempt token in its wire format, so the pair is the
+-- identity; replaying it returns the same verdict instead of grading twice.
+CREATE TABLE IF NOT EXISTS diagnostic_answers (
+    attempt_id TEXT PRIMARY KEY,
+    response   TEXT NOT NULL,
+    created_at BIGINT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS league_weeks (
     week      TEXT PRIMARY KEY,
     closed_at BIGINT NOT NULL
@@ -2326,4 +2335,31 @@ func (s *PostgresStore) AttemptsSince(since time.Time) ([]AttemptRow, error) {
 		return nil, fmt.Errorf("read attempts since: %w", err)
 	}
 	return out, nil
+}
+
+// RecordDiagnosticAttempt mirrors the SQLite method; see the schema comment.
+func (s *PostgresStore) RecordDiagnosticAttempt(attemptID, response string) error {
+	if attemptID == "" || response == "" {
+		return fmt.Errorf("diagnostic attempt: empty id or response")
+	}
+	_, err := s.db.Exec(
+		`INSERT INTO diagnostic_answers (attempt_id, response, created_at) VALUES ($1, $2, $3)
+		 ON CONFLICT (attempt_id) DO NOTHING`,
+		attemptID, response, time.Now().UTC().UnixNano())
+	if err != nil {
+		return fmt.Errorf("record diagnostic attempt: %w", err)
+	}
+	return nil
+}
+
+func (s *PostgresStore) DiagnosticAttemptResponse(attemptID string) (string, bool, error) {
+	var response string
+	err := s.db.QueryRow(`SELECT response FROM diagnostic_answers WHERE attempt_id = $1`, attemptID).Scan(&response)
+	if err == sql.ErrNoRows {
+		return "", false, nil
+	}
+	if err != nil {
+		return "", false, fmt.Errorf("read diagnostic attempt: %w", err)
+	}
+	return response, true, nil
 }
