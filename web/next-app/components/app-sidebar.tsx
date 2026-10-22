@@ -13,6 +13,8 @@ import {
   House,
   Layers,
   LogOut,
+  Mail,
+  MessagesSquare,
   Shield,
   Network,
   Pencil,
@@ -76,6 +78,8 @@ const NAV_ITEMS: SidebarNavItem[] = [
     { label: 'Contribute', href: '/docs/contributing', icon: Handshake },
     { label: "Creator's note", href: '/note', icon: Pencil },
     { label: 'How it works', href: '/how-it-works', icon: House },
+    { label: 'Contact', href: '/contact', icon: Mail },
+    { label: 'Discord', href: 'https://discord.gg/qXPeQ2jys', icon: MessagesSquare },
   ]
 
 const ADMIN_ITEM: SidebarNavItem = {
@@ -194,10 +198,17 @@ export function AppSidebar({
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton asChild isActive={active} tooltip={item.label}>
-                      <Link href={item.href}>
-                        <Icon className="shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
-                      </Link>
+                      {item.href.startsWith('http') ? (
+                        <a href={item.href} target="_blank" rel="noreferrer">
+                          <Icon className="shrink-0" />
+                          <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                        </a>
+                      ) : (
+                        <Link href={item.href}>
+                          <Icon className="shrink-0" />
+                          <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                        </Link>
+                      )}
                     </SidebarMenuButton>
                     {item.href === '/learn' && dueReviews > 0 && (
                       <SidebarMenuBadge>{dueReviews}</SidebarMenuBadge>

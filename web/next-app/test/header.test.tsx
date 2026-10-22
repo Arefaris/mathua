@@ -143,9 +143,9 @@ describe('Header mobile nav menu', () => {
     // Whatever is left after the tab bar is subtracted out. Domains is not here: it holds a
     // tab, having taken the slot the closed Study route occupied, so it is always one tap away
     // on mobile instead of hiding one level deep.
-    expect(labels).toEqual(['Leaderboard', 'Glossary', 'Contact', 'Login'])
+    expect(labels).toEqual(['Leaderboard', 'Glossary', 'Contact', 'Login', 'Discord'])
     const hrefs = items.map(i => (i as HTMLAnchorElement).getAttribute('href'))
-    expect(hrefs).toEqual(['/leaderboard', '/glossary', '/contact', '/login'])
+    expect(hrefs).toEqual(['/leaderboard', '/glossary', '/contact', '/login', 'https://discord.gg/qXPeQ2jys'])
     // The invariant behind the exact list: nothing appears twice on one screen.
     for (const href of hrefs) {
       expect(hrefs.filter(h => h === href)).toHaveLength(1)
@@ -169,7 +169,7 @@ describe('Header mobile nav menu', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation menu' }))
     const menu = screen.getByRole('menu', { name: 'Site navigation' })
     const labels = within(menu).getAllByRole('menuitem').map(i => i.textContent)
-    expect(labels).toEqual(['Graph', 'Docs', 'Architecture', 'Contributing', 'Note'])
+    expect(labels).toEqual(['Graph', 'Docs', 'Architecture', 'Contributing', 'Note', 'Discord'])
   })
 
   it('marks the current page with aria-current', () => {
@@ -192,7 +192,7 @@ describe('Header mobile nav menu', () => {
   it('closes on Escape', () => {
     render(<Header />)
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation menu' }))
-    expect(screen.getAllByRole('menuitem')).toHaveLength(4)
+    expect(screen.getAllByRole('menuitem')).toHaveLength(5)
     fireEvent.keyDown(document, { key: 'Escape' })
     expect(screen.queryAllByRole('menuitem')).toHaveLength(0)
   })
@@ -201,11 +201,11 @@ describe('Header mobile nav menu', () => {
     render(<Header />)
     const button = screen.getByRole('button', { name: 'Open navigation menu' })
     fireEvent.click(button)
-    expect(screen.getAllByRole('menuitem')).toHaveLength(4)
+    expect(screen.getAllByRole('menuitem')).toHaveLength(5)
     fireEvent.click(button)
     expect(screen.queryAllByRole('menuitem')).toHaveLength(0)
     fireEvent.click(button)
-    expect(screen.getAllByRole('menuitem')).toHaveLength(4)
+    expect(screen.getAllByRole('menuitem')).toHaveLength(5)
   })
 
   it('closes when a link is clicked', () => {

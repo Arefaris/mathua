@@ -190,6 +190,17 @@ export default function Header({ links }: HeaderProps) {
                   </Link>
                 </span>
               ))}
+              <span className="flex items-center gap-2">
+                <span className="font-mono text-xs text-mathua-blue select-none">|</span>
+                <a
+                  href="https://discord.gg/qXPeQ2jys"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-underline font-mono text-xs text-mathua-muted hover:text-mathua-blue whitespace-nowrap transition-colors"
+                >
+                  Discord
+                </a>
+              </span>
             </nav>
           </div>
 
@@ -275,6 +286,16 @@ export default function Header({ links }: HeaderProps) {
                           </Link>
                         )
                       })}
+                      <a
+                        href="https://discord.gg/qXPeQ2jys"
+                        role="menuitem"
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => setNavOpen(false)}
+                        className="flex items-center min-h-[44px] px-4 font-mono text-xs whitespace-nowrap text-mathua-muted hover:text-mathua-blue hover:bg-mathua-surface-elevated transition-colors"
+                      >
+                        Discord
+                      </a>
                     </div>
                   </div>
                   )}

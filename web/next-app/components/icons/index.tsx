@@ -34,6 +34,7 @@ import {
   HouseIcon,
   LayersIcon,
   LogOutIcon,
+  MailIcon,
   NetworkIcon,
   PauseIcon,
   PencilIcon,
@@ -140,6 +141,7 @@ export const ChevronUp = wrap(ChevronUpIcon as never)
 
 // The product assistant's dock. A speech pair rather than a single bubble: the
 // control opens a conversation, and one bubble reads as a notification badge.
+export const Mail = wrap(MailIcon as never)
 export const MessagesSquare = wrap(MessagesSquareIcon as never)
 // Named Close rather than X: the call site says what the control does, and `X`
 // in a component that also handles coordinates is a name waiting to be misread.
