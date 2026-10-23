@@ -23,6 +23,35 @@
 
 ---
 
+## Ukrainian and Russian translation
+
+This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that translates Mathua into **Ukrainian** and **Russian**. Both languages are maintained together: every new string is translated into both at once. English stays the source language and the fallback for anything not translated yet.
+
+- **Russian** can be picked today in Settings or in the footer: the interface, topic and course names and the lesson steps of the school domains are in Russian.
+- **Ukrainian** is in progress. It appears in the language switcher once its interface is complete.
+- The fork follows upstream at least twice a week, and translations live in separate overlay files next to the English originals, so the original project can take any part of this work back.
+
+<!-- i18n-progress:start -->
+![Ukrainian](https://img.shields.io/badge/Ukrainian-%3C1%25-red?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-3%25-red?style=flat-square)
+
+| Area | English words | Ukrainian | Russian |
+|---|--:|---|---|
+| Interface | 6,515 | `█░░░░░░░░░░░░░░░░░░░` 1% | `████████████████████` 100% |
+| Topic names | 4,665 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
+| Courses | 439 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
+| Lesson steps | 90,483 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████░░░░░░░░░░░░░░░░` 24% |
+| Lesson texts | 728,478 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| Worked solutions | 25,800 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| Problem texts | 17,230 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| **Overall** | **873,610** | **`█░░░░░░░░░░░░░░░░░░░` <1%** | **`█░░░░░░░░░░░░░░░░░░░` 3%** |
+
+_Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._
+<!-- i18n-progress:end -->
+
+How it works and what is planned: [TRANSLATION_PLAN.md](TRANSLATION_PLAN.md). Terminology: [Ukrainian glossary](docs/i18n/glossary-uk.md), [Russian glossary](docs/i18n/glossary-ru.md). Rules for working in this fork: [CLAUDE.md](CLAUDE.md). These documents are written in Russian.
+
+---
+
 Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 1250 atomic concepts and 28 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 3750 worked examples (1250 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
 
 ---

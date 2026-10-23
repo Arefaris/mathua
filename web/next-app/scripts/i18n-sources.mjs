@@ -34,7 +34,7 @@ const readJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 const fingerprint = value => createHash('sha1').update(JSON.stringify(value)).digest('hex').slice(0, 12)
 
 /** English originals, `section:key -> value`. */
-function englishSources() {
+export function englishSources() {
   const out = new Map()
 
   for (const [key, e] of load(messagesDir, 'en').out) out.set(`web:${key}`, e.texts)
@@ -65,7 +65,7 @@ function englishSources() {
 }
 
 /** The keys a language has translated, in the same `section:key` form. */
-function translatedKeys(locale) {
+export function translatedKeys(locale) {
   const keys = new Set()
   if (existsSync(join(messagesDir, locale))) {
     for (const key of load(messagesDir, locale).out.keys()) keys.add(`web:${key}`)
