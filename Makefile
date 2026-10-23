@@ -32,6 +32,16 @@ e2e-hermetic:
 	cd web/next-app && rm -rf out && NEXT_PUBLIC_API_URL=http://192.0.2.1:9099 npx next build
 	cd web/next-app && npx playwright test
 
+# The diagnosis suite measures the answer-to-submit timeline and prints what it
+# finds instead of asserting, so a scenario that breaks still reports green. It is
+# not part of `e2e` and not part of CI: it cost 273.6s of e2e test time across 27
+# executions on 2026-10-23, and one run printed four FAILURE lines while the shard
+# passed. This target is how it runs on all three profiles when someone is
+# investigating a phone that will not submit.
+e2e-diagnosis:
+	cd web/next-app && rm -rf out && npx next build
+	cd web/next-app && PW_DIAGNOSIS=1 npx playwright test e2e/answer-diagnosis.spec.ts
+
 validate:
 	python3 scripts/check_duplicate_tests.py
 	go run scripts/validate_graph.go
