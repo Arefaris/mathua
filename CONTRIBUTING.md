@@ -16,6 +16,19 @@ go build ./cmd/mathua
 DATABASE_URL=postgres://... ./mathua --serve --port 8080
 ```
 
+### Run the storage tests on both engines
+
+The storage tests run on SQLite by default. An in-memory database needs no service and starts in about a millisecond. Set `TEST_POSTGRES_DSN` to run the same tests against Postgres:
+
+```bash
+docker run -d --rm --name mathua-pg -e POSTGRES_PASSWORD=pg \
+  -e POSTGRES_DB=mathua -p 5432:5432 postgres:16-alpine
+TEST_POSTGRES_DSN="postgres://postgres:pg@localhost:5432/mathua?sslmode=disable" \
+  go test ./internal/storage/ -count=1
+```
+
+CI runs both engines. A method that behaves differently on Postgres fails the `Storage suite on Postgres` job.
+
 The concept graph lives in per-domain files under `data/concepts/`. Generators live in `internal/generator/`. Here are the kinds of contributions that move the needle:
 
 - New concepts — the single most impactful thing you can add. A pinned SymPy service checks equivalence for `polynomial`, `expression`, `symbolic` and `complex` grading. The service is `grading/sympy_service.py`, and its version is in `grading/requirements.txt`. The production image ships it. There is no pure-Go equivalence fallback. Run `go test ./...` and the grader tests with SymPy installed.

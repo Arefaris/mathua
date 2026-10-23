@@ -67,9 +67,7 @@ func TestSQLiteStore_GetStudentByShareToken(t *testing.T) {
 		t.Fatalf("create student: %v", err)
 	}
 	token := "valid-share-token-xyz"
-	if _, err := store.db.Exec("UPDATE students SET share_token = ? WHERE id = ?", token, stu.ID); err != nil {
-		t.Fatalf("update share token: %v", err)
-	}
+	execSeed(t, store, "UPDATE students SET share_token = ? WHERE id = ?", token, stu.ID)
 
 	found, err := store.GetStudentByShareToken(token)
 	if err != nil {

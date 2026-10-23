@@ -27,11 +27,7 @@ func TestAwardXP_IsIdempotentPerEventKey(t *testing.T) {
 	if total != 12 {
 		t.Fatalf("xp_total = %d, want 12 after three awards of one event", total)
 	}
-	var events int
-	if err := store.db.QueryRow(
-		`SELECT COUNT(*) FROM xp_events WHERE student_id = ?`, st.ID).Scan(&events); err != nil {
-		t.Fatalf("count events: %v", err)
-	}
+	events := seedInt(t, store, `SELECT COUNT(*) FROM xp_events WHERE student_id = ?`, st.ID)
 	if events != 1 {
 		t.Fatalf("ledger rows = %d, want 1", events)
 	}
@@ -111,11 +107,9 @@ func TestWeeklyXPByStudent_CountsOnlyTheWindow(t *testing.T) {
 	}
 	// Backdate the row: the query is a time window, not a label on the row, so
 	// this is the only way to prove the window is applied.
-	if _, err := store.db.Exec(
+	execSeed(t, store,
 		`UPDATE xp_events SET created_at = ? WHERE event_key = 'attempt:this-week'`,
-		time.Now().UTC().Add(-14*24*time.Hour).UnixNano()); err != nil {
-		t.Fatalf("backdate: %v", err)
-	}
+		time.Now().UTC().Add(-14*24*time.Hour).UnixNano())
 	if err := store.AwardXP(st.ID, 5, "study", "attempt:now"); err != nil {
 		t.Fatalf("award now: %v", err)
 	}
@@ -133,7 +127,7 @@ func TestWeeklyXPByStudent_CountsOnlyTheWindow(t *testing.T) {
 // seedStudent creates a real account. It is not a guest on purpose: the
 // leaderboard excludes guests, and a guest here would make a later eligibility
 // test pass for the wrong reason.
-func seedStudent(t *testing.T, store *SQLiteStore) *Student {
+func seedStudent(t *testing.T, store Repository) *Student {
 	t.Helper()
 	st, err := store.CreateStudent(fmt.Sprintf("Learner %d", time.Now().UnixNano()))
 	if err != nil {

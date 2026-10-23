@@ -9,7 +9,7 @@ import (
 // leagueFixture creates n learners with descending lifetime XP, all earned
 // inside the week starting prevFrom, and returns them in XP order. The first
 // week is bootstrapped from lifetime XP; later weeks use the ledger window.
-func leagueFixture(t *testing.T, store *SQLiteStore, n int, prevFrom time.Time) []*Student {
+func leagueFixture(t *testing.T, store Repository, n int, prevFrom time.Time) []*Student {
 	t.Helper()
 	out := make([]*Student, 0, n)
 	for i := 0; i < n; i++ {
@@ -24,10 +24,7 @@ func leagueFixture(t *testing.T, store *SQLiteStore, n int, prevFrom time.Time) 
 	}
 	// Move every seed event into the previous week's window so the transition
 	// reads them the way it would in production.
-	if _, err := store.db.Exec(
-		`UPDATE xp_events SET created_at = ?`, prevFrom.Add(24*time.Hour).UnixNano()); err != nil {
-		t.Fatalf("backdate: %v", err)
-	}
+	execSeed(t, store, `UPDATE xp_events SET created_at = ?`, prevFrom.Add(24*time.Hour).UnixNano())
 	return out
 }
 
@@ -40,23 +37,15 @@ func weekMonday(t *testing.T, value string) time.Time {
 	return day.UTC()
 }
 
-func countWeekRows(t *testing.T, store *SQLiteStore, week string) int {
+func countWeekRows(t *testing.T, store Repository, week string) int {
 	t.Helper()
-	var n int
-	if err := store.db.QueryRow(
-		`SELECT COUNT(*) FROM league_members WHERE week = ?`, week).Scan(&n); err != nil {
-		t.Fatalf("count week rows: %v", err)
-	}
-	return n
+	return seedInt(t, store, `SELECT COUNT(*) FROM league_members WHERE week = ?`, week)
 }
 
-func tierCounts(t *testing.T, store *SQLiteStore, week string) map[string]int {
+func tierCounts(t *testing.T, store Repository, week string) map[string]int {
 	t.Helper()
-	rows, err := store.db.Query(
+	rows := querySeed(t, store,
 		`SELECT tier, COUNT(*) FROM league_members WHERE week = ? GROUP BY tier`, week)
-	if err != nil {
-		t.Fatalf("tier counts: %v", err)
-	}
 	defer rows.Close()
 	out := map[string]int{}
 	for rows.Next() {
@@ -87,9 +76,8 @@ func TestResolveLeagueWeek_BootstrapsThenPromotesAndRelegates(t *testing.T) {
 		t.Fatalf("bootstrap seats = %d, want 40", got)
 	}
 	// League 1 is full at thirty; the remaining ten form league 2.
-	var league1, league2 int
-	store.db.QueryRow(`SELECT COUNT(*) FROM league_members WHERE week='2026-10-12' AND tier='bronze' AND league_no=1`).Scan(&league1)
-	store.db.QueryRow(`SELECT COUNT(*) FROM league_members WHERE week='2026-10-12' AND tier='bronze' AND league_no=2`).Scan(&league2)
+	league1 := seedInt(t, store, `SELECT COUNT(*) FROM league_members WHERE week='2026-10-12' AND tier='bronze' AND league_no=1`)
+	league2 := seedInt(t, store, `SELECT COUNT(*) FROM league_members WHERE week='2026-10-12' AND tier='bronze' AND league_no=2`)
 	if league1 != LeagueSize || league2 != 10 {
 		t.Errorf("bootstrap split = %d/%d, want %d/10", league1, league2, LeagueSize)
 	}
@@ -223,10 +211,8 @@ func TestLeagueRoster_OrdersByXPThenNameAndID(t *testing.T) {
 		if err := store.AwardXP(st.ID, 10, "test", "tie:"+name); err != nil {
 			t.Fatalf("award %s: %v", name, err)
 		}
-		if _, err := store.db.Exec(`UPDATE xp_events SET created_at = ? WHERE student_id = ?`,
-			week.Add(time.Hour).UnixNano(), st.ID); err != nil {
-			t.Fatalf("backdate %s: %v", name, err)
-		}
+		execSeed(t, store, `UPDATE xp_events SET created_at = ? WHERE student_id = ?`,
+			week.Add(time.Hour).UnixNano(), st.ID)
 		ids = append(ids, st.ID)
 	}
 	if err := store.ResolveLeagueWeek("2026-10-19", week.AddDate(0, 0, -7), week); err != nil {

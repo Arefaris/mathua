@@ -6,9 +6,8 @@ import (
 
 func TestEmailUniqueIndex_Created(t *testing.T) {
 	s := newTestStore(t)
-	var name string
-	if err := s.db.QueryRow("SELECT name FROM sqlite_master WHERE type='index' AND name='uidx_students_email'").Scan(&name); err != nil {
-		t.Fatalf("expected uidx_students_email index: %v", err)
+	if !hasIndex(t, s, "uidx_students_email") {
+		t.Fatal("expected a uidx_students_email index on the engine under test")
 	}
 }
 

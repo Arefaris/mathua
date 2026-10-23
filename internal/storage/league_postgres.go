@@ -96,7 +96,7 @@ func (s *PostgresStore) ResolveLeagueWeek(week string, prevFrom, prevTo time.Tim
 	for _, tier := range LeagueTiers {
 		next = append(next, cutCohorts(tier, byTier[tier])...)
 	}
-	if err := insertCohorts(tx, week, next); err != nil {
+	if err := insertCohorts(tx, week, next, rebindDollars); err != nil {
 		return err
 	}
 	if err := tx.Commit(); err != nil {
@@ -128,7 +128,7 @@ func (s *PostgresStore) bootstrapLeagues(tx *sql.Tx, week string) error {
 	if err := rows.Err(); err != nil {
 		return fmt.Errorf("seed leagues: %w", err)
 	}
-	return insertCohorts(tx, week, cutCohorts(LeagueTiers[0], members))
+	return insertCohorts(tx, week, cutCohorts(LeagueTiers[0], members), rebindDollars)
 }
 
 func (s *PostgresStore) EnsureLeagueMembership(studentID, week string) error {

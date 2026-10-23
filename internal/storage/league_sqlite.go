@@ -110,7 +110,7 @@ func (s *SQLiteStore) ResolveLeagueWeek(week string, prevFrom, prevTo time.Time)
 	for _, tier := range LeagueTiers {
 		next = append(next, cutCohorts(tier, byTier[tier])...)
 	}
-	if err := insertCohorts(tx, week, next); err != nil {
+	if err := insertCohorts(tx, week, next, rebindQuestion); err != nil {
 		return err
 	}
 	if err := tx.Commit(); err != nil {
@@ -143,17 +143,21 @@ func (s *SQLiteStore) bootstrapLeagues(tx *sql.Tx, week string) error {
 	if err := rows.Err(); err != nil {
 		return fmt.Errorf("seed leagues: %w", err)
 	}
-	return insertCohorts(tx, week, cutCohorts(LeagueTiers[0], members))
+	return insertCohorts(tx, week, cutCohorts(LeagueTiers[0], members), rebindQuestion)
 }
 
-func insertCohorts(tx *sql.Tx, week string, cohorts []leagueCohort) error {
+// insertCohorts writes one week's seats. Both engines call it, so the caller
+// supplies the placeholder spelling: SQLite takes `?`, Postgres takes `$n`. The
+// statement used to hardcode `?`, which made a Postgres bootstrap fail with a
+// syntax error at the first comma, so a league week could never form there.
+func insertCohorts(tx *sql.Tx, week string, cohorts []leagueCohort, rebind func(string) string) error {
+	const insert = `INSERT INTO league_members (week, student_id, tier, league_no, xp, rank)
+		 VALUES (?, ?, ?, ?, 0, 0)
+		 ON CONFLICT(week, student_id) DO NOTHING`
+	query := rebind(insert)
 	for _, c := range cohorts {
 		for _, m := range c.Members {
-			if _, err := tx.Exec(
-				`INSERT INTO league_members (week, student_id, tier, league_no, xp, rank)
-				 VALUES (?, ?, ?, ?, 0, 0)
-				 ON CONFLICT(week, student_id) DO NOTHING`,
-				week, m.StudentID, c.Tier, c.LeagueNo); err != nil {
+			if _, err := tx.Exec(query, week, m.StudentID, c.Tier, c.LeagueNo); err != nil {
 				return fmt.Errorf("insert league member: %w", err)
 			}
 		}

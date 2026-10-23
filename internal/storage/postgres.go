@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS student_topic_speed (
     efactor       REAL NOT NULL DEFAULT 2.5,
     interval      INTEGER NOT NULL DEFAULT 0,
     repetitions   INTEGER NOT NULL DEFAULT 0,
-    learning_speed REAL NOT NULL DEFAULT 1.0,
+    learning_speed DOUBLE PRECISION NOT NULL DEFAULT 1.0,
     updated_at    TEXT NOT NULL DEFAULT (now()::text),
     PRIMARY KEY (student_id, concept_id),
     FOREIGN KEY (student_id) REFERENCES students(id)
@@ -384,10 +384,30 @@ func (s *PostgresStore) Migrate() error {
 	return pgAuthMigrate(s.db)
 }
 
+// rebindDollars renumbers `?` placeholders for Postgres. Statements shared by
+// both engines are written once, in the SQLite spelling, and the Postgres
+// caller rewrites them here rather than keeping a second copy that can drift.
+func rebindDollars(query string) string {
+	var b strings.Builder
+	n := 0
+	for _, r := range query {
+		if r == '?' {
+			n++
+			b.WriteString(fmt.Sprintf("$%d", n))
+			continue
+		}
+		b.WriteRune(r)
+	}
+	return b.String()
+}
+
 func pgAuthMigrate(db *sql.DB) error {
 	migrations := []string{
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS username TEXT",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS password_hash TEXT",
+		// REAL is four bytes in Postgres and eight in SQLite, so 1.4 came back as
+		// 1.39999997 and a round trip stopped being equal to the value written.
+		"ALTER TABLE student_topic_speed ALTER COLUMN learning_speed TYPE DOUBLE PRECISION",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS course_id TEXT",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS xp_total INTEGER NOT NULL DEFAULT 0",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS xp_today INTEGER NOT NULL DEFAULT 0",
@@ -1458,7 +1478,7 @@ func (s *PostgresStore) UpsertActiveSession(a *ActiveSession) error {
 			(session_id, student_id, concept_id, concept_name, expected_answer,
 			 attempt_id, question, explanation, diagram, is_review, answered,
 			 last_concept_id, session_review, session_new, difficulty, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
 		ON CONFLICT(session_id) DO UPDATE SET
 			student_id      = EXCLUDED.student_id,
 			concept_id      = EXCLUDED.concept_id,

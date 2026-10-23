@@ -293,6 +293,41 @@ jobs:
         env:
           TEST_POSTGRES_DSN: postgres://pg:pg@localhost:5432/mathua?sslmode=disable
 
+  # The parity job above compares selected scenarios. This one runs the whole
+  # storage suite against the engine production does not use yet: a method that
+  # behaves differently there cannot hide behind a filter. It found three real
+  # Postgres defects on its first run (a shared league insert written with SQLite
+  # placeholders, an active-session upsert with one placeholder too few, and a
+  # REAL column that turned 1.4 into 1.39999997).
+  storage-postgres:
+    name: Storage suite on Postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: pg
+          POSTGRES_PASSWORD: pg
+          POSTGRES_DB: mathua
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27'
+          cache: true
+          cache-dependency-path: go.sum
+      - name: Every storage test on Postgres
+        run: go test ./internal/storage/ -count=1 -v
+        env:
+          TEST_POSTGRES_DSN: postgres://pg:pg@localhost:5432/mathua?sslmode=disable
+
   deploy:
     name: Deploy to Fly.io
     needs: [test, web, web-e2e, docker, postgres]

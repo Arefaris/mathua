@@ -27,6 +27,10 @@ type SQLiteStore struct {
 	creditProbe func(exec func(query string, args ...any) error)
 }
 
+// rebindQuestion is the SQLite half of the shared-statement contract: the
+// placeholder spelling a shared query is written in is already SQLite's.
+func rebindQuestion(query string) string { return query }
+
 func NewSQLiteStore(path string) (*SQLiteStore, error) {
 	db, err := sql.Open("sqlite3", path)
 	if err != nil {

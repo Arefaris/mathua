@@ -2,12 +2,39 @@ package storage
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 	"time"
 )
 
-func newTestStore(t *testing.T) *SQLiteStore {
+// newTestStore returns the store one test runs against.
+//
+// SQLite stays the default: `:memory:` needs no service, isolates every test by
+// construction and starts in about a millisecond. Setting TEST_POSTGRES_DSN
+// runs the same suite against Postgres, which is the only way to learn whether
+// a method behaves the same on the engine production will use. The package has
+// no t.Parallel calls, so the Postgres branch can truncate every table before
+// each test instead of giving each one a schema of its own; a parallel test
+// would need the schema, because two of them would empty each other's rows.
+func newTestStore(t *testing.T) Repository {
+	t.Helper()
+	if dsn := os.Getenv("TEST_POSTGRES_DSN"); dsn != "" {
+		store, err := NewPostgresStore(dsn)
+		if err != nil {
+			t.Fatalf("open postgres: %v", err)
+		}
+		t.Cleanup(func() { store.Close() })
+		truncatePostgres(t, store)
+		return store
+	}
+	return newSQLiteStore(t)
+}
+
+// newSQLiteStore is newTestStore without the engine switch, for the tests that
+// reach past the Repository interface: the schema itself, the trigger that
+// blocks audit rewrites, and the invalid-path case.
+func newSQLiteStore(t *testing.T) *SQLiteStore {
 	t.Helper()
 	store, err := NewSQLiteStore(":memory:")
 	if err != nil {
@@ -15,6 +42,37 @@ func newTestStore(t *testing.T) *SQLiteStore {
 	}
 	t.Cleanup(func() { store.Close() })
 	return store
+}
+
+// truncatePostgres empties every table but the migration ledger, so a test sees
+// the database a fresh install would have. RESTART IDENTITY keeps the sequence
+// numbers a test asserts on predictable, and CASCADE follows the foreign keys
+// without depending on the order the tables are named.
+func truncatePostgres(t *testing.T, store *PostgresStore) {
+	t.Helper()
+	rows, err := store.db.Query(
+		`SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename <> 'schema_migrations'`)
+	if err != nil {
+		t.Fatalf("list tables: %v", err)
+	}
+	defer rows.Close()
+	var names []string
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			t.Fatalf("scan table name: %v", err)
+		}
+		names = append(names, name)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatalf("list tables: %v", err)
+	}
+	if len(names) == 0 {
+		t.Fatal("no tables to truncate: the schema did not migrate")
+	}
+	if _, err := store.db.Exec("TRUNCATE " + strings.Join(names, ", ") + " RESTART IDENTITY CASCADE"); err != nil {
+		t.Fatalf("truncate: %v", err)
+	}
 }
 
 // Students
@@ -619,10 +677,7 @@ func TestDataMigrations_RunOnce(t *testing.T) {
 	store := newTestStore(t)
 	versions := func() map[int]bool {
 		out := map[int]bool{}
-		rows, err := store.db.Query("SELECT version FROM schema_migrations")
-		if err != nil {
-			t.Fatalf("read versions: %v", err)
-		}
+		rows := querySeed(t, store, "SELECT version FROM schema_migrations")
 		defer rows.Close()
 		for rows.Next() {
 			var v int
@@ -638,12 +693,8 @@ func TestDataMigrations_RunOnce(t *testing.T) {
 	}
 	// Legacy row simulation: reset v1 and plant a 150 goal, re-migrate.
 	st, _ := store.CreateStudent("legacy")
-	if _, err := store.db.Exec("UPDATE students SET daily_xp_goal = 150 WHERE id = ?", st.ID); err != nil {
-		t.Fatalf("plant legacy goal: %v", err)
-	}
-	if _, err := store.db.Exec("DELETE FROM schema_migrations WHERE version = 1"); err != nil {
-		t.Fatalf("reset version: %v", err)
-	}
+	execSeed(t, store, "UPDATE students SET daily_xp_goal = 150 WHERE id = ?", st.ID)
+	execSeed(t, store, "DELETE FROM schema_migrations WHERE version = ?", 1)
 	if err := store.Migrate(); err != nil {
 		t.Fatalf("re-migrate: %v", err)
 	}
@@ -656,12 +707,8 @@ func TestDataMigrations_RunOnce(t *testing.T) {
 	}
 	// v3 small-awards rescale: reset v3, plant a 90 goal, re-migrate → 30.
 	st3, _ := store.CreateStudent("rescaled")
-	if _, err := store.db.Exec("UPDATE students SET daily_xp_goal = 90 WHERE id = ?", st3.ID); err != nil {
-		t.Fatalf("plant goal: %v", err)
-	}
-	if _, err := store.db.Exec("DELETE FROM schema_migrations WHERE version = 3"); err != nil {
-		t.Fatalf("reset version: %v", err)
-	}
+	execSeed(t, store, "UPDATE students SET daily_xp_goal = 90 WHERE id = ?", st3.ID)
+	execSeed(t, store, "DELETE FROM schema_migrations WHERE version = ?", 3)
 	if err := store.Migrate(); err != nil {
 		t.Fatalf("re-migrate: %v", err)
 	}
