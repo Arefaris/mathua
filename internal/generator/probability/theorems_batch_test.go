@@ -140,3 +140,47 @@ func TestProbTheoremsBatch_DifficultyScaling(t *testing.T) {
 		t.Fatalf("expected positive sample space size n, got low=%d high=%d", lowN, highN)
 	}
 }
+
+// TestProbTheoremsBatch_PrintedParameters requires every parameter the problem
+// publishes in Facts to appear in the question. A question that asks about a
+// symbol it never prints cannot be answered: prob.dist.order_stats used to say
+// "Let n independent observations" while its answer key held n = 3, so the
+// learner had to guess how many observations there were. This is the generic
+// form of that defect, and it costs nothing to check.
+func TestProbTheoremsBatch_PrintedParameters(t *testing.T) {
+	reg := generator.NewRegistry()
+	Register(reg)
+
+	concepts := []string{
+		"prob.space.inclusion_exclusion",
+		"prob.cond.multiplication",
+		"prob.cond.total_probability",
+		"prob.bayes.prior",
+		"prob.rv.transform",
+		"prob.dist.order_stats",
+		"prob.limit.markov",
+		"prob.limit.chebyshev",
+		"prob.limit.clt",
+	}
+
+	for _, id := range concepts {
+		for i := 0; i < 100; i++ {
+			ctx := generator.GeneratorContext{
+				Difficulty: float64(i%10) / 10,
+				Seed:       int64(9000 + i),
+			}
+			prob, err := reg.GenerateContext(id, ctx)
+			if err != nil {
+				t.Fatalf("failed to generate %s: %v", id, err)
+			}
+			for name, value := range prob.Facts {
+				if name == "answer" || value == "" {
+					continue
+				}
+				if !strings.Contains(prob.Question, value) {
+					t.Fatalf("%s names %s = %s in Facts but the question does not print it: %q", id, name, value, prob.Question)
+				}
+			}
+		}
+	}
+}
