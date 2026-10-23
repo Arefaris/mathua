@@ -407,14 +407,16 @@ func (g *eigenConceptGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			Explanation: fmt.Sprintf("An eigenvector satisfies \\(Av = \\lambda v\\). Computing the first component of \\(Av\\) gives \\(%d(1) + (%d)(%d) = %d\\). Therefore \\(\\lambda = %d\\).", a, b, k, lambda, lambda),
 		}
 	case 1:
-		// tr(A) = lambda1 + lambda2
-		a := smallInt(-5, 5)
-		d := smallInt(-5, 5)
-		b := smallInt(-4, 4)
-		c := smallInt(-4, 4)
-		tr := a + d
+		// tr(A) = lambda1 + lambda2, with A = P diag(lambda1, lambda2) P^-1 for
+		// P = [[1,1],[1,2]]. Building A this way makes the stated lambda1 an
+		// actual eigenvalue; arbitrary entries would make the premise false.
 		l1 := smallInt(-4, 4)
-		l2 := tr - l1
+		l2 := smallInt(-4, 4)
+		a := 2*l1 - l2
+		b := l2 - l1
+		c := 2*l1 - 2*l2
+		d := 2*l2 - l1
+		tr := a + d
 		return generator.Problem{
 			Question:    fmt.Sprintf("The matrix \\(A = \\begin{pmatrix} %d & %d \\\\ %d & %d \\end{pmatrix}\\) has one eigenvalue \\(\\lambda_1 = %d\\). Using the trace formula \\(\\operatorname{tr}(A) = \\lambda_1 + \\lambda_2\\), compute the second eigenvalue \\(\\lambda_2\\).", a, b, c, d, l1),
 			Answer:      fmt.Sprintf("%d", l2),
