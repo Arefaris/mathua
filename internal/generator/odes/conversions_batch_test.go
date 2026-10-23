@@ -133,3 +133,60 @@ func TestODESBatchConversions_ZeroOxfordComma(t *testing.T) {
 		}
 	}
 }
+
+// TestODEsBatchAnswersAreIntegers pins the battery to numeric answers. All seven
+// concepts are graded by the numeric grader, so a decimal or a symbolic string
+// would mark a correct learner wrong.
+func TestODEsBatchAnswersAreIntegers(t *testing.T) {
+	reg := testRegistry(t)
+	for _, id := range convertedBatchIDs {
+		for i := 0; i < 100; i++ {
+			p, err := reg.GenerateContext(id, generator.GeneratorContext{
+				Difficulty: float64(i%10) / 9.0,
+				Seed:       int64(40000 + i),
+			})
+			if err != nil {
+				t.Fatalf("%s: generate failed: %v", id, err)
+			}
+			if _, err := strconv.Atoi(p.Answer); err != nil {
+				t.Fatalf("%s: answer %q is not an integer: %s", id, p.Answer, p.Question)
+			}
+		}
+	}
+}
+
+// TestODEsBatchDoesNotPrintItsAnswer covers the read-off class. The equilibrium
+// generator used to draw the capacity a and ask for a, so every one of 500
+// sampled draws printed its own answer in the stem and the question tested
+// copying rather than solving. It now writes the model as y' = a y - b y^2 and
+// asks for a/b. A share above this threshold means a question can be answered
+// without doing the work, which is the defect this guards.
+func TestODEsBatchDoesNotPrintItsAnswer(t *testing.T) {
+	reg := testRegistry(t)
+	const draws = 500
+	const maxShare = 0.6
+	for _, id := range convertedBatchIDs {
+		printed := 0
+		for i := 0; i < draws; i++ {
+			p, err := reg.GenerateContext(id, generator.GeneratorContext{
+				Difficulty: rand.Float64(),
+				Seed:       rand.Int63(),
+			})
+			if err != nil {
+				t.Fatalf("%s: generate failed: %v", id, err)
+			}
+			answer := p.Answer
+			if strings.HasPrefix(answer, "-") {
+				answer = answer[1:]
+			}
+			pattern := regexp.MustCompile(`(^|\D)` + regexp.QuoteMeta(answer) + `(\D|$)`)
+			if pattern.MatchString(p.Question) {
+				printed++
+			}
+		}
+		if share := float64(printed) / draws; share > maxShare {
+			t.Fatalf("%s: %d of %d draws print the answer in the stem (%.0f%%), limit %.0f%%",
+				id, printed, draws, share*100, maxShare*100)
+		}
+	}
+}

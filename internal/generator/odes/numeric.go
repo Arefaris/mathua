@@ -72,7 +72,7 @@ type characteristicSumGen struct{}
 
 func (g *characteristicSumGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	maxA := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
-	a := 1 + rand.Intn(maxA)
+	a := 2 + rand.Intn(maxA)
 	maxK := mathutil.ScaleInt(ctx.Difficulty, 3, 8)
 	k := rand.Intn(2*maxK+1) - maxK
 	if k == 0 {
@@ -101,27 +101,34 @@ func (g *characteristicSumGen) Generate(ctx generator.GeneratorContext) generato
 	}
 }
 
-// equilibriumGen asks for the non-zero carrying capacity equilibrium.
+// equilibriumGen asks for the non-zero equilibrium of a logistic form whose
+// capacity is not printed as the answer.
+//
+// It used to draw the capacity a and ask for it, so every one of 500 sampled
+// draws printed its own answer in the stem: the question tested copying, not
+// solving. Writing the model as y' = a y - b y^2 keeps the same equilibrium set
+// and makes the non-zero one a/b, a division the learner has to perform.
 type equilibriumGen struct{}
 
 func (g *equilibriumGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	maxK := mathutil.ScaleInt(ctx.Difficulty, 3, 10)
-	k := 1 + rand.Intn(maxK)
-	maxA := mathutil.ScaleInt(ctx.Difficulty, 8, 30)
-	a := 2 + rand.Intn(maxA)
-	ans := strconv.Itoa(a)
+	maxB := mathutil.ScaleInt(ctx.Difficulty, 4, 12)
+	b := 2 + rand.Intn(maxB)
+	maxQ := mathutil.ScaleInt(ctx.Difficulty, 8, 30)
+	q := 1 + rand.Intn(maxQ)
+	a := b * q
+	ans := strconv.Itoa(q)
 
-	q := fmt.Sprintf("The population model \\(y' = %dy(%d - y)\\) has two equilibria. What is the non-zero one?", k, a)
-	exp := fmt.Sprintf("Subgoal 1: State governing formula. An equilibrium point y* of an autonomous differential equation y' = f(y) satisfies f(y*) = 0.\n\nSubgoal 2: Substitute parameters. Set the rate of change to zero: %dy(%d - y) = 0.\n\nSubgoal 3: Evaluate and simplify. Since k = %d is positive, the product vanishes when y = 0 or %d - y = 0. Solving %d - y = 0 yields the non-zero equilibrium y* = %d.",
-		k, a, k, a, a, a)
+	question := fmt.Sprintf("The population model \\(y' = %dy - %dy^{2}\\) has two equilibria. What is the non-zero one?", a, b)
+	exp := fmt.Sprintf("Subgoal 1: State governing formula. An equilibrium point y* of an autonomous differential equation y' = f(y) satisfies f(y*) = 0.\n\nSubgoal 2: Substitute parameters. Factor the right side: %dy - %dy^2 = y(%d - %dy). The product vanishes at y = 0 and where %d - %dy = 0.\n\nSubgoal 3: Evaluate and simplify. Solve %d - %dy = 0 to get y = %d/%d = %d, the non-zero equilibrium.",
+		a, b, a, b, a, b, a, b, a, b, q)
 
 	return generator.Problem{
-		Question:    q,
+		Question:    question,
 		Answer:      ans,
 		Explanation: exp,
 		Facts: map[string]string{
-			"k":      strconv.Itoa(k),
 			"a":      strconv.Itoa(a),
+			"b":      strconv.Itoa(b),
 			"answer": ans,
 		},
 	}
@@ -132,12 +139,14 @@ type wronskianGen struct{}
 
 func (g *wronskianGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	maxM := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
-	m := 1 + rand.Intn(maxM)
-	maxDelta := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+	m := rand.Intn(maxM)
+	maxDelta := mathutil.ScaleInt(ctx.Difficulty, 3, 5)
 	delta := 1 + rand.Intn(maxDelta)
 	n := m + delta
+	// The evaluation point starts at two: at x = 1 the answer is just n - m,
+	// which throws away the exponent and collapses distinct pairs onto one value.
 	maxX := mathutil.ScaleInt(ctx.Difficulty, 2, 3)
-	x := 1 + rand.Intn(maxX)
+	x := 2 + rand.Intn(maxX)
 	expVal := m + n - 1
 	v := delta * powInt(x, expVal)
 	ans := strconv.Itoa(v)
@@ -193,7 +202,7 @@ func (g *eulerStepsGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type laplaceValueGen struct{}
 
 func (g *laplaceValueGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	minN := mathutil.ScaleInt(ctx.Difficulty, 1, 3)
+	minN := mathutil.ScaleInt(ctx.Difficulty, 3, 4)
 	maxN := mathutil.ScaleInt(ctx.Difficulty, 4, 7)
 	n := minN + rand.Intn(maxN-minN+1)
 	f := 1
