@@ -196,3 +196,25 @@ func TestSqrtSimplifyAcceptsTheFormsALearnerTypes(t *testing.T) {
 		t.Error("10 graded correct for 5 sqrt(2)")
 	}
 }
+
+// TestSqrtSimplifyReadsTheRadicalMathliveWrites pins the transport shape. The
+// math field writes an empty radical as sqrt(), so "3sqrt()2" reached the
+// grader and was rejected as malformed (report 233).
+func TestSqrtSimplifyReadsTheRadicalMathliveWrites(t *testing.T) {
+	cases := map[string]bool{
+		"3sqrt()2":   true,
+		"3 sqrt(2)":  true,
+		"3\\sqrt{2}": true,
+		"3\u221a2":   true,
+		"seventeen":  false,
+	}
+	for answer, want := range cases {
+		coef, rad, ok := sqrtParts(answer)
+		if ok != want {
+			t.Fatalf("sqrtParts(%q) ok = %v, want %v", answer, ok, want)
+		}
+		if want && (coef != 3 || rad != 2) {
+			t.Fatalf("sqrtParts(%q) = %d sqrt(%d), want 3 sqrt(2)", answer, coef, rad)
+		}
+	}
+}

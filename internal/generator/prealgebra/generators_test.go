@@ -186,3 +186,30 @@ func TestOneStepAdditionAnswerSolvesThePrintedEquation(t *testing.T) {
 		}
 	}
 }
+
+// TestOneStepInequalityAsksForTheIntegerItGrades pins the wording against the
+// key. The stem used to say only "Solve:" while the answer was the boundary
+// integer, so "x > 3" — the answer to the question as asked — was marked wrong.
+func TestOneStepInequalityAsksForTheIntegerItGrades(t *testing.T) {
+	g := &ineqOneStepGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		if !strings.Contains(p.Question, "smallest integer") {
+			t.Fatalf("question does not ask for an integer: %q", p.Question)
+		}
+		if strings.Contains(p.Question, "+ -") {
+			t.Fatalf("question prints a double sign: %q", p.Question)
+		}
+		ans, err := strconv.Atoi(p.Answer)
+		if err != nil {
+			t.Fatalf("answer %q is not an integer", p.Answer)
+		}
+		border, err := strconv.Atoi(p.Facts["border"])
+		if err != nil {
+			t.Fatalf("border %q is not an integer", p.Facts["border"])
+		}
+		if ans != border+1 {
+			t.Fatalf("answer %d is not the smallest integer above the border %d", ans, border)
+		}
+	}
+}

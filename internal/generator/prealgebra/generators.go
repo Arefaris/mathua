@@ -1107,11 +1107,20 @@ func (g *ineqOneStepGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	x := rand.Intn(scale*2) + 2
 	b := rand.Intn(scale*3) - scale
 	c := x + b - 1
+	// The stem used to read only "Solve:" while the key held the boundary
+	// integer, so a learner who answered "x > 3" was told they were wrong for
+	// answering the question as asked (reports 79, 93). It now asks for the
+	// smallest integer that works, which is the number the key holds, and it
+	// prints a signed term rather than "x + -3".
+	stem := fmt.Sprintf("x + %d", b)
+	if b < 0 {
+		stem = fmt.Sprintf("x - %d", -b)
+	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(x + %d > %d\\)", b, c),
+		Question:    fmt.Sprintf("What is the smallest integer \\(x\\) that satisfies \\(%s > %d\\)?", stem, c),
 		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("\\(x + %d > %d\\), subtract %d: \\(x > %d\\)", b, c, b, c-b),
-		Facts:       map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "x": strconv.Itoa(c - b)},
+		Explanation: fmt.Sprintf("\\(%s > %d\\) means \\(x > %d\\), so the smallest integer that works is %d.", stem, c, c-b, x),
+		Facts:       map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "border": strconv.Itoa(c - b), "x": strconv.Itoa(x)},
 	}
 }
 

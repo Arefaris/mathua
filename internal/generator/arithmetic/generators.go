@@ -708,6 +708,10 @@ var sqrtPartsRe = regexp.MustCompile(`^(-?\d*)sqrt\(?(\d+)\)?$`)
 func sqrtParts(s string) (coef, rad int, ok bool) {
 	v := strings.ToLower(strings.TrimSpace(s))
 	v = strings.NewReplacer("\\", "", "{", "", "}", "", " ", "", "\u221a", "sqrt").Replace(v)
+	// MathLive writes a radical as sqrt() while the radicand is being typed, so
+	// a learner who tapped the radical template and then the digits submitted
+	// "3sqrt()2" and was told their answer was malformed (report 233).
+	v = strings.ReplaceAll(v, "sqrt()", "sqrt")
 	m := sqrtPartsRe.FindStringSubmatch(v)
 	if m == nil {
 		return 0, 0, false

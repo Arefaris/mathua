@@ -596,10 +596,32 @@ func (g *nonlinearSystemsGen) Generate(ctx generator.GeneratorContext) generator
 		ySmall = m*q + bTotal
 	}
 	ans := fmt.Sprintf("(%d, %d)", smaller, ySmall)
-	parab := fmt.Sprintf("y = x^2 %+d", c)
-	line := fmt.Sprintf("y = %dx %+d", m, bTotal)
-	qText := fmt.Sprintf("Solve the system \\[%s\\\\ %s\\]\nEnter the solution with the smaller \\(x\\)-coordinate in the form \\((x, y)\\).", parab, line)
-	ex := fmt.Sprintf("Substituting: \\(x^2 %+d = %dx %+d\\Rightarrow x^2 -%dx %+d = 0\\), so \\(x\\in\\{%d, %d\\}\\). For \\(x=%d\\), \\(y=%d\\).", c, m, bTotal, m, -bTotal, p, q, smaller, ySmall)
+	// Both equations used to print their constant with %+d and the line its
+	// coefficient as %dx, so a draw could read "y = x^2 +0" beside "y = -1x +0"
+	// and the system arrived at the learner as noise. Zero terms are omitted and
+	// a unit coefficient prints bare.
+	parab := "y = x^{2}"
+	if c > 0 {
+		parab += fmt.Sprintf(" + %d", c)
+	} else if c < 0 {
+		parab += fmt.Sprintf(" - %d", -c)
+	}
+	line := "y = "
+	switch m {
+	case 1:
+		line += "x"
+	case -1:
+		line += "-x"
+	default:
+		line += fmt.Sprintf("%dx", m)
+	}
+	if bTotal > 0 {
+		line += fmt.Sprintf(" + %d", bTotal)
+	} else if bTotal < 0 {
+		line += fmt.Sprintf(" - %d", -bTotal)
+	}
+	qText := fmt.Sprintf("Solve the system \\[\\begin{cases}%s\\\\%s\\end{cases}\\]\nEnter the solution with the smaller \\(x\\)-coordinate in the form \\((x, y)\\).", parab, line)
+	ex := fmt.Sprintf("Substitute the line into the parabola and collect the terms: the \\(x\\) values are %d and %d. At the smaller one, \\(x=%d\\), the line gives \\(y=%d\\), which is the point asked for.", p, q, smaller, ySmall)
 	return generator.Problem{Question: qText, Answer: ans, Explanation: ex}
 }
 

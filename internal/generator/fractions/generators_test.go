@@ -71,3 +71,21 @@ func TestFractionConceptAsksInWords(t *testing.T) {
 		}
 	}
 }
+
+// TestRibbonIsNeverCutIntoItsOwnLength pins the degenerate draw. When the piece
+// count equalled the length the generator served "a ribbon 1 metres long cut
+// into 1 equal pieces" and answered 1/1, which is not a fraction exercise.
+func TestRibbonIsNeverCutIntoItsOwnLength(t *testing.T) {
+	g := &asDivisionGen{}
+	for i := 0; i < 300; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		length := p.Facts["length"]
+		pieces := p.Facts["pieces"]
+		if length == pieces {
+			t.Fatalf("ribbon %s metres is cut into %s pieces: %q", length, pieces, p.Question)
+		}
+		if strings.Contains(p.Question, "1 metres") {
+			t.Fatalf("singular length reads as plural: %q", p.Question)
+		}
+	}
+}

@@ -391,7 +391,9 @@ func (g *derivChainRuleGen) Generate(ctx generator.GeneratorContext) generator.P
 	inner := fmt.Sprintf("%dx+%d", a, b)
 	answer := fmt.Sprintf("%d(%s)^%d", coef, inner, inExp)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=%s^{%d}\\).", inner, n),
+		// The exponent used to bind only to the constant: f(x)=6x+1^4 read as
+		// 6x + 1^4, whose derivative is a constant, and three reports said so.
+		Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=(%s)^{%d}\\).", inner, n),
 		Answer:      answer,
 		Explanation: fmt.Sprintf("Chain rule: f'(x)=%d·(%s)^%d·%d = %s.", n, inner, inExp, a, answer),
 	}
@@ -1886,11 +1888,11 @@ func (g *powerSeriesGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		q, a, e string
 	}
 	table := []entry{
-		{"What is the coefficient of x^2 in the Maclaurin series for cos? (enter -1/2)", "-1/2", "General form sum c(n)(x-a)^n; cos(x) = 1 - x^2/2! + x^4/4! - ...; coefficient of x^2 is -1/2."},
+		{"What is the coefficient of x^2 in the Maclaurin series for cos? (enter a fraction)", "-1/2", "General form sum c(n)(x-a)^n; cos(x) = 1 - x^2/2! + x^4/4! - ...; coefficient of x^2 is -1/2."},
 		{"Does a power series converge for |x-a|<R? (yes/no)", "yes", "Radius R: the series converges for |x-a|<R, diverges for |x-a|>R; converges absolutely inside."},
 		{"Does 1/(1-x) = sum x^n for |x|<1? (yes/no)", "yes", "1/(1-x) = 1 + x + x^2 + x^3 + ... = sum x^n, which converges for |x|<1."},
-		{"What is the coefficient of x^2 in the Maclaurin series for e^x? (enter 1/2)", "1/2", "e^x = 1 + x + x^2/2! + x^3/3! + ... = sum x^n/n!, which converges for all real x; coefficient of x^2 is 1/2."},
-		{"What is the coefficient of x^3 in the Maclaurin series for sin? (enter -1/6)", "-1/6", "sin(x) = x - x^3/3! + x^5/5! - ..., converging for all real x; coefficient of x^3 is -1/6."},
+		{"What is the coefficient of x^2 in the Maclaurin series for e^x? (enter a fraction)", "1/2", "e^x = 1 + x + x^2/2! + x^3/3! + ... = sum x^n/n!, which converges for all real x; coefficient of x^2 is 1/2."},
+		{"What is the coefficient of x^3 in the Maclaurin series for sin? (enter a fraction)", "-1/6", "sin(x) = x - x^3/3! + x^5/5! - ..., converging for all real x; coefficient of x^3 is -1/6."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1904,9 +1906,9 @@ func (g *taylorSeriesGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	}
 	table := []entry{
 		{"Is a Taylor series built from derivatives at a? (yes/no)", "yes", "Taylor: f(x) = sum f^(n)(a)(x-a)^n/n!; centered at a with radius R."},
-		{"What is the coefficient of x^2 in the Maclaurin series for e^x? (enter 1/2)", "1/2", "e^x = sum x^n/n! with radius R=infinity; coefficient of x^2 is 1/2."},
-		{"What is the coefficient of x^3 in the Maclaurin series for sin? (enter -1/6)", "-1/6", "sin(x) = x - x^3/3! + x^5/5! - ... with R=infinity; coefficient of x^3 is -1/6."},
-		{"What is the coefficient of x^2 in the Maclaurin series for cos? (enter -1/2)", "-1/2", "cos(x) = 1 - x^2/2! + x^4/4! - ... with R=infinity; coefficient of x^2 is -1/2."},
+		{"What is the coefficient of x^2 in the Maclaurin series for e^x? (enter a fraction)", "1/2", "e^x = sum x^n/n! with radius R=infinity; coefficient of x^2 is 1/2."},
+		{"What is the coefficient of x^3 in the Maclaurin series for sin? (enter a fraction)", "-1/6", "sin(x) = x - x^3/3! + x^5/5! - ... with R=infinity; coefficient of x^3 is -1/6."},
+		{"What is the coefficient of x^2 in the Maclaurin series for cos? (enter a fraction)", "-1/2", "cos(x) = 1 - x^2/2! + x^4/4! - ... with R=infinity; coefficient of x^2 is -1/2."},
 		{"Does ln(1+x) = x - x^2/2 + x^3/3 - ... for |x|<1? (yes/no)", "yes", "ln(1+x) = x - x^2/2 + x^3/3 - x^4/4 + ... with R=1."},
 	}
 	e := table[rand.Intn(len(table))]
