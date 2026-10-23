@@ -92,7 +92,7 @@ describe('How it works in Ukrainian', () => {
     // 5 and 7 take the genitive plural, 8 / 18 / 20 seconds are "секунд".
     expect(screen.getAllByText('5 правильних відповідей поспіль').length).toBeGreaterThan(0)
     expect(screen.getAllByText('8 секунд').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Додавання однозначних чисел').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Додавання одноцифрових чисел').length).toBeGreaterThan(0)
     noKeyIds()
   })
 
