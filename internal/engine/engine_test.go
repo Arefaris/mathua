@@ -2125,8 +2125,11 @@ func TestEngine_DiagnosticConditionalCompletion_Persistence(t *testing.T) {
 	if p == nil {
 		t.Fatal("expected progress row for conditionally completed concept")
 	}
-	if p.Status != string(mastery.StatusMastered) {
-		t.Errorf("status = %q, want MASTERED", p.Status)
+	if p.Status != string(mastery.StatusLearning) {
+		// A conditional completion is a placement, so it must not read MASTERED:
+		// that unlocked dependents as though evidence existed, and hysteresis then
+		// made the guess permanent after one correct answer.
+		t.Errorf("status = %q, want LEARNING", p.Status)
 	}
 	if !p.IsProvisional {
 		t.Error("expected IsProvisional true")

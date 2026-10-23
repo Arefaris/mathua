@@ -2178,9 +2178,13 @@ func (e *Engine) ApplyDiagnosticReport(studentID string, report *diagnostic.Diag
 		}
 		if existing == nil {
 			existing = &storage.ConceptProgress{
-				StudentID:       studentID,
-				ConceptID:       cid,
-				Status:          string(mastery.StatusMastered),
+				StudentID: studentID,
+				ConceptID: cid,
+				// A conditional completion is a placement: it grants reachability so the
+				// learner can work the frontier, and it is deliberately not mastery. The
+				// row used to be written MASTERED, which unlocked dependents and, through
+				// hysteresis, quietly became permanent after one correct answer.
+				Status:          string(mastery.StatusLearning),
 				PlacementSeeded: true,
 				IsProvisional:   true,
 				SM2EFactor:      2.5,
@@ -2193,7 +2197,7 @@ func (e *Engine) ApplyDiagnosticReport(studentID string, report *diagnostic.Diag
 				continue
 			}
 			existing.IsProvisional = true
-			existing.Status = string(mastery.StatusMastered)
+			existing.Status = string(mastery.StatusLearning)
 			existing.PlacementSeeded = true
 			if existing.LastAttempted == nil {
 				existing.LastAttempted = &now
@@ -2777,7 +2781,17 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	}
 	if newStatus == mastery.StatusMastered {
 		progress.WeaknessScore = 0.0
-		progress.IsProvisional = false
+		// A placement is reachability, not evidence. The machine's hysteresis keeps a
+		// seeded row at MASTERED after one correct answer, so clearing the flag whenever
+		// the status read MASTERED turned a diagnostic guess into permanent mastery in a
+		// single attempt and removed the fallback that made it conditional. Only the
+		// ladder's own demonstration retires the placement, and the same transition is
+		// what makes the concept safe to reseed-proof: PlacementSeeded cleared here is
+		// what ApplyDiagnosticReport reads to tell genuine mastery from a seed.
+		if mastery.EnoughForMastery(evidence) {
+			progress.IsProvisional = false
+			progress.PlacementSeeded = false
+		}
 	}
 	// The decay clock starts when a tier is attained, not when a streak happens to reach
 	// the old threshold.
