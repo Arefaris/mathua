@@ -88,7 +88,10 @@ export default function AdminLeaguesPage() {
       const roster = res.leagues[0]?.members ?? []
       setRosters((prev) => ({ ...prev, [key]: roster }))
     } catch (e) {
+      // Collapse as well as report. Leaving the league open would show its loading state for a
+      // request that has already failed, which reads as "still working" rather than "cannot read".
       setRosterError(getErrorMessage(e))
+      setOpen('')
     }
   }
 
