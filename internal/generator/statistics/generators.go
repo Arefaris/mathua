@@ -643,14 +643,16 @@ func (g *bernoulliGen) Generate(ctx generator.GeneratorContext) generator.Proble
 				p, 1-p, failPct),
 		}
 	case 3:
+		// The probability is printed as a fraction because the odds it implies
+		// are then exact. Rounded to two decimals, 2/3 reads as 0.67, and a
+		// learner who divides the printed numbers gets 2.03 for an answer of 2.
 		oddsList := []int{1, 2, 3, 4, 9}
 		k := oddsList[rand.Intn(len(oddsList))]
-		p := float64(k) / float64(k+1)
 		return generator.Problem{
-			Question: fmt.Sprintf("A Bernoulli trial has success probability \\(p = %.2f\\). Compute the odds in favor of success, defined as the ratio \\(\\frac{p}{1-p}\\).", p),
+			Question: fmt.Sprintf("A Bernoulli trial has success probability \\(p = \\frac{%d}{%d}\\). Compute the odds in favor of success, defined as the ratio \\(\\frac{p}{1-p}\\).", k, k+1),
 			Answer:   fmt.Sprintf("%d", k),
-			Explanation: fmt.Sprintf("The odds in favor are given by \\(\\frac{p}{1-p} = \\frac{%.2f}{%.2f} = %d\\).",
-				p, 1-p, k),
+			Explanation: fmt.Sprintf("\\(1-p = \\frac{1}{%d}\\), so \\(\\frac{p}{1-p} = \\frac{%d}{%d} \\div \\frac{1}{%d} = %d\\).",
+				k+1, k, k+1, k+1, k),
 		}
 	default:
 		type scaleParam struct {
