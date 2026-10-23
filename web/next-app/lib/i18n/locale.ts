@@ -21,7 +21,7 @@ export const LOCALES: readonly Locale[] = ['en', 'ru', 'uk']
 // starts, so the dictionaries and the checks can grow with it, but it is offered only once it is
 // complete: a half-translated interface reads as a broken one. `npm run i18n:check` holds every
 // published language to a full key set and lets an unpublished one be partial.
-export const PUBLISHED_LOCALES: readonly Locale[] = ['en', 'ru']
+export const PUBLISHED_LOCALES: readonly Locale[] = ['en', 'ru', 'uk']
 
 /** The language of the source text, and the one the server renders at build time. */
 export const DEFAULT_LOCALE: Locale = 'en'
