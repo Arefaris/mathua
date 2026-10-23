@@ -367,16 +367,11 @@ func (g *divBasicGen) Generate(ctx generator.GeneratorContext) generator.Problem
 
 type divRemainderGen struct{}
 
-// AnswerFormat declares the syntax its Grade method accepts. The concept is
-// declared numeric, which used to put a digits-only keypad in front of an
-// answer that needs a letter and a space: two learners reported the question
-// as badly formatted, one asking how to type the comma it never asked for.
-func (g *divRemainderGen) AnswerFormat() generator.AnswerFormat {
-	return generator.AnswerFormat{Hint: "Quotient and remainder, e.g. 5 R 2", InputMode: "text"}
-}
-
-var remainderRe = regexp.MustCompile(`^(-?\d+)\s*R\s*(\d+)$`)
-
+// The question asks for the remainder alone. It used to ask for "Q R" and
+// grade it with a regex, which needs a letter between two numbers: a phone
+// keypad cannot type R, so the answer box collected nothing and the report
+// arrived with an empty answer. A remainder is one integer, so the numeric
+// keypad is enough and this generator needs no Grade method of its own.
 func (g *divRemainderGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	// Staged ladder: small divisor → larger divisor and quotient.
 	divMax := 5
@@ -389,23 +384,11 @@ func (g *divRemainderGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	r := rand.Intn(b-1) + 1
 	a := b*(rand.Intn(divMax)+1) + r
 	return generator.Problem{
-		Question:    fmt.Sprintf("\\(%d \\div %d = ?\\) (give answer with remainder: Q R)", a, b),
-		Answer:      fmt.Sprintf("%d R %d", a/b, r),
-		Explanation: fmt.Sprintf("Given %d ÷ %d. Step 1: %d × %d = %d (largest multiple ≤ %d). Step 2: remainder %d − %d = %d. Answer: %d R %d", a, b, b, a/b, (a/b)*b, a, a, (a/b)*b, r, a/b, r),
+		Question:    fmt.Sprintf("What is the remainder when %d is divided by %d?", a, b),
+		Answer:      strconv.Itoa(r),
+		Explanation: fmt.Sprintf("%d divided by %d is %d with %d left over: %d × %d = %d, and %d − %d = %d.", a, b, a/b, r, b, a/b, (a/b)*b, a, (a/b)*b, r),
 		Facts:       map[string]string{"dividend": strconv.Itoa(a), "divisor": strconv.Itoa(b), "quotient": strconv.Itoa(a / b), "remainder": strconv.Itoa(r), "used": strconv.Itoa((a / b) * b)},
 	}
-}
-
-func (g *divRemainderGen) Grade(expected, answer string) grader.Result {
-	e := remainderRe.FindStringSubmatch(expected)
-	a := remainderRe.FindStringSubmatch(answer)
-	if e == nil || a == nil {
-		return grader.Result{Correct: false, Score: 0, Feedback: "Expected format: Q R (e.g. 5 R 3)"}
-	}
-	if e[1] == a[1] && e[2] == a[2] {
-		return grader.Result{Correct: true, Score: 1}
-	}
-	return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect"}
 }
 
 type divLongGen struct{}

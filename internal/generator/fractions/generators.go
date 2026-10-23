@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/mathutil"
@@ -75,22 +74,19 @@ func toMixed(num, den int) (int, int, int) {
 
 type fracConceptGen struct{}
 
+// The bar used to be drawn as text, "X X _ _ _" inside \(…\), which is not a
+// picture: math mode collapses the spaces, the underscores become subscripts,
+// and the learner saw "X _ _ _ _ _ _" with no bar to count. Words carry the
+// same information and survive every renderer, so the question states the
+// parts and how many are filled.
 func (g *fracConceptGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	den := rand.Intn(max(1, scale*2)) + 3
 	num := rand.Intn(max(1, den-2)) + 1
-	var bar strings.Builder
-	for i := 0; i < den; i++ {
-		if i < num {
-			bar.WriteString("X ")
-		} else {
-			bar.WriteString("_ ")
-		}
-	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("What fraction of the bar is filled?\n\n\\(%s\\)", bar.String()),
+		Question:    fmt.Sprintf("A bar is split into %d equal parts, and %d of them are filled. What fraction of the bar is filled?", den, num),
 		Answer:      fracStr(num, den),
-		Explanation: fmt.Sprintf("%d out of %d equal parts are filled = %d/%d", num, den, num, den),
+		Explanation: fmt.Sprintf("%d out of %d equal parts are filled, so the fraction is %d/%d.", num, den, num, den),
 		Facts:       map[string]string{"filled": strconv.Itoa(num), "parts": strconv.Itoa(den)},
 	}
 }

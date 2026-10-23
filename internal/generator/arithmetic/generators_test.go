@@ -3,6 +3,7 @@ package arithmetic
 import (
 	"math/rand"
 	"regexp"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -117,5 +118,32 @@ func TestFuzz(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// The question used to ask for "Q R" and grade it with a regex, so a learner on
+// a phone keypad could not type the letter and the report arrived with an empty
+// answer. The answer is now the remainder alone, which has to stay a single
+// integer below the divisor.
+func TestRemainderAnswerIsTheRemainder(t *testing.T) {
+	g := &divRemainderGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		if !strings.Contains(p.Question, "remainder") {
+			t.Fatalf("question does not ask for a remainder: %q", p.Question)
+		}
+		if !regexp.MustCompile(`^\d+$`).MatchString(p.Answer) {
+			t.Fatalf("answer %q is not a bare integer", p.Answer)
+		}
+		divisor, _ := strconv.Atoi(p.Facts["divisor"])
+		dividend, _ := strconv.Atoi(p.Facts["dividend"])
+		quotient, _ := strconv.Atoi(p.Facts["quotient"])
+		remainder, _ := strconv.Atoi(p.Answer)
+		if remainder >= divisor || remainder < 1 {
+			t.Fatalf("remainder %d out of range for divisor %d", remainder, divisor)
+		}
+		if divisor*quotient+remainder != dividend {
+			t.Fatalf("%d x %d + %d != %d", divisor, quotient, remainder, dividend)
+		}
 	}
 }
