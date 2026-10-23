@@ -25,7 +25,27 @@ type Lesson struct {
 	// stored, so the body remains the single source and the two cannot disagree; see
 	// assets.go for why they are exposed as data at all.
 	Assets []Asset
+
+	// source is the lesson file, relative to the lessons directory, of the English original
+	// this lesson is or translates ("teaching/arith.add.single.md"). Translations carry the
+	// English path, because that is what lessons.json registers and what a translation is
+	// found by.
+	source string
+	// loc is the language of Body; empty means English.
+	loc i18n.Locale
 }
+
+// Locale is the language Body is written in: English unless the lesson is a translation.
+func (l *Lesson) Locale() i18n.Locale {
+	if l == nil || l.loc == "" {
+		return i18n.Default
+	}
+	return l.loc
+}
+
+// File is the English original's path relative to the lessons directory, the same string
+// lessons.json registers it under. A translation reports the path of the lesson it translates.
+func (l *Lesson) File() string { return l.source }
 
 // KP is a knowledge-point shard: a subgoal-labeled worked example for one
 // concept (MA: 3 KPs per topic, improve.md:39). Section names a heading
@@ -57,6 +77,12 @@ type Loader struct {
 	// from kps, and never merged into it, because the English Section is also a lookup key
 	// into the English lesson body: a translated heading would match nothing there.
 	kpText map[i18n.Locale]map[string][]KP
+	// translated holds the lesson bodies translated into each locale, keyed by the English
+	// lesson's source path. A body is here only if it can serve every concept that reads the
+	// English lesson (see translationFits); one that cannot is left out and logged, so the
+	// learner gets the English lesson whole rather than a translated body that the steps
+	// cannot find their sections in.
+	translated map[i18n.Locale]map[string]*Lesson
 }
 
 func Load(lessonsDir string) (*Loader, error) {
@@ -100,6 +126,7 @@ func Load(lessonsDir string) (*Loader, error) {
 			Concepts: ids,
 			Source:   corpusOf(source),
 			Assets:   ExtractAssets(content, ids),
+			source:   source,
 		}
 	}
 
@@ -117,7 +144,9 @@ func Load(lessonsDir string) (*Loader, error) {
 		}
 	}
 
-	return &Loader{concepts: concepts, kps: loadKPs(lessonsDir), kpText: loadKPOverlays(lessonsDir)}, nil
+	l := &Loader{concepts: concepts, kps: loadKPs(lessonsDir), kpText: loadKPOverlays(lessonsDir)}
+	l.translated = l.loadTranslations(lessonsDir, lessonsBySource)
+	return l, nil
 }
 
 // loadKPs reads <dir>/kp/<concept_id>.json shard files (a JSON array of KP).
@@ -217,11 +246,7 @@ func (l *Loader) KPs(conceptID string) []KP {
 // KPSectionBody extracts the worked-example section (heading → next heading)
 // from the concept's lesson body.
 func (l *Loader) KPSectionBody(conceptID, section string) (string, bool) {
-	lesson := l.concepts[conceptID]
-	if lesson == nil || section == "" {
-		return "", false
-	}
-	return extractSection(lesson.Body, section)
+	return l.KPSectionBodyIn(conceptID, section, i18n.Default)
 }
 
 // sectionDelimRe strips math delimiters for heading comparison. Shard

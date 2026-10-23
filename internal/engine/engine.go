@@ -605,7 +605,7 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 		e.persistActiveSession(sessionID, studentID, as, as.questionText)
 		var lesson *lessons.Lesson
 		if e.ll != nil {
-			lesson = e.ll.Lesson(cid)
+			lesson = e.ll.LessonIn(cid, loc)
 		}
 		return &Question{
 			ConceptID:   cid,
@@ -672,7 +672,7 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 
 	var lesson *lessons.Lesson
 	if e.ll != nil {
-		lesson = e.ll.Lesson(next.Concept.ID)
+		lesson = e.ll.LessonIn(next.Concept.ID, loc)
 	}
 
 	diagram := diagramForConcept(next.Concept.ID)
@@ -746,7 +746,7 @@ func (e *Engine) NextReviewQuestionIn(loc i18n.Locale, sessionID, studentID stri
 
 	var lesson *lessons.Lesson
 	if e.ll != nil {
-		lesson = e.ll.Lesson(next.Concept.ID)
+		lesson = e.ll.LessonIn(next.Concept.ID, loc)
 	}
 	diagram := diagramForConcept(next.Concept.ID)
 
@@ -2286,7 +2286,7 @@ func (e *Engine) GetCurrentQuestionIn(loc i18n.Locale, sessionID, studentID stri
 	}
 	var lesson *lessons.Lesson
 	if e.ll != nil {
-		lesson = e.ll.Lesson(as.conceptID)
+		lesson = e.ll.LessonIn(as.conceptID, loc)
 	}
 	name := as.conceptName
 	if c := e.dag.Concept(as.conceptID); c != nil {

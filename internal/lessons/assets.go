@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 // Visual and tabular instructional content, extracted from a lesson body.
@@ -339,7 +341,13 @@ func (l *Loader) AssetsFor(conceptID string) []Asset {
 // An authored `asset_ids` list on the KP shard wins, so Pass 3 can point a step at a figure
 // that lives outside its section without moving prose around.
 func (l *Loader) KPAssets(conceptID string, kp KP) []Asset {
-	lesson := l.concepts[conceptID]
+	return l.KPAssetsIn(conceptID, kp, i18n.Default)
+}
+
+// KPAssetsIn is KPAssets in the body LessonIn serves for loc. kp comes from KPsForBody, so its
+// section is a heading of that body, and the figures are the ones extracted from that body.
+func (l *Loader) KPAssetsIn(conceptID string, kp KP, loc i18n.Locale) []Asset {
+	lesson := l.LessonIn(conceptID, loc)
 	if lesson == nil {
 		return nil
 	}

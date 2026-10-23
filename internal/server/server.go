@@ -1761,6 +1761,10 @@ func (s *Server) handleLessonBody(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"lesson not found"}`, 404)
 		return
 	}
+	// The title is the English one the lesson list hands out and is only the key; the body
+	// that comes back is the translation when the learner's language has one, the English
+	// lesson otherwise, chosen for this lesson as a whole.
+	l = ll.Localize(l, localeOf(r))
 	// Assets travel with the body so a client can address figures as data. `/study` renders
 	// the body verbatim and needs nothing from them, but 133 of the corpus's figures have no
 	// alt text and no caption, and there is no way to fix or even count those without a
@@ -1773,6 +1777,7 @@ func (s *Server) handleLessonBody(w http.ResponseWriter, r *http.Request) {
 		"title":  l.Title,
 		"body":   l.Body,
 		"source": l.Source,
+		"locale": l.Locale(),
 		"assets": assets,
 	})
 }
@@ -1858,10 +1863,13 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, `{"error":"lessons unavailable"}`, 503)
 			return
 		}
-		// Lookups into the lesson body use the English steps; the learner is shown the
-		// translated text for the same step, which has the same length and order.
-		kps := ll.KPs(conceptID)
-		shown := ll.KPsIn(conceptID, localeOf(r))
+		// Lookups into the lesson body use the steps that belong to the body being served: the
+		// English sections for an English lesson, the translated ones for a translated lesson,
+		// whose headings are translated too. The learner is shown the translated text of the
+		// same step, which has the same length and order.
+		loc := localeOf(r)
+		kps := ll.KPsForBody(conceptID, loc)
+		shown := ll.KPsIn(conceptID, loc)
 		type kpInfo struct {
 			Label         string          `json:"label"`
 			Section       string          `json:"section"`
@@ -1877,8 +1885,8 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			// question — 33,784 words, and discrete.logic.propositions served its 2,724-word
 			// article three times over. The reference panel keeps the article reachable (ADR-047);
 			// this is the learning surface.
-			we, _ := ll.TeachingSlice(conceptID, kp)
-			assets := ll.KPAssets(conceptID, kp)
+			we, _ := ll.TeachingSliceIn(conceptID, kp, loc)
+			assets := ll.KPAssetsIn(conceptID, kp, loc)
 			if assets == nil {
 				assets = []lessons.Asset{}
 			}

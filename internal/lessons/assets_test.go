@@ -9,6 +9,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 // Every figure a lesson references must be addressable as data.
@@ -309,6 +311,10 @@ func TestPlacedFiguresAreInTheSectionTheirPlacementNamed(t *testing.T) {
 	for _, e := range expect {
 		found := ""
 		_ = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
+			// A translation of the lesson has the same file name and translated headings.
+			if err == nil && info.IsDir() && i18n.Locale(info.Name()).Valid() {
+				return filepath.SkipDir
+			}
 			if err != nil || info.IsDir() || filepath.Base(p) != e.lesson {
 				return err
 			}
