@@ -544,3 +544,35 @@ func TestBatchPoolsAreDiverse(t *testing.T) {
 		}
 	}
 }
+
+// TestBatchNumericFactsAppearInTheStem pins the class of defect that shipped
+// in prob.dist.order_stats, where the answer key held n = 3 while the stem said
+// "let n observations". A learner cannot answer a question that names a
+// parameter only in the key. Every numeric fact here has to be readable in the
+// question, so the graph it describes is the graph the answer belongs to.
+func TestBatchNumericFactsAppearInTheStem(t *testing.T) {
+	reg := graphBatchRegistry(t)
+	converted := []string{
+		"graph.complement", "graph.product", "graph.distance",
+		"graph.cut_vertex", "graph.bridge", "graph.matching",
+	}
+	for _, id := range converted {
+		for i := 0; i < 100; i++ {
+			p := graphBatchSample(t, reg, id, i)
+			for key, raw := range p.Facts {
+				if key == "answer" {
+					continue
+				}
+				value, err := strconv.Atoi(raw)
+				if err != nil {
+					continue
+				}
+				pattern := regexp.MustCompile(`(^|\D)` + regexp.QuoteMeta(strconv.Itoa(value)) + `(\D|$)`)
+				if !pattern.MatchString(p.Question) {
+					t.Fatalf("%s: %s names %s = %d, but the question does not print it: %s",
+						id, id, key, value, p.Question)
+				}
+			}
+		}
+	}
+}
