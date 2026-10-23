@@ -28,6 +28,7 @@ import SubmitErrorBlock, {
 import { GOALS_DIAG_KEY } from './constants'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
 import { useT } from '../../lib/i18n'
+import { focusClearOfTabs } from '../../lib/focusClearOfTabs'
 
 const EMPTY_PLAN: GoalPlanRes = {
   readiness: 1,
@@ -56,6 +57,7 @@ export default function DiagnosticHost({
   const conceptId = useRef('')
   const diagGradingType = useRef('')
   const goalsInputRef = useRef<MathFocusHandle | null>(null)
+  const questionShownAt = useRef<number | null>(null)
   const startedRef = useRef(false)
 
   const [question, setQuestion] = useState('')
@@ -71,7 +73,6 @@ export default function DiagnosticHost({
     answerInputMode?: string
   } | null>(null)
   const [questionCount, setQuestionCount] = useState(0)
-  const [estimatedTotal, setEstimatedTotal] = useState(0)
   const [progress, setProgress] = useState<DiagnosticProgress | null>(null)
   const [answerInput, setAnswerInput] = useState('')
   // Verdict only. A diagnostic measures prior knowledge, so the response no longer carries the
@@ -111,16 +112,7 @@ export default function DiagnosticHost({
       setAnswerFormat(formatForQuestion(res))
     diagGradingType.current = res.grading_type
       setQuestionCount(1)
-      // Backend truth first; frontend estimate as fallback for older servers.
-      if (res.progress && res.progress.cover_size > 0) {
-        setProgress(res.progress)
-        setEstimatedTotal(res.progress.cover_size)
-      } else {
-        // Fallback cover size: ~10 + log2(selected concepts)
-        const est = Math.min(10 + Math.ceil(Math.log2(Math.max(ids.length, 1)) * 5), 50)
-        setEstimatedTotal(est)
-        setProgress(null)
-      }
+      setProgress(res.progress ?? null)
       setAccuracy({ correct: 0, total: 0 })
       setLastResult(null)
       setAnswerInput('')
@@ -163,7 +155,6 @@ export default function DiagnosticHost({
     diagGradingType.current = data.grading_type
       if (data.progress) {
         setProgress(data.progress)
-        setEstimatedTotal(data.progress.cover_size)
         setQuestionCount(data.progress.answered + 1)
       }
       setLastResult(null)
@@ -196,16 +187,23 @@ export default function DiagnosticHost({
   // Keyboard flow: the answer form unmounts while feedback shows, so the
   // cursor is restored here — whenever a fresh question is revealed.
   useEffect(() => {
-    if (!lastResult && question) goalsInputRef.current?.focus()
+    if (!lastResult && question) {
+      questionShownAt.current = Date.now()
+      goalsInputRef.current?.focus()
+    }
   }, [lastResult, question])
 
   async function submitAnswer(dontKnow = false) {
+    if (loading || lastResult) return
     if (!dontKnow && !answerInput.trim()) return
     setLoading(true)
     setSubmitError(null)
     try {
       const answer = dontKnow ? '' : answerInput.trim()
-      const elapsed = 5.0
+      // Measured, as /onboard does. This was a constant 5 seconds, and the server
+      // discounts a slow correct answer (internal/diagnostic/cat.go, slowFactor), so a
+      // diagnostic run from /goals never told a fluent answer from a laboured one.
+      const elapsed = Math.max(0.5, (Date.now() - (questionShownAt.current ?? Date.now())) / 1000)
       const data = await submitGoalAnswer(sessionId.current, conceptId.current, answer, elapsed, dontKnow)
       const correct = data.correct || false
       // An admitted unknown is not a wrong answer, so it does not get the wrong answer's words.
@@ -218,9 +216,8 @@ export default function DiagnosticHost({
       setLastResult({ correct, feedback, conceptId: conceptId.current, dontKnow })
       setRetryAvailable(data.done ? false : data.retry_available === true)
       setRetryConcept(data.done ? '' : conceptId.current)
-      if (data.progress && data.progress.cover_size > 0) {
+      if (data.progress) {
         setProgress(data.progress)
-        setEstimatedTotal(data.progress.cover_size)
       }
 
       if (data.done) {
@@ -291,9 +288,8 @@ export default function DiagnosticHost({
         }, 800)
         return
       }
-      if (data.progress && data.progress.cover_size > 0) {
+      if (data.progress) {
         setProgress(data.progress)
-        setEstimatedTotal(data.progress.cover_size)
       }
       applyQuestion(data.question || '', data.concept_id || '', data.concept_name || '', data.grading_type || '', data)
     } catch (e) {
@@ -347,14 +343,18 @@ export default function DiagnosticHost({
     })
   }
 
+  // The question on screen. `progress.answered` already counts it while its feedback
+  // shows, so `+ 1` there labelled question 1's result "Question 2".
+  const shownNumber = progress ? progress.answered + (lastResult ? 0 : 1) : questionCount
+
   return (
     <>
-      <SectionHeader label={t('goals.question.number', { count: progress ? progress.answered + 1 : questionCount })} title={conceptName} />
+      <SectionHeader label={t('goals.question.number', { count: shownNumber })} title={conceptName} />
       <div className="max-w-2xl mx-auto min-w-0 overflow-hidden px-2 sm:px-0">
         <ProgressBar
-          answered={progress ? progress.answered + 1 : questionCount}
-          coverDone={progress ? progress.cover_done : 0}
-          coverSize={progress ? progress.cover_size : estimatedTotal}
+          answered={progress ? progress.answered : 0}
+          budget={progress ? progress.probe_budget : 0}
+          question={shownNumber}
         />
 
         {/* Accuracy display */}
@@ -482,9 +482,9 @@ export default function DiagnosticHost({
           <div className="mb-6 text-center">
             <button
               type="button"
-              autoFocus
+              ref={focusClearOfTabs}
               onClick={goNext}
-              className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
+              className="clear-of-tabs border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
             >
               {t('goals.question.next')}
             </button>

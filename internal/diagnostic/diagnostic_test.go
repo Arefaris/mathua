@@ -1,6 +1,7 @@
 package diagnostic
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/chuma-beep/mathua/internal/concepts"
@@ -40,6 +41,44 @@ func testDAG(t *testing.T) *concepts.DAG {
 func idFor(i int) string {
 	letters := "abcdefghij"
 	return string(letters[i])
+}
+
+// chainDAG builds an n-concept prerequisite chain.
+func chainDAG(t *testing.T, n int) *concepts.DAG {
+	t.Helper()
+	raw := make([]concepts.Concept, n)
+	for i := range raw {
+		raw[i] = concepts.Concept{
+			ID:               chainID(i),
+			Label:            "Concept " + chainID(i),
+			Domain:           "d",
+			Subdomain:        "s",
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		}
+		if i > 0 {
+			raw[i].Prerequisites = []string{chainID(i - 1)}
+		}
+	}
+	d, err := concepts.Build(raw)
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	return d
+}
+
+func chainID(i int) string {
+	return fmt.Sprintf("c%02d", i)
+}
+
+func chainRegistry(t *testing.T, n int) *generator.Registry {
+	t.Helper()
+	r := generator.NewRegistry()
+	for i := 0; i < n; i++ {
+		if err := r.Register(chainID(i), &fakeGen{}); err != nil {
+			t.Fatalf("register: %v", err)
+		}
+	}
+	return r
 }
 
 func prereqsFor(i int) []string {
@@ -307,7 +346,7 @@ func TestEngine_Report_CompletionEstimatesAreNotFabricated(t *testing.T) {
 func TestEngine_Progress_BoundsAndMonotonic(t *testing.T) {
 	e := NewEngine(testDAG(t), mustRegistry(t))
 	s := e.Start()
-	prevCover := -1
+	prevAnswered := -1
 	for i := 0; i < 60 && !e.IsComplete(s); i++ {
 		p := e.Progress(s)
 		if p.EstimatedTotal < 25 || p.EstimatedTotal > 45 {
@@ -316,13 +355,13 @@ func TestEngine_Progress_BoundsAndMonotonic(t *testing.T) {
 		if p.Answered != s.totalAsked {
 			t.Fatalf("answered mismatch: progress=%d asked=%d", p.Answered, s.totalAsked)
 		}
-		if p.CoverSize <= 0 {
-			t.Fatalf("expected positive cover size: %+v", p)
+		if p.ProbeBudget <= 0 {
+			t.Fatalf("expected a positive probe budget: %+v", p)
 		}
-		if p.CoverDone < prevCover {
-			t.Fatalf("cover done decreased (bar would regress): prev=%d cur=%+v", prevCover, p)
+		if p.Answered < prevAnswered {
+			t.Fatalf("answered decreased (bar would regress): prev=%d cur=%+v", prevAnswered, p)
 		}
-		prevCover = p.CoverDone
+		prevAnswered = p.Answered
 		if answer(t, e, s, true, true) == "" {
 			break
 		}
@@ -331,8 +370,47 @@ func TestEngine_Progress_BoundsAndMonotonic(t *testing.T) {
 	if !final.Done {
 		t.Error("expected done progress after completion")
 	}
-	if final.CoverDone != final.CoverSize {
-		t.Errorf("expected full cover at done: %+v", final)
+	if final.Answered != final.ProbeBudget {
+		t.Errorf("expected full bar at done: %+v", final)
+	}
+}
+
+// The bar a learner sees is Progress's answered over budget fraction. This chain
+// compresses to a cover of 30, which needs 60 probes, and the real Arithmetic
+// scope compresses to 31. The 45-question cap ends either run before the cover
+// settles. The old bar counted settled concepts, and 45 answers settle at most 22
+// concepts, so it could not fill.
+func TestEngine_Progress_BarMovesOnEveryAnswerAndEndsFull(t *testing.T) {
+	e := NewEngine(chainDAG(t, 60), chainRegistry(t, 60))
+	s := e.Start()
+
+	start := e.Progress(s)
+	if start.Answered != 0 {
+		t.Fatalf("expected nothing asked before the first question: %+v", start)
+	}
+	// 30 cover concepts need 60 probes, so the cap decides this run's budget.
+	if start.ProbeBudget != maxTotalQuestions {
+		t.Fatalf("expected the bar's total to be this run's probe budget %d: %+v", maxTotalQuestions, start)
+	}
+
+	if answer(t, e, s, true, true) == "" {
+		t.Fatal("expected a first question")
+	}
+	if after := e.Progress(s); after.Answered != 1 {
+		t.Fatalf("expected the first answer to move the bar: %+v", after)
+	}
+
+	for i := 0; i < maxTotalQuestions+5 && !e.IsComplete(s); i++ {
+		if answer(t, e, s, true, true) == "" {
+			break
+		}
+	}
+	final := e.Progress(s)
+	if !final.Done {
+		t.Fatalf("expected the run to end at the cap: %+v", final)
+	}
+	if final.Answered != final.ProbeBudget {
+		t.Fatalf("bar ends at %d/%d instead of full: %+v", final.Answered, final.ProbeBudget, final)
 	}
 }
 
@@ -580,5 +658,28 @@ func TestEngine_FrontierEstimate_And_KnowledgeConfidence(t *testing.T) {
 	conf := e.KnowledgeConfidence(s)
 	if len(conf) != len(s.confidence) {
 		t.Errorf("len(KnowledgeConfidence) = %d, want %d", len(conf), len(s.confidence))
+	}
+}
+
+// A run can end before the probe budget is spent: the budget is what the cover
+// would need, and the run stops when the cover settles. The bar must read full
+// on that last question, so the denominator is the answers actually given.
+func TestProgress_BarIsFullWheneverDone(t *testing.T) {
+	e := NewEngine(chainDAG(t, 60), chainRegistry(t, 60))
+	s := e.Start()
+	if answer(t, e, s, true, true) == "" {
+		t.Fatal("expected a first question")
+	}
+
+	s.Lock()
+	s.State = StateDone
+	s.Unlock()
+
+	p := e.Progress(s)
+	if !p.Done {
+		t.Fatalf("expected done progress: %+v", p)
+	}
+	if p.Answered != p.ProbeBudget {
+		t.Fatalf("bar ends at %d/%d instead of full: %+v", p.Answered, p.ProbeBudget, p)
 	}
 }

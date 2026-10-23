@@ -43,8 +43,6 @@ var algRaiseMCIDs = []string{
 	"alg.func.transformations",
 	"alg.func.inverse_domain",
 	"alg.log.graph",
-	"alg.radical.conjugate",
-	"alg.rational.complex_fraction",
 	"alg.systems.matrices",
 	"alg.seq.induction",
 }
@@ -56,6 +54,8 @@ var algRaiseNumericIDs = []string{
 	"alg.log.model",
 	"alg.radical.simplify",
 	"alg.radical.operations",
+	"alg.radical.conjugate",
+	"alg.rational.complex_fraction",
 	"alg.rational.proportions",
 	"alg.rational.asymptotes",
 	"alg.systems.three_var",
@@ -204,6 +204,23 @@ func TestRaiseNumericRecompute(t *testing.T) {
 		b := intFact(t, p, "b")
 		if p.Answer != fmt.Sprint(a+b) {
 			t.Fatalf("radical.operations: a=%d b=%d answers %s, want %d", a, b, p.Answer, a+b)
+		}
+	}
+
+	for i := 0; i < 200; i++ {
+		p := sample(t, reg, "alg.rational.complex_fraction", 100+i)
+		k := intFact(t, p, "k")
+		if p.Answer != fmt.Sprint(k) {
+			t.Fatalf("complex_fraction: k=%d answers %s, want %d", k, p.Answer, k)
+		}
+	}
+
+	for i := 0; i < 200; i++ {
+		p := sample(t, reg, "alg.radical.conjugate", 100+i)
+		a := intFact(t, p, "a")
+		b := intFact(t, p, "b")
+		if p.Answer != fmt.Sprint(a-b) {
+			t.Fatalf("radical.conjugate: a=%d b=%d answers %s, want %d", a, b, p.Answer, a-b)
 		}
 	}
 

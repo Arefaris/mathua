@@ -16,6 +16,7 @@ import ChoiceOptions from '../../components/ChoiceOptions'
 import { domainLabels, type DomainInfo } from './domains'
 import { useT } from '../../lib/i18n'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
+import { focusClearOfTabs } from '../../lib/focusClearOfTabs'
 
 export function WelcomeStep({
   domains,
@@ -292,14 +293,18 @@ export function DiagnosticStep({
   onRetryQuestion: () => void
 }) {
   const t = useT()
+  // The number of the question on screen. `progress.answered` already counts it once
+  // its feedback is showing, so adding one then labelled the result of question 1 as
+  // "Question 2" before Next had been pressed.
+  const shownNumber = progress ? progress.answered + (lastResult ? 0 : 1) : questionCount
   return (
     <>
-      <SectionHeader label={t('goals.question.number', { count: progress ? progress.answered + 1 : questionCount })} title={conceptName} />
+      <SectionHeader label={t('goals.question.number', { count: shownNumber })} title={conceptName} />
       <div className="max-w-2xl mx-auto px-2 sm:px-0 min-w-0 overflow-hidden">
         <ProgressBar
-          answered={progress ? progress.answered + 1 : questionCount}
-          coverDone={progress ? progress.cover_done : 0}
-          coverSize={progress ? progress.cover_size : 0}
+          answered={progress ? progress.answered : 0}
+          budget={progress ? progress.probe_budget : 0}
+          question={shownNumber}
         />
         <div className="bg-mathua-surface border border-mathua-border rounded-none p-4 sm:p-6 mb-6 w-full max-w-full min-w-0 overflow-hidden">
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4 w-full max-w-full min-w-0 overflow-hidden">
@@ -401,9 +406,9 @@ export function DiagnosticStep({
           <div className="mb-4 text-center">
             <button
               type="button"
-              autoFocus
+              ref={focusClearOfTabs}
               onClick={onNext}
-              className="border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
+              className="clear-of-tabs border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint rounded-none h-12 px-8 font-medium text-sm shrink-0"
             >
               {t('goals.question.next')}
             </button>

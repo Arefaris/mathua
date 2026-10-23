@@ -44,9 +44,9 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 | Courses | 439 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
 | Lesson steps | 90,483 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████░░░░░░░░░░░░░░░░` 24% |
 | Lesson texts | 502,428 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| Worked solutions | 25,800 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| Problem texts | 17,230 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **647,560** | **`█░░░░░░░░░░░░░░░░░░░` <1%** | **`█░░░░░░░░░░░░░░░░░░░` 5%** |
+| Worked solutions | 25,879 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| Problem texts | 17,342 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| **Overall** | **647,751** | **`█░░░░░░░░░░░░░░░░░░░` <1%** | **`█░░░░░░░░░░░░░░░░░░░` 5%** |
 
 _Not counted: 99 lessons adapted from OpenStax (226,050 words). OpenStax does not allow its books to be fed to generative AI without permission, so these lessons stay in English._
 

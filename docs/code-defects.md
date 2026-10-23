@@ -66,13 +66,18 @@ is zero or negative.
 The residual concern is therefore real but small. For those two cases the replay uses
 `required_streak = 3` where the live engine would have used a different value, so the rebuilt
 `concept_progress` row can differ from the row the live path would have produced. `replay` is
-already documented as best-effort at `repair.go:140-142`, and it states that it does not
-reproduce halt/rush XP or per-topic learning-speed evolution exactly. The threshold fallback is
-a further deviation that the comment does not name.
+documented as best-effort in its doc comment in `internal/repair/repair.go`, which states that it
+does not reproduce halt/rush XP or per-topic learning-speed evolution exactly. The threshold
+fallback was a further deviation the comment did not name.
 
-**Suggested fix.** Either log when the fallback fires, or extend the `replay` doc comment to
-name this deviation alongside the two it already names. A test covering a concept with a zero
-`AvgTimeSeconds` would pin the behavior either way.
+**Resolved 2026-10-23.** The `replay` doc comment now names the fallback alongside the two
+deviations it already carried, and `TestRepair_ReplayFallbackWhenConceptAbsentOrZeroThreshold`
+pins what happens for a concept that is absent from the DAG or whose stored
+`AvgTimeSeconds` is zero. The same pass removed a larger divergence:
+`repair.go` scored the attempt after applying the streak, while the live engine
+(`internal/engine/engine.go`, `applyGradedAttempt`) resets the streak on an advance and
+grades the attempt after that reset, and the replayed review clock is now set from the
+attempt that met the threshold rather than from any attempt that was correct.
 
 **Impact.** Low. Affects only repair runs over concepts with a missing or zero threshold.
 

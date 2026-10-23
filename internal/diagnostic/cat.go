@@ -107,18 +107,17 @@ type Attempt struct {
 	BeliefSnapshot map[string]float64
 }
 
-// Progress is the backend truth for the progress bar (MA parity: no exact
-// total is promised — the Diagnostic is adaptive). CoverDone/CoverSize is
-// the monotonic coverage fraction (never decreases); Answered counts
-// questions answered; EstimatedTotal is a legacy hint kept for compat and
-// must NOT be displayed as a promise.
+// Progress is the backend truth for the progress bar. The bar is Answered over
+// ProbeBudget. The budget is two probes for each cover concept, and
+// maxTotalQuestions caps it. The bar used to count settled concepts over the
+// whole cover, so it moved only when a concept reached its second probe.
+// EstimatedTotal is a legacy hint, not a promise.
 type Progress struct {
 	Answered       int  `json:"answered"`
 	EstimatedTotal int  `json:"estimated_total"`
 	MinTotal       int  `json:"min_total"`
 	MaxTotal       int  `json:"max_total"`
-	CoverDone      int  `json:"cover_done"`
-	CoverSize      int  `json:"cover_size"`
+	ProbeBudget    int  `json:"probe_budget"`
 	Done           bool `json:"done"`
 }
 
@@ -773,9 +772,11 @@ func (e *Engine) IsComplete(s *Session) bool {
 	return s.State == StateDone
 }
 
-// Progress returns the backend truth for the progress bar (MA parity).
-// CoverDone/CoverSize is monotonic (doneSet only grows); display the bar
-// from cover fraction, never from the moving estimated_total denominator.
+// Progress reports the state of the bar a learner is watching. The budget is
+// a ceiling, not a promise: a run ends when every concept in the cover has
+// settled, which can happen before the budget is spent. At that point the
+// denominator is clamped to what was answered, so the bar reads full instead
+// of stopping short on the last question.
 func (e *Engine) Progress(s *Session) Progress {
 	s.Lock()
 	defer s.Unlock()
@@ -798,13 +799,19 @@ func (e *Engine) Progress(s *Session) Progress {
 	if est < answered {
 		est = answered
 	}
+	budget := 2 * len(cover)
+	if budget > maxTotalQuestions {
+		budget = maxTotalQuestions
+	}
+	if s.State == StateDone && answered < budget {
+		budget = answered
+	}
 	return Progress{
 		Answered:       answered,
 		EstimatedTotal: est,
 		MinTotal:       minTotalQuestions,
 		MaxTotal:       maxTotalQuestions,
-		CoverDone:      coverDone,
-		CoverSize:      len(cover),
+		ProbeBudget:    budget,
 		Done:           s.State == StateDone,
 	}
 }

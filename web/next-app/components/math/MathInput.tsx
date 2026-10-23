@@ -126,6 +126,7 @@ function PlainAnswerInput({
   className,
   inputRef,
   loading,
+  onFocusChange,
 }: {
   value: string
   onChange: (plainAnswer: string) => void
@@ -143,6 +144,8 @@ function PlainAnswerInput({
    * exact failure this component was changed to fix, reappearing in the tests.
    */
   loading?: boolean
+  /** Reports focus entering and leaving, so the editor can take over the caret. */
+  onFocusChange?: (focused: boolean) => void
 }) {
   return (
     <Input
@@ -151,6 +154,8 @@ function PlainAnswerInput({
       value={value}
       data-mathua-loading={loading ? 'true' : undefined}
       aria-busy={loading ? true : undefined}
+      onFocus={() => onFocusChange?.(true)}
+      onBlur={() => onFocusChange?.(false)}
       onChange={e => onChange(e.target.value)}
       onKeyDown={e => {
         if (e.key === 'Enter') {
@@ -210,6 +215,10 @@ export default function MathInput({
   // host's `value` is LaTeX and this control is showing plain text; the two only meet
   // when `MathLiveField` mounts and pushes `value` in.
   const [loadingText, setLoadingText] = useState('')
+  // Whether the learner is in the loading input. State, not a ref: the suspended
+  // `MathLiveField` mounts with the props of this component's last render, so the
+  // value has to have caused one.
+  const [loadingFocused, setLoadingFocused] = useState(false)
 
   const isDisabled = disabled === true || status === 'disabled'
   const layout = layoutClasses()
@@ -273,6 +282,7 @@ export default function MathInput({
               ariaLabel={ariaLabel}
               className={`w-full ${className ?? ''}`}
               loading
+              onFocusChange={setLoadingFocused}
             />
           }
         >
@@ -288,6 +298,7 @@ export default function MathInput({
             onSubmit={() => onSubmit?.()}
             handleRef={fieldRef}
             focusRequest={focusRequest}
+            autoFocus={loadingFocused}
           />
         </Suspense>
         {/* Its own boundary, deliberately outside the field's. A lazily-loaded

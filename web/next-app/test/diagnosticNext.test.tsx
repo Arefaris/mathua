@@ -29,8 +29,7 @@ const PROG0 = {
   estimated_total: 25,
   min_total: 25,
   max_total: 45,
-  cover_done: 0,
-  cover_size: 5,
+  probe_budget: 45,
   done: false,
 }
 
@@ -55,7 +54,7 @@ vi.mock('../lib/api', async (importOriginal) => {
     concept_name: 'Q2 concept',
     question: 'Q2 text',
     grading_type: 'numeric',
-    progress: { ...PROG0, answered: 1, cover_done: 1 },
+    progress: { ...PROG0, answered: 1 },
   })),
   resumeGoalDiagnostic: vi.fn(),
   getGoalPlan: vi.fn(),
@@ -87,7 +86,7 @@ vi.mock('../lib/api', async (importOriginal) => {
     concept_name: 'Q3 concept',
     question: 'Q3 text',
     grading_type: 'numeric',
-    progress: { ...PROG0, answered: 1, cover_done: 1 },
+    progress: { ...PROG0, answered: 1 },
   })),
   skipQuizQuestion: vi.fn(async () => ({
     done: false,
@@ -348,6 +347,37 @@ describe('DiagnosticHost manual advance', () => {
     expect(await findAnswerField()).toBe(document.activeElement)
   })
 
+  it('numbers the question on screen, and reports how long it took', async () => {
+    // `progress.answered` already counts a question once its feedback is showing, so the
+    // label used to read "Question 2" over question 1's result. And the elapsed time
+    // sent was a constant 5 seconds, which the server's slow-answer weighting reads.
+    const now = vi.spyOn(Date, 'now').mockReturnValue(1_000_000)
+    render(
+      <DiagnosticHost
+        startIds={[]}
+        resumeId={null}
+        onComplete={() => {}}
+        onResumeExpired={() => {}}
+      />,
+    )
+    await screen.findByText('Q1 text')
+    expect(screen.getAllByText('Question 1')).toHaveLength(2)
+
+    typeAnswer(await findMathField(), '5')
+    now.mockReturnValue(1_012_000)
+    vi.mocked(submitGoalAnswer).mockClear()
+    fireEvent.click(screen.getByRole('button', { name: 'Check Answer' }))
+    await screen.findByText('Nice!')
+    expect(vi.mocked(submitGoalAnswer).mock.calls[0]?.[3]).toBe(12)
+    expect(screen.getAllByText('Question 1')).toHaveLength(2)
+    expect(screen.queryAllByText('Question 2')).toHaveLength(0)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next →' }))
+    await screen.findByText('Q2 text')
+    expect(screen.getAllByText('Question 2')).toHaveLength(2)
+    now.mockRestore()
+  })
+
   // A diagnostic measures prior knowledge. A wrong answer must not hand back the solution, and a
   // regressed server that sends one anyway must not get it onto the screen — the client holds its
   // own copy of the contract. The cast is past the response type on purpose: the type no longer
@@ -478,7 +508,7 @@ describe('DiagnosticHost manual advance', () => {
       concept_name: 'Q2 concept',
       question: 'Q2 text',
       grading_type: 'numeric',
-      progress: { ...PROG0, answered: 1, cover_done: 1 },
+      progress: { ...PROG0, answered: 1 },
     })
     render(
       <DiagnosticHost
@@ -515,7 +545,7 @@ describe('DiagnosticHost manual advance', () => {
       question: 'Q2 text',
       grading_type: 'numeric',
       retry_available: true,
-      progress: { ...PROG0, answered: 1, cover_done: 1 },
+      progress: { ...PROG0, answered: 1 },
     })
     render(
       <DiagnosticHost
