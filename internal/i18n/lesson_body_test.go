@@ -814,7 +814,7 @@ func TestEnglishMathTextIsReported(t *testing.T) {
 // "looks untranslated" check; operator names inside \text{} are notation.
 func TestBareEnvironmentsAndOperatorNames(t *testing.T) {
 	var spans []string
-	rest, _ := takeMath("Решим.\n\begin{align}\nx &= 2 \\ y &= 3\n\end{align}\nГотово.", &spans)
+	rest, _ := takeMath("Решим.\n"+`\begin{align}`+"\nx &= 2 \\\\ y &= 3\n"+`\end{align}`+"\nГотово.", &spans)
 	if len(spans) != 1 || strings.Contains(rest, "align") {
 		t.Errorf("bare environment not taken as math: spans %q, rest %q", spans, rest)
 	}
