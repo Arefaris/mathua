@@ -487,6 +487,11 @@ footer .link-underline:hover {
    with them. */
 
 .footer {
+  /* The artwork is an absolutely positioned layer, so the footer's height is the
+     height of its words and nothing else. Without this the print's intrinsic
+     ratio sized the grid row: 733px on a 412px phone, 554px at 1440, which is
+     what made the footer dominate a page with little content. */
+  position: relative;
   --footer-ink: var(--text-primary);
   --footer-ink-muted: var(--text-muted);
   --footer-rule: var(--border);
@@ -538,20 +543,32 @@ footer .link-underline:hover {
 }
 
 .footer-art {
-  grid-area: 1 / 1;
-  /* Start-aligned, not stretched: if the text is the taller of the two, the
-     artwork keeps its own proportions and the footer simply grows below it. */
-  align-self: start;
+  /* Out of flow on purpose: an in-flow image contributes its intrinsic height to
+     the parent, which is how the footer used to be sized by whichever random
+     print it picked. Absolute means the artwork can change without the layout
+     moving, which is the stability half of the report. */
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
 }
 
 .footer-art-img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  /* Cover, not auto: the six entries deliberately have different mobile ratios
+     (9:16 to 2:3), and picking one at random on mount changed the footer's height
+     after hydration -- the jump that made the page feel unstable. Cover keeps the
+     box fixed, so the artwork can change without the layout moving. */
+  object-fit: cover;
+  object-position: center;
 }
 
 .footer-content {
-  grid-area: 1 / 1;
+  /* Its own stacking layer above the artwork and the scrim. */
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -563,6 +580,25 @@ footer .link-underline:hover {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+}
+
+/* A phone gets a shorter footer than a desktop, not a taller one. The copy is the
+   same, so the difference is spacing: the old values left 554px of footer on an
+   844px screen, two thirds of the viewport, which is what "takes up too much
+   space" described. */
+@media (max-width: 639px) {
+  .footer-content {
+    padding: 1.75rem 1rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .footer-content-row {
+    gap: 1.75rem;
+  }
+
+  .footer-credits {
+    padding-top: 1rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -591,7 +627,9 @@ footer .link-underline:hover {
    to be dark, which for these prints is the trees on the left and the rocks
    along the bottom. */
 .footer-scrim {
-  grid-area: 1 / 1;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
   /* The two bands are custom properties rather than inline in `background` so the
      stack reads as two named layers and each can be adjusted on its own. */
