@@ -478,6 +478,29 @@ test('the assistant trigger does not cover the contents button', async ({ page }
   expect(overlap, `contents ${JSON.stringify(c)} overlaps assistant ${JSON.stringify(a)}`).toBe(false)
 })
 
+// The sheet listed nine entries in one column, which covered half a phone screen: 421px of
+// 844, and 63% of a 667px screen. Two columns and a 60vh cap bring it to about a third.
+// This pins the ceiling rather than the exact height, so padding may change without it.
+test('the contents sheet leaves most of a phone screen visible', async ({ page }) => {
+  await page.goto('/how-it-works')
+  await page.getByRole('button', { name: 'Table of contents' }).click()
+
+  const sheet = page.locator('[role=dialog]')
+  await expect(sheet).toBeVisible()
+  const box = await sheet.boundingBox()
+  const vh = page.viewportSize()?.height ?? 0
+  expect(box, 'sheet has no box').not.toBeNull()
+  if (!box) return
+  expect(box.height, `sheet is ${Math.round(box.height)}px of a ${vh}px screen`)
+    .toBeLessThanOrEqual(Math.round(vh * 0.6) + 1)
+
+  // A wrapped label doubles a row and pushes the sheet taller again.
+  const rows = await page.locator('[role=dialog] nav button')
+    .evaluateAll(els => els.map(e => Math.round(e.getBoundingClientRect().height)))
+  expect(rows.length).toBe(9)
+  expect(Math.max(...rows), `row heights ${rows.join(', ')}`).toBeLessThan(60)
+})
+
 test('Next is tappable after an answer, not under the tab bar', async ({ page }) => {
   // The diagnostic autofocuses Next when feedback appears. Focus scrolls it only as far
   // as the bottom edge of the viewport, which is where the floating tab bar sits, so the

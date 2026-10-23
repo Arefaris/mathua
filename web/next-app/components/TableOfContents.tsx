@@ -87,17 +87,23 @@ export default function TableOfContents({
             Contents
           </button>
         </SheetTrigger>
-        <SheetContent side="bottom" className="max-h-[70vh] overflow-y-auto">
+        {/* Two columns and no more than 60vh: nine entries in one column filled half a phone
+            screen with a wall of edge-to-edge text. The rows keep a 44px tap target and the
+            labels fit a column at 12px, so the sheet now covers about a third of the screen. */}
+        <SheetContent
+          side="bottom"
+          className="max-h-[60vh] overflow-y-auto px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
+        >
           <SheetTitle style={{ fontFamily: mono, fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
             {label}
           </SheetTitle>
-          <nav aria-label="Table of contents" className="mt-2 flex flex-col">
+          <nav aria-label="Table of contents" className="mt-1 grid grid-cols-2 gap-x-4">
             {headings.map(h => (
               <button
                 key={h.id}
                 type="button"
                 onClick={() => jump(h.id)}
-                className="min-h-[44px] border-b border-mathua-border py-2 text-left font-mono text-[13px]"
+                className="min-h-[44px] border-b border-mathua-border py-1.5 text-left font-mono text-[12px] leading-tight"
                 style={{ color: active === h.id ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
               >
                 {h.text}
