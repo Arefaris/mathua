@@ -50,6 +50,11 @@ export type FetchInit = RequestInit & {
    * a second attempt or a second award. Reads retry without asking.
    */
   retryAttempts?: number
+  /**
+   * Set internally when a guest bearer was reclaimed and the request is being
+   * repeated. It stops the recovery from looping.
+   */
+  guestRecovery?: boolean
 }
 
 const DEFAULT_TIMEOUT_MS = 30000
@@ -125,6 +130,16 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
     } else if (failed && !registered && guest && failed === `Bearer ${guest}`) {
       clearGuestToken()
     }
+  }
+  if (res.status === 401 && !sent && !registered && guest && !init.guestRecovery) {
+    // A guest bearer expires, and clearing it alone leaves an anonymous learner
+    // looking signed out mid-run: the next call arrives with no credential and
+    // the diagnostic answers "sign in again" at the worst possible moment.
+    // Reclaim a bearer for the same guest id and repeat once.
+    // ensureGuestToken() mints it from the stored id, so the learner keeps the
+    // same row and the run keeps its progress. The flag stops a loop.
+    const fresh = await ensureGuestToken()
+    if (fresh) return authedFetch(input, { ...init, guestRecovery: true })
   }
   return res
 }
