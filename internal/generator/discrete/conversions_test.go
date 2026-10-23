@@ -10,9 +10,9 @@ import (
 
 func TestDiscreteConversionsFuzz(t *testing.T) {
 	gens := map[string]generator.Generator{
-		"discrete.combinatorics.stars_bars":     &starsBarsConvertedGen{},
-		"discrete.combinatorics.pigeonhole":      &pigeonholeConvertedGen{},
-		"discrete.sets.inclusion_exclusion":     &inclusionExclusionConvertedGen{},
+		"discrete.combinatorics.stars_bars": &starsBarsConvertedGen{},
+		"discrete.combinatorics.pigeonhole": &pigeonholeConvertedGen{},
+		"discrete.sets.inclusion_exclusion": &inclusionExclusionConvertedGen{},
 	}
 
 	for id, gen := range gens {

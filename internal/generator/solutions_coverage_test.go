@@ -59,14 +59,14 @@ var generatorExplained = map[string]string{
 	"prealg.real.properties": "table-driven: fixed question, fixed answer",
 	"prealg.types":           "table-driven: fixed question, fixed answer",
 	// algebra — table-driven
-	"alg.func.dirichlet":            "table-driven: fixed question, fixed answer",
-	"alg.func.even_odd":             "table-driven: fixed question, fixed answer",
-	"alg.func.inverse_domain":       "table-driven: fixed question, fixed answer",
-	"alg.func.sigmoid":              "table-driven: fixed question, fixed answer",
-	"alg.func.transformations":      "table-driven: fixed question, fixed answer",
-	"alg.log.graph":                 "table-driven: fixed question, fixed answer",
-	"alg.seq.induction":             "table-driven: fixed question, fixed answer",
-	"alg.systems.matrices":          "table-driven: fixed question, fixed answer",
+	"alg.func.dirichlet":       "table-driven: fixed question, fixed answer",
+	"alg.func.even_odd":        "table-driven: fixed question, fixed answer",
+	"alg.func.inverse_domain":  "table-driven: fixed question, fixed answer",
+	"alg.func.sigmoid":         "table-driven: fixed question, fixed answer",
+	"alg.func.transformations": "table-driven: fixed question, fixed answer",
+	"alg.log.graph":            "table-driven: fixed question, fixed answer",
+	"alg.seq.induction":        "table-driven: fixed question, fixed answer",
+	"alg.systems.matrices":     "table-driven: fixed question, fixed answer",
 }
 
 // TestLearnerDomainsHaveSchemas is the gate that keeps the explanation

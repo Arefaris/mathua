@@ -39,6 +39,16 @@ jobs:
       # internal/auth, two TestEngine_SettleCurrent in internal/diagnostic).
       # This names the duplicate instead of leaving a compiler error.
       - run: python3 scripts/check_duplicate_tests.py
+      # gofmt is the one Go rule the compiler does not enforce, so unformatted
+      # code lands and someone reformats it later in an unrelated commit. Two
+      # files from one pull request arrived that way on 23 October 2026.
+      - run: |
+          unformatted=$(gofmt -l $(git ls-files '*.go'))
+          if [ -n "$unformatted" ]; then
+            echo "gofmt needed on:"
+            echo "$unformatted"
+            exit 1
+          fi
       - run: go test ./...
       - run: make lint-go
       - run: go run scripts/validate_graph.go

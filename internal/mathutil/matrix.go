@@ -42,16 +42,16 @@ func (m Matrix2x2) Inverse() (Matrix2x2, bool) {
 	}
 	if d == 1 {
 		return Matrix2x2{
-			A:  m.D,
+			A: m.D,
 			B: -m.B,
 			C: -m.C,
-			D:  m.A,
+			D: m.A,
 		}, true
 	}
 	return Matrix2x2{
 		A: -m.D,
-		B:  m.B,
-		C:  m.C,
+		B: m.B,
+		C: m.C,
 		D: -m.A,
 	}, true
 }

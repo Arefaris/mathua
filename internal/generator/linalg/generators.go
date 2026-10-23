@@ -1075,7 +1075,7 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	switch rand.Intn(5) {
 	case 0:
 		s1 := 2 + rand.Intn(8)
-		s2 := 1 + rand.Intn(s1 - 1)
+		s2 := 1 + rand.Intn(s1-1)
 		eig1 := s1 * s1
 		eig2 := s2 * s2
 		return generator.Problem{
@@ -1086,11 +1086,11 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		}
 	case 1:
 		s1 := 4 + rand.Intn(7)
-		s2 := 2 + rand.Intn(s1 - 2)
-		s3 := 1 + rand.Intn(s2 - 1)
+		s2 := 2 + rand.Intn(s1-2)
+		s3 := 1 + rand.Intn(s2-1)
 		return generator.Problem{
-			Question: fmt.Sprintf("A matrix \\(A\\) has singular values %d, %d and %d. Find the spectral norm \\(\\|A\\|_2\\) of the matrix.", s1, s2, s3),
-			Answer:   fmt.Sprintf("%d", s1),
+			Question:    fmt.Sprintf("A matrix \\(A\\) has singular values %d, %d and %d. Find the spectral norm \\(\\|A\\|_2\\) of the matrix.", s1, s2, s3),
+			Answer:      fmt.Sprintf("%d", s1),
 			Explanation: fmt.Sprintf("The matrix 2-norm (spectral norm) equals the largest singular value: \\(\\|A\\|_2 = \\sigma_1 = %d\\).", s1),
 		}
 	case 2:
@@ -1149,11 +1149,11 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	switch rand.Intn(5) {
 	case 0:
 		alg := 3 + rand.Intn(3)
-		geom := 1 + rand.Intn(alg - 1)
+		geom := 1 + rand.Intn(alg-1)
 		eig := 1 + rand.Intn(5)
 		return generator.Problem{
-			Question: fmt.Sprintf("An eigenvalue \\(\\lambda = %d\\) of matrix \\(A\\) has algebraic multiplicity %d and geometric multiplicity \\(\\dim \\ker(A - %d I) = %d\\). How many Jordan blocks corresponding to \\(\\lambda\\) are in the Jordan canonical form of \\(A\\)?", eig, alg, eig, geom),
-			Answer:   fmt.Sprintf("%d", geom),
+			Question:    fmt.Sprintf("An eigenvalue \\(\\lambda = %d\\) of matrix \\(A\\) has algebraic multiplicity %d and geometric multiplicity \\(\\dim \\ker(A - %d I) = %d\\). How many Jordan blocks corresponding to \\(\\lambda\\) are in the Jordan canonical form of \\(A\\)?", eig, alg, eig, geom),
+			Answer:      fmt.Sprintf("%d", geom),
 			Explanation: fmt.Sprintf("The number of Jordan blocks corresponding to an eigenvalue equals its geometric multiplicity: \\(\\dim \\ker(A - \\lambda I) = %d\\).", geom),
 		}
 	case 1:
@@ -1179,7 +1179,7 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		}
 	case 3:
 		alg := 3 + rand.Intn(3)
-		geom := 1 + rand.Intn(alg - 1)
+		geom := 1 + rand.Intn(alg-1)
 		defect := alg - geom
 		eig := 2 + rand.Intn(4)
 		return generator.Problem{

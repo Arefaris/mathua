@@ -994,22 +994,22 @@ func (g *rk4Gen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		// Truncation error order
 		if rand.Float64() < 0.5 {
 			return generator.Problem{
-				Question: "What is the integer order \\(p\\) of the global truncation error \\(\\mathcal{O}(h^p)\\) for the classic Runge-Kutta method?",
-				Answer:   "4",
+				Question:    "What is the integer order \\(p\\) of the global truncation error \\(\\mathcal{O}(h^p)\\) for the classic Runge-Kutta method?",
+				Answer:      "4",
 				Explanation: "The classic fourth-order Runge-Kutta method achieves a global truncation error of order \\(\\mathcal{O}(h^4)\\).",
 			}
 		}
 		return generator.Problem{
-			Question: "What is the integer order \\(p\\) of the local truncation error \\(\\mathcal{O}(h^p)\\) for the classic fourth-order Runge-Kutta method?",
-			Answer:   "5",
+			Question:    "What is the integer order \\(p\\) of the local truncation error \\(\\mathcal{O}(h^p)\\) for the classic fourth-order Runge-Kutta method?",
+			Answer:      "5",
 			Explanation: "Classic RK4 has local truncation error \\(\\mathcal{O}(h^5)\\), which accumulates over \\(\\mathcal{O}(1/h)\\) steps to produce a global error of \\(\\mathcal{O}(h^4)\\).",
 		}
 
 	default:
 		// Sum of intermediate stage weights in butcher increment
 		return generator.Problem{
-			Question: "In the classic RK4 increment formula \\(\\frac{h}{6}(k_1 + w_2 k_2 + w_3 k_3 + k_4)\\), what is the sum of the inner weights \\(w_2 + w_3\\)?",
-			Answer:   "4",
+			Question:    "In the classic RK4 increment formula \\(\\frac{h}{6}(k_1 + w_2 k_2 + w_3 k_3 + k_4)\\), what is the sum of the inner weights \\(w_2 + w_3\\)?",
+			Answer:      "4",
 			Explanation: "The classic RK4 butcher tableau weights the mid-point slopes at 2 each (\\(w_2 = 2\\) and \\(w_3 = 2\\)), so \\(w_2 + w_3 = 2 + 2 = 4\\).",
 		}
 	}
@@ -1516,8 +1516,8 @@ func (g *greenFunctionGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	case 1:
 		// Derivative jump discontinuity magnitude
 		return generator.Problem{
-			Question: "For the differential operator \\(L[y] = y''\\) governed by \\(y''(x) = \\delta(x - \\xi)\\), what is the jump discontinuity magnitude \\(\\left|\\left.\\frac{dG}{dx}\\right|_{x=\\xi^+} - \\left.\\frac{dG}{dx}\\right|_{x=\\xi^-}\\right|\\) across the point source \\(x = \\xi\\)?",
-			Answer:   "1",
+			Question:    "For the differential operator \\(L[y] = y''\\) governed by \\(y''(x) = \\delta(x - \\xi)\\), what is the jump discontinuity magnitude \\(\\left|\\left.\\frac{dG}{dx}\\right|_{x=\\xi^+} - \\left.\\frac{dG}{dx}\\right|_{x=\\xi^-}\\right|\\) across the point source \\(x = \\xi\\)?",
+			Answer:      "1",
 			Explanation: "Integrating the equation \\(G''(x, \\xi) = \\delta(x - \\xi)\\) over the infinitesimal interval \\((\\xi - \\epsilon, \\xi + \\epsilon)\\) yields \\(G'(\\xi^+) - G'(\\xi^-) = \\int_{\\xi-\\epsilon}^{\\xi+\\epsilon} \\delta(x-\\xi)\\,dx = 1\\). The jump magnitude is exactly 1.",
 		}
 
@@ -1588,8 +1588,8 @@ func (g *sturmLiouvilleGen) Generate(ctx generator.GeneratorContext) generator.P
 	case 1:
 		// Neumann boundary condition principal eigenvalue lambda_0 = 0
 		return generator.Problem{
-			Question: "For the regular Sturm-Liouville problem \\(-y'' = \\lambda y\\) on \\([0, \\pi]\\) with homogeneous Neumann boundary conditions \\(y'(0) = y'(\\pi) = 0\\), what is the principal (smallest) eigenvalue \\(\\lambda_0\\)?",
-			Answer:   "0",
+			Question:    "For the regular Sturm-Liouville problem \\(-y'' = \\lambda y\\) on \\([0, \\pi]\\) with homogeneous Neumann boundary conditions \\(y'(0) = y'(\\pi) = 0\\), what is the principal (smallest) eigenvalue \\(\\lambda_0\\)?",
+			Answer:      "0",
 			Explanation: "With Neumann boundary conditions \\(y'(0) = y'(\\pi) = 0\\), the constant function \\(y_0(x) = 1\\) satisfies \\(-y_0'' = 0 = 0 \\cdot y_0\\), giving the smallest eigenvalue \\(\\lambda_0 = 0\\).",
 		}
 
@@ -1857,8 +1857,8 @@ func (g *laplaceEqGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	default:
 		// Total outward normal flux of harmonic function vanishes
 		return generator.Problem{
-			Question: "For a smooth harmonic function \\(u(x, y)\\) on a bounded planar domain \\(\\Omega\\), evaluate the total outward boundary normal flux \\(\\oint_{\\partial \\Omega} \\frac{\\partial u}{\\partial n}\\,ds\\).",
-			Answer:   "0",
+			Question:    "For a smooth harmonic function \\(u(x, y)\\) on a bounded planar domain \\(\\Omega\\), evaluate the total outward boundary normal flux \\(\\oint_{\\partial \\Omega} \\frac{\\partial u}{\\partial n}\\,ds\\).",
+			Answer:      "0",
 			Explanation: "By Green's first identity (the divergence theorem), \\(\\oint_{\\partial \\Omega} \\frac{\\partial u}{\\partial n}\\,ds = \\iint_\\Omega \\Delta u\\,dA\\). Because \\(u\\) is harmonic (\\(\\Delta u = 0\\)), the integral vanishes identically, yielding 0.",
 		}
 	}

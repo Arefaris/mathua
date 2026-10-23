@@ -51,9 +51,9 @@ func TestMathutilPolynomial_Derivative(t *testing.T) {
 
 func TestMathutilPolynomial_Format(t *testing.T) {
 	cases := []struct {
-		coeffs []int
+		coeffs  []int
 		varName string
-		want   string
+		want    string
 	}{
 		{[]int{6, -5, 1}, "x", "x^2 - 5x + 6"},
 		{[]int{-4, 0, 1}, "t", "t^2 - 4"},
