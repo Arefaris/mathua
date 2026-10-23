@@ -30,11 +30,10 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 **This is an AI translation.** The text is translated by an AI model (Claude) from the English originals and held to a glossary for each language, which fixes the terminology, the style and what must never change (formulas, answers, numbers). Automated checks catch missing keys, broken formulas, letters of the wrong alphabet and translations that fell behind a change in the English. A native speaker has not reviewed every line, so corrections are welcome.
 
 - **Ukrainian and Russian** can both be picked in Settings or in the footer. The interface, topic and course names and lesson steps are translated. Lesson texts follow lesson by lesson; anything not translated yet shows in English.
-- **Lessons adapted from OpenStax stay in English.** OpenStax does not allow its books to be fed to generative AI without written permission, and this translation is made by AI.
 - The fork follows upstream at least twice a week, and translations live in separate overlay files next to the English originals, so the original project can take any part of this work back.
 
 <!-- i18n-progress:start -->
-![Ukrainian](https://img.shields.io/badge/Ukrainian-5%25-orange?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-21%25-yellow?style=flat-square)
+![Ukrainian](https://img.shields.io/badge/Ukrainian-3%25-red?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-15%25-orange?style=flat-square)
 
 | Area | English words | Ukrainian | Russian |
 |---|--:|---|---|
@@ -42,12 +41,10 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 | Topic names | 4,665 | `████████████████████` 100% | `████████████████████` 100% |
 | Courses | 439 | `████████████████████` 100% | `████████████████████` 100% |
 | Lesson steps | 90,483 | `████░░░░░░░░░░░░░░░░` 24% | `████████████████████` 100% |
-| Lesson texts | 502,428 | `░░░░░░░░░░░░░░░░░░░░` 0% | `█░░░░░░░░░░░░░░░░░░░` 7% |
+| Lesson texts | 728,478 | `░░░░░░░░░░░░░░░░░░░░` 0% | `█░░░░░░░░░░░░░░░░░░░` 4% |
 | Worked solutions | 25,879 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
 | Problem texts | 17,342 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **647,751** | **`█░░░░░░░░░░░░░░░░░░░` 5%** | **`████░░░░░░░░░░░░░░░░` 21%** |
-
-_Not counted: 99 lessons adapted from OpenStax (226,050 words). OpenStax does not allow its books to be fed to generative AI without permission, so these lessons stay in English._
+| **Overall** | **873,801** | **`█░░░░░░░░░░░░░░░░░░░` 3%** | **`███░░░░░░░░░░░░░░░░░` 15%** |
 
 _Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._
 <!-- i18n-progress:end -->

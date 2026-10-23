@@ -10,10 +10,7 @@
 //   Topic names      data/i18n/<locale>/concepts.json
 //   Courses          data/i18n/<locale>/courses.json, destinations.json
 //   Lesson steps     data/lessons/kp/<locale>/<id>.json
-//   Lesson texts     data/lessons/<corpus>/<locale>/<same path>.md   (teaching, algebrica, authored).
-//                    Lessons adapted from OpenStax are not translated (OpenStax forbids feeding its
-//                    books to generative AI without permission; see CLAUDE.md), so they are left
-//                    out of the total and reported apart.
+//   Lesson texts     data/lessons/<corpus>/<locale>/<same path>.md   (teaching, algebrica, authored)
 //   Worked solutions data/lessons/solutions/<locale>/<id>.json
 //   Problem texts    the Question and Explanation templates in internal/generator. They have no
 //                    translation mechanism yet (TRANSLATION_PLAN.md stage 4), so they count as 0
@@ -72,10 +69,6 @@ function sourceAreas() {
   return words
 }
 
-// The attribution line an OpenStax-derived lesson opens with (the same test as in
-// internal/i18n/overlay_data_test.go).
-const OPENSTAX = /^> Content (sourced|adapted) from \[OpenStax/m
-
 const AREA_OF = { web: 'Interface', cards: 'Interface', concepts: 'Topic names', courses: 'Courses', destinations: 'Courses', kp: 'Lesson steps' }
 const AREAS = ['Interface', 'Topic names', 'Courses', 'Lesson steps', 'Lesson texts', 'Worked solutions', 'Problem texts']
 
@@ -95,19 +88,12 @@ export function measure() {
   }
 
   const lessons = join(repo, 'data', 'lessons')
-  result.excluded = { files: 0, words: 0 }
   for (const corpus of ['teaching', 'algebrica', 'authored']) {
     const dir = join(lessons, corpus)
     for (const file of walk(dir)) {
       if (!file.endsWith('.md') || file.endsWith('README.md') || isLocaleDir(dir, file)) continue
-      const text = readFileSync(file, 'utf8')
-      if (OPENSTAX.test(text)) {
-        result.excluded.files += 1
-        result.excluded.words += countWords(text)
-        continue
-      }
       const rel = relative(dir, file)
-      add('Lesson texts', countWords(text), loc => existsSync(join(dir, loc, rel)))
+      add('Lesson texts', countWords(readFileSync(file, 'utf8')), loc => existsSync(join(dir, loc, rel)))
     }
   }
 
@@ -171,13 +157,6 @@ export function renderBlock(result = measure()) {
     ...rows,
     `| **Overall** | **${totals.total.toLocaleString('en-US')}** | ${LOCALES.map(l => `**${cell(totals[l.code], totals.total)}**`).join(' | ')} |`,
     '',
-    ...(result.excluded?.files
-      ? [
-          `_Not counted: ${result.excluded.files} lessons adapted from OpenStax (${result.excluded.words.toLocaleString('en-US')} words). ` +
-            'OpenStax does not allow its books to be fed to generative AI without permission, so these lessons stay in English._',
-          '',
-        ]
-      : []),
     '_Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._',
     END,
   ].join('\n')
