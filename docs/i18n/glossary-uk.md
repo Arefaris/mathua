@@ -700,38 +700,38 @@
 
 | EN | UK | Коментар |
 |---|---|---|
-| limit laws / squeeze theorem | | (український відповідник визначить перекладач) |
-| epsilon-delta definition | | (український відповідник визначить перекладач) |
-| one-sided limit / infinite limit | | (український відповідник визначить перекладач) |
-| little-o / big-O | | (український відповідник визначить перекладач) |
-| convex (f'' > 0) / concave (f'' < 0) | | (український відповідник визначить перекладач) |
-| inflection point | | (український відповідник визначить перекладач) |
-| cusp / corner / vertical tangent | | (український відповідник визначить перекладач) |
-| stationary point / critical point | | (український відповідник визначить перекладач) |
-| differential | | (український відповідник визначить перекладач) |
-| related rates | | (український відповідник визначить перекладач) |
-| linear approximation / linearization | | (український відповідник визначить перекладач) |
-| solid of revolution: disc / washer / shell method | | (український відповідник визначить перекладач) |
-| net change theorem | | (український відповідник визначить перекладач) |
-| improper integral (comparison, p-test) | | (український відповідник визначить перекладач) |
-| integration by parts / partial fractions / substitution | | (український відповідник визначить перекладач) |
-| Weierstrass substitution | | (український відповідник визначить перекладач) |
-| series: ratio / root / integral / Leibniz / Dirichlet test | | (український відповідник визначить перекладач) |
-| telescoping series | | (український відповідник визначить перекладач) |
-| Cauchy product | | (український відповідник визначить перекладач) |
-| power series, radius of convergence | | (український відповідник визначить перекладач) |
-| Taylor / Maclaurin / Fourier series | | (український відповідник визначить перекладач) |
-| partial derivative / gradient / directional derivative | | (український відповідник визначить перекладач) |
-| Jacobian | | (український відповідник визначить перекладач) |
-| Hessian | | (український відповідник визначить перекладач) |
-| Lagrange multipliers | | (український відповідник визначить перекладач) |
-| double / triple integral | | (український відповідник визначить перекладач) |
-| line integral (scalar) / surface integral | | (український відповідник визначить перекладач) |
-| curl / divergence / flux | | (український відповідник визначить перекладач) |
-| Green / Stokes / divergence theorem | | (український відповідник визначить перекладач) |
-| conservative field / potential | | (український відповідник визначить перекладач) |
-| curvature / torsion / Frenet frame | | (український відповідник визначить перекладач) |
-| gamma / beta function | | (український відповідник визначить перекладач) |
+| limit laws / squeeze theorem | властивості границь / теорема про проміжну функцію | вибір перекладача кроків |
+| epsilon-delta definition | означення мовою «епсилон–дельта» | вибір перекладача кроків |
+| one-sided limit / infinite limit | одностороння границя / нескінченна границя | вибір перекладача кроків |
+| little-o / big-O | o-мале / O-велике | вибір перекладача кроків |
+| convex (f'' > 0) / concave (f'' < 0) | опуклість (f'' > 0) / вгнутість (f'' < 0) | вибір перекладача кроків |
+| inflection point | точка перегину | вибір перекладача кроків |
+| cusp / corner / vertical tangent | вістря / злам / вертикальна дотична | вибір перекладача кроків |
+| stationary point / critical point | стаціонарна точка / критична точка | вибір перекладача кроків |
+| differential | диференціал | вибір перекладача кроків |
+| related rates | пов’язані швидкості зміни | вибір перекладача кроків |
+| linear approximation / linearization | лінійне наближення / лінеаризація | вибір перекладача кроків |
+| solid of revolution: disc / washer / shell method | тіло обертання: метод дисків / кілець / оболонок | вибір перекладача кроків |
+| net change theorem | теорема про сумарну зміну | вибір перекладача кроків |
+| improper integral (comparison, p-test) | невласний інтеграл (ознака порівняння, ознака з p-інтегралом) | вибір перекладача кроків |
+| integration by parts / partial fractions / substitution | інтегрування частинами / розкладом на найпростіші дроби / підстановкою | вибір перекладача кроків |
+| Weierstrass substitution | універсальна тригонометрична підстановка (Вейєрштраса) | вибір перекладача кроків |
+| series: ratio / root / integral / Leibniz / Dirichlet test | ряди: ознаки Даламбера / Коші / інтегральна / Лейбніца / Діріхле | вибір перекладача кроків |
+| telescoping series | телескопічний ряд | вибір перекладача кроків |
+| Cauchy product | добуток рядів за Коші | вибір перекладача кроків |
+| power series, radius of convergence | степеневий ряд, радіус збіжності | вибір перекладача кроків |
+| Taylor / Maclaurin / Fourier series | ряд Тейлора / Маклорена / Фур’є | вибір перекладача кроків |
+| partial derivative / gradient / directional derivative | частинна похідна / градієнт / похідна за напрямом | вибір перекладача кроків |
+| Jacobian | якобіан (матриця Якобі) | вибір перекладача кроків |
+| Hessian | матриця Гессе | вибір перекладача кроків |
+| Lagrange multipliers | множники Лагранжа | вибір перекладача кроків |
+| double / triple integral | подвійний / потрійний інтеграл | вибір перекладача кроків |
+| line integral (scalar) / surface integral | криволінійний інтеграл (першого роду) / поверхневий інтеграл | вибір перекладача кроків |
+| curl / divergence / flux | ротор / дивергенція / потік | вибір перекладача кроків |
+| Green / Stokes / divergence theorem | теорема Гріна / Стокса / про дивергенцію | вибір перекладача кроків |
+| conservative field / potential | потенціальне (консервативне) поле / потенціал | вибір перекладача кроків |
+| curvature / torsion / Frenet frame | кривина / скрут / репер Френе | вибір перекладача кроків |
+| gamma / beta function | гамма-функція / бета-функція | вибір перекладача кроків |
 
 ### Терміни кроків, які додав перекладач: теорія графів, чисельні методи, топологія
 
@@ -877,6 +877,30 @@
 | unit circle | одиничне коло |  |
 | inverse trig (arcsin, arccos, arctan, arccot) | арксинус, арккосинус, арктангенс, арккотангенс |  |
 | half-open interval | напіввідкритий проміжок |  |
+
+### Терміни кроків, які додав перекладач: математичний аналіз
+
+| EN | UK | Коментар |
+|---|---|---|
+| tangent line / normal | дотична / нормаль |  |
+| difference quotient | різницеве відношення |  |
+| Fermat / Rolle / Lagrange / Cauchy (mean value theorems) | теореми Ферма / Ролля / Лагранжа / Коші |  |
+| first / second derivative test | ознака першої / другої похідної |  |
+| Newton's method | метод Ньютона |  |
+| marginal analysis, elasticity | граничний аналіз, еластичність |  |
+| work, hydrostatic force | робота, гідростатична сила |  |
+| Pappus theorem | теорема Паппа про центроїд |  |
+| numerical integration (rectangle, trapezoid, Simpson) | чисельне інтегрування (прямокутників, трапецій, Сімпсона) |  |
+| Riemann / Darboux criteria | критерії Рімана / Дарбу |  |
+| Fubini | Фубіні |  |
+| cross-partial test (potential) | тест перехресних частинних похідних |  |
+| Gibbs phenomenon | ефект Гіббса |  |
+| paddle wheel (curl) | лопатеве колесо |  |
+| binormal / osculating plane | бінормаль / стична площина |  |
+| irrotational / solenoidal / incompressible | безвихрове / соленоїдальне / нестисливе |  |
+| Euler substitutions | підстановки Ейлера |  |
+| lamina | пластина |  |
+| uniform bound "Weierstrass M-test" | ознака Вейєрштраса (M-ознака) |  |
 
 ## 13. Рішення для вузівських кроків, ухвалені разом із російськими (2026-10-23)
 
