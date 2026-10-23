@@ -69,6 +69,10 @@ export function WelcomeStep({
           <p className="text-mathua-muted text-xs mt-2 px-2">
             The test adapts as it goes and usually takes about 30–45 minutes.
           </p>
+          <p className="text-mathua-muted text-xs mt-1 px-2">
+            It opens on the areas you chose. The foundations those areas build on
+            are checked too, so a few questions may come from earlier topics.
+          </p>
         </div>
         <BriefingCard eyebrow="What to expect" items={DIAGNOSTIC_BRIEFING} />
         <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center px-2">

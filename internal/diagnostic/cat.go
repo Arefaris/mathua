@@ -87,6 +87,11 @@ type Session struct {
 	doneSet      map[string]bool
 	// supplementalCount tracks extra re-probes per concept (cap enforced).
 	supplementalCount map[string]int
+	// focus marks the concepts the learner actually chose. The whole
+	// prerequisite path is still assessed; the mark only decides which covered
+	// concepts are probed first, so a run started from abstract algebra opens on
+	// abstract algebra instead of on the arithmetic beneath it.
+	focus map[string]bool
 	// retryUsed marks that the pending question's "silly mistake" retry was
 	// consumed; reset whenever NextQuestion serves a new problem.
 	retryUsed bool
@@ -160,8 +165,12 @@ type Snapshot struct {
 	TotalCount        map[string]int     `json:"total_count"`
 	DoneSet           map[string]bool    `json:"done_set"`
 	SupplementalCount map[string]int     `json:"supplemental_count"`
-	TotalAsked        int                `json:"total_asked"`
-	RetryUsed         bool               `json:"retry_used"`
+	// Focus survives a restart with the rest of the model. Without it a resumed
+	// run would fall back to probing the foundations first, which is the
+	// behaviour the focus exists to avoid.
+	Focus      map[string]bool `json:"focus,omitempty"`
+	TotalAsked int             `json:"total_asked"`
+	RetryUsed  bool            `json:"retry_used"`
 }
 
 // Encode renders the session for storage. The lock is held across marshaling,
@@ -203,6 +212,7 @@ func (s *Session) Encode() ([]byte, error) {
 		TotalCount:        s.totalCount,
 		DoneSet:           s.doneSet,
 		SupplementalCount: s.supplementalCount,
+		Focus:             s.focus,
 		TotalAsked:        s.totalAsked,
 		RetryUsed:         s.retryUsed,
 	}
@@ -248,6 +258,7 @@ func (e *Engine) Decode(data []byte) (*Session, error) {
 		LastConceptName:   snap.LastConceptName,
 		prevProblem:       snap.PrevProblem,
 		prevConceptID:     snap.PrevConceptID,
+		focus:             snap.Focus,
 		prevConceptName:   snap.PrevConceptName,
 		beliefs:           orZero(snap.Beliefs),
 		confidence:        orZero(snap.Confidence),
@@ -292,8 +303,25 @@ func (e *Engine) Start() *Session {
 // It compresses the path into a minimal covering set and picks the first
 // question by info gain.
 func (e *Engine) StartWithPath(path []*concepts.Concept) *Session {
+	return e.StartWithPathFocus(path, nil)
+}
+
+// StartWithPathFocus is StartWithPath with the concepts the learner asked for.
+//
+// The path still carries the whole prerequisite closure, because a placement
+// run has to know whether the foundations hold. The focus only raises those
+// concepts' information gain, so the probes start inside the chosen areas and
+// the foundations are asked once the selection is settled. Report 117 was a
+// learner who picked linear algebra, analysis and abstract algebra, and whose
+// first question was "what is the opposite of 1": the highest-influence node in
+// a 246-concept closure is almost always a root.
+func (e *Engine) StartWithPathFocus(path []*concepts.Concept, focusIDs []string) *Session {
 	if len(path) == 0 {
 		return &Session{State: StateDone, order: path}
+	}
+	focus := make(map[string]bool, len(focusIDs))
+	for _, id := range focusIDs {
+		focus[id] = true
 	}
 	s := &Session{
 		State:             StateProbing,
@@ -305,6 +333,7 @@ func (e *Engine) StartWithPath(path []*concepts.Concept) *Session {
 		totalCount:        make(map[string]int, len(path)),
 		doneSet:           make(map[string]bool, len(path)),
 		supplementalCount: make(map[string]int),
+		focus:             focus,
 	}
 	for _, c := range path {
 		s.beliefs[c.ID] = 0.5
@@ -374,6 +403,12 @@ func (e *Engine) infoGain(s *Session, c *concepts.Concept, coverSet map[string]b
 		if coverSet[pr.ID] {
 			influence += 0.25
 		}
+	}
+	// A concept the learner chose outranks a foundation of equal uncertainty.
+	// This is a preference between probes, not a filter: every covered concept
+	// is still asked, and a miss anywhere still pulls the frontier backwards.
+	if s.focus[c.ID] {
+		influence += 0.5
 	}
 	return unc * influence
 }

@@ -1935,7 +1935,10 @@ func (e *Engine) StartGoalDiagnostic(studentID string, conceptIDs []string) (*di
 	if err != nil {
 		return nil, nil, fmt.Errorf("goal path: %w", err)
 	}
-	session := e.diag.StartWithPath(path.Concepts)
+	// conceptIDs are the concepts the learner chose; path.Concepts is their whole
+	// prerequisite closure. Passing the selection as the focus keeps the first
+	// probes inside the chosen areas.
+	session := e.diag.StartWithPathFocus(path.Concepts, conceptIDs)
 	if session.State == diagnostic.StateDone || len(path.Concepts) == 0 {
 		return session, nil, nil
 	}
