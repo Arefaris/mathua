@@ -134,3 +134,58 @@ func TestMLBatchConversions_ZeroOxfordComma(t *testing.T) {
 		}
 	}
 }
+
+// TestMLBatchAnswerIsNotReadableOffTheQuestion guards the two linear-regression
+// generators, where the answer and the printed parameters are the same kind of
+// number and can therefore coincide. The least-squares slope used to equal a
+// printed coordinate whenever the intercept was 0, was the slope or was its
+// negative; a prediction could equal the slope or the input. A percentage equal
+// to one of the counts is not this defect, which is why the guard is not applied
+// to the metric generators.
+func TestMLBatchAnswerIsNotReadableOffTheQuestion(t *testing.T) {
+	cases := []struct {
+		id       string
+		excluded []string
+	}{
+		{"ml.linreg.least_squares", []string{"b", "y1", "y2"}},
+		{"ml.linreg.predict", []string{"m", "x"}},
+	}
+	reg := testMLRegistry(t)
+	for _, c := range cases {
+		for i := 0; i < 500; i++ {
+			p, err := reg.GenerateContext(c.id, generator.GeneratorContext{
+				Difficulty: rand.Float64(),
+				Seed:       int64(40000 + i),
+			})
+			if err != nil {
+				t.Fatalf("%s: generate failed: %v", c.id, err)
+			}
+			for _, key := range c.excluded {
+				if p.Facts[key] == p.Answer {
+					t.Fatalf("%s: fact %s = %s is the answer itself: %s", c.id, key, p.Answer, p.Question)
+				}
+			}
+		}
+	}
+}
+
+// TestMLBatchVarianceAnswersVary keeps the principal-component question from
+// falling back to a fixed pool of eigenvalue ratios, which served seven answers
+// however often a learner met the concept.
+func TestMLBatchVarianceAnswersVary(t *testing.T) {
+	reg := testMLRegistry(t)
+	seen := map[string]bool{}
+	for i := 0; i < 300; i++ {
+		p, err := reg.GenerateContext("ml.pca.variance_percent", generator.GeneratorContext{
+			Difficulty: 1,
+			Seed:       int64(50000 + i),
+		})
+		if err != nil {
+			t.Fatalf("generate failed: %v", err)
+		}
+		seen[p.Answer] = true
+	}
+	if len(seen) < 40 {
+		t.Fatalf("explained-variance serves only %d distinct answers at full difficulty, want at least 40", len(seen))
+	}
+}

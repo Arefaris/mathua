@@ -42,6 +42,12 @@ func (g *leastSquaresGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	m := 1 + rand.Intn(maxM)
 	maxB := mathutil.ScaleInt(ctx.Difficulty, 5, 20)
 	b := rand.Intn(2*maxB+1) - maxB
+	// A slope that equals one of the printed coordinates can be read off the
+	// question instead of fitted. y0 = b, so b = m does it; y1 = m + b, so b = 0
+	// does it; y2 = 2m + b, so b = -m does it.
+	for b == 0 || b == m || b == -m {
+		b = rand.Intn(2*maxB+1) - maxB
+	}
 	ans := strconv.Itoa(m)
 
 	y0 := b
@@ -76,6 +82,14 @@ func (g *predictGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	maxX := mathutil.ScaleInt(ctx.Difficulty, 4, 15)
 	x := 2 + rand.Intn(maxX)
 	pred := m*x + b
+	// A prediction equal to the slope or to the input can be read off the
+	// question instead of computed, which happens for intercepts like b = -3 with
+	// m = 2 and x = 3. Redraw the intercept until the prediction is its own
+	// number.
+	for pred == m || pred == x {
+		b = rand.Intn(2*maxB+1) - maxB
+		pred = m*x + b
+	}
 	ans := strconv.Itoa(pred)
 
 	q := fmt.Sprintf("A model has been fitted as \\(\\hat{y} = %dx %+d\\). Find the predicted value of \\(\\hat{y}\\) when \\(x = %d\\).", m, b, x)
@@ -219,21 +233,18 @@ func (g *ridgePenaltyGen) Generate(ctx generator.GeneratorContext) generator.Pro
 type variancePercentGen struct{}
 
 func (g *variancePercentGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	pairs := [][2]int{
-		{3, 1},  // 75%
-		{4, 1},  // 80%
-		{7, 3},  // 70%
-		{9, 1},  // 90%
-		{17, 3}, // 85%
-		{19, 1}, // 95%
-		{13, 7}, // 65%
+	// Draw the answer first, then build eigenvalues that produce it exactly. A
+	// fixed pool of seven ratios made this concept serve seven answers however
+	// often a learner met it.
+	pct := 10 + rand.Intn(81)
+	k := 2 + rand.Intn(mathutil.ScaleInt(ctx.Difficulty, 1, 4))
+	// λ2 = k(100 - pct); it equals pct at pct = 80, k = 4, which would print the
+	// answer as an eigenvalue.
+	for k*(100-pct) == pct {
+		k++
 	}
-	pair := pairs[rand.Intn(len(pairs))]
-	maxMult := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
-	mult := 1 + rand.Intn(maxMult)
-	lam1 := pair[0] * mult
-	lam2 := pair[1] * mult
-	pct := 100 * pair[0] / (pair[0] + pair[1])
+	lam1 := k * pct
+	lam2 := k * (100 - pct)
 	ans := strconv.Itoa(pct)
 
 	q := fmt.Sprintf("A principal component analysis finds two eigenvalues, %d and %d. What percentage of the total variance is accounted for by the first component?", lam1, lam2)
