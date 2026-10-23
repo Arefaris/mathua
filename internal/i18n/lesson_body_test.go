@@ -525,6 +525,16 @@ func TestLessonTranslationsMirrorTheEnglishOnes(t *testing.T) {
 	for _, p := range problems {
 		t.Error(p)
 	}
+	// The Russian pilot, the 41 non-OpenStax lessons of arithmetic, prealgebra and geometry, is
+	// shipped. Dropping a lesson from it must be a decision, not an accident.
+	n := 0
+	for _, corpus := range lessonCorpora {
+		files, _ := filepath.Glob(filepath.Join(lessonsDir, corpus, string(i18n.RU), "*.md"))
+		n += len(files)
+	}
+	if n < 41 {
+		t.Errorf("only %d Russian lessons found, the pilot has 41", n)
+	}
 }
 
 // goodLesson is a small lesson with every feature the validator looks at, and goodTranslation is
