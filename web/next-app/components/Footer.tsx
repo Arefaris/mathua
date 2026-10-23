@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { DICEBEAR_VERSION } from '../lib/dicebear'
-import { LOCALES, LOCALE_NAMES, setLocale, useLocale, useT } from '../lib/i18n'
+import { PUBLISHED_LOCALES, LOCALE_NAMES, setLocale, useLocale, useT } from '../lib/i18n'
 import type { MessageKey } from '../lib/i18n/keys'
 
 interface FooterProps {
@@ -270,7 +270,7 @@ export default function Footer({ className = '' }: FooterProps) {
               wrong one should not have to find a page that, for a guest, says "needs an account". */}
           {' · '}
           <span role="group" aria-label={t('common.language.label')}>
-            {LOCALES.map((l, i) => (
+            {PUBLISHED_LOCALES.map((l, i) => (
               <span key={l}>
                 {i > 0 && ' / '}
                 <button

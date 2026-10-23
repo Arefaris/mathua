@@ -1,6 +1,6 @@
 'use client'
 
-import { LOCALES, LOCALE_NAMES, setLocale, useLocale, useT } from '@/lib/i18n'
+import { PUBLISHED_LOCALES, LOCALE_NAMES, setLocale, useLocale, useT } from '@/lib/i18n'
 
 /**
  * The language choice, as two buttons.
@@ -15,7 +15,7 @@ export default function LanguageSwitcher() {
   const locale = useLocale()
   return (
     <div role="group" aria-label={t('common.language.label')} className="flex flex-wrap gap-2">
-      {LOCALES.map(l => (
+      {PUBLISHED_LOCALES.map(l => (
         <button
           type="button"
           key={l}

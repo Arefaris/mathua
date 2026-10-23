@@ -7,7 +7,7 @@ export type EnglishMessages = typeof en
 // language the static export is prerendered in. Every other language is a separate chunk that
 // loads when a learner uses it, so an English visitor does not download Russian (about 29 kB
 // gzipped) and a Russian one downloads it once. Until it arrives, lookups fall back to English.
-export const MESSAGES: Record<Locale, unknown> = { en, ru: undefined }
+export const MESSAGES: Record<Locale, unknown> = { en, ru: undefined, uk: undefined }
 
 let version = 0
 
@@ -24,5 +24,6 @@ export async function loadMessages(locale: Locale): Promise<void> {
   if (messagesLoaded(locale)) return
   // A literal path per language, so the bundler can split each into its own chunk.
   if (locale === 'ru') MESSAGES.ru = (await import('./ru')).ru
+  if (locale === 'uk') MESSAGES.uk = (await import('./uk')).uk
   version += 1
 }

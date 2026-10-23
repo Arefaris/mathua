@@ -2,6 +2,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest'
 import { createResolver, pluralForm } from '../lib/i18n/translate'
 import {
   LOCALE_STORAGE_KEY,
+  PUBLISHED_LOCALES,
   getLocale,
   getLocaleEpoch,
   resetLocaleForTests,
@@ -27,6 +28,7 @@ const fixtures = {
     topic: { one: '{count} тема', few: '{count} темы', many: '{count} тем', other: '{count} темы' },
     none: { zero: 'Тем нет', one: '{count} тема', few: '{count} темы', many: '{count} тем', other: '{count} темы' },
   },
+  uk: {},
 }
 const resolve = createResolver(fixtures)
 const t = (locale: 'en' | 'ru', key: string, params?: Record<string, string | number>) =>
@@ -117,7 +119,7 @@ describe('t(): fallback', () => {
   })
 
   it('uses the English plural rules for English text shown in Russian', () => {
-    const only = createResolver({ en: { n: { one: '{count} item', other: '{count} items' } }, ru: {} })
+    const only = createResolver({ en: { n: { one: '{count} item', other: '{count} items' } }, ru: {}, uk: {} })
     expect(only('ru', 'n', { count: 2 })).toBe('2 items')
     expect(only('ru', 'n', { count: 5 })).toBe('5 items')
   })
@@ -129,18 +131,21 @@ describe('t(): fallback', () => {
 })
 
 describe('the locale store', () => {
-  it('defaults to Russian when the browser asks for it, and English otherwise', () => {
-    const lang = vi.spyOn(window.navigator, 'language', 'get')
-    resetLocaleForTests(null)
-    lang.mockReturnValue('ru-RU')
-    expect(getLocale()).toBe('ru')
-    resetLocaleForTests(null)
-    lang.mockReturnValue('de-DE')
-    expect(getLocale()).toBe('en')
-    resetLocaleForTests(null)
-    lang.mockReturnValue('en-US')
-    expect(getLocale()).toBe('en')
-    lang.mockRestore()
+  it('defaults to the first published language the browser asks for, and English otherwise', () => {
+    const langs = vi.spyOn(window.navigator, 'languages', 'get')
+    const firstVisit = (prefs: string[]) => {
+      langs.mockReturnValue(prefs)
+      resetLocaleForTests(null)
+      return getLocale()
+    }
+    expect(firstVisit(['ru-RU'])).toBe('ru')
+    expect(firstVisit(['de-DE', 'ru'])).toBe('ru')
+    expect(firstVisit(['de-DE'])).toBe('en')
+    expect(firstVisit(['en-US', 'ru'])).toBe('en')
+    // Ukrainian is not offered until its translation is published, so a Ukrainian browser
+    // falls through to the next language it accepts.
+    expect(firstVisit(['uk-UA', 'ru'])).toBe(PUBLISHED_LOCALES.includes('uk') ? 'uk' : 'ru')
+    langs.mockRestore()
   })
 
   it('prefers a stored choice to the browser language', () => {

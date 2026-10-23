@@ -23,7 +23,10 @@ import { DOMAIN_ORDER } from '../lib/graphDomains.ts'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const concepts = JSON.parse(readFileSync(join(root, 'data', 'concepts.json'), 'utf8'))
 // The app lives in web/next-app, two levels below the repository root that holds data/i18n.
-const overlayPath = join(root, '..', '..', 'data', 'i18n', 'ru', 'concepts.json')
+const overlayDir = join(root, '..', '..', 'data', 'i18n')
+// Every translated language in lib/i18n/locale.ts LOCALES; lib/conceptData.ts imports one
+// labels file per language, so each is written even when its overlay does not exist yet.
+const TRANSLATED_LOCALES = ['ru', 'uk']
 
 const t0 = performance.now()
 const input = concepts.map(c => ({
@@ -48,29 +51,33 @@ writeFileSync(join(root, 'public', 'data', 'concepts.positions.json'), JSON.stri
 writeFileSync(join(root, 'public', 'data', 'concepts.graph.json'), JSON.stringify(payload) + '\n')
 writeFileSync(join(root, 'data', 'graph.meta.json'), JSON.stringify(meta, null, 2) + '\n')
 
-// Russian labels. Positions are keyed by id and do not change with the language, so the
+// Translated labels. Positions are keyed by id and do not change with the language, so the
 // positions file is shared.
-const overlay = readLabelOverlay(overlayPath)
-const ruGraphPath = join(root, 'public', 'data', graphPayloadFile('ru'))
-const ruLabelsPath = join(root, 'data', 'concepts.labels.ru.json')
 const known = new Set(concepts.map(c => c.id))
-const labels = {}
-if (overlay) {
-  for (const [id, label] of Object.entries(overlay)) {
-    if (known.has(id) && label.trim() !== '') labels[id] = label
+const summary = []
+for (const locale of TRANSLATED_LOCALES) {
+  const overlay = readLabelOverlay(join(overlayDir, locale, 'concepts.json'))
+  const graphPath = join(root, 'public', 'data', graphPayloadFile(locale))
+  const labels = {}
+  if (overlay) {
+    for (const [id, label] of Object.entries(overlay)) {
+      if (known.has(id) && label.trim() !== '') labels[id] = label
+    }
+    const stale = Object.keys(overlay).filter(id => !known.has(id))
+    if (stale.length) console.warn(`graph:build ${locale}: ${stale.length} overlay ids are not in the corpus (first: ${stale[0]})`)
+    const localized = buildGraphPayload(applyLabelOverlay(concepts, labels), importance)
+    writeFileSync(graphPath, JSON.stringify(localized) + '\n')
+    summary.push(`${locale} labels for ${Object.keys(labels).length}`)
+  } else {
+    // A stale artifact from an earlier overlay would keep shipping labels nobody maintains.
+    rmSync(graphPath, { force: true })
+    summary.push(`no ${locale} overlay`)
   }
-  const stale = Object.keys(overlay).filter(id => !known.has(id))
-  if (stale.length) console.warn(`graph:build ${stale.length} overlay ids are not in the corpus (first: ${stale[0]})`)
-  const ruPayload = buildGraphPayload(applyLabelOverlay(concepts, labels), importance)
-  writeFileSync(ruGraphPath, JSON.stringify(ruPayload) + '\n')
-} else {
-  // A stale artifact from an earlier overlay would keep shipping labels nobody maintains.
-  rmSync(ruGraphPath, { force: true })
+  writeFileSync(join(root, 'data', `concepts.labels.${locale}.json`), JSON.stringify(labels) + '\n')
 }
-writeFileSync(ruLabelsPath, JSON.stringify(labels) + '\n')
 
 console.log(
   `graph:build ${concepts.length} nodes / ${payload.edges.length} edges in ${layoutMs.toFixed(0)}ms ` +
-    `(layout), ${Object.keys(quantized).length} positions -> public/data/ + data/graph.meta.json` +
-    (overlay ? `; ru labels for ${Object.keys(labels).length}` : '; no ru overlay')
+    `(layout), ${Object.keys(quantized).length} positions -> public/data/ + data/graph.meta.json; ` +
+    summary.join('; ')
 )

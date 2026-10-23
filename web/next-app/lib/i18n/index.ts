@@ -2,6 +2,8 @@
 export {
   DEFAULT_LOCALE,
   LOCALES,
+  PUBLISHED_LOCALES,
+  isPublishedLocale,
   LOCALE_NAMES,
   LOCALE_STORAGE_KEY,
   getLocale,

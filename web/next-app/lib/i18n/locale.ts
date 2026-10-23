@@ -12,9 +12,16 @@
 
 import { loadMessages, messagesLoaded, messagesVersion } from './messages'
 
-export type Locale = 'en' | 'ru'
+export type Locale = 'en' | 'ru' | 'uk'
 
-export const LOCALES: readonly Locale[] = ['en', 'ru']
+/** Every language the code knows: dictionaries, overlays and checks exist for each. */
+export const LOCALES: readonly Locale[] = ['en', 'ru', 'uk']
+
+// The languages a learner can pick. A language is added to LOCALES as soon as its translation
+// starts, so the dictionaries and the checks can grow with it, but it is offered only once it is
+// complete: a half-translated interface reads as a broken one. `npm run i18n:check` holds every
+// published language to a full key set and lets an unpublished one be partial.
+export const PUBLISHED_LOCALES: readonly Locale[] = ['en', 'ru']
 
 /** The language of the source text, and the one the server renders at build time. */
 export const DEFAULT_LOCALE: Locale = 'en'
@@ -23,6 +30,7 @@ export const DEFAULT_LOCALE: Locale = 'en'
 export const LOCALE_NAMES: Record<Locale, string> = {
   en: 'English',
   ru: 'Русский',
+  uk: 'Українська',
 }
 
 export const LOCALE_STORAGE_KEY = 'mathua_locale'
@@ -31,20 +39,34 @@ export function isLocale(value: unknown): value is Locale {
   return typeof value === 'string' && (LOCALES as readonly string[]).includes(value)
 }
 
+export function isPublishedLocale(value: unknown): value is Locale {
+  return isLocale(value) && PUBLISHED_LOCALES.includes(value)
+}
+
 function readStored(): Locale | null {
   try {
     const stored = localStorage.getItem(LOCALE_STORAGE_KEY)
-    return isLocale(stored) ? stored : null
+    return isPublishedLocale(stored) ? stored : null
   } catch {
     // Private mode or blocked site data: the choice then lasts for the tab only.
     return null
   }
 }
 
-/** First visit: Russian for a browser that asks for it, English for everyone else. */
+// "ua" is Ukraine's country code, which some people and browsers send for Ukrainian.
+const BROWSER_ALIASES: Record<string, Locale> = { ua: 'uk' }
+
+/** First visit: the first published language in the browser's preference list, else English. */
 function fromBrowser(): Locale {
-  const lang = typeof navigator !== 'undefined' ? navigator.language : ''
-  return typeof lang === 'string' && lang.toLowerCase().startsWith('ru') ? 'ru' : DEFAULT_LOCALE
+  if (typeof navigator === 'undefined') return DEFAULT_LOCALE
+  const prefs = navigator.languages?.length ? navigator.languages : [navigator.language]
+  for (const tag of prefs) {
+    if (typeof tag !== 'string') continue
+    const base = tag.toLowerCase().split(/[-_]/)[0]
+    const locale = BROWSER_ALIASES[base] ?? base
+    if (isPublishedLocale(locale)) return locale
+  }
+  return DEFAULT_LOCALE
 }
 
 let current: Locale | null = null
@@ -146,7 +168,7 @@ export function syncDocumentLang() {
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', e => {
     if (e.key !== LOCALE_STORAGE_KEY) return
-    const next = isLocale(e.newValue) ? e.newValue : fromBrowser()
+    const next = isPublishedLocale(e.newValue) ? e.newValue : fromBrowser()
     if (next === current) return
     requested = next
     if (messagesLoaded(next)) commit(next)
