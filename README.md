@@ -29,7 +29,7 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 
 **This is an AI translation.** The text is translated by an AI model (Claude) from the English originals and held to a glossary for each language, which fixes the terminology, the style and what must never change (formulas, answers, numbers). Automated checks catch missing keys, broken formulas, letters of the wrong alphabet and translations that fell behind a change in the English. A native speaker has not reviewed every line, so corrections are welcome.
 
-- **Ukrainian and Russian** can both be picked in Settings or in the footer. The interface, topic and course names and lesson steps are translated, and lesson texts follow lesson by lesson; anything not translated yet shows in English.
+- **Ukrainian and Russian** can both be picked in Settings or in the footer. The interface, topic and course names and lesson steps are translated. Lesson texts follow lesson by lesson; anything not translated yet shows in English.
 - **Lessons adapted from OpenStax stay in English.** OpenStax does not allow its books to be fed to generative AI without written permission, and this translation is made by AI.
 - The fork follows upstream at least twice a week, and translations live in separate overlay files next to the English originals, so the original project can take any part of this work back.
 
