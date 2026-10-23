@@ -17,6 +17,7 @@
     "graph:build": "node scripts/build-graph.mjs",
     "flow:build": "node scripts/build-flow-layout.mjs",
     "i18n:check": "node scripts/i18n-check.mjs",
+    "i18n:literals": "node scripts/i18n-literals.mjs",
     "og:build": "node scripts/build-og.mjs",
     "docs:build": "node scripts/build-docs.mjs",
     "docs:check": "node scripts/build-docs.mjs --check",
