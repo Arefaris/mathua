@@ -102,7 +102,7 @@ func (g *AddSingleGen) Generate(ctx generator.GeneratorContext) generator.Proble
 
 - Use `ctx.Difficulty` (0.0 trivial → 1.0 challenging) to scale operand sizes.
 - Always return an `Explanation` — shown when a student asks to see the solution.
-- Use the global `math/rand`, seeded per request (`Registry.GenerateContext` in `internal/generator/registry.go`). Do not hardcode problems. `ctx.Seed` is deterministic: `hashSeed(student|cid|attemptID)` (`engine.go:389`). Do not use `UnixNano`.
+- Use the global `math/rand`, seeded per request (`Registry.GenerateContext` in `internal/generator/registry.go`). Do not hardcode problems. `ctx.Seed` is deterministic: `hashSeed(student|cid|attemptID)` (`internal/engine/engine.go`). Do not use `UnixNano`.
 
 ### 3. Prove it works
 
@@ -236,10 +236,10 @@ Every lesson is broken into exactly 3 **knowledge points** (KPs), each a subgoal
 
 A validator runs on every pull request. It checks invariants before any merge can happen:
 
-1. **No cycles** — including `prerequisites` + `encompasses` edges (`loader.go:335` Kahn’s)
-2. **No orphans** — every `prerequisites`/`encompasses`/`key_prerequisites` must exist (`loader.go:254`)
+1. **No cycles** — including `prerequisites` + `encompasses` edges (`internal/concepts/loader.go` Kahn’s)
+2. **No orphans** — every `prerequisites`/`encompasses`/`key_prerequisites` must exist (`internal/concepts/loader.go`)
 3. **No dup IDs, no empty label/domain, valid `mastery_threshold`** (`loader.go:303`)
-4. **No singleton `interference_group`** (`loader.go:322`), valid `grading_type` enum (9 values `loader.go:297`), `variants` `0.1–1.0` difficulty
+4. **No singleton `interference_group`** (`internal/concepts/loader.go`), valid `grading_type` enum (9 values `loader.go:297`), `variants` `0.1–1.0` difficulty
 
 A second audit guards the lesson corpus (`python3 scripts/audit_lessons.py:191`). It fails on these conditions:
 
