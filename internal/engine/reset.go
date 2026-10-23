@@ -83,6 +83,11 @@ func (e *Engine) ResetAccountProgress(studentID, phrase string) error {
 			delete(e.studyAnchor, k)
 		}
 	}
+	for k := range e.kpStates {
+		if strings.HasPrefix(k, prefix) {
+			delete(e.kpStates, k)
+		}
+	}
 	e.mu.Unlock()
 	// KV last and retry-safe: deletes tolerate missing rows, the prefs
 	// upsert is idempotent, and ResetProgress itself is a no-op rerun.
@@ -132,6 +137,11 @@ func (e *Engine) DeleteAccount(studentID, phrase string) error {
 	for k := range e.studyAnchor {
 		if strings.HasPrefix(k, prefix) {
 			delete(e.studyAnchor, k)
+		}
+	}
+	for k := range e.kpStates {
+		if strings.HasPrefix(k, prefix) {
+			delete(e.kpStates, k)
 		}
 	}
 	e.mu.Unlock()

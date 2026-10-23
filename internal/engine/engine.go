@@ -72,6 +72,7 @@ type activeSession struct {
 	// rather than a fabricated one.
 	questionDifficulty float64
 	rushCount          int
+	kpOrdinal          int
 }
 
 // ErrNoActiveQuestion is returned when a session has no unanswered question
@@ -130,7 +131,9 @@ type Question struct {
 	Diagram     string          `json:"diagram,omitempty"`
 	// GradingType lets every answer host (study, review, quiz, diagnostic)
 	// show the right input hint/keyboard. Empty means "unknown".
-	GradingType string `json:"grading_type,omitempty"`
+	GradingType    string                   `json:"grading_type,omitempty"`
+	KPOrdinal      int                      `json:"kp_ordinal,omitempty"`
+	KnowledgePoint *concepts.KnowledgePoint `json:"knowledge_point,omitempty"`
 }
 
 type AnswerResult struct {
@@ -144,6 +147,8 @@ type AnswerResult struct {
 	ExpectedAnswer string         `json:"expected_answer"`
 	Halted         bool           `json:"halted,omitempty"`
 	Remedial       []string       `json:"remedial,omitempty"`
+	KPOrdinal      int            `json:"kp_ordinal,omitempty"`
+	KPAdvanced     bool           `json:"kp_advanced,omitempty"`
 	// Ungraded marks a grader infrastructure fault: the answer was NOT
 	// evaluated and nothing was recorded. Clients should retry, not penalize.
 	Ungraded bool `json:"ungraded,omitempty"`
@@ -209,6 +214,8 @@ type Engine struct {
 	// answer graded across a reset is refused instead of resurrecting wiped
 	// progress (the write-time half of the ADR-026 guarantee).
 	resetGen map[string]uint64
+	// kpStates tracks Knowledge Point progress per student and concept.
+	kpStates map[string]*mastery.KPStateMachine
 }
 
 // QuizGateXP is the mastery-check interval. It delegates so there is one definition: the
@@ -244,7 +251,34 @@ func New(repo storage.Repository, dag *concepts.DAG, reg *generator.Registry, ll
 		quizRemedial:  make(map[string][]string),
 		remedialQueue: make(map[string][]string),
 		resetGen:      make(map[string]uint64),
+		kpStates:      make(map[string]*mastery.KPStateMachine),
 	}
+}
+
+// GetKPState returns the current Knowledge Point state machine for a student and concept.
+// It returns nil if the concept has no Knowledge Points defined.
+func (e *Engine) GetKPState(studentID, conceptID string) *mastery.KPStateMachine {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.getKPStateLocked(studentID, conceptID)
+}
+
+func (e *Engine) getKPStateLocked(studentID, conceptID string) *mastery.KPStateMachine {
+	key := studentID + "|" + conceptID
+	if sm, ok := e.kpStates[key]; ok && sm != nil {
+		return sm
+	}
+	if e.dag != nil {
+		if c := e.dag.Concept(conceptID); c != nil && len(c.KnowledgePoints) > 0 {
+			sm := mastery.NewKPStateMachine(len(c.KnowledgePoints))
+			if e.kpStates == nil {
+				e.kpStates = make(map[string]*mastery.KPStateMachine)
+			}
+			e.kpStates[key] = sm
+			return sm
+		}
+	}
+	return nil
 }
 
 // Anchor is the server-side record of one served question: the answer it must
@@ -593,6 +627,15 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		if as.remedialDifficulty > 0 {
 			diff = as.remedialDifficulty
 		}
+		var activeKP *concepts.KnowledgePoint
+		as.kpOrdinal = 0
+		if len(c.KnowledgePoints) > 0 {
+			sm := e.getKPStateLocked(studentID, cid)
+			if sm != nil {
+				as.kpOrdinal = sm.CurrentOrdinal
+				activeKP = c.KnowledgePointByOrdinal(as.kpOrdinal)
+			}
+		}
 		ctx := generator.GeneratorContext{Difficulty: diff, Seed: hashSeed(studentID + "|" + cid + "|" + as.attemptID)}
 		prob, err := e.registry.GenerateContext(cid, ctx)
 		if err != nil {
@@ -612,13 +655,15 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 			lesson = e.ll.Lesson(cid)
 		}
 		return &Question{
-			ConceptID:   cid,
-			ConceptName: c.Label,
-			Question:    prob.Question,
-			GradingType: e.gradingTypeFor(cid),
-			IsReview:    false,
-			AttemptID:   as.attemptID,
-			Lesson:      lesson,
+			ConceptID:      cid,
+			ConceptName:    c.Label,
+			Question:       prob.Question,
+			GradingType:    e.gradingTypeFor(cid),
+			IsReview:       false,
+			AttemptID:      as.attemptID,
+			Lesson:         lesson,
+			KPOrdinal:      as.kpOrdinal,
+			KnowledgePoint: activeKP,
 		}, nil
 	}
 
@@ -639,6 +684,25 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 	}
 	next := cands[0]
 	difficulty := difficultyFromWeakness(weakness, next.Concept.ID)
+
+	var activeKP *concepts.KnowledgePoint
+	kpOrdinal := 0
+	if len(next.Concept.KnowledgePoints) > 0 {
+		sm := e.getKPStateLocked(studentID, next.Concept.ID)
+		if sm != nil {
+			kpOrdinal = sm.CurrentOrdinal
+			activeKP = next.Concept.KnowledgePointByOrdinal(kpOrdinal)
+			if activeKP != nil && activeKP.VariantKey != "" {
+				for _, v := range next.Concept.Variants {
+					if v.Label == activeKP.VariantKey {
+						difficulty = v.Difficulty
+						break
+					}
+				}
+			}
+		}
+	}
+	as.kpOrdinal = kpOrdinal
 	prevQuestion := as.questionText
 	attemptID := newAttemptID()
 	seedBase := hashSeed(studentID + "|" + next.Concept.ID + "|" + attemptID)
@@ -682,14 +746,16 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 	diagram := diagramForConcept(next.Concept.ID)
 
 	return &Question{
-		ConceptID:   next.Concept.ID,
-		ConceptName: next.Concept.Label,
-		Question:    prob.Question,
-		GradingType: e.gradingTypeFor(next.Concept.ID),
-		IsReview:    next.IsReview,
-		AttemptID:   as.attemptID,
-		Lesson:      lesson,
-		Diagram:     diagram,
+		ConceptID:      next.Concept.ID,
+		ConceptName:    next.Concept.Label,
+		Question:       prob.Question,
+		GradingType:    e.gradingTypeFor(next.Concept.ID),
+		IsReview:       next.IsReview,
+		AttemptID:      as.attemptID,
+		Lesson:         lesson,
+		Diagram:        diagram,
+		KPOrdinal:      as.kpOrdinal,
+		KnowledgePoint: activeKP,
 	}, nil
 }
 
@@ -1130,6 +1196,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		requiredStreak     int
 		timeThreshold      float64
 		isReview           bool
+		kpOrdinal          int
 	}{
 		conceptID:          as.conceptID,
 		expectedAnswer:     as.expectedAnswer,
@@ -1139,6 +1206,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		requiredStreak:     as.requiredStreak,
 		timeThreshold:      as.timeThreshold,
 		isReview:           as.isReview,
+		kpOrdinal:          as.kpOrdinal,
 	}
 	// Mark answered while still holding the lock so a concurrent
 	// SubmitAnswer for the same attemptID is rejected as ErrNoActiveQuestion.
@@ -1189,6 +1257,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		correct:        gr.Correct,
 		questionText:   sessionFields.questionText,
 		difficulty:     difficultyOrNil(sessionFields.questionDifficulty),
+		kpOrdinal:      sessionFields.kpOrdinal,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("save progress: %w", err)
@@ -1254,6 +1323,14 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 			if c != nil {
 				if len(c.Variants) > 0 {
 					as.remedialDifficulty = c.Variants[0].Difficulty
+				}
+				if kp := c.KnowledgePointByOrdinal(sessionFields.kpOrdinal); kp != nil {
+					for _, req := range kp.KeyPrerequisites {
+						if e.dag.Concept(req) != nil {
+							as.remedialQueue = append(as.remedialQueue, req)
+							remedial = append(remedial, req)
+						}
+					}
 				}
 				if len(c.KeyPrerequisites) > 0 {
 					var validKPs []string
@@ -1328,8 +1405,18 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	// answered already true from the early mark; keep it true.
 	as.conceptID = ""
 	as.questionText = ""
+	as.kpOrdinal = 0
 	e.persistActiveSession(sessionID, studentID, as, "")
 	e.mu.Unlock()
+
+	var resKPOrdinal int
+	var resKPAdvanced bool
+	if sm := e.GetKPState(studentID, sessionFields.conceptID); sm != nil {
+		resKPOrdinal = sm.CurrentOrdinal
+		if sm.Completed || (sessionFields.kpOrdinal > 0 && sm.CurrentOrdinal > sessionFields.kpOrdinal) {
+			resKPAdvanced = true
+		}
+	}
 
 	return &AnswerResult{
 		Correct:        gr.Correct,
@@ -1345,6 +1432,8 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		ExpectedAnswer: sessionFields.expectedAnswer,
 		Halted:         halted,
 		Remedial:       remedial,
+		KPOrdinal:      resKPOrdinal,
+		KPAdvanced:     resKPAdvanced,
 	}, nil
 }
 
@@ -1591,6 +1680,15 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 			log.Printf("warning: failed to add XP for student %s: %v", studentID, err)
 		}
 	}
+	var resKPOrdinal int
+	var resKPAdvanced bool
+	if sm := e.GetKPState(studentID, conceptID); sm != nil {
+		resKPOrdinal = sm.CurrentOrdinal
+		if sm.Completed {
+			resKPAdvanced = true
+		}
+	}
+
 	return &AnswerResult{
 		Correct:        gr.Correct,
 		Feedback:       gr.Feedback,
@@ -1605,6 +1703,8 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 		ExpectedAnswer: expected,
 		Halted:         halted,
 		Remedial:       remedial,
+		KPOrdinal:      resKPOrdinal,
+		KPAdvanced:     resKPAdvanced,
 	}, nil
 }
 
@@ -2489,6 +2589,7 @@ func (e *Engine) persistActiveSession(sessionID, studentID string, as *activeSes
 		SessionReview:  as.sessionReview,
 		SessionNew:     as.sessionNew,
 		Difficulty:     attemptDifficulty(as),
+		KPOrdinal:      as.kpOrdinal,
 	}
 	if err := e.repo.UpsertActiveSession(rec); err != nil {
 		log.Printf("warning: persist active session %s: %v", sessionID, err)
@@ -2531,6 +2632,19 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 		timeThresh = c.MasteryThreshold.AvgTimeSeconds
 		reqStreak = c.MasteryThreshold.Streak
 	}
+	if rec.KPOrdinal > 0 && rec.ConceptID != "" && e.dag != nil {
+		if c != nil && len(c.KnowledgePoints) > 0 {
+			key := rec.StudentID + "|" + rec.ConceptID
+			if sm := e.kpStates[key]; sm == nil {
+				sm = mastery.NewKPStateMachine(len(c.KnowledgePoints))
+				sm.CurrentOrdinal = rec.KPOrdinal
+				if e.kpStates == nil {
+					e.kpStates = make(map[string]*mastery.KPStateMachine)
+				}
+				e.kpStates[key] = sm
+			}
+		}
+	}
 	return &activeSession{
 		studentID:      studentID,
 		conceptID:      rec.ConceptID,
@@ -2546,6 +2660,7 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 		lastConceptID:  rec.LastConceptID,
 		sessionReview:  rec.SessionReview,
 		sessionNew:     rec.SessionNew,
+		kpOrdinal:      rec.KPOrdinal,
 	}
 }
 
@@ -2570,15 +2685,23 @@ func (e *Engine) GetCurrentQuestion(sessionID, studentID string) (*Question, err
 	if e.ll != nil {
 		lesson = e.ll.Lesson(as.conceptID)
 	}
+	var activeKP *concepts.KnowledgePoint
+	if as.kpOrdinal > 0 && e.dag != nil {
+		if c := e.dag.Concept(as.conceptID); c != nil {
+			activeKP = c.KnowledgePointByOrdinal(as.kpOrdinal)
+		}
+	}
 	return &Question{
-		ConceptID:   as.conceptID,
-		ConceptName: as.conceptName,
-		Question:    as.questionText,
-		GradingType: e.gradingTypeFor(as.conceptID),
-		IsReview:    as.isReview,
-		AttemptID:   as.attemptID,
-		Lesson:      lesson,
-		Diagram:     diagramForConcept(as.conceptID),
+		ConceptID:      as.conceptID,
+		ConceptName:    as.conceptName,
+		Question:       as.questionText,
+		GradingType:    e.gradingTypeFor(as.conceptID),
+		IsReview:       as.isReview,
+		AttemptID:      as.attemptID,
+		Lesson:         lesson,
+		Diagram:        diagramForConcept(as.conceptID),
+		KPOrdinal:      as.kpOrdinal,
+		KnowledgePoint: activeKP,
 	}, nil
 }
 
@@ -2670,6 +2793,7 @@ type gradedAttempt struct {
 	// a deliberate "unknown" be indistinguishable at the call site — which is exactly the
 	// bug that let the quiz path record unknown difficulty for every attempt.
 	difficulty *float64
+	kpOrdinal  int
 }
 
 // applyGradedAttempt is the single mastery authority.
@@ -2735,12 +2859,35 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 		Instance:   o.questionText,
 	})
 
+	var kpSM *mastery.KPStateMachine
+	if e.dag != nil {
+		if c := e.dag.Concept(o.conceptID); c != nil && len(c.KnowledgePoints) > 0 {
+			key := o.studentID + "|" + o.conceptID
+			e.mu.Lock()
+			sm := e.kpStates[key]
+			if sm == nil {
+				sm = mastery.NewKPStateMachine(len(c.KnowledgePoints))
+				if e.kpStates == nil {
+					e.kpStates = make(map[string]*mastery.KPStateMachine)
+				}
+				e.kpStates[key] = sm
+			}
+			if o.kpOrdinal > 0 && sm.CurrentOrdinal != o.kpOrdinal && !sm.Completed {
+				sm.CurrentOrdinal = o.kpOrdinal
+			}
+			sm.Transition(o.correct)
+			kpSM = sm
+			e.mu.Unlock()
+		}
+	}
+
 	ctx := mastery.TransitionCtx{
 		Evidence:          evidence,
 		Streak:            progress.Streak,
 		RequiredStreak:    o.requiredStreak,
 		AvgResponseTime:   progress.AvgResponseTime,
 		ResponseThreshold: o.timeThreshold,
+		KPState:           kpSM,
 	}
 	newStatus := e.machine.Next(mastery.Status(progress.Status), ctx)
 	oldStatus := progress.Status

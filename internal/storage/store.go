@@ -101,6 +101,7 @@ type ActiveSession struct {
 	LastConceptID  string
 	SessionReview  int
 	SessionNew     int
+	KPOrdinal      int
 	UpdatedAt      time.Time
 }
 
