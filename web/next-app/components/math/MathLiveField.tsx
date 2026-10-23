@@ -485,7 +485,7 @@ export default function MathLiveField({
   return (
     <math-field
       ref={ref}
-      class="mathua-math-field"
+      class="mathua-math-field clear-of-tabs"
       data-status={status === 'correct' || status === 'incorrect' ? status : undefined}
       placeholder={placeholder}
       aria-label={ariaLabel}
