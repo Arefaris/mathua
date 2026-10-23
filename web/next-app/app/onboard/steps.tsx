@@ -262,6 +262,7 @@ export function DiagnosticStep({
   onSkip,
   skipsLeft,
   onRestart,
+  onRetrySubmit,
   onRetryPlan,
   retryAvailable,
   onRetryQuestion,
@@ -288,6 +289,9 @@ export function DiagnosticStep({
   onSkip: () => void
   skipsLeft: number
   onRestart: () => void
+  /** Retry the failed submission as the kind of answer it was. Optional because
+   *  a caller that only ever submits graded answers can rely on onSubmit. */
+  onRetrySubmit?: () => void
   onRetryPlan: () => void
   retryAvailable: boolean
   onRetryQuestion: () => void
@@ -393,7 +397,7 @@ export function DiagnosticStep({
           <div className="mb-4">
             <SubmitErrorBlock
               error={submitError}
-              onRetry={onSubmit}
+              onRetry={onRetrySubmit ?? onSubmit}
               onSkip={onSkip}
               skipsLeft={skipsLeft}
               onRestart={onRestart}
