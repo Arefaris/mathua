@@ -6,8 +6,8 @@
 // English text each translation was made from, in i18n/sources/<locale>.json at the repository
 // root, and reports every translation whose English no longer matches its fingerprint.
 //
-// Covered: the web dictionaries, concept labels, course and destination text, lesson-step shards
-// and the next-up card wording in internal/server/localize.go.
+// Covered: the web dictionaries, concept labels, course and destination text, lesson-step shards,
+// lesson texts and the next-up card wording in internal/server/localize.go.
 //
 // Usage (from web/next-app):
 //   npm run i18n:sources                       check every language
@@ -19,8 +19,8 @@
 //
 // It is also a test (test/i18nSources.test.ts), so `npm test` fails on a stale translation.
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { dirname, join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { load } from './i18n-check.mjs'
 
@@ -29,6 +29,27 @@ const repo = join(here, '..', '..', '..')
 const messagesDir = join(here, '..', 'lib', 'i18n', 'messages')
 const sourcesDir = join(repo, 'i18n', 'sources')
 const TRANSLATED = ['ru', 'uk']
+// Lesson texts: a translation of data/lessons/<corpus>/<path>.md is <corpus>/<locale>/<path>.md.
+const LESSON_CORPORA = ['teaching', 'algebrica', 'authored']
+const LOCALE_DIRS = new Set(['en', ...TRANSLATED])
+
+/** Lesson files under a corpus dir, relative to it with forward slashes. */
+function lessonFiles(corpusDir, skipLocales) {
+  const out = []
+  const walk = dir => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name)
+      if (statSync(full).isDirectory()) {
+        if (skipLocales && dir === corpusDir && LOCALE_DIRS.has(name)) continue
+        walk(full)
+      } else if (name.endsWith('.md') && name !== 'README.md') {
+        out.push(relative(corpusDir, full).split(sep).join('/'))
+      }
+    }
+  }
+  if (existsSync(corpusDir)) walk(corpusDir)
+  return out
+}
 
 const readJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 const fingerprint = value => createHash('sha1').update(JSON.stringify(value)).digest('hex').slice(0, 12)
@@ -51,6 +72,15 @@ export function englishSources() {
     if (!file.endsWith('.json')) continue
     const steps = readJSON(join(kpDir, file)).map(s => [s.label, s.section, s.subgoals])
     out.set(`kp:${file.replace(/\.json$/, '')}`, steps)
+  }
+
+  // A lesson's whole English text; line endings are normalised so a Windows checkout
+  // fingerprints the same as any other.
+  for (const corpus of LESSON_CORPORA) {
+    const dir = join(repo, 'data', 'lessons', corpus)
+    for (const rel of lessonFiles(dir, true)) {
+      out.set(`lessons:${corpus}/${rel}`, readFileSync(join(dir, rel), 'utf8').replace(/\r\n/g, '\n'))
+    }
   }
 
   // Each card is the source span from its badge to its call to action, so a change to any of
@@ -82,6 +112,9 @@ export function translatedKeys(locale) {
   const kp = join(repo, 'data', 'lessons', 'kp', locale)
   if (existsSync(kp)) {
     for (const file of readdirSync(kp)) if (file.endsWith('.json')) keys.add(`kp:${file.replace(/\.json$/, '')}`)
+  }
+  for (const corpus of LESSON_CORPORA) {
+    for (const rel of lessonFiles(join(repo, 'data', 'lessons', corpus, locale), false)) keys.add(`lessons:${corpus}/${rel}`)
   }
   const localize = readFileSync(join(repo, 'internal', 'server', 'localize.go'), 'utf8').replace(/\r\n/g, '\n')
   const block = localize.match(new RegExp(`i18n\\.${locale.toUpperCase()}: \\{\\n([\\s\\S]*?)\\n\\t\\},`))
