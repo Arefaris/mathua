@@ -406,6 +406,12 @@ func englishMathText(spans []string) []string {
 	for _, s := range spans {
 		for _, m := range mathTextRe.FindAllString(s, -1) {
 			body := m[strings.Index(m, "{")+1 : len(m)-1]
+			// A single letter set in italic or bold is a variable (\textit{r} for a radius), not
+			// prose, and stays as it is; in \text{} even one letter is a word or a unit (m, s).
+			cmd := m[:strings.Index(m, "{")]
+			if len(body) == 1 && (cmd == `\textit` || cmd == `\textbf`) {
+				continue
+			}
 			if strings.ContainsAny(body, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
 				out = append(out, m)
 			}
@@ -760,12 +766,13 @@ func TestMathTextMayBeTranslated(t *testing.T) {
 	}
 }
 
-// English left inside \text{} of a translated formula is reported; translated prose is not.
+// English left inside \text{} of a translated formula is reported; translated prose and an
+// italic single-letter variable are not.
 func TestEnglishMathTextIsReported(t *testing.T) {
-	if got := englishMathText([]string{`$5\,\text{cm} + x$`}); len(got) != 1 {
-		t.Errorf("English unit inside \text{} not reported: %v", got)
+	if got := englishMathText([]string{`$5\,\text{cm} + x$`, `$3\text{s}$`}); len(got) != 2 {
+		t.Errorf("English inside \\text{} not reported: %v", got)
 	}
-	if got := englishMathText([]string{`$5\,\text{см} + x$`, `$\text{как весы}$`, `$x^2$`}); len(got) != 0 {
-		t.Errorf("translated \text{} reported as English: %v", got)
+	if got := englishMathText([]string{`$5\,\text{см} + x$`, `$\text{как весы}$`, `$x^2$`, `$C=2\pi\textit{r}$`}); len(got) != 0 {
+		t.Errorf("translated \\text{} or a variable reported as English: %v", got)
 	}
 }
