@@ -211,21 +211,28 @@ func TestMathliveNumericCannotEvaluatePinnedForms(t *testing.T) {
 
 // TestMathliveNormalizationIsLoadBearing shows why toPlainAnswer exists.
 //
-// These are the raw strings MathLive emits. Fed to a grader unnormalized they are
+// These are the raw strings MathLive emits. Fed to a grader unnormalized most are
 // rejected, which is the false miss the editor would otherwise introduce on every
 // fraction, mixed number and division.
+//
+// Two of them now grade anyway: "(1)/(2)" and "(2)/(4)" are plain arithmetic, and
+// the numeric grader reads an expression when it cannot read a number, so the
+// guard for normalisation rests on the mixed numbers and the "-:" division form.
+// Those still cannot be read as arithmetic, which is the part toPlainAnswer exists
+// for.
 func TestMathliveNormalizationIsLoadBearing(t *testing.T) {
 	r := NewRouter()
 	defer r.Close()
 
 	cases := []struct {
-		latex  string
-		raw    string
-		want   string
-		graded bool
+		latex      string
+		raw        string
+		want       string
+		graded     bool
+		expression bool
 	}{
-		{latex: `\frac{1}{2}`, raw: `(1)/(2)`, want: `1/2`, graded: true},
-		{latex: `\frac{2}{4}`, raw: `(2)/(4)`, want: `2/4`, graded: true},
+		{latex: `\frac{1}{2}`, raw: `(1)/(2)`, want: `1/2`, graded: true, expression: true},
+		{latex: `\frac{2}{4}`, raw: `(2)/(4)`, want: `2/4`, graded: true, expression: true},
 		{latex: `4\frac{1}{10}`, raw: `4(1)/(10)`, want: `4 1/10`, graded: true},
 		{latex: `-1\frac{1}{2}`, raw: `-1(1)/(2)`, want: `-1 1/2`, graded: true},
 		{latex: `7\div2`, raw: `7 -: 2`, want: `7 / 2`, graded: true},
@@ -236,7 +243,14 @@ func TestMathliveNormalizationIsLoadBearing(t *testing.T) {
 			if got := normalized(c.raw); got != c.want {
 				t.Fatalf("normalized(%q) = %q, want %q", c.raw, got, c.want)
 			}
-			if c.graded && r.Grade(GradingNumeric, "1/2", c.raw).Correct {
+			graded := r.Grade(GradingNumeric, "1/2", c.raw).Correct
+			if c.expression {
+				if !graded {
+					t.Errorf("%q no longer grades through the expression path; update this table", c.raw)
+				}
+				return
+			}
+			if c.graded && graded {
 				t.Errorf("%q grades correct unnormalized; normalization is redundant for it", c.raw)
 			}
 		})
