@@ -4,8 +4,10 @@ import '@testing-library/jest-dom/vitest'
 import { resetLocaleForTests } from '../lib/i18n/locale'
 import { loadMessages } from '../lib/i18n/messages'
 
-// Russian is a separate chunk in the app. Tests switch language synchronously, so load it up front.
+// Russian and Ukrainian are separate chunks in the app. Tests switch language synchronously, so
+// load them up front.
 await loadMessages('ru')
+await loadMessages('uk')
 
 class MemoryStorage {
   private map = new Map<string, string>()
