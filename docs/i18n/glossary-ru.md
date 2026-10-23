@@ -533,6 +533,43 @@
 | Heaviside step function | ступенчатая функция Хевисайда |
 | arithmetic / geometric series (precalc) | арифметическая / геометрическая прогрессия, ряд |
 
+### Математический анализ
+
+| EN | RU |
+|---|---|
+| limit laws / squeeze theorem | свойства пределов / теорема о промежуточной функции (о зажатой функции) |
+| epsilon-delta definition | определение на языке ε–δ |
+| one-sided limit / infinite limit | односторонний предел / бесконечный предел |
+| little-o / big-O | o-малое / O-большое |
+| convex (f'' > 0) / concave (f'' < 0) | выпуклая вниз / выпуклая вверх (в шагах: «чаша вверх» / «чаша вниз») |
+| inflection point | точка перегиба |
+| cusp / corner / vertical tangent | точка возврата / угловая точка / вертикальная касательная |
+| stationary point / critical point | стационарная / критическая точка |
+| differential | дифференциал |
+| related rates | связанные скорости изменения |
+| linear approximation / linearization | линейное приближение / линеаризация |
+| solid of revolution: disc / washer / shell method | тело вращения: метод дисков / шайб / цилиндрических оболочек |
+| net change theorem | теорема о суммарном изменении |
+| improper integral (comparison, p-test) | несобственный интеграл (признак сравнения, p-признак) |
+| integration by parts / partial fractions / substitution | интегрирование по частям / разложением на простейшие дроби / заменой переменной |
+| Weierstrass substitution | подстановка Вейерштрасса (тангенс половинного угла) |
+| series: ratio / root / integral / Leibniz / Dirichlet test | ряд: признаки Даламбера / Коши (радикальный) / интегральный / Лейбница / Дирихле |
+| telescoping series | телескопический ряд |
+| Cauchy product | произведение рядов по Коши |
+| power series, radius of convergence | степенной ряд, радиус сходимости |
+| Taylor / Maclaurin / Fourier series | ряд Тейлора / Маклорена / Фурье |
+| partial derivative / gradient / directional derivative | частная производная / градиент / производная по направлению |
+| Jacobian | якобиан (матрица Якоби) |
+| Hessian | гессиан |
+| Lagrange multipliers | множители Лагранжа |
+| double / triple integral | двойной / тройной интеграл |
+| line integral (scalar) / surface integral | криволинейный / поверхностный интеграл (первого рода) |
+| curl / divergence / flux | ротор / дивергенция / поток |
+| Green / Stokes / divergence theorem | теорема Грина / Стокса / Остроградского — Гаусса |
+| conservative field / potential | потенциальное поле / потенциал |
+| curvature / torsion / Frenet frame | кривизна / кручение / репер Френе |
+| gamma / beta function | гамма- / бета-функция |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.

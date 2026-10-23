@@ -583,3 +583,40 @@
 | floor / ceiling | | (український відповідник визначить перекладач) |
 | Heaviside step function | | (український відповідник визначить перекладач) |
 | arithmetic / geometric series (precalc) | | (український відповідник визначить перекладач) |
+
+### Нові терміни кроків уроків: Математический анализ
+
+| EN | UK | Коментар |
+|---|---|---|
+| limit laws / squeeze theorem | | (український відповідник визначить перекладач) |
+| epsilon-delta definition | | (український відповідник визначить перекладач) |
+| one-sided limit / infinite limit | | (український відповідник визначить перекладач) |
+| little-o / big-O | | (український відповідник визначить перекладач) |
+| convex (f'' > 0) / concave (f'' < 0) | | (український відповідник визначить перекладач) |
+| inflection point | | (український відповідник визначить перекладач) |
+| cusp / corner / vertical tangent | | (український відповідник визначить перекладач) |
+| stationary point / critical point | | (український відповідник визначить перекладач) |
+| differential | | (український відповідник визначить перекладач) |
+| related rates | | (український відповідник визначить перекладач) |
+| linear approximation / linearization | | (український відповідник визначить перекладач) |
+| solid of revolution: disc / washer / shell method | | (український відповідник визначить перекладач) |
+| net change theorem | | (український відповідник визначить перекладач) |
+| improper integral (comparison, p-test) | | (український відповідник визначить перекладач) |
+| integration by parts / partial fractions / substitution | | (український відповідник визначить перекладач) |
+| Weierstrass substitution | | (український відповідник визначить перекладач) |
+| series: ratio / root / integral / Leibniz / Dirichlet test | | (український відповідник визначить перекладач) |
+| telescoping series | | (український відповідник визначить перекладач) |
+| Cauchy product | | (український відповідник визначить перекладач) |
+| power series, radius of convergence | | (український відповідник визначить перекладач) |
+| Taylor / Maclaurin / Fourier series | | (український відповідник визначить перекладач) |
+| partial derivative / gradient / directional derivative | | (український відповідник визначить перекладач) |
+| Jacobian | | (український відповідник визначить перекладач) |
+| Hessian | | (український відповідник визначить перекладач) |
+| Lagrange multipliers | | (український відповідник визначить перекладач) |
+| double / triple integral | | (український відповідник визначить перекладач) |
+| line integral (scalar) / surface integral | | (український відповідник визначить перекладач) |
+| curl / divergence / flux | | (український відповідник визначить перекладач) |
+| Green / Stokes / divergence theorem | | (український відповідник визначить перекладач) |
+| conservative field / potential | | (український відповідник визначить перекладач) |
+| curvature / torsion / Frenet frame | | (український відповідник визначить перекладач) |
+| gamma / beta function | | (український відповідник визначить перекладач) |
