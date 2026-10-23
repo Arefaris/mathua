@@ -203,6 +203,22 @@ func takeMath(s string, math *[]string) (string, int) {
 	for i := 0; i < len(s); {
 		c := s[i]
 		switch {
+		case c == '\\' && strings.HasPrefix(s[i:], `\begin{`):
+			// A bare environment (\begin{align} … \end{align}) with no \[ \] around it is a
+			// display formula too; KaTeX renders it as one, and its insides are not prose.
+			name := s[i+len(`\begin{`):]
+			if j := strings.IndexByte(name, '}'); j > 0 {
+				closer := `\end{` + name[:j] + `}`
+				if k := strings.Index(s[i:], closer); k >= 0 {
+					end := i + k + len(closer)
+					*math = append(*math, s[i:end])
+					b.WriteString(mathMark)
+					i = end
+					continue
+				}
+			}
+			b.WriteString(s[i : i+2])
+			i += 2
 		case c == '\\' && i+1 < len(s):
 			switch s[i+1] {
 			case '(', '[':
@@ -398,6 +414,18 @@ func compareLessonBodies(loc i18n.Locale, en, tr string) []string {
 	return problems
 }
 
+// mathOperatorNames are names of functions and operators that a formula may set with \text{}.
+var mathOperatorNames = map[string]bool{
+	"lcm": true, "gcd": true, "gcf": true, "sgn": true, "sign": true, "mod": true,
+	"sin": true, "cos": true, "tan": true, "cot": true, "sec": true, "csc": true,
+	"arcsin": true, "arccos": true, "arctan": true, "arccot": true, "arcsec": true, "arccsc": true,
+	"sinh": true, "cosh": true, "tanh": true, "coth": true, "sech": true, "csch": true,
+	"log": true, "ln": true, "lg": true, "exp": true, "lim": true, "max": true, "min": true,
+	"det": true, "rank": true, "tr": true, "dim": true, "ker": true, "span": true, "proj": true,
+	"Re": true, "Im": true, "arg": true, "deg": true, "diag": true, "var": true, "Var": true,
+	"Cov": true, "cov": true, "E": true, "P": true,
+}
+
 // englishMathText returns the \text{…} pieces of the translated formulas that still hold Latin
 // letters. maskMathText lets that prose be translated; this makes sure it was. The pilot review
 // found 140 such groups that had passed silently.
@@ -410,6 +438,11 @@ func englishMathText(spans []string) []string {
 			// prose, and stays as it is; in \text{} even one letter is a word or a unit (m, s).
 			cmd := m[:strings.Index(m, "{")]
 			if len(body) == 1 && (cmd == `\textit` || cmd == `\textbf`) {
+				continue
+			}
+			// A function or operator name (\text{lcm}, \text{sgn}) is notation, not English;
+			// a translation may keep it or use its own notation (НОК), as the glossary says.
+			if mathOperatorNames[strings.TrimSpace(body)] {
 				continue
 			}
 			if strings.ContainsAny(body, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
@@ -774,5 +807,18 @@ func TestEnglishMathTextIsReported(t *testing.T) {
 	}
 	if got := englishMathText([]string{`$5\,\text{см} + x$`, `$\text{как весы}$`, `$x^2$`, `$C=2\pi\textit{r}$`}); len(got) != 0 {
 		t.Errorf("translated \\text{} or a variable reported as English: %v", got)
+	}
+}
+
+// A bare \begin{align} block is math, not prose, so a faithful translation does not trip the
+// "looks untranslated" check; operator names inside \text{} are notation.
+func TestBareEnvironmentsAndOperatorNames(t *testing.T) {
+	var spans []string
+	rest, _ := takeMath("Решим.\n\begin{align}\nx &= 2 \\ y &= 3\n\end{align}\nГотово.", &spans)
+	if len(spans) != 1 || strings.Contains(rest, "align") {
+		t.Errorf("bare environment not taken as math: spans %q, rest %q", spans, rest)
+	}
+	if got := englishMathText([]string{`$\text{lcm}(4,6)$`, `$\text{sgn}\,x$`}); len(got) != 0 {
+		t.Errorf("operator names reported as English: %v", got)
 	}
 }
