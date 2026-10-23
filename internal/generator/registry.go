@@ -15,6 +15,12 @@ type Registry struct {
 	gens      map[string]Generator
 	solutions *solutions.Loader
 	randMu    sync.Mutex
+	// duplicates records every concept that a second Register call was refused for. Callers in
+	// every generator package ignore Register's error, so a concept claimed by two packages used
+	// to fail silently: one implementation became unreachable while its own tests kept passing
+	// against the type directly. Two packages did exactly that with the six basic combinatorics
+	// counts on 23 October 2026. Duplicates lets a test see the collision.
+	duplicates []string
 }
 
 func NewRegistry() *Registry {
@@ -65,6 +71,7 @@ func (r *Registry) Register(conceptID string, gen Generator) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if _, exists := r.gens[conceptID]; exists {
+		r.duplicates = append(r.duplicates, conceptID)
 		return fmt.Errorf("generator already registered for concept %q", conceptID)
 	}
 	// Self-check: if this is a GradedGenerator, make sure it can grade its own output.
@@ -199,6 +206,17 @@ func (r *Registry) Count() int {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 	return len(r.gens)
+}
+
+// Duplicates returns the concepts that were registered more than once, in the order the refused
+// registrations arrived. It is empty for a registry built by hand from one package; a registry
+// built by all.Register should be empty too, and a test there asserts it.
+func (r *Registry) Duplicates() []string {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	out := make([]string, len(r.duplicates))
+	copy(out, r.duplicates)
+	return out
 }
 
 func (r *Registry) Concepts() []string {
