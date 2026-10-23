@@ -352,6 +352,7 @@ export default function DiagnosticHost({
         <ProgressBar
           answered={progress ? progress.answered : 0}
           budget={progress ? progress.probe_budget : 0}
+          question={shownNumber}
         />
 
         {/* Accuracy display */}

@@ -3,18 +3,25 @@
 interface ProgressBarProps {
   answered: number
   budget: number
+  /**
+   * The number of the question on screen. `answered` cannot supply it on its own,
+   * because it counts the current question as soon as its feedback is up: the bar
+   * would then read "Question 2" over question 1's verdict. Defaults to the next
+   * unanswered question, which is right when no feedback is showing.
+   */
+  question?: number
   className?: string
 }
 
 // Shared progress bar for the Diagnostic. The budget is the probe count of this
 // run, not the cover size, so the bar tracks questions answered.
-export default function ProgressBar({ answered, budget, className = '' }: ProgressBarProps) {
+export default function ProgressBar({ answered, budget, question, className = '' }: ProgressBarProps) {
   const safeAnswered = Math.max(0, answered)
   const total = Math.max(0, budget)
   const done = Math.min(safeAnswered, total)
   const pct = total > 0 ? (done / total) * 100 : 0
   const indeterminate = total <= 0
-  const questionLabel = `Question ${Math.max(safeAnswered + 1, 1)}`
+  const questionLabel = `Question ${question ?? Math.max(safeAnswered + 1, 1)}`
 
   return (
     <div className={`mb-4 ${className}`}>

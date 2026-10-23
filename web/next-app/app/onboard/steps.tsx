@@ -303,6 +303,7 @@ export function DiagnosticStep({
         <ProgressBar
           answered={progress ? progress.answered : 0}
           budget={progress ? progress.probe_budget : 0}
+          question={shownNumber}
         />
         <div className="bg-mathua-surface border border-mathua-border rounded-none p-4 sm:p-6 mb-6 w-full max-w-full min-w-0 overflow-hidden">
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4 w-full max-w-full min-w-0 overflow-hidden">
