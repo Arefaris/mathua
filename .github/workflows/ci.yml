@@ -354,7 +354,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The scope step diffs against the previous head of main, which a
+          # depth-1 clone does not contain.
+          fetch-depth: 0
+      # Every push to main redeployed, including a typo fix in CONTRIBUTING.md,
+      # which restarted the API for a prose change. This classifies the push and
+      # skips only the deploy step; every required check still runs, because the
+      # skip lives here rather than in a workflow-level path filter, where a
+      # filtered-out workflow leaves its checks pending and blocks every merge.
+      #
+      # Documentation means markdown at the repository root, anything under
+      # docs/, and the licence. `data/lessons/*.md` is not documentation: those
+      # files are served as lesson content, so they fall through to a deploy.
+      # An unreadable base or an empty change set deploys, because a missed
+      # deploy is a worse failure than a redundant one.
+      - name: Classify the push
+        id: scope
+        run: |
+          set -eu
+          before='${{ github.event.before }}'
+          if [ -z "$before" ] || ! git cat-file -e "${before}^{commit}" 2>/dev/null; then
+            echo "No usable base commit; a deploy is the safe default."
+            echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only "$before" '${{ github.sha }}')
+          if [ -z "$changed" ]; then
+            echo "Empty change set; a deploy is the safe default."
+            echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          docs_only=true
+          while IFS= read -r path; do
+            case "$path" in
+              docs/*|LICENSE) ;;
+              */*) docs_only=false; echo "not documentation: $path" ;;
+              *.md) ;;
+              *) docs_only=false; echo "not documentation: $path" ;;
+            esac
+          done <<< "$changed"
+          echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
+          echo "Documentation only: $docs_only"
       - uses: superfly/flyctl-actions/setup-flyctl@master
+        if: steps.scope.outputs.docs_only != 'true'
       - run: flyctl deploy --remote-only --wait-timeout 300
+        if: steps.scope.outputs.docs_only != 'true'
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
