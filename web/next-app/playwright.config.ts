@@ -28,6 +28,11 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'retain-on-failure',
+    // The export registers `public/sw.js`, whose fetch handler calls `fetch` itself, so its
+    // requests never pass through `page.route`. A service worker that answered from cache would
+    // also let a test pass against the export of an earlier build. Blocking it keeps the fixture's
+    // network guard the only thing that can answer a request.
+    serviceWorkers: 'block',
   },
   projects: [
     {

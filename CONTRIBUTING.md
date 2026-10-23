@@ -113,26 +113,26 @@ component lives. The unit suite renders components in isolation and cannot see
 any of those: a renamed button and a page that moved both reached `main` green
 on `vitest` while six Playwright tests failed.
 
-#### A red e2e run is not always your change
+#### The browser suite never talks to the deployed API
 
-The browser suite runs against a static export. The export must not talk to the
-deployed API. CI builds it with `NEXT_PUBLIC_API_URL` set to
-`http://192.0.2.1:9099`. That address is reserved for documentation and never
-answers, so a request that leaves the runner cannot reach production.
+The browser suite runs against a static export. CI builds it with
+`NEXT_PUBLIC_API_URL` set to `http://192.0.2.1:9099`. That address is reserved
+for documentation and never answers.
 
-One CI run failed four admin and profile tests, and the same commit passed on
-the next run. At that time the build used `web/next-app/.env.production`, which
-points at the deployed API. The report showed a page that never left its loading
-skeleton. Four endpoints escaped the stubs:
+The export also cannot reach any other origin. `e2e/fixtures.ts` registers a net
+on the browser context. A request to an origin that is not the export is
+recorded, refused, and the test fails. The message names the method and the URL:
 
-* `**/api/activity` and `**/api/next`, whose patterns ended in a bare name. The
-  app adds a query string, so the request went to the deployed API.
-* `/api/auth/me`, which draws the Admin entry and the diagnostic call to action.
-* `/api/curriculum/domains`, which fills `/domains`.
+```
+this test reached an origin outside the static export:
+  POST http://192.0.2.1:9099/api/study/answer
+Stub it in the spec with page.route, or add the endpoint to e2e/fixtures.ts if
+every page needs it. Production must never answer a browser test.
+```
 
-Production answered quickly and the tests passed. Production answered slowly
-and the pages waited. Check the stubs before you look for a fault in your
-change.
+The net is why a missing stub now fails the run. Before it existed, the build
+pointed at the deployed API. Production answered a page that skipped a stub, so
+the test passed on a fast reply and waited on a slow one.
 
 `make e2e-hermetic` builds the export the same way CI does. Run it before you
 change a stub:
@@ -141,12 +141,6 @@ change a stub:
 make e2e-hermetic
 ```
 
-The stubs still miss endpoints. A measurement on 23 October 2026 built the
-export against the documentation address and recorded every request that left
-it. It found seventeen request paths, among them `/api/settings`, `/api/auth/me`,
-`/api/health` and `POST /api/auth/guest`. The pages tolerate the missing answer,
-so the suite stays green. A green run is not proof that the stubs are complete.
-
 Then run one test on its own, and then the whole shard:
 
 ```bash
@@ -154,9 +148,32 @@ npx playwright test e2e/admin.spec.ts:300 --project=chromium
 PW_WORKERS=1 CI=1 npx playwright test --shard=1/2     # about three minutes
 ```
 
+Fix an escape in the spec that caused it:
+
+```ts
+await page.route('**/api/study/answer', route => route.fulfill({ json: { correct: true } }))
+```
+
+Add the route to `e2e/fixtures.ts` only when every page asks for that endpoint.
+The fixture holds the anonymous shell: no session, default settings, an empty
+graph. A spec that asserts content registers its own route and wins, because its
+route is later.
+
 A stub must match the whole request URL. A pattern that ends in a name matches
 that name only, and not the same path with a query string. Use a trailing `**`
 for an endpoint that carries parameters.
+
+Service workers are blocked for the same reason. The export registers
+`public/sw.js`, and its fetch handler bypasses `page.route`. `playwright.config.ts`
+sets `serviceWorkers: 'block'`, so no cached answer can hide a missing stub.
+
+The diagnosis harness is opt-in. It measures typing latency and scenario
+failures, and it does not assert, so it cannot fail a run. Run it when you need
+it:
+
+```bash
+make e2e-diagnosis
+```
 
 
 ### 4. (Optional) Write a lesson

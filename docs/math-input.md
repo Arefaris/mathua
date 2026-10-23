@@ -350,8 +350,8 @@ be filled with `<div className="h-12" aria-hidden />`: the right size, in the ri
 place, and completely inert. A tap on it looked like it landed on an answer field and
 then did nothing.
 
-Measured (`make diagnose-answer` equivalent: `e2e/answer-diagnosis.spec.ts`, everything
-on one `performance.now()` clock):
+Measured (`make e2e-diagnosis`, which runs `e2e/answer-diagnosis.spec.ts` behind
+`PW_DIAGNOSIS=1`, everything on one `performance.now()` clock):
 
 | MathLive chunk latency | window with no editor |
 |---|---|
