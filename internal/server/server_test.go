@@ -1556,7 +1556,11 @@ func TestQuizMiss_RemedialAndGateDue(t *testing.T) {
 // `correct` flag and was unused by the frontend.)
 
 func TestGoalDiagnostic_FullFlowReport(t *testing.T) {
-	_, mux := twoConceptServer(t)
+	s, mux := twoConceptServer(t)
+	// This test submits a whole diagnostic as fast as the loop runs, which is
+	// far faster than a learner. The limiter is per learner with a burst of 20
+	// so a human run never meets it; relax it here rather than weaken it.
+	s.writeLimiter = newRateLimiter(10000, 10000, time.Second, "")
 
 	code, start := postJSON(t, mux, "/api/goal/diagnostic", `{"name":"tester","concept_ids":["a","b"]}`)
 	if code != 200 {

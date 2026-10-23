@@ -61,6 +61,15 @@ CREATE TABLE IF NOT EXISTS league_members (
 
 CREATE INDEX IF NOT EXISTS idx_league_members_cohort ON league_members(week, tier, league_no, xp DESC);
 
+-- One row per answered diagnostic question, keyed by session and concept.
+-- The diagnostic has no attempt token in its wire format, so the pair is the
+-- identity; replaying it returns the same verdict instead of grading twice.
+CREATE TABLE IF NOT EXISTS diagnostic_answers (
+    attempt_id TEXT PRIMARY KEY,
+    response   TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS league_weeks (
     week      TEXT PRIMARY KEY,
     closed_at INTEGER NOT NULL
@@ -344,6 +353,61 @@ CREATE INDEX IF NOT EXISTS idx_ai_usage_day ON ai_usage(day);
 -- NOTE: no UNIQUE constraints are added here on purpose — legacy username
 -- colliding groups (same lower form twice) still exist and are renamed
 -- manually; a UNIQUE would fail migration on real databases.
+-- FIRe-inspired implicit credit, shadow only. These tables record what an
+-- implicit repetition would have been worth; no query in the scheduler reads
+-- them, so production due dates and review order are unchanged.
+CREATE TABLE IF NOT EXISTS implicit_credit_targets (
+    student_id        TEXT    NOT NULL,
+    target_concept_id TEXT    NOT NULL,
+    credit_epoch      INTEGER NOT NULL DEFAULT 1,
+    created_at        INTEGER NOT NULL,
+    PRIMARY KEY (student_id, target_concept_id)
+);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_allocations (
+    student_id        TEXT    NOT NULL,
+    source_attempt_id TEXT    NOT NULL,
+    raw_units         INTEGER NOT NULL,
+    allocated_units   INTEGER NOT NULL,
+    target_count      INTEGER NOT NULL,
+    dropped_count     INTEGER NOT NULL,
+    created_at        INTEGER NOT NULL,
+    PRIMARY KEY (student_id, source_attempt_id)
+);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_events (
+    student_id        TEXT    NOT NULL,
+    source_attempt_id TEXT    NOT NULL,
+    target_concept_id TEXT    NOT NULL,
+    credit_epoch      INTEGER NOT NULL,
+    scaled_units      INTEGER NOT NULL,
+    retained_units    INTEGER NOT NULL,
+    discarded_units   INTEGER NOT NULL,
+    discard_reason    TEXT    NOT NULL DEFAULT '',
+    voided_at         INTEGER,
+    voided_by         TEXT    NOT NULL DEFAULT '',
+    void_reason       TEXT    NOT NULL DEFAULT '',
+    created_at        INTEGER NOT NULL,
+    PRIMARY KEY (student_id, source_attempt_id, target_concept_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_credit_events_target
+    ON implicit_credit_events(student_id, target_concept_id, credit_epoch);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_ordinals (
+    student_id          TEXT    NOT NULL,
+    target_concept_id   TEXT    NOT NULL,
+    credit_epoch        INTEGER NOT NULL,
+    ordinal             INTEGER NOT NULL,
+    state               TEXT    NOT NULL CHECK (state IN ('banked','projected','stale')),
+    banked_at           INTEGER NOT NULL,
+    projected_at        INTEGER,
+    baseline_due        TEXT,
+    counterfactual_due  TEXT,
+    attempts            INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (student_id, target_concept_id, credit_epoch, ordinal)
+);
+
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version    INTEGER PRIMARY KEY,
     applied_at TEXT NOT NULL DEFAULT (datetime('now'))

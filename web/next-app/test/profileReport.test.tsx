@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import ProfilePage from '../app/profile/page'
 import * as api from '../lib/api'
 import { getUserInfo } from '../lib/auth'
@@ -90,10 +90,13 @@ describe('/profile shows the report', () => {
   it('still owns the learning tasks, which is what makes it a hub', async () => {
     render(<ProfilePage />)
     const learning = await screen.findByRole('region', { name: 'Your learning' })
-    // The cards are buttons (selection asks the server for eligibility first),
-    // and the "Choose what to learn" affordance is always present.
-    expect(learning.querySelectorAll('button').length).toBeGreaterThan(0)
-    expect(learning.querySelectorAll('a').length).toBeGreaterThan(0)
+    // Tasks are buttons (selection asks the server for eligibility first); an
+    // empty or failed shelf offers the "Choose what to learn" link instead. The
+    // recommendation request retries once before giving up, so the region settles
+    // a beat after the heading appears.
+    await waitFor(() => {
+      expect(learning.querySelectorAll('button, a').length).toBeGreaterThan(0)
+    })
   })
 
 

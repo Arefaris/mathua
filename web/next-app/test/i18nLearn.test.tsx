@@ -85,9 +85,9 @@ describe('learn flow in Russian', () => {
   it('renders submit errors', () => {
     resetLocaleForTests('ru')
     const { container } = render(
-      <SubmitErrorBlock error={{ message: 'boom', status: 500 }} onRetry={() => {}} onSkip={() => {}} skipsLeft={0} onRestart={() => {}} restartLabel="Начать заново" />,
+      <SubmitErrorBlock error={{ message: 'boom', status: 503 }} onRetry={() => {}} onSkip={() => {}} skipsLeft={0} onRestart={() => {}} restartLabel="Начать заново" />,
     )
-    expect(screen.getByText('Не удалось отправить ответ — он остался в поле.')).toBeInTheDocument()
+    expect(screen.getByText('Сервер перезапускается. Повторите через минуту — ваш ответ сохранён.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Попробовать ещё раз' })).toBeInTheDocument()
     expect(screen.getByText('Пропусков не осталось — начните заново.')).toBeInTheDocument()
     expectNoRawKeys(container)

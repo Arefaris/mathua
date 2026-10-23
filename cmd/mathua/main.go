@@ -181,8 +181,14 @@ func main() {
 				os.Exit(1)
 			}
 			return
+		case "issues":
+			if err := issuesCommand(flag.Args()[1:]); err != nil {
+				fmt.Fprintf(os.Stderr, "error: %v\n", err)
+				os.Exit(1)
+			}
+			return
 		default:
-			fmt.Fprintf(os.Stderr, "unknown command %q. Available: admin\n", flag.Arg(0))
+			fmt.Fprintf(os.Stderr, "unknown command %q. Available: admin, issues\n", flag.Arg(0))
 			os.Exit(2)
 		}
 	}
@@ -389,9 +395,6 @@ func securityHeaders(next http.Handler) http.Handler {
 func nextStaticFS(root string) http.Handler {
 	fs := http.FileServer(http.Dir(root))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// The URL is cleaned with path, not filepath: on Windows filepath.Clean turns "/learn"
-		// into `\learn`, and that backslash path then reaches http.FileServer as a URL and
-		// matches nothing, so every route answered 404.
 		cleaned := path.Clean(r.URL.Path)
 		if strings.Contains(cleaned, "..") {
 			http.NotFound(w, r)

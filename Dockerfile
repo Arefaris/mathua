@@ -22,6 +22,8 @@ RUN STAMP="build-$(date -u +%Y%m%dT%H%M%SZ)" && \
 # set build arg NEXT_PUBLIC_API_URL=https://mathua.fly.dev
 ARG NEXT_PUBLIC_API_URL=""
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# This image serves the export and the API from one origin, so /api/* is correct.
+ENV NEXT_PUBLIC_SAME_ORIGIN_API=1
 RUN cd web/next-app && npm run build
 
 FROM golang:1.27-bookworm AS builder

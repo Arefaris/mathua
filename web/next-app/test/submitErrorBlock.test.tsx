@@ -41,11 +41,12 @@ describe('the submit error block', () => {
     expect(onRetry).toHaveBeenCalledTimes(1)
   })
 
-  it('keeps an ordinary failure manual and says the answer is still there', () => {
+  it('does not offer a retry that cannot help on a server error', () => {
     vi.useFakeTimers()
     const onRetry = renderBlock({ status: 500, message: 'goal answer failed' })
 
-    expect(screen.getByRole('alert')).toHaveTextContent(/still in the box/)
+    expect(screen.getByRole('alert')).toHaveTextContent(/will not change it/)
+    expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull()
     act(() => {
       vi.advanceTimersByTime(10000)
     })

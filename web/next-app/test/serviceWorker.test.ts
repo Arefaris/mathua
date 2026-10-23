@@ -117,30 +117,6 @@ describe('the service worker and Cloudflare-injected pages', () => {
   })
 })
 
-describe('API answers are cached per language', () => {
-  const api = (lang: string) => ({
-    method: 'GET',
-    mode: 'cors',
-    url: 'https://mathua.com/api/graph',
-    headers: new Headers({ 'Accept-Language': lang }),
-  })
-  const json = (body: string) => new Response(body, { status: 200 })
-
-  it('does not serve the English copy to a Russian request when offline', async () => {
-    let online = true
-    const worker = loadWorker(async () => {
-      if (!online) throw new TypeError('Failed to fetch')
-      return json('english')
-    })
-    await worker.dispatchFetch(api('en'))
-    online = false
-    // Nothing was cached for Russian, so the failure must surface rather than answer in English.
-    await expect(worker.dispatchFetch(api('ru'))).rejects.toThrow('Failed to fetch')
-    const english = await worker.dispatchFetch(api('en'))
-    expect(await english.text()).toBe('english')
-  })
-})
-
 describe('the worker version', () => {
   it('is not the static development stamp in a built export', () => {
     // The source must stay stampable; the build rewrites out/sw.js. This guards

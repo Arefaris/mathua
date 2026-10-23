@@ -68,5 +68,17 @@
     "days": { "one": "{count} day", "other": "{count} days" },
     "minutes": { "one": "{count} minute", "other": "{count} minutes" },
     "attempts": { "one": "{count} attempt", "other": "{count} attempts" }
+  },
+  "failure": {
+    "offline": "You are offline. Your answer is kept and will be sent when the connection returns.",
+    "timeout": "The server took too long to answer. Your answer is kept.",
+    "network": "The connection dropped before the answer arrived. It is still in the box.",
+    "auth": "Your session ended. Sign in again and the answer can be sent.",
+    "throttled": "Saving is catching up — your answer is kept and will be sent again.",
+    "notFound": "The server forgot this run. Restart it to continue.",
+    "gateway": "The server is restarting. Retry in a moment — your answer is kept.",
+    "server": "The server hit an error while grading. Retrying the same answer will not change it.",
+    "parse": "The server answered in a form this page could not read. Reload to continue.",
+    "other": "Couldn't submit your answer — it's still in the box."
   }
 }

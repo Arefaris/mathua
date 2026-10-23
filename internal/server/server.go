@@ -50,13 +50,16 @@ var (
 )
 
 func parseAllowedOrigins() {
-	raw := os.Getenv("CORS_ALLOWED_ORIGINS")
-	raw = strings.TrimSpace(raw)
+	raw := strings.TrimSpace(os.Getenv("CORS_ALLOWED_ORIGINS"))
 	if raw == "" {
-		allowedOriginsAllowAll = true
-		allowedOriginsExact = nil
-		allowedOriginPatterns = nil
-		return
+		// Nothing configured used to mean "allow every origin", which turns a
+		// forgotten variable into an open API. Local development keeps working;
+		// a deployed app gets only the local origins and a warning naming the
+		// variable, so the mistake is visible in the first log lines.
+		if os.Getenv("FLY_APP_NAME") != "" || os.Getenv("MATHUA_ENV") == "production" {
+			log.Printf("warning: CORS_ALLOWED_ORIGINS is unset — only local development origins are allowed; set it to the public site origins")
+		}
+		raw = "http://localhost:3000,http://127.0.0.1:3000"
 	}
 	allowedOriginsAllowAll = false
 	allowedOriginsExact = make(map[string]bool)
@@ -76,7 +79,9 @@ func parseAllowedOrigins() {
 		}
 	}
 	if len(allowedOriginsExact) == 0 && len(allowedOriginPatterns) == 0 && !allowedOriginsAllowAll {
-		allowedOriginsAllowAll = true
+		log.Printf("warning: CORS_ALLOWED_ORIGINS listed no usable origin — only local development origins are allowed")
+		allowedOriginsExact["http://localhost:3000"] = true
+		allowedOriginsExact["http://127.0.0.1:3000"] = true
 	}
 }
 
@@ -127,7 +132,18 @@ func cors(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept-Language")
+		// A browser refuses a cross-origin request whose headers are not all
+		// listed here, and the failure is silent in the app: the fetch dies
+		// before it leaves the browser. X-Request-ID was added to every client
+		// request without being listed, which would have taken the whole
+		// cross-origin API down. Reflect what the browser asks for when the
+		// origin is allowed, and keep a static list for a bare preflight, so a
+		// future client header cannot repeat this.
+		allowedHeaders := "Content-Type, Authorization, X-Request-ID, Accept-Language"
+		if requested := r.Header.Get("Access-Control-Request-Headers"); requested != "" && isAllowedOrigin(origin) {
+			allowedHeaders = requested
+		}
+		w.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
 		w.Header().Set("Access-Control-Max-Age", "86400")
 		if r.Method == http.MethodOptions {
 			// Preflight: 204 with CORS headers already set
@@ -453,7 +469,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/attempts", logRequest(cors(s.authMiddleware(s.handleAttempts))))
 	mux.HandleFunc("/api/goal", logRequest(cors(s.authMiddleware(s.handleGoal))))
 	mux.HandleFunc("/api/goal/diagnostic", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticStart)))))
-	mux.HandleFunc("/api/goal/diagnostic/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticAnswer)))))
+	mux.HandleFunc("/api/goal/diagnostic/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleGoalDiagnosticAnswer))))))
 	mux.HandleFunc("/api/goal/diagnostic/skip", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticSkip)))))
 	mux.HandleFunc("/api/goal/diagnostic/retry", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleGoalDiagnosticRetry)))))
 	mux.HandleFunc("/api/goal/diagnostic/resume", logRequest(cors(s.optionalAuthMiddleware(s.handleGoalDiagnosticResume))))
@@ -474,7 +490,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// landing on the app gets the diagnostic recommendation rather than an error.
 	mux.HandleFunc("/api/next", logRequest(cors(s.optionalAuthMiddleware(s.handleNext))))
 	mux.HandleFunc("/api/reviews/session", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsSession)))))
-	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsAnswer)))))
+	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleReviewsAnswer))))))
 	// The lesson routes stay publicly readable — Study is reference and is
 	// indexed — so auth is optional, but it must be *present*: the practice
 	// branch writes the server-side answer anchor, and it can only key that
@@ -484,7 +500,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/lessons", logRequest(cors(s.optionalAuthMiddleware(s.handleLessons))))
 	mux.HandleFunc("/api/lessons/body", logRequest(cors(s.optionalAuthMiddleware(s.handleLessonBody))))
 	mux.HandleFunc("/api/lessons/", logRequest(cors(s.optionalAuthMiddleware(s.handleLessonConcept))))
-	mux.HandleFunc("/api/study/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleStudyAnswer)))))
+	mux.HandleFunc("/api/study/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleStudyAnswer))))))
 	// Report creation only. Listing and resolving reports is administration now and lives under
 	// /api/admin/reports behind the role boundary; the old shared-password triage endpoints were
 	// removed in V2 so there is exactly one moderation path.
@@ -519,7 +535,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/admin/lab/generate", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGenerate)))))
 	mux.HandleFunc("/api/admin/lab/grade", logRequest(cors(s.writeLimiter.middleware(s.requirePermission(admin.ContentRead, s.handleAdminLabGrade)))))
 	mux.HandleFunc("/api/quiz/session", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizSession)))))
-	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizAnswer)))))
+	mux.HandleFunc("/api/quiz/answer", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleQuizAnswer))))))
 	mux.HandleFunc("/api/quiz/skip", logRequest(cors(s.optionalAuthMiddleware(s.writeLimiter.middleware(s.handleQuizSkip)))))
 	mux.HandleFunc("/api/health", logRequest(cors(getOnly(s.handleHealth))))
 	mux.HandleFunc("/api/activity", logRequest(cors(s.authMiddleware(s.handleActivity))))
@@ -1001,6 +1017,27 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		})
 		return
 	}
+	// The diagnostic has no attempt token in its wire format, so the pair of
+	// session and concept is the identity of one answer: the run never serves a
+	// concept twice. A retry after a timeout, a duplicate POST or a retry after
+	// a restart therefore replays the stored verdict instead of grading again.
+	answerKey := session.ID + ":" + req.ConceptID
+	// Only a concept the session has already moved past can be a duplicate. A
+	// retry deliberately re-serves the same concept as a new question, and
+	// replaying it there would return the first attempt's verdict instead of
+	// grading the retry.
+	if req.ConceptID != session.LastConceptID {
+		if raw, found, err := s.repo.DiagnosticAttemptResponse(answerKey); err != nil {
+			writeError(w, "failed to read the previous answer", 500)
+			return
+		} else if found {
+			var replayed map[string]interface{}
+			if err := json.Unmarshal([]byte(raw), &replayed); err == nil {
+				writeAssessmentVerdict(w, replayed)
+				return
+			}
+		}
+	}
 	if session.LastConceptID != "" && session.LastConceptID != req.ConceptID {
 		writeError(w, "concept_id does not match the current question", 400)
 		return
@@ -1065,13 +1102,15 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		s.persistDiagnosticSession(session)
 		report := s.eng.DiagnosticReportIn(localeOf(r), session)
 		prog := s.eng.DiagnosticProgress(session)
-		writeAssessmentVerdict(w, map[string]interface{}{
+		verdict := map[string]interface{}{
 			"done":     true,
 			"correct":  correct,
 			"feedback": explanation,
 			"report":   report,
 			"progress": prog,
-		})
+		}
+		s.recordDiagnosticVerdict(answerKey, verdict)
+		writeAssessmentVerdict(w, verdict)
 		return
 	}
 	nextProb, cid, err := s.eng.NextDiagnosticQuestionIn(localeOf(r), session)
@@ -1105,7 +1144,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	// next question is staged. A crash after this line costs nothing.
 	s.persistDiagnosticSession(session)
 	prog := s.eng.DiagnosticProgress(session)
-	writeAssessmentVerdict(w, s.withAnswerFormat(map[string]interface{}{
+	verdict := s.withAnswerFormat(map[string]interface{}{
 		"done":            false,
 		"correct":         correct,
 		"feedback":        explanation,
@@ -1115,7 +1154,9 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 		"grading_type":    s.gradingTypeOf(cid),
 		"progress":        prog,
 		"retry_available": retryAvailable,
-	}, cid))
+	}, cid)
+	s.recordDiagnosticVerdict(answerKey, verdict)
+	writeAssessmentVerdict(w, verdict)
 }
 
 // POST /api/goal/diagnostic/skip
@@ -3724,10 +3765,70 @@ func (s *Server) handleEfficacyTrend(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, trend)
 }
 
+// requestIDHeader carries a correlation id through the whole request. The
+// browser mints one per call, the server echoes it, and the access log records
+// it, so a learner's "it failed" can be matched to one line in `fly logs`
+// without guessing from timestamps.
+const requestIDHeader = "X-Request-ID"
+
+// validRequestID rejects anything that is not a short opaque token, because the
+// value is echoed into a response header and a log line.
+func validRequestID(id string) bool {
+	if len(id) < 8 || len(id) > 64 {
+		return false
+	}
+	for _, r := range id {
+		ok := r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '-' || r == '_'
+		if !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func newRequestID() string {
+	var b [12]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		return fmt.Sprintf("%d", time.Now().UnixNano())
+	}
+	return fmt.Sprintf("%x", b[:])
+}
+
+// statusWriter remembers the status so the access log can report it; without
+// this the log line says a request happened but not how it ended.
+type statusWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *statusWriter) WriteHeader(code int) {
+	w.status = code
+	w.ResponseWriter.WriteHeader(code)
+}
+
+func (w *statusWriter) Write(b []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+	return w.ResponseWriter.Write(b)
+}
+
 func logRequest(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s", r.Method, r.URL.Path)
-		next(w, r)
+		start := time.Now()
+		id := r.Header.Get(requestIDHeader)
+		if !validRequestID(id) {
+			id = newRequestID()
+		}
+		w.Header().Set(requestIDHeader, id)
+		rec := &statusWriter{ResponseWriter: w}
+		next(rec, r)
+		status := rec.status
+		if status == 0 {
+			status = http.StatusOK
+		}
+		log.Printf("%s %s %d %s id=%s", r.Method, r.URL.Path, status,
+			time.Since(start).Round(time.Millisecond), id)
 	}
 }
 
@@ -4322,4 +4423,34 @@ func GzipMiddleware(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(&gzipResponseWriter{ResponseWriter: w, gz: gz}, r)
 	})
+}
+
+// gradingDeadline is the server's own bound on grading. It sits below the
+// browser's answer timeout so a slow grade returns a JSON 503 the client can
+// retry instead of the browser aborting a request the server still holds.
+const gradingDeadline = 20 * time.Second
+
+// gradingTimeout converts a handler into one that answers 503 if it outlives
+// deadline. http.TimeoutHandler also cancels the request context, so the
+// grader and any database call under it stop rather than continuing to work
+// for a response nobody will read.
+func gradingTimeout(deadline time.Duration, h http.HandlerFunc) http.HandlerFunc {
+	th := http.TimeoutHandler(h, deadline, `{"error":"grading took too long — retry the same answer"}`)
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		th.ServeHTTP(w, r)
+	}
+}
+
+// recordDiagnosticVerdict remembers what the learner was told. It is
+// best-effort: losing the row costs a duplicate grade on a retry, while
+// failing the request would throw away an answer that was already accepted.
+func (s *Server) recordDiagnosticVerdict(answerKey string, verdict map[string]interface{}) {
+	raw, err := json.Marshal(verdict)
+	if err != nil {
+		return
+	}
+	if err := s.repo.RecordDiagnosticAttempt(answerKey, string(raw)); err != nil {
+		log.Printf("warning: diagnostic verdict not stored: %v", err)
+	}
 }

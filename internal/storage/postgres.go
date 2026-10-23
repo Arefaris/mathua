@@ -16,6 +16,15 @@ import (
 
 type PostgresStore struct {
 	db *sql.DB
+
+	// creditProbe runs inside a projection transaction, immediately before the
+	// real due date is re-read. It exists only for tests: the conflict guard is
+	// otherwise unreachable because the projection holds the concept_progress
+	// row FOR UPDATE, so no competing writer can move the due date
+	// mid-projection. Per-store rather than package-level, so concurrent tests
+	// cannot observe each other's probe. Nil in production, and nothing outside
+	// this package can set it.
+	creditProbe func(exec func(query string, args ...any) error)
 }
 
 const pgSchema = `
@@ -72,6 +81,15 @@ CREATE TABLE IF NOT EXISTS league_members (
 );
 
 CREATE INDEX IF NOT EXISTS idx_league_members_cohort ON league_members(week, tier, league_no, xp DESC);
+
+-- One row per answered diagnostic question, keyed by session and concept.
+-- The diagnostic has no attempt token in its wire format, so the pair is the
+-- identity; replaying it returns the same verdict instead of grading twice.
+CREATE TABLE IF NOT EXISTS diagnostic_answers (
+    attempt_id TEXT PRIMARY KEY,
+    response   TEXT NOT NULL,
+    created_at BIGINT NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS league_weeks (
     week      TEXT PRIMARY KEY,
@@ -202,7 +220,8 @@ CREATE TABLE IF NOT EXISTS question_reports (
     resolution  TEXT NOT NULL DEFAULT '',
     resolved_by TEXT NOT NULL DEFAULT '',
     resolved_at TEXT NOT NULL DEFAULT '',
-    created_at  TEXT NOT NULL DEFAULT (now()::text)
+    created_at  TEXT NOT NULL DEFAULT (now()::text),
+    origin_report_id TEXT NOT NULL DEFAULT ''
 );
 
 CREATE INDEX IF NOT EXISTS idx_reports_status  ON question_reports(status, created_at);
@@ -260,6 +279,59 @@ CREATE TABLE IF NOT EXISTS ai_usage (
 );
 
 CREATE INDEX IF NOT EXISTS idx_ai_usage_day ON ai_usage(day);
+
+-- FIRe-inspired implicit credit, shadow only. See the SQLite schema.
+CREATE TABLE IF NOT EXISTS implicit_credit_targets (
+    student_id        TEXT    NOT NULL,
+    target_concept_id TEXT    NOT NULL,
+    credit_epoch      BIGINT  NOT NULL DEFAULT 1,
+    created_at        BIGINT  NOT NULL,
+    PRIMARY KEY (student_id, target_concept_id)
+);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_allocations (
+    student_id        TEXT   NOT NULL,
+    source_attempt_id TEXT   NOT NULL,
+    raw_units         BIGINT NOT NULL,
+    allocated_units   BIGINT NOT NULL,
+    target_count      INTEGER NOT NULL,
+    dropped_count     INTEGER NOT NULL,
+    created_at        BIGINT NOT NULL,
+    PRIMARY KEY (student_id, source_attempt_id)
+);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_events (
+    student_id        TEXT   NOT NULL,
+    source_attempt_id TEXT   NOT NULL,
+    target_concept_id TEXT   NOT NULL,
+    credit_epoch      BIGINT NOT NULL,
+    scaled_units      BIGINT NOT NULL,
+    retained_units    BIGINT NOT NULL,
+    discarded_units   BIGINT NOT NULL,
+    discard_reason    TEXT   NOT NULL DEFAULT '',
+    voided_at         BIGINT,
+    voided_by         TEXT   NOT NULL DEFAULT '',
+    void_reason       TEXT   NOT NULL DEFAULT '',
+    created_at        BIGINT NOT NULL,
+    PRIMARY KEY (student_id, source_attempt_id, target_concept_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_credit_events_target
+    ON implicit_credit_events(student_id, target_concept_id, credit_epoch);
+
+CREATE TABLE IF NOT EXISTS implicit_credit_ordinals (
+    student_id         TEXT   NOT NULL,
+    target_concept_id  TEXT   NOT NULL,
+    credit_epoch       BIGINT NOT NULL,
+    ordinal            INTEGER NOT NULL,
+    state              TEXT   NOT NULL CHECK (state IN ('banked','projected','stale')),
+    banked_at          BIGINT NOT NULL,
+    projected_at       BIGINT,
+    baseline_due       TEXT,
+    counterfactual_due TEXT,
+    attempts           INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (student_id, target_concept_id, credit_epoch, ordinal)
+);
 
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version    INTEGER PRIMARY KEY,
@@ -361,6 +433,8 @@ func pgAuthMigrate(db *sql.DB) error {
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS grading_type TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_hint TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS answer_input_mode TEXT NOT NULL DEFAULT ''",
+		"ALTER TABLE question_reports ADD COLUMN IF NOT EXISTS origin_report_id TEXT NOT NULL DEFAULT ''",
+		"CREATE UNIQUE INDEX IF NOT EXISTS idx_reports_origin ON question_reports(origin_report_id) WHERE origin_report_id != ''",
 		`CREATE TABLE IF NOT EXISTS avatar_images (
 			student_id TEXT PRIMARY KEY REFERENCES students(id) ON DELETE CASCADE,
 			content_type TEXT NOT NULL,
@@ -1957,6 +2031,45 @@ func (s *PostgresStore) CreateReport(r QuestionReport) (int64, error) {
 	return id, nil
 }
 
+// ImportReport mirrors the SQLite implementation: the origin id is what makes
+// a repeated import a no-op, and the row is otherwise an ordinary report.
+func (s *PostgresStore) ImportReport(originID string, r QuestionReport) (bool, error) {
+	originID = strings.TrimSpace(originID)
+	if originID == "" {
+		return false, fmt.Errorf("import report: origin id is required")
+	}
+	if r.Status == "" {
+		r.Status = "open"
+	}
+	created := r.CreatedAt.UTC().Format(time.RFC3339)
+	if r.CreatedAt.IsZero() {
+		created = time.Now().UTC().Format(time.RFC3339)
+	}
+	res, err := s.db.Exec(`
+		INSERT INTO question_reports
+			(reporter_id, concept_id, kind, question, expected, explanation,
+			 lesson_id, source, session_id, attempt_id, answer_given, grading_type,
+			 answer_hint, answer_input_mode, reason, detail, status, created_at,
+			 origin_report_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+		ON CONFLICT DO NOTHING
+	`,
+		r.ReporterID, r.ConceptID, r.Kind, r.Question, r.Expected, r.Explanation,
+		r.LessonID, r.Source, r.SessionID, r.AttemptID,
+		r.AnswerGiven, r.GradingType, r.AnswerHint, r.AnswerInputMode,
+		r.Reason, r.Detail, r.Status,
+		created, originID,
+	)
+	if err != nil {
+		return false, fmt.Errorf("import report: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("import report: %w", err)
+	}
+	return n > 0, nil
+}
+
 func (s *PostgresStore) ListReports(status string, limit, offset int) ([]QuestionReport, error) {
 	if limit <= 0 || limit > 200 {
 		limit = 50
@@ -1972,7 +2085,7 @@ func (s *PostgresStore) ListReports(status string, limit, offset int) ([]Questio
 			       lesson_id, source, session_id, attempt_id,
 			       answer_given, grading_type, answer_hint, answer_input_mode,
 			       reason, detail, status,
-			       resolution, resolved_by, resolved_at, created_at
+			       resolution, resolved_by, resolved_at, created_at, origin_report_id
 			FROM question_reports
 			ORDER BY created_at DESC
 			LIMIT $1 OFFSET $2
@@ -1983,7 +2096,7 @@ func (s *PostgresStore) ListReports(status string, limit, offset int) ([]Questio
 			       lesson_id, source, session_id, attempt_id,
 			       answer_given, grading_type, answer_hint, answer_input_mode,
 			       reason, detail, status,
-			       resolution, resolved_by, resolved_at, created_at
+			       resolution, resolved_by, resolved_at, created_at, origin_report_id
 			FROM question_reports
 			WHERE status = $1
 			ORDER BY created_at DESC
@@ -2003,6 +2116,7 @@ func (s *PostgresStore) ListReports(status string, limit, offset int) ([]Questio
 			&r.Explanation, &r.LessonID, &r.Source, &r.SessionID, &r.AttemptID,
 			&r.AnswerGiven, &r.GradingType, &r.AnswerHint, &r.AnswerInputMode,
 			&r.Reason, &r.Detail, &r.Status, &r.Resolution, &r.ResolvedBy, &r.ResolvedAt, &created,
+			&r.OriginReportID,
 		); err != nil {
 			return nil, fmt.Errorf("scan report: %w", err)
 		}
@@ -2326,4 +2440,31 @@ func (s *PostgresStore) AttemptsSince(since time.Time) ([]AttemptRow, error) {
 		return nil, fmt.Errorf("read attempts since: %w", err)
 	}
 	return out, nil
+}
+
+// RecordDiagnosticAttempt mirrors the SQLite method; see the schema comment.
+func (s *PostgresStore) RecordDiagnosticAttempt(attemptID, response string) error {
+	if attemptID == "" || response == "" {
+		return fmt.Errorf("diagnostic attempt: empty id or response")
+	}
+	_, err := s.db.Exec(
+		`INSERT INTO diagnostic_answers (attempt_id, response, created_at) VALUES ($1, $2, $3)
+		 ON CONFLICT (attempt_id) DO NOTHING`,
+		attemptID, response, time.Now().UTC().UnixNano())
+	if err != nil {
+		return fmt.Errorf("record diagnostic attempt: %w", err)
+	}
+	return nil
+}
+
+func (s *PostgresStore) DiagnosticAttemptResponse(attemptID string) (string, bool, error) {
+	var response string
+	err := s.db.QueryRow(`SELECT response FROM diagnostic_answers WHERE attempt_id = $1`, attemptID).Scan(&response)
+	if err == sql.ErrNoRows {
+		return "", false, nil
+	}
+	if err != nil {
+		return "", false, fmt.Errorf("read diagnostic attempt: %w", err)
+	}
+	return response, true, nil
 }

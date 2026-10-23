@@ -16,6 +16,15 @@ import (
 
 type SQLiteStore struct {
 	db *sql.DB
+
+	// creditProbe runs inside a projection transaction, immediately before the
+	// real due date is re-read. It exists only for tests: the conflict guard is
+	// otherwise unreachable because BEGIN IMMEDIATE holds the write reservation
+	// for the whole transaction, so no competing writer can move the due date
+	// mid-projection. Per-store rather than package-level, so concurrent tests
+	// cannot observe each other's probe. Nil in production, and nothing outside
+	// this package can set it.
+	creditProbe func(exec func(query string, args ...any) error)
 }
 
 func NewSQLiteStore(path string) (*SQLiteStore, error) {
@@ -122,6 +131,11 @@ func authMigrate(db *sql.DB) error {
 		"ALTER TABLE question_reports ADD COLUMN grading_type TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN answer_hint TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE question_reports ADD COLUMN answer_input_mode TEXT NOT NULL DEFAULT ''",
+		// Which report this row was imported from, on a database that did not file it. Empty
+		// for reports filed here, which is why the unique index below is partial: NULL-like
+		// blanks must be allowed to repeat.
+		"ALTER TABLE question_reports ADD COLUMN origin_report_id TEXT NOT NULL DEFAULT ''",
+		"CREATE UNIQUE INDEX IF NOT EXISTS idx_reports_origin ON question_reports(origin_report_id) WHERE origin_report_id != ''",
 	}
 	for _, m := range migrations {
 		if _, err := db.Exec(m); err != nil {
@@ -1819,6 +1833,43 @@ func (s *SQLiteStore) CreateReport(r QuestionReport) (int64, error) {
 	return id, nil
 }
 
+// ImportReport copies a report filed on another database into this one. The
+// origin id is the report's id there; the partial unique index on it turns a
+// repeated import into a no-op instead of a duplicate row, so an interrupted
+// export can simply be run again.
+func (s *SQLiteStore) ImportReport(originID string, r QuestionReport) (bool, error) {
+	originID = strings.TrimSpace(originID)
+	if originID == "" {
+		return false, fmt.Errorf("import report: origin id is required")
+	}
+	if r.Status == "" {
+		r.Status = "open"
+	}
+	res, err := s.db.Exec(`
+		INSERT OR IGNORE INTO question_reports
+			(reporter_id, concept_id, kind, question, expected, explanation,
+			 lesson_id, source, session_id, attempt_id, answer_given, grading_type,
+			 answer_hint, answer_input_mode, reason, detail, status, created_at,
+			 origin_report_id)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`,
+		r.ReporterID, r.ConceptID, r.Kind, r.Question, r.Expected, r.Explanation,
+		r.LessonID, r.Source, r.SessionID, r.AttemptID,
+		r.AnswerGiven, r.GradingType, r.AnswerHint, r.AnswerInputMode,
+		r.Reason, r.Detail, r.Status,
+		formatReportTime(r.CreatedAt),
+		originID,
+	)
+	if err != nil {
+		return false, fmt.Errorf("import report: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("import report: %w", err)
+	}
+	return n > 0, nil
+}
+
 func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionReport, error) {
 	if limit <= 0 || limit > 200 {
 		limit = 50
@@ -1834,7 +1885,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 			       lesson_id, source, session_id, attempt_id,
 			       answer_given, grading_type, answer_hint, answer_input_mode,
 			       reason, detail, status,
-			       resolution, resolved_by, resolved_at, created_at
+			       resolution, resolved_by, resolved_at, created_at, origin_report_id
 			FROM question_reports
 			ORDER BY created_at DESC
 			LIMIT ? OFFSET ?
@@ -1845,7 +1896,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 			       lesson_id, source, session_id, attempt_id,
 			       answer_given, grading_type, answer_hint, answer_input_mode,
 			       reason, detail, status,
-			       resolution, resolved_by, resolved_at, created_at
+			       resolution, resolved_by, resolved_at, created_at, origin_report_id
 			FROM question_reports
 			WHERE status = ?
 			ORDER BY created_at DESC
@@ -1865,6 +1916,7 @@ func (s *SQLiteStore) ListReports(status string, limit, offset int) ([]QuestionR
 			&r.Explanation, &r.LessonID, &r.Source, &r.SessionID, &r.AttemptID,
 			&r.AnswerGiven, &r.GradingType, &r.AnswerHint, &r.AnswerInputMode,
 			&r.Reason, &r.Detail, &r.Status, &r.Resolution, &r.ResolvedBy, &r.ResolvedAt, &created,
+			&r.OriginReportID,
 		); err != nil {
 			return nil, fmt.Errorf("scan report: %w", err)
 		}
@@ -2246,4 +2298,32 @@ func (s *SQLiteStore) AttemptsSince(since time.Time) ([]AttemptRow, error) {
 		return nil, fmt.Errorf("read attempts since: %w", err)
 	}
 	return out, nil
+}
+
+// RecordDiagnosticAttempt keeps the first verdict for an answered diagnostic
+// question. A duplicate stores nothing, so the original answer stands.
+func (s *SQLiteStore) RecordDiagnosticAttempt(attemptID, response string) error {
+	if attemptID == "" || response == "" {
+		return fmt.Errorf("diagnostic attempt: empty id or response")
+	}
+	_, err := s.db.Exec(
+		`INSERT INTO diagnostic_answers (attempt_id, response, created_at) VALUES (?, ?, ?)
+		 ON CONFLICT(attempt_id) DO NOTHING`,
+		attemptID, response, time.Now().UTC().UnixNano())
+	if err != nil {
+		return fmt.Errorf("record diagnostic attempt: %w", err)
+	}
+	return nil
+}
+
+func (s *SQLiteStore) DiagnosticAttemptResponse(attemptID string) (string, bool, error) {
+	var response string
+	err := s.db.QueryRow(`SELECT response FROM diagnostic_answers WHERE attempt_id = ?`, attemptID).Scan(&response)
+	if err == sql.ErrNoRows {
+		return "", false, nil
+	}
+	if err != nil {
+		return "", false, fmt.Errorf("read diagnostic attempt: %w", err)
+	}
+	return response, true, nil
 }

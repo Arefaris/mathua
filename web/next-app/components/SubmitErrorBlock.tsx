@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { getErrorMessage, getErrorStatus } from '../lib/api'
 import { useT } from '../lib/i18n'
+import { classifyFailure, failureHeadline } from '../lib/failure'
 
 export interface SubmitError {
   message: string
@@ -37,8 +38,9 @@ export default function SubmitErrorBlock({
   retrying?: boolean
 }) {
   const t = useT()
-  const sessionGone = error.status === 404
-  const throttled = error.status === 429
+  const failure = classifyFailure(error)
+  const sessionGone = failure.kind === 'not_found'
+  const throttled = failure.kind === 'throttled'
   const skipsExhausted = onSkip != null && (skipsLeft ?? MAX_SKIPS) <= 0
 
   // A 429 means the answer was refused for pace, not for being wrong, so retry
@@ -62,15 +64,13 @@ export default function SubmitErrorBlock({
       <p className="font-mono text-xs text-mathua-red">
         {sessionGone
           ? t('learn.submitError.sessionGone')
-          : throttled
-            ? t('learn.submitError.throttled')
-            : t('learn.submitError.failed')}
+          : failureHeadline(failure)}
       </p>
       <p className="mt-1 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
         {error.status != null ? `(${error.status}) ` : ''}{error.message}
       </p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        {!sessionGone && (
+        {!sessionGone && failure.retryable && (
           <button
             type="button"
             onClick={onRetry}

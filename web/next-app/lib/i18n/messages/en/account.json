@@ -342,7 +342,7 @@
     "dailyHint": "How much you aim to earn each day. See finish-date estimates in {plan}.",
     "planLink": "Plan",
     "planTitle": "Learning plan",
-    "planHint": "Destination, pace, and rest days. Full workload estimates live in {plan}.",
+    "planHint": "Destination, pace and rest days. Full workload estimates live in {plan}.",
     "pauseTitle": "Pause learning",
     "pausedHint": "Paused until {date}. Due reviews are hidden while paused. Pick another duration to change it, or resume.",
     "pauseHint": "Take a break for 30, 60 or 90 days. Due reviews are hidden while paused.",

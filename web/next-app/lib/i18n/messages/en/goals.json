@@ -94,6 +94,7 @@
     "welcomeTitle": "Let's find your starting point",
     "welcomeIntro": "Select what you want to learn. We'll test your current knowledge and build a personalized plan.",
     "selectAll": "Select everything",
+    "deselectAll": "Deselect everything",
     "continue": "Continue diagnostic →",
     "start": {
       "one": "Start diagnostic test ({count} concept in scope)",
@@ -219,7 +220,7 @@
     },
     "update": "Update my plan",
     "create": "Plan my learning",
-    "illustrative": "Illustrative estimate from Mathua's measured curriculum workload — actual completion depends on pace, reviews, and checks. It never changes quiz eligibility or mastery rules.",
+    "illustrative": "Illustrative estimate from Mathua's measured curriculum workload — actual completion depends on pace, reviews and checks. It never changes quiz eligibility or mastery rules.",
     "noEstimate": "Your plan is saved as a destination and a daily pace. The workload estimate is not available right now — your answers still count toward it."
   },
   "dailyGoal": {

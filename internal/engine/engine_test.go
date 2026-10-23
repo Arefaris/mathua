@@ -198,8 +198,10 @@ func TestEngine_GetScores(t *testing.T) {
 	}
 }
 
-// A duplicate/stale submission racing the real one must be rejected, never
-// graded against a question the client was not shown (cross-question grading).
+// A duplicate of one attempt may race the real submission. Every caller must
+// get the recorded result back — a retry the learner made because the first
+// response was lost is not an error — but only one grading may happen, so the
+// progress is written once and no second attempt is recorded.
 func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("grace")
@@ -209,42 +211,46 @@ func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	const workers = 8
 	var wg sync.WaitGroup
 	results := make([]error, workers)
+	out := make([]*AnswerResult, workers)
 	for i := 0; i < workers; i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			_, results[i] = e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "42", 3.0)
+			out[i], results[i] = e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "42", 3.0)
 		}(i)
 	}
 	wg.Wait()
 
-	var ok, rejected int
-	for _, err := range results {
-		switch {
-		case err == nil:
-			ok++
-		case errors.Is(err, ErrNoActiveQuestion):
-			rejected++
-		default:
-			t.Fatalf("unexpected error: %v", err)
+	for i, err := range results {
+		if err != nil {
+			t.Fatalf("duplicate %d was rejected: %v", i, err)
 		}
 	}
-	if ok != 1 {
-		t.Errorf("expected exactly 1 successful submission, got %d (rejected %d)", ok, rejected)
+	// Every duplicate must report the same accepted answer, not a fresh grade.
+	for i := 1; i < workers; i++ {
+		if out[i] == nil || out[0] == nil {
+			t.Fatalf("duplicate %d returned no result", i)
+		}
+		if out[i].Correct != out[0].Correct || out[i].XP != out[0].XP {
+			t.Errorf("duplicate %d = correct:%v xp:%d, want %v/%d", i, out[i].Correct, out[i].XP, out[0].Correct, out[0].XP)
+		}
 	}
 
-	// The winning grade must match the question that was displayed (concept "a", answer "42").
+	// The grade happened once: same streak, one attempt, answer "42".
 	progress, _ := e.GetProgress(st.ID)
-	if p, ok := progress["a"]; !ok || p.Streak != 1 {
-		t.Errorf("expected concept a to be graded once with streak 1, got %+v", progress["a"])
+	if p, ok := progress["a"]; !ok || p.Streak != 1 || p.Attempts != 1 {
+		t.Errorf("expected concept a graded once, got %+v", progress["a"])
 	}
 }
 
-// A submission carrying the token of a previous question must be rejected, never
-// graded against the session's current question (stale/cross-question grading).
-func TestEngine_SubmitAnswer_StaleAttemptIDRejected(t *testing.T) {
+// A client that retries a submission it never saw acknowledged must get the
+// recorded result back, not an error: the answer was accepted, and the learner
+// should be told so. The attempt id is the idempotency key, so a duplicate
+// carrying different text still replays the first grading instead of grading
+// the new text against a question that has already moved on.
+func TestEngine_SubmitAnswer_ReplaysAnAcceptedAttempt(t *testing.T) {
 	e := testEngine(t)
-	st, _ := e.CreateStudent("stale")
+	st, _ := e.CreateStudent("replay")
 	sess, _ := e.repo.CreateSession(st.ID)
 
 	q1, err := e.NextQuestion(sess.ID, st.ID)
@@ -267,13 +273,14 @@ func TestEngine_SubmitAnswer_StaleAttemptIDRejected(t *testing.T) {
 		t.Fatalf("expected a fresh attempt id for the next question, got %q", q2.AttemptID)
 	}
 
-	// A stale submission for Q1 must be rejected — never graded against Q2.
-	if _, err := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "99", 3.0); !errors.Is(err, ErrNoActiveQuestion) {
-		t.Fatalf("expected stale submission rejected, got %v", err)
+	// The retry replays the accepted answer. Different text is ignored, because
+	// the key is the attempt id and that attempt has already been graded.
+	if _, err := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "99", 3.0); err != nil {
+		t.Fatalf("replay of an accepted attempt: %v", err)
 	}
 	progress, _ := e.GetProgress(st.ID)
 	if p := progress["a"]; p == nil || p.Attempts != 1 || p.Streak != 1 {
-		t.Fatalf("stale submission must not be graded: got %+v", progress["a"])
+		t.Fatalf("replay must not be graded twice: got %+v", progress["a"])
 	}
 
 	// The current question's token is still accepted.

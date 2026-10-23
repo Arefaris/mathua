@@ -1,10 +1,11 @@
 import { getLocale } from './i18n/locale'
+import { API_BASE } from './apiBase'
+import { retryBudget, retryDelay, retryableError, retryableStatus, wait } from './retry'
 
 const TOKEN_KEY = 'mathua_token'
 const USER_KEY = 'mathua_user'
 const GUEST_KEY = 'mathua_guest_id'
 const GUEST_TOKEN_KEY = 'mathua_guest_token'
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
 export function getToken(): string | null {
   if (typeof window === 'undefined') return null
@@ -49,9 +50,26 @@ export function getAuthHeaders(): Record<string, string> {
 // Network failures reject — callers must not treat them as "invalid".
 // Per-request timeout override: authedFetch(input, { timeoutMs: 5000 }).
 // Stripped before reaching fetch.
-export type FetchInit = RequestInit & { timeoutMs?: number }
+export type FetchInit = RequestInit & {
+  timeoutMs?: number
+  /**
+   * How many times a mutation may be repeated. Only the answer submission
+   * sets it: its attempt id is replayed by the engine, so a retry cannot add
+   * a second attempt or a second award. Reads retry without asking.
+   */
+  retryAttempts?: number
+}
 
 const DEFAULT_TIMEOUT_MS = 30000
+
+export const REQUEST_ID_HEADER = 'X-Request-ID'
+
+export function newRequestID(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID()
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+}
 
 export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}): Promise<Response> {
   const registered = getToken()
@@ -59,11 +77,16 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
   const sent = init.headers instanceof Headers
     ? init.headers.get('Authorization')
     : new Headers(init.headers).get('Authorization')
-  const { timeoutMs, ...fetchInit } = init
+  const { timeoutMs, retryAttempts, ...fetchInit } = init
   const headers = new Headers(fetchInit.headers)
   // Set here, at the one choke point, so a new endpoint cannot forget it. A caller that sets
   // its own value (a test, a future export) keeps it.
   if (!headers.has('Accept-Language')) headers.set('Accept-Language', getLocale())
+  // One id per call, echoed by the API and printed in its access log, so a
+  // report of "it failed" names the exact request instead of a timestamp.
+  if (!headers.has(REQUEST_ID_HEADER)) {
+    headers.set(REQUEST_ID_HEADER, newRequestID())
+  }
   if (!sent) {
     const token = registered || guest
     if (token) {
@@ -71,20 +94,37 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
     }
   }
   const ms = timeoutMs ?? DEFAULT_TIMEOUT_MS
-  const ctrl = new AbortController()
-  const timer = setTimeout(() => ctrl.abort(), ms)
-  // A caller-provided signal still wins: aborting it aborts ours.
-  if (fetchInit.signal) {
-    const caller = fetchInit.signal
-    if (caller.aborted) ctrl.abort()
-    else caller.addEventListener('abort', () => ctrl.abort(), { once: true })
+  const budget = retryBudget(fetchInit.method, retryAttempts)
+  let res: Response | undefined
+  let lastError: unknown
+  for (let attempt = 0; ; attempt++) {
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), ms)
+    // A caller-provided signal still wins: aborting it aborts ours.
+    if (fetchInit.signal) {
+      const caller = fetchInit.signal
+      if (caller.aborted) ctrl.abort()
+      else caller.addEventListener('abort', () => ctrl.abort(), { once: true })
+    }
+    try {
+      res = await fetch(input, { ...fetchInit, headers, signal: ctrl.signal })
+      if (attempt < budget && retryableStatus(res.status)) {
+        const retryAfter = res.headers.get('Retry-After')
+        await res.body?.cancel().catch(() => {})
+        res = undefined
+        await wait(retryDelay(attempt, retryAfter))
+        continue
+      }
+      break
+    } catch (err) {
+      lastError = err
+      if (attempt >= budget || !retryableError(err, fetchInit.signal?.aborted === true)) throw err
+      await wait(retryDelay(attempt))
+    } finally {
+      clearTimeout(timer)
+    }
   }
-  let res: Response
-  try {
-    res = await fetch(input, { ...fetchInit, headers, signal: ctrl.signal })
-  } finally {
-    clearTimeout(timer)
-  }
+  if (!res) throw lastError ?? new Error('request failed')
   if (res.status === 401) {
     // Clear the stored credential behind the 401 — but only when the failed
     // request actually carried it. A caller-set header that merely forwards

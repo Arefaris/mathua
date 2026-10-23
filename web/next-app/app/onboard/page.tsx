@@ -139,9 +139,15 @@ export default function OnboardPage() {
     setDomains(prev => prev.map(d => d.name === name ? { ...d, selected: !d.selected } : d))
   }
 
+  // One control for both directions: when every domain is already chosen the
+  // same button clears them, because a full grid gives the learner nothing left
+  // to add and a second trip through 21 cards to undo it is busywork.
   function selectAll() {
     dropPausedRun()
-    setDomains(prev => prev.map(d => ({ ...d, selected: true })))
+    setDomains(prev => {
+      const allSelected = prev.length > 0 && prev.every(d => d.selected)
+      return prev.map(d => ({ ...d, selected: !allSelected }))
+    })
   }
 
   function selectedConceptIds(): string[] {

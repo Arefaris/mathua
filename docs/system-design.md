@@ -143,7 +143,7 @@ Eighteen tables. The five that carry the learning loop are `students`, `concept_
 - `sessions(student_id)`  --  Session history
 - `attempts(session_id)`  --  Attempts per session
 - `attempts(student_id, timestamp)`  --  Time-series queries
-- `attempts(student_id, concept_id, timestamp)`  --  Aggregate efficacy `GetAllAttempts` (`sqlite.go:1387`)
+- `attempts(student_id, concept_id, timestamp)`  --  Aggregate efficacy `GetAllAttempts` (`sqlite.go:1401`)
 - `questions(concept_id)`  --  Question lookup
 - `students(share_token)`  --  Share link lookup (`migrate.go:69`)
 - `active_sessions(student_id)`, `active_sessions(attempt_id)`  --  Session recovery
@@ -369,7 +369,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | `cors` | Sets `Access-Control-Allow-Origin` from `CORS_ALLOWED_ORIGINS` allowlist (`server.go:32`), handles OPTIONS (204), `Vary: Origin` |
 | `logRequest` | Logs method and path |
 | `authMiddleware` | Reads `Authorization: Bearer <token>`, validates `HS256` JWT (`auth.go:98`), injects `studentID` into context |
-| `authLimiter` | Token-bucket rate limiter (5 rate, 10 burst, 1 min window) on auth endpoints `server.go:207` |
+| `authLimiter` | Token-bucket rate limiter (5 rate, 10 burst, 1 min window) on auth endpoints `server.go:224` |
 | `writeLimiter` | 20 burst, 3s window on write endpoints (`/api/study/answer`, `/api/quiz/*`, `/api/goal/*`, `/api/reviews/*`) `server.go:208` |
 | `shareLimiter` | 10 burst, 6s window on `GET /api/share/*` `server.go:209` |
 
@@ -525,7 +525,7 @@ Mathua implements a compressed-covering + info-gain CAT to locate a student's kn
 - **Covering-set + info-gain efficiency**: `2 × |cover|` probes, `≤ 45` total, vs `666` exhaustive; `80%` difficulty targeting via `engine.computeDifficulty` `engine.go:157`
 - **Evidence propagation**: correct boosts prereqs, wrong penalizes postrequisites — finds frontier even with conflicting evidence
 - **Mastery + automaticity**: `fast` (`elapsed < timeThreshold`) distinguishes `PRACTICING` vs `LEARNING` placement
-- **Optimistic merge**: Retaking does not delete progress; `ApplyGoalResults` `engine.go:1364` merges with `Practicing/Learning` vs `Unseen`
+- **Optimistic merge**: Retaking does not delete progress; `ApplyGoalResults` `engine.go:1947` merges with `Practicing/Learning` vs `Unseen`
 - **Time-bounded**: Per-concept `AvgTimeSeconds` threshold; slow answers are `!fast` for diagnostic purposes
 
 ### Goal-Oriented Diagnostic
@@ -574,7 +574,7 @@ Trade-off: generation latency. Complex polynomial questions require a SymPy subp
 
 ### Why No ORM?
 
-The schema has 23 tables with straightforward relationships. Raw SQL with `database/sql` gives:
+The schema has 28 tables with straightforward relationships. Raw SQL with `database/sql` gives:
 - Full control over query optimization (especially the SM-2 upsert and leaderboard queries)
 - No query generation overhead
 - Transparent SQL for debugging

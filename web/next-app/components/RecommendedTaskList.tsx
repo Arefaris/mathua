@@ -46,9 +46,14 @@ interface Blocked {
 export default function RecommendedTaskList({
   shelf,
   loading = false,
+  failed = false,
 }: {
   shelf: Shelf | null
   loading?: boolean
+  // A failed fetch used to look identical to a slow one, because the profile
+  // passed `loading={shelf === null}` and its catch also set null. That is an
+  // indefinite spinner, which is never an honest answer.
+  failed?: boolean
 }) {
   const t = useT()
   const router = useRouter()
@@ -94,7 +99,31 @@ export default function RecommendedTaskList({
       </h2>
       <p className="font-mono text-[11px] text-mathua-muted mb-3">{t('account.tasks.subtitle')}</p>
 
-      {loading && (
+      {failed && (
+        <div className="border border-mathua-border bg-mathua-surface p-4 min-w-0">
+          <p className="font-mono text-xs text-mathua-red">
+            Couldn&apos;t load your recommended tasks.
+          </p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-2 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 h-10 font-mono text-xs"
+          >
+            Reload
+          </button>
+          {/* The hub must keep a route into the curriculum even when the
+              recommendation request fails; the empty branch below offers the
+              same route, and the failure branch replaced it. */}
+          <Link
+            href="/domains"
+            className="mt-3 inline-block font-mono text-xs text-mathua-blue hover:underline"
+          >
+            Choose what to learn →
+          </Link>
+        </div>
+      )}
+
+      {!failed && loading && (
         <div
           role="status"
           aria-live="polite"
@@ -104,7 +133,7 @@ export default function RecommendedTaskList({
         </div>
       )}
 
-      {!loading && items.length === 0 && (
+      {!failed && !loading && items.length === 0 && (
         <div className="border border-mathua-border bg-mathua-surface p-4 min-w-0">
           <p className="font-mono text-xs text-mathua-secondary">
             {t('account.tasks.none')}
@@ -118,7 +147,7 @@ export default function RecommendedTaskList({
         </div>
       )}
 
-      {!loading && items.length > 0 && (
+      {!failed && !loading && items.length > 0 && (
         <ul className="border-[0.5px] border-mathua-border min-w-0">
           {items.map((item, i) => {
             const conceptId = hrefConceptId(item.href)

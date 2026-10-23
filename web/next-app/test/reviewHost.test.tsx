@@ -90,12 +90,12 @@ describe('ReviewHost', () => {
   })
 
   it('surfaces submit failures with retry', async () => {
-    vi.mocked(submitReviewAnswer).mockRejectedValueOnce(Object.assign(new Error('boom'), { status: 500 }))
+    vi.mocked(submitReviewAnswer).mockRejectedValueOnce(Object.assign(new Error('boom'), { status: 503 }))
     render(<ReviewHost />)
     fireEvent.click(screen.getByRole('button', { name: /Start review/ }))
     await screen.findByText('2 + 3 = ?')
     typeAnswer(await findAnswerField(), '5')
     fireEvent.click(screen.getByRole('button', { name: 'Check Answer' }))
-    expect(await screen.findByText(/Couldn't submit your answer/)).toBeTruthy()
+    expect(await screen.findByText(/The server is restarting/)).toBeTruthy()
   })
 })

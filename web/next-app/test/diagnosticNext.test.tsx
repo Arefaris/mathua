@@ -16,7 +16,7 @@ import { answerValue, findAnswerField, findMathField, isMathField, typeAnswer } 
 
 describe('formatForGradingType', () => {
   it('maps known types to hint + keyboard, unknowns to generic text', () => {
-    expect(formatForGradingType('numeric')).toEqual({ hint: 'Answer with a number, fraction, or mixed number (e.g. 4 1/10)', inputMode: 'numeric' })
+    expect(formatForGradingType('numeric')).toEqual({ hint: 'Answer with a number, fraction or mixed number (e.g. 4 1/10)', inputMode: 'numeric' })
     expect(formatForGradingType('expression').inputMode).toBe('text')
     expect(formatForGradingType('multiple_choice').hint).toBe('Type the exact answer')
     expect(formatForGradingType(undefined)).toEqual({ hint: 'Answer in the form shown', inputMode: 'text' })
@@ -227,12 +227,12 @@ describe('DiagnosticStep Next button', () => {  it('shows no Next button before 
       <DiagnosticStep
         {...stepProps}
         lastResult={null}
-        submitError={{ message: 'boom', status: 500 }}
+        submitError={{ message: 'boom', status: 503 }}
         onSubmit={onRetry}
       />,
     )
     expect(screen.getByRole('alert')).toBeInTheDocument()
-    expect(screen.getByText('(500) boom')).toBeInTheDocument()
+    expect(screen.getByText('(503) boom')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
     expect(onRetry).toHaveBeenCalledTimes(1)
   })
@@ -326,7 +326,7 @@ describe('DiagnosticHost manual advance', () => {
     await screen.findByText('Q1 text')
 
     // Format hint from the served grading_type, with numeric keyboard.
-    expect(screen.getByText('Answer with a number, fraction, or mixed number (e.g. 4 1/10)')).toBeInTheDocument()
+    expect(screen.getByText('Answer with a number, fraction or mixed number (e.g. 4 1/10)')).toBeInTheDocument()
     // `numeric` selects the math editor, which brings its own virtual keyboard
     // rather than the OS numeric pad — so the control itself is the assertion.
     // `findMathField`, not `findAnswerField`: the loading state is a working plain
@@ -381,7 +381,7 @@ describe('DiagnosticHost manual advance', () => {
   it('shows the error block with Retry and Skip on submit failure', async () => {
     vi.mocked(submitGoalAnswer).mockRejectedValueOnce(
       Object.assign(new Error('Goal answer failed: 500'), {
-        status: 500,
+        status: 503,
         serverMessage: 'failed to get next question',
       }),
     )
@@ -400,7 +400,7 @@ describe('DiagnosticHost manual advance', () => {
 
     // No alert: persistent inline error with the server's own words.
     await screen.findByRole('alert')
-    expect(screen.getByText('(500) failed to get next question')).toBeInTheDocument()
+    expect(screen.getByText('(503) failed to get next question')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Skip →' })).toBeInTheDocument()
     // Answer preserved for one-tap retry.
@@ -443,7 +443,7 @@ describe('DiagnosticHost manual advance', () => {
   it('Skip serves the next staged question without recording', async () => {
     vi.mocked(submitGoalAnswer).mockRejectedValueOnce(
       Object.assign(new Error('Goal answer failed: 500'), {
-        status: 500,
+        status: 503,
         serverMessage: 'failed to get next question',
       }),
     )
@@ -657,7 +657,7 @@ describe('QuizHost manual advance', () => {
   it('QuizHost shows the error block and Skip advances without XP', async () => {
     vi.mocked(submitQuizAnswer).mockRejectedValueOnce(
       Object.assign(new Error('Quiz answer failed: 500'), {
-        status: 500,
+        status: 503,
         serverMessage: 'failed to get next quiz question',
       }),
     )
@@ -669,7 +669,7 @@ describe('QuizHost manual advance', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Check Answer' }))
 
     await screen.findByRole('alert')
-    expect(screen.getByText('(500) failed to get next quiz question')).toBeInTheDocument()
+    expect(screen.getByText('(503) failed to get next quiz question')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Skip →' }))
     await screen.findByText('Quiz Q3 text')

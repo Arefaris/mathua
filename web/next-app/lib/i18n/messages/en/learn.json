@@ -1,6 +1,13 @@
 {
   "page": {
-    "backToProfile": "← Profile"
+    "backToProfile": "← Profile",
+    "loadFailed": {
+      "title": "Could not load what to study next.",
+      "error": "Could not load what to study next",
+      "body": "The engine could not be reached, so your queue was not read. Nothing was lost.",
+      "retry": "Try again",
+      "browse": "Browse domains"
+    }
   },
   "review": {
     "back": "← Back",
@@ -255,7 +262,7 @@
     "offline": "The assistant is unavailable right now. These go to the same places:",
     "consent": {
       "title": "Before you send a message",
-      "body": "Your text goes to an AI provider so it can answer. Do not type names, email addresses, school details, or anything about another person.",
+      "body": "Your text goes to an AI provider so it can answer. Do not type names, email addresses, school details or anything about another person.",
       "notSent": "Your answers, progress and account details are not sent. The message is not stored after it is answered. Replies can be wrong.",
       "checkbox": "I am 13 or older, and I understand this.",
       "privacy": "Privacy notice"
@@ -317,11 +324,11 @@
     "needs": "Needs: {names}"
   },
   "answerFormat": {
-    "numeric": "Answer with a number, fraction, or mixed number (e.g. 4 1/10)",
+    "numeric": "Answer with a number, fraction or mixed number (e.g. 4 1/10)",
     "expression": "Answer as an expression",
     "symbolic": "Answer in simplest form",
     "multipleChoice": "Type the exact answer",
-    "comparison": "Answer <, >, or =",
+    "comparison": "Answer <, > or =",
     "ordering": "Answer in order, separated by commas",
     "tuple": "Separate values with commas, e.g. 2, 3 or (2, 3)",
     "complex": "Answer as a + bi",
