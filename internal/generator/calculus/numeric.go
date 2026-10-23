@@ -89,9 +89,9 @@ func (g *recursiveValueGen) Generate(ctx generator.GeneratorContext) generator.P
 	start := 1 + rand.Intn(maxStart)
 	maxR := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
 	r := 2 + rand.Intn(maxR)
-	maxC := mathutil.ScaleInt(ctx.Difficulty, 3, 8)
+	maxC := mathutil.ScaleInt(ctx.Difficulty, 3, 10)
 	c := 1 + rand.Intn(maxC)
-	maxSteps := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+	maxSteps := mathutil.ScaleInt(ctx.Difficulty, 3, 7)
 	steps := 2 + rand.Intn(maxSteps)
 	target := steps + 1
 
