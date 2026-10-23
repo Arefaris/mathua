@@ -403,7 +403,7 @@ func (g *multiStepIneqGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	b := rand.Intn(10) + 1
 	c := a*x + b
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(%dx + %d > %d\\)", a, b, c),
+		Question:    fmt.Sprintf("Solve \\(%dx + %d > %d\\). What is the boundary of the solution set, the number that \\(x\\) must exceed?", a, b, c),
 		Answer:      fmt.Sprintf("%d", x),
 		Explanation: fmt.Sprintf("\\(%dx + %d > %d\\) → \\(%dx > %d\\) → \\(x > %d\\)", a, b, c, a, a*x, x),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "x": strconv.Itoa(x)},
@@ -458,7 +458,13 @@ func (g *sysEliminationGen) Generate(ctx generator.GeneratorContext) generator.P
 	y := rand.Intn(8) + 2
 	a := rand.Intn(5) + 2
 	b := rand.Intn(5) + 2
-	c := rand.Intn(5) + 2
+	// The x coefficients must differ, or both equations are the same one and
+	// the system has no unique solution: report 229 quoted
+	// "6x + 4y = 50, 6x + 4y = 50" and no answer could be right.
+	c := a
+	for c == a {
+		c = rand.Intn(5) + 2
+	}
 	eq1 := a*x + b*y
 	eq2 := c*x + b*y
 	return generator.Problem{
@@ -1663,11 +1669,23 @@ func (g *polyRootsGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	r2 := rand.Intn(6) - 3
 	b := -(r1 + r2)
 	c := r1 * r2
+	// The stem comes from formatQuadratic, which prints "x^2 - 2x - 3". The
+	// old "x^{2} + %dx + %d" format printed "x^2 + -2x + 0" whenever a
+	// coefficient was negative or zero, which is what report 224 quoted.
+	q := formatQuadratic(b, c)
+	answer := fmt.Sprintf("%d,%d", r1, r2)
+	explanation := fmt.Sprintf("\\((x %+d)(x %+d) = 0\\) \u2192 roots are %d and %d", -r1, -r2, r1, r2)
+	if r1 == r2 {
+		// A double root is one root, not two: publishing "2,2" rejected the
+		// learner who wrote 2, the same defect the quadratic solver had.
+		answer = fmt.Sprintf("%d", r1)
+		explanation = fmt.Sprintf("\\((x %+d)^{2} = 0\\), so %d is a double root", -r1, r1)
+	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find the roots of \\(x^{2} + %dx + %d = 0\\).", b, c),
-		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("\\((x %+d)(x %+d) = 0\\) → roots are %d and %d", -r1, -r2, r1, r2),
-		Facts:       map[string]string{"q": formatQuadratic(b, c), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
+		Question:    fmt.Sprintf("Find the roots of \\(%s = 0\\).", q),
+		Answer:      answer,
+		Explanation: explanation,
+		Facts:       map[string]string{"q": q, "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
 

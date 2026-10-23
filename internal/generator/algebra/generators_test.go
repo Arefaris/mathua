@@ -124,6 +124,11 @@ func TestMultiStepInequalityHasAnExactBoundary(t *testing.T) {
 		if strings.Contains(p.Explanation, "ge") {
 			t.Fatalf("%q: explanation still claims a greater-or-equal bound: %q", p.Question, p.Explanation)
 		}
+		// "Solve:" alone invited "x > 5", which the numeric grader cannot read
+		// (reports 228 and 226). The question has to name the number it wants.
+		if !strings.Contains(p.Question, "boundary of the solution set") {
+			t.Fatalf("%q does not ask for the boundary", p.Question)
+		}
 	}
 }
 
@@ -224,6 +229,43 @@ func TestSystemQuestionsAskForThePair(t *testing.T) {
 		y, _ := strconv.Atoi(m[2])
 		if got := a*x + b*y; got != eq1 {
 			t.Fatalf("%dx + %dy = %d, want %d", a, b, got, eq1)
+		}
+		c, _ := strconv.Atoi(p.Facts["c"])
+		eq2, _ := strconv.Atoi(p.Facts["eq2"])
+		if c == a {
+			// Both equations identical is an underdetermined system, and
+			// report 229 quoted exactly that: "6x + 4y = 50, 6x + 4y = 50".
+			t.Fatalf("both equations use x coefficient %d: %q", a, p.Question)
+		}
+		if got := c*x + b*y; got != eq2 {
+			t.Fatalf("%dx + %dy = %d, want %d", c, b, got, eq2)
+		}
+	}
+}
+
+// The stem used to be built with "x^{2} + %dx + %d", which printed
+// "x^2 + -2x + 0" for negative or zero coefficients (report 224).
+func TestPolyRootsPrintsReadableCoefficients(t *testing.T) {
+	gen := &polyRootsGen{}
+	for i := 0; i < 300; i++ {
+		p := gen.Generate(generator.GeneratorContext{})
+		if strings.Contains(p.Question, "+ -") || strings.Contains(p.Question, "+ 0") {
+			t.Fatalf("unreadable quadratic: %q", p.Question)
+		}
+		b, _ := strconv.Atoi(p.Facts["b"])
+		c, _ := strconv.Atoi(p.Facts["c"])
+		r1, _ := strconv.Atoi(p.Facts["r1"])
+		r2, _ := strconv.Atoi(p.Facts["r2"])
+		if r1 != r2 && p.Answer != p.Facts["r1"]+","+p.Facts["r2"] {
+			t.Fatalf("answer %q does not list both roots %d and %d", p.Answer, r1, r2)
+		}
+		if r1 == r2 && p.Answer != p.Facts["r1"] {
+			t.Fatalf("double root %d answered as %q", r1, p.Answer)
+		}
+		for _, r := range []int{r1, r2} {
+			if r*r+b*r+c != 0 {
+				t.Fatalf("root %d does not solve x^2 + %dx + %d", r, b, c)
+			}
 		}
 	}
 }

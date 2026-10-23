@@ -11,5 +11,5 @@
       "say": "Subtracting [[b]] leaves [[a]]x > [[rhs]]; dividing by [[a]] isolates x."
     }
   ],
-  "answer": "So the solution is x = [[x]]."
+  "answer": "So the solution is the set of values above [[x]]; the boundary is [[x]]."
 }
