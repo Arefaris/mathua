@@ -506,6 +506,33 @@
 | ANOVA | дисперсионный анализ |
 | coefficient of determination (R-squared) | коэффициент детерминации (R-квадрат) |
 
+### Начала анализа, тригонометрия
+
+| EN | RU |
+|---|---|
+| terminal side / initial ray | конечная сторона / начальный луч |
+| coterminal angles | углы с общей конечной стороной |
+| quadrantal angle | осевой угол (лежащий на оси) |
+| bearing | азимут |
+| reduction formulas | формулы приведения |
+| cofunction identities | тождества для дополнительных углов (кофункции) |
+| double / half / triple angle formulas | формулы двойного / половинного / тройного угла |
+| product-to-sum / sum-to-product | преобразование произведения в сумму / суммы в произведение |
+| power-reduction formulas | формулы понижения степени |
+| ambiguous case (SSA) | неоднозначный случай («сторона — сторона — угол») |
+| Heron's formula / semiperimeter | формула Герона / полупериметр |
+| amplitude / midline / phase shift | амплитуда / средняя линия / сдвиг по фазе |
+| hyperbolic sine / cosine (sinh, cosh) | гиперболические синус / косинус |
+| principal branch | главная ветвь |
+| polar coordinates (pole, polar axis) | полярные координаты (полюс, полярная ось) |
+| parametric equations | параметрические уравнения |
+| directrix | директриса |
+| partial fractions | простейшие дроби |
+| piecewise function / sgn | кусочно заданная функция / функция знака sgn |
+| floor / ceiling | «пол» (целая часть) / «потолок» |
+| Heaviside step function | ступенчатая функция Хевисайда |
+| arithmetic / geometric series (precalc) | арифметическая / геометрическая прогрессия, ряд |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
