@@ -668,38 +668,85 @@ func (g *stabilityGen) Generate(ctx generator.GeneratorContext) generator.Proble
 type characteristicsGen struct{}
 
 func (g *characteristicsGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct {
-		q string
-		a string
-		e string
+	mode := rand.Intn(5)
+	switch mode {
+	case 0:
+		// Propagation speed dx/dt for transport equation u_t + c u_x = 0
+		c := smallInt(2, 6+int(ctx.Difficulty*4))
+		return generator.Problem{
+			Question: fmt.Sprintf("For the first-order linear PDE \\(u_t + %du_x = 0\\), what is the characteristic propagation speed \\(\\frac{dx}{dt}\\)?", c),
+			Answer:   fmt.Sprintf("%d", c),
+			Explanation: fmt.Sprintf(
+				"The characteristic equations for the advection equation \\(u_t + %du_x = 0\\) are \\(\\frac{dt}{1} = \\frac{dx}{%d} = \\frac{du}{0}\\). Along the characteristic curves, \\(\\frac{dx}{dt} = %d\\).",
+				c, c, c,
+			),
+		}
+
+	case 1:
+		// Evaluation of quadratic initial condition u(x, 0) = x^2
+		c := smallInt(2, 4)
+		t0 := smallInt(1, 3)
+		delta := smallInt(1, 5)
+		x0 := c*t0 + delta
+		ans := delta * delta
+		return generator.Problem{
+			Question: fmt.Sprintf("Consider the transport equation \\(u_t + %du_x = 0\\) with initial profile \\(u(x, 0) = x^2\\). Evaluate \\(u(%d, %d)\\).", c, x0, t0),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf(
+				"Along the characteristic curves \\(x - %dt = C\\), the solution is constant: \\(u(x, t) = u(x - %dt, 0) = (x - %dt)^2\\). Substituting \\((x, t) = (%d, %d)\\) gives \\(u(%d, %d) = (%d - %d \\cdot %d)^2 = %d^2 = %d\\).",
+				c, c, c, x0, t0, x0, t0, x0, c, t0, delta, ans,
+			),
+		}
+
+	case 2:
+		// Linear initial condition u(x, 0) = m*x + k
+		c := smallInt(2, 4)
+		m := smallInt(2, 5)
+		k := smallInt(1, 9)
+		t0 := smallInt(1, 3)
+		x0 := smallInt(2, 8) + c*t0
+		xBase := x0 - c*t0
+		ans := m*xBase + k
+		return generator.Problem{
+			Question: fmt.Sprintf("For the advection equation \\(u_t + %du_x = 0\\) with initial condition \\(u(x, 0) = %dx + %d\\), evaluate \\(u(%d, %d)\\).", c, m, k, x0, t0),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf(
+				"The general solution is \\(u(x, t) = u(x - %dt, 0) = %d(x - %dt) + %d\\). Evaluating at \\((x, t) = (%d, %d)\\) yields \\(u(%d, %d) = %d(%d - %d \\cdot %d) + %d = %d(%d) + %d = %d\\).",
+				c, m, c, k, x0, t0, x0, t0, m, x0, c, t0, k, m, xBase, k, ans,
+			),
+		}
+
+	case 3:
+		// Characteristic ray origin at t = 0
+		c := smallInt(2, 5)
+		t1 := smallInt(2, 5)
+		xOrigin := smallInt(1, 10)
+		x1 := xOrigin + c*t1
+		return generator.Problem{
+			Question: fmt.Sprintf("A characteristic curve for the PDE \\(u_t + %du_x = 0\\) passes through the point \\((x, t) = (%d, %d)\\). At what coordinate \\(x\\) does this characteristic curve intersect the initial axis \\(t = 0\\)?", c, x1, t1),
+			Answer:   fmt.Sprintf("%d", xOrigin),
+			Explanation: fmt.Sprintf(
+				"The characteristic curves satisfy \\(\\frac{dx}{dt} = %d\\), which integrates to \\(x - %dt = x_0\\). Using the point \\((%d, %d)\\), the initial position is \\(x_0 = %d - %d \\cdot %d = %d\\).",
+				c, c, x1, t1, x1, c, t1, xOrigin,
+			),
+		}
+
+	default:
+		// Inhomogeneous advection with zero initial state u(x, 0) = 0
+		c := smallInt(2, 6)
+		k := smallInt(2, 7)
+		t0 := smallInt(2, 6)
+		x0 := smallInt(1, 12)
+		ans := k * t0
+		return generator.Problem{
+			Question: fmt.Sprintf("Consider the inhomogeneous transport equation \\(u_t + %du_x = %d\\) with initial condition \\(u(x, 0) = 0\\). What is the value of \\(u(%d, %d)\\)?", c, k, x0, t0),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf(
+				"Along the characteristics \\(\\frac{dx}{dt} = %d\\), the transport equation simplifies to \\(\\frac{du}{dt} = %d\\). Integrating from \\(t = 0\\) with \\(u(x - %dt, 0) = 0\\) yields \\(u(x, t) = %dt\\). Evaluating at \\(t = %d\\) gives \\(u(%d, %d) = %d \\cdot %d = %d\\).",
+				c, k, c, k, t0, x0, t0, k, t0, ans,
+			),
+		}
 	}
-	easy := []entry{
-		{"Does method of characteristics reduce first-order PDE a*u_x+b*u_y=0 to ODEs along curves? (yes/no)", "yes", "Characteristics satisfy dx/a=dy/b."},
-		{"Is transport PDE solved by shifting initial data along characteristics? (yes/no)", "yes", "Value propagates along char lines."},
-	}
-	// Parameterized production: evaluate shifted data for u_t + c u_x = 0, u(x,0) = x^2.
-	cs := []int{2, 3}
-	xs := []int{5, 7}
-	c := cs[rand.Intn(len(cs))]
-	x := xs[rand.Intn(len(xs))]
-	v := (x - c) * (x - c)
-	easy = append(easy, entry{
-		q: fmt.Sprintf("For u_t + %du_x = 0 with u(x,0) = x^2, what is u(%d,1)? (enter a number)", c, x),
-		a: fmt.Sprintf("%d", v),
-		e: fmt.Sprintf("Characteristics x-%dt = const give u(x,t) = (x-%dt)^2, so u(%d,1) = %d^2 = %d.", c, c, x, x-c, v),
-	})
-	hard := []entry{
-		{"Does quasi-linear PDE become ODE system for (x(t),u(t)) via characteristics? (yes/no)", "yes", "dx/dt=a, dy/dt=b, du/dt=c."},
-		{"Are characteristics curves where PDE becomes interior ODE? (yes/no)", "yes", "PDE restricts to ODE along them."},
-		{"Does shock form when characteristics intersect? (yes/no)", "yes", "Intersection gives multi-valued solution → shock."},
-	}
-	pool := easy
-	if scale > 3 {
-		pool = append(easy, hard...)
-	}
-	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type fourierGen struct{}
