@@ -98,3 +98,30 @@ func TestQuadParametricAsksForAParameterItPrints(t *testing.T) {
 		}
 	}
 }
+
+// The boundary of a two-step inequality has to be exact. The earlier generator
+// added a remainder to the constant, so the true solution was 27/7 while the
+// answer field held a whole number and the explanation printed the boundary as
+// an integer — the shape of two live reports.
+func TestMultiStepInequalityHasAnExactBoundary(t *testing.T) {
+	gen := &multiStepIneqGen{}
+	for i := 0; i < 200; i++ {
+		p := gen.Generate(generator.GeneratorContext{})
+		a, _ := strconv.Atoi(p.Facts["a"])
+		b, _ := strconv.Atoi(p.Facts["b"])
+		c, _ := strconv.Atoi(p.Facts["c"])
+		want, _ := strconv.Atoi(p.Answer)
+		if a == 0 {
+			t.Fatalf("zero coefficient in %q", p.Question)
+		}
+		if (c-b)%a != 0 {
+			t.Fatalf("%q: c-b = %d is not a multiple of %d, so the boundary is a fraction", p.Question, c-b, a)
+		}
+		if got := (c - b) / a; got != want {
+			t.Fatalf("%q: boundary %d, answer %d", p.Question, got, want)
+		}
+		if strings.Contains(p.Explanation, "ge") {
+			t.Fatalf("%q: explanation still claims a greater-or-equal bound: %q", p.Question, p.Explanation)
+		}
+	}
+}

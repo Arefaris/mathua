@@ -391,15 +391,21 @@ func (g *literalEqGen) Generate(ctx generator.GeneratorContext) generator.Proble
 
 type multiStepIneqGen struct{}
 
+// multiStepIneqGen asks for the boundary of a two-step inequality: a x + b > c
+// has the solution x > x when c - b is exactly a times the boundary. The earlier
+// version added a random remainder to c, so the true boundary was a fraction
+// (7x + 4 > 31 gives x > 27/7) while the answer was a whole number, and a learner
+// who typed 27/7 — or 3 6/7 — was marked wrong for being right. The remainder is
+// gone and the arithmetic is exact.
 func (g *multiStepIneqGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	x := rand.Intn(8) + 2
 	a := rand.Intn(6) + 2
 	b := rand.Intn(10) + 1
-	c := a*(x-1) + b + rand.Intn(a)
+	c := a*x + b
 	return generator.Problem{
 		Question:    fmt.Sprintf("Solve: \\(%dx + %d > %d\\)", a, b, c),
 		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("\\(%dx + %d > %d\\) → \\(%dx > %d\\) → \\(x > %d\\), so \\(x \\ge %d\\)", a, b, c, a, c-b, c-b, x),
+		Explanation: fmt.Sprintf("\\(%dx + %d > %d\\) → \\(%dx > %d\\) → \\(x > %d\\)", a, b, c, a, a*x, x),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "x": strconv.Itoa(x)},
 	}
 }
