@@ -344,6 +344,39 @@
 | crosscap | кросс-кэп |
 | Betti numbers / Euler characteristic | числа Бетти / эйлерова характеристика |
 
+### Общая алгебра, комплексные числа и комплексный анализ
+
+| EN | RU |
+|---|---|
+| coset / normal subgroup | смежный класс / нормальная подгруппа |
+| quotient group / quotient ring | факторгруппа / факторкольцо |
+| kernel / image | ядро / образ |
+| abelianization / commutator subgroup | абелианизация / коммутант |
+| free group / presentation | свободная группа / задание образующими и соотношениями |
+| orbit-stabilizer theorem | теорема об орбите и стабилизаторе |
+| Sylow subgroup | силовская подгруппа |
+| nilpotent / solvable group | нильпотентная / разрешимая группа |
+| composition series | композиционный ряд |
+| class equation | уравнение классов |
+| UFD / PID / Euclidean domain | факториальное кольцо / кольцо главных идеалов / евклидово кольцо |
+| integral domain / zero divisor | область целостности / делитель нуля |
+| prime / maximal ideal | простой / максимальный идеал |
+| localization | локализация |
+| splitting field | поле разложения |
+| Noetherian ring | нётерово кольцо |
+| tensor product / base change | тензорное произведение / замена базы |
+| exact sequence | точная последовательность |
+| principal value / branch / branch cut | главное значение / ветвь / разрез |
+| pole / essential singularity | полюс / существенно особая точка |
+| residue | вычет |
+| Laurent series (principal part / regular part) | ряд Лорана (главная часть / правильная часть) |
+| entire function | целая функция |
+| Cauchy-Riemann equations | условия Коши — Римана |
+| conformal map / Möbius transformation | конформное отображение / дробно-линейное преобразование (преобразование Мёбиуса) |
+| cross-ratio | двойное отношение |
+| locus | геометрическое место точек |
+| Riemann sphere | сфера Римана |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
