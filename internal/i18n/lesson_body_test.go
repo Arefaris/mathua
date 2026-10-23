@@ -310,6 +310,21 @@ func sample(xs []string) string {
 	return strings.Join(out, ", ")
 }
 
+// mathTextRe matches the prose a formula carries: \text{…} and its relatives, with no braces inside.
+var mathTextRe = regexp.MustCompile(`\\(?:text|textbf|textit|textrm|mbox)\{[^{}]*\}`)
+
+// maskMathText empties the prose inside each formula, so a translation may put «как весы» or «см»
+// where the original says \text{like a balanced scale} or \text{cm}, while every symbol, number
+// and command around it must still match the original exactly. Without this a Russian page
+// would show English words in the middle of its formulas.
+func maskMathText(spans []string) []string {
+	out := make([]string, len(spans))
+	for i, s := range spans {
+		out[i] = mathTextRe.ReplaceAllStringFunc(s, func(m string) string { return m[:strings.Index(m, "{")] + "{}" })
+	}
+	return out
+}
+
 // compareLessonBodies lists everything wrong with tr as a translation of en into loc. An empty
 // result means the formulas, code, figures, links, structure and licence lines are the original's
 // and the prose is in the right alphabet.
@@ -322,7 +337,7 @@ func compareLessonBodies(loc i18n.Locale, en, tr string) []string {
 		name   string
 		en, tr []string
 	}{
-		{"math span", e.math, t.math},
+		{"math span", maskMathText(e.math), maskMathText(t.math)},
 		{"code", e.code, t.code},
 		{"link or figure target", e.targets, t.targets},
 	} {
@@ -710,5 +725,18 @@ func TestLessonValidatorFailsOnABrokenLessonsDirectory(t *testing.T) {
 		if !strings.Contains(got, want) {
 			t.Errorf("missing %q in:\n%s", want, got)
 		}
+	}
+}
+
+// The prose inside a formula may be translated; nothing else in the formula may change.
+func TestMathTextMayBeTranslated(t *testing.T) {
+	en := []string{`$5\,\text{cm} + x$`, `$$\text{like a balanced scale}\quad 2x=6$$`}
+	same := []string{`$5\,\text{см} + x$`, `$$\text{как весы}\quad 2x=6$$`}
+	if lost, added := diffMultiset(maskMathText(en), maskMathText(same)); len(lost)+len(added) > 0 {
+		t.Errorf("translated \text{} was rejected: lost %v, added %v", lost, added)
+	}
+	changed := []string{`$6\,\text{см} + x$`, `$$\text{как весы}\quad 2x=6$$`}
+	if lost, _ := diffMultiset(maskMathText(en), maskMathText(changed)); len(lost) == 0 {
+		t.Error("a changed number beside \text{} was accepted")
 	}
 }
