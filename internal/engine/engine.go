@@ -255,6 +255,18 @@ func New(repo storage.Repository, dag *concepts.DAG, reg *generator.Registry, ll
 	}
 }
 
+// persistedKPOrdinalLocked reports the knowledge-point position stored with the
+// learner's live session for this concept, or 0 when there is none. Callers hold
+// e.mu.
+func (e *Engine) persistedKPOrdinalLocked(studentID, conceptID string) int {
+	for _, as := range e.sessions {
+		if as != nil && as.studentID == studentID && as.conceptID == conceptID && as.kpOrdinal > 0 {
+			return as.kpOrdinal
+		}
+	}
+	return 0
+}
+
 // GetKPState returns the current Knowledge Point state machine for a student and concept.
 // It returns nil if the concept has no Knowledge Points defined.
 func (e *Engine) GetKPState(studentID, conceptID string) *mastery.KPStateMachine {
@@ -270,7 +282,13 @@ func (e *Engine) getKPStateLocked(studentID, conceptID string) *mastery.KPStateM
 	}
 	if e.dag != nil {
 		if c := e.dag.Concept(conceptID); c != nil && len(c.KnowledgePoints) > 0 {
-			sm := mastery.NewKPStateMachine(len(c.KnowledgePoints))
+			// Rebuild from where the learner actually was. The ordinal is
+			// persisted on the active session, so a deploy that empties this map
+			// used to restart everyone at KP 1 even mid-topic. Completion is not
+			// inferred from a MASTERED progress row on purpose: only the evidence
+			// ladder certifies mastery, and a seeded completion would be the same
+			// bypass this repair removed from Machine.Next.
+			sm := mastery.NewKPStateMachineAt(len(c.KnowledgePoints), e.persistedKPOrdinalLocked(studentID, conceptID))
 			if e.kpStates == nil {
 				e.kpStates = make(map[string]*mastery.KPStateMachine)
 			}

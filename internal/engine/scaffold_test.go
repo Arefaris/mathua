@@ -185,7 +185,12 @@ func TestScaffolding_SequentialProgressionAndMastery(t *testing.T) {
 		t.Fatalf("expected q5 KPOrdinal=2, got %d", q5.KPOrdinal)
 	}
 
-	// 2nd consecutive correct answer on KP 2: completes all KPs and achieves mastery
+	// 2nd consecutive correct answer on KP 2: completes all KPs. That is progress, not
+	// proof: every one of these five answers was the same instance at the same
+	// difficulty, so the evidence ladder still refuses MASTERED. This assertion used to
+	// expect mastery here, which is the defect PR 150 shipped: completing the scaffold
+	// replaced the ladder. The mastery-with-evidence case is asserted in
+	// internal/mastery/scaffold_test.go TestKPStateMachine_MachineNextIntegration.
 	res5, err := eng.SubmitAnswer(sess.ID, stu.ID, q5.AttemptID, "10", 5.0)
 	if err != nil {
 		t.Fatalf("submit q5: %v", err)
@@ -196,19 +201,19 @@ func TestScaffolding_SequentialProgressionAndMastery(t *testing.T) {
 	if !res5.KPAdvanced {
 		t.Fatalf("expected KPAdvanced=true when final KP completes")
 	}
-	if res5.NewStatus != mastery.StatusMastered {
-		t.Fatalf("expected StatusMastered, got %s", res5.NewStatus)
+	if res5.NewStatus == mastery.StatusMastered {
+		t.Fatalf("completing every knowledge point must not certify mastery on one instance and one difficulty")
 	}
 
 	prog, err := store.GetProgress(stu.ID, "calc.deriv")
 	if err != nil {
 		t.Fatalf("get progress: %v", err)
 	}
-	if prog.Status != string(mastery.StatusMastered) {
-		t.Fatalf("expected progress status MASTERED, got %s", prog.Status)
+	if prog.Status == string(mastery.StatusMastered) {
+		t.Fatalf("progress row must not read MASTERED on scaffold completion alone, got %s", prog.Status)
 	}
-	if prog.MasteredAt == nil {
-		t.Fatalf("expected MasteredAt timestamp stamped")
+	if prog.MasteredAt != nil {
+		t.Fatalf("MasteredAt must stay empty until the ladder certifies mastery, got %v", prog.MasteredAt)
 	}
 }
 

@@ -44,10 +44,13 @@ type Machine struct{}
 
 // Next computes the next status.
 func (m *Machine) Next(current Status, ctx TransitionCtx) Status {
-	if ctx.KPState != nil && ctx.KPState.TotalKPs > 0 {
-		if ctx.KPState.Completed {
-			return StatusMastered
-		}
+	// Knowledge points gate and pace the ladder; they never replace it. Completing every
+	// knowledge point used to return MASTERED here, so a concept with points granted
+	// mastery on evidence the ladder refuses (four correct answers, one instance, one
+	// difficulty, against `RungDemonstrated` which wants variety and difficulty). The
+	// state machine is now an input: an unfinished concept is held at its current rung,
+	// a finished one still has to climb. See docs/mastery-invariants.md.
+	if ctx.KPState != nil && ctx.KPState.TotalKPs > 0 && !ctx.KPState.Completed {
 		if current == StatusUnseen {
 			if ctx.KPState.CurrentStreak > 0 || ctx.KPState.CurrentOrdinal > 1 {
 				return StatusLearning
