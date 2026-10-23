@@ -310,6 +310,40 @@
 | one-hot encoding | унитарное кодирование (one-hot) |
 | recognize (подцель) | распознайте (не «узнайте» — читается как «выясните») |
 
+### Теория графов, численные методы, топология
+
+| EN | RU |
+|---|---|
+| cut vertex / bridge | точка сочленения / мост |
+| matching / perfect matching | паросочетание / совершенное паросочетание |
+| vertex cover / independent set | вершинное покрытие / независимое множество |
+| list coloring / choosability | списковая раскраска / выбираемость |
+| treewidth / genus | древесная ширина / род графа |
+| minor / subdivision | минор / подразбиение |
+| outerplanar graph | внешнепланарный граф |
+| tournament | турнир |
+| max-flow min-cut / residual graph | максимальный поток и минимальный разрез / остаточный граф |
+| topological sort (Kahn's algorithm) | топологическая сортировка (алгоритм Кана) |
+| roundoff error / machine epsilon | ошибка округления / машинный эпсилон |
+| catastrophic cancellation | катастрофическая потеря точности при вычитании |
+| condition number / stability | число обусловленности / устойчивость |
+| bracketing method / open method | метод с отделением корня / открытый метод |
+| fixed-point iteration | метод простой итерации |
+| false position (regula falsi) | метод ложного положения |
+| Horner's method | схема Горнера |
+| divided differences | разделённые разности |
+| Runge's phenomenon | феномен Рунге |
+| composite rule / adaptive quadrature | составная квадратурная формула / адаптивная квадратура |
+| diagonal dominance / sweep | диагональное преобладание / проход (по неизвестным) |
+| partial pivoting / pivot | частичный выбор ведущего элемента / ведущий элемент |
+| open ball / clopen | открытый шар / открыто-замкнутое множество |
+| quotient topology | фактортопология |
+| path-connected | линейно связный |
+| wedge of circles | букет окружностей |
+| deck transformation | накрывающий автоморфизм |
+| crosscap | кросс-кэп |
+| Betti numbers / Euler characteristic | числа Бетти / эйлерова характеристика |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
