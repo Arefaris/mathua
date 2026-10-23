@@ -167,7 +167,7 @@ function PlainAnswerInput({
       enterKeyHint="go"
       disabled={disabled}
       aria-label={ariaLabel}
-      className={className}
+      className={`clear-of-tabs ${className}`}
     />
   )
 }

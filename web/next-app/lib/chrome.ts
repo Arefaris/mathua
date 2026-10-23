@@ -46,19 +46,17 @@ const BOTTOM_AUTO_HIDE_MS = 2000
 // otherwise be undone by the animation's trailing scroll events.
 const PIN_RELEASE_DISTANCE = 48
 
-// Changing the chrome changes the height of the document above the viewport:
-// revealing the header and its --chrome-top padding puts ~149px back. The
-// browser scroll-anchors that shift, which arrives as a scroll event of its
-// own -- measured at +23px, comfortably past the hide threshold. Left alone the
-// two feed each other: show -> anchor -> looks like a downward scroll -> hide
-// -> collapse -> anchor -> show, and the bar oscillates while the page drifts.
-//
-// So scroll is inert for a moment after we move the chrome ourselves. The
-// window is shorter than IDLE_MS on purpose: it only needs to cover the anchor
-// event, which lands within a frame or two, and it must not outlive the idle
-// timer that brings the chrome back on its own. lastY still advances during
-// the window, so real movement inside it is not lost -- it surfaces as a larger
-// delta once the window closes.
+// Changing the chrome used to move the document as well: collapsing the header
+// and its --chrome-top padding took ~149px off the top. The scroll anchoring
+// that provoked arrived as a scroll event of its own -- measured at +23px,
+// comfortably past the hide threshold -- so show -> anchor -> looks like a
+// downward scroll -> hide -> collapse -> anchor -> show, and the bar
+// oscillated while the page drifted. The header now slides on a transform and
+// changes no layout, so that loop cannot start. The window is kept because a
+// chrome change still lands in the middle of a smooth scroll animation, whose
+// trailing events would otherwise undo a tap a frame later. It is shorter than
+// IDLE_MS on purpose, and lastY still advances inside it, so real movement is
+// not lost: it surfaces as a larger delta once the window closes.
 const SETTLE_MS = 250
 
 // Desktop keeps its chrome. The tab bar does not exist there (it is lg:hidden),
@@ -130,12 +128,13 @@ function onScroll(): void {
     const atBottom =
       window.innerHeight + y >= document.documentElement.scrollHeight - BOTTOM_OFFSET
 
-    // Resting on the bottom edge, the timers own the chrome. Collapsing the
-    // header shortens the document, so the browser clamps scrollY to stay at the
-    // end and reports the clamp as a scroll event -- which then re-armed the
-    // bottom timer, which hid the chrome, which clamped again. A two-second
-    // cycle that never settled. Leaving the bottom is the only thing scroll
-    // decides here.
+    // Resting on the bottom edge, the timers own the chrome: reveal it, then
+    // let it get out of the way again. Leaving the bottom is the only thing
+    // scroll decides here. (This used to be fragile for a different reason:
+    // collapsing the header shortened the document, the browser clamped
+    // scrollY, and the clamp re-armed the timer in a two-second cycle. The
+    // header no longer changes layout, so no clamp arrives; the mode still
+    // keeps the reveal and the auto-hide from fighting each other.)
     if (atBottomMode) {
       lastY = y
       if (delta < -SHOW_THRESHOLD) atBottomMode = false

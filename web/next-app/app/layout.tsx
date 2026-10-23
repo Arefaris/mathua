@@ -104,15 +104,13 @@ export default function RootLayout({
         <div
           id="main-content"
           tabIndex={-1}
-          // Scroll anchoring is off, deliberately. The chrome collapses the
-          // header and its --chrome-top padding, which changes the height of the
-          // document above the viewport. With anchoring on, the browser
-          // compensates and reports that compensation as a scroll event -- and
-          // since it moves in the same direction as the chrome just went, the
-          // scroll logic read it as the user scrolling and undid the hide. The
-          // content shifting when a toolbar collapses is the expected behaviour;
-          // silently scrolling to compensate for it is not.
-          className="relative z-10 [overflow-anchor:none]"
+          // Scroll anchoring used to be off here, because the chrome collapsed the
+          // header and its --chrome-top padding and the browser's compensation for
+          // that shift arrived as a scroll event that undid the hide. The header
+          // now slides on a transform and changes no layout, so there is nothing
+          // left to compensate for, and the browser's default is the better one:
+          // content that loads above the viewport should not jerk the page.
+          className="relative z-10"
         >
           {/* Remounts the page when the learner switches language, so localized server
               data is fetched again. See LocaleRoot. */}

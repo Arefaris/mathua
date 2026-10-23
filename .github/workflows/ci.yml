@@ -100,7 +100,15 @@ jobs:
       - run: npm run lint
       - run: npm run lint:antislop
       - run: npm test
+      # Point the export at a documentation address, not the deployed API. A normal
+      # build reads web/next-app/.env.production and bakes https://mathua.fly.dev
+      # into every page, so a spec whose stub misses its URL is answered by
+      # production — it passed on a fast reply and could hang on a slow one, and
+      # e2e traffic reached the live service for that reason. 192.0.2.1 never
+      # answers, so a missed stub cannot leave the runner.
       - run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://192.0.2.1:9099
       # e2e runs in its own jobs and needs the exported site. Build once here and
       # hand the result over, rather than building again on two runners.
       - uses: actions/upload-artifact@v4
