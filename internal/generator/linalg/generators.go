@@ -898,8 +898,8 @@ func (g *rankGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("What is the rank of matrix \\(%s\\)?", formatMatrix(m)),
 			Answer:   "1",
-			Explanation: fmt.Sprintf("Subgoal 1: Recall that the rank is the dimension of the subspace spanned by the row vectors.\n"+
-				"Subgoal 2: Observe that row 2 = 2 \\times row 1 and row 3 = 3 \\times row 1, meaning all rows are scalar multiples of row 1.\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Recall that the rank is the dimension of the subspace spanned by the row vectors.\n" +
+				"Subgoal 2: Observe that row 2 = 2 \\times row 1 and row 3 = 3 \\times row 1, meaning all rows are scalar multiples of row 1.\n" +
 				"Subgoal 3: Conclude the row space is 1-dimensional, so \\(\\operatorname{rank}(A) = 1\\)."),
 		}
 	}
