@@ -1391,7 +1391,11 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	// Grade using concept's grading type via registry/router — skipped for
 	// admitted unknowns, which are forced misses (no XP, no rushing penalty).
 	gen := e.writeGeneration(studentID)
-	gr := e.gradeAnswer(conceptID, expected, answer)
+	// A tapped option arrives as its letter, because the browser cannot send the
+	// option text back unchanged: the answer control rewrites what it renders.
+	// The attempt keeps the letter the learner chose; the grader needs the text
+	// the anchor stores.
+	gr := e.gradeAnswer(conceptID, expected, resolveChoiceAnswer(questionText, answer))
 	if dontKnow {
 		gr = grader.Result{Correct: false}
 	}
@@ -2544,4 +2548,30 @@ func (e *Engine) BackfillWeeklyXP(now time.Time) (int, error) {
 		}
 	}
 	return replayed, nil
+}
+
+// resolveChoiceAnswer turns a tapped option letter into the option text the
+// question carries and the anchor stores, or returns the answer unchanged.
+//
+// The client submits the letter because it cannot submit the text faithfully.
+// Tapping an option fills the answer control, and that control is a math field:
+// it drops spaces ("down on the left" arrived as "downontheleft"), turns LaTeX
+// into glyphs (\forall became ∀) and rewrites U+2212 as a hyphen. The server
+// compared that rendering to the authored string, so the correct option was
+// graded wrong on four independent grounds. A letter has no rendering problem,
+// and resolving it here means the comparison the anchor was designed for still
+// happens.
+//
+// Multi-character answers, and stems without a parseable option list, pass
+// through untouched: this must never let a learner answer a numeric question by
+// typing a letter.
+func resolveChoiceAnswer(question, answer string) string {
+	letter := strings.ToUpper(strings.TrimSpace(answer))
+	if len(letter) != 1 || letter[0] < 'A' || letter[0] > 'E' {
+		return answer
+	}
+	if text, ok := generator.ChoiceOptions(question)[letter]; ok {
+		return text
+	}
+	return answer
 }

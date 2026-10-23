@@ -583,6 +583,35 @@ func TestEngine_StudyPath_NegativeXPOnRush(t *testing.T) {
 	}
 }
 
+// A tapped choice arrives as a letter, because the browser cannot return the
+// option text faithfully. The anchor stores the authored text, so the letter has
+// to be resolved before the comparison: reports #154, #160, #163, #172 and #179
+// were all correct taps graded wrong by a rendering difference (spaces gone,
+// LaTeX turned into glyphs, U+2212 turned into a hyphen).
+func TestResolveChoiceAnswerMapsALetterToTheAuthoredOption(t *testing.T) {
+	const question = "Which statement is true?\n\nA) 1 − P(A)\n\nB) P(A)\n\nC) \\(x^{2}<0\\)\n\nD) down on the left"
+
+	if got := resolveChoiceAnswer(question, "D"); got != "down on the left" {
+		t.Errorf("D resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, " c "); got != `\(x^{2}<0\)` {
+		t.Errorf("lowercase letter with spaces resolved to %q", got)
+	}
+	if got := resolveChoiceAnswer(question, "1 − P(A)"); got != "1 − P(A)" {
+		t.Errorf("a full option text was rewritten to %q", got)
+	}
+	// A letter with no option, a number, and a stem without options all pass through.
+	if got := resolveChoiceAnswer(question, "E"); got != "E" {
+		t.Errorf("unmatched letter became %q", got)
+	}
+	if got := resolveChoiceAnswer(question, "42"); got != "42" {
+		t.Errorf("numeric answer became %q", got)
+	}
+	if got := resolveChoiceAnswer("Solve for x: 2x = 4", "A"); got != "A" {
+		t.Errorf("letter against a free-text question became %q", got)
+	}
+}
+
 // The learner is owed the explanation for the question they actually saw, on
 // both verdicts. A miss used to render the grader's status token ("Incorrect")
 // and a correct answer got no explanation at all, because the return was gated
