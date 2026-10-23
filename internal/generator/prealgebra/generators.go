@@ -984,17 +984,43 @@ func (g *distributeGen) Generate(ctx generator.GeneratorContext) generator.Probl
 
 type eqOneStepAddGen struct{}
 
+// The answer is the solution, not the right-hand side. Until 23 October 2026
+// this drew x and b, printed x + b = x - b + b, and published x as the answer,
+// so every question marked the correct solution wrong: x + 3 = 8 expected 8
+// rather than 5. Three learners reported it (217, 115, 112) and the questions
+// they quoted are the proof.
 func (g *eqOneStepAddGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	x := rand.Intn(scale*4) + 1
 	b := rand.Intn(scale*5) - scale*2
-	a := x - b
-	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(x + %d = %d\\)", b, a+b),
-		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("\\(x + %d = %d\\), subtract %d: \\(x = %d\\)", b, a+b, b, x),
-		Facts:       map[string]string{"b": strconv.Itoa(b), "rhs": strconv.Itoa(a + b), "x": strconv.Itoa(x)},
+	for b == 0 {
+		b = rand.Intn(scale*5) - scale*2
 	}
+	rhs := x + b
+	return generator.Problem{
+		Question:    fmt.Sprintf("Solve: \\(x %s = %d\\)", signedTerm(b), rhs),
+		Answer:      fmt.Sprintf("%d", x),
+		Explanation: fmt.Sprintf("\\(x %s = %d\\): %s %d from both sides, which leaves \\(x = %d\\)", signedTerm(b), rhs, undoWord(b), absInt(b), x),
+		Facts:       map[string]string{"b": strconv.Itoa(b), "rhs": strconv.Itoa(rhs), "x": strconv.Itoa(x)},
+	}
+}
+
+// signedTerm renders an additive constant the way a reader expects to see it,
+// as " + 4" or " - 4". Printing "x + -4" put a minus straight after a plus,
+// which is the other half of what the one-step reports quoted.
+func signedTerm(n int) string {
+	if n < 0 {
+		return fmt.Sprintf("- %d", -n)
+	}
+	return fmt.Sprintf("+ %d", n)
+}
+
+// undoWord names the inverse operation for a constant of that sign.
+func undoWord(n int) string {
+	if n < 0 {
+		return "add"
+	}
+	return "subtract"
 }
 
 type eqOneStepMultGen struct{}

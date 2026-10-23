@@ -2,6 +2,7 @@ package prealgebra
 
 import (
 	"math/rand"
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
@@ -156,6 +157,32 @@ func TestTwoStepInequalityNamesTheLargestInteger(t *testing.T) {
 		}
 		if !strings.Contains(p.Question, "largest integer") {
 			t.Fatalf("question does not ask for the largest integer: %q", p.Question)
+		}
+	}
+}
+
+// The question prints "x + b = rhs" and the answer has to be the x that makes
+// it true. It used to publish the right-hand side, so x + 3 = 8 expected 8.
+func TestOneStepAdditionAnswerSolvesThePrintedEquation(t *testing.T) {
+	gen := &eqOneStepAddGen{}
+	pattern := regexp.MustCompile(`\\\(x ([+-]) (\d+) = (-?\d+)\\\)`)
+	for i := 0; i < 300; i++ {
+		p := gen.Generate(generator.GeneratorContext{Difficulty: rand.Float64()})
+		m := pattern.FindStringSubmatch(p.Question)
+		if m == nil {
+			t.Fatalf("question does not print the equation: %q", p.Question)
+		}
+		if strings.Contains(p.Question, "+ -") {
+			t.Fatalf("question prints a minus after a plus: %q", p.Question)
+		}
+		offset, _ := strconv.Atoi(m[2])
+		if m[1] == "-" {
+			offset = -offset
+		}
+		rhs, _ := strconv.Atoi(m[3])
+		want, _ := strconv.Atoi(p.Answer)
+		if want != rhs-offset {
+			t.Fatalf("answer = %d, want %d for %q", want, rhs-offset, p.Question)
 		}
 	}
 }
