@@ -31,10 +31,11 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 
 - **Russian** can be picked today in Settings or in the footer: the interface, topic and course names and the lesson steps of the school domains are in Russian.
 - **Ukrainian** is in progress. It appears in the language switcher once its interface is complete.
+- **Lessons adapted from OpenStax stay in English.** OpenStax does not allow its books to be fed to generative AI without written permission, and this translation is made by AI.
 - The fork follows upstream at least twice a week, and translations live in separate overlay files next to the English originals, so the original project can take any part of this work back.
 
 <!-- i18n-progress:start -->
-![Ukrainian](https://img.shields.io/badge/Ukrainian-%3C1%25-red?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-3%25-red?style=flat-square)
+![Ukrainian](https://img.shields.io/badge/Ukrainian-%3C1%25-red?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-5%25-orange?style=flat-square)
 
 | Area | English words | Ukrainian | Russian |
 |---|--:|---|---|
@@ -42,10 +43,12 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 | Topic names | 4,665 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
 | Courses | 439 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
 | Lesson steps | 90,483 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████░░░░░░░░░░░░░░░░` 24% |
-| Lesson texts | 728,478 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| Lesson texts | 502,428 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
 | Worked solutions | 25,800 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
 | Problem texts | 17,230 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **873,610** | **`█░░░░░░░░░░░░░░░░░░░` <1%** | **`█░░░░░░░░░░░░░░░░░░░` 3%** |
+| **Overall** | **647,560** | **`█░░░░░░░░░░░░░░░░░░░` <1%** | **`█░░░░░░░░░░░░░░░░░░░` 5%** |
+
+_Not counted: 99 lessons adapted from OpenStax (226,050 words). OpenStax does not allow its books to be fed to generative AI without permission, so these lessons stay in English._
 
 _Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._
 <!-- i18n-progress:end -->
