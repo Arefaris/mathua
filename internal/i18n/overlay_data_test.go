@@ -301,6 +301,7 @@ func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
 		t.Errorf("only %d %s shards found; the school domains have ~334", len(have), loc)
 	}
 
+	fromOpenStax := openStaxConcepts(t)
 	for id := range have {
 		var en, tr []kpStep
 		readJSON(t, kpDir+"/"+id+".json", &en)
@@ -311,6 +312,11 @@ func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
 		}
 		for i := range en {
 			where := fmt.Sprintf("%s#%d", id, i)
+			// A step's section is a heading of the lesson it points into; for an OpenStax lesson
+			// that heading is OpenStax text, which is not translated (see openStaxConcepts).
+			if fromOpenStax[id] && tr[i].Section != en[i].Section {
+				t.Errorf("%s: section %q is OpenStax text and must stay %q", where, tr[i].Section, en[i].Section)
+			}
 			if strings.TrimSpace(tr[i].Label) == "" {
 				t.Errorf("%s: empty label", where)
 			} else {
@@ -330,6 +336,89 @@ func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
 					t.Errorf("%s subgoal %d: empty", where, j)
 				}
 				checkCarried(t, where+" subgoal", en[i].Subgoals[j], tr[i].Subgoals[j])
+			}
+		}
+	}
+}
+
+// openStaxRe matches the attribution line an OpenStax-derived lesson opens with.
+var openStaxRe = regexp.MustCompile(`(?m)^> Content (sourced|adapted) from \[OpenStax`)
+
+// openStaxConcepts are the concepts whose lesson text comes from an OpenStax book: those
+// data/lessons/mapping.json attributes to OpenStax, and those whose teaching lesson carries the
+// OpenStax attribution line.
+//
+// OpenStax text is not translated in this fork, by machine or AI. Every OpenStax title states
+// that the book "may not be used in the training of large language models or otherwise be
+// ingested into large language models or generative AI offerings without OpenStax's prior
+// written permission" (recorded in THIRD_PARTY_NOTICES.md), and the translation here is made
+// by AI. The lessons stay in English until OpenStax grants permission.
+func openStaxConcepts(t *testing.T) map[string]bool {
+	t.Helper()
+	out := map[string]bool{}
+	var mapping map[string]struct{ Source string }
+	readJSON(t, dataDir+"/lessons/mapping.json", &mapping)
+	for id, m := range mapping {
+		if m.Source == "openstax" {
+			out[id] = true
+		}
+	}
+	for _, f := range openStaxLessonFiles(t) {
+		out[strings.TrimSuffix(filepath.Base(f), ".md")] = true
+	}
+	if len(out) == 0 {
+		t.Fatal("found no OpenStax lessons; the mapping or the attribution line has changed")
+	}
+	return out
+}
+
+// openStaxLessonFiles are the English lesson files that carry the OpenStax attribution line,
+// relative to data/lessons.
+func openStaxLessonFiles(t *testing.T) []string {
+	t.Helper()
+	var out []string
+	root := dataDir + "/lessons"
+	for _, corpus := range []string{"teaching", "algebrica", "authored"} {
+		err := filepath.WalkDir(root+"/"+corpus, func(path string, d os.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() && i18n.Locale(d.Name()).Valid() {
+				return filepath.SkipDir // a translation, not an English original
+			}
+			if d.IsDir() || !strings.HasSuffix(path, ".md") {
+				return nil
+			}
+			data, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			if openStaxRe.Match(data) {
+				rel, _ := filepath.Rel(root, path)
+				out = append(out, filepath.ToSlash(rel))
+			}
+			return nil
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	return out
+}
+
+// No translation of an OpenStax lesson exists in any language; see openStaxConcepts for why.
+func TestOpenStaxLessonsAreNotTranslated(t *testing.T) {
+	files := openStaxLessonFiles(t)
+	if len(files) < 90 {
+		t.Fatalf("found %d OpenStax lessons, expected about 99; the attribution line may have changed", len(files))
+	}
+	root := dataDir + "/lessons"
+	for _, rel := range files {
+		corpus, rest, _ := strings.Cut(rel, "/")
+		for _, loc := range i18n.Overlays() {
+			p := root + "/" + corpus + "/" + string(loc) + "/" + rest
+			if _, err := os.Stat(p); err == nil {
+				t.Errorf("%s translates an OpenStax lesson; OpenStax text stays in English", p)
 			}
 		}
 	}
