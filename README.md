@@ -35,18 +35,18 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 - The fork follows upstream at least twice a week, and translations live in separate overlay files next to the English originals, so the original project can take any part of this work back.
 
 <!-- i18n-progress:start -->
-![Ukrainian](https://img.shields.io/badge/Ukrainian-%3C1%25-red?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-5%25-orange?style=flat-square)
+![Ukrainian](https://img.shields.io/badge/Ukrainian-4%25-red?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-5%25-orange?style=flat-square)
 
 | Area | English words | Ukrainian | Russian |
 |---|--:|---|---|
 | Interface | 6,515 | `█░░░░░░░░░░░░░░░░░░░` 1% | `████████████████████` 100% |
-| Topic names | 4,665 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
-| Courses | 439 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████████████████████` 100% |
-| Lesson steps | 90,483 | `░░░░░░░░░░░░░░░░░░░░` 0% | `████░░░░░░░░░░░░░░░░` 24% |
+| Topic names | 4,665 | `████████████████████` 100% | `████████████████████` 100% |
+| Courses | 439 | `████████████████████` 100% | `████████████████████` 100% |
+| Lesson steps | 90,483 | `████░░░░░░░░░░░░░░░░` 24% | `████░░░░░░░░░░░░░░░░` 24% |
 | Lesson texts | 502,428 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
 | Worked solutions | 25,879 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
 | Problem texts | 17,342 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **647,751** | **`█░░░░░░░░░░░░░░░░░░░` <1%** | **`█░░░░░░░░░░░░░░░░░░░` 5%** |
+| **Overall** | **647,751** | **`█░░░░░░░░░░░░░░░░░░░` 4%** | **`█░░░░░░░░░░░░░░░░░░░` 5%** |
 
 _Not counted: 99 lessons adapted from OpenStax (226,050 words). OpenStax does not allow its books to be fed to generative AI without permission, so these lessons stay in English._
 
