@@ -1720,15 +1720,24 @@ func (g *quadIncompleteGen) Generate(ctx generator.GeneratorContext) generator.P
 	}
 }
 
+// quadParametricGen asks for the positive k that makes x² + kx + p² a perfect
+// square, so the discriminant is k² - 4p².
+//
+// The parameter has to appear in the printed equation. Before 23 October 2026
+// the question showed x² + 2px + p² and asked for k, which was not in it, and
+// the explanation "solved" a discriminant that is already zero for every p.
+// Nine learners reported the same missing k that day, which is the whole reason
+// this comment names the failure rather than the shape.
 type quadParametricGen struct{}
 
 func (g *quadParametricGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	p := rand.Intn(5) + 1
+	k := 2 * p
 	return generator.Problem{
-		Question:    fmt.Sprintf("For what value(s) of \\(k\\) does \\(x^{2} + %dx + %d = 0\\) have exactly one solution?", 2*p, p*p),
-		Answer:      fmt.Sprintf("%d", p),
-		Explanation: fmt.Sprintf("Discriminant = 0: \\((%d)^{2} - 4(%d) = %d - %d = 0\\) → \\(k = %d\\)", 2*p, p*p, 4*p*p, 4*p*p, p),
-		Facts:       map[string]string{"coef": strconv.Itoa(2 * p), "const": strconv.Itoa(p * p), "k": strconv.Itoa(p)},
+		Question:    fmt.Sprintf("For what positive value of \\(k\\) does \\(x^{2} + kx + %d = 0\\) have exactly one solution?", p*p),
+		Answer:      strconv.Itoa(k),
+		Explanation: fmt.Sprintf("Exactly one solution means the discriminant is zero: \\(k^{2} - 4(%d) = 0\\), so \\(k^{2} = %d\\) and the positive value is \\(k = %d\\).", p*p, k*k, k),
+		Facts:       map[string]string{"coef": strconv.Itoa(k), "const": strconv.Itoa(p * p), "k": strconv.Itoa(k)},
 	}
 }
 

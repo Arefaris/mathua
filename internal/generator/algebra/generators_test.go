@@ -2,6 +2,8 @@ package algebra
 
 import (
 	"math/rand"
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/chuma-beep/mathua/internal/generator"
@@ -67,3 +69,32 @@ func TestFuzz(t *testing.T) {
 func TestInjectivityGen(t *testing.T)    { fuzzGen(t, &injectivityGen{}) }
 func TestPowerFuncGen(t *testing.T)      { fuzzGen(t, &powerFuncGen{}) }
 func TestIrrationalFuncGen(t *testing.T) { fuzzGen(t, &irrationalFuncGen{}) }
+
+// Nine reports on 23 October 2026 said the same thing: the question asked for k
+// and the equation had no k in it. The answer was unrelated to the printed
+// quadratic as well. This pins the equation a learner reads against the answer.
+func TestQuadParametricAsksForAParameterItPrints(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		p := (&quadParametricGen{}).Generate(generator.GeneratorContext{})
+		if !strings.Contains(p.Question, "kx") {
+			t.Fatalf("question does not print the parameter it asks for: %q", p.Question)
+		}
+		k, err := strconv.Atoi(p.Answer)
+		if err != nil {
+			t.Fatalf("answer %q is not an integer", p.Answer)
+		}
+		c, err := strconv.Atoi(p.Facts["const"])
+		if err != nil {
+			t.Fatalf("const fact %q is not an integer", p.Facts["const"])
+		}
+		if k*k != 4*c {
+			t.Fatalf("k=%d gives discriminant %d for x^2 + kx + %d, want zero", k, k*k-4*c, c)
+		}
+		if p.Facts["k"] != p.Answer || p.Facts["coef"] != p.Answer {
+			t.Fatalf("facts disagree with the answer: %v", p.Facts)
+		}
+		if !strings.Contains(p.Question, strconv.Itoa(c)) {
+			t.Fatalf("constant %d is not printed in %q", c, p.Question)
+		}
+	}
+}
