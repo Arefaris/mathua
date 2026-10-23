@@ -1,0 +1,29 @@
+[
+  {
+    "label": "3.5 Производные тригонометрических функций",
+    "section": "3.5 Derivatives of Trigonometric Functions",
+    "subgoals": [
+      "Продифференцируйте sin x в cos x",
+      "Продифференцируйте cos x в -sin x",
+      "Продифференцируйте 2 sin x + 3 cos x почленно"
+    ]
+  },
+  {
+    "label": "Производные синуса и косинуса",
+    "section": "Derivatives of the Sine and Cosine Functions",
+    "subgoals": [
+      "Возьмите предел по теореме о зажатой функции sin h/h → 1",
+      "Разложите sin(x+h) по формуле сложения углов",
+      "Прочитайте d/dx sin x = cos x"
+    ]
+  },
+  {
+    "label": "Теорема 3.8",
+    "section": "Theorem 3.8",
+    "subgoals": [
+      "Продифференцируйте sin x в cos x, а cos x в -sin x",
+      "Распространите на tan по правилу частного: sec^2 x",
+      "Проверьте, что sin(2x) даёт 2cos(2x)"
+    ]
+  }
+]

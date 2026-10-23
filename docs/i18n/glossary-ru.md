@@ -310,6 +310,268 @@
 | one-hot encoding | унитарное кодирование (one-hot) |
 | recognize (подцель) | распознайте (не «узнайте» — читается как «выясните») |
 
+### Теория графов, численные методы, топология
+
+| EN | RU |
+|---|---|
+| cut vertex / bridge | точка сочленения / мост |
+| matching / perfect matching | паросочетание / совершенное паросочетание |
+| vertex cover / independent set | вершинное покрытие / независимое множество |
+| list coloring / choosability | списковая раскраска / выбираемость |
+| treewidth / genus | древесная ширина / род графа |
+| minor / subdivision | минор / подразбиение |
+| outerplanar graph | внешнепланарный граф |
+| tournament | турнир |
+| max-flow min-cut / residual graph | максимальный поток и минимальный разрез / остаточный граф |
+| topological sort (Kahn's algorithm) | топологическая сортировка (алгоритм Кана) |
+| roundoff error / machine epsilon | ошибка округления / машинный эпсилон |
+| catastrophic cancellation | катастрофическая потеря точности при вычитании |
+| condition number / stability | число обусловленности / устойчивость |
+| bracketing method / open method | метод с отделением корня / открытый метод |
+| fixed-point iteration | метод простой итерации |
+| false position (regula falsi) | метод хорд (regula falsi); «метод ложного положения» — только как пояснение |
+| Horner's method | схема Горнера |
+| divided differences | разделённые разности |
+| Runge's phenomenon | феномен Рунге |
+| composite rule / adaptive quadrature | составная квадратурная формула / адаптивная квадратура |
+| diagonal dominance / sweep | диагональное преобладание / проход (по неизвестным) |
+| partial pivoting / pivot | частичный выбор ведущего элемента / ведущий элемент |
+| open ball / clopen | открытый шар / открыто-замкнутое множество |
+| quotient topology | фактортопология |
+| path-connected | линейно связный |
+| wedge of circles | букет окружностей |
+| deck transformation | автоморфизм накрытия (скольжение) |
+| crosscap | кросс-кэп |
+| Betti numbers / Euler characteristic | числа Бетти / эйлерова характеристика |
+
+### Общая алгебра, комплексные числа и комплексный анализ
+
+| EN | RU |
+|---|---|
+| coset / normal subgroup | смежный класс / нормальная подгруппа |
+| quotient group / quotient ring | факторгруппа / факторкольцо |
+| kernel / image | ядро / образ |
+| abelianization / commutator subgroup | абелианизация / коммутант |
+| free group / presentation | свободная группа / задание образующими и соотношениями |
+| orbit-stabilizer theorem | теорема об орбите и стабилизаторе |
+| Sylow subgroup | силовская подгруппа |
+| nilpotent / solvable group | нильпотентная / разрешимая группа |
+| composition series | композиционный ряд |
+| class equation | уравнение классов |
+| UFD / PID / Euclidean domain | факториальное кольцо / кольцо главных идеалов / евклидово кольцо |
+| integral domain / zero divisor | область целостности / делитель нуля |
+| prime / maximal ideal | простой / максимальный идеал |
+| localization | локализация |
+| splitting field | поле разложения |
+| Noetherian ring | нётерово кольцо |
+| tensor product / base change | тензорное произведение / замена базы |
+| exact sequence | точная последовательность |
+| principal value / branch / branch cut | главное значение / ветвь / разрез |
+| pole / essential singularity | полюс / существенно особая точка |
+| residue | вычет |
+| Laurent series (principal part / regular part) | ряд Лорана (главная часть / правильная часть) |
+| entire function | целая функция |
+| Cauchy-Riemann equations | условия Коши — Римана |
+| conformal map / Möbius transformation | конформное отображение / дробно-линейное преобразование (преобразование Мёбиуса) |
+| cross-ratio | двойное отношение |
+| locus | геометрическое место точек |
+| Riemann sphere | сфера Римана |
+
+### Дифференциальные уравнения, линейная алгебра
+
+| EN | RU |
+|---|---|
+| ODE / PDE | ОДУ / УЧП (уравнение в частных производных) |
+| separable equation | уравнение с разделяющимися переменными |
+| integrating factor | интегрирующий множитель |
+| exact equation | уравнение в полных дифференциалах |
+| undetermined coefficients / variation of parameters | метод неопределённых коэффициентов / метод вариации постоянных |
+| Wronskian | вронскиан |
+| Cauchy problem / initial value problem | задача Коши (начальные условия); IVP — тоже «задача Коши» |
+| boundary value problem | краевая задача |
+| equilibrium / phase portrait | положение равновесия / фазовый портрет |
+| saddle / node / spiral | седло / узел / фокус (спираль) |
+| pitchfork / saddle-node / transcritical bifurcation | бифуркация вилка / седло-узел / транскритическая |
+| Lyapunov function | функция Ляпунова |
+| characteristics (PDE) | характеристики |
+| Green's function | функция Грина |
+| Sturm-Liouville problem | задача Штурма — Лиувилля |
+| matrix exponential | матричная экспонента |
+| Heaviside step / delta | функция Хевисайда / дельта-функция |
+| impulse response / transfer function | импульсная характеристика / передаточная функция |
+| dot product / cross product (в шагах) | скалярное произведение / векторное произведение |
+| tip to tail | «конец к началу» |
+| cofactor / minor / adjugate | алгебраическое дополнение / минор / присоединённая матрица |
+| rank / nullity | ранг / дефект |
+| column space / null space | пространство столбцов / нуль-пространство (ядро) |
+| algebraic / geometric multiplicity | алгебраическая / геометрическая кратность |
+| span / basis / change of basis | линейная оболочка / базис / замена базиса |
+| orthogonal complement / projection | ортогональное дополнение / проекция |
+| positive definite / indefinite | положительно определённая / знаконеопределённая |
+| Sylvester's criterion | критерий Сильвестра |
+| Cayley-Hamilton theorem | теорема Гамильтона — Кэли |
+| Jordan normal form / minimal polynomial | жорданова нормальная форма / минимальный многочлен |
+
+### Машинное обучение, теория чисел
+
+| EN | RU |
+|---|---|
+| epoch / mini-batch | эпоха / мини-пакет |
+| learning rate | скорость обучения |
+| loss function | функция потерь |
+| forward pass / backward pass | прямой проход / обратный проход |
+| bias (смещение нейрона) | смещение |
+| activation function | функция активации |
+| overfit / underfit | переобучение / недообучение |
+| dropout / batch normalization | дропаут / пакетная нормализация |
+| momentum | импульс |
+| actor / critic / advantage / baseline | актор / критик / преимущество / базовая линия |
+| return (RL) | суммарная награда (не «возврат») |
+| inference (этап применения модели) | этап предсказания (не «вывод») |
+| TPR / FPR / AUC | TPR / FPR / AUC (площадь под ROC-кривой) |
+| confusion matrix | матрица ошибок |
+| F1 score | F1-мера |
+| calibration (ECE) | калибровка (ожидаемая ошибка калибровки, ECE) |
+| elbow method | метод локтя |
+| dummy variable trap | ловушка фиктивных переменных |
+| Gini impurity | неопределённость Джини |
+| bagging / boosting | бэггинг / бустинг |
+| residue / quadratic residue | вычет / квадратичный вычет |
+| witness (Miller-Rabin) | свидетель |
+| primitive root | первообразный корень |
+| Euler's totient function | функция Эйлера |
+| twin primes | простые числа-близнецы |
+| convergent (цепной дроби) | подходящая дробь |
+| class number | число классов |
+| Gaussian integers | гауссовы целые числа |
+| Pisano period | период Пизано |
+| squarefree | свободное от квадратов |
+| Euler's criterion | критерий Эйлера |
+
+### Дискретная математика, теория вероятностей
+
+| EN | RU |
+|---|---|
+| sigma-algebra / measurable | σ-алгебра / измеримый |
+| power set | булеан |
+| pmf / pdf / CDF | функция вероятности (pmf) / плотность распределения (pdf) / функция распределения (CDF) |
+| prior / likelihood / posterior | априорная вероятность / правдоподобие / апостериорная вероятность |
+| law of total probability / expectation / variance | формула полной вероятности / математического ожидания / дисперсии |
+| tower property | свойство повторного ожидания |
+| moment generating function / characteristic function | производящая функция моментов / характеристическая функция |
+| order statistic | порядковая статистика |
+| memoryless property | свойство отсутствия памяти |
+| Poisson process | пуассоновский процесс |
+| exponential family / sufficient statistic | экспоненциальное семейство / достаточная статистика |
+| weak / strong law of large numbers | слабый / усиленный закон больших чисел |
+| convergence in probability / in distribution / almost surely | сходимость по вероятности / по распределению / почти наверное |
+| Borel-Cantelli lemmas | леммы Бореля — Кантелли |
+| Slutsky's theorem / delta method | теорема Слуцкого / дельта-метод |
+| Markov chain / transition matrix / stationary distribution | цепь Маркова / матрица переходных вероятностей / стационарное распределение |
+| random walk / martingale / optional stopping | случайное блуждание / мартингал / теорема об остановке |
+| recurrent / transient | возвратный / невозвратный |
+| union bound | неравенство Буля |
+| LOTUS (law of the unconscious statistician) | правило «бессознательного статистика» |
+
+### Вещественный анализ, статистика
+
+| EN | RU |
+|---|---|
+| upper bound / supremum / infimum | верхняя граница / супремум / инфимум |
+| completeness axiom / Archimedean property | аксиома полноты / свойство Архимеда |
+| nested intervals | вложенные отрезки |
+| dense set / countable set | плотное множество / счётное множество |
+| extended real line | расширенная числовая прямая |
+| Cauchy sequence / Cauchy criterion | последовательность Коши (фундаментальная) / критерий Коши |
+| subsequence / cluster point | подпоследовательность / частичный предел |
+| divergence test | необходимый признак сходимости (расходимости) |
+| comparison / ratio / root test | признак сравнения / Даламбера / Коши |
+| absolute / conditional convergence | абсолютная / условная сходимость |
+| rearrangement of a series | перестановка членов ряда |
+| sequential criterion (Heine) | критерий предела по Гейне (через последовательности) |
+| intermediate value theorem / extreme value theorem | теорема о промежуточном значении / теорема Вейерштрасса об экстремальных значениях |
+| uniform continuity | равномерная непрерывность |
+| compact / Heine-Borel | компактный / теорема Гейне — Бореля |
+| removable discontinuity / jump | устранимый разрыв / скачок |
+| Riemann sum, mesh, upper/lower sums | сумма Римана, диаметр (мелкость) разбиения, верхние/нижние суммы |
+| uniform convergence | равномерная сходимость |
+| contraction mapping | сжимающее отображение |
+| nowhere dense / meagre | нигде не плотное / первой категории |
+| Lipschitz | липшицев |
+| mean, geometric, harmonic, quadratic mean | среднее арифметическое, геометрическое, гармоническое, квадратичное |
+| Hölder mean | среднее Гёльдера |
+| range / interquartile range | размах / межквартильный размах |
+| z-score | z-оценка |
+| standard error / margin of error | стандартная ошибка / предельная ошибка выборки |
+| null / alternative hypothesis | нулевая / альтернативная гипотеза |
+| Type I / Type II error / power | ошибка I рода / II рода / мощность |
+| ANOVA | дисперсионный анализ |
+| coefficient of determination (R-squared) | коэффициент детерминации (R-квадрат) |
+
+### Начала анализа, тригонометрия
+
+| EN | RU |
+|---|---|
+| terminal side / initial ray | конечная сторона / начальный луч |
+| coterminal angles | углы с общей конечной стороной |
+| quadrantal angle | осевой угол (лежащий на оси) |
+| bearing | азимут |
+| reduction formulas | формулы приведения |
+| cofunction identities | тождества для дополнительных углов (кофункции) |
+| double / half / triple angle formulas | формулы двойного / половинного / тройного угла |
+| product-to-sum / sum-to-product | преобразование произведения в сумму / суммы в произведение |
+| power-reduction formulas | формулы понижения степени |
+| ambiguous case (SSA) | неоднозначный случай («сторона — сторона — угол») |
+| Heron's formula / semiperimeter | формула Герона / полупериметр |
+| amplitude / midline / phase shift | амплитуда / средняя линия / сдвиг по фазе |
+| hyperbolic sine / cosine (sinh, cosh) | гиперболические синус / косинус |
+| principal branch | главная ветвь |
+| polar coordinates (pole, polar axis) | полярные координаты (полюс, полярная ось) |
+| parametric equations | параметрические уравнения |
+| directrix | директриса |
+| partial fractions | простейшие дроби |
+| piecewise function / sgn | кусочно заданная функция / функция знака sgn |
+| floor / ceiling | «пол» (целая часть) / «потолок» |
+| Heaviside step function | ступенчатая функция Хевисайда |
+| arithmetic / geometric series (precalc) | арифметическая / геометрическая прогрессия, ряд |
+
+### Математический анализ
+
+| EN | RU |
+|---|---|
+| limit laws / squeeze theorem | свойства пределов / теорема о промежуточной функции (о зажатой функции) |
+| epsilon-delta definition | определение на языке ε–δ |
+| one-sided limit / infinite limit | односторонний предел / бесконечный предел |
+| little-o / big-O | o-малое / O-большое |
+| convex (f'' > 0) / concave (f'' < 0) | выпуклая вниз / выпуклая вверх (в шагах: «чаша вверх» / «чаша вниз») |
+| inflection point | точка перегиба |
+| cusp / corner / vertical tangent | точка возврата / угловая точка / вертикальная касательная |
+| stationary point / critical point | стационарная / критическая точка |
+| differential | дифференциал |
+| related rates | связанные скорости изменения |
+| linear approximation / linearization | линейное приближение / линеаризация |
+| solid of revolution: disc / washer / shell method | тело вращения: метод дисков / шайб / цилиндрических оболочек |
+| net change theorem | теорема о суммарном изменении |
+| improper integral (comparison, p-test) | несобственный интеграл (признак сравнения, p-признак) |
+| integration by parts / partial fractions / substitution | интегрирование по частям / разложением на простейшие дроби / заменой переменной |
+| Weierstrass substitution | подстановка Вейерштрасса (тангенс половинного угла) |
+| series: ratio / root / integral / Leibniz / Dirichlet test | ряд: признаки Даламбера / Коши (радикальный) / интегральный / Лейбница / Дирихле |
+| telescoping series | телескопический ряд |
+| Cauchy product | произведение рядов по Коши |
+| power series, radius of convergence | степенной ряд, радиус сходимости |
+| Taylor / Maclaurin / Fourier series | ряд Тейлора / Маклорена / Фурье |
+| partial derivative / gradient / directional derivative | частная производная / градиент / производная по направлению |
+| Jacobian | якобиан (матрица Якоби) |
+| Hessian | гессиан |
+| Lagrange multipliers | множители Лагранжа |
+| double / triple integral | двойной / тройной интеграл |
+| line integral (scalar) / surface integral | криволинейный / поверхностный интеграл (первого рода) |
+| curl / divergence / flux | ротор / дивергенция / поток |
+| Green / Stokes / divergence theorem | теорема Грина / Стокса / Остроградского — Гаусса |
+| conservative field / potential | потенциальное поле / потенциал |
+| curvature / torsion / Frenet frame | кривизна / кручение / репер Френе |
+| gamma / beta function | гамма- / бета-функция |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
