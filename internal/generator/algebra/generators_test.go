@@ -125,3 +125,62 @@ func TestMultiStepInequalityHasAnExactBoundary(t *testing.T) {
 		}
 	}
 }
+
+func TestSystemsWordAnswerIsSmallerFirst(t *testing.T) {
+	g := &sysWordGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		parts := strings.Split(p.Answer, ",")
+		if len(parts) != 2 {
+			t.Fatalf("answer %q is not a pair: %q", p.Answer, p.Question)
+		}
+		small, err1 := strconv.Atoi(strings.TrimSpace(parts[0]))
+		big, err2 := strconv.Atoi(strings.TrimSpace(parts[1]))
+		if err1 != nil || err2 != nil {
+			t.Fatalf("answer %q is not two integers: %q", p.Answer, p.Question)
+		}
+		// The question asks for the smaller number first, so the answer has to
+		// agree with it or a learner who reads it is marked wrong.
+		if small >= big {
+			t.Fatalf("answer %q is not smaller first: %q", p.Answer, p.Question)
+		}
+		sum, _ := strconv.Atoi(p.Facts["sum"])
+		diff, _ := strconv.Atoi(p.Facts["diff"])
+		if small+big != sum {
+			t.Fatalf("answer %q does not sum to %d: %q", p.Answer, sum, p.Question)
+		}
+		if big-small != diff {
+			t.Fatalf("answer %q does not differ by %d: %q", p.Answer, diff, p.Question)
+		}
+		if diff <= 0 {
+			t.Fatalf("difference %d is not positive: %q", diff, p.Question)
+		}
+	}
+}
+
+func TestQuadraticRootsAreOneNumberWhenRepeated(t *testing.T) {
+	g := &quadSolveFactorGen{}
+	repeated := 0
+	for i := 0; i < 400; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		r1, _ := strconv.Atoi(p.Facts["r1"])
+		r2, _ := strconv.Atoi(p.Facts["r2"])
+		parts := strings.Split(p.Answer, ",")
+		if r1 == r2 {
+			repeated++
+			if len(parts) != 1 {
+				t.Fatalf("repeated root %d answered as %q: %q", r1, p.Answer, p.Question)
+			}
+			if parts[0] != strconv.Itoa(r1) {
+				t.Fatalf("answer %q is not the repeated root %d: %q", p.Answer, r1, p.Question)
+			}
+			continue
+		}
+		if len(parts) != 2 {
+			t.Fatalf("two distinct roots answered as %q: %q", p.Answer, p.Question)
+		}
+	}
+	if repeated == 0 {
+		t.Fatal("no repeated root was drawn, so the case was never checked")
+	}
+}

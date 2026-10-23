@@ -469,15 +469,20 @@ func (g *sysEliminationGen) Generate(ctx generator.GeneratorContext) generator.P
 type sysWordGen struct{}
 
 func (g *sysWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	a := rand.Intn(8) + 3
-	b := rand.Intn(8) + 3
-	sum := a + b
-	diff := a - b
+	// The numbers are drawn so the bigger one comes first in the algebra and
+	// the answer, which is what the question asks for: "smaller first". Before
+	// this the pair was drawn independently, so a draw with a < b printed a
+	// negative difference and answered larger-first, and a learner who read the
+	// question and wrote the smaller number first was marked wrong (report 218).
+	small := rand.Intn(8) + 3
+	big := small + rand.Intn(6) + 1
+	sum := big + small
+	diff := big - small
 	return generator.Problem{
 		Question:    fmt.Sprintf("Two numbers sum to %d and differ by %d. Find both numbers (smaller first).", sum, diff),
-		Answer:      fmt.Sprintf("%d,%d", b, a),
-		Explanation: fmt.Sprintf("\\(x + y = %d\\), \\(x - y = %d\\). Add: \\(2x = %d\\) → \\(x = %d\\). \\(y = %d\\)", sum, diff, a+b, a, b),
-		Facts:       map[string]string{"sum": strconv.Itoa(sum), "diff": strconv.Itoa(diff), "two_x": strconv.Itoa(a + b), "big": strconv.Itoa(a), "small": strconv.Itoa(b)},
+		Answer:      fmt.Sprintf("%d,%d", small, big),
+		Explanation: fmt.Sprintf("\\(x + y = %d\\), \\(x - y = %d\\). Add: \\(2x = %d\\) → \\(x = %d\\). \\(y = %d\\)", sum, diff, sum+diff, big, small),
+		Facts:       map[string]string{"sum": strconv.Itoa(sum), "diff": strconv.Itoa(diff), "two_x": strconv.Itoa(sum + diff), "big": strconv.Itoa(big), "small": strconv.Itoa(small)},
 	}
 }
 
@@ -629,10 +634,19 @@ func (g *quadSolveFactorGen) Generate(ctx generator.GeneratorContext) generator.
 	b := -(r1 + r2)
 	c := r1 * r2
 	q := formatQuadratic(b, c)
+	// A repeated root is one number, so the answer is one number. Written as
+	// "-1,-1" it asked the learner to repeat themselves, and "-1" was rejected
+	// for having the wrong number of parts (report 219).
+	answer := fmt.Sprintf("%d,%d", r1, r2)
+	explanation := fmt.Sprintf("Factors: \\((x %+d)(x %+d) = 0\\), so \\(x = %d\\) or \\(x = %d\\)", -r1, -r2, r1, r2)
+	if r1 == r2 {
+		answer = strconv.Itoa(r1)
+		explanation = fmt.Sprintf("Factors: \\((x %+d)^2 = 0\\), so \\(x = %d\\) is the only root", -r1, r1)
+	}
 	return generator.Problem{
 		Question:    fmt.Sprintf("Solve: %s = 0", q),
-		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("Factors: \\((x %+d)(x %+d) = 0\\), so \\(x = %d\\) or \\(x = %d\\)", -r1, -r2, r1, r2),
+		Answer:      answer,
+		Explanation: explanation,
 		Facts:       map[string]string{"q": q, "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
