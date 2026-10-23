@@ -18,15 +18,16 @@ func fuzzGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestConceptGen(t *testing.T)        { fuzzGen(t, &conceptGen{}) }
-func TestSeparableGen(t *testing.T)      { fuzzGen(t, &separableGen{}) }
-func TestLinearFirstGen(t *testing.T)    { fuzzGen(t, &linearFirstGen{}) }
-func TestExactGen(t *testing.T)          { fuzzGen(t, &exactGen{}) }
-func TestHomogeneousGen(t *testing.T)    { fuzzGen(t, &homogeneousGen{}) }
-func TestNonhomogeneousGen(t *testing.T) { fuzzGen(t, &nonhomogeneousGen{}) }
-func TestLaplaceGen(t *testing.T)        { fuzzGen(t, &laplaceGen{}) }
-func TestSystemsGen(t *testing.T)        { fuzzGen(t, &systemsGen{}) }
+func TestConceptGen(t *testing.T)           { fuzzGen(t, &conceptGen{}) }
+func TestSeparableGen(t *testing.T)         { fuzzGen(t, &separableGen{}) }
+func TestLinearFirstGen(t *testing.T)       { fuzzGen(t, &linearFirstGen{}) }
+func TestExactGen(t *testing.T)             { fuzzGen(t, &exactGen{}) }
+func TestHomogeneousGen(t *testing.T)       { fuzzGen(t, &homogeneousGen{}) }
+func TestNonhomogeneousGen(t *testing.T)    { fuzzGen(t, &nonhomogeneousGen{}) }
+func TestLaplaceGen(t *testing.T)           { fuzzGen(t, &laplaceGen{}) }
+func TestSystemsGen(t *testing.T)           { fuzzGen(t, &systemsGen{}) }
 func TestConvolutionGenerator(t *testing.T) { fuzzGen(t, &convolutionGen{}) }
+func TestLinearPhaseGenerator(t *testing.T) { fuzzGen(t, &linearPhaseGen{}) }
 func TestRK4Gen(t *testing.T) {
 	gen := &rk4Gen{}
 	for i := 0; i < 200; i++ {
