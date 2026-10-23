@@ -419,6 +419,9 @@ var mathOperatorNames = map[string]bool{
 	"lcm": true, "gcd": true, "gcf": true, "sgn": true, "sign": true, "mod": true,
 	"sin": true, "cos": true, "tan": true, "cot": true, "sec": true, "csc": true,
 	"arcsin": true, "arccos": true, "arctan": true, "arccot": true, "arcsec": true, "arccsc": true,
+	// The same functions in Russian notation: tg, ctg, arctg, arcctg, cosec, sh, ch, th, cth.
+	"tg": true, "ctg": true, "arctg": true, "arcctg": true, "cosec": true,
+	"sh": true, "ch": true, "th": true, "cth": true,
 	"sinh": true, "cosh": true, "tanh": true, "coth": true, "sech": true, "csch": true,
 	"log": true, "ln": true, "lg": true, "exp": true, "lim": true, "max": true, "min": true,
 	"det": true, "rank": true, "tr": true, "dim": true, "ker": true, "span": true, "proj": true,
