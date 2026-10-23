@@ -202,6 +202,42 @@ func TestScheduler_BackwardRemediationOutranksDownstreamStruggle(t *testing.T) {
 	}
 }
 
+// A remediation card and the concept the learner is failing are two different tasks, so the
+// shelf has to hold both. They used to share the practice bucket, and it has one slot: the
+// mastered prerequisite took it and the failing concept disappeared from the response.
+func TestRecommend_RemediationKeepsTheFailingConceptOnTheShelf(t *testing.T) {
+	s := New(miniDAG(t))
+	now := time.Now()
+	// The weakness map is what the engine passes: zero for a mastered concept, the stored
+	// score for the rest. The elevated prerequisite weakness reaches the scheduler through
+	// the snapshot, which is why both are set here.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    15,
+		ConceptsMastered: 1,
+		Weakness:         map[string]float64{"a": 0, "b": 0.8, "c": 0, "d": 0},
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": {Status: mastery.StatusMastered, Streak: 3, WeaknessScore: 0.45, LastAttempted: now, LastReviewed: now},
+			"b": {Status: mastery.StatusPracticing, WeaknessScore: 0.8, LastAttempted: now},
+		},
+	})
+	if got.Primary == nil || got.Primary.ConceptID != "a" {
+		t.Fatalf("primary = %+v, want the prerequisite remediation for a", got.Primary)
+	}
+	var kept *Recommendation
+	for i, r := range all(got) {
+		if r.ConceptID == "b" {
+			kept = &all(got)[i]
+		}
+	}
+	if kept == nil {
+		t.Fatalf("the concept the learner is failing was dropped from the shelf: %+v", got)
+	}
+	if kept.Reason != ReasonNeedsPractice {
+		t.Errorf("b reason = %q, want %q", kept.Reason, ReasonNeedsPractice)
+	}
+}
+
 func TestRecommend_ExcludedConceptIsNotOfferedBack(t *testing.T) {
 	s := New(miniDAG(t))
 	now := time.Now()

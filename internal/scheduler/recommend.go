@@ -64,10 +64,11 @@ type Action struct {
 type bucket string
 
 const (
-	bucketReview   bucket = "review"
-	bucketPractice bucket = "practice"
-	bucketNew      bucket = "new"
-	bucketResume   bucket = "resume"
+	bucketReview      bucket = "review"
+	bucketRemediation bucket = "remediation"
+	bucketPractice    bucket = "practice"
+	bucketNew         bucket = "new"
+	bucketResume      bucket = "resume"
 )
 
 // Recommendation is one worthwhile task.
@@ -265,6 +266,10 @@ func (s *Scheduler) selectTasks(in RecommendInput, now time.Time) []Recommendati
 	if in.DueReviews > 0 {
 		take(bucketReview, 1)
 	}
+	// Remediation gets its own slot rather than competing for the practice one. Sharing it
+	// meant a mastered prerequisite pushed the concept the learner is actually failing off
+	// the shelf entirely, because the two are the same bucket with one slot between them.
+	take(bucketRemediation, MaxConceptWeakness)
 	take(bucketPractice, MaxConceptWeakness)
 	take(bucketNew, MaxConceptNew)
 	take(bucketResume, MaxConceptResume)
@@ -330,7 +335,7 @@ func classify(c Candidate, in RecommendInput) (bucket, Kind, Reason) {
 	}
 	if w >= weaknessPracticeFloor {
 		if snap != nil && snap.Status == mastery.StatusMastered {
-			return bucketPractice, KindPractice, ReasonPrerequisite
+			return bucketRemediation, KindPractice, ReasonPrerequisite
 		}
 		return bucketPractice, KindPractice, ReasonNeedsPractice
 	}
