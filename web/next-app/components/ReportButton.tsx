@@ -43,7 +43,7 @@ export default function ReportButton(props: ReportButtonProps) {
   useEffect(() => {
     setSent(false)
     setError('')
-  }, [props.question, props.conceptId, props.attemptId])
+  }, [props.attemptId, props.question, props.conceptId])
 
   useEffect(() => {
     if (!sent) return
