@@ -377,6 +377,41 @@
 | locus | геометрическое место точек |
 | Riemann sphere | сфера Римана |
 
+### Дифференциальные уравнения, линейная алгебра
+
+| EN | RU |
+|---|---|
+| ODE / PDE | ОДУ / УЧП (уравнение в частных производных) |
+| separable equation | уравнение с разделяющимися переменными |
+| integrating factor | интегрирующий множитель |
+| exact equation | уравнение в полных дифференциалах |
+| undetermined coefficients / variation of parameters | метод неопределённых коэффициентов / метод вариации постоянных |
+| Wronskian | вронскиан |
+| Cauchy problem / initial value problem | задача Коши (начальные условия); IVP — тоже «задача Коши» |
+| boundary value problem | краевая задача |
+| equilibrium / phase portrait | положение равновесия / фазовый портрет |
+| saddle / node / spiral | седло / узел / фокус (спираль) |
+| pitchfork / saddle-node / transcritical bifurcation | бифуркация вилка / седло-узел / транскритическая |
+| Lyapunov function | функция Ляпунова |
+| characteristics (PDE) | характеристики |
+| Green's function | функция Грина |
+| Sturm-Liouville problem | задача Штурма — Лиувилля |
+| matrix exponential | матричная экспонента |
+| Heaviside step / delta | функция Хевисайда / дельта-функция |
+| impulse response / transfer function | импульсная характеристика / передаточная функция |
+| dot product / cross product (в шагах) | скалярное произведение / векторное произведение |
+| tip to tail | «конец к началу» |
+| cofactor / minor / adjugate | алгебраическое дополнение / минор / присоединённая матрица |
+| rank / nullity | ранг / дефект |
+| column space / null space | пространство столбцов / нуль-пространство (ядро) |
+| algebraic / geometric multiplicity | алгебраическая / геометрическая кратность |
+| span / basis / change of basis | линейная оболочка / базис / замена базиса |
+| orthogonal complement / projection | ортогональное дополнение / проекция |
+| positive definite / indefinite | положительно определённая / знаконеопределённая |
+| Sylvester's criterion | критерий Сильвестра |
+| Cayley-Hamilton theorem | теорема Гамильтона — Кэли |
+| Jordan normal form / minimal polynomial | жорданова нормальная форма / минимальный многочлен |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
