@@ -328,7 +328,7 @@
     "startLearning": "Почніть вчитися",
     "all": "Усі",
     "loadError": "Не вдалося завантажити живий граф: показано вбудовану резервну копію.",
-    "retry": "Ще раз →",
+    "retry": "Спробувати ще раз →",
     "flow": {
       "status": {
         "mastered": "Засвоєна",
@@ -338,7 +338,7 @@
         "unseen": "Не розпочата",
         "locked": "Закрита"
       },
-      "nodeAria": "{label}, розділ {domain}, {status}",
+      "nodeAria": "{label}, розділ «{domain}», {status}",
       "towardMastery": "{pct}% до засвоєння",
       "notStarted": "Не розпочата",
       "searchLabel": "Пошук тем",

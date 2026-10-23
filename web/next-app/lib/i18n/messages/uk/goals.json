@@ -124,7 +124,7 @@
     },
     "score": "результат діагностичного тесту",
     "scoreDetail": "({correct}/{total} правильно)",
-    "toReview": "{weak} повторити · {strong} упевнено",
+    "toReview": "повторити: {weak} · упевнено: {strong}",
     "needsReview": "Треба повторити",
     "strong": "Упевнено",
     "startPracticing": "Почати практику →"
