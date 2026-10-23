@@ -392,7 +392,26 @@ func compareLessonBodies(loc i18n.Locale, en, tr string) []string {
 	if mixed := mixedScriptWords(t.prose); len(mixed) > 0 {
 		add("word(s) that mix Latin and Cyrillic letters: %s", sample(mixed))
 	}
+	if english := englishMathText(t.math); len(english) > 0 {
+		add("%d \\text{} prose left in English inside formulas: %s", len(english), sample(english))
+	}
 	return problems
+}
+
+// englishMathText returns the \text{…} pieces of the translated formulas that still hold Latin
+// letters. maskMathText lets that prose be translated; this makes sure it was. The pilot review
+// found 140 such groups that had passed silently.
+func englishMathText(spans []string) []string {
+	var out []string
+	for _, s := range spans {
+		for _, m := range mathTextRe.FindAllString(s, -1) {
+			body := m[strings.Index(m, "{")+1 : len(m)-1]
+			if strings.ContainsAny(body, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+				out = append(out, m)
+			}
+		}
+	}
+	return out
 }
 
 // digitsOfProse returns the digit runs of the prose, with the ones that the translation may
@@ -738,5 +757,15 @@ func TestMathTextMayBeTranslated(t *testing.T) {
 	changed := []string{`$6\,\text{см} + x$`, `$$\text{как весы}\quad 2x=6$$`}
 	if lost, _ := diffMultiset(maskMathText(en), maskMathText(changed)); len(lost) == 0 {
 		t.Error("a changed number beside \text{} was accepted")
+	}
+}
+
+// English left inside \text{} of a translated formula is reported; translated prose is not.
+func TestEnglishMathTextIsReported(t *testing.T) {
+	if got := englishMathText([]string{`$5\,\text{cm} + x$`}); len(got) != 1 {
+		t.Errorf("English unit inside \text{} not reported: %v", got)
+	}
+	if got := englishMathText([]string{`$5\,\text{см} + x$`, `$\text{как весы}$`, `$x^2$`}); len(got) != 0 {
+		t.Errorf("translated \text{} reported as English: %v", got)
 	}
 }
