@@ -60,7 +60,8 @@ func checkLetters(t *testing.T, loc i18n.Locale, where, text string) {
 	}
 }
 
-// schoolDomains are the domains whose lesson steps are translated in this round.
+// schoolDomains are the domains whose lesson steps every locale must translate. Any other domain
+// may be translated too, but only whole (see checkKPShards).
 var schoolDomains = []string{"arithmetic", "fractions", "prealgebra", "algebra", "geometry"}
 
 func readJSON(t *testing.T, path string, v interface{}) {
@@ -257,15 +258,14 @@ func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
 	t.Helper()
 	dir := kpDir + "/" + string(loc)
 
-	// Every concept in the school domains has a translated shard, and nothing else does.
-	want := map[string]bool{}
-	for id, dom := range ids {
-		for _, d := range schoolDomains {
-			if dom == d {
-				want[id] = true
-			}
-		}
+	// Every concept in the school domains has a translated shard. A domain outside them may have
+	// shards too, but only when it is complete, every one of its concepts translated, so that a
+	// half-translated domain cannot ship. A shard for an id outside the corpus is always an error.
+	school := map[string]bool{}
+	for _, d := range schoolDomains {
+		school[d] = true
 	}
+	total, translated := map[string]int{}, map[string]int{}
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		t.Fatalf("read %s shards: %v", loc, err)
@@ -278,24 +278,36 @@ func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
 		}
 		have[strings.TrimSuffix(e.Name(), ".json")] = true
 	}
-	var missing, extra []string
-	for id := range want {
-		if !have[id] {
+	var missing, extra, partial []string
+	for id, dom := range ids {
+		total[dom]++
+		if have[id] {
+			translated[dom]++
+		} else if school[dom] {
 			missing = append(missing, id)
 		}
 	}
 	for id := range have {
-		if !want[id] {
+		if _, ok := ids[id]; !ok {
 			extra = append(extra, id)
+		}
+	}
+	for dom, n := range translated {
+		if !school[dom] && n < total[dom] {
+			partial = append(partial, fmt.Sprintf("%s (%d of %d)", dom, n, total[dom]))
 		}
 	}
 	sort.Strings(missing)
 	sort.Strings(extra)
+	sort.Strings(partial)
 	if len(missing) > 0 {
 		t.Errorf("%d school-domain concepts have no %s shard, e.g. %v", len(missing), loc, missing[:min(5, len(missing))])
 	}
 	if len(extra) > 0 {
-		t.Errorf("%s shards for ids outside the school domains or the corpus: %v", loc, extra[:min(5, len(extra))])
+		t.Errorf("%s shards for ids that are not in the corpus: %v", loc, extra[:min(5, len(extra))])
+	}
+	if len(partial) > 0 {
+		t.Errorf("%s shards for domains that are only partly translated, which must be finished or removed: %v", loc, partial)
 	}
 	if len(have) < 300 {
 		t.Errorf("only %d %s shards found; the school domains have ~334", len(have), loc)
