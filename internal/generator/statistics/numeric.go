@@ -297,7 +297,10 @@ func (g *standardErrorGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	r := 2 + rand.Intn(maxR-1)
 	n := r * r
 
-	maxMult := mathutil.ScaleInt(ctx.Difficulty, 3, 20)
+	// The standard error is the whole answer here, so the multiplier is the
+	// answer space. It used to stop at 20, which left this concept serving 19
+	// distinct answers where the fixed table it replaced served 33.
+	maxMult := mathutil.ScaleInt(ctx.Difficulty, 8, 40)
 	mult := 2 + rand.Intn(maxMult-1)
 	for mult == n || mult == r {
 		mult++
