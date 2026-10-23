@@ -100,3 +100,47 @@ func looksLikeWords(answer string) bool {
 	}
 	return false
 }
+
+// A yes/no answer is a word, and a maths field cannot take a word: it strips
+// the spaces and reads the letters as variables. One hundred and eighteen
+// concepts across topology, calculus, complex analysis, abstract algebra and
+// machine learning answered yes/no with no options, and a learner who typed
+// "y" was marked wrong (report 118). The registry now wraps every boolean
+// answer in options, so this sweep must never find one without them.
+func TestBooleanAnswersAlwaysServeOptions(t *testing.T) {
+	reg := generator.NewRegistry()
+	all.Register(reg)
+
+	checked, offenders := 0, 0
+	for _, id := range reg.Concepts() {
+		for i := 0; i < 8; i++ {
+			p, err := reg.GenerateContext(id, generator.GeneratorContext{
+				Difficulty: float64(i) / 8,
+				Seed:       int64(i*7919 + len(id)),
+			})
+			if err != nil {
+				continue
+			}
+			switch strings.ToLower(strings.TrimSpace(p.Answer)) {
+			case "yes", "no", "true", "false":
+			default:
+				continue
+			}
+			checked++
+			if generator.ChoiceOptions(p.Question) == nil {
+				offenders++
+				t.Errorf("%s serves the answer %q with no options: %q", id, p.Answer, p.Question)
+			}
+			if strings.Contains(strings.ToLower(p.Question), "(yes/no)") {
+				t.Errorf("%s still asks for a typed yes or no: %q", id, p.Question)
+			}
+			break
+		}
+	}
+	if checked < 100 {
+		t.Fatalf("the sweep checked only %d boolean answers; it is not reading the corpus", checked)
+	}
+	if offenders == 0 {
+		t.Logf("checked %d boolean answers, all serve options", checked)
+	}
+}

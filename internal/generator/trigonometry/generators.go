@@ -47,36 +47,62 @@ func Register(reg *generator.Registry) {
 
 type radiansGen struct{}
 
+// trig.basics.radians is a multiple-choice concept, but this generator served a
+// bare question whose answer was "\\(\\pi/2\\)" — delimiters included, and no
+// options to tap. A learner typed pi/2, which is right, and the choice grader
+// compared it with the delimited string and marked it wrong (report 119). The
+// options are plain text so they render in a button, and the answer is the
+// option's own text so a tap resolves to it.
 func (g *radiansGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		deg      int
-		radHTML  string
-		radLatex string
+	table := []struct {
+		deg   int
+		label string
+	}{
+		{30, "\u03c0/6"},
+		{45, "\u03c0/4"},
+		{60, "\u03c0/3"},
+		{90, "\u03c0/2"},
+		{180, "\u03c0"},
+		{270, "3\u03c0/2"},
+		{360, "2\u03c0"},
 	}
-	table := []entry{
-		{30, "\\(\\pi/6\\)", "\\pi/6"},
-		{45, "\\(\\pi/4\\)", "\\pi/4"},
-		{60, "\\(\\pi/3\\)", "\\pi/3"},
-		{90, "\\(\\pi/2\\)", "\\pi/2"},
-		{180, "\\(\\pi\\)", "\\pi"},
-		{270, "\\(3\\pi/2\\)", "3\\pi/2"},
-		{360, "\\(2\\pi\\)", "2\\pi"},
+	made := make([]string, len(table))
+	for i, e := range table {
+		made[i] = e.label
 	}
-	e := table[rand.Intn(len(table))]
+	i := rand.Intn(len(table))
+	e := table[i]
 	if rand.Intn(2) == 0 {
-		return generator.Problem{
-			Question:    fmt.Sprintf("Convert \\(%d^{\\circ}\\) to radians.", e.deg),
-			Answer:      e.radHTML,
-			Explanation: fmt.Sprintf("\\(%d^{\\circ} \\times \\frac{\\pi}{180} = %s\\).", e.deg, e.radHTML),
-			Facts:       map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.radHTML, "factor": "\\frac{\\pi}{180}"},
+		p := generator.MultipleChoice(
+			fmt.Sprintf("Convert \\(%d^{\\circ}\\) to radians.", e.deg),
+			e.label, others(made, e.label)...,
+		)
+		p.Explanation = fmt.Sprintf("\\(%d^{\\circ} \\times \\frac{\\pi}{180} = %s\\).", e.deg, e.label)
+		p.Facts = map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.label, "factor": "\\frac{\\pi}{180}"}
+		return p
+	}
+	degrees := make([]string, len(table))
+	for j, other := range table {
+		degrees[j] = strconv.Itoa(other.deg)
+	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("Convert %s radians to degrees.", e.label),
+		strconv.Itoa(e.deg), others(degrees, strconv.Itoa(e.deg))...,
+	)
+	p.Explanation = fmt.Sprintf("%s \\(\\times \\frac{180}{\\pi} = %d^{\\circ}\\).", e.label, e.deg)
+	p.Facts = map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.label, "factor": "\\frac{180}{\\pi}"}
+	return p
+}
+
+// others returns every value except one, for use as distractors.
+func others(values []string, except string) []string {
+	out := make([]string, 0, len(values))
+	for _, v := range values {
+		if v != except {
+			out = append(out, v)
 		}
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Convert %s to degrees.", e.radHTML),
-		Answer:      fmt.Sprintf("%d", e.deg),
-		Explanation: fmt.Sprintf("%s \\(\\times \\frac{180}{\\pi} = %d^{\\circ}\\).", e.radHTML, e.deg),
-		Facts:       map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.radHTML, "factor": "\\frac{180}{\\pi}"},
-	}
+	return out
 }
 
 type unitCircleGen struct{}

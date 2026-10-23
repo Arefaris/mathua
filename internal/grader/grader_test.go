@@ -488,3 +488,22 @@ func TestNumeric_Grade_RoundedAnswers(t *testing.T) {
 		}
 	}
 }
+
+// A yes/no question is answered with a word, so the word is what gets graded,
+// whatever the concept's type says. A symbolic concept used to send "yes" to
+// SymPy, which cannot parse it, and a learner who typed "y" for yes was marked
+// wrong (report 118).
+func TestBooleanAnswersAreGradedAsWords(t *testing.T) {
+	r := NewRouter()
+	for _, typ := range []GradingType{GradingNumeric, GradingSymbolic, GradingExpression, GradingMultipleChoice} {
+		if got := r.Grade(typ, "yes", "YES"); !got.Correct {
+			t.Errorf("%s grading rejected the word it was given: %+v", typ, got)
+		}
+		if got := r.Grade(typ, "yes", "no"); got.Correct {
+			t.Errorf("%s grading accepted the opposite answer", typ)
+		}
+		if got := r.Grade(typ, "true", "true"); !got.Correct {
+			t.Errorf("%s grading rejected true", typ)
+		}
+	}
+}

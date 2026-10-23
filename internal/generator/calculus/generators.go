@@ -2139,18 +2139,53 @@ func (g *derivGlobalExtremaGen) Generate(ctx generator.GeneratorContext) generat
 
 type derivCurveSketchGen struct{}
 
+// Every entry is a choice now. Three of the four used to answer "yes"/"no" on a
+// concept graded symbolic, so the client showed a maths field: a learner typed
+// y for yes and was marked wrong (report 118), and no form of the answer was
+// typeable in a maths editor.
 func (g *derivCurveSketchGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	type entry struct {
-		q, a, e string
+		q       string
+		a       string
+		e       string
+		options []string
 	}
 	table := []entry{
-		{"Where is the inflection point of \\(f(x)=x^{3}-3x\\)? (enter the x-value)", "0", "\\(f' = 3x^{2}-3\\): critical points at -1 and 1. \\(f'' = 6x\\): inflection at \\(x=0\\)."},
-		{"Does curve sketching use the first derivative? (yes/no)", "yes", "Sketching combines intercepts, asymptotes (limits at infinity), critical points from the first derivative, and concavity/inflection from the second derivative."},
-		{"Is \\(f(x)=x^{2}\\) increasing on \\((0, infinity)\\)? (yes/no)", "yes", "\\(f'(x) = 2x > 0\\) for \\(x>0\\), so f is increasing on \\((0,\\infty)\\)."},
-		{"Does \\(f(x)=1/x\\) have a vertical asymptote at \\(x=0\\)? (yes/no)", "yes", "\\(\\lim_{x\\to 0} 1/x = \\pm\\infty\\) gives vertical asymptote \\(x=0\\); \\(\\lim_{x\\to\\pm\\infty} 1/x = 0\\) gives horizontal asymptote \\(y=0\\)."},
+		{
+			q:       "Where is the inflection point of \\(f(x)=x^{3}-3x\\)?",
+			a:       "0",
+			e:       "\\(f' = 3x^{2}-3\\): critical points at -1 and 1. \\(f'' = 6x\\): inflection at \\(x=0\\).",
+			options: []string{"-1", "0", "1", "2"},
+		},
+		{
+			q:       "Does curve sketching use the first derivative?",
+			a:       "yes",
+			e:       "Sketching combines intercepts, asymptotes (limits at infinity), critical points from the first derivative, and concavity/inflection from the second derivative.",
+			options: []string{"yes", "no"},
+		},
+		{
+			q:       "Is \\(f(x)=x^{2}\\) increasing on \\((0, \\infty)\\)?",
+			a:       "yes",
+			e:       "\\(f'(x) = 2x > 0\\) for \\(x>0\\), so f is increasing on \\((0,\\infty)\\).",
+			options: []string{"yes", "no"},
+		},
+		{
+			q:       "Does \\(f(x)=1/x\\) have a vertical asymptote at \\(x=0\\)?",
+			a:       "yes",
+			e:       "\\(\\lim_{x\\to 0} 1/x = \\pm\\infty\\) gives vertical asymptote \\(x=0\\); \\(\\lim_{x\\to\\pm\\infty} 1/x = 0\\) gives horizontal asymptote \\(y=0\\).",
+			options: []string{"yes", "no"},
+		},
 	}
 	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	distractors := make([]string, 0, len(e.options))
+	for _, o := range e.options {
+		if o != e.a {
+			distractors = append(distractors, o)
+		}
+	}
+	p := generator.MultipleChoice(e.q, e.a, distractors...)
+	p.Explanation = e.e
+	return p
 }
 
 type derivTangentLineGen struct{}
