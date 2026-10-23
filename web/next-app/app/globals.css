@@ -2,6 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Cyrillic for the Russian and Ukrainian interface (vendored from Google Fonts 2026-10-23, the
+   `cyrillic` subset, which includes the Ukrainian ґ, є, і, ї).
+   The Latin faces in app/layout.tsx carry no Cyrillic, and next/font's metric fallback for them
+   (local Arial) does, so Cyrillic text used to render in Arial: the monospace navigation turned
+   proportional and lines mixed two typefaces. Each Cyrillic face is listed before its Latin one
+   and restricted by unicode-range, so Latin text, digits and punctuation still come from the
+   Latin face. A browser fetches these files only for a page that shows Cyrillic, which on an
+   English page is just the language switcher's own «Русский» (about 23 KB once, then cached).
+   Space Grotesk has no Cyrillic at all; Manrope is its Cyrillic partner, chosen for matching
+   geometry and proportions. JetBrains Mono's own Cyrillic is used for the monospace face. */
+@font-face {
+  font-family: 'Mathua Mono Cyrillic';
+  src: url('./fonts/jetbrains-mono-cyrillic-normal.woff2') format('woff2');
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Mathua Mono Cyrillic';
+  src: url('./fonts/jetbrains-mono-cyrillic-italic.woff2') format('woff2');
+  font-weight: 400 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Mathua Sans Cyrillic';
+  src: url('./fonts/manrope-cyrillic.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* Set where next/font sets the Latin variables (the body), so both resolve together. */
+body {
+  --font-jetbrains-mono: 'Mathua Mono Cyrillic', var(--font-jetbrains-mono-latin);
+  --font-space-grotesk: 'Mathua Sans Cyrillic', var(--font-space-grotesk-latin);
+}
+
 @layer base {
   :root {
     color-scheme: light dark;

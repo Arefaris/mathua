@@ -92,6 +92,15 @@ remark-math and rehype-katex (MIT) support layout, icons and Markdown. Their lic
 texts ship inside each package under `node_modules/`, and are reproduced here on
 upgrade by the package manager.
 
+### Fonts — SIL Open Font License 1.1
+
+The typefaces in `web/next-app/app/fonts/` are vendored from Google Fonts and licensed under the
+[SIL Open Font License 1.1](https://openfontlicense.org): JetBrains Mono (Latin and Cyrillic
+subsets, © The JetBrains Mono Project Authors), Space Grotesk (Latin, © The Space Grotesk Project
+Authors) and Manrope (Cyrillic, © The Manrope Project Authors), which sets the Russian and
+Ukrainian text Space Grotesk has no glyphs for. The fonts are used unmodified apart from Google's
+own subsetting.
+
 ## Go dependencies
 
 The Go module's dependency licences are recorded in `go.sum` and in each module's own

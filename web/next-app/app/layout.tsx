@@ -27,7 +27,8 @@ const jetbrainsMono = localFont({
   // Only the faces a page actually renders are fetched; preloading the
   // families costs ~105KB on the landing page.
   preload: false,
-  variable: '--font-jetbrains-mono',
+  // The Latin face only; globals.css builds --font-jetbrains-mono from it and a Cyrillic face.
+  variable: '--font-jetbrains-mono-latin',
 })
 
 // Space Grotesk ships no italic face — only normal weights are requested.
@@ -35,7 +36,8 @@ const spaceGrotesk = localFont({
   src: [{ path: './fonts/space-grotesk-latin.woff2', weight: '400 500 700', style: 'normal' }],
   display: 'swap',
   preload: false,
-  variable: '--font-space-grotesk',
+  // The Latin face only; globals.css builds --font-space-grotesk from it and a Cyrillic face.
+  variable: '--font-space-grotesk-latin',
 })
 
 export const metadata: Metadata = {
