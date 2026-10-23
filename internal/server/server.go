@@ -518,6 +518,10 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/admin/reports/", logRequest(cors(s.requirePermission(admin.ReportsRead, s.handleAdminReport))))
 	mux.HandleFunc("/api/admin/users", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminUsers))))
 	mux.HandleFunc("/api/admin/users/", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminUser))))
+	// Leagues are read under the same grant as accounts because a league row is an account plus
+	// its week: an administrator who may not look an account up does not get to enumerate the
+	// same people by cohort instead.
+	mux.HandleFunc("/api/admin/leagues", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminLeagues))))
 	mux.HandleFunc("/api/admin/admins", logRequest(cors(s.requirePermission(admin.AdminsRead, s.handleAdminAdmins))))
 	// Accepting an invitation is the one route here reachable by a non-staff account: it is how
 	// a learner becomes staff. It still requires authentication, and it is bound to the invited

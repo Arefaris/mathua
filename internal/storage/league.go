@@ -58,6 +58,16 @@ type LeagueMembership struct {
 	Size     int
 }
 
+// LeagueCohort is one league's shape: which tier, which number inside it, and
+// how many learners hold a seat. The standings are read separately, because a
+// week can hold dozens of leagues and an administrator browsing the pyramid
+// does not need every roster at once.
+type LeagueCohort struct {
+	Tier     string
+	LeagueNo int
+	Size     int
+}
+
 // moversFor decides how many learners leave a league upwards and downwards.
 //
 // The cap is five, so a full league behaves the way the product documents. A

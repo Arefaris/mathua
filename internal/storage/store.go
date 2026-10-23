@@ -612,6 +612,10 @@ type Repository interface {
 	EnsureLeagueMembership(studentID, week string) error
 	LeagueMembershipOf(studentID, week string) (tier string, leagueNo int, found bool, err error)
 	LeagueRoster(week, tier string, leagueNo int, from, to time.Time) ([]LeagueRow, error)
+	// LeagueCohorts lists every league that exists in a week, in tier order and
+	// then league number. It reads seats only, so an administrator can see the
+	// whole pyramid without loading one roster per league.
+	LeagueCohorts(week string) ([]LeagueCohort, error)
 	SetShareToken(studentID, token string) error
 	GetStudentByShareToken(token string) (*Student, error)
 	GetDailyActivity(studentID string, days int) ([]DailyActivity, error)

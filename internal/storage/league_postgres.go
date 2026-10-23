@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -244,5 +245,37 @@ func (s *PostgresStore) LeagueRoster(week, tier string, leagueNo int, from, to t
 		return nil, fmt.Errorf("read league roster: %w", err)
 	}
 	rankInCohort(out)
+	return out, nil
+}
+
+// LeagueCohorts lists the week's leagues in pyramid order, exactly as the
+// SQLite twin does.
+func (s *PostgresStore) LeagueCohorts(week string) ([]LeagueCohort, error) {
+	rows, err := s.db.Query(
+		`SELECT tier, league_no, COUNT(*) FROM league_members
+		 WHERE week = $1
+		 GROUP BY tier, league_no`, week)
+	if err != nil {
+		return nil, fmt.Errorf("read league cohorts: %w", err)
+	}
+	defer rows.Close()
+	var out []LeagueCohort
+	for rows.Next() {
+		var c LeagueCohort
+		if err := rows.Scan(&c.Tier, &c.LeagueNo, &c.Size); err != nil {
+			return nil, fmt.Errorf("scan league cohort: %w", err)
+		}
+		c.Tier = validTier(c.Tier)
+		out = append(out, c)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("read league cohorts: %w", err)
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		if out[i].Tier != out[j].Tier {
+			return tierIndex(out[i].Tier) < tierIndex(out[j].Tier)
+		}
+		return out[i].LeagueNo < out[j].LeagueNo
+	})
 	return out, nil
 }

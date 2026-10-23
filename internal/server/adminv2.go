@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/admin"
+	"github.com/chuma-beep/mathua/internal/leaderboard"
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
@@ -668,6 +669,141 @@ func (s *Server) adminUserDetail(w http.ResponseWriter, r *http.Request, id stri
 	}
 	writeJSON(w, map[string]interface{}{
 		"user": user, "history": history, "activity": activity, "reports": reports,
+	})
+}
+
+// adminLeagueRow is one seat in an administrator's view of a league. It carries the account id
+// because the page links each row to account detail; the public board deliberately does not,
+// and this is the surface where that difference is intended.
+type adminLeagueRow struct {
+	Rank      int    `json:"rank"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	StudentID string `json:"student_id"`
+	XP        int    `json:"xp"`
+}
+
+// adminLeague is one league in the week's pyramid. Members is omitted unless the caller asked
+// for that league, so browsing every league costs one grouped query rather than one roster read
+// per league.
+type adminLeague struct {
+	Tier     string           `json:"tier"`
+	LeagueNo int              `json:"league_no"`
+	Size     int              `json:"size"`
+	Movers   int              `json:"movers"`
+	Members  []adminLeagueRow `json:"members,omitempty"`
+}
+
+// GET /api/admin/leagues?week=YYYY-MM-DD&tier=bronze&league=3
+//
+// The whole week's leagues, or one league's standings when tier and league are given. The public
+// league endpoint answers only "where am I", which leaves an owner unable to see the pyramid at
+// all: a cohort reporting a problem cannot be located, and a tier that is empty or has one
+// learner in it is invisible. This is the read that closes that gap.
+//
+// A week key must be the Monday the league week starts, and is validated here rather than
+// trusted, because a bare date is a join key into a table of seats. Without a week the current
+// one is used, and the previous week is settled first exactly as a learner's own read does, so
+// the numbers an administrator sees are the numbers the transition would act on.
+func (s *Server) handleAdminLeagues(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, "method not allowed", 405)
+		return
+	}
+	now := time.Now().UTC()
+	start := leaderboard.WeekStart(now)
+	if raw := strings.TrimSpace(r.URL.Query().Get("week")); raw != "" {
+		parsed, err := storage.WeekFromString(raw)
+		if err != nil {
+			writeError(w, "week must be a Monday in YYYY-MM-DD form", 400)
+			return
+		}
+		start = parsed
+	}
+	week := start.Format("2006-01-02")
+	end := start.AddDate(0, 0, 7)
+
+	// Only the current week needs settling, and only because its seats come from the previous
+	// week's final standings. A past week is already written and must not be rewritten by a read.
+	if start.Equal(leaderboard.WeekStart(now)) {
+		if err := s.repo.ResolveLeagueWeek(week, start.AddDate(0, 0, -7), start); err != nil {
+			log.Printf("admin leagues resolve %s: %v", week, err)
+			writeError(w, "failed to settle the league week", 500)
+			return
+		}
+	}
+
+	cohorts, err := s.repo.LeagueCohorts(week)
+	if err != nil {
+		log.Printf("admin leagues cohorts %s: %v", week, err)
+		writeError(w, "failed to read leagues", 500)
+		return
+	}
+
+	tier := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("tier")))
+	leagueNo := 0
+	if raw := strings.TrimSpace(r.URL.Query().Get("league")); raw != "" {
+		n, convErr := strconv.Atoi(raw)
+		if convErr != nil || n < 1 {
+			writeError(w, "league must be a positive number", 400)
+			return
+		}
+		leagueNo = n
+	}
+	if (tier == "") != (leagueNo == 0) {
+		writeError(w, "tier and league are read together", 400)
+		return
+	}
+
+	out := make([]adminLeague, 0, len(cohorts))
+	seats := 0
+	found := leagueNo == 0
+	for _, c := range cohorts {
+		seats += c.Size
+		entry := adminLeague{
+			Tier:     c.Tier,
+			LeagueNo: c.LeagueNo,
+			Size:     c.Size,
+			Movers:   storage.LeagueMovers(c.Size),
+		}
+		if leagueNo != 0 {
+			if c.Tier != tier || c.LeagueNo != leagueNo {
+				continue
+			}
+			found = true
+			rows, err := s.repo.LeagueRoster(week, c.Tier, c.LeagueNo, start, end)
+			if err != nil {
+				log.Printf("admin leagues roster %s %s/%d: %v", week, c.Tier, c.LeagueNo, err)
+				writeError(w, "failed to read that league", 500)
+				return
+			}
+			for _, row := range rows {
+				entry.Members = append(entry.Members, adminLeagueRow{
+					Rank:      row.Rank,
+					Name:      row.Name,
+					Username:  row.Username,
+					StudentID: row.StudentID,
+					XP:        row.XP,
+				})
+			}
+		}
+		out = append(out, entry)
+	}
+	if !found {
+		// An administrator who typed a league that does not exist is told so, rather than shown
+		// an empty roster that reads like a league nobody joined.
+		writeError(w, "no such league in that week", 404)
+		return
+	}
+
+	writeJSON(w, map[string]interface{}{
+		"week":       week,
+		"week_start": start,
+		"week_end":   end,
+		"promote":    storage.PromoteCount,
+		"demote":     storage.DemoteCount,
+		"seats":      seats,
+		"leagues":    out,
 	})
 }
 

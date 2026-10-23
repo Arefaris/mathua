@@ -170,6 +170,24 @@ and `Cancel` all close the dialog and send no request.
 The page shows two errors apart. One is the list failing to load. The other is the server
 refusing a change. They are different sentences.
 
+### Seeing the leagues
+
+The public league read answers one question: where a learner sits. It cannot answer "what does
+this week's pyramid look like", so an administrator had no screen on which a cohort existed. A
+report saying "my league is broken" could not be located.
+
+`GET /api/admin/leagues` returns every league of a week, in tier order, with its size and its
+mover count. `?tier=bronze&league=3` adds the standings for that one league. The pyramid read is
+a single grouped query, and a roster is read only when a league is opened.
+
+The route is guarded by `users.read`. A league row is an account plus a week, so the grant that
+lets an administrator look an account up is the grant that lets them enumerate the same people
+by cohort.
+
+A week key is a Monday. The handler validates it, because the value is a join key into
+`league_members`. A read of the current week settles that week first, exactly as a learner's own
+read does. A read of a past week writes nothing.
+
 ### The deployed surface
 
 The static export writes both `/admin.html` and a directory named `/admin`. `nextStaticFS` in

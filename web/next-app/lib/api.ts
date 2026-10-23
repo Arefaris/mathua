@@ -1783,6 +1783,64 @@ export async function getAdminUser(id: string): Promise<AdminUserDetail> {
 	)
 }
 
+// The administrator's view of the weekly leagues.
+//
+// The public league endpoint answers only "where am I", so an administrator cannot see a cohort
+// at all. This payload is the pyramid: every league that exists in a week, and one roster when a
+// tier and league number are given. Member rows carry the account id, which the public board
+// deliberately withholds, because this is the surface where a row has to link to an account.
+const AdminLeagueMemberSchema = z.object({
+	rank: z.number(),
+	name: z.string(),
+	username: z.string(),
+	student_id: z.string(),
+	xp: z.number(),
+})
+
+const AdminLeagueSchema = z.object({
+	tier: z.string(),
+	league_no: z.number(),
+	size: z.number(),
+	movers: z.number(),
+	members: z.array(AdminLeagueMemberSchema).optional(),
+})
+
+const AdminLeaguesSchema = z.object({
+	week: z.string(),
+	week_start: z.string(),
+	week_end: z.string(),
+	promote: z.number(),
+	demote: z.number(),
+	seats: z.number(),
+	leagues: z.array(AdminLeagueSchema),
+})
+
+export type AdminLeague = z.infer<typeof AdminLeagueSchema>
+export type AdminLeagueMember = z.infer<typeof AdminLeagueMemberSchema>
+export type AdminLeagues = z.infer<typeof AdminLeaguesSchema>
+
+/**
+ * Read the week's leagues, or one league's standings.
+ *
+ * All three parameters travel together or not at all: a tier without a league number is refused
+ * by the server rather than ignored, because a page that asked for one tier and then rendered the
+ * whole pyramid would be showing something other than what it requested.
+ */
+export async function getAdminLeagues(
+	query: { week?: string; tier?: string; league?: number } = {},
+): Promise<AdminLeagues> {
+	const params = new URLSearchParams()
+	if (query.week) params.set('week', query.week)
+	if (query.tier && query.league) {
+		params.set('tier', query.tier)
+		params.set('league', String(query.league))
+	}
+	const qs = params.toString()
+	const res = await authedFetch(`${API_BASE}/api/admin/leagues${qs ? `?${qs}` : ''}`, { cache: 'no-store' })
+	if (!res.ok) await throwWithResponse(res, 'Could not load leagues')
+	return validateResponse(AdminLeaguesSchema, await res.json(), 'adminLeagues')
+}
+
 export async function searchAdminUsers(q: string): Promise<AdminUsersRes> {
 	const params = new URLSearchParams()
 	if (q.trim()) params.set('q', q.trim())
