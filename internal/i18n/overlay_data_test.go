@@ -1,7 +1,7 @@
 package i18n_test
 
-// These tests read the shipped Russian overlays in data/i18n and data/lessons/kp/ru and
-// hold them to the English originals they translate. They are the check that a translation
+// These tests read every shipped overlay in data/i18n/<locale> and data/lessons/kp/<locale>
+// and hold it to the English originals it translates. They are the check that a translation
 // cannot silently drift from the corpus: an id that no longer exists, a label that was left
 // blank, a step with a different number of subgoals, or a formula that did not survive.
 
@@ -23,9 +23,42 @@ import (
 
 const (
 	dataDir = "../../data"
-	ruDir   = dataDir + "/i18n/ru"
 	kpDir   = dataDir + "/lessons/kp"
 )
+
+// overlayLocales are the supported translations that have started: a locale without a
+// data/i18n/<locale> directory is not begun yet, and is skipped rather than failed, so adding a
+// language to i18n.Supported and translating it can land as separate commits.
+func overlayLocales(t *testing.T) []i18n.Locale {
+	t.Helper()
+	var out []i18n.Locale
+	for _, loc := range i18n.Overlays() {
+		if _, err := os.Stat(dataDir + "/i18n/" + string(loc)); err != nil {
+			t.Logf("%s: no overlays yet, skipped", loc)
+			continue
+		}
+		out = append(out, loc)
+	}
+	return out
+}
+
+// forbiddenLetters are letters that belong to a neighbouring language and so mark a slip, not
+// a translation: Russian ы, э, ъ, ё in Ukrainian text, and Ukrainian ґ, є, і, ї in Russian.
+var forbiddenLetters = map[i18n.Locale]string{
+	i18n.RU: "ґєіїҐЄІЇ",
+	i18n.UK: "ыэъёЫЭЪЁ",
+}
+
+// checkLetters reports text in the wrong alphabet for its locale.
+func checkLetters(t *testing.T, loc i18n.Locale, where, text string) {
+	t.Helper()
+	if !hasCyrillic(text) {
+		t.Errorf("%s: %q has no %s text", where, text, loc)
+	}
+	if bad := forbiddenLetters[loc]; bad != "" && strings.ContainsAny(text, bad) {
+		t.Errorf("%s: %q uses letters that are not %s (%s)", where, text, loc, bad)
+	}
+}
 
 // schoolDomains are the domains whose lesson steps are translated in this round.
 var schoolDomains = []string{"arithmetic", "fractions", "prealgebra", "algebra", "geometry"}
@@ -73,7 +106,7 @@ var (
 
 // checkCarried reports what a translation lost from its English source: a protected token
 // (LaTeX, placeholder, code-like term) or a number.
-func checkCarried(t *testing.T, where, en, ru string) {
+func checkCarried(t *testing.T, where, en, tr string) {
 	t.Helper()
 	for _, tok := range protectedRe.FindAllString(en, -1) {
 		tok = trimRe.ReplaceAllString(tok, "")
@@ -85,13 +118,13 @@ func checkCarried(t *testing.T, where, en, ru string) {
 		if !strings.HasPrefix(tok, "$") && !strings.HasPrefix(tok, `\`) && englishWordRe.MatchString(tok) {
 			continue
 		}
-		if !strings.Contains(ru, tok) {
-			t.Errorf("%s: %q lost %q\n  en: %s\n  ru: %s", where, ru, tok, en, ru)
+		if !strings.Contains(tr, tok) {
+			t.Errorf("%s: %q lost %q\n  en: %s\n  tr: %s", where, tr, tok, en, tr)
 		}
 	}
 	for _, d := range digitsRe.FindAllString(en, -1) {
-		if !strings.Contains(ru, d) {
-			t.Errorf("%s: the number %s is missing\n  en: %s\n  ru: %s", where, d, en, ru)
+		if !strings.Contains(tr, d) {
+			t.Errorf("%s: the number %s is missing\n  en: %s\n  tr: %s", where, d, en, tr)
 		}
 	}
 }
@@ -105,10 +138,8 @@ func hasCyrillic(s string) bool {
 	return false
 }
 
-func TestRussianConceptLabels(t *testing.T) {
+func TestConceptLabelOverlays(t *testing.T) {
 	ids := corpus(t)
-	var ru map[string]string
-	readJSON(t, ruDir+"/concepts.json", &ru)
 
 	// The English label comes from the corpus files, not from the loaded DAG, which is
 	// the same data but keeps this test about the files.
@@ -125,40 +156,45 @@ func TestRussianConceptLabels(t *testing.T) {
 		}
 	}
 
-	if len(ru) != len(ids) {
-		t.Errorf("concepts.json has %d labels for %d concepts", len(ru), len(ids))
-	}
-	for id := range ru {
-		if _, ok := ids[id]; !ok {
-			t.Errorf("concepts.json names %q, which is not a concept in the corpus", id)
-		}
-	}
-	for id := range ids {
-		label, ok := ru[id]
-		switch {
-		case !ok:
-			t.Errorf("no Russian label for %s", id)
-		case strings.TrimSpace(label) == "":
-			t.Errorf("empty Russian label for %s", id)
-		case !hasCyrillic(label):
-			t.Errorf("%s: label %q has no Russian text", id, label)
-		case label != strings.TrimSpace(label):
-			t.Errorf("%s: label %q has stray whitespace", id, label)
-		default:
-			checkCarried(t, id, en[id], label)
-		}
+	for _, loc := range overlayLocales(t) {
+		t.Run(string(loc), func(t *testing.T) {
+			var tr map[string]string
+			readJSON(t, dataDir+"/i18n/"+string(loc)+"/concepts.json", &tr)
+			if len(tr) != len(ids) {
+				t.Errorf("concepts.json has %d labels for %d concepts", len(tr), len(ids))
+			}
+			for id := range tr {
+				if _, ok := ids[id]; !ok {
+					t.Errorf("concepts.json names %q, which is not a concept in the corpus", id)
+				}
+			}
+			for id := range ids {
+				label, ok := tr[id]
+				switch {
+				case !ok:
+					t.Errorf("no %s label for %s", loc, id)
+				case strings.TrimSpace(label) == "":
+					t.Errorf("empty %s label for %s", loc, id)
+				case label != strings.TrimSpace(label):
+					t.Errorf("%s: label %q has stray whitespace", id, label)
+				default:
+					checkLetters(t, loc, id, label)
+					checkCarried(t, id, en[id], label)
+				}
+			}
+		})
 	}
 }
 
-func TestRussianCourseAndDestinationText(t *testing.T) {
-	check := func(file string, ids []string) {
-		var ru map[string]planning.Text
-		readJSON(t, ruDir+"/"+file, &ru)
-		if len(ru) != len(ids) {
-			t.Errorf("%s has %d entries for %d ids", file, len(ru), len(ids))
+func TestCourseAndDestinationOverlays(t *testing.T) {
+	check := func(t *testing.T, loc i18n.Locale, file string, ids []string) {
+		var tr map[string]planning.Text
+		readJSON(t, dataDir+"/i18n/"+string(loc)+"/"+file, &tr)
+		if len(tr) != len(ids) {
+			t.Errorf("%s has %d entries for %d ids", file, len(tr), len(ids))
 		}
 		for _, id := range ids {
-			e, ok := ru[id]
+			e, ok := tr[id]
 			if !ok {
 				t.Errorf("%s: no entry for %q", file, id)
 				continue
@@ -166,11 +202,10 @@ func TestRussianCourseAndDestinationText(t *testing.T) {
 			if strings.TrimSpace(e.Name) == "" || strings.TrimSpace(e.Description) == "" {
 				t.Errorf("%s: %q has an empty name or description", file, id)
 			}
-			if !hasCyrillic(e.Name) || !hasCyrillic(e.Description) {
-				t.Errorf("%s: %q is not Russian: %+v", file, id, e)
-			}
+			checkLetters(t, loc, file+" "+id+" name", e.Name)
+			checkLetters(t, loc, file+" "+id+" description", e.Description)
 		}
-		for id := range ru {
+		for id := range tr {
 			found := false
 			for _, want := range ids {
 				found = found || want == id
@@ -190,7 +225,6 @@ func TestRussianCourseAndDestinationText(t *testing.T) {
 	if len(courseIDs) != 28 {
 		t.Fatalf("expected 28 courses, found %d", len(courseIDs))
 	}
-	check("courses.json", courseIDs)
 
 	var dests []struct{ ID string }
 	readJSON(t, dataDir+"/destinations.json", &dests)
@@ -198,7 +232,12 @@ func TestRussianCourseAndDestinationText(t *testing.T) {
 	for _, d := range dests {
 		destIDs = append(destIDs, d.ID)
 	}
-	check("destinations.json", destIDs)
+	for _, loc := range overlayLocales(t) {
+		t.Run(string(loc), func(t *testing.T) {
+			check(t, loc, "courses.json", courseIDs)
+			check(t, loc, "destinations.json", destIDs)
+		})
+	}
 }
 
 type kpStep struct {
@@ -207,8 +246,16 @@ type kpStep struct {
 	Subgoals []string `json:"subgoals"`
 }
 
-func TestRussianKPShardsMirrorTheEnglishOnes(t *testing.T) {
+func TestKPShardOverlaysMirrorTheEnglishOnes(t *testing.T) {
 	ids := corpus(t)
+	for _, loc := range overlayLocales(t) {
+		t.Run(string(loc), func(t *testing.T) { checkKPShards(t, loc, ids) })
+	}
+}
+
+func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
+	t.Helper()
+	dir := kpDir + "/" + string(loc)
 
 	// Every concept in the school domains has a translated shard, and nothing else does.
 	want := map[string]bool{}
@@ -219,14 +266,14 @@ func TestRussianKPShardsMirrorTheEnglishOnes(t *testing.T) {
 			}
 		}
 	}
-	entries, err := os.ReadDir(kpDir + "/ru")
+	entries, err := os.ReadDir(dir)
 	if err != nil {
-		t.Fatalf("read ru shards: %v", err)
+		t.Fatalf("read %s shards: %v", loc, err)
 	}
 	have := map[string]bool{}
 	for _, e := range entries {
 		if e.IsDir() || !strings.HasSuffix(e.Name(), ".json") {
-			t.Errorf("unexpected entry %q in the ru shard directory", e.Name())
+			t.Errorf("unexpected entry %q in the %s shard directory", e.Name(), loc)
 			continue
 		}
 		have[strings.TrimSuffix(e.Name(), ".json")] = true
@@ -245,51 +292,64 @@ func TestRussianKPShardsMirrorTheEnglishOnes(t *testing.T) {
 	sort.Strings(missing)
 	sort.Strings(extra)
 	if len(missing) > 0 {
-		t.Errorf("%d school-domain concepts have no Russian shard, e.g. %v", len(missing), missing[:min(5, len(missing))])
+		t.Errorf("%d school-domain concepts have no %s shard, e.g. %v", len(missing), loc, missing[:min(5, len(missing))])
 	}
 	if len(extra) > 0 {
-		t.Errorf("Russian shards for ids outside the school domains or the corpus: %v", extra[:min(5, len(extra))])
+		t.Errorf("%s shards for ids outside the school domains or the corpus: %v", loc, extra[:min(5, len(extra))])
 	}
 	if len(have) < 300 {
-		t.Errorf("only %d Russian shards found; the school domains have ~334", len(have))
+		t.Errorf("only %d %s shards found; the school domains have ~334", len(have), loc)
 	}
 
 	for id := range have {
-		var en, ru []kpStep
+		var en, tr []kpStep
 		readJSON(t, kpDir+"/"+id+".json", &en)
-		readJSON(t, kpDir+"/ru/"+id+".json", &ru)
-		if len(ru) != len(en) {
-			t.Errorf("%s: %d Russian steps for %d English ones", id, len(ru), len(en))
+		readJSON(t, dir+"/"+id+".json", &tr)
+		if len(tr) != len(en) {
+			t.Errorf("%s: %d %s steps for %d English ones", id, len(tr), loc, len(en))
 			continue
 		}
 		for i := range en {
 			where := fmt.Sprintf("%s#%d", id, i)
-			if strings.TrimSpace(ru[i].Label) == "" {
+			if strings.TrimSpace(tr[i].Label) == "" {
 				t.Errorf("%s: empty label", where)
+			} else {
+				checkLetters(t, loc, where+" label", tr[i].Label)
 			}
-			if (en[i].Section == "") != (ru[i].Section == "") {
-				t.Errorf("%s: section %q became %q; an empty section must stay empty and a set one must not be dropped", where, en[i].Section, ru[i].Section)
+			if (en[i].Section == "") != (tr[i].Section == "") {
+				t.Errorf("%s: section %q became %q; an empty section must stay empty and a set one must not be dropped", where, en[i].Section, tr[i].Section)
 			}
-			if len(ru[i].Subgoals) != len(en[i].Subgoals) {
-				t.Errorf("%s: %d Russian subgoals for %d English ones", where, len(ru[i].Subgoals), len(en[i].Subgoals))
+			if len(tr[i].Subgoals) != len(en[i].Subgoals) {
+				t.Errorf("%s: %d %s subgoals for %d English ones", where, len(tr[i].Subgoals), loc, len(en[i].Subgoals))
 				continue
 			}
-			checkCarried(t, where+" label", en[i].Label, ru[i].Label)
-			checkCarried(t, where+" section", en[i].Section, ru[i].Section)
+			checkCarried(t, where+" label", en[i].Label, tr[i].Label)
+			checkCarried(t, where+" section", en[i].Section, tr[i].Section)
 			for j := range en[i].Subgoals {
-				if strings.TrimSpace(ru[i].Subgoals[j]) == "" {
+				if strings.TrimSpace(tr[i].Subgoals[j]) == "" {
 					t.Errorf("%s subgoal %d: empty", where, j)
 				}
-				checkCarried(t, where+" subgoal", en[i].Subgoals[j], ru[i].Subgoals[j])
+				checkCarried(t, where+" subgoal", en[i].Subgoals[j], tr[i].Subgoals[j])
 			}
 		}
 	}
 }
 
-func TestOverlayLocalesAreTheSupportedOnes(t *testing.T) {
-	for _, loc := range i18n.Overlays() {
-		if _, err := os.Stat(dataDir + "/i18n/" + string(loc)); err != nil {
-			t.Errorf("supported overlay locale %q has no directory: %v", loc, err)
+// Every overlay directory belongs to a supported locale; a directory the server does not know
+// would be translated work that no learner can ever see.
+func TestOverlayDirectoriesAreSupportedLocales(t *testing.T) {
+	for _, root := range []string{dataDir + "/i18n", kpDir} {
+		entries, err := os.ReadDir(root)
+		if err != nil {
+			t.Fatal(err)
 		}
+		for _, e := range entries {
+			if e.IsDir() && !i18n.Locale(e.Name()).Valid() {
+				t.Errorf("%s/%s is not a supported locale", root, e.Name())
+			}
+		}
+	}
+	if len(overlayLocales(t)) == 0 {
+		t.Error("no overlay locale has started; the Russian overlays at least should ship")
 	}
 }

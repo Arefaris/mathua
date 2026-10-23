@@ -29,6 +29,11 @@ func TestParseAcceptLanguage(t *testing.T) {
 		{"ru;q=0.5,en;q=0.5", RU},
 		{";;;,,,", EN},
 		{"russian", EN},
+		{"uk", UK},
+		{"uk-UA", UK},
+		{"ua", UK},
+		{"uk,ru;q=0.9,en;q=0.8", UK},
+		{"ru,uk;q=0.9", RU},
 	}
 	for _, c := range cases {
 		if got := ParseAcceptLanguage(c.header); got != c.want {
@@ -38,7 +43,7 @@ func TestParseAcceptLanguage(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	for tag, want := range map[string]Locale{"ru": RU, "ru-RU": RU, "en-GB": EN, "": EN, "de": EN} {
+	for tag, want := range map[string]Locale{"ru": RU, "ru-RU": RU, "en-GB": EN, "": EN, "de": EN, "uk": UK, "uk-UA": UK, "ua": UK} {
 		if got := Parse(tag); got != want {
 			t.Errorf("Parse(%q) = %q, want %q", tag, got, want)
 		}
@@ -64,7 +69,7 @@ func TestOverlaysExcludeDefault(t *testing.T) {
 			t.Fatalf("Overlays() contains the default locale %q", l)
 		}
 	}
-	if len(Overlays()) != 1 || Overlays()[0] != RU {
-		t.Fatalf("Overlays() = %v, want [ru]", Overlays())
+	if got := Overlays(); len(got) != 2 || got[0] != RU || got[1] != UK {
+		t.Fatalf("Overlays() = %v, want [ru uk]", got)
 	}
 }

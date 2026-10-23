@@ -18,6 +18,7 @@ type Locale string
 const (
 	EN Locale = "en"
 	RU Locale = "ru"
+	UK Locale = "uk"
 )
 
 // Default is the locale of every untranslated item and of any request that does
@@ -25,7 +26,11 @@ const (
 const Default = EN
 
 // Supported lists the locales the server has translations for, English first.
-var Supported = []Locale{EN, RU}
+var Supported = []Locale{EN, RU, UK}
+
+// aliases maps tags that people and some browsers send for a language but that are not its
+// ISO 639-1 code. "ua" is the country code of Ukraine, often sent for Ukrainian by mistake.
+var aliases = map[string]Locale{"ua": UK}
 
 // Overlays are the locales that ship translation files next to the English
 // originals. English is the original, so it never has an overlay.
@@ -52,8 +57,9 @@ func (l Locale) Valid() bool {
 // String implements fmt.Stringer.
 func (l Locale) String() string { return string(l) }
 
-// Parse maps a single language tag to a supported locale. "ru", "RU" and
-// "ru-RU" are Russian; anything else, including the empty string, is Default.
+// Parse maps a single language tag to a supported locale. "ru", "RU" and "ru-RU" are
+// Russian; "uk", "uk-UA" and "ua" are Ukrainian; anything else, including the empty string,
+// is Default.
 func Parse(tag string) Locale {
 	if l, ok := match(tag); ok {
 		return l
@@ -71,6 +77,9 @@ func match(tag string) (Locale, bool) {
 		if string(s) == tag {
 			return s, true
 		}
+	}
+	if l, ok := aliases[tag]; ok {
+		return l, true
 	}
 	return "", false
 }

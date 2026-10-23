@@ -34,37 +34,57 @@ func (s *Server) localizeEligibility(r *http.Request, el *engine.ConceptEligibil
 	}
 }
 
-// recommendationRU words a recommendation card in Russian, keyed by the English badge. Each
-// badge belongs to exactly one wording in scheduler and engine recommend.go, so the badge
-// identifies the whole card; a badge missing here keeps its English wording.
-var recommendationRU = map[string]struct{ badge, detail, cta string }{
-	"Recommended":   {"Рекомендуем", "Короткая адаптивная диагностика покажет, с чего начать", "Пройти диагностику →"},
-	"Mastery check": {"Проверка освоения", fmt.Sprintf("С прошлой проверки вы набрали %d XP — пройдите её, чтобы закрепить изученное", xp.QuizGateXP), "Пройти проверку →"},
-	"All learned":   {"Всё изучено", "Сейчас ничего не нужно повторять — на графе видно, что строится на ваших темах", "Открыть граф →"},
-	"Paused":        {"На паузе", "Повторения отложены, пока вы не продолжите, — темы к повторению скрыты", "Изменить или продолжить →"},
-	"Review":        {"Повторение", "Пора проверить то, что вы уже изучили", "Повторить →"},
-	"Practice":      {"Практика", "Стоит попробовать ещё раз — эта тема пока не закрепилась", "Продолжить практику →"},
-	"New":           {"Новая тема", "Можно начинать — всё, что для неё нужно, вы уже прошли", "Начать →"},
+type cardWording struct{ badge, detail, cta string }
+
+// recommendationWording words a recommendation card in each translated language, keyed by the
+// English badge. Each badge belongs to exactly one wording in scheduler and engine
+// recommend.go, so the badge identifies the whole card; a badge missing here keeps its English
+// wording.
+var recommendationWording = map[i18n.Locale]map[string]cardWording{
+	i18n.RU: {
+		"Recommended":   {"Рекомендуем", "Короткая адаптивная диагностика покажет, с чего начать", "Пройти диагностику →"},
+		"Mastery check": {"Проверка освоения", fmt.Sprintf("С прошлой проверки вы набрали %d XP — пройдите её, чтобы закрепить изученное", xp.QuizGateXP), "Пройти проверку →"},
+		"All learned":   {"Всё изучено", "Сейчас ничего не нужно повторять — на графе видно, что строится на ваших темах", "Открыть граф →"},
+		"Paused":        {"На паузе", "Повторения отложены, пока вы не продолжите, — темы к повторению скрыты", "Изменить или продолжить →"},
+		"Review":        {"Повторение", "Пора проверить то, что вы уже изучили", "Повторить →"},
+		"Practice":      {"Практика", "Стоит попробовать ещё раз — эта тема пока не закрепилась", "Продолжить практику →"},
+		"New":           {"Новая тема", "Можно начинать — всё, что для неё нужно, вы уже прошли", "Начать →"},
+	},
+	i18n.UK: {
+		"Recommended":   {"Рекомендуємо", "Коротка адаптивна діагностика покаже, з чого почати", "Пройти діагностику →"},
+		"Mastery check": {"Перевірка засвоєння", fmt.Sprintf("Від останньої перевірки ви набрали %d XP — пройдіть її, щоб закріпити вивчене", xp.QuizGateXP), "Пройти перевірку →"},
+		"All learned":   {"Усе вивчено", "Зараз нічого не потрібно повторювати — на графі видно, що будується на ваших темах", "Відкрити граф →"},
+		"Paused":        {"На паузі", "Повторення відкладено, доки ви не продовжите, — теми для повторення приховано", "Змінити або продовжити →"},
+		"Review":        {"Повторення", "Час перевірити те, що ви вже вивчили", "Повторити →"},
+		"Practice":      {"Практика", "Варто спробувати ще раз — ця тема поки не закріпилася", "Продовжити практику →"},
+		"New":           {"Нова тема", "Можна починати — усе, що для неї потрібно, ви вже пройшли", "Почати →"},
+	},
 }
 
-// recommendationTitlesRU names the cards that are not a concept and so carry no concept title;
+// recommendationTitles names the cards that are not a concept and so carry no concept title;
 // the client would otherwise show the bare id ("diagnostic").
-var recommendationTitlesRU = map[string]string{
-	"diagnostic":    "Диагностика",
-	"mastery-check": "Проверка освоения",
-	"graph":         "Граф тем",
-	"paused":        "Пауза",
+var recommendationTitles = map[i18n.Locale]map[string]string{
+	i18n.RU: {
+		"diagnostic":    "Диагностика",
+		"mastery-check": "Проверка освоения",
+		"graph":         "Граф тем",
+		"paused":        "Пауза",
+	},
+	i18n.UK: {
+		"diagnostic":    "Діагностика",
+		"mastery-check": "Перевірка засвоєння",
+		"graph":         "Граф тем",
+		"paused":        "Пауза",
+	},
 }
 
 // localizeRecommendations relabels the concept titles of a recommendation in place and, for a
-// Russian request, its badge, detail and call to action.
+// translated language, its badge, detail and call to action.
 func (s *Server) localizeRecommendations(r *http.Request, resp *scheduler.RecommendationResponse) {
 	dag, loc := s.eng.GetDAG(), localeOf(r)
 	localize := func(rec *scheduler.Recommendation) {
 		rec.ConceptTitle = dag.LabelByID(rec.ConceptID, loc, rec.ConceptTitle)
-		if loc == i18n.RU {
-			wordRecommendationRU(rec)
-		}
+		wordRecommendation(rec, loc)
 	}
 	if resp.Primary != nil {
 		localize(resp.Primary)
@@ -74,13 +94,13 @@ func (s *Server) localizeRecommendations(r *http.Request, resp *scheduler.Recomm
 	}
 }
 
-// wordRecommendationRU swaps a card's English wording for the Russian one.
-func wordRecommendationRU(rec *scheduler.Recommendation) {
-	if w, ok := recommendationRU[rec.Badge]; ok {
+// wordRecommendation swaps a card's English wording for the one in loc, if there is one.
+func wordRecommendation(rec *scheduler.Recommendation, loc i18n.Locale) {
+	if w, ok := recommendationWording[loc][rec.Badge]; ok {
 		rec.Badge, rec.Detail, rec.CTA = w.badge, w.detail, w.cta
 	}
 	if rec.ConceptTitle == "" {
-		rec.ConceptTitle = recommendationTitlesRU[rec.ID]
+		rec.ConceptTitle = recommendationTitles[loc][rec.ID]
 	}
 }
 
