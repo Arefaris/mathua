@@ -618,16 +618,37 @@ func (g *factorDiffSquaresGen) Generate(ctx generator.GeneratorContext) generato
 type factorACMethodGen struct{}
 
 func (g *factorACMethodGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	// The concept is "ax^2 + bx + c by the AC method", so the leading
+	// coefficient must not be 1, and the printed trinomial must be the product
+	// the answer claims. It used to draw the leading coefficient as a sum
+	// offset (b = a + r1*r2) while answering (x + r1)(x + r2), so x^2 + 9x + 1
+	// was served with (x+1)(x+1), which multiplies out to x^2 + 2x + 1. Report
+	// 196 quoted exactly that pair.
+	//
+	// (ax + q)(x + s) = ax^2 + (as + q)x + qs, and the two numbers the method
+	// looks for are as and q: they multiply to ac = a*qs and add to b.
 	a := rand.Intn(4) + 2
-	r1 := rand.Intn(4) + 1
-	r2 := rand.Intn(4) + 1
-	b := a + r1*r2
-	c := r1 * r2
+	q := rand.Intn(5) + 1
+	s := rand.Intn(5) + 1
+	b := a*s + q
+	c := q * s
+	ac := a * c
 	return generator.Problem{
-		Question:    fmt.Sprintf("Factor: \\(x^{2} + %dx + %d\\)", b, c),
-		Answer:      fmt.Sprintf("(x + %d)(x + %d)", r1, r2),
-		Explanation: fmt.Sprintf("Find numbers multiplying to %d and adding to %d: %d and %d.", c, b, r1, r2),
-		Facts:       map[string]string{"q": formatQuadratic(b, c), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
+		Question: fmt.Sprintf("Factor: \\(%dx^{2} + %dx + %d\\)", a, b, c),
+		Answer:   fmt.Sprintf("(%dx + %d)(x + %d)", a, q, s),
+		Explanation: fmt.Sprintf("Multiply the leading coefficient by the constant: \\(%d \\times %d = %d\\). "+
+			"The two numbers that multiply to %d and add to %d are %d and %d. "+
+			"Split the middle term and group: \\(%dx^{2} + %dx + %dx + %d = %dx(x + %d) + %d(x + %d) = (%dx + %d)(x + %d)\\).",
+			a, c, ac, ac, b, a*s, q, a, a*s, q, c, a, s, q, s, a, q, s),
+		Facts: map[string]string{
+			"a":  strconv.Itoa(a),
+			"b":  strconv.Itoa(b),
+			"c":  strconv.Itoa(c),
+			"ac": strconv.Itoa(ac),
+			"m":  strconv.Itoa(a * s),
+			"n":  strconv.Itoa(q),
+			"s":  strconv.Itoa(s),
+		},
 	}
 }
 

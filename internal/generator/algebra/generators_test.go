@@ -269,3 +269,48 @@ func TestPolyRootsPrintsReadableCoefficients(t *testing.T) {
 		}
 	}
 }
+
+// Report 196: the AC-method generator served x^2 + 9x + 1 with (x+1)(x+1),
+// which multiplies out to x^2 + 2x + 1. The concept is "ax^2 + bx + c", so the
+// leading coefficient must also not be 1: otherwise the "AC" step is a no-op.
+func TestACMethodTrinomialMultipliesOut(t *testing.T) {
+	q := regexp.MustCompile(`^Factor: \\\((\d+)x\^\{2\} \+ (\d+)x \+ (\d+)\\\)$`)
+	ans := regexp.MustCompile(`^\((\d+)x \+ (\d+)\)\(x \+ (\d+)\)$`)
+	g := &factorACMethodGen{}
+	wideLead := 0
+	for i := 0; i < 300; i++ {
+		p := g.Generate(generator.GeneratorContext{Seed: int64(i)})
+		qm := q.FindStringSubmatch(p.Question)
+		if qm == nil {
+			t.Fatalf("question not in ax^2 + bx + c form: %q", p.Question)
+		}
+		am := ans.FindStringSubmatch(p.Answer)
+		if am == nil {
+			t.Fatalf("answer not in factored form: %q", p.Answer)
+		}
+		a, _ := strconv.Atoi(qm[1])
+		b, _ := strconv.Atoi(qm[2])
+		c, _ := strconv.Atoi(qm[3])
+		fa, _ := strconv.Atoi(am[1])
+		fq, _ := strconv.Atoi(am[2])
+		fs, _ := strconv.Atoi(am[3])
+		if a != fa {
+			t.Fatalf("question leads with %d but the answer leads with %d: %q", a, fa, p.Question)
+		}
+		if a > 1 {
+			wideLead++
+		}
+		// (ax + q)(x + s) = ax^2 + (as + q)x + qs
+		if b != a*fs+fq || c != fq*fs {
+			t.Fatalf("printed trinomial does not multiply out: %q = %q gives b=%d c=%d, want b=%d c=%d",
+				p.Question, p.Answer, a*fs+fq, fq*fs, b, c)
+		}
+		// The AC step needs a pair multiplying to ac and adding to b.
+		if a*fs+fq != b || (a*fs)*fq != a*c {
+			t.Fatalf("AC pair as=%d and q=%d do not fit ac=%d and b=%d", a*fs, fq, a*c, b)
+		}
+	}
+	if wideLead != 300 {
+		t.Fatalf("only %d of 300 draws had a leading coefficient above 1", wideLead)
+	}
+}
