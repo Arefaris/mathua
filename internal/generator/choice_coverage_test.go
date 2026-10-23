@@ -150,17 +150,12 @@ func TestBooleanAnswersAlwaysServeOptions(t *testing.T) {
 // there is nothing to type that the choice grader will match. Report 28 was
 // exactly this — tan(60) answered with a radical and no options to tap.
 //
-// latexOnlyOptions is the backlog this guard found and does not yet fix: five
-// multiple-choice concepts still answer in LaTeX with no option list, so a
-// learner has nothing to tap. Each needs its own option set, which is content
-// work rather than a sweep. Remove an id when it serves options.
-var latexOnlyOptions = map[string]bool{
-	"alg.ineq.interval":       true,
-	"trig.adv.inverse":        true,
-	"trig.basics.unit_circle": true,
-	"trig.graph.cos":          true,
-	"trig.graph.sin":          true,
-}
+// latexOnlyOptions is the backlog this guard found: multiple-choice concepts
+// that answer in LaTeX with no option list, so a learner has nothing to tap.
+// It is empty now. Add an id here only while a newly found concept is being
+// fixed, and remove it when the concept serves options, because a permanent
+// entry turns the guard off for the concept it exists to protect.
+var latexOnlyOptions = map[string]bool{}
 
 func TestMultipleChoiceSymbolAnswersServeOptions(t *testing.T) {
 	dag, err := concepts.LoadDir("../../data/concepts")

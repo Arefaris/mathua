@@ -163,19 +163,52 @@ func (g *unitCircleGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	angle := fmt.Sprintf("%d^{\\circ}", a.deg)
 	label := fmt.Sprintf("\\(%s\\)", angle)
 	if rand.Intn(2) == 0 {
-		return generator.Problem{
-			Question:    fmt.Sprintf("What is \\(\\sin(%s)\\)?", angle),
-			Answer:      a.sin,
-			Explanation: fmt.Sprintf("On the unit circle, \\(\\sin(%s) = %s\\).", angle, bare(a.sin)),
-			Facts:       map[string]string{"label": label, "val": a.sin, "fn": "\\sin"},
+		return unitCircleProblem(angle, fmt.Sprintf("What is \\(\\sin(%s)\\)?", angle), a.sin, "\\sin", label)
+	}
+	return unitCircleProblem(angle, fmt.Sprintf("What is \\(\\cos(%s)\\)?", angle), a.cos, "\\cos", label)
+}
+
+// unitCirclePlainValues are the answers a unit-circle question can have, written
+// the way a learner reads them. They are option labels, so they carry no math
+// delimiters: the option row renders plain text.
+var unitCirclePlainValues = []string{
+	"-1", "-√3/2", "-√2/2", "-1/2", "0", "1/2", "√2/2", "√3/2", "1",
+}
+
+// plainUnitValue turns a table value into its plain label. The table writes
+// radicals as LaTeX because the question embeds them inside a math region.
+func plainUnitValue(v string) string {
+	v = bare(v)
+	v = strings.ReplaceAll(v, "\\sqrt{2}", "√2")
+	v = strings.ReplaceAll(v, "\\sqrt{3}", "√3")
+	return v
+}
+
+// unitCircleDistractors returns three other values from the same family, so the
+// choice tests which coordinate the angle gives rather than which symbol looks
+// familiar.
+func unitCircleDistractors(want string) []string {
+	pool := make([]string, 0, len(unitCirclePlainValues))
+	for _, v := range unitCirclePlainValues {
+		if v != want {
+			pool = append(pool, v)
 		}
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is \\(\\cos(%s)\\)?", angle),
-		Answer:      a.cos,
-		Explanation: fmt.Sprintf("On the unit circle, \\(\\cos(%s) = %s\\).", angle, bare(a.cos)),
-		Facts:       map[string]string{"label": label, "val": a.cos, "fn": "\\cos"},
-	}
+	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	return pool[:3]
+}
+
+// unitCircleProblem serves the value as options because a radical and a fraction
+// slash have no key on a phone keypad: report 28 was a learner who could not
+// enter the answer at all. The answer text is the plain value the learner reads.
+// Facts["val"] keeps its math delimiters because the solution schema quotes it
+// inside prose ("its vertical coordinate is [[val]]").
+func unitCircleProblem(angle, question, value, fn, label string) generator.Problem {
+	plain := plainUnitValue(value)
+	p := generator.MultipleChoice(question, plain, unitCircleDistractors(plain)...)
+	p.Explanation = fmt.Sprintf("On the unit circle, \\(%s(%s) = %s\\).", fn, angle, bare(value))
+	p.Facts = map[string]string{"label": label, "val": value, "fn": fn}
+	return p
 }
 
 type sinCosDefGen struct{}
@@ -435,11 +468,37 @@ func (g *graphSinGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		{"Where does \\(\\sin(x)\\) start on the \\(y\\)-axis?", "0", "\\(\\sin(0) = 0\\)"},
 	}
 	q := questions[rand.Intn(len(questions))]
-	return generator.Problem{
-		Question:    q.q,
-		Answer:      q.a,
-		Explanation: q.e,
+	return graphTrigProblem(q.q, q.a, q.e)
+}
+
+// graphNumberValues and graphDegreeValues are the answer families a sine or
+// cosine graph question draws from. Options stay inside one family so a period
+// question never offers "-1" beside "360°".
+var graphNumberValues = []string{"-1", "0", "1", "2"}
+var graphDegreeValues = []string{"90°", "180°", "270°", "360°"}
+
+// graphTrigProblem serves the value as options because a degree sign has no key
+// on a phone keypad, and only one of these questions asks for a number a learner
+// could type anyway.
+func graphTrigProblem(question, answer, explanation string) generator.Problem {
+	plain := strings.ReplaceAll(bare(answer), "^{\\circ}", "°")
+	p := generator.MultipleChoice(question, plain, graphValueDistractors(plain)...)
+	p.Explanation = explanation
+	return p
+}
+
+func graphValueDistractors(want string) []string {
+	pool := graphNumberValues
+	if strings.HasSuffix(want, "°") {
+		pool = graphDegreeValues
 	}
+	out := make([]string, 0, len(pool))
+	for _, v := range pool {
+		if v != want {
+			out = append(out, v)
+		}
+	}
+	return out
 }
 
 type graphCosGen struct{}
@@ -460,11 +519,7 @@ func (g *graphCosGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		{"Where does \\(\\cos(x)\\) start on the \\(y\\)-axis?", "1", "\\(\\cos(0) = 1\\)"},
 	}
 	q := questions[rand.Intn(len(questions))]
-	return generator.Problem{
-		Question:    q.q,
-		Answer:      q.a,
-		Explanation: q.e,
-	}
+	return graphTrigProblem(q.q, q.a, q.e)
 }
 
 type periodGen struct{}
@@ -528,11 +583,28 @@ func (g *inverseGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 		{"\\(\\arccos(-1/2)\\)", "-1/2", "\\(120^{\\circ}\\)", "\\(\\arccos(-1/2) = 120^{\\circ}\\)"},
 	}
 	e := table[rand.Intn(len(table))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is %s?", e.f),
-		Answer:      e.result,
-		Explanation: e.desc,
+	// The answer is an angle, and a degree sign has no key on a phone keypad, so
+	// it is served as a tap. Report 28 was the same defect on special angles.
+	answer := strings.ReplaceAll(bare(e.result), "^{\\circ}", "°")
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What is %s?", e.f), answer, inverseAngleDistractors(answer)...)
+	p.Explanation = e.desc
+	return p
+}
+
+// inverseAngleValues are the principal angles an inverse-function question can
+// return, including the negative arcsin value.
+var inverseAngleValues = []string{"-30°", "0°", "30°", "45°", "60°", "90°", "120°"}
+
+func inverseAngleDistractors(want string) []string {
+	pool := make([]string, 0, len(inverseAngleValues))
+	for _, v := range inverseAngleValues {
+		if v != want {
+			pool = append(pool, v)
+		}
 	}
+	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	return pool[:3]
 }
 
 type lawSinesGen struct{}

@@ -1519,24 +1519,48 @@ func (g *ineqIntervalGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	b := a + rand.Intn(5) + 2
 	type interval struct {
 		q, a, key string
+		// others are the brackets that read almost the same, so a tap tests
+		// which endpoint the inequality includes rather than which symbol
+		// shape the learner happened to guess.
+		others []string
 	}
 	// key is published as its own fact so an authored schema can key one step
 	// per bracket shape. A shared "shape" fact would be present on every
 	// question, so every step would render every time.
 	types := []interval{
-		{fmt.Sprintf("Write in interval notation: \\%d \\leq x < %d\\).", a, b), fmt.Sprintf("[%d,%d)", a, b), "a_left_closed"},
-		{fmt.Sprintf("Write in interval notation: \\(x > %d\\).", a), fmt.Sprintf("(%d,\\infty)", a), "a_right_unbounded"},
-		{fmt.Sprintf("Write in interval notation: \\(x \\leq %d\\).", b), fmt.Sprintf("(-\\infty,%d]", b), "a_left_unbounded"},
-		{fmt.Sprintf("Write in interval notation: \\%d < x < %d\\).", a, b), fmt.Sprintf("(%d,%d)", a, b), "a_both_open"},
+		{
+			fmt.Sprintf("Write in interval notation: \\(%d \\leq x < %d\\).", a, b),
+			fmt.Sprintf("[%d, %d)", a, b),
+			"a_left_closed",
+			[]string{fmt.Sprintf("(%d, %d)", a, b), fmt.Sprintf("[%d, %d]", a, b), fmt.Sprintf("(%d, %d]", a, b)},
+		},
+		{
+			fmt.Sprintf("Write in interval notation: \\(x > %d\\).", a),
+			fmt.Sprintf("(%d, ∞)", a),
+			"a_right_unbounded",
+			[]string{fmt.Sprintf("[%d, ∞)", a), fmt.Sprintf("(-∞, %d)", a), fmt.Sprintf("(-∞, %d]", a)},
+		},
+		{
+			fmt.Sprintf("Write in interval notation: \\(x \\leq %d\\).", b),
+			fmt.Sprintf("(-∞, %d]", b),
+			"a_left_unbounded",
+			[]string{fmt.Sprintf("(-∞, %d)", b), fmt.Sprintf("[%d, ∞)", b), fmt.Sprintf("(%d, ∞)", b)},
+		},
+		{
+			fmt.Sprintf("Write in interval notation: \\(%d < x < %d\\).", a, b),
+			fmt.Sprintf("(%d, %d)", a, b),
+			"a_both_open",
+			[]string{fmt.Sprintf("[%d, %d]", a, b), fmt.Sprintf("[%d, %d)", a, b), fmt.Sprintf("(%d, %d]", a, b)},
+		},
 	}
 	e := types[rand.Intn(len(types))]
-	facts := map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), e.key: "yes"}
-	return generator.Problem{
-		Question:    e.q,
-		Answer:      e.a,
-		Explanation: fmt.Sprintf("The interval notation for this set is %s.", e.a),
-		Facts:       facts,
-	}
+	// The answer is served as options because a bracket pair cannot be typed on
+	// a phone keypad: `[2, 5)` has no key, and the free-text grader would have to
+	// parse bracket syntax to accept it.
+	p := generator.MultipleChoice(e.q, e.a, e.others...)
+	p.Explanation = fmt.Sprintf("The interval notation for this set is %s.", e.a)
+	p.Facts = map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), e.key: "yes"}
+	return p
 }
 
 type ineqIrrationalGen struct{}
