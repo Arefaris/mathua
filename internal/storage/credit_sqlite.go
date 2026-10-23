@@ -125,10 +125,14 @@ func (s *SQLiteStore) AllocateCredit(studentID, attemptID string, epoch int64, c
 			if err != nil {
 				return err
 			}
-			if targetEpoch != epoch {
+			if epoch > 0 && targetEpoch != epoch {
 				return fmt.Errorf("%w: target %s is at epoch %d, not %d", ErrCreditClosedEpoch, a.ConceptID, targetEpoch, epoch)
 			}
-			acc, err := s.accountTx(ctx, conn, studentID, a.ConceptID, epoch)
+			useEpoch := targetEpoch
+			if epoch > 0 {
+				useEpoch = epoch
+			}
+			acc, err := s.accountTx(ctx, conn, studentID, a.ConceptID, useEpoch)
 			if err != nil {
 				return err
 			}
@@ -148,8 +152,30 @@ func (s *SQLiteStore) AllocateCredit(studentID, attemptID string, epoch int64, c
 			if want := (acc.RetainedUnits + retained) / repetition.Micro; want > int64(acc.Banked) {
 				banked = want - int64(acc.Banked)
 			}
+
+			// One implicit advance per review cycle. A learner who answers ten
+			// questions in one sitting earns ten units against this target, and
+			// each one used to become its own ordinal, which ProjectCredit then
+			// chained into ten spaced reviews: a three-day interval reached
+			// 30,595 days. The cycle closes when the review this credit stands
+			// for is consumed (see ProjectCredit), so at most one ordinal may be
+			// banked per epoch. Refused units are recorded, not dropped.
+			var advanced int
+			if err := conn.QueryRowContext(ctx, `
+				SELECT COUNT(*) FROM implicit_credit_ordinals
+				WHERE student_id = ? AND target_concept_id = ? AND credit_epoch = ?
+				  AND state IN ('banked', 'projected')
+			`, studentID, a.ConceptID, useEpoch).Scan(&advanced); err != nil {
+				return fmt.Errorf("credit: cycle check: %w", err)
+			}
+			if advanced > 0 && banked > 0 {
+				discarded += retained
+				retained = 0
+				banked = 0
+				reason = "cycle_already_advanced"
+			}
 			ev := CreditEvent{
-				AttemptID: attemptID, ConceptID: a.ConceptID, Epoch: epoch,
+				AttemptID: attemptID, ConceptID: a.ConceptID, Epoch: useEpoch,
 				ScaledUnits: a.Units, RetainedUnits: retained, DiscardedUnits: discarded,
 				DiscardReason: reason, Banked: int(banked),
 			}
@@ -159,7 +185,7 @@ func (s *SQLiteStore) AllocateCredit(studentID, attemptID string, epoch int64, c
 					 scaled_units, retained_units, discarded_units, discard_reason, created_at)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 				ON CONFLICT(student_id, source_attempt_id, target_concept_id) DO NOTHING
-			`, studentID, attemptID, a.ConceptID, epoch, a.Units, retained, discarded, reason, time.Now().UTC().UnixNano()); err != nil {
+			`, studentID, attemptID, a.ConceptID, useEpoch, a.Units, retained, discarded, reason, time.Now().UTC().UnixNano()); err != nil {
 				return fmt.Errorf("credit: insert event: %w", err)
 			}
 			for i := int64(0); i < banked; i++ {
@@ -167,7 +193,7 @@ func (s *SQLiteStore) AllocateCredit(studentID, attemptID string, epoch int64, c
 					INSERT INTO implicit_credit_ordinals
 						(student_id, target_concept_id, credit_epoch, ordinal, state, banked_at, attempts)
 					VALUES (?, ?, ?, ?, 'banked', ?, 0)
-				`, studentID, a.ConceptID, epoch, int64(acc.Banked)+i+1, time.Now().UTC().UnixNano()); err != nil {
+				`, studentID, a.ConceptID, useEpoch, int64(acc.Banked)+i+1, time.Now().UTC().UnixNano()); err != nil {
 					return fmt.Errorf("credit: insert ordinal: %w", err)
 				}
 			}
@@ -236,6 +262,13 @@ func (s *SQLiteStore) AccountOf(studentID, conceptID string, epoch int64) (Credi
 		return CreditAccount{}, err
 	}
 	defer conn.Close()
+	if epoch <= 0 {
+		var err error
+		epoch, err = s.targetEpoch(conn, ctx, studentID, conceptID)
+		if err != nil {
+			return CreditAccount{}, err
+		}
+	}
 	return s.accountTx(ctx, conn, studentID, conceptID, epoch)
 }
 
@@ -246,6 +279,13 @@ func (s *SQLiteStore) ProjectCredit(studentID, conceptID string, epoch int64, st
 	var out []CreditOrdinal
 	err := s.runImmediate(context.Background(), func(conn *sql.Conn) error {
 		ctx := context.Background()
+		if epoch <= 0 {
+			var err error
+			epoch, err = s.targetEpoch(conn, ctx, studentID, conceptID)
+			if err != nil {
+				return err
+			}
+		}
 		var due sql.NullString
 		if err := conn.QueryRowContext(ctx, `
 			SELECT next_review_due FROM concept_progress WHERE student_id = ? AND concept_id = ?
@@ -353,6 +393,25 @@ func (s *SQLiteStore) ProjectCredit(studentID, conceptID string, epoch int64, st
 		if !nowDue.Valid || nowDue.String != baseline {
 			return fmt.Errorf("%w: was %q, now %q", ErrCreditDueConflict, baseline, nowDue.String)
 		}
+
+		// The review this chain was built for is now the evidence for this cycle,
+		// so the cycle closes: the next implicit credit may bank once this review
+		// is next due. Without this the epoch would stay at 1 forever and the
+		// guard in allocate would allow one implicit advance in a lifetime.
+		// Only a call that actually consumed an ordinal closes the cycle. A
+		// retry with nothing banked must not advance the epoch again, or a
+		// repeated projection would walk the cycle forward for free.
+		if _, err := conn.ExecContext(ctx, `
+			UPDATE implicit_credit_targets SET credit_epoch = ?
+			WHERE student_id = ? AND target_concept_id = ? AND credit_epoch = ?
+			  AND EXISTS (
+				SELECT 1 FROM implicit_credit_ordinals
+				WHERE student_id = ? AND target_concept_id = ? AND credit_epoch = ?
+				  AND state = 'projected'
+			  )
+		`, epoch+1, studentID, conceptID, epoch, studentID, conceptID, epoch); err != nil {
+			return fmt.Errorf("credit: advance epoch: %w", err)
+		}
 		return nil
 	})
 	return out, err
@@ -430,4 +489,33 @@ func (s *SQLiteStore) VoidCreditEvent(studentID, attemptID, conceptID, reason st
 		}
 		return nil
 	})
+}
+
+func (s *SQLiteStore) GetBankedOrdinals(studentID string) (map[string]int, error) {
+	ctx := context.Background()
+	conn, err := s.db.Conn(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+	rows, err := conn.QueryContext(ctx, `
+		SELECT target_concept_id, COUNT(*)
+		FROM implicit_credit_ordinals
+		WHERE student_id = ? AND state = 'banked'
+		GROUP BY target_concept_id
+	`, studentID)
+	if err != nil {
+		return nil, fmt.Errorf("credit: get banked ordinals: %w", err)
+	}
+	defer rows.Close()
+	out := make(map[string]int)
+	for rows.Next() {
+		var cid string
+		var count int
+		if err := rows.Scan(&cid, &count); err != nil {
+			return nil, err
+		}
+		out[cid] = count
+	}
+	return out, rows.Err()
 }

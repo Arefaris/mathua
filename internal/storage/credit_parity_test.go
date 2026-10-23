@@ -112,7 +112,7 @@ func TestCreditParity(t *testing.T) {
 				t.Errorf("projection retry: %v", err)
 			}
 
-			if _, _, err := credit.AllocateCredit(stu.ID, tag+":2", 1, []CreditCandidate{{ConceptID: "a", RawUnits: 500_000}}); err != nil {
+			if _, _, err := credit.AllocateCredit(stu.ID, tag+":2", 2, []CreditCandidate{{ConceptID: "a", RawUnits: 500_000}}); err != nil {
 				t.Fatalf("second allocate: %v", err)
 			}
 			if err := credit.VoidCreditEvent(stu.ID, tag+":1", "a", "test"); err == nil {
@@ -123,7 +123,7 @@ func TestCreditParity(t *testing.T) {
 			}
 
 			next, err := credit.ResetCreditEpoch(stu.ID, "a")
-			if err != nil || next != 2 {
+			if err != nil || next != 3 {
 				t.Fatalf("reset = %d err=%v", next, err)
 			}
 			// Projection already consumed the only whole repetition, so reset has

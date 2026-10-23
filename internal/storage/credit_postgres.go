@@ -115,10 +115,14 @@ func (s *PostgresStore) AllocateCredit(studentID, attemptID string, epoch int64,
 		if err != nil {
 			return CreditAllocation{}, false, err
 		}
-		if targetEpoch != epoch {
+		if epoch > 0 && targetEpoch != epoch {
 			return CreditAllocation{}, false, fmt.Errorf("%w: target %s is at epoch %d, not %d", ErrCreditClosedEpoch, a.ConceptID, targetEpoch, epoch)
 		}
-		acc, err := s.pgAccount(ctx, tx, studentID, a.ConceptID, epoch)
+		useEpoch := targetEpoch
+		if epoch > 0 {
+			useEpoch = epoch
+		}
+		acc, err := s.pgAccount(ctx, tx, studentID, a.ConceptID, useEpoch)
 		if err != nil {
 			return CreditAllocation{}, false, err
 		}
@@ -138,13 +142,34 @@ func (s *PostgresStore) AllocateCredit(studentID, attemptID string, epoch int64,
 		if want := (acc.RetainedUnits + retained) / repetition.Micro; want > int64(acc.Banked) {
 			banked = want - int64(acc.Banked)
 		}
+
+		// One implicit advance per review cycle. Ten answers in one sitting earn
+		// ten units against this target, and each used to become its own ordinal,
+		// which ProjectCredit chained into ten spaced reviews: a three-day
+		// interval reached 30,595 days. The cycle closes when the review this
+		// credit stands for is consumed, so at most one ordinal may be banked per
+		// epoch. Refused units are recorded, not dropped.
+		var advanced int
+		if err := tx.QueryRowContext(ctx, `
+			SELECT COUNT(*) FROM implicit_credit_ordinals
+			WHERE student_id = $1 AND target_concept_id = $2 AND credit_epoch = $3
+			  AND state IN ('banked', 'projected')
+		`, studentID, a.ConceptID, useEpoch).Scan(&advanced); err != nil {
+			return CreditAllocation{}, false, fmt.Errorf("credit: cycle check: %w", err)
+		}
+		if advanced > 0 && banked > 0 {
+			discarded += retained
+			retained = 0
+			banked = 0
+			reason = "cycle_already_advanced"
+		}
 		if _, err := tx.ExecContext(ctx, `
 			INSERT INTO implicit_credit_events
 				(student_id, source_attempt_id, target_concept_id, credit_epoch,
 				 scaled_units, retained_units, discarded_units, discard_reason, created_at)
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 			ON CONFLICT (student_id, source_attempt_id, target_concept_id) DO NOTHING
-		`, studentID, attemptID, a.ConceptID, epoch, a.Units, retained, discarded, reason, time.Now().UTC().UnixNano()); err != nil {
+		`, studentID, attemptID, a.ConceptID, useEpoch, a.Units, retained, discarded, reason, time.Now().UTC().UnixNano()); err != nil {
 			return CreditAllocation{}, false, fmt.Errorf("credit: insert event: %w", err)
 		}
 		for i := int64(0); i < banked; i++ {
@@ -152,12 +177,12 @@ func (s *PostgresStore) AllocateCredit(studentID, attemptID string, epoch int64,
 				INSERT INTO implicit_credit_ordinals
 					(student_id, target_concept_id, credit_epoch, ordinal, state, banked_at, attempts)
 				VALUES ($1, $2, $3, $4, 'banked', $5, 0)
-			`, studentID, a.ConceptID, epoch, int64(acc.Banked)+i+1, time.Now().UTC().UnixNano()); err != nil {
+			`, studentID, a.ConceptID, useEpoch, int64(acc.Banked)+i+1, time.Now().UTC().UnixNano()); err != nil {
 				return CreditAllocation{}, false, fmt.Errorf("credit: insert ordinal: %w", err)
 			}
 		}
 		out.Events = append(out.Events, CreditEvent{
-			AttemptID: attemptID, ConceptID: a.ConceptID, Epoch: epoch,
+			AttemptID: attemptID, ConceptID: a.ConceptID, Epoch: useEpoch,
 			ScaledUnits: a.Units, RetainedUnits: retained, DiscardedUnits: discarded,
 			DiscardReason: reason, Banked: int(banked),
 		})
@@ -201,7 +226,22 @@ func (s *PostgresStore) pgReplayAllocation(ctx context.Context, tx *sql.Tx, stud
 }
 
 func (s *PostgresStore) AccountOf(studentID, conceptID string, epoch int64) (CreditAccount, error) {
-	return s.pgAccount(context.Background(), s.db, studentID, conceptID, epoch)
+	ctx := context.Background()
+	if epoch <= 0 {
+		tx, err := s.db.BeginTx(ctx, nil)
+		if err != nil {
+			return CreditAccount{}, err
+		}
+		defer tx.Rollback()
+		epoch, err = s.pgTargetEpoch(ctx, tx, studentID, conceptID)
+		if err != nil {
+			return CreditAccount{}, err
+		}
+		if err := tx.Commit(); err != nil {
+			return CreditAccount{}, err
+		}
+	}
+	return s.pgAccount(ctx, s.db, studentID, conceptID, epoch)
 }
 
 func (s *PostgresStore) ProjectCredit(studentID, conceptID string, epoch int64, stepDays int, now time.Time) ([]CreditOrdinal, error) {
@@ -214,6 +254,14 @@ func (s *PostgresStore) ProjectCredit(studentID, conceptID string, epoch int64, 
 		return nil, err
 	}
 	defer tx.Rollback()
+
+	if epoch <= 0 {
+		var err error
+		epoch, err = s.pgTargetEpoch(ctx, tx, studentID, conceptID)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	var due sql.NullString
 	if err := tx.QueryRowContext(ctx, `
@@ -323,6 +371,24 @@ func (s *PostgresStore) ProjectCredit(studentID, conceptID string, epoch int64, 
 	if !nowDue.Valid || nowDue.String != baseline {
 		return nil, fmt.Errorf("%w: was %q, now %q", ErrCreditDueConflict, baseline, nowDue.String)
 	}
+	// The review this chain was built for is now this cycle's evidence, so the
+	// cycle closes: the next implicit credit may bank once the review is next
+	// due. Without this the epoch would stay at 1 and the guard in allocate would
+	// allow one implicit advance in a lifetime.
+	// Only a call that actually consumed an ordinal closes the cycle. A retry
+	// with nothing banked must not advance the epoch again, or a repeated
+	// projection would walk the cycle forward for free.
+	if _, err := tx.ExecContext(ctx, `
+		UPDATE implicit_credit_targets SET credit_epoch = $1
+		WHERE student_id = $2 AND target_concept_id = $3 AND credit_epoch = $4
+		  AND EXISTS (
+			SELECT 1 FROM implicit_credit_ordinals
+			WHERE student_id = $2 AND target_concept_id = $3 AND credit_epoch = $4
+			  AND state = 'projected'
+		  )
+	`, epoch+1, studentID, conceptID, epoch); err != nil {
+		return nil, fmt.Errorf("credit: advance epoch: %w", err)
+	}
 	if err := tx.Commit(); err != nil {
 		return nil, fmt.Errorf("credit: commit projection: %w", err)
 	}
@@ -404,4 +470,28 @@ func (s *PostgresStore) VoidCreditEvent(studentID, attemptID, conceptID, reason 
 		return fmt.Errorf("credit: void event: %w", err)
 	}
 	return tx.Commit()
+}
+
+func (s *PostgresStore) GetBankedOrdinals(studentID string) (map[string]int, error) {
+	ctx := context.Background()
+	rows, err := s.db.QueryContext(ctx, `
+		SELECT target_concept_id, COUNT(*)
+		FROM implicit_credit_ordinals
+		WHERE student_id = $1 AND state = 'banked'
+		GROUP BY target_concept_id
+	`, studentID)
+	if err != nil {
+		return nil, fmt.Errorf("credit: get banked ordinals: %w", err)
+	}
+	defer rows.Close()
+	out := make(map[string]int)
+	for rows.Next() {
+		var cid string
+		var count int
+		if err := rows.Scan(&cid, &count); err != nil {
+			return nil, err
+		}
+		out[cid] = count
+	}
+	return out, rows.Err()
 }
