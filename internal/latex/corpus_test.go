@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 var updateBaseline = flag.Bool("update", false, "rewrite the corpus warning baseline")
@@ -63,6 +65,12 @@ func TestCorpusGate(t *testing.T) {
 	err := filepath.WalkDir(corpusRoot, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+		// A translation lives in <corpus>/<locale>/. Its math is the English original's, character
+		// for character (internal/i18n checks that), so it adds no warning of its own and is not
+		// listed in the baseline.
+		if d.IsDir() && i18n.Locale(d.Name()).Valid() {
+			return filepath.SkipDir
 		}
 		if !d.IsDir() && strings.HasSuffix(d.Name(), ".md") {
 			files = append(files, path)

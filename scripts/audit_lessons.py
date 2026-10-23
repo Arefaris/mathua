@@ -22,6 +22,19 @@ GLUED_ID_RE = r"[A-Za-z0-9]s[0-9a-f]{7,}"
 LESSONS_JSON = os.path.join(LESSONS, "lessons.json")
 
 
+def locale_dirs():
+    """Locales that have translations: the directories under kp/ (kp/ru, kp/uk).
+
+    A translated lesson lives in data/lessons/<corpus>/<locale>/. It is a translation of an
+    English lesson that is already audited, not a lesson of its own, so the checks that count
+    lessons skip these directories. internal/i18n validates the translations themselves.
+    """
+    kp = os.path.join(LESSONS, "kp")
+    if not os.path.isdir(kp):
+        return set()
+    return {n for n in os.listdir(kp) if os.path.isdir(os.path.join(kp, n))}
+
+
 def load_dag_ids():
     ids = set()
     for name in os.listdir(CONCEPTS_DIR):
@@ -301,9 +314,11 @@ def main():
         return words
 
     if os.path.isdir(LESSONS):
+        locales = locale_dirs()
         for root, _dirs, files in os.walk(LESSONS):
             if "kp" in root.split(os.sep):
                 continue
+            _dirs[:] = [d for d in _dirs if d not in locales]
             for name in sorted(files):
                 if not name.endswith(".md"):
                     continue

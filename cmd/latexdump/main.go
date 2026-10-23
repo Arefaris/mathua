@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/chuma-beep/latexnorm"
+	"github.com/chuma-beep/mathua/internal/i18n"
 	"github.com/chuma-beep/mathua/internal/latex"
 )
 
@@ -83,6 +84,11 @@ func run(args []string, stdout, stderr io.Writer) int {
 	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+		// A translation (<corpus>/<locale>/...) has the English lesson's math character for
+		// character, which internal/i18n checks, so it is dumped once, as the original.
+		if d.IsDir() && i18n.Locale(d.Name()).Valid() {
+			return filepath.SkipDir
 		}
 		if d.IsDir() || !strings.HasSuffix(d.Name(), ".md") {
 			return nil

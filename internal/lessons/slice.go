@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
 // A teaching slice is the smallest self-contained piece of instruction a learner needs to
@@ -70,16 +72,7 @@ const (
 // no written explanation" rather than as an error. It is not a failure: a minimal slice is a
 // valid, honest answer.
 func (l *Loader) TeachingSlice(conceptID string, kp KP) (string, bool) {
-	// 1. A section that resolves is already the right size — it was authored as a section.
-	if body, ok := l.KPSectionBody(conceptID, kp.Section); ok {
-		return body, true
-	}
-	// 2. An authored slice.
-	if s := kp.Slice; s != nil && strings.TrimSpace(s.Rule) != "" {
-		return renderSlice(kp.Label, *s), true
-	}
-	// 3. Nothing authored. Say so rather than serving the article.
-	return renderMinimalSlice(kp.Label, l.Lesson(conceptID)), true
+	return l.TeachingSliceIn(conceptID, kp, i18n.Default)
 }
 
 // renderMinimalSlice is the fallback. It must not pretend to teach and must not leak the

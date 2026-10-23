@@ -49,14 +49,24 @@ var forbiddenLetters = map[i18n.Locale]string{
 	i18n.UK: "ыэъёЫЭЪЁ",
 }
 
+// letterProblems describes what is wrong with text as a text in loc: no Cyrillic at all, or
+// letters that belong to a neighbouring language.
+func letterProblems(loc i18n.Locale, text string) []string {
+	var out []string
+	if !hasCyrillic(text) {
+		out = append(out, fmt.Sprintf("has no %s text", loc))
+	}
+	if bad := forbiddenLetters[loc]; bad != "" && strings.ContainsAny(text, bad) {
+		out = append(out, fmt.Sprintf("uses letters that are not %s (%s)", loc, bad))
+	}
+	return out
+}
+
 // checkLetters reports text in the wrong alphabet for its locale.
 func checkLetters(t *testing.T, loc i18n.Locale, where, text string) {
 	t.Helper()
-	if !hasCyrillic(text) {
-		t.Errorf("%s: %q has no %s text", where, text, loc)
-	}
-	if bad := forbiddenLetters[loc]; bad != "" && strings.ContainsAny(text, bad) {
-		t.Errorf("%s: %q uses letters that are not %s (%s)", where, text, loc, bad)
+	for _, problem := range letterProblems(loc, text) {
+		t.Errorf("%s: %q %s", where, text, problem)
 	}
 }
 
