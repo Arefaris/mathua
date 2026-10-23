@@ -306,6 +306,13 @@ export function DiagnosticStep({
               <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{question}</KatexContent>
             </div>
           </div>
+          {/* The controls belong to the question that is still unanswered.
+              Once a verdict is in, they are not rendered at all: leaving a
+              disabled field beside a disabled button looked like a frozen
+              page, and the same controls were already showing the next
+              question underneath the verdict. */}
+          {!lastResult && (
+            <>
           <ChoiceOptions question={question} value={answerInput} onPick={onInputChange} disabled={loading || lastResult !== null} />
           <form
             onSubmit={e => { e.preventDefault(); onSubmit() }}
@@ -333,6 +340,8 @@ export function DiagnosticStep({
               Check Answer
             </button>
           </form>
+            </>
+          )}
           <div className="mt-2 flex items-center justify-between gap-2">
             <p className="font-mono text-[11px] text-mathua-muted">{answerFormat.hint}</p>
             {!lastResult && !loading && (

@@ -151,9 +151,26 @@ export default function MathLiveField({
   onChangeRef.current = onChange
   const onLatexRef = useRef(onLatex)
   onLatexRef.current = onLatex
+  // The value the host owns, read synchronously by `emit` so a rejected keystroke
+  // can be put back without waiting for a render.
+  const valueRef = useRef(value)
+  valueRef.current = value
+  const disabledRef = useRef(disabled)
+  disabledRef.current = disabled
   const emit = useCallback(() => {
     const el = ref.current
     if (!el) return
+    if (disabledRef.current) {
+      // A disabled field still receives keystrokes from MathLive's own keypad:
+      // the keypad inserts through the editor API, which does not consult
+      // `readOnly`. The result was an answer that appeared in the box while
+      // Check Answer stayed disabled, which reads as a freeze. Put the held
+      // value back and report nothing.
+      const held = valueRef.current ?? ''
+      if (el.value !== held) el.value = held
+      lastPushed.current = held
+      return
+    }
     const latex = el.value ?? ''
     lastPushed.current = latex
     onChangeRef.current({ latex, plainAnswer: toPlainAnswer(el.getValue('plain-text') ?? '') })
@@ -182,6 +199,10 @@ export default function MathLiveField({
   useEffect(() => {
     const el = ref.current
     if (el) el.readOnly = disabled
+    // A disabled field has nothing to type into, so the page-wide keypad should
+    // not stay up over it. Without this the keypad kept offering keys that the
+    // field then refused.
+    if (disabled) window.mathVirtualKeyboard?.hide()
   }, [disabled])
 
   // Take the typed word, not the symbol it abbreviates. `{}` is the documented way to
