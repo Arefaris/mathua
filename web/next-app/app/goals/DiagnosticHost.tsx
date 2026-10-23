@@ -60,6 +60,10 @@ export default function DiagnosticHost({
 
   const [question, setQuestion] = useState('')
   const [conceptName, setConceptName] = useState('')
+  // A failed don't-know must be retried as a don't-know. Retrying it as a
+  // graded answer would post an empty one and record a miss the learner never
+  // made, which is how the error block used to corrupt a run.
+  const lastAttemptDontKnow = useRef(false)
   // Next question staged from the submit response — revealed by goNext(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingNext = useRef<{
@@ -196,6 +200,7 @@ export default function DiagnosticHost({
     if (!dontKnow && !answerInput.trim()) return
     setLoading(true)
     setSubmitError(null)
+    lastAttemptDontKnow.current = dontKnow
     try {
       const answer = dontKnow ? '' : answerInput.trim()
       // Measured, as /onboard does. This was a constant 5 seconds, and the server
@@ -220,6 +225,10 @@ export default function DiagnosticHost({
 
       if (data.done) {
         setFinished(true)
+        // Clear the busy state now. The plan request can take its whole timeout,
+        // and leaving loading set made every control on the screen look dead
+        // while the learner was already finished.
+        setLoading(false)
         setTimeout(() => {
           void fetchPlan()
         }, 800)
@@ -227,6 +236,13 @@ export default function DiagnosticHost({
       }
 
       // Manual advance: stage the prefetched next question, reveal on Next.
+      // The server promises a question whenever done is false, so an absent one
+      // is a broken response rather than an empty question to display. Throwing
+      // reaches the error block, which offers a retry, instead of staging ''
+      // and leaving the Next button looking inert.
+      if (!data.question) {
+        throw new Error('The diagnostic returned no next question. Try again.')
+      }
       pendingNext.current = {
         question: data.question || '',
         conceptId: data.concept_id || '',
@@ -468,7 +484,7 @@ export default function DiagnosticHost({
           <div className="mb-6">
             <SubmitErrorBlock
               error={submitError}
-              onRetry={() => { void submitAnswer(false) }}
+              onRetry={() => { void submitAnswer(lastAttemptDontKnow.current) }}
               onSkip={skipAnswer}
               skipsLeft={MAX_SKIPS - skipCount}
               onRestart={restartDiagnostic}

@@ -685,13 +685,18 @@ export async function submitGoalAnswer(
 	dontKnow?: boolean,
 ): Promise<GoalDiagAnswerRes> {
 	const res = await authedFetch(`${API_BASE}/api/goal/diagnostic/answer`, {
-		// The server now records each verdict in diagnostic_answers, keyed by
-		// session and concept, and replays a duplicate instead of grading twice.
-		// That makes one automatic retry safe in both cases: if the first request
+		// The server records each verdict in diagnostic_answers, keyed by session
+		// and concept, and replays a duplicate instead of grading twice. That
+		// makes one automatic retry safe in both cases: if the first request
 		// committed, the retry receives the stored verdict; if it never arrived,
 		// the retry is graded fresh. Without it, a single dropped packet on
 		// mobile data ended the whole run.
-		timeoutMs: 25000,
+		//
+		// Twelve seconds, not twenty-five: with the retry the worst case is half
+		// a minute, and learners reported the screen sitting there for "a good
+		// minute" before it gave up. A tutor endpoint that has not answered in
+		// twelve seconds is better retried than waited on.
+		timeoutMs: 12000,
 		retryAttempts: 1,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
