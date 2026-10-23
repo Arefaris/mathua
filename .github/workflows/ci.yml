@@ -302,6 +302,11 @@ jobs:
   storage-postgres:
     name: Storage suite on Postgres
     runs-on: ubuntu-latest
+    # Set once, at job level, so the guard below and the test step read the same
+    # value. A step-level env would let the guard pass on its own copy while the
+    # test step ran with none.
+    env:
+      TEST_POSTGRES_DSN: postgres://pg:pg@localhost:5432/mathua?sslmode=disable
     services:
       postgres:
         image: postgres:16-alpine
@@ -323,10 +328,17 @@ jobs:
           go-version: '1.27'
           cache: true
           cache-dependency-path: go.sum
+      # The suite falls back to SQLite when the DSN is absent, so a removed
+      # environment block would leave this required check green while testing
+      # the engine it was added to exclude.
+      - name: Require the Postgres DSN
+        run: |
+          if [ -z "${TEST_POSTGRES_DSN}" ]; then
+            echo "TEST_POSTGRES_DSN is empty: the storage suite would test SQLite."
+            exit 1
+          fi
       - name: Every storage test on Postgres
         run: go test ./internal/storage/ -count=1 -v
-        env:
-          TEST_POSTGRES_DSN: postgres://pg:pg@localhost:5432/mathua?sslmode=disable
 
   deploy:
     name: Deploy to Fly.io

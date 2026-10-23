@@ -12,9 +12,19 @@ cd mathua
 
 go build ./cmd/mathua
 
-# Run the web server (requires Postgres)
-DATABASE_URL=postgres://... ./mathua --serve --port 8080
+# Run the web server. SQLite is the default, so there is no database to install.
+./mathua --serve --port 8080
 ```
+
+SQLite keeps its data in `mathua.db` in the working directory. Local development needs no database service and no `DATABASE_URL`.
+
+Postgres runs the same code. Set `DATABASE_URL` to run against a Postgres instance instead:
+
+```bash
+DATABASE_URL="postgres://user:pass@localhost:5432/mathua?sslmode=disable" ./mathua --serve --port 8080
+```
+
+The deployment decides which database production uses. The Fly deployment keeps SQLite on a volume today, and the storage layer runs on either engine.
 
 ### Run the storage tests on both engines
 
