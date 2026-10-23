@@ -329,7 +329,7 @@
 | condition number / stability | число обусловленности / устойчивость |
 | bracketing method / open method | метод с отделением корня / открытый метод |
 | fixed-point iteration | метод простой итерации |
-| false position (regula falsi) | метод ложного положения |
+| false position (regula falsi) | метод хорд (regula falsi); «метод ложного положения» — только как пояснение |
 | Horner's method | схема Горнера |
 | divided differences | разделённые разности |
 | Runge's phenomenon | феномен Рунге |
@@ -340,7 +340,7 @@
 | quotient topology | фактортопология |
 | path-connected | линейно связный |
 | wedge of circles | букет окружностей |
-| deck transformation | накрывающий автоморфизм |
+| deck transformation | автоморфизм накрытия (скольжение) |
 | crosscap | кросс-кэп |
 | Betti numbers / Euler characteristic | числа Бетти / эйлерова характеристика |
 
@@ -426,6 +426,8 @@
 | dropout / batch normalization | дропаут / пакетная нормализация |
 | momentum | импульс |
 | actor / critic / advantage / baseline | актор / критик / преимущество / базовая линия |
+| return (RL) | суммарная награда (не «возврат») |
+| inference (этап применения модели) | этап предсказания (не «вывод») |
 | TPR / FPR / AUC | TPR / FPR / AUC (площадь под ROC-кривой) |
 | confusion matrix | матрица ошибок |
 | F1 score | F1-мера |
