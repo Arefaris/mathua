@@ -72,11 +72,11 @@ describe('learn flow in Russian', () => {
       { conceptId: 'c', title: 'Степени', state: 'due_for_review', met: true },
     ] as EligibilityPrereq[]
     const { container } = render(<PrerequisitePanel prerequisites={prereqs} onDismiss={() => {}} />)
-    expect(screen.getByRole('note', { name: 'Опорные темы' })).toBeInTheDocument()
-    expect(screen.getByText('Опорные темы (3)')).toBeInTheDocument()
-    expect(screen.getByText(/Освоена · Обязательная опорная тема/)).toBeInTheDocument()
-    expect(screen.getByText(/Не начата · Обязательная опорная тема/)).toBeInTheDocument()
-    expect(screen.getByText(/Освоена · пора проверить · Обязательная опорная тема/)).toBeInTheDocument()
+    expect(screen.getByRole('note', { name: 'Необходимые темы' })).toBeInTheDocument()
+    expect(screen.getByText('Что изучить сначала (3)')).toBeInTheDocument()
+    expect(screen.getByText(/Освоена · Обязательная$/)).toBeInTheDocument()
+    expect(screen.getByText(/Не начата · Обязательная$/)).toBeInTheDocument()
+    expect(screen.getByText(/Освоена · пора проверить · Обязательная$/)).toBeInTheDocument()
     expect(screen.getAllByText('Изучить →')).toHaveLength(3)
     expect(screen.getByRole('button', { name: 'Закрыть' })).toBeInTheDocument()
     expectNoRawKeys(container)
@@ -87,7 +87,7 @@ describe('learn flow in Russian', () => {
     const { container } = render(
       <SubmitErrorBlock error={{ message: 'boom', status: 503 }} onRetry={() => {}} onSkip={() => {}} skipsLeft={0} onRestart={() => {}} restartLabel="Начать заново" />,
     )
-    expect(screen.getByText('Сервер перезапускается. Повторите через минуту — ваш ответ сохранён.')).toBeInTheDocument()
+    expect(screen.getByText('Сервер перезапускается. Повторите чуть позже — ваш ответ сохранён.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Попробовать ещё раз' })).toBeInTheDocument()
     expect(screen.getByText('Пропусков не осталось — начните заново.')).toBeInTheDocument()
     expectNoRawKeys(container)
@@ -125,7 +125,7 @@ describe('learn flow in Russian', () => {
       />,
     )
     expect(screen.getByText('✓ Готово — 5/6 верно · +18 XP · Хороший прогресс')).toBeInTheDocument()
-    expect(screen.getByText('← Назад: Дроби')).toBeInTheDocument()
+    expect(screen.getByText('← Назад к теме «Дроби»')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Тренироваться снова' })).toBeInTheDocument()
     expect(screen.getByText('Назад в профиль')).toBeInTheDocument()
     expectNoRawKeys(container)

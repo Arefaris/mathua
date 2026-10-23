@@ -109,7 +109,7 @@ describe('attempt list in Russian', () => {
     const { container } = render(<AttemptList attempts={[attempt]} />)
     expect(container.textContent).toContain('контрольная')
     expect(container.textContent).toContain('Вы: 5')
-    expect(container.textContent).toContain('Верно: 4')
+    expect(container.textContent).toContain('Правильный ответ: 4')
     noRawKeys(container)
   })
 
