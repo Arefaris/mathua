@@ -21,7 +21,7 @@ import (
 func moveDueInsideProjection(t *testing.T, repo Repository, studentID, conceptID, newDue string) {
 	t.Helper()
 	_, postgres := repo.(*PostgresStore)
-	creditProjectTestHook = func(exec func(query string, args ...any) error) {
+	installCreditProbe(repo, func(exec func(query string, args ...any) error) {
 		var err error
 		if postgres {
 			err = exec(
@@ -35,8 +35,31 @@ func moveDueInsideProjection(t *testing.T, repo Repository, studentID, conceptID
 		if err != nil {
 			t.Fatalf("hook could not move the due date: %v", err)
 		}
+	})
+	t.Cleanup(func() { installCreditProbe(repo, nil) })
+}
+
+// installCreditProbe sets the per-store probe. The probe lives on the store
+// rather than in a package variable, so two tests running concurrently in this
+// package cannot observe each other's probe.
+func installCreditProbe(repo Repository, probe func(exec func(query string, args ...any) error)) {
+	switch s := repo.(type) {
+	case *SQLiteStore:
+		s.creditProbe = probe
+	case *PostgresStore:
+		s.creditProbe = probe
 	}
-	t.Cleanup(func() { creditProjectTestHook = nil })
+}
+
+// creditProbeOf reports the installed probe, used to prove none leaks.
+func creditProbeOf(repo Repository) func(exec func(query string, args ...any) error) {
+	switch s := repo.(type) {
+	case *SQLiteStore:
+		return s.creditProbe
+	case *PostgresStore:
+		return s.creditProbe
+	}
+	return nil
 }
 
 // TestCreditParity_ProjectionRollsBackWhenTheDueDateMoves covers the
@@ -81,7 +104,7 @@ func TestCreditParity_ProjectionRollsBackWhenTheDueDateMoves(t *testing.T) {
 				t.Errorf("credit after rollback = retained %d balance %d", acc.RetainedUnits, acc.Balance())
 			}
 			// Nothing is left to project: a later honest run still has the ordinal.
-			creditProjectTestHook = nil
+			installCreditProbe(repo, nil)
 			ords, err := credit.ProjectCredit(stu.ID, "a", 1, 25, now)
 			if err != nil || len(ords) != 1 || ords[0].State != "projected" {
 				t.Fatalf("projection after recovery = %+v err=%v", ords, err)
@@ -166,7 +189,7 @@ func TestProjectionConflictGuardIsDefensive(t *testing.T) {
 	if _, err := store.ProjectCredit(stu, "a", 1, 25, now); err != nil {
 		t.Fatalf("clean projection: %v", err)
 	}
-	if creditProjectTestHook != nil {
+	if creditProbeOf(store) != nil {
 		t.Fatal("a test hook leaked into the production path")
 	}
 }

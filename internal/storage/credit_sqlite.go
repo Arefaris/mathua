@@ -334,8 +334,8 @@ func (s *SQLiteStore) ProjectCredit(studentID, conceptID string, epoch int64, st
 			out = append(out, CreditOrdinal{ConceptID: conceptID, Epoch: epoch, Ordinal: o.ordinal, State: "projected", BaselineDue: baseline, CounterfactualDue: next.UTC().Format(time.RFC3339)})
 		}
 
-		if creditProjectTestHook != nil {
-			creditProjectTestHook(func(query string, args ...any) error {
+		if s.creditProbe != nil {
+			s.creditProbe(func(query string, args ...any) error {
 				_, err := conn.ExecContext(ctx, query, args...)
 				return err
 			})

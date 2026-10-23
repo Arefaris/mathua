@@ -16,6 +16,15 @@ import (
 
 type SQLiteStore struct {
 	db *sql.DB
+
+	// creditProbe runs inside a projection transaction, immediately before the
+	// real due date is re-read. It exists only for tests: the conflict guard is
+	// otherwise unreachable because BEGIN IMMEDIATE holds the write reservation
+	// for the whole transaction, so no competing writer can move the due date
+	// mid-projection. Per-store rather than package-level, so concurrent tests
+	// cannot observe each other's probe. Nil in production, and nothing outside
+	// this package can set it.
+	creditProbe func(exec func(query string, args ...any) error)
 }
 
 func NewSQLiteStore(path string) (*SQLiteStore, error) {

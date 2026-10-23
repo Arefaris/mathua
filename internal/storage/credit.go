@@ -67,15 +67,6 @@ type CreditOrdinal struct {
 // CreditAccount is the derived balance for one target in one epoch. Retained is
 // the sum of non-voided retained units; Banked counts every ordinal in the
 // epoch, including projected and stale ones, because MaxBank is a lifetime cap.
-// creditProjectTestHook runs inside a projection transaction, immediately
-// before the due date is re-read. It exists because the conflict guard below is
-// otherwise unreachable: SQLite holds the write reservation for the whole
-// transaction and PostgreSQL holds the progress row FOR UPDATE, so no other
-// writer can move the due date mid-projection. The hook lets a test move it from
-// inside the same transaction and prove the whole chain rolls back. It is nil in
-// production and is never exported.
-var creditProjectTestHook func(exec func(query string, args ...any) error)
-
 type CreditAccount struct {
 	ConceptID     string
 	Epoch         int64

@@ -16,6 +16,15 @@ import (
 
 type PostgresStore struct {
 	db *sql.DB
+
+	// creditProbe runs inside a projection transaction, immediately before the
+	// real due date is re-read. It exists only for tests: the conflict guard is
+	// otherwise unreachable because the projection holds the concept_progress
+	// row FOR UPDATE, so no competing writer can move the due date
+	// mid-projection. Per-store rather than package-level, so concurrent tests
+	// cannot observe each other's probe. Nil in production, and nothing outside
+	// this package can set it.
+	creditProbe func(exec func(query string, args ...any) error)
 }
 
 const pgSchema = `

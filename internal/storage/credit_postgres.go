@@ -305,8 +305,8 @@ func (s *PostgresStore) ProjectCredit(studentID, conceptID string, epoch int64, 
 		}
 	}
 
-	if creditProjectTestHook != nil {
-		creditProjectTestHook(func(query string, args ...any) error {
+	if s.creditProbe != nil {
+		s.creditProbe(func(query string, args ...any) error {
 			_, err := tx.ExecContext(ctx, query, args...)
 			return err
 		})
