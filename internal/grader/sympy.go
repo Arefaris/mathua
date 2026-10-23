@@ -22,7 +22,12 @@ var findOnce sync.Once
 
 // Pool for persistent sympy service to avoid per-request fork + DoS.
 var (
-	sympyMu     sync.Mutex
+	// sympyGate serialises the single stdin/stdout pipe. It is a one-slot
+	// channel rather than a mutex because waiting for it has to be abandonable:
+	// on 2026-10-23 a slow CAS call held the mutex while requests stacked up
+	// behind it with no deadline, which is how a single hard expression became
+	// a stall for every symbolic answer on the machine.
+	sympyGate   = make(chan struct{}, 1)
 	sympyCmd    *exec.Cmd
 	sympyStdin  io.WriteCloser
 	sympyStdout *bufio.Scanner
@@ -170,9 +175,18 @@ func gradeSymPy(expected, answer string) Result {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	// Ensure pooled process is alive, guarded by mutex (held across I/O — pool is single stdin/stdout)
-	sympyMu.Lock()
-	defer sympyMu.Unlock()
+	// Ensure pooled process is alive, guarded by the pipe gate (held across I/O —
+	// the pool is a single stdin/stdout pair). The wait is bounded: a call that
+	// holds the pipe past five seconds is not worth stalling every other
+	// symbolic answer for, so the caller is told to retry instead.
+	gateCtx, gateCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer gateCancel()
+	select {
+	case sympyGate <- struct{}{}:
+		defer func() { <-sympyGate }()
+	case <-gateCtx.Done():
+		return Result{Correct: false, Score: 0, Feedback: "Grading service busy", Unavailable: true}
+	}
 
 	if err := ensureSympyLocked(); err != nil {
 		return Result{Correct: false, Score: 0, Feedback: "Grading service not found", Unavailable: true}

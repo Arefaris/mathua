@@ -21,6 +21,21 @@ primary_region = "ams"
     timeout = "2s"
     grace_period = "20s"
 
+# 256 MB was too small for what this process holds: the Go heap reached 101 MB
+# during a burst, the SymPy child holds 57 MB, and the database is 368 MB. The
+# kernel then evicted page cache and the process's own pages to the volume,
+# /api/health took 17-32 s instead of microseconds, the 2 s health check failed,
+# and the proxy answered "could not find a good candidate" to every request.
+# Measured on 2026-10-23; see docs/administration.md.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
+
+[env]
+  # Keep the Go heap well below the machine so page cache survives. Without a
+  # limit the collector's default target (2x live heap) is free to take the box.
+  GOMEMLIMIT = "700MiB"
+
 [[mounts]]
   source = "mathua_data"
   destination = "/data"

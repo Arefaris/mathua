@@ -78,7 +78,7 @@ Eighteen tables. The five that carry the learning loop are `students`, `concept_
 | `username` | TEXT | Unique login identifier |
 | `password_hash` | TEXT | bcrypt hash |
 | `course_id` | TEXT | Active course filter |
-| `xp_total` | INTEGER | Lifetime XP (`MAX(0, xp_total+?)` floor `sqlite.go:199`) |
+| `xp_total` | INTEGER | Lifetime XP (`MAX(0, xp_total+?)` floor in `AwardXP`) |
 | `xp_today` | INTEGER | Resets via `xp_date` check (`MAX(0, …)`) |
 | `xp_date` | TEXT | Date of `xp_today` bucket (`YYYY-MM-DD`) |
 | `daily_xp_goal` | INTEGER | Daily goal (default 30, `xp.DefaultDailyGoal`; migrated from legacy 150 via versioned backfill `sqlite.go`) |

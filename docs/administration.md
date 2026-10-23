@@ -170,9 +170,7 @@ and `Cancel` all close the dialog and send no request.
 The page shows two errors apart. One is the list failing to load. The other is the server
 refusing a change. They are different sentences.
 
-### Seeing the leagues
-
-The public league read answers one question: where a learner sits. It cannot answer "what does
+### Seeing the leaguesThe public league read answers one question: where a learner sits. It cannot answer "what does
 this week's pyramid look like", so an administrator had no screen on which a cohort existed. A
 report saying "my league is broken" could not be located.
 
@@ -196,3 +194,42 @@ require that the path is not a directory. Without that test the server answers `
 redirect to `/admin/`, and `/admin/` returns a generated directory listing. Every route answers
 `200` in that state, so no page-level test can see the fault.
 `cmd/mathua/staticfs_test.go` asserts that no response body holds a directory listing.
+
+### What the machine can carry, measured
+
+The app once ran on `shared-cpu-1x` with 256 MB. On 2026-10-23 that machine stopped answering
+for minutes at a time: `/api/health`, which touches no database and writes a constant JSON body,
+was logged at 17 to 32 seconds, and the Fly proxy answered 94 requests in 45 seconds with
+`could not find a good candidate within 40 attempts at load balancing`, because the 2 second
+health check could not get a reply. Requests that did reach the app took 1m45s and the grading
+deadline turned them into `503`.
+
+The cause was memory, not processor. The machine reported `MemTotal` 212 MB and, during the
+burst, 8 MB available. The Go process reached 101 MB resident, the SymPy child holds 57 MB, and
+`/data/mathua.db` is 368 MB. With no memory left for page cache the kernel evicted the process's
+own pages to a volume that measures 20 MB/s sequential read, so the runtime spent its time
+faulting pages back in. `/proc/pressure/io` reported `full avg10=29.77`, meaning every runnable
+task was stalled on I/O for 30% of wall time, while `/proc/pressure/cpu` stayed near 4%. The
+processor was idle and the disk was the queue.
+
+The same software is fast when memory is not the constraint. On a 1 CPU / 256 MB container with a
+fresh database and rate limits relaxed (`MATHUA_LOADTEST=1`), driving the real diagnostic path,
+the machine sustained about 235 answers per second with a median of 1 ms and a 95th percentile of
+236 ms at 16 concurrent learners and 459 ms at 32, with no errors. A numeric-only mix reached
+about 600 answers per second. So the ceiling at classroom scale is memory and I/O, not the
+handler.
+
+Three changes follow from that, and each one is in the repository rather than in a setting:
+
+- `fly.toml` requests 1 GB, which leaves room for page cache beside the heap and the CAS child.
+- `GOMEMLIMIT=700MiB` keeps the Go heap from taking the whole machine. Without a limit the
+  collector's default target is twice the live heap, which is free to consume the box.
+- SQLite runs with a 32 MB page cache and `synchronous=NORMAL`. A commit no longer fsyncs a
+  20 MB/s volume, and the cost is the last few transactions if the host loses power, not
+  corruption. The client already retries an unsaved answer.
+
+Two related limits are worth knowing. A branch deploy restarts the only machine, and a volume can
+be attached to one machine at a time, so a deploy is a short outage rather than a rolling
+replacement; the deploy of 2026-10-23T19:08 was visible as that error burst. And symbolic grading
+is serialized through one Python pipe, so the wait for that pipe is now bounded at five seconds
+and the caller is told to retry rather than queueing behind a slow expression.

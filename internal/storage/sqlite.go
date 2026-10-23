@@ -41,6 +41,21 @@ func NewSQLiteStore(path string) (*SQLiteStore, error) {
 	if _, err := db.Exec("PRAGMA busy_timeout=5000"); err != nil {
 		return nil, fmt.Errorf("set busy timeout: %w", err)
 	}
+	// 32 MB of page cache, held in the process rather than left to the kernel.
+	// The database is 368 MB (2026-10-23) so most reads miss either way, but an
+	// explicit cache makes the resident cost predictable instead of letting the
+	// go runtime and SQLite compete for the last few megabytes.
+	if _, err := db.Exec("PRAGMA cache_size=-32768"); err != nil {
+		return nil, fmt.Errorf("set cache size: %w", err)
+	}
+	// WAL with synchronous=NORMAL means a commit does not fsync a volume whose
+	// measured throughput is 20 MB/s. The cost is the last few transactions if
+	// the host loses power; the database is not corrupted, and a learner's
+	// unsaved answer is already retried by the client. The default (FULL) makes
+	// every graded answer wait for the disk.
+	if _, err := db.Exec("PRAGMA synchronous=NORMAL"); err != nil {
+		return nil, fmt.Errorf("set synchronous: %w", err)
+	}
 	// Fix 7 (revised): small pool instead of a single connection. WAL
 	// allows one writer plus concurrent readers; concurrent writers
 	// serialize inside SQLite and ride the 5s busy_timeout above. A pool
