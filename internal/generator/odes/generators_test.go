@@ -147,6 +147,17 @@ func TestVolterraGen(t *testing.T) {
 	}
 }
 
+func TestSturmLiouvilleGen(t *testing.T) {
+	gen := &sturmLiouvilleGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
 func TestFuzz(t *testing.T) {
 	reg := generator.NewRegistry()
 	Register(reg)
