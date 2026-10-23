@@ -471,6 +471,41 @@
 | union bound | неравенство Буля |
 | LOTUS (law of the unconscious statistician) | правило «бессознательного статистика» |
 
+### Вещественный анализ, статистика
+
+| EN | RU |
+|---|---|
+| upper bound / supremum / infimum | верхняя граница / супремум / инфимум |
+| completeness axiom / Archimedean property | аксиома полноты / свойство Архимеда |
+| nested intervals | вложенные отрезки |
+| dense set / countable set | плотное множество / счётное множество |
+| extended real line | расширенная числовая прямая |
+| Cauchy sequence / Cauchy criterion | последовательность Коши (фундаментальная) / критерий Коши |
+| subsequence / cluster point | подпоследовательность / частичный предел |
+| divergence test | необходимый признак сходимости (расходимости) |
+| comparison / ratio / root test | признак сравнения / Даламбера / Коши |
+| absolute / conditional convergence | абсолютная / условная сходимость |
+| rearrangement of a series | перестановка членов ряда |
+| sequential criterion (Heine) | критерий предела по Гейне (через последовательности) |
+| intermediate value theorem / extreme value theorem | теорема о промежуточном значении / теорема Вейерштрасса об экстремальных значениях |
+| uniform continuity | равномерная непрерывность |
+| compact / Heine-Borel | компактный / теорема Гейне — Бореля |
+| removable discontinuity / jump | устранимый разрыв / скачок |
+| Riemann sum, mesh, upper/lower sums | сумма Римана, диаметр (мелкость) разбиения, верхние/нижние суммы |
+| uniform convergence | равномерная сходимость |
+| contraction mapping | сжимающее отображение |
+| nowhere dense / meagre | нигде не плотное / первой категории |
+| Lipschitz | липшицев |
+| mean, geometric, harmonic, quadratic mean | среднее арифметическое, геометрическое, гармоническое, квадратичное |
+| Hölder mean | среднее Гёльдера |
+| range / interquartile range | размах / межквартильный размах |
+| z-score | z-оценка |
+| standard error / margin of error | стандартная ошибка / предельная ошибка выборки |
+| null / alternative hypothesis | нулевая / альтернативная гипотеза |
+| Type I / Type II error / power | ошибка I рода / II рода / мощность |
+| ANOVA | дисперсионный анализ |
+| coefficient of determination (R-squared) | коэффициент детерминации (R-квадрат) |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
