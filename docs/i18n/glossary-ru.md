@@ -446,6 +446,31 @@
 | squarefree | свободное от квадратов |
 | Euler's criterion | критерий Эйлера |
 
+### Дискретная математика, теория вероятностей
+
+| EN | RU |
+|---|---|
+| sigma-algebra / measurable | σ-алгебра / измеримый |
+| power set | булеан |
+| pmf / pdf / CDF | функция вероятности (pmf) / плотность распределения (pdf) / функция распределения (CDF) |
+| prior / likelihood / posterior | априорная вероятность / правдоподобие / апостериорная вероятность |
+| law of total probability / expectation / variance | формула полной вероятности / математического ожидания / дисперсии |
+| tower property | свойство повторного ожидания |
+| moment generating function / characteristic function | производящая функция моментов / характеристическая функция |
+| order statistic | порядковая статистика |
+| memoryless property | свойство отсутствия памяти |
+| Poisson process | пуассоновский процесс |
+| exponential family / sufficient statistic | экспоненциальное семейство / достаточная статистика |
+| weak / strong law of large numbers | слабый / усиленный закон больших чисел |
+| convergence in probability / in distribution / almost surely | сходимость по вероятности / по распределению / почти наверное |
+| Borel-Cantelli lemmas | леммы Бореля — Кантелли |
+| Slutsky's theorem / delta method | теорема Слуцкого / дельта-метод |
+| Markov chain / transition matrix / stationary distribution | цепь Маркова / матрица переходных вероятностей / стационарное распределение |
+| random walk / martingale / optional stopping | случайное блуждание / мартингал / теорема об остановке |
+| recurrent / transient | возвратный / невозвратный |
+| union bound | неравенство Буля |
+| LOTUS (law of the unconscious statistician) | правило «бессознательного статистика» |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.

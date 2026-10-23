@@ -1,7 +1,7 @@
 [
   {
-    "label": "Сильно вероятно простые числа (strong probable primes)",
-    "section": "Сильно вероятно простые числа (strong probable primes)",
+    "label": "Сильные вероятно простые числа",
+    "section": "Сильные вероятно простые числа",
     "subgoals": [
       "Запишите n-1 = 2^s d",
       "Вычислите a^d mod n",

@@ -496,3 +496,28 @@
 | Pisano period | | (український відповідник визначить перекладач) |
 | squarefree | | (український відповідник визначить перекладач) |
 | Euler's criterion | | (український відповідник визначить перекладач) |
+
+### Нові терміни кроків уроків: Дискретная математика, теория вероятностей
+
+| EN | UK | Коментар |
+|---|---|---|
+| sigma-algebra / measurable | | (український відповідник визначить перекладач) |
+| power set | | (український відповідник визначить перекладач) |
+| pmf / pdf / CDF | | (український відповідник визначить перекладач) |
+| prior / likelihood / posterior | | (український відповідник визначить перекладач) |
+| law of total probability / expectation / variance | | (український відповідник визначить перекладач) |
+| tower property | | (український відповідник визначить перекладач) |
+| moment generating function / characteristic function | | (український відповідник визначить перекладач) |
+| order statistic | | (український відповідник визначить перекладач) |
+| memoryless property | | (український відповідник визначить перекладач) |
+| Poisson process | | (український відповідник визначить перекладач) |
+| exponential family / sufficient statistic | | (український відповідник визначить перекладач) |
+| weak / strong law of large numbers | | (український відповідник визначить перекладач) |
+| convergence in probability / in distribution / almost surely | | (український відповідник визначить перекладач) |
+| Borel-Cantelli lemmas | | (український відповідник визначить перекладач) |
+| Slutsky's theorem / delta method | | (український відповідник визначить перекладач) |
+| Markov chain / transition matrix / stationary distribution | | (український відповідник визначить перекладач) |
+| random walk / martingale / optional stopping | | (український відповідник визначить перекладач) |
+| recurrent / transient | | (український відповідник визначить перекладач) |
+| union bound | | (український відповідник визначить перекладач) |
+| LOTUS (law of the unconscious statistician) | | (український відповідник визначить перекладач) |
