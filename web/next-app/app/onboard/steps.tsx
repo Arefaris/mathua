@@ -13,6 +13,7 @@ import Loading from '../../components/Loading'
 import type { DiagnosticProgress, GoalPlanRes } from '../../lib/api'
 import type { AnswerFormat } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
+import { stemWithoutChoices } from '../../lib/choices'
 import { domainLabels, type DomainInfo } from './domains'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
 import { focusClearOfTabs } from '../../lib/focusClearOfTabs'
@@ -316,7 +317,7 @@ export function DiagnosticStep({
         <div className="bg-mathua-surface border border-mathua-border rounded-none p-4 sm:p-6 mb-6 w-full max-w-full min-w-0 overflow-hidden">
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4 w-full max-w-full min-w-0 overflow-hidden">
             <div className="w-full max-w-full min-w-0 overflow-hidden">
-              <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{question}</KatexContent>
+              <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{stemWithoutChoices(question)}</KatexContent>
             </div>
           </div>
           {/* The controls belong to the question that is still unanswered.

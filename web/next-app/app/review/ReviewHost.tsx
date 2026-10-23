@@ -11,6 +11,7 @@ import ReportButton from '../../components/ReportButton'
 import { startReviewSession, submitReviewAnswer } from '../../lib/api'
 import { formatForGradingType, type AnswerFormat } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
+import { stemWithoutChoices } from '../../lib/choices'
 import SubmitErrorBlock, { toSubmitError, type SubmitError } from '../../components/SubmitErrorBlock'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
 import { focusClearOfTabs } from '../../lib/focusClearOfTabs'
@@ -237,7 +238,7 @@ export default function ReviewHost() {
         </div>
         <div className={`bg-mathua-surface border rounded-none p-4 sm:p-6 mb-6 transition-colors w-full max-w-full min-w-0 overflow-hidden ${reviewLastResult ? (reviewLastResult.correct ? 'border-mathua-green-faint' : 'border-mathua-red-faint') : 'border-mathua-border'}`}>
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4">
-            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{reviewQuestion}</KatexContent>
+            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{stemWithoutChoices(reviewQuestion)}</KatexContent>
           </div>
           <ChoiceOptions question={reviewQuestion} value={reviewAnswerInput} onPick={setReviewAnswerInput} disabled={loading} />
           {!reviewLastResult ? (

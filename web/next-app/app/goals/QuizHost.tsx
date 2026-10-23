@@ -11,6 +11,7 @@ import ReportButton from '../../components/ReportButton'
 import { startQuizSession, submitQuizAnswer, skipQuizQuestion } from '../../lib/api'
 import { formatForGradingType, formatForQuestion, type AnswerFormat, type QuestionFormatFields } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
+import { stemWithoutChoices } from '../../lib/choices'
 import SubmitErrorBlock, {
   MAX_SKIPS,
   toSubmitError,
@@ -336,7 +337,7 @@ export default function QuizHost() {
         </div>
         <div className={`bg-mathua-surface border rounded-none p-4 sm:p-6 mb-6 transition-colors w-full max-w-full min-w-0 overflow-hidden ${quizLastResult ? (quizLastResult.correct ? 'border-mathua-green-faint' : 'border-mathua-red-faint') : 'border-mathua-border'}`}>
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4">
-            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{quizQuestion}</KatexContent>
+            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{stemWithoutChoices(quizQuestion)}</KatexContent>
           </div>
           <ChoiceOptions question={quizQuestion} value={quizAnswerInput} onPick={setQuizAnswerInput} disabled={loading} />
           {!quizLastResult ? (

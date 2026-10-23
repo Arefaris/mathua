@@ -29,3 +29,16 @@ export function parseChoices(question: string): ChoiceOption[] | null {
   }
   return opts
 }
+
+// The stem without the option block, for display above tappable options.
+//
+// The generator writes the options into the question text, and the options are
+// also drawn as buttons, so a learner reads every choice twice: once as prose
+// and once as a tap target (report #232). Only the rendered stem loses the
+// list. The full question is still passed to the grader and to the report
+// button, because the letter is resolved against the text the server served.
+export function stemWithoutChoices(question: string): string {
+  if (!parseChoices(question)) return question
+  const cut = question.search(/\n\n[A-E]\)\s/)
+  return cut === -1 ? question : question.slice(0, cut).trimEnd()
+}

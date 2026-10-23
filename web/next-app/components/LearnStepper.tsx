@@ -6,6 +6,7 @@ import KatexContent from './KatexContent'
 import LessonDiagram from './LessonDiagram'
 import LessonAssets from './LessonAssets'
 import ChoiceOptions from './ChoiceOptions'
+import { stemWithoutChoices } from '../lib/choices'
 import ConceptReference from './ConceptReference'
 import PrerequisitePanel from './PrerequisitePanel'
 import { getLessonKPs, getLessonPractice, getLessonReadiness, submitStudyAnswer, getProgress, getErrorStatus, type EligibilityPrereq, type KpInfo, type PracticeQuestion, type ReadinessRes, type ConceptProgress } from '../lib/api'
@@ -725,7 +726,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
           const locked = qe.feedback !== null
           return (
             <div key={qe.key} className={`border bg-mathua-surface p-6 ${qe.feedback?.correct ? 'border-mathua-green-faint' : qe.feedback ? 'border-mathua-red-faint' : 'border-mathua-border'}`}>
-              <KatexContent className="text-sm text-mathua-primary font-mono whitespace-pre-wrap">{qe.q.question}</KatexContent>
+              <KatexContent className="text-sm text-mathua-primary font-mono whitespace-pre-wrap">{stemWithoutChoices(qe.q.question)}</KatexContent>
               <ChoiceOptions question={qe.q.question} value={qe.answer} onPick={v => setEntry(qe.key, { answer: v })} disabled={locked || qe.checking} />
               {!locked && (
                 <form onSubmit={ev => { ev.preventDefault(); handleCheck(qe.key) }} className="mt-3 flex flex-col sm:flex-row gap-2">
