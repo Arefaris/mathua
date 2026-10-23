@@ -503,21 +503,18 @@ func (g *primeGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	composites := []int{4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25}
 	if rand.Intn(2) == 0 {
 		p := primes[rand.Intn(min(len(primes), scale*3))]
-		return generator.Problem{
-			Question:    fmt.Sprintf("Is %d prime?", p),
-			Answer:      "yes",
-			Explanation: fmt.Sprintf("%d is prime — only divisible by 1 and itself.", p),
-			Facts:       map[string]string{"p": strconv.Itoa(p)},
-		}
+		// A yes/no verdict is a word, so it is offered rather than typed.
+		choice := generator.MultipleChoice(fmt.Sprintf("Is %d prime?", p), "yes", "no")
+		choice.Explanation = fmt.Sprintf("%d is prime — only divisible by 1 and itself.", p)
+		choice.Facts = map[string]string{"p": strconv.Itoa(p)}
+		return choice
 	}
 	c := composites[rand.Intn(min(len(composites), scale*3))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is %d prime?", c),
-		Answer:      "no",
-		Explanation: fmt.Sprintf("%d is composite.", c),
-		// Same key as the prime branch: one schema covers both verdicts.
-		Facts: map[string]string{"p": strconv.Itoa(c)},
-	}
+	choice := generator.MultipleChoice(fmt.Sprintf("Is %d prime?", c), "no", "yes")
+	choice.Explanation = fmt.Sprintf("%d is composite.", c)
+	// Same key as the prime branch: one schema covers both verdicts.
+	choice.Facts = map[string]string{"p": strconv.Itoa(c)}
+	return choice
 }
 
 type primeFactGen struct{}
@@ -600,12 +597,16 @@ func (g *compositeGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		ans = "yes"
 		exp = fmt.Sprintf("%d is composite.", n)
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is %d composite?", n),
-		Answer:      ans,
-		Explanation: exp,
-		Facts:       map[string]string{"n": strconv.Itoa(n), "ans": ans, "is_composite": strconv.FormatBool(isComposite)},
+	// "yes" and "no" are words, so the learner needs options: the math field
+	// strips the spaces a typed sentence relies on.
+	other := "no"
+	if ans == "no" {
+		other = "yes"
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("Is %d composite?", n), ans, other)
+	p.Explanation = exp
+	p.Facts = map[string]string{"n": strconv.Itoa(n), "ans": ans, "is_composite": strconv.FormatBool(isComposite)}
+	return p
 }
 
 type expConceptGen struct{}

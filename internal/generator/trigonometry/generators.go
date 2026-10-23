@@ -786,6 +786,22 @@ type funcEntry struct {
 	exp      string
 }
 
+// functionChoices gives the options for the prose answers in the function pools.
+// A word cannot survive the math field: report #198 recorded a whole sentence
+// with every space stripped. Numeric answers are left as typed input.
+var functionChoices = map[string][]string{
+	"odd":           {"odd", "even", "neither"},
+	"even":          {"odd", "even", "neither"},
+	"neither":       {"odd", "even", "neither"},
+	"increasing":    {"increasing", "decreasing", "neither"},
+	"decreasing":    {"increasing", "decreasing", "neither"},
+	"all reals":     {"all reals", "[-1, 1]", "[0, pi]", "(-pi/2, pi/2)"},
+	"[-pi/2,pi/2]":  {"[-pi/2,pi/2]", "[-1, 1]", "[0, pi]", "all reals"},
+	"[-pi/2, pi/2]": {"[-pi/2, pi/2]", "[-1, 1]", "[0, pi]", "all reals"},
+	"[0, pi]":       {"[0, pi]", "[-1, 1]", "all reals", "(-pi/2, pi/2)"},
+	"(0, pi)":       {"(0, pi)", "[-1, 1]", "all reals", "[0, pi]"},
+}
+
 func funcPool(ctx generator.GeneratorContext, easy, hard []funcEntry) generator.Problem {
 	scale := int(1 + ctx.Difficulty*4)
 	pool := easy
@@ -793,6 +809,11 @@ func funcPool(ctx generator.GeneratorContext, easy, hard []funcEntry) generator.
 		pool = append(easy, hard...)
 	}
 	e := pool[rand.Intn(len(pool))]
+	if options, ok := functionChoices[e.answer]; ok {
+		p := generator.MultipleChoice(strings.ReplaceAll(e.question, " (type one word)", ""), e.answer, options...)
+		p.Explanation = e.exp
+		return p
+	}
 	return generator.Problem{Question: e.question, Answer: e.answer, Explanation: e.exp}
 }
 

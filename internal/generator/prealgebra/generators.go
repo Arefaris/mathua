@@ -1121,6 +1121,19 @@ func formatExpr(a, b int) string {
 	return fmt.Sprintf("%dx + %d", a, b)
 }
 
+// realConceptOptions names the options for the prose answers in realConceptGen.
+// A two-word answer such as "rational and irrational" cannot be typed into the
+// math field, so those entries are presented as choices.
+var realConceptOptions = map[string][]string{
+	"yes":                           {"yes", "no"},
+	"no":                            {"yes", "no"},
+	"true":                          {"true", "false"},
+	"false":                         {"true", "false"},
+	"irrational":                    {"rational", "irrational", "integer", "natural"},
+	"rational and irrational":       {"rational and irrational", "positive and negative", "integers and fractions", "prime and composite"},
+	"can be expressed as \\(a/b\\)": {"can be expressed as \\(a/b\\)", "is always a whole number", "has a terminating decimal", "cannot be written as a fraction"},
+}
+
 type realConceptGen struct{}
 
 func (g *realConceptGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -1140,6 +1153,14 @@ func (g *realConceptGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		{"What is the name for a non-repeating, non-terminating decimal?", "irrational", "Irrational numbers have decimal representations that neither terminate nor repeat."},
 	}
 	e := entries[rand.Intn(len(entries))]
+	// Half of these answers are words, and the math field strips the spaces out
+	// of words. Offer them, and drop the "(yes/no)" hint that no longer applies.
+	if options, ok := realConceptOptions[e.answer]; ok {
+		question := strings.NewReplacer(" (yes/no)", "", " (true/false)", "").Replace(e.question)
+		p := generator.MultipleChoice(question, e.answer, options...)
+		p.Explanation = e.exp
+		return p
+	}
 	return generator.Problem{
 		Question:    e.question,
 		Answer:      e.answer,
@@ -1168,6 +1189,20 @@ func (g *realPropertiesGen) Generate(ctx generator.GeneratorContext) generator.P
 		{"The identity property of multiplication states a × 1 = ?", "a", "Multiplying by 1 gives the original number."},
 	}
 	e := entries[rand.Intn(len(entries))]
+	// The property names are words, so they need options: a math field eats
+	// the spaces and turns "commutative" into something no grader can match.
+	switch e.answer {
+	case "commutative", "associative", "distributive":
+		others := make([]string, 0, 2)
+		for _, w := range []string{"commutative", "associative", "distributive"} {
+			if w != e.answer {
+				others = append(others, w)
+			}
+		}
+		p := generator.MultipleChoice(e.question, e.answer, others...)
+		p.Explanation = e.exp
+		return p
+	}
 	return generator.Problem{
 		Question:    e.question,
 		Answer:      e.answer,

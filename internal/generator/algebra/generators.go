@@ -195,19 +195,15 @@ func (g *stdFormGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	y := rand.Intn(5) + 1
 	c := a*x + b*y
 	if rand.Intn(2) == 0 {
-		return generator.Problem{
-			Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x, y, a, b, c),
-			Answer:      "yes",
-			Explanation: fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\). Yes!", a, x, b, y, a*x, b*y, c),
-			Facts:       map[string]string{"x": strconv.Itoa(x), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * x), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*x + b*y), "verdict": "yes"},
-		}
+		p := generator.MultipleChoice(fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x, y, a, b, c), "yes", "no")
+		p.Explanation = fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\). Yes!", a, x, b, y, a*x, b*y, c)
+		p.Facts = map[string]string{"x": strconv.Itoa(x), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * x), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*x + b*y), "verdict": "yes"}
+		return p
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x+1, y, a, b, c),
-		Answer:      "no",
-		Explanation: fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\), not %d. No!", a, x+1, b, y, a*(x+1), b*y, a*(x+1)+b*y, c),
-		Facts:       map[string]string{"x": strconv.Itoa(x + 1), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * (x + 1)), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*(x+1) + b*y), "verdict": "no"},
-	}
+	p := generator.MultipleChoice(fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x+1, y, a, b, c), "no", "yes")
+	p.Explanation = fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\), not %d. No!", a, x+1, b, y, a*(x+1), b*y, a*(x+1)+b*y, c)
+	p.Facts = map[string]string{"x": strconv.Itoa(x + 1), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * (x + 1)), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*(x+1) + b*y), "verdict": "no"}
+	return p
 }
 
 type parallelPerpGen struct{}
@@ -676,12 +672,16 @@ func (g *quadDiscriminantGen) Generate(ctx generator.GeneratorContext) generator
 	} else if disc < 0 {
 		count = "zero real"
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("How many real solutions? \\(x^{2} + %dx + %d = 0\\)", b, c),
-		Answer:      count,
-		Explanation: fmt.Sprintf("Discriminant: \\(%d^{2} - 4(%d) = %d\\). %s solutions.", b, c, disc, count),
-		Facts:       map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "b2": strconv.Itoa(b * b), "four_c": strconv.Itoa(4 * c), "disc": strconv.Itoa(disc), "count": count},
-	}
+	// "two real" is a phrase, and a phrase cannot be typed into the math field,
+	// so the count is offered rather than entered.
+	p := generator.MultipleChoice(
+		fmt.Sprintf("How many real solutions? \\(x^{2} + %dx + %d = 0\\)", b, c),
+		count,
+		"two real", "one real", "zero real", "infinitely many",
+	)
+	p.Explanation = fmt.Sprintf("Discriminant: \\(%d^{2} - 4(%d) = %d\\). %s solutions.", b, c, disc, count)
+	p.Facts = map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "b2": strconv.Itoa(b * b), "four_c": strconv.Itoa(4 * c), "disc": strconv.Itoa(disc), "count": count}
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -763,20 +763,16 @@ func (g *funcLinearGen) Generate(ctx generator.GeneratorContext) generator.Probl
 			m = 1
 		}
 		b := rand.Intn(10) - 5
-		return generator.Problem{
-			Question:    fmt.Sprintf("Is \\(%s\\) a function? (yes/no)", formatLinear(m, b)),
-			Answer:      "yes",
-			Explanation: fmt.Sprintf("Linear equations always define functions (passes vertical line test)."),
-			Facts:       map[string]string{"m": strconv.Itoa(m), "b": strconv.Itoa(b), "is_linear_yes": "yes"},
-		}
+		linear := generator.MultipleChoice(fmt.Sprintf("Is \\(%s\\) a function?", formatLinear(m, b)), "yes", "no")
+		linear.Explanation = "Linear equations always define functions (passes vertical line test)."
+		linear.Facts = map[string]string{"m": strconv.Itoa(m), "b": strconv.Itoa(b), "is_linear_yes": "yes"}
+		return linear
 	}
 	c := rand.Intn(5) + 1
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\(x = %d\\) a function? (yes/no)", c),
-		Answer:      "no",
-		Explanation: fmt.Sprintf("x = %d is a vertical line — it fails the vertical line test.", c),
-		Facts:       map[string]string{"c": strconv.Itoa(c), "is_vertical": "yes"},
-	}
+	vertical := generator.MultipleChoice(fmt.Sprintf("Is \\(x = %d\\) a function?", c), "no", "yes")
+	vertical.Explanation = fmt.Sprintf("x = %d is a vertical line — it fails the vertical line test.", c)
+	vertical.Facts = map[string]string{"c": strconv.Itoa(c), "is_vertical": "yes"}
+	return vertical
 }
 
 type funcQuadGen struct{}
@@ -828,12 +824,19 @@ func (g *logConceptGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	base := rand.Intn(3) + 2
 	exp := rand.Intn(4) + 1
 	val := mathutil.IntPow(base, exp)
-	return generator.Problem{
-		Question:    fmt.Sprintf("Write as a logarithm: \\(%d^{%d} = %d\\)", base, exp, val),
-		Answer:      fmt.Sprintf("log_%d(%d) = %d", base, val, exp),
-		Explanation: fmt.Sprintf("\\(\\log_{%d}(%d) = %d\\)", base, val, exp),
-		Facts:       map[string]string{"base": strconv.Itoa(base), "exp": strconv.Itoa(exp), "val": strconv.Itoa(val)},
-	}
+	// The answer is a whole equation, which the math field turns into one
+	// unreadable token (report #198). The three wrong statements are the same
+	// equation with two of the three numbers swapped.
+	p := generator.MultipleChoice(
+		fmt.Sprintf("Write as a logarithm: \\(%d^{%d} = %d\\)", base, exp, val),
+		fmt.Sprintf("log_%d(%d) = %d", base, val, exp),
+		fmt.Sprintf("log_%d(%d) = %d", val, base, exp),
+		fmt.Sprintf("log_%d(%d) = %d", base, exp, val),
+		fmt.Sprintf("log_%d(%d) = %d", exp, base, val),
+	)
+	p.Explanation = fmt.Sprintf("\\(\\log_{%d}(%d) = %d\\)", base, val, exp)
+	p.Facts = map[string]string{"base": strconv.Itoa(base), "exp": strconv.Itoa(exp), "val": strconv.Itoa(val)}
+	return p
 }
 
 type logEvaluateGen struct{}
@@ -1024,8 +1027,12 @@ func (g *ineqTwoVarGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	if satisfies {
 		ans = "yes"
 	}
+	choice := generator.MultipleChoice(
+		fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(y %s %dx + %d\\)?", testX, testY, op, m, b),
+		ans, "yes", "no",
+	)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(y %s %dx + %d\\)?", testX, testY, op, m, b),
+		Question:    choice.Question,
 		Answer:      ans,
 		Explanation: fmt.Sprintf("At x=%d: y should be %s %d. y=%d %s %d = %t.", testX, op, expected, testY, op, expected, satisfies),
 		Facts:       map[string]string{"tx": strconv.Itoa(testX), "ty": strconv.Itoa(testY), "op": op, "m": strconv.Itoa(m), "b": strconv.Itoa(b), "expected": strconv.Itoa(expected), "ans": ans},

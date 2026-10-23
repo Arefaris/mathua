@@ -212,12 +212,16 @@ func (g *fracBenchmarkGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		ans = "equal"
 		comp = "="
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\(\\frac{%d}{%d}\\) greater than, less than, or equal to \\(\\frac{1}{2}\\)?", num, den),
-		Answer:      ans,
-		Explanation: fmt.Sprintf("1/2 = %d/%d, and %d/%d %s 1/2", den/2, den, num, den, comp),
-		Facts:       map[string]string{"num": strconv.Itoa(num), "den": strconv.Itoa(den), "dec": fmt.Sprintf("%.2f", val), "word": ans, "comp": comp},
+	others := make([]string, 0, 2)
+	for _, w := range []string{"less", "greater", "equal"} {
+		if w != ans {
+			others = append(others, w)
+		}
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("Is \\(\\frac{%d}{%d}\\) greater than, less than, or equal to \\(\\frac{1}{2}\\)?", num, den), ans, others...)
+	p.Explanation = fmt.Sprintf("1/2 = %d/%d, and %d/%d %s 1/2", den/2, den, num, den, comp)
+	p.Facts = map[string]string{"num": strconv.Itoa(num), "den": strconv.Itoa(den), "dec": fmt.Sprintf("%.2f", val), "word": ans, "comp": comp}
+	return p
 }
 
 type fracToDecimalGen struct{}
@@ -599,10 +603,12 @@ func (g *fracCompareWordGen) Generate(ctx generator.GeneratorContext) generator.
 	if bv2 > av2 {
 		ans = "second"
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Alice ate \\(\\frac{%d}{%d}\\) of a pizza, Bob ate \\(\\frac{%d}{%d}\\). Who ate more? (first/second)", aNum, aDen, bNum, bDen),
-		Answer:      ans,
-		Explanation: fmt.Sprintf("%d/%d = %.3f, %d/%d = %.3f, so %s ate more", aNum, aDen, av2, bNum, bDen, bv2, ans),
-		Facts:       map[string]string{"a_num": strconv.Itoa(aNum), "a_den": strconv.Itoa(aDen), "a_val": fmt.Sprintf("%.3f", av2), "b_num": strconv.Itoa(bNum), "b_den": strconv.Itoa(bDen), "b_val": fmt.Sprintf("%.3f", bv2), "who": ans},
+	other := "second"
+	if ans == "second" {
+		other = "first"
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("Alice ate \\(\\frac{%d}{%d}\\) of a pizza, Bob ate \\(\\frac{%d}{%d}\\). Who ate more?", aNum, aDen, bNum, bDen), ans, other)
+	p.Explanation = fmt.Sprintf("%d/%d = %.3f, %d/%d = %.3f, so %s ate more", aNum, aDen, av2, bNum, bDen, bv2, ans)
+	p.Facts = map[string]string{"a_num": strconv.Itoa(aNum), "a_den": strconv.Itoa(aDen), "a_val": fmt.Sprintf("%.3f", av2), "b_num": strconv.Itoa(bNum), "b_den": strconv.Itoa(bDen), "b_val": fmt.Sprintf("%.3f", bv2), "who": ans}
+	return p
 }
