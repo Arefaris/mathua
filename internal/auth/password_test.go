@@ -90,5 +90,3 @@ func TestValidateUsername(t *testing.T) {
 		})
 	}
 }
-
-

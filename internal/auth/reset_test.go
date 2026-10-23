@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestCheckPassword(t *testing.T) {
+func TestCheckPasswordReportsWhyItFailed(t *testing.T) {
 	svc := newTestService(t)
 
 	// Non-existent student
