@@ -107,3 +107,26 @@ func TestPolynomialRingGenDiscriminates(t *testing.T) {
 		}
 	}
 }
+
+func TestQuotientGroupServesOptions(t *testing.T) {
+	g := &quotientGroupGen{}
+	for i := 0; i < 100; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		opts := generator.ChoiceOptions(p.Question)
+		if len(opts) < 2 {
+			t.Fatalf("no options to tap: %q", p.Question)
+		}
+		found := false
+		for _, text := range opts {
+			if text == p.Answer {
+				found = true
+			}
+		}
+		if !found {
+			t.Fatalf("answer %q is not one of the options: %q", p.Answer, p.Question)
+		}
+		if p.Explanation == "" {
+			t.Fatalf("no explanation for %q", p.Question)
+		}
+	}
+}

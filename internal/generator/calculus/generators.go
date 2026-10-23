@@ -1289,18 +1289,27 @@ func (g *seqConceptGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type seqConvergenceGen struct{}
 
 func (g *seqConvergenceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	// The answers used to be prose ("no (diverges to \(\infty\))") on a concept
+	// graded as a tuple, so a learner who answered "False" was compared against
+	// text and marked wrong, and nobody could type the parenthetical anyway
+	// (report 178). The question is now answerable by tapping yes or no, and the
+	// limit it converges to lives in the explanation where it belongs.
 	type entry struct {
-		q, a, e string
+		q      string
+		answer string
+		reason string
 	}
 	table := []entry{
-		{"Does \\(a_{n} = 1/n\\) converge? If so, to what?", "yes, to 0", "As \\(n\\to\\infty\\), \\(1/n \\to 0\\). The sequence converges to 0."},
-		{"Does \\(a_{n} = n/(n+1)\\) converge? If so, to what?", "yes, to 1", "\\(n/(n+1) = 1/(1+1/n) \\to 1/(1+0) = 1\\)."},
+		{"Does \\(a_{n} = 1/n\\) converge?", "yes", "As \\(n\\to\\infty\\), \\(1/n \\to 0\\), so the sequence converges to 0."},
+		{"Does \\(a_{n} = n/(n+1)\\) converge?", "yes", "\\(n/(n+1) = 1/(1+1/n) \\to 1/(1+0) = 1\\), so it converges to 1."},
 		{"Does \\(a_{n} = (-1)^{n}\\) converge?", "no", "\\((-1)^{n}\\) oscillates between -1 and 1 without approaching a single limit."},
-		{"Does \\(a_{n} = n^{2}\\) converge?", "no (diverges to \\(\\infty\\))", "\\(n^{2} \\to \\infty\\) as \\(n\\to\\infty\\), so the sequence diverges."},
-		{"Does \\(a_{n} = 2^{n}/n!\\) converge? If so, to what?", "yes, to 0", "The factorial grows faster than the exponential, so \\(2^{n}/n! \\to 0\\)."},
+		{"Does \\(a_{n} = n^{2}\\) converge?", "no", "\\(n^{2} \\to \\infty\\) as \\(n\\to\\infty\\), so the sequence diverges."},
+		{"Does \\(a_{n} = 2^{n}/n!\\) converge?", "yes", "The factorial grows faster than the exponential, so \\(2^{n}/n! \\to 0\\)."},
 	}
 	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	p := generator.MultipleChoice(e.q, e.answer, "yes", "no")
+	p.Explanation = e.reason
+	return p
 }
 
 type cauchySeqGen struct{}

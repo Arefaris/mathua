@@ -2,6 +2,7 @@ package prealgebra
 
 import (
 	"math/rand"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -129,6 +130,32 @@ func TestSciNotationGenBothDirections(t *testing.T) {
 	} {
 		if res := gen.Grade(tc.expected, tc.answer); res.Correct != tc.want {
 			t.Errorf("Grade(%q, %q) = %v, want %v (%q)", tc.expected, tc.answer, res.Correct, tc.want, res.Feedback)
+		}
+	}
+}
+
+func TestTwoStepInequalityNamesTheLargestInteger(t *testing.T) {
+	g := &ineqTwoStepGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		// The question asks for the largest integer, so the boundary has to sit
+		// strictly between that integer and the next one; otherwise the answer
+		// is either wrong or not the largest.
+		bound, err := strconv.ParseFloat(p.Facts["bound"], 64)
+		if err != nil {
+			t.Fatalf("bound %q is not a number: %q", p.Facts["bound"], p.Question)
+		}
+		want, err := strconv.Atoi(p.Answer)
+		if err != nil {
+			t.Fatalf("answer %q is not an integer: %q", p.Answer, p.Question)
+		}
+		// The inequality is strict, so a boundary that lands exactly on want+1
+		// still leaves want as the largest integer that satisfies it.
+		if !(float64(want) < bound && bound <= float64(want+1)) {
+			t.Fatalf("bound %.4f does not leave %d as the largest integer: %q", bound, want, p.Question)
+		}
+		if !strings.Contains(p.Question, "largest integer") {
+			t.Fatalf("question does not ask for the largest integer: %q", p.Question)
 		}
 	}
 }

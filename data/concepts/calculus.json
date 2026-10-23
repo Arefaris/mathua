@@ -856,7 +856,7 @@
   "label": "Convergent and divergent sequences",
   "domain": "calculus",
   "subdomain": "calculus.sequences",
-  "grading_type": "tuple",
+  "grading_type": "multiple_choice",
   "prerequisites": [
    "calc.seq.concept"
   ],

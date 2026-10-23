@@ -653,11 +653,22 @@ func (g *quotientGroupGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		pool = append(tableEasy, tableHard...)
 	}
 	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What group is %s isomorphic to?", e.quotient),
-		Answer:      e.iso,
-		Explanation: e.reason,
+	// The concept is graded as multiple choice, but this generator returned a
+	// bare problem, so the question arrived with no options to tap and the
+	// answer had to be typed exactly as "Z_3" (report 184, filed with no
+	// answer at all). The distractors are the other quotients in the pool.
+	var others []string
+	for _, o := range pool {
+		if o.iso != e.iso {
+			others = append(others, o.iso)
+		}
 	}
+	if len(others) < 2 {
+		others = append(others, "Z_6")
+	}
+	p := generator.MultipleChoice(fmt.Sprintf("What group is %s isomorphic to?", e.quotient), e.iso, others...)
+	p.Explanation = e.reason
+	return p
 }
 
 // ----- 15. polynomial ring -----

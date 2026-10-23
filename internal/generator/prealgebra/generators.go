@@ -1098,11 +1098,16 @@ func (g *ineqTwoStepGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	b := rand.Intn(scale*2) - scale
 	c := a*x + b + rand.Intn(a) + 1
 	q := formatIneq(a, b, c)
+	// c - b is a*x plus a remainder below a, so the boundary is strictly between
+	// x and x+1: x is the largest integer that satisfies the inequality, which
+	// is what the question now asks for. It used to ask for "x" and answer the
+	// integer while the true boundary was a fraction, so a learner who solved it
+	// properly answered "x < 10/3" and was marked wrong (report 183).
 	return generator.Problem{
-		Question:    q,
+		Question:    fmt.Sprintf("What is the largest integer \\(x\\) that satisfies %s?", q),
 		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("Solve \\(%s \\to %dx < %d \\to x < %.1f \\to x = %d\\)", q, a, c-b, float64(c-b)/float64(a), x),
-		Facts:       map[string]string{"q": q, "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "bound": fmt.Sprintf("%.1f", float64(c-b)/float64(a)), "x": strconv.Itoa(x)},
+		Explanation: fmt.Sprintf("Solve \\(%s\\): subtract %d to get the variable term alone, then divide by %d. The boundary is \\(( %d )/%d = %.2f\\), so the largest integer below it is %d.", q, b, a, c-b, a, float64(c-b)/float64(a), x),
+		Facts:       map[string]string{"q": q, "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "bound": fmt.Sprintf("%.2f", float64(c-b)/float64(a)), "x": strconv.Itoa(x)},
 	}
 }
 

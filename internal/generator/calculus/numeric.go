@@ -32,6 +32,32 @@ func registerNumeric(reg *generator.Registry) {
 // sequenceLimitGen compares the leading coefficients of a rational sequence.
 type sequenceLimitGen struct{}
 
+// squaredPoly writes q n^2 + l n + c without the leading 1 or a zero term, so a
+// denominator of 1n^2 + 2n + 6 reads as n^2 + 2n + 6 (reports 186 and 181 both
+// showed the stray coefficient).
+func squaredPoly(q, l, c int) string {
+	out := fmt.Sprintf("%dn^2", q)
+	if q == 1 {
+		out = "n^2"
+	}
+	switch {
+	case l == 1:
+		out += " + n"
+	case l == -1:
+		out += " - n"
+	case l > 1:
+		out += fmt.Sprintf(" + %dn", l)
+	case l < -1:
+		out += fmt.Sprintf(" - %dn", -l)
+	}
+	if c > 0 {
+		out += fmt.Sprintf(" + %d", c)
+	} else if c < 0 {
+		out += fmt.Sprintf(" - %d", -c)
+	}
+	return out
+}
+
 func (g *sequenceLimitGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	ratio := 1 + rand.Intn(3+int(ctx.Difficulty*3))
 	d := 1 + rand.Intn(2+int(ctx.Difficulty*3))
@@ -39,7 +65,7 @@ func (g *sequenceLimitGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	b, c := rand.Intn(9), rand.Intn(9)
 	e, f := rand.Intn(9), rand.Intn(9)
 	return generator.Problem{
-		Question: fmt.Sprintf("Find \\\\(\\\\lim_{n \\\\to \\\\infty} \\\\frac{%dn^2 + %dn + %d}{%dn^2 + %dn + %d}\\\\).", a, b, c, d, e, f),
+		Question: fmt.Sprintf("Find \\\\(\\\\lim_{n \\\\to \\\\infty} \\\\frac{%s}{%s}\\\\).", squaredPoly(a, b, c), squaredPoly(d, e, f)),
 		Answer:   fmt.Sprintf("%d", ratio),
 		Explanation: fmt.Sprintf("For a ratio of polynomials at infinity only the highest powers matter, so the limit is the ratio of the leading coefficients: %d/%d = %d. The lower terms are negligible because the squared terms grow fastest.",
 			a, d, ratio),
