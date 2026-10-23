@@ -699,13 +699,49 @@ func (g *sqrtSimplifyGen) AnswerFormat() generator.AnswerFormat {
 	return generator.AnswerFormat{Hint: "Coefficient and radical, e.g. 5 sqrt(2)", InputMode: "text"}
 }
 
-var sqrtRe = regexp.MustCompile(`^(-?\d+)\s*sqrt\(\s*(\d+)\s*\)$`)
+var sqrtPartsRe = regexp.MustCompile(`^(-?\d*)sqrt\(?(\d+)\)?$`)
+
+// sqrtParts reads the forms a learner actually writes: "5 sqrt(2)",
+// "5sqrt(2)", "5√2", "5\sqrt{2}" and "sqrt(2)". The grader used to require
+// exactly "a sqrt(b)", so a learner who computed a perfect square and typed the
+// integer — 12 for sqrt(144) — was told they were wrong (reports 138 and 221).
+func sqrtParts(s string) (coef, rad int, ok bool) {
+	v := strings.ToLower(strings.TrimSpace(s))
+	v = strings.NewReplacer("\\", "", "{", "", "}", "", " ", "", "\u221a", "sqrt").Replace(v)
+	m := sqrtPartsRe.FindStringSubmatch(v)
+	if m == nil {
+		return 0, 0, false
+	}
+	coef = 1
+	if m[1] != "" && m[1] != "-" {
+		parsed, err := strconv.Atoi(m[1])
+		if err != nil {
+			return 0, 0, false
+		}
+		coef = parsed
+	} else if m[1] == "-" {
+		coef = -1
+	}
+	rad, err := strconv.Atoi(m[2])
+	if err != nil || rad < 2 {
+		return 0, 0, false
+	}
+	return coef, rad, true
+}
+
+// squareFreeFactors are the radicands this generator may leave inside the
+// radical. Every one is square-free, so the answer cannot be simplified
+// further. Before this the remainder was drawn at random, so sqrt(100) was
+// served with the answer "5 sqrt(4)": not simplified, and 10 — the value a
+// learner computes — was rejected as unparseable.
+var squareFreeFactors = []int{2, 3, 5, 6, 7, 10, 11, 13}
 
 func (g *sqrtSimplifyGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	perfects := []int{2, 3, 4, 5, 6}
 	square := perfects[rand.Intn(len(perfects))]
-	b := rand.Intn(max(1, scale*2)) + 2
+	pool := minInt(len(squareFreeFactors), 2+scale)
+	b := squareFreeFactors[rand.Intn(pool)]
 	n := square * square * b
 	return generator.Problem{
 		Question:    fmt.Sprintf("Simplify: \\(\\sqrt{%d}\\)", n),
@@ -716,15 +752,22 @@ func (g *sqrtSimplifyGen) Generate(ctx generator.GeneratorContext) generator.Pro
 }
 
 func (g *sqrtSimplifyGen) Grade(expected, answer string) grader.Result {
-	e := sqrtRe.FindStringSubmatch(expected)
-	a := sqrtRe.FindStringSubmatch(answer)
-	if e == nil || a == nil {
+	eCoef, eRad, eOK := sqrtParts(expected)
+	aCoef, aRad, aOK := sqrtParts(answer)
+	if !eOK || !aOK {
 		return grader.Result{Correct: false, Score: 0, Feedback: "Expected format: a sqrt(b) (e.g. 3 sqrt(2))"}
 	}
-	if e[1] == a[1] && e[2] == a[2] {
+	if eCoef == aCoef && eRad == aRad {
 		return grader.Result{Correct: true, Score: 1}
 	}
 	return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect"}
+}
+
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 type negNumberLineGen struct{}

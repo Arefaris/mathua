@@ -147,3 +147,52 @@ func TestRemainderAnswerIsTheRemainder(t *testing.T) {
 		}
 	}
 }
+
+// The answer must be fully simplified and must round-trip through the grader.
+// sqrt(100) used to be served as "5 sqrt(4)", and 10 was rejected.
+func TestSqrtSimplifyAnswerIsFullySimplified(t *testing.T) {
+	gen := &sqrtSimplifyGen{}
+	nRe := regexp.MustCompile(`\\sqrt\{(\d+)\}`)
+	for i := 0; i < 200; i++ {
+		p := gen.Generate(generator.GeneratorContext{Difficulty: rand.Float64()})
+		m := nRe.FindStringSubmatch(p.Question)
+		if m == nil {
+			t.Fatalf("question prints no radicand: %q", p.Question)
+		}
+		n, _ := strconv.Atoi(m[1])
+		coef, rad, ok := sqrtParts(p.Answer)
+		if !ok {
+			t.Fatalf("answer %q is not a coefficient and a radical", p.Answer)
+		}
+		if coef*coef*rad != n {
+			t.Fatalf("answer %q does not equal sqrt(%d)", p.Answer, n)
+		}
+		for f := 2; f*f <= rad; f++ {
+			if rad%(f*f) == 0 {
+				t.Fatalf("answer %q leaves a square factor %d inside the radical", p.Answer, f*f)
+			}
+		}
+		if got := gen.Grade(p.Answer, p.Answer); !got.Correct {
+			t.Fatalf("answer %q does not grade as itself", p.Answer)
+		}
+	}
+}
+
+func TestSqrtSimplifyAcceptsTheFormsALearnerTypes(t *testing.T) {
+	gen := &sqrtSimplifyGen{}
+	for _, answer := range []string{"5 sqrt(2)", "5sqrt(2)", "5\u221a2", `5\sqrt{2}`, " sqrt(2) "} {
+		expected := "5 sqrt(2)"
+		if strings.Contains(answer, "sqrt") && !strings.Contains(answer, "5") {
+			expected = "sqrt(2)"
+		}
+		if got := gen.Grade(expected, answer); !got.Correct {
+			t.Errorf("grade(%q, %q) = incorrect", expected, answer)
+		}
+	}
+	if got := gen.Grade("5 sqrt(2)", "5 sqrt(3)"); got.Correct {
+		t.Error("a different radical graded correct")
+	}
+	if got := gen.Grade("5 sqrt(2)", "10"); got.Correct {
+		t.Error("10 graded correct for 5 sqrt(2)")
+	}
+}
