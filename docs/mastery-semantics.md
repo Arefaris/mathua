@@ -68,7 +68,7 @@ ten rounds with no miss anywhere in them.
 
 ### The barrier is probabilistic, not just arithmetic
 
-Each incorrect answer sets `Streak = 0` (`engine.go:1093`), so a run is all-or-nothing:
+Each incorrect answer sets `Streak = 0` (`internal/engine/engine.go`), so a run is all-or-nothing:
 
 | Answers in a row | p = 0.95 | p = 0.90 | p = 0.85 |
 |---|---|---|---|
