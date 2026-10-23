@@ -380,6 +380,18 @@ export function DiagnosticStep({
         {lastResult && (
           <div className={`bg-mathua-surface border rounded-none p-4 mb-4 text-center ${lastResult.correct ? 'border-mathua-green' : 'border-mathua-red'}`}>
             <KatexContent className={lastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}>{lastResult.feedback}</KatexContent>
+            {/* A miss offers the teaching surface as a deliberate next step, not
+                as the answer. The feedback above is a verdict; this is the only
+                route from it to an explanation, and it leaves the assessment
+                rather than injecting instruction into it. */}
+            {!lastResult.correct && !done && conceptId && (
+              <Link
+                href={`/learn?concept=${encodeURIComponent(conceptId)}`}
+                className="mt-3 inline-flex items-center border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em]"
+              >
+                Learn this concept →
+              </Link>
+            )}
             {!lastResult.correct && !done && retryAvailable && (
               <button
                 type="button"

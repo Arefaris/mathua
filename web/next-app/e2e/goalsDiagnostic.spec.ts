@@ -1,8 +1,8 @@
 import { test, expect } from './fixtures'
 import { answerField, focusAnswerField, typeAnswer } from './helpers/answer'
 
-// Goals diagnostic flow (select → answer → results). This is the safety net
-// for the DiagnosticHost extraction: it must keep passing unchanged.
+// Goals diagnostic flow (select → answer → results). /goals redirects to
+// /onboard, so this exercises the live diagnostic path end to end.
 const PROGRESS = {
   answered: 0,
   estimated_total: 25,
