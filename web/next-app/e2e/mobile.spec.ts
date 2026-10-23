@@ -478,23 +478,26 @@ test('the assistant trigger does not cover the contents button', async ({ page }
   expect(overlap, `contents ${JSON.stringify(c)} overlaps assistant ${JSON.stringify(a)}`).toBe(false)
 })
 
-// The sheet listed nine entries in one column, which covered half a phone screen: 421px of
-// 844, and 63% of a 667px screen. Two columns and a 60vh cap bring it to about a third.
-// This pins the ceiling rather than the exact height, so padding may change without it.
-test('the contents sheet leaves most of a phone screen visible', async ({ page }) => {
+// The sheet used to span the full width, so opening it read as a page takeover: 390px of a
+// 390px phone, with nine entries across it. It is a 240px card at the bottom right now, which
+// is 62% of a Pixel 7 and 75% of a 320px phone, and every label sits on one line.
+test('the contents sheet stays a card with the page visible beside it', async ({ page }) => {
   await page.goto('/how-it-works')
   await page.getByRole('button', { name: 'Table of contents' }).click()
 
   const sheet = page.locator('[role=dialog]')
   await expect(sheet).toBeVisible()
   const box = await sheet.boundingBox()
-  const vh = page.viewportSize()?.height ?? 0
+  const vp = page.viewportSize()
   expect(box, 'sheet has no box').not.toBeNull()
-  if (!box) return
-  expect(box.height, `sheet is ${Math.round(box.height)}px of a ${vh}px screen`)
-    .toBeLessThanOrEqual(Math.round(vh * 0.6) + 1)
+  if (!box || !vp) return
 
-  // A wrapped label doubles a row and pushes the sheet taller again.
+  // A strip of the page stays visible on the left: the card must not span the viewport.
+  expect(box.x, `card starts at ${Math.round(box.x)}px`).toBeGreaterThanOrEqual(8)
+  expect(box.width, `card is ${Math.round(box.width)}px of ${vp.width}px`)
+    .toBeLessThanOrEqual(288)
+
+  // A wrapped label doubles a row, which means the width is too narrow for the text.
   const rows = await page.locator('[role=dialog] nav button')
     .evaluateAll(els => els.map(e => Math.round(e.getBoundingClientRect().height)))
   expect(rows.length).toBe(9)

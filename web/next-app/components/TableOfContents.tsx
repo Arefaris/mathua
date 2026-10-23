@@ -87,17 +87,18 @@ export default function TableOfContents({
             Contents
           </button>
         </SheetTrigger>
-        {/* Two columns and no more than 60vh: nine entries in one column filled half a phone
-            screen with a wall of edge-to-edge text. The rows keep a 44px tap target and the
-            labels fit a column at 12px, so the sheet now covers about a third of the screen. */}
+        {/* A card at the bottom-right, not a full-width bar: nine entries used to fill the whole
+            width and read as a page takeover. The card is 240px wide, so a strip of the page
+            stays visible and every label sits on one line, and each row keeps a 44px tap
+            target. */}
         <SheetContent
           side="bottom"
-          className="max-h-[60vh] overflow-y-auto px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
+          className="inset-x-auto right-3 bottom-3 w-[min(15rem,calc(100vw-1.5rem))] max-h-[60vh] overflow-y-auto rounded-xl border px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-lg"
         >
           <SheetTitle style={{ fontFamily: mono, fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
             {label}
           </SheetTitle>
-          <nav aria-label="Table of contents" className="mt-1 grid grid-cols-2 gap-x-4">
+          <nav aria-label="Table of contents" className="mt-1 flex flex-col">
             {headings.map(h => (
               <button
                 key={h.id}
