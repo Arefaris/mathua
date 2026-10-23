@@ -356,9 +356,15 @@ func (g *complexEquationsGen) Generate(ctx generator.GeneratorContext) generator
 	if rand.Intn(2) == 0 {
 		b = -b
 	}
-	// Choose the answer first so the coefficient equation is exact.
+	// Choose the answer first so the coefficient equation is exact. Resample a
+	// zero root: "(2 + 3i)z = 0" has the answer 0 + 0i for every coefficient,
+	// which tests nothing and prints an answer a learner reads as a typo.
 	pr := rand.Intn(2*rootMax+1) - rootMax
 	pi := rand.Intn(2*rootMax+1) - rootMax
+	for pr == 0 && pi == 0 {
+		pr = rand.Intn(2*rootMax+1) - rootMax
+		pi = rand.Intn(2*rootMax+1) - rootMax
+	}
 	c := a*pr - b*pi
 	d := a*pi + b*pr
 	ans := fmtComplex(pr, pi)
@@ -466,7 +472,10 @@ func (g *hyperbolicGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type complexSeriesGen struct{}
 
 func (g *complexSeriesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	maxK := mathutil.ScaleInt(ctx.Difficulty, 4, 8)
+	// The answer is determined by k alone, so the number of distinct answers is
+	// the size of this range. It used to stop at 8, which left the series as one
+	// of the few concepts a learner could meet twice.
+	maxK := mathutil.ScaleInt(ctx.Difficulty, 6, 14)
 	k := 2 + rand.Intn(maxK-1) // ratio i/k, modulus 1/k < 1
 	den := k*k + 1
 	reN := k * k
