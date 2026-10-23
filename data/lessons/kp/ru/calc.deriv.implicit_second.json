@@ -18,7 +18,7 @@
     ]
   },
   {
-    "label": "Вторая неявная производная",
+    "label": "Вторая производная неявной функции",
     "section": "Using Implicit Differentiation and the Product Rule",
     "subgoals": [
       "Продифференцируйте y' = -x/y неявно",
