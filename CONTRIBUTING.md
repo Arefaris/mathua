@@ -115,14 +115,15 @@ on `vitest` while six Playwright tests failed.
 
 #### A red e2e run is not always your change
 
-The browser suite runs against the static export. The export is built from
-`web/next-app/.env.production`, so the bundle points at the deployed API. Any
-request that no stub claims arrives at that API. The suite is correct only when
-the stubs answer every endpoint the pages call.
+The browser suite runs against a static export. The export must not talk to the
+deployed API. CI builds it with `NEXT_PUBLIC_API_URL` set to
+`http://192.0.2.1:9099`. That address is reserved for documentation and never
+answers, so a request that leaves the runner cannot reach production.
 
 One CI run failed four admin and profile tests, and the same commit passed on
-the next run. The report showed a page that never left its loading skeleton.
-Four endpoints escaped the stubs:
+the next run. At that time the build used `web/next-app/.env.production`, which
+points at the deployed API. The report showed a page that never left its loading
+skeleton. Four endpoints escaped the stubs:
 
 * `**/api/activity` and `**/api/next`, whose patterns ended in a bare name. The
   app adds a query string, so the request went to the deployed API.
@@ -133,16 +134,18 @@ Production answered quickly and the tests passed. Production answered slowly
 and the pages waited. Check the stubs before you look for a fault in your
 change.
 
-`make e2e-hermetic` proves that the stubs still cover every endpoint:
+`make e2e-hermetic` builds the export the same way CI does. Run it before you
+change a stub:
 
 ```bash
 make e2e-hermetic
 ```
 
-That target builds the export with `NEXT_PUBLIC_API_URL` set to
-`http://192.0.2.1:9099`. That address is reserved for documentation and never
-answers. Every request that escapes a stub waits there until the test fails.
-The suite is green only when nothing escapes.
+The stubs still miss endpoints. A measurement on 23 October 2026 built the
+export against the documentation address and recorded every request that left
+it. It found seventeen request paths, among them `/api/settings`, `/api/auth/me`,
+`/api/health` and `POST /api/auth/guest`. The pages tolerate the missing answer,
+so the suite stays green. A green run is not proof that the stubs are complete.
 
 Then run one test on its own, and then the whole shard:
 
