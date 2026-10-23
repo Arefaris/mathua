@@ -613,26 +613,26 @@
 
 | EN | UK | Коментар |
 |---|---|---|
-| sigma-algebra / measurable | | (український відповідник визначить перекладач) |
-| power set | | (український відповідник визначить перекладач) |
-| pmf / pdf / CDF | | (український відповідник визначить перекладач) |
-| prior / likelihood / posterior | | (український відповідник визначить перекладач) |
-| law of total probability / expectation / variance | | (український відповідник визначить перекладач) |
-| tower property | | (український відповідник визначить перекладач) |
-| moment generating function / characteristic function | | (український відповідник визначить перекладач) |
-| order statistic | | (український відповідник визначить перекладач) |
-| memoryless property | | (український відповідник визначить перекладач) |
-| Poisson process | | (український відповідник визначить перекладач) |
-| exponential family / sufficient statistic | | (український відповідник визначить перекладач) |
-| weak / strong law of large numbers | | (український відповідник визначить перекладач) |
-| convergence in probability / in distribution / almost surely | | (український відповідник визначить перекладач) |
-| Borel-Cantelli lemmas | | (український відповідник визначить перекладач) |
-| Slutsky's theorem / delta method | | (український відповідник визначить перекладач) |
-| Markov chain / transition matrix / stationary distribution | | (український відповідник визначить перекладач) |
-| random walk / martingale / optional stopping | | (український відповідник визначить перекладач) |
-| recurrent / transient | | (український відповідник визначить перекладач) |
-| union bound | | (український відповідник визначить перекладач) |
-| LOTUS (law of the unconscious statistician) | | (український відповідник визначить перекладач) |
+| sigma-algebra / measurable | σ-алгебра / вимірний | вибір перекладача кроків |
+| power set | булеан | вибір перекладача кроків |
+| pmf / pdf / CDF | функція ймовірностей (pmf) / щільність (pdf) / функція розподілу (CDF) | вибір перекладача кроків |
+| prior / likelihood / posterior | апріорна ймовірність / правдоподібність / апостеріорна ймовірність | вибір перекладача кроків |
+| law of total probability / expectation / variance | формула повної ймовірності / повного сподівання / повної дисперсії | вибір перекладача кроків |
+| tower property | властивість вежі | вибір перекладача кроків |
+| moment generating function / characteristic function | твірна функція моментів / характеристична функція | вибір перекладача кроків |
+| order statistic | порядкова статистика | вибір перекладача кроків |
+| memoryless property | властивість відсутності пам’яті | вибір перекладача кроків |
+| Poisson process | процес Пуассона | вибір перекладача кроків |
+| exponential family / sufficient statistic | експоненційне сімейство / достатня статистика | вибір перекладача кроків |
+| weak / strong law of large numbers | слабкий / посилений закон великих чисел | вибір перекладача кроків |
+| convergence in probability / in distribution / almost surely | збіжність за ймовірністю / за розподілом / майже напевно | вибір перекладача кроків |
+| Borel-Cantelli lemmas | леми Бореля–Кантеллі | вибір перекладача кроків |
+| Slutsky's theorem / delta method | теорема Слуцького / дельта-метод | вибір перекладача кроків |
+| Markov chain / transition matrix / stationary distribution | ланцюг Маркова / матриця переходів / стаціонарний розподіл | вибір перекладача кроків |
+| random walk / martingale / optional stopping | випадкове блукання / мартингал / опційна зупинка | вибір перекладача кроків |
+| recurrent / transient | рекурентний / транзієнтний | вибір перекладача кроків |
+| union bound | оцінка об’єднання (нерівність Буля) | вибір перекладача кроків |
+| LOTUS (law of the unconscious statistician) | закон несвідомого статистика (LOTUS) | вибір перекладача кроків |
 
 ### Нові терміни кроків уроків: Вещественный анализ, статистика
 
@@ -824,6 +824,26 @@
 | temperature scaling | температурне масштабування |  |
 | mixup, GAN: mode collapse | mixup; колапс мод |  |
 | base (системи числення) | основа (системи числення) |  |
+
+### Терміни кроків, які додав перекладач: дискретна математика, теорія ймовірностей
+
+| EN | UK | Коментар |
+|---|---|---|
+| composition / partition (of an integer) | композиція (упорядковане розбиття) / розбиття |  |
+| handshake lemma | лема про рукостискання |  |
+| walk / trail / path | маршрут / стежка / шлях |  |
+| contrapositive, converse, inverse | контрапозиція, обернене твердження, протилежне твердження |  |
+| contingency (formula) | контингентна формула |  |
+| affirming the consequent / denying the antecedent | ствердження наслідку / заперечення засновку |  |
+| base case / inductive step | база індукції / крок індукції |  |
+| lattice vs grid | ґратка (lattice) / сітка (grid) |  |
+| stars and bars (в підрахунках) | кульки й перегородки |  |
+| AND, OR, IMPLIES, FORALL, EXISTS (ASCII) | лишаються латиницею, як в оригіналі | символи ∧ ∨ → ∀ ∃ можна ввести, коли тексти уроків з логіки буде переведено |
+| weak convergence / tightness | слабка збіжність / щільність (сім’ї розподілів) |  |
+| transform (характеристична функція) | перетворення |  |
+| outcome (елементарний) | елементарний наслідок |  |
+| recurrence / transience (блукання) | рекурентність / транзієнтність |  |
+| Bayes | Баєс |  |
 
 ## 13. Рішення для вузівських кроків, ухвалені разом із російськими (2026-10-23)
 
