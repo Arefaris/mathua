@@ -68,6 +68,19 @@ func multinomialCoeff(n int, parts []int) int {
 	return num / den
 }
 
+// batchWordCounts splits n letters into k positive counts, so a word built from it has exactly n
+// letters and k distinct ones.
+func batchWordCounts(n, k int) []int {
+	counts := make([]int, k)
+	for i := range counts {
+		counts[i] = 1
+	}
+	for rest := n - k; rest > 0; rest-- {
+		counts[rand.Intn(k)]++
+	}
+	return counts
+}
+
 // ----- 1. counting_principle (discrete.combinatorics.counting_principle) -----
 
 type countingPrincipleGen struct{}
@@ -164,7 +177,7 @@ func (g *factorialGen) Generate(ctx generator.GeneratorContext) generator.Proble
 
 	case 1:
 		// Factorial quotient: n! / (n - k)!
-		k := 2 + rand.Intn(2) // 2 or 3
+		k := 2 + rand.Intn(2)                                               // 2 or 3
 		n := 4 + k + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 2) // 6..9
 		denom := n - k
 		ans = 1
@@ -229,44 +242,44 @@ func (g *multinomialGen) Generate(ctx generator.GeneratorContext) generator.Prob
 
 	switch mode {
 	case 0:
-		// Word anagrams with repeated characters
-		type wordEntry struct {
-			word   string
-			counts []int
-			desc   string
+		// Word anagrams drawn from a composition, so the word itself varies rather than being
+		// one of six fixed strings: the letters and their multiplicities both change.
+		n := 5 + rand.Intn(3) + mathutil.ScaleInt(ctx.Difficulty, 0, 4) // 5..11
+		kinds := 2 + rand.Intn(2)
+		if kinds > n-1 {
+			kinds = n - 1
 		}
-		words := []wordEntry{
-			{"LEVEL", []int{2, 2, 1}, "2 Ls, 2 Es and 1 V"},
-			{"RADAR", []int{2, 2, 1}, "2 Rs, 2 As and 1 D"},
-			{"BANANA", []int{3, 2, 1}, "3 As, 2 Ns and 1 B"},
-			{"PEPPER", []int{3, 2, 1}, "3 Ps, 2 Es and 1 R"},
-			{"CHEESE", []int{3, 1, 1, 1}, "3 Es, 1 C, 1 H and 1 S"},
-			{"SUCCESS", []int{3, 2, 1, 1}, "3 Ss, 2 Cs, 1 U and 1 E"},
+		counts := batchWordCounts(n, kinds)
+		letters := "ABCD"
+		var b strings.Builder
+		descs := make([]string, len(counts))
+		for i, k := range counts {
+			for j := 0; j < k; j++ {
+				b.WriteByte(letters[i])
+			}
+			descs[i] = fmt.Sprintf("%d %cs", k, letters[i])
 		}
-		idx := rand.Intn(len(words))
-		if ctx.Difficulty >= 0.7 {
-			idx = 2 + rand.Intn(len(words)-2)
-		} else if ctx.Difficulty <= 0.3 {
-			idx = rand.Intn(2)
-		}
-		w := words[idx]
-		n := len(w.word)
-		ans = multinomialCoeff(n, w.counts)
+		runes := []rune(b.String())
+		rand.Shuffle(len(runes), func(i, j int) { runes[i], runes[j] = runes[j], runes[i] })
+		word := string(runes)
+		desc := strings.Join(descs[:len(descs)-1], ", ") + " and " + descs[len(descs)-1]
+		ans = multinomialCoeff(n, counts)
 
-		factTerms := make([]string, len(w.counts))
-		for i, c := range w.counts {
+		factTerms := make([]string, len(counts))
+		for i, c := range counts {
 			factTerms[i] = fmt.Sprintf("%d!", c)
 		}
-		denomStr := strings.Join(factTerms, " \\cdot ")
+		denomStr := strings.Join(factTerms, " · ")
 
-		prompt = fmt.Sprintf("How many distinct letter arrangements can be formed using all the letters in the word \"%s\"?", w.word)
-		expl = fmt.Sprintf("Subgoal 1: State governing formula. The number of distinct permutations of a multiset of \\(n\\) items with duplicate frequencies \\(k_1, k_2, \\dots, k_m\\) is given by the multinomial coefficient \\(\\frac{n!}{k_1! \\cdot k_2! \\cdots k_m!}\\).\nSubgoal 2: Substitute parameters. The word \"%s\" has %d letters with character counts: %s. Write \\(\\frac{%d!}{%s}\\).\nSubgoal 3: Evaluate and simplify. Compute numerator %d! = %d and divide by the product of factorials to obtain: %d.", w.word, n, w.desc, n, denomStr, n, factorial(n), ans)
+		prompt = fmt.Sprintf("How many distinct letter arrangements can be formed using all the letters in the word \"%s\"?", word)
+		expl = fmt.Sprintf("Subgoal 1: State governing formula. The number of distinct permutations of a multiset of n items with duplicate frequencies k_1, k_2, ..., k_m is the multinomial coefficient: n! divided by k_1! · k_2! · ... · k_m!.\nSubgoal 2: Substitute parameters. The word \"%s\" has %d letters, with character counts %s, so the count is %d! / (%s).\nSubgoal 3: Evaluate and simplify. %d! = %d, and dividing by the duplicate orders gives %d.", word, n, desc, n, denomStr, n, factorial(n), ans)
 
 	case 1:
 		// Colored flags in a vertical line
-		r := 2 + rand.Intn(2)
-		b := 2 + rand.Intn(2)
-		gCount := 1 + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 1)
+		width := 2 + mathutil.ScaleInt(ctx.Difficulty, 0, 4)
+		r := 2 + rand.Intn(width)
+		b := 2 + rand.Intn(width)
+		gCount := 1 + rand.Intn(2+mathutil.ScaleInt(ctx.Difficulty, 0, 2))
 		n := r + b + gCount
 		ans = multinomialCoeff(n, []int{r, b, gCount})
 
@@ -275,9 +288,10 @@ func (g *multinomialGen) Generate(ctx generator.GeneratorContext) generator.Prob
 
 	case 2:
 		// Partitioning into labeled groups of sizes k1, k2, k3
-		k1 := 2 + rand.Intn(2)
-		k2 := 2 + rand.Intn(2)
-		k3 := 2 + mathutil.ScaleInt(ctx.Difficulty, 0, 2)
+		width := 2 + mathutil.ScaleInt(ctx.Difficulty, 0, 4)
+		k1 := 2 + rand.Intn(width)
+		k2 := 2 + rand.Intn(width)
+		k3 := 1 + rand.Intn(2+mathutil.ScaleInt(ctx.Difficulty, 0, 2))
 		n := k1 + k2 + k3
 		ans = multinomialCoeff(n, []int{k1, k2, k3})
 
@@ -286,9 +300,10 @@ func (g *multinomialGen) Generate(ctx generator.GeneratorContext) generator.Prob
 
 	case 3:
 		// Multinomial theorem coefficient: coeff of x^a y^b z^c in (x + y + z)^n
-		a := 1 + rand.Intn(2)
-		b := 1 + rand.Intn(2)
-		c := 1 + mathutil.ScaleInt(ctx.Difficulty, 0, 2)
+		width := 2 + mathutil.ScaleInt(ctx.Difficulty, 0, 4)
+		a := 1 + rand.Intn(width)
+		b := 1 + rand.Intn(width)
+		c := 1 + mathutil.ScaleInt(ctx.Difficulty, 0, 2) + rand.Intn(2)
 		n := a + b + c
 		ans = multinomialCoeff(n, []int{a, b, c})
 
@@ -297,9 +312,10 @@ func (g *multinomialGen) Generate(ctx generator.GeneratorContext) generator.Prob
 
 	case 4:
 		// 3D grid path walk
-		x := 1 + rand.Intn(2)
-		y := 1 + rand.Intn(2)
-		z := 1 + mathutil.ScaleInt(ctx.Difficulty, 0, 2)
+		width := 2 + mathutil.ScaleInt(ctx.Difficulty, 0, 4)
+		x := 1 + rand.Intn(width)
+		y := 1 + rand.Intn(width)
+		z := 1 + mathutil.ScaleInt(ctx.Difficulty, 0, 2) + rand.Intn(2)
 		n := x + y + z
 		ans = multinomialCoeff(n, []int{x, y, z})
 
@@ -466,7 +482,7 @@ func (g *catalanGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	switch mode {
 	case 0:
 		// Direct Catalan number
-		n := 2 + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 2) // 2..5
+		n := 2 + rand.Intn(3) + mathutil.ScaleInt(ctx.Difficulty, 0, 4) // 2..8
 		ans = catalan(n)
 		comb := nCr(2*n, n)
 
@@ -475,7 +491,7 @@ func (g *catalanGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 
 	case 1:
 		// Valid parentheses strings
-		n := 2 + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 2) // 2..5
+		n := 2 + rand.Intn(3) + mathutil.ScaleInt(ctx.Difficulty, 0, 4) // 2..8
 		ans = catalan(n)
 		comb := nCr(2*n, n)
 
@@ -484,7 +500,7 @@ func (g *catalanGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 
 	case 2:
 		// Monotonic lattice paths not crossing diagonal
-		n := 2 + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 2) // 2..5
+		n := 2 + rand.Intn(3) + mathutil.ScaleInt(ctx.Difficulty, 0, 4) // 2..8
 		ans = catalan(n)
 		comb := nCr(2*n, n)
 
@@ -493,7 +509,7 @@ func (g *catalanGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 
 	case 3:
 		// Full binary trees with n internal nodes
-		n := 2 + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 2) // 2..5
+		n := 2 + rand.Intn(3) + mathutil.ScaleInt(ctx.Difficulty, 0, 4) // 2..8
 		ans = catalan(n)
 		comb := nCr(2*n, n)
 
@@ -503,7 +519,7 @@ func (g *catalanGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	case 4:
 		// Convex polygon triangulation
 		// vertices k = n + 2, where n in 2..5 => k in 4..7
-		n := 2 + rand.Intn(2) + mathutil.ScaleInt(ctx.Difficulty, 0, 2) // 2..5
+		n := 2 + rand.Intn(3) + mathutil.ScaleInt(ctx.Difficulty, 0, 4) // 2..8
 		k := n + 2
 		polyNames := map[int]string{
 			4: "quadrilateral",
