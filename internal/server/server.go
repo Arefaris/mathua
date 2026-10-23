@@ -1056,7 +1056,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	if req.DontKnow {
 		s.eng.SubmitDiagnosticDontKnow(session, req.ConceptID, req.Elapsed, timeThresh)
 	} else {
-		correct = s.eng.GradeAnswer(req.ConceptID, expected, req.Answer).Correct
+		correct = s.eng.GradeAnswerForQuestion(req.ConceptID, questionText, expected, req.Answer).Correct
 		s.eng.SubmitDiagnosticAnswerTimed(session, req.ConceptID, correct, req.Elapsed, timeThresh)
 	}
 	explanation = expExplanation
@@ -3355,7 +3355,7 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 	// the same dispatch SubmitQuizAnswer uses, so the response, the recorded
 	// answer, and the XP/mastery update can never disagree.
 	expected := sess.LastProblem.Answer
-	gr := s.eng.GradeAnswer(req.ConceptID, expected, req.Answer)
+	gr := s.eng.GradeAnswerForQuestion(req.ConceptID, sess.LastProblem.Question, expected, req.Answer)
 	// The session already holds the explanation the generator produced for the
 	// question that was served. Send it on every verdict — a correct answer
 	// still needs the reasoning that made it right — and fall back to the

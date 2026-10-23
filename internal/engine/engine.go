@@ -1028,6 +1028,14 @@ func (e *Engine) GradeAnswer(conceptID, expectedAnswer, userAnswer string) grade
 	return e.gradeAnswer(conceptID, expectedAnswer, userAnswer)
 }
 
+// GradeAnswerForQuestion grades against the stem that was served, so a choice
+// tapped by letter is resolved to the option the learner saw. GradeAnswer
+// cannot do that, because it never sees the question. Every caller that still
+// holds the served problem should use this one.
+func (e *Engine) GradeAnswerForQuestion(conceptID, question, expectedAnswer, userAnswer string) grader.Result {
+	return e.gradeAnswer(conceptID, expectedAnswer, resolveChoiceAnswer(question, userAnswer))
+}
+
 // gradingTypeFor returns a concept's grading_type ("" if unknown), so served
 // questions can tell every answer host which input to show.
 func (e *Engine) gradingTypeFor(conceptID string) string {
