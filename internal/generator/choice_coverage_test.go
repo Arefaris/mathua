@@ -144,3 +144,68 @@ func TestBooleanAnswersAlwaysServeOptions(t *testing.T) {
 		t.Logf("checked %d boolean answers, all serve options", checked)
 	}
 }
+
+// A multiple-choice concept whose answer is written with a symbol a phone
+// keyboard cannot produce needs options for the same reason a word answer does:
+// there is nothing to type that the choice grader will match. Report 28 was
+// exactly this — tan(60) answered with a radical and no options to tap.
+//
+// latexOnlyOptions is the backlog this guard found and does not yet fix: five
+// multiple-choice concepts still answer in LaTeX with no option list, so a
+// learner has nothing to tap. Each needs its own option set, which is content
+// work rather than a sweep. Remove an id when it serves options.
+var latexOnlyOptions = map[string]bool{
+	"alg.ineq.interval":       true,
+	"trig.adv.inverse":        true,
+	"trig.basics.unit_circle": true,
+	"trig.graph.cos":          true,
+	"trig.graph.sin":          true,
+}
+
+func TestMultipleChoiceSymbolAnswersServeOptions(t *testing.T) {
+	dag, err := concepts.LoadDir("../../data/concepts")
+	if err != nil {
+		t.Fatalf("load concepts: %v", err)
+	}
+	reg := generator.NewRegistry()
+	all.Register(reg)
+
+	checked := 0
+	for id, c := range dag.Concepts() {
+		if c == nil || c.GradingType != "multiple_choice" || !learnerDomains[c.Domain] {
+			continue
+		}
+		if latexOnlyOptions[id] {
+			continue
+		}
+		gen, err := reg.Get(id)
+		if err != nil {
+			continue
+		}
+		for i := 0; i < 60; i++ {
+			p := gen.Generate(generator.GeneratorContext{Difficulty: float64(i%5) / 4, Seed: int64(i)})
+			if !strings.ContainsAny(p.Answer, "\u221a\u00b0") {
+				continue
+			}
+			checked++
+			options := generator.ChoiceOptions(p.Question)
+			if len(options) < 2 {
+				t.Fatalf("%s: answer %q carries a symbol and the question carries no options:\n%s", id, p.Answer, p.Question)
+			}
+			found := false
+			for _, text := range options {
+				if text == p.Answer {
+					found = true
+					break
+				}
+			}
+			if !found {
+				t.Fatalf("%s: answer %q is not one of the options", id, p.Answer)
+			}
+			break
+		}
+	}
+	if checked < 2 {
+		t.Fatalf("checked %d symbol answers, want at least 2", checked)
+	}
+}

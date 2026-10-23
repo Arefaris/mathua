@@ -337,6 +337,11 @@ func (g *pythagoreanIDGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	}
 }
 
+// trig.basics.special_angles is a multiple-choice concept that served its value
+// as LaTeX with no options to tap: report 28 arrived from a learner who had no
+// way to enter sqrt(3)/2 that the choice grader would accept. The values are
+// plain text now, so a tap resolves to the answer and a typed square root still
+// reads as itself.
 type specialAnglesGen struct{}
 
 func (g *specialAnglesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -347,11 +352,11 @@ func (g *specialAnglesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		tan   string
 	}
 	table := []entry{
-		{"\\(30^{\\circ}\\)", "\\(\\frac{1}{2}\\)", "\\(\\frac{\\sqrt{3}}{2}\\)", "\\(\\frac{\\sqrt{3}}{3}\\)"},
-		{"\\(45^{\\circ}\\)", "\\(\\frac{\\sqrt{2}}{2}\\)", "\\(\\frac{\\sqrt{2}}{2}\\)", "1"},
-		{"\\(60^{\\circ}\\)", "\\(\\frac{\\sqrt{3}}{2}\\)", "\\(\\frac{1}{2}\\)", "\\(\\sqrt{3}\\)"},
+		{"\\(30^{\\circ}\\)", "1/2", "\u221a3/2", "\u221a3/3"},
+		{"\\(45^{\\circ}\\)", "\u221a2/2", "\u221a2/2", "1"},
+		{"\\(60^{\\circ}\\)", "\u221a3/2", "1/2", "\u221a3"},
 	}
-	e := table[rand.Intn(3)]
+	e := table[rand.Intn(len(table))]
 	funcs := []struct {
 		name string
 		val  string
@@ -361,14 +366,24 @@ func (g *specialAnglesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		{"tan", e.tan},
 	}
 	fn := funcs[rand.Intn(3)]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is the exact value of %s(%s)?", fn.name, e.label),
-		Answer:      fn.val,
-		Explanation: fmt.Sprintf("%s(%s) = %s.", fn.name, e.label, fn.val),
-		Facts:       map[string]string{"fn": fn.name, "label": e.label, "val": fn.val},
+	pool := []string{"1/2", "\u221a2/2", "\u221a3/2", "\u221a3/3", "1", "\u221a3"}
+	distractors := make([]string, 0, len(pool))
+	for _, v := range pool {
+		if v != fn.val {
+			distractors = append(distractors, v)
+		}
 	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What is the exact value of %s(%s)?", fn.name, e.label),
+		fn.val, distractors...)
+	p.Explanation = fmt.Sprintf("%s(%s) = %s.", fn.name, e.label, fn.val)
+	p.Facts = map[string]string{"fn": fn.name, "label": e.label, "val": fn.val}
+	return p
 }
 
+// trig.basics.reference_angle is also a multiple-choice concept, and it answered
+// "60\u00b0" with no options, so a learner had nothing to tap and a typed 60 did
+// not match the degree sign. The three acute answers are options now.
 type referenceAngleGen struct{}
 
 func (g *referenceAngleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -388,12 +403,18 @@ func (g *referenceAngleGen) Generate(ctx generator.GeneratorContext) generator.P
 		{330, 30},
 	}
 	e := table[rand.Intn(len(table))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is the reference angle for %d°?", e.angle),
-		Answer:      fmt.Sprintf("%d°", e.ref),
-		Explanation: fmt.Sprintf("The reference angle for %d° is the acute angle it makes with the x-axis: %d°.", e.angle, e.ref),
-		Facts:       map[string]string{"angle": strconv.Itoa(e.angle), "ref": strconv.Itoa(e.ref)},
+	ans := fmt.Sprintf("%d\u00b0", e.ref)
+	var distractors []string
+	for _, v := range []string{"30\u00b0", "45\u00b0", "60\u00b0"} {
+		if v != ans {
+			distractors = append(distractors, v)
+		}
 	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What is the reference angle for %d\u00b0?", e.angle), ans, distractors...)
+	p.Explanation = fmt.Sprintf("The reference angle for %d\u00b0 is the acute angle it makes with the x-axis: %s.", e.angle, ans)
+	p.Facts = map[string]string{"angle": strconv.Itoa(e.angle), "ref": strconv.Itoa(e.ref)}
+	return p
 }
 
 type graphSinGen struct{}
