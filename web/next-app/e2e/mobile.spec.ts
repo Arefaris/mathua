@@ -98,12 +98,21 @@ test('chrome hides the header and the tab bar together, and tap toggles it', asy
   await page.evaluate(() => window.scrollTo(0, 800))
   await page.waitForTimeout(600)
 
+  // The reported iOS bug, as an assertion: hiding the chrome must not resize the
+  // document. It used to collapse the header and its top padding away, and with
+  // scroll anchoring off the content slid up under the reader's finger.
+  const heightBefore = await page.evaluate(() => document.documentElement.scrollHeight)
+  const scrollBefore = await page.evaluate(() => window.scrollY)
+
   await toggle.click()
   await expect(toggle).toHaveAttribute('aria-expanded', 'false')
   await expect(header).toHaveAttribute('inert', '')
   await expect(tabs).toHaveAttribute('inert', '')
-  // Collapsed, not merely translated: the header gives its height back.
-  await expect.poll(async () => header.evaluate(el => el.getBoundingClientRect().height)).toBe(0)
+  // Slid out of the way, not collapsed: its box keeps its size, so the page
+  // under it does not move.
+  await expect.poll(async () => header.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThanOrEqual(0)
+  await expect.poll(async () => page.evaluate(() => document.documentElement.scrollHeight)).toBe(heightBefore)
+  await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(scrollBefore)
 
   // A tap is a decision, not a suggestion: idle and settle must not undo it.
   await page.waitForTimeout(1500)
@@ -124,9 +133,9 @@ test('chrome reveals at the bottom then gets out of the way', async ({ page }) =
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
   await expect(tabs).toBeInViewport()
 
-  // Then it hides itself, and stays hidden: collapsing the header shortens the
-  // document, so the browser clamps scrollY and reports it as a scroll event.
-  // Acting on that clamp used to restart the timer in a loop that never settled.
+  // Then it hides itself and stays hidden, with the document the same size as
+  // before: the header slides on a transform now, so no scroll clamp arrives to
+  // re-arm the timer.
   //
   // The window is generous on purpose. `BOTTOM_AUTO_HIDE_MS` is 2000ms of real
   // wall-clock time, so the assertion has to outlast it even when the suite is

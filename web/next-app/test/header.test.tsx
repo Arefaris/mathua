@@ -117,14 +117,18 @@ describe('Header mobile nav menu', () => {
     mockUser = null
   })
 
-  it('renders the nav panel outside the header row that clips it', () => {
+  it('renders the nav panel outside the row, with nothing clipping it', () => {
     render(<Header />)
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation menu' }))
     const panel = screen.getByRole('menu', { name: 'Site navigation' })
 
-    const clipper = document.querySelector('.overflow-hidden')
-    expect(clipper, 'the collapse wrapper should still exist; the animation needs it').not.toBeNull()
-    expect(clipper!.contains(panel)).toBe(false)
+    // The header used to hide by collapsing a `min-h-0 overflow-hidden` wrapper, and a panel
+    // inside it painted behind the page. The header slides on a transform now and keeps no
+    // clipper, so the structure that was tested then is gone and the invariant is stated
+    // directly: no ancestor between the panel and the page may clip it, and it must not sit
+    // inside the constrained row.
+    expect(panel.closest('.overflow-hidden')).toBeNull()
+    expect(panel.closest('.mx-auto')).toBeNull()
 
     // It still has to be anchored to the header rather than the viewport, which is what the
     // original `top-[calc(100%+8px)]` relative to the row achieved.
@@ -226,20 +230,18 @@ describe('Header mobile nav menu', () => {
 describe('Header profile menu', () => {
   beforeEach(() => { mockUser = null; chromeRef.visible = true })
 
-  it('renders the profile panel outside the header row that clips it', () => {
-    // The same clipping bug the nav panel had, and the same fix. Inside `<div
-    // class="min-h-0 overflow-hidden">` the profile menu painted *behind* the page instead of
-    // over it, so clicking the avatar put a menu under the box below it — the one thing a
-    // dropdown must never do, and invisible to jsdom, which has no layout. The assertion is
-    // therefore structural: the panel must not be a descendant of the clipper.
+  it('renders the profile panel outside the row, with nothing clipping it', () => {
+    // The same clipping bug the nav panel had, and the same fix. Inside the old collapse
+    // wrapper the profile menu painted *behind* the page instead of over it, so clicking the
+    // avatar put a menu under the box below it. The wrapper is gone with the collapse, so the
+    // assertion is stated against what actually clips: no ancestor, and not the inner row.
     mockUser = { student_id: 's1', name: 'Nelson', username: 'wis' }
     render(<Header />)
     fireEvent.click(screen.getByRole('button', { name: 'Open profile menu' }))
     const panel = screen.getByRole('menu', { name: 'Profile' })
 
-    const clipper = document.querySelector('.overflow-hidden')
-    expect(clipper, 'the collapse wrapper should still exist; the animation needs it').not.toBeNull()
-    expect(clipper!.contains(panel)).toBe(false)
+    expect(panel.closest('.overflow-hidden')).toBeNull()
+    expect(panel.closest('.mx-auto')).toBeNull()
     expect(panel.className).toMatch(/absolute/)
     expect(panel.className).toMatch(/z-50/)
     expect(panel.closest('header')).not.toBeNull()

@@ -5,10 +5,11 @@
 @layer base {
   :root {
     color-scheme: light dark;
-    /* Top spacing mobile pages use to clear the sticky header. The header is in
-       flow and collapses when the chrome hides (see components/Header.tsx), so
-       this has to collapse with it or the page keeps an 80px hole. Desktop
-       overrides it back to 0 with `lg:pt-0`. */
+    /* Top spacing mobile pages use under the sticky header. The header slides
+       away with a transform rather than collapsing (see components/Header.tsx),
+       so it never gives this space back -- and it must not: reclaiming it moved
+       every element under the reader's finger. Desktop overrides it back to 0
+       with `lg:pt-0`, where the header is always showing. */
     --chrome-top: 80px;
     --bg: oklch(1 0 0);
     --surface: oklch(0.95 0 0);
@@ -50,12 +51,10 @@
     --sidebar-ring: var(--accent-blue);
   }
 
-  /* Set on <html> by lib/chrome.ts. Hidden chrome reclaims the top spacing the
-     pages were reserving for the header. */
-  [data-chrome='hidden'] {
-    --chrome-top: 0px;
-  }
-
+  /* The header used to give this spacing back while the chrome was hidden,
+     which shortened the document and pulled the page up under the reader. It
+     now slides out of the way without changing layout, so the value is the
+     same in both states. */
   .dark {
     color-scheme: dark;
     --bg: oklch(0.16 0.004 264);
@@ -792,17 +791,13 @@ footer .link-underline:hover {
    `lib/focusClearOfTabs.ts`, whose `scrollIntoView` does. 8rem clears the 56px bar, its
    12px inset and the toggle above it.
 
-   While the chrome is scrolled away (`lib/chrome.ts`), it comes back after an idle pause,
-   and the sticky header is in flow: its return pushes everything down by about 60px.
-   Measured at 320x568, Next was placed correctly and then pushed under the returning
-   toggle, so a hidden chrome adds 4rem for the header it is about to reveal. */
+   The chrome used to be a second reason for extra room here: hiding it collapsed the
+   header in flow, and bringing it back pushed the page down by about 60px, which could
+   put Next under the returning toggle. The header now slides on a transform and never
+   changes layout, so 8rem is the whole story. */
 @media (max-width: 1023px) {
   .clear-of-tabs {
     scroll-margin-bottom: calc(8rem + env(safe-area-inset-bottom));
-  }
-
-  html[data-chrome='hidden'] .clear-of-tabs {
-    scroll-margin-bottom: calc(12rem + env(safe-area-inset-bottom));
   }
 }
 

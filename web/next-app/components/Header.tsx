@@ -129,19 +129,22 @@ export default function Header({ links }: HeaderProps) {
   const compassLinks = links || overflowLinks(loggedIn, isStaffRole(user?.role))
 
   return (
-    // The header is sticky and therefore in flow, so hiding it with a transform
-    // would leave a dead strip where it used to be. Collapsing the row to 0fr
-    // takes its height out of the flow and pulls the page up with it. The
-    // border lives on the inner bar so it collapses too, instead of leaving a
-    // 1px line behind.
+    // The header hides by sliding up, not by collapsing. Collapsing its height
+    // removed ~149px from the top of the document (69px of bar plus the 80px
+    // --chrome-top padding), and because the main content sets
+    // `overflow-anchor: none` the browser did not compensate: everything under
+    // the finger jumped up as the chrome went away. That is the bug a reader
+    // reported on iOS Safari. A transform is not in flow, so the document keeps
+    // its height and nothing moves; the sticky box keeps its place at the top
+    // of the page, and translating it only uncovers what was already behind it.
     <header
       ref={headerRef}
       data-chrome-part="header"
-      className={`sticky top-0 z-50 grid backdrop-blur transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${
-        chromeVisible ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+      className={`sticky top-0 z-50 backdrop-blur transition-transform duration-300 ease-out motion-reduce:transition-none ${
+        chromeVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="min-h-0 overflow-hidden bg-mathua-bg">
+      <div className="bg-mathua-bg">
         {/* Full-bleed rule, constrained content.
 
             The bar's rule is the header's own edge: it should reach both sides of the window the
@@ -253,14 +256,14 @@ export default function Header({ links }: HeaderProps) {
         </div>
         </div>
       </div>
-      {/* The nav panel hangs off <header>, not off the row. Inside the row it sat below
-          `min-h-0 overflow-hidden` — the CSS grid-collapse trick that hides the header on scroll
-          — and that clips absolutely positioned children, so the panel painted *behind* the page
-          instead of over it. `overflow-hidden` cannot come off, because the collapse animation
-          needs it, so the panel moves out of the clipper instead of the clipper losing its clip.
+      {/* The nav panel hangs off <header>, not off the row. It used to sit inside a
+          `min-h-0 overflow-hidden` clipper, the grid trick that collapsed the header on scroll,
+          and that clipped absolutely positioned children so the panel painted *behind* the page.
+          The header slides on a transform now and needs no clipper, but the panel stays where it
+          is: this is the structure the open menus were tested against.
 
-          Also gated on chromeVisible: the trigger lives inside the row, so a panel whose button
-          is scrolled away is a floating menu with no visible way to close it. */}
+          Gated on chromeVisible: the trigger slides away with the header, so a panel whose button
+          is off screen is a floating menu with no visible way to close it. */}
 {navOpen && chromeVisible && (
                   <div className="absolute inset-y-0 left-1/2 w-full max-w-container -translate-x-1/2 pointer-events-none">
                     <div
@@ -301,19 +304,16 @@ export default function Header({ links }: HeaderProps) {
                   )}
 
 
-      {/* The profile menu hangs off <header> for the same reason the nav panel does: inside the
-          row it sits below `min-h-0 overflow-hidden`, which clips absolutely positioned children,
-          so it painted *behind* the page instead of over it — clicking the avatar put a menu under
-          the box below it. The clip has to stay (the collapse animation needs it), so the menu
-          moves out of the clipper instead of the clipper losing its clip.
+      {/* The profile menu hangs off <header> for the same reason the nav panel does: it was
+          built when the header collapsed inside a `min-h-0 overflow-hidden` clipper, and that
+          clipped absolutely positioned children, so the menu painted *behind* the page.
 
           Anchored to the header's own padding rather than to the button, because the button is
-          no longer an ancestor and `right-0` would have nothing to resolve against. The avatar
-          sits at the end of the same row the header's padding insets, so the two agree.
+          not an ancestor and `right-0` would have nothing to resolve against. The avatar sits at
+          the end of the same row the header's padding insets, so the two agree.
 
-          Gated on chromeVisible for the same reason as the nav panel: the trigger lives inside
-          the collapsed row, so a menu whose button is scrolled away is a floating menu with no
-          visible way to close it. */}
+          Gated on chromeVisible for the same reason as the nav panel: the trigger slides away
+          with the header, so a menu whose button is off screen could not be closed. */}
       {open && chromeVisible && (
         <>
         {/* The panel's wrapper is itself absolutely positioned: <header> is full width, so a panel
