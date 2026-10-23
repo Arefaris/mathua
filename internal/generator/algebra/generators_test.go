@@ -2,6 +2,7 @@ package algebra
 
 import (
 	"math/rand"
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
@@ -182,5 +183,47 @@ func TestQuadraticRootsAreOneNumberWhenRepeated(t *testing.T) {
 	}
 	if repeated == 0 {
 		t.Fatal("no repeated root was drawn, so the case was never checked")
+	}
+}
+
+func TestSystemQuestionsAskForThePair(t *testing.T) {
+	// A tuple answers with both values, so the stem has to say so: "Solve:"
+	// alone let a learner stop at x = 2 and be marked wrong (report 147).
+	pair := regexp.MustCompile(`^\((\d+),(\d+)\)$`)
+
+	for i := 0; i < 100; i++ {
+		p := (&sysSubstitutionGen{}).Generate(generator.GeneratorContext{})
+		if !strings.Contains(p.Question, "Give both values as") {
+			t.Fatalf("substitution stem does not ask for the pair: %q", p.Question)
+		}
+		m := pair.FindStringSubmatch(p.Answer)
+		if m == nil {
+			t.Fatalf("substitution answer %q is not a pair", p.Answer)
+		}
+		y, _ := strconv.Atoi(p.Facts["y"])
+		sum, _ := strconv.Atoi(p.Facts["sum"])
+		x, _ := strconv.Atoi(m[1])
+		if got := x + y; got != sum {
+			t.Fatalf("x + y = %d, want the sum in the stem %d", got, sum)
+		}
+	}
+
+	for i := 0; i < 100; i++ {
+		p := (&sysEliminationGen{}).Generate(generator.GeneratorContext{})
+		if !strings.Contains(p.Question, "Give both values as") {
+			t.Fatalf("elimination stem does not ask for the pair: %q", p.Question)
+		}
+		m := pair.FindStringSubmatch(p.Answer)
+		if m == nil {
+			t.Fatalf("elimination answer %q is not a pair", p.Answer)
+		}
+		a, _ := strconv.Atoi(p.Facts["a"])
+		b, _ := strconv.Atoi(p.Facts["b"])
+		eq1, _ := strconv.Atoi(p.Facts["eq1"])
+		x, _ := strconv.Atoi(m[1])
+		y, _ := strconv.Atoi(m[2])
+		if got := a*x + b*y; got != eq1 {
+			t.Fatalf("%dx + %dy = %d, want %d", a, b, got, eq1)
+		}
 	}
 }

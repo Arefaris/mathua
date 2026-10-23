@@ -441,7 +441,10 @@ func (g *sysSubstitutionGen) Generate(ctx generator.GeneratorContext) generator.
 	x := rand.Intn(8) + 2
 	y := rand.Intn(8) + 2
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(y = %d\\),  \\(x + y = %d\\)", y, x+y),
+		// "Solve:" alone invited half an answer: a learner found x and wrote
+		// "x = 2", which a tuple graded wrong because it wanted the pair
+		// (report 147). The stem now says which form to use.
+		Question:    fmt.Sprintf("Solve the system \\(y = %d\\), \\(x + y = %d\\). Give both values as \\((x, y)\\).", y, x+y),
 		Answer:      fmt.Sprintf("(%d,%d)", x, y),
 		Explanation: fmt.Sprintf("Substitute \\(y=%d\\): \\(x + %d = %d\\) → \\(x = %d\\). Solution: \\((%d,%d)\\)", y, y, x+y, x, x, y),
 		Facts:       map[string]string{"y": strconv.Itoa(y), "sum": strconv.Itoa(x + y), "x": strconv.Itoa(x)},
@@ -459,7 +462,7 @@ func (g *sysEliminationGen) Generate(ctx generator.GeneratorContext) generator.P
 	eq1 := a*x + b*y
 	eq2 := c*x + b*y
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(%dx + %dy = %d\\),  \\(%dx + %dy = %d\\)", a, b, eq1, c, b, eq2),
+		Question:    fmt.Sprintf("Solve the system \\(%dx + %dy = %d\\), \\(%dx + %dy = %d\\). Give both values as \\((x, y)\\).", a, b, eq1, c, b, eq2),
 		Answer:      fmt.Sprintf("(%d,%d)", x, y),
 		Explanation: fmt.Sprintf("Subtract: \\(%dx = %d\\) → \\(x = %d\\); \\(y = %d\\). Solution: \\((%d,%d)\\)", a-c, eq1-eq2, x, y, x, y),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "eq1": strconv.Itoa(eq1), "eq2": strconv.Itoa(eq2), "coef": strconv.Itoa(a - c), "rhs": strconv.Itoa(eq1 - eq2), "x": strconv.Itoa(x), "y": strconv.Itoa(y)},
