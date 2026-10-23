@@ -412,6 +412,40 @@
 | Cayley-Hamilton theorem | теорема Гамильтона — Кэли |
 | Jordan normal form / minimal polynomial | жорданова нормальная форма / минимальный многочлен |
 
+### Машинное обучение, теория чисел
+
+| EN | RU |
+|---|---|
+| epoch / mini-batch | эпоха / мини-пакет |
+| learning rate | скорость обучения |
+| loss function | функция потерь |
+| forward pass / backward pass | прямой проход / обратный проход |
+| bias (смещение нейрона) | смещение |
+| activation function | функция активации |
+| overfit / underfit | переобучение / недообучение |
+| dropout / batch normalization | дропаут / пакетная нормализация |
+| momentum | импульс |
+| actor / critic / advantage / baseline | актор / критик / преимущество / базовая линия |
+| TPR / FPR / AUC | TPR / FPR / AUC (площадь под ROC-кривой) |
+| confusion matrix | матрица ошибок |
+| F1 score | F1-мера |
+| calibration (ECE) | калибровка (ожидаемая ошибка калибровки, ECE) |
+| elbow method | метод локтя |
+| dummy variable trap | ловушка фиктивных переменных |
+| Gini impurity | неопределённость Джини |
+| bagging / boosting | бэггинг / бустинг |
+| residue / quadratic residue | вычет / квадратичный вычет |
+| witness (Miller-Rabin) | свидетель |
+| primitive root | первообразный корень |
+| Euler's totient function | функция Эйлера |
+| twin primes | простые числа-близнецы |
+| convergent (цепной дроби) | подходящая дробь |
+| class number | число классов |
+| Gaussian integers | гауссовы целые числа |
+| Pisano period | период Пизано |
+| squarefree | свободное от квадратов |
+| Euler's criterion | критерий Эйлера |
+
 ## 8. Дополнения от перевода веб-интерфейса
 
 > Добавлено при переводе `web/next-app` (2026-10-22). Термины выбраны там, где §3 не давал готового варианта.
