@@ -185,7 +185,7 @@ The engine is the central orchestrator. It holds references to every subsystem a
 | **Generators** | 22 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74` — no static question bank |
 | **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:41`, `sm2.go:34`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `mastery/status.go:24`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
 | **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `xp.DefaultDailyGoal` (`xp/policy.go`) |
-| **Weakness Propagation** | In engine `engine.go:1575` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
+| **Weakness Propagation** | `Engine.PropagateWeakness` in `internal/engine/engine.go` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
 | **Diagnostic** | `internal/diagnostic/` (`cat.go:1`, `report.go:11`) | Compressed covering set + info-gain CAT with `±0.3` evidence propagation, per-concept `KnowledgeConfidence 0–1`, frontier at max belief drop, supplemental when `<0.7` |
 | **Planner** | `internal/planning/` | Course paths loaded from `data/courses.json` (28 courses) |
 | **Lessons** | `internal/lessons/` | Markdown lesson content from `data/lessons/` + 1250 KP shards `data/lessons/kp/*.json` ×3 `audit_lessons.py:191` |
