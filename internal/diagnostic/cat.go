@@ -766,7 +766,11 @@ func (e *Engine) IsComplete(s *Session) bool {
 	return s.State == StateDone
 }
 
-// Progress reports the bar that the Progress type describes.
+// Progress reports the state of the bar a learner is watching. The budget is
+// a ceiling, not a promise: a run ends when every concept in the cover has
+// settled, which can happen before the budget is spent. At that point the
+// denominator is clamped to what was answered, so the bar reads full instead
+// of stopping short on the last question.
 func (e *Engine) Progress(s *Session) Progress {
 	s.Lock()
 	defer s.Unlock()
@@ -792,6 +796,9 @@ func (e *Engine) Progress(s *Session) Progress {
 	budget := 2 * len(cover)
 	if budget > maxTotalQuestions {
 		budget = maxTotalQuestions
+	}
+	if s.State == StateDone && answered < budget {
+		budget = answered
 	}
 	return Progress{
 		Answered:       answered,

@@ -660,3 +660,26 @@ func TestEngine_FrontierEstimate_And_KnowledgeConfidence(t *testing.T) {
 		t.Errorf("len(KnowledgeConfidence) = %d, want %d", len(conf), len(s.confidence))
 	}
 }
+
+// A run can end before the probe budget is spent: the budget is what the cover
+// would need, and the run stops when the cover settles. The bar must read full
+// on that last question, so the denominator is the answers actually given.
+func TestProgress_BarIsFullWheneverDone(t *testing.T) {
+	e := NewEngine(chainDAG(t, 60), chainRegistry(t, 60))
+	s := e.Start()
+	if answer(t, e, s, true, true) == "" {
+		t.Fatal("expected a first question")
+	}
+
+	s.Lock()
+	s.State = StateDone
+	s.Unlock()
+
+	p := e.Progress(s)
+	if !p.Done {
+		t.Fatalf("expected done progress: %+v", p)
+	}
+	if p.Answered != p.ProbeBudget {
+		t.Fatalf("bar ends at %d/%d instead of full: %+v", p.Answered, p.ProbeBudget, p)
+	}
+}
