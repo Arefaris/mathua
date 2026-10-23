@@ -345,8 +345,10 @@ func checkKPShards(t *testing.T, loc i18n.Locale, ids map[string]string) {
 var openStaxRe = regexp.MustCompile(`(?m)^> Content (sourced|adapted) from \[OpenStax`)
 
 // openStaxConcepts are the concepts whose lesson text comes from an OpenStax book: those
-// data/lessons/mapping.json attributes to OpenStax, and those whose teaching lesson carries the
-// OpenStax attribution line.
+// data/lessons/mapping.json attributes to OpenStax, those whose teaching lesson carries the
+// OpenStax attribution line, and those data/lessons/lessons.json points at such a lesson under
+// another name (frac.mult.word reads teaching/frac.mult.md). The last group was missed at first,
+// and their steps' section headings had been translated.
 //
 // OpenStax text is not translated in this fork, by machine or AI. Every OpenStax title states
 // that the book "may not be used in the training of large language models or otherwise be
@@ -363,8 +365,20 @@ func openStaxConcepts(t *testing.T) map[string]bool {
 			out[id] = true
 		}
 	}
+	files := map[string]bool{}
 	for _, f := range openStaxLessonFiles(t) {
+		files[f] = true
 		out[strings.TrimSuffix(filepath.Base(f), ".md")] = true
+	}
+	var registered []struct {
+		ConceptID string `json:"concept_id"`
+		Source    string `json:"source"`
+	}
+	readJSON(t, dataDir+"/lessons/lessons.json", &registered)
+	for _, r := range registered {
+		if files[r.Source] {
+			out[r.ConceptID] = true
+		}
 	}
 	if len(out) == 0 {
 		t.Fatal("found no OpenStax lessons; the mapping or the attribution line has changed")
