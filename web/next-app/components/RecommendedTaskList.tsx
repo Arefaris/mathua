@@ -102,14 +102,14 @@ export default function RecommendedTaskList({
       {failed && (
         <div className="border border-mathua-border bg-mathua-surface p-4 min-w-0">
           <p className="font-mono text-xs text-mathua-red">
-            Couldn&apos;t load your recommended tasks.
+            {t('account.tasks.loadFailed')}
           </p>
           <button
             type="button"
             onClick={() => window.location.reload()}
             className="mt-2 border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 h-10 font-mono text-xs"
           >
-            Reload
+            {t('account.tasks.reload')}
           </button>
           {/* The hub must keep a route into the curriculum even when the
               recommendation request fails; the empty branch below offers the
@@ -118,7 +118,7 @@ export default function RecommendedTaskList({
             href="/domains"
             className="mt-3 inline-block font-mono text-xs text-mathua-blue hover:underline"
           >
-            Choose what to learn →
+            {t('account.tasks.chooseArrow')}
           </Link>
         </div>
       )}

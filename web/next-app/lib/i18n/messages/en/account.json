@@ -223,7 +223,9 @@
     "choose": "Choose what to learn",
     "chooseArrow": "Choose what to learn →",
     "starting": "Starting…",
-    "startFailed": "Couldn't start this topic."
+    "startFailed": "Couldn't start this topic.",
+    "loadFailed": "Couldn't load your recommended tasks.",
+    "reload": "Reload"
   },
   "profile": {
     "guest": "Guest",
