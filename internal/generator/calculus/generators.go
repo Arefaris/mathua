@@ -511,20 +511,17 @@ type integralPowerRuleGen struct{}
 
 func (g *integralPowerRuleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
-	n := rand.Intn(max(2, scale)) + 1
-	a := n + 1
-	exp := n + 1
-	coef := a / (n + 1)
-	var answer string
-	if coef == 1 {
-		answer = fmt.Sprintf("x^%d", exp)
-	} else {
-		answer = fmt.Sprintf("%dx^%d", coef, exp)
-	}
+	n := randRange(ctx.Difficulty, 1, 2+scale)
+	// The coefficient is a multiple of n+1 so that the antiderivative stays an
+	// integer multiple of x^(n+1). An arbitrary coefficient would divide to a
+	// fraction, and the concept is graded as an expression.
+	k := randRange(ctx.Difficulty, 1, 4)
+	c := k * (n + 1)
+	answer := coefStr(k) + varPow("x", n+1)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find \\(\\int %d x^{%d} \\, dx\\) (use power rule for integration, omit \\(+C\\)).", a, n),
+		Question:    fmt.Sprintf("Find \\(\\int %d x^{%d} \\, dx\\) (use power rule for integration, omit \\(+C\\)).", c, n),
 		Answer:      answer,
-		Explanation: fmt.Sprintf("∫%dx^%d dx = %d/(%d+1)·x^(%d+1)+C = %s+C.", a, n, a, n, n, answer),
+		Explanation: fmt.Sprintf("∫%dx^%d dx = %d/(%d+1)·x^(%d+1)+C = %s+C.", c, n, c, n, n, answer),
 	}
 }
 
@@ -1394,17 +1391,62 @@ func (g *improperIntegralGen) Generate(ctx generator.GeneratorContext) generator
 type numericalIntegralGen struct{}
 
 func (g *numericalIntegralGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	scale := int(1 + ctx.Difficulty*5)
+	switch rand.Intn(8) {
+	case 0:
+		return generator.Problem{
+			Question:    "What method approximates the integral using rectangles? (enter trapezoids, parabolas, or rectangles)",
+			Answer:      "rectangles",
+			Explanation: "Riemann sums partition [a,b] into subintervals and use rectangles to approximate the area.",
+		}
+	case 1:
+		return generator.Problem{
+			Question:    "What method approximates the integral using trapezoids? (enter trapezoids, parabolas, or rectangles)",
+			Answer:      "trapezoids",
+			Explanation: "The trapezoidal rule approximates the integral with (Δx/2)(f(x₀)+2f(x₁)+...+2f(xₙ₋₁)+f(xₙ)).",
+		}
+	case 2:
+		return generator.Problem{
+			Question:    "What method approximates the integral using parabolas? (enter trapezoids, parabolas, or rectangles)",
+			Answer:      "parabolas",
+			Explanation: "Simpson's rule uses quadratic polynomials and is more accurate than trapezoidal for smooth functions.",
+		}
+	case 3:
+		return generator.Problem{
+			Question:    "What power of h gives the accuracy order of the trapezoidal rule? (enter a number)",
+			Answer:      "2",
+			Explanation: "The trapezoidal rule error is proportional to h^2 times f'' at some point, making it second-order accurate: O(h^2).",
+		}
+	case 4:
+		return generator.Problem{
+			Question:    "What power of h gives the accuracy order of Simpson's rule? (enter a number)",
+			Answer:      "4",
+			Explanation: "Simpson's rule error is proportional to h^4 times the fourth derivative, so it is O(h^4) and beats the trapezoidal rule on smooth functions.",
+		}
+	case 5:
+		return generator.Problem{
+			Question:    "What power of h gives the accuracy order of the midpoint rule? (enter a number)",
+			Answer:      "2",
+			Explanation: "The midpoint rule error is proportional to h^2 times f'' at some point, so it is second-order accurate like the trapezoidal rule.",
+		}
+	case 6:
+		return generator.Problem{
+			Question:    "What power of h gives the accuracy order of the left-endpoint Riemann sum? (enter a number)",
+			Answer:      "1",
+			Explanation: "A one-point Riemann sum error is proportional to h times f' at some point, so it is only first-order accurate: O(h).",
+		}
 	}
-	table := []entry{
-		{"What method approximates the integral using rectangles? (enter trapezoids, parabolas, or rectangles)", "rectangles", "Riemann sums partition [a,b] into subintervals and use rectangles to approximate the area."},
-		{"What method approximates the integral using trapezoids? (enter trapezoids, parabolas, or rectangles)", "trapezoids", "The trapezoidal rule approximates the integral with (Δx/2)(f(x₀)+2f(x₁)+...+2f(xₙ₋₁)+f(xₙ))."},
-		{"What method approximates the integral using parabolas? (enter trapezoids, parabolas, or rectangles)", "parabolas", "Simpson's rule uses quadratic polynomials and is more accurate than trapezoidal for smooth functions."},
-		{"What power of h gives the accuracy order of the trapezoidal rule? (enter a number)", "2", "The trapezoidal rule error is proportional to h^2 times f'' at some point, making it second-order accurate: O(h^2)."},
+	// The step size for n equal subintervals of [a,b] is h = (b-a)/n.
+	n := randRange(ctx.Difficulty, 2, 4+scale)
+	a := randRange(ctx.Difficulty, 0, 3)
+	b := a + n*randRange(ctx.Difficulty, 1, 3)
+	h := decimal(float64(b-a)/float64(n), 4)
+	return generator.Problem{
+		Question: fmt.Sprintf("On \\([%d,%d]\\) with \\(n=%d\\) equal subintervals, what is the step size \\(h\\)? (enter a number)", a, b, n),
+		Answer:   h,
+		Explanation: fmt.Sprintf("\\(h = (b-a)/n = (%d-%d)/%d = %s\\). Every quadrature rule on this panel uses that step size.",
+			b, a, n, h),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type riemannCriteriaGen struct{}
@@ -1462,17 +1504,55 @@ func (g *trigSubstitutionGen) Generate(ctx generator.GeneratorContext) generator
 type weierstrassSubGen struct{}
 
 func (g *weierstrassSubGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	switch rand.Intn(6) {
+	case 0:
+		return generator.Problem{
+			Question:    "What is the Weierstrass substitution? (enter as t = ...)",
+			Answer:      "t = tan(x/2)",
+			Explanation: "Let \\(t=\\tan(x/2)\\). Then \\(\\sin(x)=2t/(1+t^{2})\\), \\(\\cos(x)=(1-t^{2})/(1+t^{2})\\), \\(dx=2/(1+t^{2})dt\\).",
+		}
+	case 1:
+		return generator.Problem{
+			Question:    "What is \\(\\sin(x)\\) in terms of \\(t=\\tan(x/2)\\)?",
+			Answer:      "2t/(1+t^2)",
+			Explanation: "\\(\\sin(x) = 2t/(1+t^{2})\\) where \\(t=\\tan(x/2)\\).",
+		}
+	case 2:
+		return generator.Problem{
+			Question:    "What is \\(\\cos(x)\\) in terms of \\(t=\\tan(x/2)\\)?",
+			Answer:      "(1-t^2)/(1+t^2)",
+			Explanation: "\\(\\cos(x) = (1-t^{2})/(1+t^{2})\\) where \\(t=\\tan(x/2)\\).",
+		}
+	case 3:
+		return generator.Problem{
+			Question:    "What is \\(dx\\) in terms of \\(t=\\tan(x/2)\\)?",
+			Answer:      "2/(1+t^2) dt",
+			Explanation: "\\(dx = 2/(1+t^{2}) dt\\) where \\(t=\\tan(x/2)\\).",
+		}
+	case 4:
+		return generator.Problem{
+			Question:    "What is \\(\\tan(x)\\) in terms of \\(t=\\tan(x/2)\\)?",
+			Answer:      "2t/(1-t^2)",
+			Explanation: "\\(\\tan(x) = \\sin(x)/\\cos(x) = \\frac{2t}{1-t^{2}}\\) where \\(t=\\tan(x/2)\\), valid where \\(t \\ne \\pm 1\\).",
+		}
 	}
-	table := []entry{
-		{"What is the Weierstrass substitution? (enter as t = ...)", "t = tan(x/2)", "Let \\(t=\\tan(x/2)\\). Then \\(\\sin(x)=2t/(1+t^{2})\\), \\(\\cos(x)=(1-t^{2})/(1+t^{2})\\), \\(dx=2/(1+t^{2})dt\\)."},
-		{"What is \\(\\sin(x)\\) in terms of \\(t=\\tan(x/2)\\)?", "2t/(1+t^2)", "\\(\\sin(x) = 2t/(1+t^{2})\\) where \\(t=\\tan(x/2)\\)."},
-		{"What is \\(\\cos(x)\\) in terms of \\(t=\\tan(x/2)\\)?", "(1-t^2)/(1+t^2)", "\\(\\cos(x) = (1-t^{2})/(1+t^{2})\\) where \\(t=\\tan(x/2)\\)."},
-		{"What is \\(dx\\) in terms of \\(t=\\tan(x/2)\\)?", "2/(1+t^2) dt", "\\(dx = 2/(1+t^{2}) dt\\) where \\(t=\\tan(x/2)\\)."},
+	// A concrete value keeps the substitution honest: the learner cannot answer by
+	// pattern-matching the general identity.
+	t := randRange(ctx.Difficulty, 1, 4)
+	sinValue := decimal(2*float64(t)/float64(1+t*t), 4)
+	cosValue := decimal(float64(1-t*t)/float64(1+t*t), 4)
+	if rand.Intn(2) == 0 {
+		return generator.Problem{
+			Question:    fmt.Sprintf("If \\(t=\\tan(x/2)=%d\\), what is \\(\\sin(x)\\)? (enter a decimal)", t),
+			Answer:      sinValue,
+			Explanation: fmt.Sprintf("\\(\\sin(x) = 2t/(1+t^{2}) = %d/(1+%d) = %s\\).", 2*t, t*t, sinValue),
+		}
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	return generator.Problem{
+		Question:    fmt.Sprintf("If \\(t=\\tan(x/2)=%d\\), what is \\(\\cos(x)\\)? (enter a decimal)", t),
+		Answer:      cosValue,
+		Explanation: fmt.Sprintf("\\(\\cos(x) = (1-t^{2})/(1+t^{2}) = (1-%d)/(1+%d) = %s\\).", t*t, t*t, cosValue),
+	}
 }
 
 // --- Limit generators ---
@@ -1665,17 +1745,51 @@ func (g *weierstrassLimitGen) Generate(ctx generator.GeneratorContext) generator
 type seqConceptGen struct{}
 
 func (g *seqConceptGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	scale := int(1 + ctx.Difficulty*4)
+	switch rand.Intn(3) {
+	case 0:
+		// a_n = n/(n+k): every term is a fresh fraction.
+		k := randRange(ctx.Difficulty, 1, 2+scale)
+		terms := make([]string, 3)
+		for i := 1; i <= 3; i++ {
+			terms[i-1] = fmt.Sprintf("%d/%d", i, i+k)
+		}
+		answer := strings.Join(terms, ", ")
+		return generator.Problem{
+			Question:    fmt.Sprintf("For \\(a_{n} = n/(n+%d)\\), write the first 3 terms. (separate with commas)", k),
+			Answer:      answer,
+			Explanation: fmt.Sprintf("Substituting \\(n=1,2,3\\) gives \\(%s\\). The terms increase toward 1 as \\(n\\to\\infty\\).", answer),
+		}
+	case 1:
+		// An arithmetic sequence: a_n = a_1 + (n-1)d.
+		a := randRange(ctx.Difficulty, 1, 9)
+		d := randRange(ctx.Difficulty, 1, 5)
+		terms := make([]string, 4)
+		for i := 0; i < 4; i++ {
+			terms[i] = strconv.Itoa(a + i*d)
+		}
+		answer := strings.Join(terms, ", ")
+		return generator.Problem{
+			Question:    fmt.Sprintf("For the arithmetic sequence with \\(a_{1}=%d\\) and common difference \\(d=%d\\), write the first 4 terms. (separate with commas)", a, d),
+			Answer:      answer,
+			Explanation: fmt.Sprintf("Each term adds \\(d=%d\\): \\(%s\\).", d, answer),
+		}
 	}
-	table := []entry{
-		{"What is a sequence?", "an ordered list of numbers (a function ℕ→ℝ)", "A sequence is a function from natural numbers (or a subset) to real numbers, denoted {aₙ}."},
-		{"What is aₙ = n/(n+1): write first 3 terms.", "1/2, 2/3, 3/4", "a₁=1/2, a₂=2/3, a₃=3/4."},
-		{"What is aₙ = (-1)ⁿ: write first 4 terms.", "-1, 1, -1, 1", "a₁=-1, a₂=1, a₃=-1, a₄=1. This sequence alternates."},
-		{"What is a recursive sequence?", "a sequence defined by relating aₙ to previous terms", "E.g., a₁=1, aₙ=aₙ₋₁+2 defines the odd numbers: 1, 3, 5, 7, ..."},
+	// A geometric sequence: a_n = a r^(n-1).
+	a := randRange(ctx.Difficulty, 1, 4)
+	r := randRange(ctx.Difficulty, 2, 3)
+	terms := make([]string, 3)
+	v := a
+	for i := 0; i < 3; i++ {
+		terms[i] = strconv.Itoa(v)
+		v *= r
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	answer := strings.Join(terms, ", ")
+	return generator.Problem{
+		Question:    fmt.Sprintf("For the geometric sequence with \\(a_{1}=%d\\) and ratio \\(r=%d\\), write the first 3 terms. (separate with commas)", a, r),
+		Answer:      answer,
+		Explanation: fmt.Sprintf("Multiply by \\(r=%d\\) each time: \\(%s\\).", r, answer),
+	}
 }
 
 type seqConvergenceGen struct{}
@@ -2600,17 +2714,32 @@ func (g *integralNetChangeGen) Generate(ctx generator.GeneratorContext) generato
 type integralVariableLimitsGen struct{}
 
 func (g *integralVariableLimitsGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	scale := int(1 + ctx.Difficulty*5)
+	p := randRange(ctx.Difficulty, 1, 2+scale)
+	// q is a multiple of p+1 so the chain rule cancels the antiderivative's
+	// denominator and the answer stays an integer multiple of a power of x.
+	k := randRange(ctx.Difficulty, 1, 3)
+	q := k * (p + 1)
+	a := randRange(ctx.Difficulty, 0, 3)
+	exp := q*p + q - 1
+	body := coefStr(k) + varPow("x", exp)
+	upper := fmt.Sprintf("x^{%d}", q)
+	lower := fmt.Sprintf("%d", a)
+	flipped := rand.Intn(3) == 0
+	if flipped {
+		upper, lower = lower, upper
+		body = "-" + body
 	}
-	table := []entry{
-		{"Find \\(\\frac{d}{dx}\\int_{0}^{x} t^{2}\\,dt\\).", "x^2", "FTC part 1: derivative of the accumulation is the integrand at \\(x\\)."},
-		{"Find \\(\\frac{d}{dx}\\int_{1}^{x} \\sin(t)\\,dt\\).", "sin(x)", "By FTC1, \\(\\frac{d}{dx}\\int_{1}^{x}\\sin t\\,dt = \\sin x\\)."},
-		{"Find \\(\\frac{d}{dx}\\int_{0}^{x^{2}} t\\,dt\\).", "2x^3", "Chain rule + FTC1: \\(x^{2} \\cdot 2x = 2x^{3}\\)."},
-		{"Find \\(\\frac{d}{dx}\\int_{x}^{2} e^{t}\\,dt\\).", "-e^x", "Flipped limit: \\(-\\frac{d}{dx}\\int_{2}^{x}e^{t}\\,dt = -e^{x}\\)."},
+	dir := ""
+	if flipped {
+		dir = "Flipping the limits introduces a minus sign. "
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	return generator.Problem{
+		Question: fmt.Sprintf("Find \\(\\frac{d}{dx}\\int_{%s}^{%s} t^{%d}\\,dt\\).", lower, upper, p),
+		Answer:   body,
+		Explanation: fmt.Sprintf("%sFTC part 1 with the chain rule: the integrand at the upper limit times the derivative of the upper limit, "+
+			"\\(%s \\cdot %d x^{%d} = %s\\).", dir, upper, q, q-1, body),
+	}
 }
 
 type integralMVTGen struct{}
@@ -2832,16 +2961,27 @@ func (g *integralCenterMassGen) Generate(ctx generator.GeneratorContext) generat
 type integralSurfaceAreaGen struct{}
 
 func (g *integralSurfaceAreaGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	scale := int(1 + ctx.Difficulty*5)
+	if rand.Intn(2) == 0 {
+		// Revolving a semicircle of radius r gives S = 4 pi r^2.
+		r := randRange(ctx.Difficulty, 1, 2+scale)
+		answer := fmt.Sprintf("%dpi", 4*r*r)
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the surface area of a sphere of radius %d? (enter in terms of pi)", r),
+			Answer:   answer,
+			Explanation: fmt.Sprintf("Revolving a semicircle gives \\(S = 4\\pi r^{2}\\); with \\(r=%d\\): \\(4\\pi \\cdot %d = %s\\). "+
+				"The general band formula is \\(S = 2\\pi\\int f(x)\\sqrt{1+(f'(x))^{2}}\\,dx\\).", r, r*r, answer),
+		}
 	}
-	table := []entry{
-		{"What is the surface area of a sphere of radius 2? (enter in terms of pi)", "16pi", "Revolving a semicircle gives S = 4 pi r^2; with r=2: 16pi. Bands of radius f(x): S = 2 pi times integral of f(x)sqrt(1+(f')^2)dx."},
-		{"What is the surface area of a sphere of radius \\(r\\)? (enter in terms of pi)", "4*pi*r^2", "Revolving a semicircle gives \\(S = 4\\pi r^{2}\\)."},
-		{"For \\(y=3x\\), what is \\(1+(f'(x))^{2}\\)? (enter a number)", "10", "f'=3, so 1+(f')^2=10. The arc-length element sqrt(1+(f')^2)dx measures slant length in the surface formula."},
+	// The slant factor of a line y = m x: 1 + (f')^2 = 1 + m^2.
+	m := randRange(ctx.Difficulty, 1, 2+scale)
+	answer := fmt.Sprintf("%d", 1+m*m)
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(y=%dx\\), what is \\(1+(f'(x))^{2}\\)? (enter a number)", m),
+		Answer:   answer,
+		Explanation: fmt.Sprintf("\\(f'=%d\\), so \\(1+(f')^{2} = 1+%d = %s\\). "+
+			"The arc-length element \\(\\sqrt{1+(f')^{2}}\\,dx\\) measures slant length in the surface formula.", m, m*m, answer),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type integralTrapezoidGen struct{}
