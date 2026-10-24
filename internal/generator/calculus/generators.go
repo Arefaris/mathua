@@ -2202,188 +2202,272 @@ func (g *derivCurveSketchGen) Generate(ctx generator.GeneratorContext) generator
 type derivTangentLineGen struct{}
 
 func (g *derivTangentLineGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// f(x)=x^n at x=a: the tangent is y = a^n + n a^(n-1) (x-a).
+	n := randRange(ctx.Difficulty, 2, 4)
+	a := randRange(ctx.Difficulty, 1, 4)
+	fv := intPow(a, n)
+	slope := n * intPow(a, n-1)
+	return generator.Problem{
+		Question: fmt.Sprintf("Find the tangent line to \\(f(x)=x^{%d}\\) at \\(x=%d\\).", n, a),
+		Answer:   fmt.Sprintf("%d+%d(x-%d)", fv, slope, a),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: Differentiate: \\(f'(x)=%d%s\\).\n"+
+				"Subgoal 2: The slope at \\(x=%d\\) is \\(f'(%d)=%d\\) and the point of tangency is \\((%d,%d)\\).\n"+
+				"Subgoal 3: Point-slope form gives \\(y-%d=%d(x-%d)\\), that is \\(y=%d+%d(x-%d)\\).",
+			n, varPow("x", n-1), a, a, slope, a, fv, fv, slope, a, fv, slope, a),
 	}
-	table := []entry{
-		{"Find the tangent line to \\(f(x)=x^{2}\\) at \\(x=1\\).", "y=2x-1", "Slope \\(f'(1)=2\\); point \\((1,1)\\): \\(y-1=2(x-1)\\), i.e. \\(y=2x-1\\)."},
-		{"Find the tangent line to \\(f(x)=x^{3}\\) at \\(x=2\\).", "y=12x-16", "Slope \\(f'(2)=12\\); point \\((2,8)\\): \\(y-8=12(x-2)\\), i.e. \\(y=12x-16\\)."},
-		{"Find the tangent line to \\(f(x)=\\sin(x)\\) at \\(x=0\\).", "y=x", "Slope \\(\\cos(0)=1\\); point \\((0,0)\\): \\(y=x\\)."},
-		{"Find the tangent line to \\(f(x)=e^{x}\\) at \\(x=0\\).", "y=x+1", "Slope \\(e^{0}=1\\); point \\((0,1)\\): \\(y-1=x\\), i.e. \\(y=x+1\\)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivLinearApproxGen struct{}
 
 func (g *derivLinearApproxGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// Linearize f(x)=x^n at x=a and evaluate the tangent at a+h.
+	n := randRange(ctx.Difficulty, 2, 3)
+	a := randRange(ctx.Difficulty, 2, 6)
+	h := []float64{0.1, 0.2}[rand.Intn(2)]
+	fv := intPow(a, n)
+	slope := n * intPow(a, n-1)
+	estimate := float64(fv) + float64(slope)*h
+	return generator.Problem{
+		Question: fmt.Sprintf("Use the linearization of \\(f(x)=x^{%d}\\) at \\(x=%d\\) to estimate \\((%.1f)^{%d}\\). (enter a decimal)", n, a, float64(a)+h, n),
+		Answer:   decimal(estimate, 4),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: \\(f(%d)=%d\\) and \\(f'(x)=%d%s\\), so \\(f'(%d)=%d\\).\n"+
+				"Subgoal 2: The linearization is \\(L(x)=%d+%d(x-%d)\\).\n"+
+				"Subgoal 3: Evaluate at \\(x=%.1f\\): \\(L(%.1f)=%d+%d(%.1f)=%s\\).",
+			a, fv, n, varPow("x", n-1), a, slope, fv, slope, a, float64(a)+h, float64(a)+h, fv, slope, h, decimal(estimate, 4)),
 	}
-	table := []entry{
-		{"Write the linearization of \\(f(x)=\\sqrt{x}\\) at \\(x=4\\) as an expression in \\(x\\).", "2+(x-4)/4", "\\(f(4)=2\\), \\(f'(x)=1/(2\\sqrt{x})\\), \\(f'(4)=1/4\\): \\(L(x)=2+(x-4)/4\\)."},
-		{"Use \\(L(x)=1+(x-1)/2\\) to approximate \\(\\sqrt{1.1}\\).", "1.05", "\\(L(1.1) = 1 + 0.1/2 = 1.05\\)."},
-		{"Write the linearization of \\(f(x)=e^{x}\\) at \\(x=0\\) as an expression in \\(x\\).", "1+x", "\\(f(0)=1\\), \\(f'(0)=1\\): \\(L(x) = 1+x\\)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivNewtonGen struct{}
 
 func (g *derivNewtonGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// One Newton step for f(x)=x^2-c from x0: x1 = x0 - (x0^2-c)/(2 x0).
+	c := randRange(ctx.Difficulty, 2, 9)
+	x0 := randRange(ctx.Difficulty, 1, 4)
+	if x0*x0 == c {
+		// x0 would already be the root, which makes the step a no-op.
+		x0 = x0%4 + 1
 	}
-	table := []entry{
-		{"One Newton step for \\(f(x)=x^{2}-3\\) from \\(x_{0}=2\\). (enter a number)", "1.75", "Newton iterates x(n+1) = x(n) - f(x(n))/f'(x(n)). Here \\(x_{1} = 2 - (4-3)/4 = 1.75\\)."},
-		{"One Newton step for \\(f(x)=x^{2}-2\\) from \\(x_{0}=1\\).", "1.5", "\\(x_{1} = 1 - (1-2)/2 = 1.5\\)."},
-		{"One Newton step for \\(f(x)=x^{2}-2\\) from \\(x_{0}=1.5\\).", "1.4167", "\\(x_{1} = 1.5 - (2.25-2)/3 = 1.5 - 0.0833 = 1.4167\\)."},
-		{"One Newton step for \\(f(x)=x^{2}-5\\) from \\(x_{0}=2\\). (enter a number)", "2.25", "\\(x_{1} = 2 - (4-5)/4 = 2.25\\). Newton's method fails when f'(x(n))=0 or the guess is far from the root (zero derivative or bad start breaks the iteration)."},
+	x1 := (float64(x0*x0) + float64(c)) / float64(2*x0)
+	return generator.Problem{
+		Question: fmt.Sprintf("One Newton step for \\(f(x)=x^{2}-%d\\) from \\(x_{0}=%d\\). (enter a number)", c, x0),
+		Answer:   decimal(x1, 4),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: Newton's method uses \\(x_{1}=x_{0}-f(x_{0})/f'(x_{0})\\) with \\(f'(x)=2x\\).\n"+
+				"Subgoal 2: \\(f(%d)=%d-%d=%d\\) and \\(f'(%d)=%d\\).\n"+
+				"Subgoal 3: \\(x_{1}=%d-%d/%d=%s\\).",
+			x0, x0*x0, c, x0*x0-c, x0, 2*x0, x0, x0*x0-c, 2*x0, decimal(x1, 4)),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivErrorPropGen struct{}
 
 func (g *derivErrorPropGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// y=x^n with x measured as x0±dx gives dy = n x0^(n-1) dx.
+	n := randRange(ctx.Difficulty, 2, 3)
+	x0 := randRange(ctx.Difficulty, 2, 5)
+	dx := []float64{0.1, 0.2}[rand.Intn(2)]
+	dy := float64(n*intPow(x0, n-1)) * dx
+	return generator.Problem{
+		Question: fmt.Sprintf("If \\(y=x^{%d}\\) and \\(x=%d\\pm %.1f\\), estimate \\(\\Delta y\\). (enter a decimal)", n, x0, dx),
+		Answer:   decimal(dy, 4),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: For small changes \\(\\Delta y \\approx dy = f'(x)\\,dx\\).\n"+
+				"Subgoal 2: \\(f'(x)=%d%s\\), so \\(f'(%d)=%d\\).\n"+
+				"Subgoal 3: \\(\\Delta y \\approx %d \\cdot %.1f = %s\\).",
+			n, varPow("x", n-1), x0, n*intPow(x0, n-1), n*intPow(x0, n-1), dx, decimal(dy, 4)),
 	}
-	table := []entry{
-		{"If \\(y=x^{2}\\) and \\(x=3\\pm 0.1\\), estimate \\(\\Delta y\\).", "0.6", "\\(dy = 2x\\,dx = 6 \\cdot 0.1 = 0.6\\)."},
-		{"If \\(y=\\sqrt{x}\\) and \\(x=100\\pm 1\\), estimate \\(\\Delta y\\).", "0.05", "\\(dy = dx/(2\\sqrt{x}) = 1/20 = 0.05\\)."},
-		{"If \\(y=x^{3}\\) and \\(x=2\\pm 0.1\\), estimate \\(\\Delta y\\). (enter a number)", "1.2", "\\(dy = 3x^{2}\\,dx = 12 \\cdot 0.1 = 1.2\\). Measurement error propagates as dy = f'(x)dx."},
-		{"If \\(y=1/x\\) and \\(x=2\\pm 0.1\\), estimate \\(\\Delta y\\).", "-0.025", "\\(dy = -dx/x^{2} = -0.1/4 = -0.025\\) (magnitude 0.025)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivImplicitSecondGen struct{}
 
 func (g *derivImplicitSecondGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// x^2+y^2=r^2 gives y'=-x/y and y''=-r^2/y^3.
+	r := randRange(ctx.Difficulty, 3, 6)
+	if rand.Intn(2) == 0 {
+		return generator.Problem{
+			Question: fmt.Sprintf("For \\(x^{2}+y^{2}=%d\\), what is \\(dy/dx\\)?", r*r),
+			Answer:   "-x/y",
+			Explanation: fmt.Sprintf(
+				"Subgoal 1: Differentiate both sides implicitly: \\(2x+2y\\,y'=0\\).\n"+
+					"Subgoal 2: Solve for \\(y'\\): \\(y'=-x/y\\).\n"+
+					"Subgoal 3: This holds on the circle \\(x^{2}+y^{2}=%d\\) wherever \\(y\\neq 0\\).", r*r),
+		}
 	}
-	table := []entry{
-		{"For \\(x^{2}+y^{2}=25\\), what is \\(dy/dx\\)?", "-x/y", "Implicit: \\(2x+2y\\,y'=0\\), so \\(y'=-x/y\\)."},
-		{"For \\(x^{2}+y^{2}=25\\), what is \\(d^{2}y/dx^{2}\\) in terms of \\(x,y\\)?", "-25/y^3", "Differentiate \\(y'=-x/y\\): \\(y'' = -(y-xy')/y^{2} = -(y+x^{2}/y)/y^{2} = -25/y^{3}\\)."},
-		{"What is the first step in finding a second implicit derivative?", "find dy/dx by implicit differentiation", "Compute \\(dy/dx\\) first, then differentiate that relation implicitly again."},
-		{"For \\(y=x^{3}\\) (explicit check), what is \\(y''\\)?", "6x", "\\(y'=3x^{2}\\), \\(y''=6x\\)."},
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(x^{2}+y^{2}=%d\\), what is \\(d^{2}y/dx^{2}\\) in terms of \\(x,y\\)?", r*r),
+		Answer:   fmt.Sprintf("-%d/y^3", r*r),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: From \\(y'=-x/y\\), differentiate again: \\(y''=-(y-xy')/y^{2}\\).\n"+
+				"Subgoal 2: Substitute \\(y'=-x/y\\): \\(y''=-(y+x^{2}/y)/y^{2}=-(y^{2}+x^{2})/y^{3}\\).\n"+
+				"Subgoal 3: On the circle \\(x^{2}+y^{2}=%d\\), so \\(y''=-%d/y^{3}\\).", r*r, r*r),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivChainPowerGen struct{}
 
 func (g *derivChainPowerGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// (ax+b)^n differentiates to n a (ax+b)^(n-1).
+	a := randRange(ctx.Difficulty, 1, 4)
+	b := randRange(ctx.Difficulty, 1, 5)
+	n := randRange(ctx.Difficulty, 2, 4)
+	coef := n * a
+	inner := innerLinear(a, b)
+	answer := coefStr(coef) + "(" + inner + ")" + powSuffix(n-1)
+	return generator.Problem{
+		Question: fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=(%s)^{%d}\\).", inner, n),
+		Answer:   answer,
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: The outer power rule gives \\(%d(%s)^{%d}\\).\n"+
+				"Subgoal 2: The inner derivative is %d.\n"+
+				"Subgoal 3: Multiply: \\(f'(x)=%d(%s)^{%d}=%s\\).",
+			n, inner, n-1, a, coef, inner, n-1, answer),
 	}
-	table := []entry{
-		{"Find \\(f'(x)\\) if \\(f(x)=(3x+1)^{4}\\).", "12(3x+1)^3", "Chain rule: \\(4(3x+1)^{3} \\cdot 3 = 12(3x+1)^{3}\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=\\sqrt{x^{2}+1}\\).", "x/sqrt(x^2+1)", "Chain rule: \\(\\frac{1}{2}(x^{2}+1)^{-1/2} \\cdot 2x = x/\\sqrt{x^{2}+1}\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=(x^{2})^{3}\\) simplified first.", "6x^5", "Simplify: \\((x^{2})^{3}=x^{6}\\), so \\(f'=6x^{5}\\)."},
-		{"Which technique handles \\(f(x)=x^{x}\\)?", "logarithmic differentiation after taking logs", "\\(x^{x}\\) is a composite power: take \\(\\ln\\) both sides, then differentiate implicitly."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivChainMultiGen struct{}
 
 func (g *derivChainMultiGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// z=ax+by with x=t, y=t^2 gives dz/dt = a + 2 b t.
+	a := randRange(ctx.Difficulty, 1, 5)
+	b := randRange(ctx.Difficulty, 1, 5)
+	t0 := randRange(ctx.Difficulty, 1, 4)
+	answer := a + 2*b*t0
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(z=%s\\), \\(x=t\\), \\(y=t^{2}\\), find \\(dz/dt\\) at \\(t=%d\\). (enter a number)", linearIn(a, b), t0),
+		Answer:   fmt.Sprintf("%d", answer),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: The multivariable chain rule is \\(dz/dt = z_{x}\\,x'(t) + z_{y}\\,y'(t)\\).\n"+
+				"Subgoal 2: \\(z_{x}=%d\\), \\(z_{y}=%d\\), \\(x'(t)=1\\), \\(y'(t)=2t\\).\n"+
+				"Subgoal 3: \\(dz/dt = %d + %d t\\), so at \\(t=%d\\) it equals %d.",
+			a, b, a, 2*b, t0, answer),
 	}
-	table := []entry{
-		{"For \\(z=2x+3y\\), \\(x=t\\), \\(y=t^{2}\\), find \\(dz/dt\\) at \\(t=1\\). (enter a number)", "8", "Multivariable chain rule: dz/dt = 2(1)+3(2t) = 2+6t; at t=1: 8."},
-		{"For \\(z=x^{2}y\\), \\(x=t\\), \\(y=t^{2}\\), find \\(dz/dt\\).", "4t^3", "\\(z=t^{4}\\), so \\(dz/dt=4t^{3}\\) (check: \\(2xy\\cdot 1 + x^{2}\\cdot 2t = 2t^{3}+2t^{3}\\))."},
-		{"For \\(z=x+y\\), \\(x=t^{2}\\), \\(y=3t\\), find \\(dz/dt\\).", "2t+3", "\\(dz/dt = 1\\cdot 2t + 1\\cdot 3 = 2t+3\\)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivGradientGen struct{}
 
 func (g *derivGradientGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// f = c x^p y^q gives grad f = (c p x^(p-1) y^q, c q x^p y^(q-1)).
+	c := randRange(ctx.Difficulty, 1, 4)
+	p := randRange(ctx.Difficulty, 2, 3)
+	q := randRange(ctx.Difficulty, 2, 3)
+	f := monoTerm(c, p, q)
+	fx := monoTerm(c*p, p-1, q)
+	fy := monoTerm(c*q, p, q-1)
+	return generator.Problem{
+		Question: fmt.Sprintf("Find \\(\\nabla f\\) for \\(f(x,y)=%s\\).", f),
+		Answer:   fmt.Sprintf("(%s, %s)", fx, fy),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: \\(\\nabla f=(f_{x},f_{y})\\).\n"+
+				"Subgoal 2: Differentiate in \\(x\\) holding \\(y\\) fixed: \\(f_{x}=%s\\).\n"+
+				"Subgoal 3: Differentiate in \\(y\\) holding \\(x\\) fixed: \\(f_{y}=%s\\). So \\(\\nabla f=(%s, %s)\\).",
+			fx, fy, fx, fy),
 	}
-	table := []entry{
-		{"Find \\(\\nabla f\\) for \\(f(x,y)=x^{2}+y^{2}\\).", "(2x, 2y)", "\\(\\nabla f = (f_{x}, f_{y}) = (2x, 2y)\\)."},
-		{"Find \\(\\nabla f\\) for \\(f(x,y)=xy\\).", "(y, x)", "\\(\\nabla f = (y, x)\\)."},
-		{"What direction does the gradient point?", "steepest ascent", "The gradient points in the direction of steepest increase of \\(f\\)."},
-		{"Find \\(\\nabla f\\) at \\((1,2)\\) for \\(f(x,y)=x^{2}y\\).", "(4, 1)", "\\(\\nabla f = (2xy, x^{2})\\); at \\((1,2)\\): \\((4,1)\\)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivDirectionalGen struct{}
 
 func (g *derivDirectionalGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// f=a x^2+b y^2, so D_u f at (p,q) is 2ap or 2bq with the sign of u.
+	a := randRange(ctx.Difficulty, 1, 4)
+	b := randRange(ctx.Difficulty, 1, 4)
+	p := randRange(ctx.Difficulty, 1, 4)
+	q := randRange(ctx.Difficulty, 1, 4)
+	dirs := []struct {
+		label string
+		x, y  int
+	}{
+		{"(1,0)", 1, 0},
+		{"(0,1)", 0, 1},
+		{"(-1,0)", -1, 0},
+		{"(0,-1)", 0, -1},
 	}
-	table := []entry{
-		{"Is the directional derivative the dot product of the gradient with the direction? (yes/no)", "yes", "The derivative in unit direction \\(u\\) is \\(D_{u}f = \\nabla f \\cdot u\\)."},
-		{"For \\(f(x,y)=x^{2}+y^{2}\\) at \\((1,0)\\) in direction \\((1,0)\\), find \\(D_{u}f\\).", "2", "\\(\\nabla f(1,0) = (2,0)\\); dotted with \\((1,0)\\): 2."},
-		{"For \\(f(x,y)=xy\\) at \\((1,1)\\) in direction \\((1,0)\\), find \\(D_{u}f\\).", "1", "\\(\\nabla f(1,1) = (1,1)\\); dotted with \\((1,0)\\): 1."},
+	d := dirs[rand.Intn(len(dirs))]
+	answer := d.x*2*a*p + d.y*2*b*q
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(f(x,y)=%s\\), find the directional derivative at \\((%d,%d)\\) in the direction \\(u=%s\\). (enter a number)", quadForm(a, b), p, q, d.label),
+		Answer:   fmt.Sprintf("%d", answer),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: \\(D_{u}f=\\nabla f\\cdot u\\) for a unit direction \\(u\\).\n"+
+				"Subgoal 2: \\(\\nabla f=(%s, %s)\\), so at \\((%d,%d)\\) it is \\((%d, %d)\\).\n"+
+				"Subgoal 3: Dot with \\(u=%s\\): %d.",
+			monoTerm(2*a, 1, 0), monoTerm(2*b, 0, 1), p, q, 2*a*p, 2*b*q, d.label, answer),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivPartialHigherGen struct{}
 
 func (g *derivPartialHigherGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// f = c x^p y^q; ask for one of the three second partials.
+	c := randRange(ctx.Difficulty, 1, 4)
+	p := randRange(ctx.Difficulty, 2, 4)
+	q := randRange(ctx.Difficulty, 2, 4)
+	f := monoTerm(c, p, q)
+	which := []struct {
+		label string
+		coef  int
+		px    int
+		py    int
+	}{
+		{"f_{xx}", c * p * (p - 1), p - 2, q},
+		{"f_{yy}", c * q * (q - 1), p, q - 2},
+		{"f_{xy}", c * p * q, p - 1, q - 1},
+	}[rand.Intn(3)]
+	answer := monoTerm(which.coef, which.px, which.py)
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(f(x,y)=%s\\), find \\(%s\\).", f, which.label),
+		Answer:   answer,
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: Differentiate once in each variable the label names, holding the other fixed.\n"+
+				"Subgoal 2: Powers drop by one per derivative, so the surviving exponents are \\(x^{%d}y^{%d}\\).\n"+
+				"Subgoal 3: The coefficients multiply to %d, giving \\(%s\\).",
+			which.px, which.py, which.coef, answer),
 	}
-	table := []entry{
-		{"For \\(f(x,y)=x^{3}y^{2}\\), find \\(f_{xx}\\).", "6xy^2", "\\(f_{x} = 3x^{2}y^{2}\\), so \\(f_{xx} = 6xy^{2}\\)."},
-		{"For \\(f(x,y)=x^{3}y^{2}\\), find \\(f_{yy}\\).", "2x^3", "\\(f_{y} = 2x^{3}y\\), so \\(f_{yy} = 2x^{3}\\)."},
-		{"For \\(f(x,y)=x^{2}y\\), find \\(f_{xy}\\).", "2x", "\\(f_{x} = 2xy\\), so \\(f_{xy} = 2x\\)."},
-		{"For \\(f(x,y)=\\sin(x)\\cos(y)\\), find \\(f_{xx}\\).", "-sin(x)cos(y)", "\\(f_{x} = \\cos(x)\\cos(y)\\), so \\(f_{xx} = -\\sin(x)\\cos(y)\\)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivClairautGen struct{}
 
 func (g *derivClairautGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// f = c x^m y^n, so f_xy = f_yx = c m n x^(m-1) y^(n-1) for polynomials.
+	c := randRange(ctx.Difficulty, 1, 4)
+	m := randRange(ctx.Difficulty, 2, 4)
+	n := randRange(ctx.Difficulty, 2, 4)
+	f := monoTerm(c, m, n)
+	answer := monoTerm(c*m*n, m-1, n-1)
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(f(x,y)=%s\\), compute \\(f_{xy}\\) (Clairaut's theorem says this equals \\(f_{yx}\\)).", f),
+		Answer:   answer,
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: Differentiate in \\(x\\) first: \\(f_{x}=%s\\).\n"+
+				"Subgoal 2: Then differentiate that in \\(y\\): \\(f_{xy}=%s\\).\n"+
+				"Subgoal 3: The other order gives the same term because the mixed partials of a polynomial are continuous, which is exactly Clairaut's hypothesis.",
+			monoTerm(c*m, m-1, n), answer),
 	}
-	table := []entry{
-		{"State Clairaut's theorem.", "f_xy = f_yx when mixed partials are continuous", "If \\(f_{xy}\\) and \\(f_{yx}\\) are continuous near a point, they are equal there."},
-		{"For \\(f(x,y)=x^{2}y^{3}\\), verify \\(f_{xy}\\) equals \\(f_{yx}\\).", "6xy^2", "\\(f_{xy} = 6xy^{2} = f_{yx}\\), as Clairaut guarantees for polynomials."},
-		{"What hypothesis does Schwarz's theorem need?", "continuity of the mixed partials", "Schwarz/Clairaut needs \\(f_{xy}\\) and \\(f_{yx}\\) continuous at the point."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivTotalDiffGen struct{}
 
 func (g *derivTotalDiffGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// z=c x^p y^q, so dz = (p c x^(p-1) y^q) dx + (q c x^p y^(q-1)) dy.
+	c := randRange(ctx.Difficulty, 1, 3)
+	p := randRange(ctx.Difficulty, 2, 3)
+	q := randRange(ctx.Difficulty, 2, 3)
+	x0 := randRange(ctx.Difficulty, 1, 3)
+	y0 := randRange(ctx.Difficulty, 1, 3)
+	dx, dy := 0.1, 0.1
+	fx := c * p * intPow(x0, p-1) * intPow(y0, q)
+	fy := c * q * intPow(x0, p) * intPow(y0, q-1)
+	dz := (float64(fx) + float64(fy)) * dx
+	return generator.Problem{
+		Question: fmt.Sprintf("For \\(z=%s\\), estimate \\(\\Delta z\\) when \\(x\\) grows from %d to %.1f and \\(y\\) grows from %d to %.1f. (enter a decimal)", monoTerm(c, p, q), x0, float64(x0)+dx, y0, float64(y0)+dy),
+		Answer:   decimal(dz, 4),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: The total differential is \\(dz=z_{x}\\,dx+z_{y}\\,dy\\).\n"+
+				"Subgoal 2: At \\((%d,%d)\\), \\(z_{x}=%d\\) and \\(z_{y}=%d\\).\n"+
+				"Subgoal 3: \\(dz\\approx %d(%.1f)+%d(%.1f)=%s\\).",
+			x0, y0, fx, fy, fx, dx, fy, dy, decimal(dz, 4)),
 	}
-	table := []entry{
-		{"Write the total differential of \\(z=f(x,y)\\).", "dz = f_x dx + f_y dy", "The total differential is \\(dz = f_{x}\\,dx + f_{y}\\,dy\\)."},
-		{"For \\(z=x^{2}y\\), write \\(dz\\).", "dz = 2xy dx + x^2 dy", "\\(z_{x} = 2xy\\), \\(z_{y} = x^{2}\\), so \\(dz = 2xy\\,dx + x^{2}\\,dy\\)."},
-		{"For \\(z=xy\\), write \\(dz\\).", "dz = y dx + x dy", "\\(z_{x} = y\\), \\(z_{y} = x\\), so \\(dz = y\\,dx + x\\,dy\\)."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivDiffContinuityGen struct{}
@@ -2404,16 +2488,36 @@ func (g *derivDiffContinuityGen) Generate(ctx generator.GeneratorContext) genera
 type derivJacobianGen struct{}
 
 func (g *derivJacobianGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// Two shapes: a power map, whose Jacobian is diagonal, and a linear map,
+	// whose Jacobian is the constant coefficient matrix.
+	if rand.Intn(2) == 0 {
+		p := randRange(ctx.Difficulty, 2, 3)
+		q := randRange(ctx.Difficulty, 2, 3)
+		fx := monoTerm(p, p-1, 0)
+		fy := monoTerm(q, 0, q-1)
+		return generator.Problem{
+			Question: fmt.Sprintf("Write the Jacobian of \\(T(x,y)=(x^{%d},y^{%d})\\).", p, q),
+			Answer:   fmt.Sprintf("[[%s,0],[0,%s]]", fx, fy),
+			Explanation: fmt.Sprintf(
+				"Subgoal 1: Row 1 holds the partials of the first component \\(x^{%d}\\): \\(%s\\) in \\(x\\) and 0 in \\(y\\).\n"+
+					"Subgoal 2: Row 2 holds the partials of \\(y^{%d}\\): 0 in \\(x\\) and \\(%s\\) in \\(y\\).\n"+
+					"Subgoal 3: Assemble the matrix \\(\\begin{pmatrix}%s&0\\\\0&%s\\end{pmatrix}\\).",
+				p, fx, q, fy, fx, fy),
+		}
 	}
-	table := []entry{
-		{"Write the Jacobian of \\(T(x,y)=(x^{2},y^{2})\\).", "[[2x,0],[0,2y]]", "Partial derivatives row by row: \\(\\begin{pmatrix}2x&0\\\\0&2y\\end{pmatrix}\\)."},
-		{"What are the entries of a Jacobian matrix?", "all first-order partials ∂T_i/∂x_j", "Row \\(i\\), column \\(j\\) holds \\(\\partial T_{i}/\\partial x_{j}\\)."},
-		{"Write the Jacobian of \\(T(x,y)=(x+y,x-y)\\).", "[[1,1],[1,-1]]", "Row 1: \\((1,1)\\); row 2: \\((1,-1)\\)."},
+	a := randRange(ctx.Difficulty, 1, 4)
+	b := randRange(ctx.Difficulty, 1, 4)
+	c := randRange(ctx.Difficulty, 1, 4)
+	d := randRange(ctx.Difficulty, 1, 4)
+	return generator.Problem{
+		Question: fmt.Sprintf("Write the Jacobian of \\(T(x,y)=(%s,%s)\\).", linearIn(a, b), linearIn(c, d)),
+		Answer:   fmt.Sprintf("[[%d,%d],[%d,%d]]", a, b, c, d),
+		Explanation: fmt.Sprintf(
+			"Subgoal 1: The first row holds \\(\\partial T_{1}/\\partial x=%d\\) and \\(\\partial T_{1}/\\partial y=%d\\).\n"+
+				"Subgoal 2: The second row holds \\(\\partial T_{2}/\\partial x=%d\\) and \\(\\partial T_{2}/\\partial y=%d\\).\n"+
+				"Subgoal 3: A linear map has a constant Jacobian, so the matrix is the coefficient matrix itself.",
+			a, b, c, d),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type integralNetChangeGen struct{}
