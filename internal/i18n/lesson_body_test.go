@@ -435,6 +435,9 @@ func mathSymbols(s string) []string {
 	return out
 }
 
+// pointLabelRe matches one to three Latin capitals: the label of a point or a triangle.
+var pointLabelRe = regexp.MustCompile(`^[A-Z]{1,3}$`)
+
 // mathOperatorNames are names of functions and operators that a formula may set with \text{}.
 var mathOperatorNames = map[string]bool{
 	"lcm": true, "gcd": true, "gcf": true, "sgn": true, "sign": true, "mod": true,
@@ -471,6 +474,13 @@ func englishMathText(spans []string) []string {
 			// A function or operator name (\text{lcm}, \text{sgn}) is notation, not English;
 			// a translation may keep it or use its own notation (НОК), as the glossary says.
 			if mathOperatorNames[strings.TrimSpace(body)] {
+				continue
+			}
+			// A point or segment label set with \text{} (\text{O}, \text{OST}) is notation as
+			// well: Russian and Ukrainian geometry writes points with Latin capitals too, and
+			// the label also appears outside \text{} in \overline{OS}, so it cannot be
+			// translated alone.
+			if pointLabelRe.MatchString(strings.TrimSpace(body)) {
 				continue
 			}
 			if strings.ContainsAny(body, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
@@ -863,5 +873,11 @@ func TestBareEnvironmentsAndOperatorNames(t *testing.T) {
 	}
 	if got := englishMathText([]string{`$\text{lcm}(4,6)$`, `$\text{sgn}\,x$`}); len(got) != 0 {
 		t.Errorf("operator names reported as English: %v", got)
+	}
+	if got := englishMathText([]string{`$\text{O} = (0,0)$`, `$\triangle\text{OST}$`}); len(got) != 0 {
+		t.Errorf("point labels reported as English: %v", got)
+	}
+	if got := englishMathText([]string{`$5\,\text{cm}$`, `$\text{rad}$`, `$\text{like}$`}); len(got) != 3 {
+		t.Errorf("lower-case English next to the point-label rule not reported: %v", got)
 	}
 }
