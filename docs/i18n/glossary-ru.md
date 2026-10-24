@@ -735,6 +735,7 @@
 | sales tax / tax rate / purchase price | налог с продаж / ставка налога / цена покупки | |
 | commission / rate of commission | комиссионные / ставка комиссионных | |
 | discount / discount rate / amount of discount / sale price / original price | скидка / ставка скидки / размер скидки / цена со скидкой / первоначальная цена | |
+| cost (в `pct.ops.markup`) | закупочная цена | решено 2026-10-24: «себестоимость» — затраты производителя, а магазин покупает товар по закупочной цене; selling price там остаётся «ценой продажи» |
 | mark-up / mark-up rate / wholesale price / list price | наценка / ставка наценки / оптовая цена / розничная цена | решено 2026-10-24: «оптовая / розничная цена» — естественная пара. «Цена продажи» остаётся для selling price в `pct.ops.markup` |
 | unit price / better buy | цена за единицу / выгодная покупка | |
 | conversion factor | переводной коэффициент | не «множитель перевода»; рецензия §12 |
