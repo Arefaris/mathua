@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/admin"
+	"github.com/chuma-beep/mathua/internal/leaderboard"
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
@@ -30,7 +31,7 @@ func hasPermission(r *http.Request, perm admin.Permission) bool {
 	return admin.Permitted(actorFrom(r).Role, perm)
 }
 
-// GET /api/admin/me — who the caller is to this surface, and what they may do. The frontend uses
+// GET /api/admin/me, who the caller is to this surface, and what they may do. The frontend uses
 // it to show only reachable sections; the sections still enforce themselves server-side.
 func (s *Server) handleAdminMe(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -61,7 +62,7 @@ var moderationStatuses = map[string]bool{
 	"open": true, "reviewing": true, "resolved": true, "dismissed": true,
 }
 
-// GET /api/admin/reports?status=&limit=&offset= — the moderation queue.
+// GET /api/admin/reports?status=&limit=&offset=, the moderation queue.
 func (s *Server) handleAdminReports(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, "method not allowed", 405)
@@ -172,7 +173,7 @@ func (s *Server) handleAdminReport(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// POST /api/admin/reports/{id}/grade — replay a report's answer through the
+// POST /api/admin/reports/{id}/grade, replay a report's answer through the
 // same grader the learner's submission used, and write nothing.
 //
 // The queue could show the question and the expected answer, but not whether an
@@ -213,7 +214,7 @@ func (s *Server) handleAdminReportGrade(w http.ResponseWriter, r *http.Request, 
 	s.writeGradeResult(w, report.ConceptID, report.Expected, answer)
 }
 
-// POST /api/admin/reports/bulk — one decision across a concept's unsettled
+// POST /api/admin/reports/bulk, one decision across a concept's unsettled
 // reports.
 //
 // A fix is usually one bug, not one report: the answer-format defect produced
@@ -294,7 +295,7 @@ func (s *Server) handleAdminReportsBulk(w http.ResponseWriter, r *http.Request) 
 
 // ── Admins and contributors ───────────────────────────────────────────────
 
-// GET /api/admin/admins — who currently holds a staff role, most privileged first.
+// GET /api/admin/admins, who currently holds a staff role, most privileged first.
 func (s *Server) handleAdminAdmins(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, "method not allowed", 405)
@@ -309,7 +310,7 @@ func (s *Server) handleAdminAdmins(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"admins": staff})
 }
 
-// GET /api/admin/invitations — list; POST /api/admin/invitations — create.
+// GET /api/admin/invitations, list; POST /api/admin/invitations, create.
 //
 // Creation mints the raw token once and returns it in the response; the database holds only the
 // hash, so the invitation is shown to the inviter and cannot be recovered afterwards. That is
@@ -422,12 +423,12 @@ func (s *Server) handleAdminInvitationRevoke(w http.ResponseWriter, r *http.Requ
 	writeJSON(w, map[string]interface{}{"invitation": inv})
 }
 
-// POST /api/admin/invitations/accept {token} — any authenticated account may accept the
+// POST /api/admin/invitations/accept {token}, any authenticated account may accept the
 // invitation addressed to it.
 //
 // This is the one route under /api/admin that is not staff-gated: it is how a learner becomes
 // staff. It requires an authenticated account whose email matches the invitation's, so knowing
-// the token is not by itself enough — the invitation is bound to an address, and only the
+// the token is not by itself enough, the invitation is bound to an address, and only the
 // account holding that address can turn it into a role.
 func (s *Server) handleAdminInvitationAccept(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -457,7 +458,7 @@ func (s *Server) handleAdminInvitationAccept(w http.ResponseWriter, r *http.Requ
 		writeError(w, "failed to read invitation", 500)
 		return
 	}
-	// Every failure of the invitation itself — unknown, expired, revoked, already used — reads
+	// Every failure of the invitation itself, unknown, expired, revoked, already used, reads
 	// the same to the caller. A prober learns "that token is not usable", never which near-miss
 	// they are closest to.
 	if inv == nil || inv.AcceptedAt != "" || inv.RevokedAt != "" || expired(inv.ExpiresAt) {
@@ -499,7 +500,7 @@ func expired(expiresAt string) bool {
 
 // ── Content inspection ────────────────────────────────────────────────────
 
-// GET /api/admin/content?q=&limit=&offset= — read-only inspection of the corpus.
+// GET /api/admin/content?q=&limit=&offset=, read-only inspection of the corpus.
 //
 // Inspection, not editing. The content is code-adjacent corpus data (concepts, generated
 // questions) with no safe write path, and the task's guidance is explicit: provide inspection
@@ -559,9 +560,87 @@ func (s *Server) handleAdminContent(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"concepts": out, "total": matched})
 }
 
-// adminUserDetail backs GET /api/admin/users/{id}. It returns the non-sensitive projection and
-// the account's role history from the audit trail, so "when were they made an admin and by whom"
-// is answered from the trail rather than a maintained column.
+// adminUserActivity is the counts-only projection shown beside an account. It answers "how
+// much has this person used the product and what did they send us" without exposing a single
+// question, answer or attempt row: a moderator investigating a report needs the shape of the
+// account, not a window onto the learner's work.
+type adminUserActivity struct {
+	XPTotal               int    `json:"xp_total"`
+	XPToday               int    `json:"xp_today"`
+	ConceptsTouched       int    `json:"concepts_touched"`
+	ConceptsMastered      int    `json:"concepts_mastered"`
+	Attempts              int    `json:"attempts"`
+	LastAttemptAt         string `json:"last_attempt_at"`
+	LastActiveDay         string `json:"last_active_day"`
+	DiagnosticCompletedAt string `json:"diagnostic_completed_at"`
+	ReportsFiled          int    `json:"reports_filed"`
+}
+
+// adminUserActivity reads the counts from the accessors that already own them. It returns an
+// error rather than zeros on a failed read, because a profile that silently says "0 attempts"
+// for a database error is worse than one that says it could not load.
+func (s *Server) adminUserActivity(id string) (adminUserActivity, error) {
+	var out adminUserActivity
+	total, today, err := s.repo.GetXP(id)
+	if err != nil {
+		return out, err
+	}
+	out.XPTotal, out.XPToday = total, today
+
+	progress, err := s.repo.GetAllProgress(id)
+	if err != nil {
+		return out, err
+	}
+	for _, p := range progress {
+		if p == nil {
+			continue
+		}
+		out.ConceptsTouched++
+		if p.Status == "MASTERED" {
+			out.ConceptsMastered++
+		}
+	}
+
+	attempts, err := s.repo.GetAttemptsForStudent(id)
+	if err != nil {
+		return out, err
+	}
+	out.Attempts = len(attempts)
+	for _, a := range attempts {
+		if ts := a.Timestamp.UTC().Format(time.RFC3339); ts > out.LastAttemptAt {
+			out.LastAttemptAt = ts
+		}
+	}
+
+	// Five years is not a retention policy, it is wide enough that a dormant account still
+	// shows its last active day instead of looking like an account that never started.
+	days, err := s.repo.GetDailyActivity(id, 365*5)
+	if err != nil {
+		return out, err
+	}
+	if len(days) > 0 {
+		out.LastActiveDay = days[len(days)-1].Date
+	}
+
+	if at, ok, err := s.repo.DiagnosticCompletedAt(id); err != nil {
+		return out, err
+	} else if ok {
+		out.DiagnosticCompletedAt = at.UTC().Format(time.RFC3339)
+	}
+
+	filed, err := s.repo.CountReportsByReporter(id)
+	if err != nil {
+		return out, err
+	}
+	out.ReportsFiled = filed
+	return out, nil
+}
+
+// adminUserDetail backs GET /api/admin/users/{id}. It returns the non-sensitive projection, the
+// account's role history from the audit trail, the counts-only activity summary and the reports
+// that account filed. The reporter's own reports are included because the question an
+// administrator arrives with is usually "who is this and what did they send", and the reports
+// list is the only place the two meet.
 func (s *Server) adminUserDetail(w http.ResponseWriter, r *http.Request, id string) {
 	user, err := s.repo.GetAdminUser(id)
 	if err != nil {
@@ -577,10 +656,158 @@ func (s *Server) adminUserDetail(w http.ResponseWriter, r *http.Request, id stri
 		writeError(w, "failed to read role history", 500)
 		return
 	}
-	writeJSON(w, map[string]interface{}{"user": user, "history": history})
+	activity, err := s.adminUserActivity(id)
+	if err != nil {
+		log.Printf("admin user activity %s: %v", id, err)
+		writeError(w, "failed to read account activity", 500)
+		return
+	}
+	reports, err := s.repo.ListReportsByReporter(id, 20)
+	if err != nil {
+		writeError(w, "failed to read reports", 500)
+		return
+	}
+	writeJSON(w, map[string]interface{}{
+		"user": user, "history": history, "activity": activity, "reports": reports,
+	})
 }
 
-// GET /api/admin/audit?entity_type=&entity_id=&limit=&offset= — the trail, newest first.
+// adminLeagueRow is one seat in an administrator's view of a league. It carries the account id
+// because the page links each row to account detail; the public board deliberately does not,
+// and this is the surface where that difference is intended.
+type adminLeagueRow struct {
+	Rank      int    `json:"rank"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	StudentID string `json:"student_id"`
+	XP        int    `json:"xp"`
+}
+
+// adminLeague is one league in the week's pyramid. Members is omitted unless the caller asked
+// for that league, so browsing every league costs one grouped query rather than one roster read
+// per league.
+type adminLeague struct {
+	Tier     string           `json:"tier"`
+	LeagueNo int              `json:"league_no"`
+	Size     int              `json:"size"`
+	Movers   int              `json:"movers"`
+	Members  []adminLeagueRow `json:"members,omitempty"`
+}
+
+// GET /api/admin/leagues?week=YYYY-MM-DD&tier=bronze&league=3
+//
+// The whole week's leagues, or one league's standings when tier and league are given. The public
+// league endpoint answers only "where am I", which leaves an owner unable to see the pyramid at
+// all: a cohort reporting a problem cannot be located, and a tier that is empty or has one
+// learner in it is invisible. This is the read that closes that gap.
+//
+// A week key must be the Monday the league week starts, and is validated here rather than
+// trusted, because a bare date is a join key into a table of seats. Without a week the current
+// one is used, and the previous week is settled first exactly as a learner's own read does, so
+// the numbers an administrator sees are the numbers the transition would act on.
+func (s *Server) handleAdminLeagues(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, "method not allowed", 405)
+		return
+	}
+	now := time.Now().UTC()
+	start := leaderboard.WeekStart(now)
+	if raw := strings.TrimSpace(r.URL.Query().Get("week")); raw != "" {
+		parsed, err := storage.WeekFromString(raw)
+		if err != nil {
+			writeError(w, "week must be a Monday in YYYY-MM-DD form", 400)
+			return
+		}
+		start = parsed
+	}
+	week := start.Format("2006-01-02")
+	end := start.AddDate(0, 0, 7)
+
+	// Only the current week needs settling, and only because its seats come from the previous
+	// week's final standings. A past week is already written and must not be rewritten by a read.
+	if start.Equal(leaderboard.WeekStart(now)) {
+		if err := s.repo.ResolveLeagueWeek(week, start.AddDate(0, 0, -7), start); err != nil {
+			log.Printf("admin leagues resolve %s: %v", week, err)
+			writeError(w, "failed to settle the league week", 500)
+			return
+		}
+	}
+
+	cohorts, err := s.repo.LeagueCohorts(week)
+	if err != nil {
+		log.Printf("admin leagues cohorts %s: %v", week, err)
+		writeError(w, "failed to read leagues", 500)
+		return
+	}
+
+	tier := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("tier")))
+	leagueNo := 0
+	if raw := strings.TrimSpace(r.URL.Query().Get("league")); raw != "" {
+		n, convErr := strconv.Atoi(raw)
+		if convErr != nil || n < 1 {
+			writeError(w, "league must be a positive number", 400)
+			return
+		}
+		leagueNo = n
+	}
+	if (tier == "") != (leagueNo == 0) {
+		writeError(w, "tier and league are read together", 400)
+		return
+	}
+
+	out := make([]adminLeague, 0, len(cohorts))
+	seats := 0
+	found := leagueNo == 0
+	for _, c := range cohorts {
+		seats += c.Size
+		entry := adminLeague{
+			Tier:     c.Tier,
+			LeagueNo: c.LeagueNo,
+			Size:     c.Size,
+			Movers:   storage.LeagueMovers(c.Size),
+		}
+		if leagueNo != 0 {
+			if c.Tier != tier || c.LeagueNo != leagueNo {
+				continue
+			}
+			found = true
+			rows, err := s.repo.LeagueRoster(week, c.Tier, c.LeagueNo, start, end)
+			if err != nil {
+				log.Printf("admin leagues roster %s %s/%d: %v", week, c.Tier, c.LeagueNo, err)
+				writeError(w, "failed to read that league", 500)
+				return
+			}
+			for _, row := range rows {
+				entry.Members = append(entry.Members, adminLeagueRow{
+					Rank:      row.Rank,
+					Name:      row.Name,
+					Username:  row.Username,
+					StudentID: row.StudentID,
+					XP:        row.XP,
+				})
+			}
+		}
+		out = append(out, entry)
+	}
+	if !found {
+		// An administrator who typed a league that does not exist is told so, rather than shown
+		// an empty roster that reads like a league nobody joined.
+		writeError(w, "no such league in that week", 404)
+		return
+	}
+
+	writeJSON(w, map[string]interface{}{
+		"week":       week,
+		"week_start": start,
+		"week_end":   end,
+		"promote":    storage.PromoteCount,
+		"demote":     storage.DemoteCount,
+		"seats":      seats,
+		"leagues":    out,
+	})
+}
+
+// GET /api/admin/audit?entity_type=&entity_id=&limit=&offset=, the trail, newest first.
 //
 // Read-only. There is no PUT, PATCH or DELETE for this table on any store, and no route to
 // create one, which is what makes "the audit log must not be editable" a property of the system

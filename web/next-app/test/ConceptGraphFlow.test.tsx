@@ -60,14 +60,14 @@ describe('ConceptGraphFlow', () => {
 
   it('draws no bordered box rounded, because the house style is square', () => {
     // app/docs/contributing states the aesthetic outright: "no rounded corners". This
-    // component was the only place in the app that broke it — the node card, the search
+    // component was the only place in the app that broke it, the node card, the search
     // box, the results dropdown, the legend toggle, two filter chips and two inner
-    // panels — while a button a few lines away used `rounded-none` and the page
+    // panels, while a button a few lines away used `rounded-none` and the page
     // contradicted itself.
     //
     // The rule is deliberately the user's own: a *bordered* box may not be rounded. That
-    // exempts the things that are round because they are shapes, not corners — status
-    // dots, avatars, progress bars, switch knobs — without listing them and going stale.
+    // exempts the things that are round because they are shapes, not corners, status
+    // dots, avatars, progress bars, switch knobs, without listing them and going stale.
     //
     // Both mechanisms have to be checked. jsdom resolves an inline `borderRadius` but has
     // no stylesheet, so a Tailwind `rounded-[4px]` is invisible to `getComputedStyle`
@@ -125,7 +125,7 @@ describe('ConceptGraphFlow', () => {
 
   it('gives a decaying concept the same full bar as a mastered one, and says why', () => {
     // The brief: bar length is attainment, colour is state. A decayed concept keeps the
-    // exact geometry of a mastered one — full bar, same track — so "full bar" keeps
+    // exact geometry of a mastered one, full bar, same track, so "full bar" keeps
     // meaning "I learned this", and decay is carried entirely by the node colour and the
     // hover text. No second bar, no pattern, no icon, no badge, no shorter fill.
     const barWidth = (el: Element | null) =>

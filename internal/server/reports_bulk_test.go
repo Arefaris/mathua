@@ -46,7 +46,7 @@ func bulkPost(t *testing.T, s *Server, body map[string]interface{}) (int, map[st
 
 // Bulk close is about a bug, not a list: a fix ships, and every still-unsettled
 // report about the concept it touched is stale. The test pins the two halves of
-// that promise — the whole set closes together, and each report keeps its own
+// that promise, the whole set closes together, and each report keeps its own
 // decision record rather than inheriting one.
 func TestAdminReportsBulk_ClosesAConceptsUnsettledReports(t *testing.T) {
 	s := testServer(t)

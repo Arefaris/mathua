@@ -1,7 +1,7 @@
 // The one place `grading_type` and `conceptData.domain` become a keyboard.
 //
-// Everything downstream — which keycaps a learner sees, and whether the math
-// editor or the plain text input is used at all — is derived here. No React
+// Everything downstream, which keycaps a learner sees, and whether the math
+// editor or the plain text input is used at all, is derived here. No React
 // component branches on a domain or a grading type; they ask this module.
 //
 // Two independent decisions come out of one lookup:
@@ -26,7 +26,7 @@ export type AnswerEditor = 'math' | 'text'
  * internal/grader/router.go, on the reasoning that MathLive earns its place only where
  * the grader parses an expression. That reasoning was sound for the editor and wrong
  * about the corpus: `multiple_choice` is 209 of 657 concepts and its options are
- * embedded in the question text, `tuple` 11, `ordering` 1, `comparison` 2 — and all of
+ * embedded in the question text, `tuple` 11, `ordering` 1, `comparison` 2 and all of
  * them take a *typed* answer too, because the answer hosts render a text field
  * alongside the tappable options. So 223 concepts were typing mathematics into a plain
  * `<input>` with no fraction key, no exponent, no parentheses and no symbols.
@@ -109,7 +109,7 @@ export interface AnswerPresentation {
  * carries `concept_id` and `grading_type`; the domain comes from the bundled
  * corpus via `conceptData`. A concept id the corpus does not know (a unit test
  * fixture, a concept added server-side without a corpus rebuild) degrades to the
- * text input rather than guessing — the plain input is the safe default because
+ * text input rather than guessing, the plain input is the safe default because
  * it is what every concept grades correctly against today.
  */
 export function presentationFor(gradingType?: string, domain?: string): AnswerPresentation {
@@ -122,7 +122,7 @@ export function presentationFor(gradingType?: string, domain?: string): AnswerPr
  * `conceptId` is the only required input: `grading_type` and `domain` both live in
  * the bundled corpus, which is the same place the Go server reads `grading_type`
  * from. A host that already holds the server's `grading_type` passes it and it
- * wins — the server is the authority (ADR-009: every served question carries one).
+ * wins, the server is the authority (ADR-009: every served question carries one).
  *
  * An unknown concept id resolves to the text input, which grades correctly for
  * every concept today, so a corpus gap degrades to the old behaviour rather than

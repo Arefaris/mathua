@@ -127,7 +127,7 @@ describe('decay', () => {
 
   it('keeps the mastered count and reports the review debt separately', () => {
     // This used to assert the opposite: that DECAYING *lowered* `mastered`, "which is
-    // the point of reporting it" — a deliberate choice not to over-claim.
+    // the point of reporting it", a deliberate choice not to over-claim.
     //
     // It over-claimed in the other direction instead. The graph gives a decayed concept
     // a full mastery bar, so a learner with 10 decayed and 32 fresh read "32 concepts
@@ -135,8 +135,8 @@ describe('decay', () => {
     // explain the gap. Two numbers for one fact is the problem this file exists to
     // prevent.
     //
-    // So `mastered` now means "competence demonstrated and not yet stale" — which is
-    // what the word means — and decay is reported in its own right rather than by
+    // So `mastered` now means "competence demonstrated and not yet stale", which is
+    // what the word means and decay is reported in its own right rather than by
     // silently shrinking it. The over-claiming the original was avoiding is prevented
     // by *showing* the review debt, not by making the headline number disagree with the
     // map.

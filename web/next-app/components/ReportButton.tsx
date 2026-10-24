@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { submitReport, type ReportKind, type ReportReason } from '../lib/api'
 import { useT } from '../lib/i18n'
 
@@ -37,6 +37,19 @@ export default function ReportButton(props: ReportButtonProps) {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
 
+  useEffect(() => {
+    setSent(false)
+    setError('')
+  }, [props.attemptId, props.question, props.conceptId, props.sessionId])
+
+  useEffect(() => {
+    if (!sent) return
+    const timer = setTimeout(() => {
+      setSent(false)
+    }, 4000)
+    return () => clearTimeout(timer)
+  }, [sent])
+
   async function handleSubmit() {
     if (sending || sent) return
     setSending(true)
@@ -70,9 +83,14 @@ export default function ReportButton(props: ReportButtonProps) {
 
   if (sent) {
     return (
-      <span className="font-mono text-[10px] text-mathua-green uppercase tracking-wider">
+      <button
+        type="button"
+        onClick={() => setSent(false)}
+        title={t('learn.report.dismiss')}
+        className="font-mono text-[10px] text-mathua-green hover:underline uppercase tracking-wider"
+      >
         {t('learn.report.thanks')}
-      </span>
+      </button>
     )
   }
 

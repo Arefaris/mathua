@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/determining-the-domain-of-a-function/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/determining-the-domain-of-a-function/), CC BY-NC 4.0
 
 ## A systematic method for determining the domain of a function
 

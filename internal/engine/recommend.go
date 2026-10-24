@@ -2,22 +2,153 @@ package engine
 
 import (
 	"fmt"
+	"log"
 	"time"
 
+	"github.com/chuma-beep/mathua/internal/fsrs"
 	"github.com/chuma-beep/mathua/internal/mastery"
+	"github.com/chuma-beep/mathua/internal/repetition"
 	"github.com/chuma-beep/mathua/internal/scheduler"
 	"github.com/chuma-beep/mathua/internal/storage"
 )
 
+// SatisfyImplicitReviews inspects banked implicit repetition credit for concepts that appear
+// due for explicit spaced review. If an encompassed concept has banked sufficient implicit credit,
+// it projects the credit, advances the review interval and updates storage.
+func (e *Engine) SatisfyImplicitReviews(studentID string) error {
+	if studentID == "" {
+		return nil
+	}
+	cs, ok := e.repo.(storage.CreditStore)
+	if !ok {
+		return nil
+	}
+	banked, err := cs.GetBankedOrdinals(studentID)
+	if err != nil || len(banked) == 0 {
+		return err
+	}
+	progress, err := e.repo.GetAllProgress(studentID)
+	if err != nil {
+		return fmt.Errorf("load progress: %w", err)
+	}
+	now := time.Now().UTC()
+	for cid, count := range banked {
+		if count <= 0 {
+			continue
+		}
+		if e.dag == nil || len(e.dag.EncompassedBy(cid)) == 0 {
+			continue
+		}
+		p := progress[cid]
+		if p == nil {
+			continue
+		}
+		isDue := false
+		if p.NextReviewDue != nil && !p.NextReviewDue.After(now) {
+			isDue = true
+		}
+		var elapsed float64
+		if p.FSRSLastReview != nil && !p.FSRSLastReview.IsZero() {
+			elapsed = now.Sub(*p.FSRSLastReview).Hours() / 24.0
+		} else if p.LastReviewed != nil && !p.LastReviewed.IsZero() {
+			elapsed = now.Sub(*p.LastReviewed).Hours() / 24.0
+		}
+		if elapsed < 0 {
+			elapsed = 0
+		}
+		if p.FSRSStability != nil && *p.FSRSStability > 0 {
+			if fsrs.DefaultParameters().Retrievability(elapsed, *p.FSRSStability) < fsrs.DefaultRetention {
+				isDue = true
+			}
+		} else if elapsed >= mastery.DecayDays {
+			isDue = true
+		}
+		if !isDue {
+			continue
+		}
+
+		speed := 1.0
+		if ts, err := e.repo.GetTopicSpeed(studentID, cid); err == nil && ts != nil {
+			speed = ts.LearningSpeed
+		}
+		prevSM2 := scheduler.SM2{
+			Interval:    p.SM2Interval,
+			EFactor:     p.SM2EFactor,
+			Repetitions: p.SM2Repetitions,
+		}
+		stepDays, err := repetition.StepDays(prevSM2, speed)
+		if err != nil || stepDays < 1 {
+			stepDays = 1
+		}
+		ords, err := cs.ProjectCredit(studentID, cid, 0, stepDays, now)
+		if err != nil {
+			log.Printf("warning: project credit %s/%s: %v", studentID, cid, err)
+			continue
+		}
+		if len(ords) == 0 {
+			continue
+		}
+		lastDueStr := ords[len(ords)-1].CounterfactualDue
+		newDue, err := time.Parse(time.RFC3339, lastDueStr)
+		if err != nil {
+			newDue, err = time.Parse("2006-01-02 15:04:05", lastDueStr)
+		}
+		if err != nil {
+			newDue = now.AddDate(0, 0, stepDays)
+		}
+		p.NextReviewDue = &newDue
+		p.LastReviewed = &now
+		p.SM2Interval = stepDays
+		if p.Status == "DECAYING" {
+			p.Status = string(mastery.StatusMastered)
+		}
+		if p.FSRSStability != nil && *p.FSRSStability > 0 {
+			params := fsrs.DefaultParameters()
+			diff := params.InitialDifficulty(fsrs.Good)
+			if p.FSRSDifficulty != nil && *p.FSRSDifficulty > 0 {
+				diff = *p.FSRSDifficulty
+			}
+			var elapsed float64
+			if p.FSRSLastReview != nil && !p.FSRSLastReview.IsZero() {
+				elapsed = now.Sub(*p.FSRSLastReview).Hours() / 24.0
+			}
+			if elapsed < 0 {
+				elapsed = 0
+			}
+			r := params.Retrievability(elapsed, *p.FSRSStability)
+			nextStab := params.NextStability(*p.FSRSStability, diff, r, fsrs.Good)
+			p.FSRSStability = &nextStab
+			p.FSRSLastReview = &now
+		}
+		if err := e.repo.UpsertProgress(p); err != nil {
+			log.Printf("warning: upsert progress after credit projection %s/%s: %v", studentID, cid, err)
+		}
+	}
+	return nil
+}
+
 // conceptSnapshots assembles the scheduler's view of a learner.
 //
-// This was written out three times — NextQuestion, NextReviewQuestion and the recommender —
+// This was written out three times, NextQuestion, NextReviewQuestion and the recommender,
 // which is how they came to disagree. The recommender in particular could not reuse either: it
 // needs the whole DAG including unseen concepts, and it needs to run outside a session.
 //
 // One definition, so "what should this learner do next" cannot answer differently depending on
 // which caller asked.
 func (e *Engine) conceptSnapshotsFrom(studentID string, progress map[string]*storage.ConceptProgress) map[string]*scheduler.ConceptSnapshot {
+	var banked map[string]int
+	if cs, ok := e.repo.(storage.CreditStore); ok && studentID != "" {
+		if b, err := cs.GetBankedOrdinals(studentID); err == nil {
+			banked = b
+		}
+	}
+	var speeds map[string]*storage.TopicSpeed
+	if studentID != "" {
+		if sp, err := e.repo.GetAllTopicSpeeds(studentID); err == nil {
+			speeds = sp
+		}
+	}
+
 	snapshots := make(map[string]*scheduler.ConceptSnapshot, len(progress))
 	for cid, p := range progress {
 		reqStreak := 0
@@ -25,6 +156,18 @@ func (e *Engine) conceptSnapshotsFrom(studentID string, progress map[string]*sto
 		if c := e.dag.Concept(cid); c != nil {
 			reqStreak = c.MasteryThreshold.Streak
 			timeThresh = c.MasteryThreshold.AvgTimeSeconds
+		}
+		ordinals := 0
+		if banked != nil {
+			ordinals = banked[cid]
+		}
+		speed := 1.0
+		if speeds != nil && speeds[cid] != nil {
+			speed = speeds[cid].LearningSpeed
+		}
+		isEncompassed := false
+		if e.dag != nil && len(e.dag.EncompassedBy(cid)) > 0 {
+			isEncompassed = true
 		}
 		snapshots[cid] = &scheduler.ConceptSnapshot{
 			Status:         mastery.Status(p.Status),
@@ -36,6 +179,16 @@ func (e *Engine) conceptSnapshotsFrom(studentID string, progress map[string]*sto
 			TimeThreshold:  timeThresh,
 			WeaknessScore:  p.WeaknessScore,
 			Placement:      p.PlacementSeeded,
+			IsProvisional:  p.IsProvisional,
+			BankedOrdinals: ordinals,
+			Repetitions:    p.SM2Repetitions,
+			Interval:       p.SM2Interval,
+			EFactor:        p.SM2EFactor,
+			LearningSpeed:  speed,
+			Encompassed:    isEncompassed,
+			FSRSStability:  p.FSRSStability,
+			FSRSDifficulty: p.FSRSDifficulty,
+			FSRSLastReview: p.FSRSLastReview,
 		}
 	}
 	// Concepts never attempted still need a snapshot: prereqsMet returns false for a missing
@@ -46,6 +199,7 @@ func (e *Engine) conceptSnapshotsFrom(studentID string, progress map[string]*sto
 				Status:         mastery.StatusUnseen,
 				RequiredStreak: c.MasteryThreshold.Streak,
 				TimeThreshold:  c.MasteryThreshold.AvgTimeSeconds,
+				Encompassed:    len(e.dag.EncompassedBy(c.ID)) > 0,
 			}
 		}
 	}
@@ -54,6 +208,9 @@ func (e *Engine) conceptSnapshotsFrom(studentID string, progress map[string]*sto
 
 // conceptSnapshots is the loading wrapper, for the question-serving paths.
 func (e *Engine) conceptSnapshots(studentID string) (map[string]*scheduler.ConceptSnapshot, error) {
+	if studentID != "" {
+		_ = e.SatisfyImplicitReviews(studentID)
+	}
 	progress, err := e.repo.GetAllProgress(studentID)
 	if err != nil {
 		return nil, fmt.Errorf("load progress: %w", err)
@@ -64,6 +221,9 @@ func (e *Engine) conceptSnapshots(studentID string) (map[string]*scheduler.Conce
 // ReviewsDue counts concepts whose SM-2 interval has elapsed. Moved here from the server,
 // which computed it inline and which the recommender needs it from.
 func (e *Engine) ReviewsDue(studentID string) (int, error) {
+	if studentID != "" {
+		_ = e.SatisfyImplicitReviews(studentID)
+	}
 	progress, err := e.repo.GetAllProgress(studentID)
 	if err != nil {
 		return 0, fmt.Errorf("load progress: %w", err)
@@ -71,19 +231,27 @@ func (e *Engine) ReviewsDue(studentID string) (int, error) {
 	now := time.Now()
 	count := 0
 	for _, p := range progress {
-		if p.NextReviewDue == nil {
-			continue
+		isDue := false
+		if p.NextReviewDue != nil && !p.NextReviewDue.After(now) {
+			isDue = true
 		}
-		if p.NextReviewDue.After(now) {
-			continue
+		if p.FSRSStability != nil && *p.FSRSStability > 0 {
+			var elapsed float64
+			if p.FSRSLastReview != nil && !p.FSRSLastReview.IsZero() {
+				elapsed = now.Sub(*p.FSRSLastReview).Hours() / 24.0
+			} else if p.LastReviewed != nil && !p.LastReviewed.IsZero() {
+				elapsed = now.Sub(*p.LastReviewed).Hours() / 24.0
+			}
+			if elapsed < 0 {
+				elapsed = 0
+			}
+			if fsrs.DefaultParameters().Retrievability(elapsed, *p.FSRSStability) < fsrs.DefaultRetention {
+				isDue = true
+			}
 		}
-		// A stored MASTERED row with a due review IS due a review — scheduler.effectiveState
-		// says so explicitly, which is what put it in the review bucket in the first place.
-		// The old guard skipped exactly those rows, so the count and the candidates disagreed
-		// and selectTasks never took the review bucket for a learner whose only debt was a
-		// decayed concept. Any NextReviewDue at or before now is a due review; that is the
-		// whole condition.
-		count++
+		if isDue {
+			count++
+		}
 	}
 	return count, nil
 }
@@ -110,7 +278,7 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 	quizDue, _ := e.QuizDue(studentID)
 
 	// How far along the learner is, in the two terms the recommender needs. Mastered is
-	// effective MASTERED — decay applied, so a stale concept has left the count rather than
+	// effective MASTERED, decay applied, so a stale concept has left the count rather than
 	// inflating it, and *not* "anything not unseen", which counted a concept the learner had
 	// merely started. Only the new-learner gate consumes this today and AttemptedDays already
 	// guarded it, so the miscount was unobservable; it is fixed because the field is named
@@ -118,7 +286,13 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 	// reading the comment.
 	mastered, attemptedDays := 0, map[string]bool{}
 	for _, p := range progress {
-		if mastery.EffectiveStatus(mastery.Status(p.Status), daysSinceReview(p.LastReviewed), mastery.DecayDays) == mastery.StatusMastered {
+		var elapsed float64
+		if p.FSRSLastReview != nil && !p.FSRSLastReview.IsZero() {
+			elapsed = daysSinceReview(p.FSRSLastReview)
+		} else if p.LastReviewed != nil {
+			elapsed = daysSinceReview(p.LastReviewed)
+		}
+		if mastery.EffectiveStatusFSRS(mastery.Status(p.Status), elapsed, p.FSRSStability, mastery.DecayDays) == mastery.StatusMastered {
 			mastered++
 		}
 		if p.LastAttempted != nil {
@@ -126,11 +300,54 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 		}
 	}
 
+	remQueue, err := e.repo.GetRemedialQueue(studentID)
+	if err != nil {
+		return scheduler.RecommendationResponse{}, fmt.Errorf("read remedial queue: %w", err)
+	}
 	e.mu.Lock()
 	if path := e.activePath[studentID]; len(path) > 0 {
 		for cid := range snapshots {
 			if !path[cid] {
 				delete(snapshots, cid)
+			}
+		}
+	}
+	for _, as := range e.sessions {
+		if as.studentID == studentID && as.halted {
+			for _, cid := range as.remedialQueue {
+				c := e.dag.Concept(as.conceptID)
+				if c == nil {
+					c = e.dag.Concept(as.lastConceptID)
+				}
+				if c != nil {
+					isRemedialTarget := false
+					for _, kp := range c.KeyPrerequisites {
+						if kp == cid {
+							isRemedialTarget = true
+							break
+						}
+					}
+					if !isRemedialTarget {
+						for _, p := range e.dag.PrereqsOf(c.ID) {
+							if p.ID == cid {
+								isRemedialTarget = true
+								break
+							}
+						}
+					}
+					if isRemedialTarget {
+						found := false
+						for _, existing := range remQueue {
+							if existing == cid {
+								found = true
+								break
+							}
+						}
+						if !found {
+							remQueue = append(remQueue, cid)
+						}
+					}
+				}
 			}
 		}
 	}
@@ -155,6 +372,8 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 		AttemptedDays:       len(attemptedDays),
 		ExcludeConceptIds:   exclude,
 		DiagnosticCompleted: diagnosticCompleted,
+		KeyPrerequisites:    remQueue,
+		RemedialConcepts:    remQueue,
 	}), nil
 }
 
@@ -169,11 +388,11 @@ func daysSinceReview(t *time.Time) float64 {
 // and handleDueReviews agree on that), so a recommendation pointing at /review would
 // contradict the pause the learner just set.
 //
-// It used to point at `/study` instead, with "Lessons are still open" — true when it was
+// It used to point at `/study` instead, with "Lessons are still open", true when it was
 // written, and a dead end once the library closed: a learner who opened the app on a break was
 // sent to a page that could only explain things they had already decided not to practise today.
 // `/settings` is where the pause and its end both live, so it is the one destination that can
-// actually answer "I am not doing reviews — now what".
+// actually answer "I am not doing reviews, now what".
 func (e *Engine) RecommendPaused(studentID string) scheduler.RecommendationResponse {
 	return scheduler.RecommendationResponse{
 		Primary: &scheduler.Recommendation{
@@ -182,7 +401,7 @@ func (e *Engine) RecommendPaused(studentID string) scheduler.RecommendationRespo
 			Reason: scheduler.ReasonNew,
 			Action: scheduler.Action{Type: scheduler.KindLearn, Href: "/settings"},
 			Badge:  "Paused",
-			Detail: "Reviews are on hold until you resume — due reviews are hidden while paused",
+			Detail: "Reviews are on hold until you resume, due reviews are hidden while paused",
 			CTA:    "Change or resume →",
 		},
 		Alternatives: []scheduler.Recommendation{},

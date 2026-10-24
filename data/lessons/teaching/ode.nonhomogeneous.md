@@ -14,9 +14,9 @@ where $y_h$ solves the homogeneous equation ($y'' + py' + qy = 0$) and $y_p$ is 
 
 For constant-coefficient equations with $r(x)$ of special form:
 
-**Case 1:** $r(x) = e^{\alpha x}$ — Try $y_p = Ae^{\alpha x}$.
-**Case 2:** $r(x) = \cos(\beta x)$ or $\sin(\beta x)$ — Try $y_p = A\cos(\beta x) + B\sin(\beta x)$.
-**Case 3:** $r(x) = polynomial$ — Try $y_p$ as a general polynomial of the same degree.
+**Case 1:** $r(x) = e^{\alpha x}$, Try $y_p = Ae^{\alpha x}$.
+**Case 2:** $r(x) = \cos(\beta x)$ or $\sin(\beta x)$, Try $y_p = A\cos(\beta x) + B\sin(\beta x)$.
+**Case 3:** $r(x) = polynomial$, Try $y_p$ as a general polynomial of the same degree.
 
 **Modification Rule:** If the trial form is already a solution of the homogeneous equation, multiply by $x$ (or $x^2$ if needed).
 

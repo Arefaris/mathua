@@ -57,7 +57,7 @@ func parseAllowedOrigins() {
 		// a deployed app gets only the local origins and a warning naming the
 		// variable, so the mistake is visible in the first log lines.
 		if os.Getenv("FLY_APP_NAME") != "" || os.Getenv("MATHUA_ENV") == "production" {
-			log.Printf("warning: CORS_ALLOWED_ORIGINS is unset — only local development origins are allowed; set it to the public site origins")
+			log.Printf("warning: CORS_ALLOWED_ORIGINS is unset, only local development origins are allowed; set it to the public site origins")
 		}
 		raw = "http://localhost:3000,http://127.0.0.1:3000"
 	}
@@ -79,7 +79,7 @@ func parseAllowedOrigins() {
 		}
 	}
 	if len(allowedOriginsExact) == 0 && len(allowedOriginPatterns) == 0 && !allowedOriginsAllowAll {
-		log.Printf("warning: CORS_ALLOWED_ORIGINS listed no usable origin — only local development origins are allowed")
+		log.Printf("warning: CORS_ALLOWED_ORIGINS listed no usable origin, only local development origins are allowed")
 		allowedOriginsExact["http://localhost:3000"] = true
 		allowedOriginsExact["http://127.0.0.1:3000"] = true
 	}
@@ -230,7 +230,7 @@ func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService, op
 		ipHeader:             trustedHeader,
 	}
 	// MATHUA_LOADTEST=1 relaxes rate limits so load generators measure the
-	// app and database instead of the limiter. Local/staging use only —
+	// app and database instead of the limiter. Local/staging use only,
 	// never set in production.
 	if os.Getenv("MATHUA_LOADTEST") == "1" {
 		log.Print("loadtest mode: rate limits relaxed")
@@ -295,7 +295,7 @@ func New(eng *engine.Engine, repo storage.Repository, auth *auth.AuthService, op
 }
 
 // aiUsageRetention is how many days of AI counters are kept. Nothing reads a
-// counter older than today — a cap only ever consults the current day — so this
+// counter older than today, a cap only ever consults the current day, so this
 // exists to bound the table, not to bound a query.
 const aiUsageRetention = 42
 
@@ -316,7 +316,7 @@ func aiUsageCutoff(now time.Time) string {
 // all back, because handleGoalDiagnosticAnswer re-inserts the attempt via
 // EnsureSession + RecordAttempt, and handleQuizAnswer writes concept_progress
 // and XP through SubmitQuizAnswer. Reset and delete must therefore evict these
-// eagerly — a wipe that a stale in-memory session can undo is not a wipe.
+// eagerly, a wipe that a stale in-memory session can undo is not a wipe.
 func (s *Server) dropStudentLiveSessions(studentID string) {
 	s.mu.Lock()
 	for id, sess := range s.diagSessions {
@@ -341,7 +341,7 @@ func (s *Server) dropStudentLiveSessions(studentID string) {
 }
 
 // loadDiagnosticSession returns the live run for id, restoring it from storage
-// when this process has never seen it — the ordinary case after a deploy.
+// when this process has never seen it, the ordinary case after a deploy.
 //
 // The map stays the fast path: a run is answered at human speed and read on
 // every request, while a reload costs one row read and a JSON decode. A row that
@@ -486,13 +486,13 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/avatar/u/", logRequest(cors(s.handleAvatarByUsername)))
 	mux.HandleFunc("/api/avatar/", logRequest(cors(s.handleAvatarPublic)))
 	mux.HandleFunc("/api/reviews/due", logRequest(cors(s.authMiddleware(s.handleDueReviews))))
-	// GET /api/next — the one answer to "what should I do now?". Optional auth so a guest
+	// GET /api/next, the one answer to "what should I do now?". Optional auth so a guest
 	// landing on the app gets the diagnostic recommendation rather than an error.
 	mux.HandleFunc("/api/next", logRequest(cors(s.optionalAuthMiddleware(s.handleNext))))
 	mux.HandleFunc("/api/reviews/session", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(s.handleReviewsSession)))))
 	mux.HandleFunc("/api/reviews/answer", logRequest(cors(s.authMiddleware(s.writeLimiter.middleware(gradingTimeout(gradingDeadline, s.handleReviewsAnswer))))))
-	// The lesson routes stay publicly readable — Study is reference and is
-	// indexed — so auth is optional, but it must be *present*: the practice
+	// The lesson routes stay publicly readable, Study is reference and is
+	// indexed, so auth is optional, but it must be *present*: the practice
 	// branch writes the server-side answer anchor, and it can only key that
 	// anchor by student once the bearer token has been resolved into the
 	// request context. Without the middleware here the anchor was never
@@ -506,7 +506,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// removed in V2 so there is exactly one moderation path.
 	mux.HandleFunc("/api/reports", logRequest(cors(s.writeLimiter.middleware(s.optionalAuthMiddleware(s.handleCreateReport)))))
 	// Admin V2. Every route names the permission it needs, and requirePermission enforces it
-	// server-side on every request from the role the database holds — never from anything the
+	// server-side on every request from the role the database holds, never from anything the
 	// client sends. The password login above is the old content-triage gate; it is not this
 	// boundary and does not open any of these routes.
 	mux.HandleFunc("/api/admin/me", logRequest(cors(s.requirePermission(admin.Access, s.handleAdminMe))))
@@ -519,6 +519,10 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/api/admin/reports/", logRequest(cors(s.requirePermission(admin.ReportsRead, s.handleAdminReport))))
 	mux.HandleFunc("/api/admin/users", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminUsers))))
 	mux.HandleFunc("/api/admin/users/", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminUser))))
+	// Leagues are read under the same grant as accounts because a league row is an account plus
+	// its week: an administrator who may not look an account up does not get to enumerate the
+	// same people by cohort instead.
+	mux.HandleFunc("/api/admin/leagues", logRequest(cors(s.requirePermission(admin.UsersRead, s.handleAdminLeagues))))
 	mux.HandleFunc("/api/admin/admins", logRequest(cors(s.requirePermission(admin.AdminsRead, s.handleAdminAdmins))))
 	// Accepting an invitation is the one route here reachable by a non-staff account: it is how
 	// a learner becomes staff. It still requires authentication, and it is bound to the invited
@@ -561,7 +565,7 @@ func (s *Server) handleProgress(w http.ResponseWriter, r *http.Request) {
 	studentID, _ := r.Context().Value(authStudentKey{}).(string)
 	if studentID == "" {
 		// No ID enumeration: unauthenticated callers cannot read
-		// arbitrary students. Guest IDs are the exception — the
+		// arbitrary students. Guest IDs are the exception, the
 		// unguessable `guest_` token in localStorage IS the credential
 		// (same capability model as quiz/diag session UUIDs).
 		// (Auth-disabled dev/test deployments keep the legacy fallback.)
@@ -576,7 +580,7 @@ func (s *Server) handleProgress(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	// Authed: always serve the caller's own progress — the path ID is
+	// Authed: always serve the caller's own progress, the path ID is
 	// ignored so one student can never pull another's via enumeration
 	// (e.g. IDs harvested from the public leaderboard).
 	// mastery_pct is derived server-side, beside the state machine that enforces the
@@ -600,7 +604,7 @@ func (s *Server) handleScores(w http.ResponseWriter, r *http.Request) {
 	studentID, _ := r.Context().Value(authStudentKey{}).(string)
 	if studentID == "" {
 		// No ID enumeration: unauthenticated callers cannot read
-		// arbitrary students. Guest IDs are the exception — the
+		// arbitrary students. Guest IDs are the exception, the
 		// unguessable `guest_` token in localStorage IS the credential
 		// (same capability model as quiz/diag session UUIDs).
 		// (Auth-disabled dev/test deployments keep the legacy fallback.)
@@ -615,7 +619,7 @@ func (s *Server) handleScores(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	// Authed: always serve the caller's own scores — the path ID is ignored.
+	// Authed: always serve the caller's own scores, the path ID is ignored.
 	scores, err := s.eng.GetScores(studentID)
 	if err != nil {
 		writeError(w, "failed to get scores", 500)
@@ -670,7 +674,7 @@ func (s *Server) handleGraph(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"nodes": nodes, "count": len(nodes)})
 }
 
-// GET /api/curriculum/domains — read-only curriculum picker: each domain with
+// GET /api/curriculum/domains, read-only curriculum picker: each domain with
 // per-state counts. The server decides the states; the client renders them.
 func (s *Server) handleCurriculumDomains(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -685,7 +689,7 @@ func (s *Server) handleCurriculumDomains(w http.ResponseWriter, r *http.Request)
 	writeJSON(w, map[string]interface{}{"domains": domains})
 }
 
-// GET /api/curriculum/domains/{domainId} — one domain's concepts with state.
+// GET /api/curriculum/domains/{domainId}, one domain's concepts with state.
 func (s *Server) handleCurriculumDomain(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -757,7 +761,7 @@ func (s *Server) handleLeaderboard(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, board)
 }
 
-// GET /api/leagues — weekly league standings with promotion/demotion.
+// GET /api/leagues, weekly league standings with promotion/demotion.
 func (s *Server) handleLeagues(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -875,7 +879,7 @@ func (s *Server) gradingTypeOf(cid string) string {
 
 // answerFormatOf is the format the learner's field must accept, which is not
 // the same question as how the answer is graded. Several generators grade their
-// own syntax — "5 R 2", "2 sqrt(5)", "4:7", "[[1,2],[3,4]]" — while the concept
+// own syntax, "5 R 2", "2 sqrt(5)", "4:7", "[[1,2],[3,4]]", while the concept
 // is declared numeric, and a numeric keypad cannot produce any of them. The
 // generator's declaration wins; the grading type is only the fallback.
 func (s *Server) answerFormatOf(cid string) generator.AnswerFormat {
@@ -966,7 +970,7 @@ func (s *Server) handleGoalDiagnosticStart(w http.ResponseWriter, r *http.Reques
 // POST /api/goal/diagnostic/answer
 // Body: { "session_id": "...", "concept_id": "...", "answer": "...", "elapsed": 0.0, "dont_know": false }
 // dont_know records an admitted unknown as negative evidence (grader
-// bypassed, too-quick check exempt — an instant admit is honesty, not spam).
+// bypassed, too-quick check exempt, an instant admit is honesty, not spam).
 func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -1009,7 +1013,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 
 	// Grade against the stored problem (the one the user actually saw)
 	if session.LastProblem == nil {
-		// Session is already done — reject the answer
+		// Session is already done, reject the answer
 		writeJSON(w, map[string]interface{}{
 			"done":     true,
 			"correct":  false,
@@ -1063,7 +1067,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 	if req.DontKnow {
 		s.eng.SubmitDiagnosticDontKnow(session, req.ConceptID, req.Elapsed, timeThresh)
 	} else {
-		correct = s.eng.GradeAnswer(req.ConceptID, expected, req.Answer).Correct
+		correct = s.eng.GradeAnswerForQuestion(req.ConceptID, questionText, expected, req.Answer).Correct
 		s.eng.SubmitDiagnosticAnswerTimed(session, req.ConceptID, correct, req.Elapsed, timeThresh)
 	}
 	explanation = expExplanation
@@ -1162,7 +1166,7 @@ func (s *Server) handleGoalDiagnosticAnswer(w http.ResponseWriter, r *http.Reque
 // POST /api/goal/diagnostic/skip
 // Body: { "session_id": "..." }
 // Escape hatch for questions that can't be answered (bad content, repeated
-// submit failures). Settles the pending concept with no evidence recorded —
+// submit failures). Settles the pending concept with no evidence recorded,
 // settling (not re-asking) is what moves CAT past a poisoned transition,
 // since NextQuestion is deterministic on session state.
 func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request) {
@@ -1198,7 +1202,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 	s.mu.Unlock()
 
 	if s.eng.SettleDiagnosticCurrent(session) == "" {
-		// Nothing pending — session is already done.
+		// Nothing pending, session is already done.
 		writeJSON(w, map[string]interface{}{
 			"done":     true,
 			"correct":  false,
@@ -1216,7 +1220,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		writeJSON(w, map[string]interface{}{
 			"done":     true,
 			"correct":  false,
-			"feedback": "Skipped — no evidence recorded.",
+			"feedback": "Skipped, no evidence recorded.",
 			"report":   report,
 			"progress": prog,
 		})
@@ -1237,7 +1241,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 		writeJSON(w, map[string]interface{}{
 			"done":     true,
 			"correct":  false,
-			"feedback": "Skipped — no evidence recorded.",
+			"feedback": "Skipped, no evidence recorded.",
 			"report":   report,
 			"progress": prog,
 		})
@@ -1249,7 +1253,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":         false,
 		"correct":      false,
-		"feedback":     "Skipped — no evidence recorded.",
+		"feedback":     "Skipped, no evidence recorded.",
 		"concept_id":   cid,
 		"concept_name": name,
 		"question":     nextProb.Question,
@@ -1262,7 +1266,7 @@ func (s *Server) handleGoalDiagnosticSkip(w http.ResponseWriter, r *http.Request
 // Body: { "session_id": "...", "concept_id": "..." }
 // "Silly mistake" retry: voids the superseded question's miss and restores
 // it as pending. The concept_id names the question being retried and must
-// match the voidable attempt — a stale client that already moved on gets a
+// match the voidable attempt, a stale client that already moved on gets a
 // 400 instead of voiding the wrong answer. Methodology-gated (engine):
 // only surprising misses qualify, once per question. Never for quiz.
 func (s *Server) handleGoalDiagnosticRetry(w http.ResponseWriter, r *http.Request) {
@@ -1320,7 +1324,7 @@ func (s *Server) handleGoalDiagnosticRetry(w http.ResponseWriter, r *http.Reques
 }
 
 // GET /api/goal/diagnostic/resume?session_id=...
-// MA parity: the Diagnostic doesn't have to be completed at once — a paused
+// MA parity: the Diagnostic doesn't have to be completed at once, a paused
 // session resumes on its current question with coverage progress intact.
 func (s *Server) handleGoalDiagnosticResume(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -1620,8 +1624,8 @@ func (s *Server) handleLessons(w http.ResponseWriter, r *http.Request) {
 	// Identity comes from the validated bearer token first, and only then from
 	// an explicit student_id. The readiness and practice branches below already
 	// resolve it this way; reading only the query param here meant a caller who
-	// simply sent its token — which is every guest, since authedFetch attaches
-	// the guest token — got the catalog back with no per-concept status at all.
+	// simply sent its token, which is every guest, since authedFetch attaches
+	// the guest token, got the catalog back with no per-concept status at all.
 	// Preferring the validated identity also means a mismatched param can never
 	// select whose progress is returned.
 	//
@@ -1795,7 +1799,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 	}
 	conceptID := parts[0]
 
-	// GET /api/lessons/{id}/readiness — prerequisite detail and the server's
+	// GET /api/lessons/{id}/readiness, prerequisite detail and the server's
 	// eligibility verdict. `ready/weak/missing` remains the soft banner the
 	// /learn UI has always rendered; `eligible/state/reason/prerequisites` is the
 	// canonical answer a learner's curriculum selection is gated on. A client
@@ -1817,7 +1821,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		missing := []engine.PrereqInfo{}
 		for _, p := range prereqs {
 			// Satisfied means the same thing here as in the canonical gate
-			// below (EligibilityFor): MASTERED, or DECAYING — a stale
+			// below (EligibilityFor): MASTERED, or DECAYING, a stale
 			// mastery is still a met prerequisite, and the banner must not
 			// contradict the verdict it shares a response with. Stored rows
 			// never carry DECAYING, so apply the same read-time decay the
@@ -1825,10 +1829,15 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			status := p.Status
 			if rp, ok := rawProgress[p.ID]; ok && rp != nil {
 				days := 999.0
-				if rp.LastReviewed != nil {
+				if rp.FSRSLastReview != nil && !rp.FSRSLastReview.IsZero() {
+					days = time.Since(*rp.FSRSLastReview).Hours() / 24
+				} else if rp.LastReviewed != nil {
 					days = time.Since(*rp.LastReviewed).Hours() / 24
 				}
-				status = string(mastery.EffectiveStatus(mastery.Status(rp.Status), days, mastery.DecayDays))
+				if days < 0 {
+					days = 0
+				}
+				status = string(mastery.EffectiveStatusFSRS(mastery.Status(rp.Status), days, rp.FSRSStability, mastery.DecayDays))
 			}
 			if status == string(mastery.StatusMastered) || status == "DECAYING" {
 				continue
@@ -1856,7 +1865,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// GET /api/lessons/{id}/kp — knowledge-point shards with worked examples.
+	// GET /api/lessons/{id}/kp, knowledge-point shards with worked examples.
 	if parts[1] == "kp" {
 		ll := s.eng.GetLessonLoader()
 		if ll == nil {
@@ -1882,7 +1891,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			// TeachingSlice never falls back to the lesson body. It used to: when a shard's
 			// section was empty the server substituted l.Body, so 69 of 1,971 steps across 43
 			// concepts served the whole reference article to a learner who asked for one
-			// question — 33,784 words, and discrete.logic.propositions served its 2,724-word
+			// question, 33,784 words, and discrete.logic.propositions served its 2,724-word
 			// article three times over. The reference panel keeps the article reachable (ADR-047);
 			// this is the learning surface.
 			we, _ := ll.TeachingSliceIn(conceptID, kp, loc)
@@ -1943,6 +1952,12 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 			diff = v
 		}
 	}
+	kpOrdinal := 0
+	if kp := r.URL.Query().Get("kp_ordinal"); kp != "" {
+		if v, err := strconv.Atoi(kp); err == nil && v >= 1 && v <= 3 {
+			kpOrdinal = v
+		}
+	}
 	excluded := make(map[string]bool)
 	for _, ex := range r.URL.Query()["exclude"] {
 		for _, part := range strings.Split(ex, "\n") {
@@ -1959,6 +1974,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		Source          string `json:"source,omitempty"`
 		AnswerHint      string `json:"answer_hint,omitempty"`
 		AnswerInputMode string `json:"answer_input_mode,omitempty"`
+		KPOrdinal       int    `json:"kp_ordinal,omitempty"`
 	}
 	// Every question in this response carries the format its answer needs, not
 	// only the concept's grading type. LearnStepper used the concept record,
@@ -2011,7 +2027,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, map[string]interface{}{"questions": []interface{}{}})
 		return
 	}
-	problems, err := reg.BatchGenerateContext(conceptID, count+len(excluded)+5, generator.GeneratorContext{Difficulty: diff, Seed: seed, Locale: localeOf(r)})
+	problems, err := reg.BatchGenerateContext(conceptID, count+len(excluded)+5, generator.GeneratorContext{Difficulty: diff, Seed: seed, Locale: localeOf(r), KPOrdinal: kpOrdinal})
 	if err != nil {
 		writeError(w, err.Error(), 404)
 		return
@@ -2034,7 +2050,7 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 	// feed read that as success, stopped appending, and left the last verdict as the end
 	// of the page with no next step and no message. Repeats are a far better outcome than
 	// a stranded learner, and the variety shortfall is measured separately in
-	// `internal/generator/all/bank_test.go` — 378 of 657 concepts sit under a 12-question
+	// `internal/generator/all/bank_test.go`, 378 of 657 concepts sit under a 12-question
 	// reference, which is a content backlog, not something an empty array should be
 	// answering.
 	if len(fresh) == 0 && len(problems) > 0 {
@@ -2062,7 +2078,11 @@ func (s *Server) handleLessonConcept(w http.ResponseWriter, r *http.Request) {
 	}
 	questions := make([]qInfo, len(problems))
 	for i, p := range problems {
-		questions[i] = qInfo{Question: p.Question, Answer: p.Answer, Explanation: p.Explanation, Source: "generator", AnswerHint: qFormat.Hint, AnswerInputMode: qFormat.InputMode}
+		qOrdinal := kpOrdinal
+		if p.KPOrdinal > 0 {
+			qOrdinal = p.KPOrdinal
+		}
+		questions[i] = qInfo{Question: p.Question, Answer: p.Answer, Explanation: p.Explanation, Source: "generator", AnswerHint: qFormat.Hint, AnswerInputMode: qFormat.InputMode, KPOrdinal: qOrdinal}
 	}
 	writeJSON(w, map[string]interface{}{"questions": questions, "concept_id": conceptID})
 }
@@ -2300,7 +2320,7 @@ func (s *Server) setSettingsFlag(studentID, key string, value bool) error {
 	return s.repo.UpdateSettings(studentID, string(out))
 }
 
-// GET /api/next — the learner's recommended task and their alternatives.
+// GET /api/next, the learner's recommended task and their alternatives.
 //
 // The whole point of this endpoint is that the decision happens once. `/learn` and `/profile`
 // used to recompute it independently in the browser from five API calls and a bundled copy of
@@ -2344,7 +2364,7 @@ func (s *Server) handleNext(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, resp)
 }
 
-// GET /api/reviews/due — returns count of concepts due for review
+// GET /api/reviews/due, returns count of concepts due for review
 func (s *Server) handleDueReviews(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2370,7 +2390,7 @@ func (s *Server) handleDueReviews(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"count": count})
 }
 
-// POST /api/share — enable (body {enabled:true|false}) the read-only share link.
+// POST /api/share, enable (body {enabled:true|false}) the read-only share link.
 func (s *Server) handleShareToggle(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2404,7 +2424,7 @@ func (s *Server) handleShareToggle(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"enabled": true, "token": token})
 }
 
-// GET /api/share/{token} — public read-only oversight view (parent/teacher).
+// GET /api/share/{token}, public read-only oversight view (parent/teacher).
 func (s *Server) handleShareReport(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2464,7 +2484,7 @@ type answerRes struct {
 	Done         bool                 `json:"done"`
 }
 
-// POST /api/reviews/session — creates a review-only session
+// POST /api/reviews/session, creates a review-only session
 func (s *Server) handleReviewsSession(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2488,7 +2508,7 @@ func (s *Server) handleReviewsSession(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, startSessionRes{StudentID: studentID, SessionID: sess.ID, Question: q})
 }
 
-// POST /api/reviews/answer — submits a review answer and returns the next review question
+// POST /api/reviews/answer, submits a review answer and returns the next review question
 func (s *Server) handleReviewsAnswer(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2558,7 +2578,7 @@ func (s *Server) handleCourseRoute(w http.ResponseWriter, r *http.Request) {
 	s.handleCourseDetail(w, r)
 }
 
-// GET /api/destinations — destination bundles with per-student progress.
+// GET /api/destinations, destination bundles with per-student progress.
 func (s *Server) handleDestinations(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2576,7 +2596,7 @@ func (s *Server) handleDestinations(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"destinations": list})
 }
 
-// GET /api/destinations/{id}/estimate — two-track workload estimate.
+// GET /api/destinations/{id}/estimate, two-track workload estimate.
 // Query: daily_goal (default stored goal), deadline_days (-1 none),
 // rest_days (0-6), diagnostic_min. Pure estimator: never mutates mastery,
 // quiz eligibility, or XP.
@@ -2629,7 +2649,7 @@ func (s *Server) handleDestinationEstimate(w http.ResponseWriter, r *http.Reques
 	writeJSON(w, resp)
 }
 
-// POST /api/plans — snapshot the current estimate as the ahead/behind baseline.
+// POST /api/plans, snapshot the current estimate as the ahead/behind baseline.
 func (s *Server) handlePlanSave(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2658,7 +2678,7 @@ func (s *Server) handlePlanSave(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, snap)
 }
 
-// GET /api/plans/current — saved baseline plus fresh ahead/behind delta.
+// GET /api/plans/current, saved baseline plus fresh ahead/behind delta.
 // Prefs (destination/deadline/pace) come from the kept prefs record; the
 // daily rate reads live so goal changes apply without re-saving.
 func (s *Server) handlePlanCurrent(w http.ResponseWriter, r *http.Request) {
@@ -2693,7 +2713,7 @@ func (s *Server) handlePlanCurrent(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"plan": snap, "prefs": prefs, "delta_days": resp.PlanDelta, "fresh_start": resp.FreshStart, "xp_remaining": resp.Estimate.XPRemaining})
 }
 
-// POST /api/account/reset — wipe learning record after typed confirmation.
+// POST /api/account/reset, wipe learning record after typed confirmation.
 // Body: { "phrase": "reset my progress" }. Retry-safe; see engine docs.
 func (s *Server) handleAccountReset(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -2716,7 +2736,7 @@ func (s *Server) handleAccountReset(w http.ResponseWriter, r *http.Request) {
 		// An infrastructure fault must not read as a typo: the learner would
 		// retype the same correct phrase forever.
 		log.Printf("account reset failed for %s: %v", studentID, err)
-		writeError(w, "reset failed and nothing was changed — please try again", 500)
+		writeError(w, "reset failed and nothing was changed, please try again", 500)
 		return
 	}
 	// Evict live diagnostic/quiz sessions so a tab left open cannot rewrite
@@ -2725,7 +2745,7 @@ func (s *Server) handleAccountReset(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"reset": true})
 }
 
-// DELETE /api/account — delete the student and every owned row after typed
+// DELETE /api/account, delete the student and every owned row after typed
 // confirmation, plus the current password for password accounts (OAuth-only
 // and guest rows need the phrase alone). Irreversible.
 func (s *Server) handleAccountDelete(w http.ResponseWriter, r *http.Request) {
@@ -2763,7 +2783,7 @@ func (s *Server) handleAccountDelete(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Printf("account delete failed for %s: %v", studentID, err)
-		writeError(w, "deletion failed and nothing was changed — please try again", 500)
+		writeError(w, "deletion failed and nothing was changed, please try again", 500)
 		return
 	}
 	// Evict live sessions too. On Postgres these FKs are absent, so without
@@ -2774,7 +2794,7 @@ func (s *Server) handleAccountDelete(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"deleted": true})
 }
 
-// GET /api/courses/{id} — one course with the student's progress.
+// GET /api/courses/{id}, one course with the student's progress.
 func (s *Server) handleCourseDetail(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -2802,7 +2822,7 @@ func (s *Server) handleCourseDetail(w http.ResponseWriter, r *http.Request) {
 	writeError(w, "course not found", 404)
 }
 
-// GET /api/attempts — mistakes transcript source, always self-scoped.
+// GET /api/attempts, mistakes transcript source, always self-scoped.
 // Query: source=diagnostic|quiz|practice|review, concept_id=...,
 // incorrect_only=1, limit (default 100, max 500), offset (default 0).
 // Newest first. Pre-migration rows carry empty question/source.
@@ -2871,7 +2891,7 @@ func (s *Server) handleAttempts(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"attempts": filtered[offset:end], "total": total})
 }
 
-// GET /api/transcript — accreditation-track completion overview
+// GET /api/transcript, accreditation-track completion overview
 // (?format=csv returns a downloadable transcript).
 func (s *Server) handleTranscript(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -2946,14 +2966,14 @@ func (s *Server) handleCourseDiagnostic(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
-// POST /api/study/answer — Learn seam: LessonQuiz → SubmitAnswer (CONTEXT.md Seam).
+// POST /api/study/answer, Learn seam: LessonQuiz → SubmitAnswer (CONTEXT.md Seam).
 // The endpoint keeps its name; it is Learn's answer route and has never been Study's page.
 // Body: { concept_id, answer, elapsed, question, student_id? }
 // student_id is used only for a guest (mathua_guest_id).
 //
 // The request carries no expected answer and needs none: the answer and the
 // explanation both come from the server-side anchor written when the question
-// was served. An `expected` a client does send is ignored — there is nothing
+// was served. An `expected` a client does send is ignored, there is nothing
 // left for it to grade against.
 func (s *Server) handleStudyAnswer(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -3054,6 +3074,9 @@ func (s *Server) handleStudyAnswer(w http.ResponseWriter, r *http.Request) {
 		"xp":              res.XP,
 		"expected_answer": res.ExpectedAnswer,
 		"halted":          res.Halted,
+		"scaffold_active": res.ScaffoldActive,
+		"scaffold_step":   res.ScaffoldStep,
+		"scaffold_total":  res.ScaffoldTotal,
 	})
 }
 
@@ -3067,7 +3090,7 @@ type authRoleKey struct{}
 // ownsStudentID reports whether the caller may act as sid. The validated
 // Bearer identity always wins; unauthenticated callers may only act as
 // client-generated guest IDs (unguessable `guest_` tokens kept in
-// localStorage — knowledge of the token IS the credential). Auth-disabled
+// localStorage, knowledge of the token IS the credential). Auth-disabled
 // deployments (dev/test) allow all, preserving legacy behavior.
 func (s *Server) ownsStudentID(r *http.Request, sid string) bool {
 	if sid == "" {
@@ -3162,7 +3185,7 @@ func (s *Server) optionalAuthMiddleware(next http.HandlerFunc) http.HandlerFunc 
 		}
 		studentID, err := s.auth.ValidateToken(token)
 		if err != nil {
-			// Invalid token treated as unauthenticated — allow guest flow to proceed
+			// Invalid token treated as unauthenticated, allow guest flow to proceed
 			log.Printf("optionalAuth: invalid token: %v", err)
 			next(w, r)
 			return
@@ -3230,7 +3253,7 @@ func (s *Server) handleSession(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, startSessionRes{StudentID: sid, SessionID: sess.ID, Question: q})
 }
 
-// POST /api/quiz/session — actionable quiz every 150 XP, own grading path, guest unlimited retake
+// POST /api/quiz/session, actionable quiz every 150 XP, own grading path, guest unlimited retake
 // Body: { student_id? } optional for guest
 func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -3294,7 +3317,7 @@ func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 		"question":     prob.Question,
 		"grading_type": s.gradingTypeOf(cid),
 		"done":         false,
-		// Batch 1: timed closed-book contract — per-question limit
+		// Batch 1: timed closed-book contract, per-question limit
 		// (accommodated), total count, no-lesson closed book.
 		"closed_book":        true,
 		"time_limit_seconds": s.eng.TimeLimitFor(studentID, cid),
@@ -3302,7 +3325,7 @@ func (s *Server) handleQuizSession(w http.ResponseWriter, r *http.Request) {
 	}, cid))
 }
 
-// POST /api/quiz/answer — own grading path via SubmitStudyAnswer with TaskQuiz 20
+// POST /api/quiz/answer, own grading path via SubmitStudyAnswer with TaskQuiz 20
 // Body: { session_id, concept_id, answer, elapsed, student_id?, dont_know? }
 // dont_know records an admitted unknown as a miss (remedial queued, no XP,
 // no rushing penalty); the grader is bypassed.
@@ -3374,10 +3397,10 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 	// the same dispatch SubmitQuizAnswer uses, so the response, the recorded
 	// answer, and the XP/mastery update can never disagree.
 	expected := sess.LastProblem.Answer
-	gr := s.eng.GradeAnswer(req.ConceptID, expected, req.Answer)
+	gr := s.eng.GradeAnswerForQuestion(req.ConceptID, sess.LastProblem.Question, expected, req.Answer)
 	// The session already holds the explanation the generator produced for the
-	// question that was served. Send it on every verdict — a correct answer
-	// still needs the reasoning that made it right — and fall back to the
+	// question that was served. Send it on every verdict, a correct answer
+	// still needs the reasoning that made it right and fall back to the
 	// grader's status token only if it is somehow empty. Same contract as
 	// handleGoalDiagnosticAnswer, which was the one path already doing this.
 	explanation := sess.LastProblem.Explanation
@@ -3396,7 +3419,7 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 	// Record via quiz engine (advance index)
 	qEng := quiz.NewEngine(s.eng.GetDAG(), s.eng.GetGeneratorRegistry())
 	qEng.RecordAnswer(sess, req.ConceptID, gr.Correct)
-	// Single-path quiz grading: the engine owns TaskQuiz XP atomically —
+	// Single-path quiz grading: the engine owns TaskQuiz XP atomically,
 	// one progress update, one AddXP, DB and response agree by construction.
 	xp := 0
 	var newStatus string
@@ -3472,7 +3495,7 @@ func (s *Server) handleQuizAnswer(w http.ResponseWriter, r *http.Request) {
 	}, cid))
 }
 
-// POST /api/quiz/skip — escape hatch for unanswerable quiz questions.
+// POST /api/quiz/skip, escape hatch for unanswerable quiz questions.
 // Body: { session_id, concept_id?, student_id? }
 // Advances past the pending question with no grade, no XP, no remedial.
 // The 150 XP gate baseline resets only if at least one answer was recorded,
@@ -3538,7 +3561,7 @@ func (s *Server) handleQuizSkip(w http.ResponseWriter, r *http.Request) {
 		delete(s.quizSessions, req.SessionID)
 		delete(s.quizCreated, req.SessionID)
 		s.mu.Unlock()
-		writeJSON(w, map[string]interface{}{"done": true, "correct": false, "feedback": "Skipped — no XP awarded.", "xp": 0, "retake_available": true})
+		writeJSON(w, map[string]interface{}{"done": true, "correct": false, "feedback": "Skipped, no XP awarded.", "xp": 0, "retake_available": true})
 		return
 	}
 	prob, cid, err := qEng.NextQuestionIn(localeOf(r), sess)
@@ -3550,7 +3573,7 @@ func (s *Server) handleQuizSkip(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, s.withAnswerFormat(map[string]interface{}{
 		"done":               false,
 		"correct":            false,
-		"feedback":           "Skipped — no XP awarded.",
+		"feedback":           "Skipped, no XP awarded.",
 		"xp":                 0,
 		"new_status":         "",
 		"remedial":           []string{},
@@ -3582,8 +3605,8 @@ func writeJSON(w http.ResponseWriter, v interface{}) {
 // The assessment boundary.
 //
 // Diagnostics and tests measure knowledge. They do not teach. So a verdict from
-// an assessment may carry the assessment's own state — was it right, how far
-// through are we, what should be looked at next — and must not carry anything
+// an assessment may carry the assessment's own state, was it right, how far
+// through are we, what should be looked at next and must not carry anything
 // that tells the learner the answer.
 //
 // `done: true` is not the line. It means "the assessment is over", not "now
@@ -3594,12 +3617,12 @@ func writeJSON(w http.ResponseWriter, v interface{}) {
 //
 // The stripped fields, and why each one goes:
 //
-//   explanation — the generator's worked solution. The whole solution.
-//   feedback    — for these two handlers it *is* the explanation; the graders'
+//   explanation, the generator's worked solution. The whole solution.
+//   feedback  , for these two handlers it *is* the explanation; the graders'
 //                 own tokens ("Not equivalent", "Incorrect comparison") are
 //                 kept because they say how the answer was judged and nothing
 //                 about what the answer was.
-//   diagnosis   — "You are exactly one away, so a count or a boundary is off by
+//   diagnosis , "You are exactly one away, so a count or a boundary is off by
 //                 one." That is not a hint, it is a derivation: the learner
 //                 already holds their own wrong answer, so "exactly one away"
 //                 hands them the right one.
@@ -3725,7 +3748,7 @@ func writeError(w http.ResponseWriter, msg string, code int) {
 	json.NewEncoder(w).Encode(map[string]string{"error": msg})
 }
 
-// GET /api/efficacy — first-pass / second-pass instrumentation.
+// GET /api/efficacy, first-pass / second-pass instrumentation.
 func (s *Server) handleEfficacy(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -3744,7 +3767,7 @@ func (s *Server) handleEfficacy(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, report)
 }
 
-// GET /api/efficacy/all — public product-wide first-pass / second-pass rates.
+// GET /api/efficacy/all, public product-wide first-pass / second-pass rates.
 func (s *Server) handleEfficacyAll(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -3758,7 +3781,7 @@ func (s *Server) handleEfficacyAll(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, report)
 }
 
-// GET /api/efficacy/trend — public longitudinal weekly efficacy + retention
+// GET /api/efficacy/trend, public longitudinal weekly efficacy + retention
 // (docs/efficacy.md). Rate-limited like /api/efficacy/all.
 func (s *Server) handleEfficacyTrend(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -3854,11 +3877,11 @@ type authRes struct {
 	DiagnosticCompleted bool   `json:"diagnostic_completed"`
 }
 
-// POST /api/auth/guest — mint (or reclaim) a bearer token for a guest.
+// POST /api/auth/guest, mint (or reclaim) a bearer token for a guest.
 // Body: { student_id? (existing guest ID to claim), name? }.
 // Claimable rows are credential-less by construction: no password hash, no
 // email, no linked OAuth identity. Anything with a credential → 403 (use
-// signup/login — this is what stops guest-claim account takeover).
+// signup/login, this is what stops guest-claim account takeover).
 // Unknown IDs are adopted only under the `guest_` prefix (progress rows
 // keyed by that ID predate any students row); anything else → 404.
 // Rate-limited with the other auth endpoints.
@@ -3900,7 +3923,7 @@ func (s *Server) handleGuestToken(w http.ResponseWriter, r *http.Request) {
 		if st == nil {
 			// Adopt pre-existing progress keyed by a client guest ID.
 			if !strings.HasPrefix(sid, "guest_") {
-				writeError(w, "unknown student — sign up for a new account", 404)
+				writeError(w, "unknown student, sign up for a new account", 404)
 				return
 			}
 			if _, err := s.repo.ClaimGuestStudent(sid, name); err != nil {
@@ -3908,16 +3931,16 @@ func (s *Server) handleGuestToken(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		} else {
-			// A row with any credential is a real account — not claimable.
+			// A row with any credential is a real account, not claimable.
 			if st.PasswordHash != "" || strings.TrimSpace(st.Email) != "" {
-				writeError(w, "account already registered — log in instead", 403)
+				writeError(w, "account already registered, log in instead", 403)
 				return
 			}
 			if ids, err := s.repo.ListIdentities(sid); err != nil {
 				writeError(w, "failed to look up student", 500)
 				return
 			} else if len(ids) > 0 {
-				writeError(w, "account already registered — log in instead", 403)
+				writeError(w, "account already registered, log in instead", 403)
 				return
 			}
 		}
@@ -3957,8 +3980,8 @@ func (s *Server) handleSignup(w http.ResponseWriter, r *http.Request) {
 		writeError(w, err.Error(), 400)
 		return
 	}
-	// Strict one-email-one-account: any existing row with this address —
-	// verified or not — is a 409. Point the caller at login/reset instead
+	// Strict one-email-one-account: any existing row with this address,
+	// verified or not, is a 409. Point the caller at login/reset instead
 	// of forking a duplicate (same enumeration class as "username is taken").
 	if existing, err := s.repo.FindByEmail(email); err != nil {
 		writeError(w, "signup failed: "+err.Error(), 500)
@@ -3980,7 +4003,7 @@ func (s *Server) handleSignup(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "signup failed: "+err.Error(), 500)
 		return
 	}
-	// Best-effort verification dispatch — never fails signup when mail is
+	// Best-effort verification dispatch, never fails signup when mail is
 	// unconfigured or the send fails (Settings → Verify email stays available).
 	if err := s.auth.RequestEmailVerification(st.ID); err != nil {
 		log.Printf("auth: signup verification dispatch skipped: %v", err)
@@ -4010,7 +4033,7 @@ func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
 	token, st, err := s.auth.Login(req.Username, req.Password)
 	if err != nil || token == "" {
 		if errors.Is(err, auth.ErrGoogleOnly) {
-			writeError(w, "this account uses Google sign-in — continue with Google", 401)
+			writeError(w, "this account uses Google sign-in, continue with Google", 401)
 			return
 		}
 		writeError(w, "invalid username or password", 401)
@@ -4019,7 +4042,7 @@ func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, authRes{Token: token, StudentID: st.ID, Name: st.Name, DiagnosticCompleted: st.DiagnosticCompleted})
 }
 
-// POST /api/auth/reset/request {identifier} — always 200 (no enumeration),
+// POST /api/auth/reset/request {identifier}, always 200 (no enumeration),
 // 503 when outbound mail is unconfigured.
 func (s *Server) handleResetRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -4052,7 +4075,7 @@ func (s *Server) handleResetRequest(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"ok": true})
 }
 
-// POST /api/auth/reset/complete {token, password} — burns the token,
+// POST /api/auth/reset/complete {token, password}, burns the token,
 // sets the password, and logs the user in.
 func (s *Server) handleResetComplete(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -4079,7 +4102,7 @@ func (s *Server) handleResetComplete(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, authRes{Token: token, StudentID: st.ID, Name: st.Name, DiagnosticCompleted: st.DiagnosticCompleted})
 }
 
-// PUT /api/auth/password {current_password, new_password} — logged-in
+// PUT /api/auth/password {current_password, new_password}, logged-in
 // password change (no email involved).
 func (s *Server) handleChangePassword(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
@@ -4110,7 +4133,7 @@ func (s *Server) handleChangePassword(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"ok": true})
 }
 
-// PUT /api/profile — update display name and/or recovery email.
+// PUT /api/profile, update display name and/or recovery email.
 // Username is immutable. Email must be valid when given; empty clears it.
 func (s *Server) handleProfileUpdate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
@@ -4147,7 +4170,7 @@ func (s *Server) handleProfileUpdate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// Strict one-email-one-account (mirrors signup): another account
-		// holding this address — verified or not — is a 409. Re-saving
+		// holding this address, verified or not, is a 409. Re-saving
 		// your own address stays a no-op success.
 		if email != "" {
 			if existing, err := s.repo.FindByEmail(email); err != nil {
@@ -4201,7 +4224,7 @@ func (s *Server) handleMe(w http.ResponseWriter, r *http.Request) {
 	//
 	// This is a convenience and nothing more. Hiding a link is not authorization, and a client
 	// that lies about the role gets nothing: every /api/admin route re-reads it server-side.
-	// It is read here rather than added to storage.Student for the reason given there — a
+	// It is read here rather than added to storage.Student for the reason given there, a
 	// privilege field that silently defaults to "student" when unloaded is the wrong shape.
 	role, err := s.repo.GetStudentRole(studentID)
 	if err != nil {
@@ -4233,7 +4256,7 @@ func (s *Server) handleMe(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// POST /api/auth/google — One-Tap id_token
+// POST /api/auth/google, One-Tap id_token
 func (s *Server) handleGoogleOneTap(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -4267,7 +4290,7 @@ func (s *Server) handleGoogleOneTap(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, authRes{Token: token, StudentID: st.ID, Name: st.Name, DiagnosticCompleted: st.DiagnosticCompleted})
 }
 
-// GET /api/auth/google/login — redirect to Google OAuth consent
+// GET /api/auth/google/login, redirect to Google OAuth consent
 func (s *Server) handleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	if s.auth == nil {
 		writeError(w, "authentication is disabled", 400)
@@ -4443,7 +4466,7 @@ const gradingDeadline = 20 * time.Second
 // grader and any database call under it stop rather than continuing to work
 // for a response nobody will read.
 func gradingTimeout(deadline time.Duration, h http.HandlerFunc) http.HandlerFunc {
-	th := http.TimeoutHandler(h, deadline, `{"error":"grading took too long — retry the same answer"}`)
+	th := http.TimeoutHandler(h, deadline, `{"error":"grading took too long, retry the same answer"}`)
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		th.ServeHTTP(w, r)

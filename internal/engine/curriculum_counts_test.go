@@ -13,7 +13,7 @@ import (
 // The handler sums per-domain counters, and CurriculumDomains skips a concept
 // whose domain has no row (`if d == nil { continue }`). That skip is defensive,
 // and its failure mode is a total that is quietly too small while every row
-// still looks plausible — so the sum is checked against the corpus the DAG was
+// still looks plausible, so the sum is checked against the corpus the DAG was
 // built from, not against itself.
 func TestCurriculumDomainsCountsEveryConcept(t *testing.T) {
 	dag, err := concepts.LoadDir("../../data/concepts")

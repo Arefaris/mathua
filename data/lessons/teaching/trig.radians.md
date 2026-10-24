@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Precalculus 2e](https://openstax.org/details/books/precalculus-2e) by Jay Abramson — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Precalculus 2e](https://openstax.org/details/books/precalculus-2e) by Jay Abramson, CC BY-NC-SA 4.0
 
 ## 5.1 Angles
 
@@ -47,7 +47,7 @@ To formalize our work, we will begin by drawing angles on an *x*-*y* coordinate 
 
 If the angle is measured in a counterclockwise direction from the initial side to the terminal side, the angle is said to be a positive angle. If the angle is measured in a clockwise direction, the angle is said to be a negative angle.
 
-Drawing an angle in standard position always starts the same way—draw the initial side along the positive *x*-axis. To place the terminal side of the angle, we must calculate the fraction of a full rotation the angle represents. We do that by dividing the angle measure in degrees by 360°. For example, to draw a 90° angle, we calculate that $\frac{90{^\circ}}{360{^\circ}} = \frac{1}{4}.$ So, the terminal side will be one-fourth of the way around the circle, moving counterclockwise from the positive *x*-axis. To draw a 360° angle, we calculate that $\frac{360{^\circ}}{360{^\circ}} = 1.$ So the terminal side will be 1 complete rotation around the circle, moving counterclockwise from the positive *x*-axis. In this case, the initial side and the terminal side overlap. See Figure 6.
+Drawing an angle in standard position always starts the same way, draw the initial side along the positive *x*-axis. To place the terminal side of the angle, we must calculate the fraction of a full rotation the angle represents. We do that by dividing the angle measure in degrees by 360°. For example, to draw a 90° angle, we calculate that $\frac{90{^\circ}}{360{^\circ}} = \frac{1}{4}.$ So, the terminal side will be one-fourth of the way around the circle, moving counterclockwise from the positive *x*-axis. To draw a 360° angle, we calculate that $\frac{360{^\circ}}{360{^\circ}} = 1.$ So the terminal side will be 1 complete rotation around the circle, moving counterclockwise from the positive *x*-axis. In this case, the initial side and the terminal side overlap. See Figure 6.
 
 *Figure 6*
 
@@ -139,7 +139,7 @@ See Figure 11. Note that when an angle is described without a specific unit, it 
 
 An arc length $s$ is the length of the curve along the arc. Just as the full circumference of a circle always has a constant ratio to the radius, the arc length produced by any given angle also has a constant relation to the radius, regardless of the length of the radius.
 
-This ratio, called the radian measure, is the same regardless of the radius of the circle—it depends only on the angle. This property allows us to define a measure of any angle as the ratio of the arc length $s$ to the radius $r.$ See Figure 12.
+This ratio, called the radian measure, is the same regardless of the radius of the circle, it depends only on the angle. This property allows us to define a measure of any angle as the ratio of the arc length $s$ to the radius $r.$ See Figure 12.
 
 $$
 \begin{array}{l}
@@ -352,7 +352,7 @@ It is possible for more than one angle to have the same terminal side. Look at F
 
 *Figure 16 An angle of 140° and an angle of –220° are coterminal angles.*
 
-Any angle has infinitely many coterminal angles because each time we add 360° to that angle—or subtract 360° from it—the resulting value has a terminal side in the same location. For example, 100° and 460° are coterminal for this reason, as is −260°. Recognizing that any angle has infinitely many coterminal angles explains the repetitive shape in the graphs of trigonometric functions.
+Any angle has infinitely many coterminal angles because each time we add 360° to that angle or subtract 360° from it, the resulting value has a terminal side in the same location. For example, 100° and 460° are coterminal for this reason, as is −260°. Recognizing that any angle has infinitely many coterminal angles explains the repetitive shape in the graphs of trigonometric functions.
 
 An angle’s reference angle is the measure of the smallest, positive, acute angle $t'$ formed by the terminal side of the angle $t$ and the horizontal axis. Thus positive reference angles have terminal sides that lie in the first quadrant and can be used as models for angles in other quadrants. See Figure 17 for examples of reference angles for angles in different quadrants.
 

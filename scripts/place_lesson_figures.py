@@ -5,7 +5,7 @@ Every placement is declared here explicitly, as an anchor plus a position, rathe
 computed. That is deliberate: an earlier version scored each figure's caption against every
 section of its lesson and picked the best match, which put 7 of 38 figures somewhere no rule
 could justify. A declared anchor is auditable in one read, and the script refuses to write if
-an anchor has stopped being unique — a stale line number fails loudly instead of putting a
+an anchor has stopped being unique, a stale line number fails loudly instead of putting a
 figure in the wrong section.
 
 Two kinds of edit:
@@ -16,12 +16,12 @@ Two kinds of edit:
 
   insert   The figure is absent and the prose needs it. 32 of the 38 are like this. Most go at
            the end of the section that names their concept; several must go somewhere exact,
-           because the prose already refers to a figure by position — "The graph above
+           because the prose already refers to a figure by position, "The graph above
            illustrates…" is an instruction, not a description.
 
 Alt text is copied verbatim from the figure's own SVG caption. It is never reworded, because
 the caption is the author's words and a paraphrase is a claim the figure does not make. The six
-Venn diagrams in sets.md have no caption at all — only symbolic labels — so their alt is listed
+Venn diagrams in sets.md have no caption at all, only symbolic labels, so their alt is listed
 below as the one place this file interprets rather than copies, and it is flagged in the
 comment.
 
@@ -45,7 +45,7 @@ LESSONS = os.path.join(ROOT, "data", "lessons")
 # These are the only alt strings not copied verbatim from one <text> run, and each is composed
 # from the figure's own panel captions rather than reworded. Composing them is necessary: the
 # auto-derivation below takes the single longest run, and for a two-panel figure that silently
-# drops half of what the figure shows. polynomial-function-2.svg is the clearest case — its two
+# drops half of what the figure shows. polynomial-function-2.svg is the clearest case, its two
 # panels are y = 2x² − 3x + 1 opening upward and y = −x² + 5x + 1 opening downward, and taking
 # one run described only one of them.
 EXPLICIT_ALT = {
@@ -55,7 +55,7 @@ EXPLICIT_ALT = {
     "principle-of-mathematical-induction-1.svg": "The two steps of an induction: the base case, true for every $n$ in the natural numbers, and the inductive step, $p(n)$ implies $p(n+1)$.",
 }
 
-# Alt text for the six Venn diagrams, which carry no caption — only the labels A, B, U and the
+# Alt text for the six Venn diagrams, which carry no caption, only the labels A, B, U and the
 # result. These are read off the figure's visible maths, which is the only evidence there is,
 # and are the only alt strings in this file that are not a verbatim copy. sets-6.svg's own
 # <title> says "Group 2", which contradicts its content, so it is deliberately not used.
@@ -183,7 +183,7 @@ def svg_caption(name):
     if len(captions) != 1:
         raise SystemExit(
             f"{name}: {len(captions)} caption runs, so there is no single caption to copy. "
-            "Add an explicit alt rather than letting the longest run stand in for the figure — "
+            "Add an explicit alt rather than letting the longest run stand in for the figure, "
             "on a multi-panel figure that describes only one panel.")
     return captions[0]
 
@@ -246,8 +246,8 @@ def main():
             lines = fh.read().split("\n")
         planned = []
 
-        # Group by target line. Two figures can legitimately land on the same line — both
-        # belong to one section, or the prose names one figure position for two of them — and
+        # Group by target line. Two figures can legitimately land on the same line, both
+        # belong to one section, or the prose names one figure position for two of them and
         # applying those edits independently reverses them, because every insert lands at the
         # same index. Splicing each line once, in declared order, keeps them in order.
         buckets = {}

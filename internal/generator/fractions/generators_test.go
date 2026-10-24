@@ -2,6 +2,7 @@ package fractions
 
 import (
 	"math/rand"
+	"strings"
 	"testing"
 
 	"github.com/chuma-beep/mathua/internal/generator"
@@ -49,5 +50,42 @@ func TestFuzz(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// The bar was drawn as "X X _ _ _" inside math delimiters, where the spaces
+// collapse and the underscores become subscripts, so the learner was asked what
+// fraction of a bar they could not see. The question now says the counts.
+func TestFractionConceptAsksInWords(t *testing.T) {
+	g := &fracConceptGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		if strings.Contains(p.Question, "X X") || strings.Contains(p.Question, "\\(") {
+			t.Fatalf("question still draws a bar: %q", p.Question)
+		}
+		if !strings.Contains(p.Question, "equal parts") {
+			t.Fatalf("question does not describe the parts: %q", p.Question)
+		}
+		if p.Answer != p.Facts["filled"]+"/"+p.Facts["parts"] {
+			t.Fatalf("answer %q does not match facts %v", p.Answer, p.Facts)
+		}
+	}
+}
+
+// TestRibbonIsNeverCutIntoItsOwnLength pins the degenerate draw. When the piece
+// count equalled the length the generator served "a ribbon 1 metres long cut
+// into 1 equal pieces" and answered 1/1, which is not a fraction exercise.
+func TestRibbonIsNeverCutIntoItsOwnLength(t *testing.T) {
+	g := &asDivisionGen{}
+	for i := 0; i < 300; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		length := p.Facts["length"]
+		pieces := p.Facts["pieces"]
+		if length == pieces {
+			t.Fatalf("ribbon %s metres is cut into %s pieces: %q", length, pieces, p.Question)
+		}
+		if strings.Contains(p.Question, "1 metres") {
+			t.Fatalf("singular length reads as plural: %q", p.Question)
+		}
 	}
 }

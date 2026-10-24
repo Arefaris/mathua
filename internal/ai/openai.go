@@ -22,7 +22,7 @@ const maxSuccessBody = 4 << 20
 
 // OpenAIProvider speaks the OpenAI chat-completions contract, which Groq,
 // Cloudflare Workers AI, Ollama and llama.cpp's server all expose. Provider
-// quirks — base path, auth header, model id — are fields rather than
+// quirks, base path, auth header, model id, are fields rather than
 // subclasses, so one transport serves the whole production chain and there is
 // one place to get timeouts and error classification right.
 type OpenAIProvider struct {
@@ -220,7 +220,7 @@ const maxErrorSummaryRunes = 300
 //
 // The raw body is deliberately discarded. A provider that rejects a request
 // frequently echoes parts of it back, and Groq's `json_validate_failed` returns
-// the model's unparsed generation under `failed_generation` — which, for a
+// the model's unparsed generation under `failed_generation`, which, for a
 // caller whose whole input is the learner's own words, can restate them. A log
 // line is the one place a prompt must never reappear, so only the provider's own
 // `error.message` survives, and only after control characters are stripped so a

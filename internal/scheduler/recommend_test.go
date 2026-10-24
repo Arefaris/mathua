@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/mastery"
 )
 
@@ -32,7 +33,7 @@ func TestRecommend_NewLearnerIsOfferedTheDiagnosticButStillHasAgency(t *testing.
 		t.Fatalf("primary = %+v, want the diagnostic for a learner with no history", got.Primary)
 	}
 	if len(got.Alternatives) == 0 {
-		t.Error("a new learner got the diagnostic and nothing else — no agency")
+		t.Error("a new learner got the diagnostic and nothing else, no agency")
 	}
 }
 
@@ -63,7 +64,7 @@ func TestRecommend_MasteredAndBlockedConceptsAreNeverOffered(t *testing.T) {
 		}
 	}
 	if got.Primary.ConceptID != "b" && got.Primary.ConceptID != "c" {
-		t.Errorf("primary = %q, want b or c — the unlocked, unattempted concepts", got.Primary.ConceptID)
+		t.Errorf("primary = %q, want b or c, the unlocked, unattempted concepts", got.Primary.ConceptID)
 	}
 }
 
@@ -114,6 +115,127 @@ func TestRecommend_WeakConceptIsOfferedAsPracticeNotNew(t *testing.T) {
 	}
 	if practice.Action.Href != "/learn?concept=b" {
 		t.Errorf("practice href = %q", practice.Action.Href)
+	}
+}
+
+func TestRecommend_MasteredPrerequisiteWithWeaknessOfferedForRemediation(t *testing.T) {
+	s := New(miniDAG(t))
+	now := time.Now()
+	// Concept "a" is mastered but elevated weakness was propagated backward from downstream struggle.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    15,
+		ConceptsMastered: 1,
+		Weakness:         map[string]float64{"a": 0.45},
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": {
+				Status:        mastery.StatusMastered,
+				Streak:        3,
+				WeaknessScore: 0.45,
+				LastAttempted: now,
+				LastReviewed:  now,
+			},
+		},
+	})
+	var remediation *Recommendation
+	for i, r := range all(got) {
+		if r.ConceptID == "a" {
+			remediation = &all(got)[i]
+		}
+	}
+	if remediation == nil {
+		t.Fatalf("mastered prerequisite with weakness 0.45 was not offered for remediation: %+v", got)
+	}
+	if remediation.Kind != KindPractice {
+		t.Errorf("remediation kind = %q, want %q", remediation.Kind, KindPractice)
+	}
+	if remediation.Reason != ReasonPrerequisite {
+		t.Errorf("remediation reason = %q, want %q", remediation.Reason, ReasonPrerequisite)
+	}
+	if remediation.Badge != "Remediation" {
+		t.Errorf("remediation badge = %q, want Remediation", remediation.Badge)
+	}
+	if remediation.CTA != "Review prerequisite →" {
+		t.Errorf("remediation cta = %q, want Review prerequisite →", remediation.CTA)
+	}
+}
+
+func TestScheduler_BackwardRemediationOutranksDownstreamStruggle(t *testing.T) {
+	s := New(miniDAG(t))
+	now := time.Now()
+	// In miniDAG: a -> b.
+	// Learner has mastered "a" with streak 3, but downstream struggle on "b" elevated "a"'s weakness to 0.45.
+	// Meanwhile "b" has weakness 0.7.
+	// Prerequisite remediation for "a" must receive higher priority than repeating "b".
+	candidates := buildCandidates(s.dag, map[string]*ConceptSnapshot{
+		"a": {
+			Status:        mastery.StatusMastered,
+			Streak:        3,
+			WeaknessScore: 0.45,
+			LastAttempted: now,
+			LastReviewed:  now,
+		},
+		"b": {
+			Status:        mastery.StatusPracticing,
+			Streak:        0,
+			WeaknessScore: 0.7,
+			LastAttempted: now,
+		},
+	}, now, "")
+
+	var prioA, prioB float64
+	foundA, foundB := false, false
+	for _, c := range candidates {
+		if c.Concept.ID == "a" {
+			prioA = c.Priority
+			foundA = true
+		}
+		if c.Concept.ID == "b" {
+			prioB = c.Priority
+			foundB = true
+		}
+	}
+	if !foundA || !foundB {
+		t.Fatalf("expected both a and b in candidates: foundA=%v foundB=%v candidates=%+v", foundA, foundB, candidates)
+	}
+	if prioA <= prioB {
+		t.Errorf("prerequisite remediation priority %v should exceed downstream struggle priority %v", prioA, prioB)
+	}
+}
+
+// A remediation card and the concept the learner is failing are two different tasks, so the
+// shelf has to hold both. They used to share the practice bucket, and it has one slot: the
+// mastered prerequisite took it and the failing concept disappeared from the response.
+func TestRecommend_RemediationKeepsTheFailingConceptOnTheShelf(t *testing.T) {
+	s := New(miniDAG(t))
+	now := time.Now()
+	// The weakness map is what the engine passes: zero for a mastered concept, the stored
+	// score for the rest. The elevated prerequisite weakness reaches the scheduler through
+	// the snapshot, which is why both are set here.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    15,
+		ConceptsMastered: 1,
+		Weakness:         map[string]float64{"a": 0, "b": 0.8, "c": 0, "d": 0},
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": {Status: mastery.StatusMastered, Streak: 3, WeaknessScore: 0.45, LastAttempted: now, LastReviewed: now},
+			"b": {Status: mastery.StatusPracticing, WeaknessScore: 0.8, LastAttempted: now},
+		},
+	})
+	if got.Primary == nil || got.Primary.ConceptID != "a" {
+		t.Fatalf("primary = %+v, want the prerequisite remediation for a", got.Primary)
+	}
+	var kept *Recommendation
+	for i, r := range all(got) {
+		if r.ConceptID == "b" {
+			kept = &all(got)[i]
+		}
+	}
+	if kept == nil {
+		t.Fatalf("the concept the learner is failing was dropped from the shelf: %+v", got)
+	}
+	if kept.Reason != ReasonNeedsPractice {
+		t.Errorf("b reason = %q, want %q", kept.Reason, ReasonNeedsPractice)
 	}
 }
 
@@ -289,7 +411,7 @@ func TestRecommend_NoLearnerFacingTerminology(t *testing.T) {
 	}
 }
 
-// A learner with nothing eligible — nothing reachable, nothing due, nothing weak — is a real
+// A learner with nothing eligible, nothing reachable, nothing due, nothing weak, is a real
 // state, and it must still get a head: the client cannot render a null primary.
 //
 // It used to be answered with `/study`, and the fallback is worth keeping as a test because of
@@ -315,5 +437,275 @@ func TestRecommend_NothingAvailableFallsBackToOrientation(t *testing.T) {
 	// recommendation pointing at it would send a learner to a redirect on the way to nothing.
 	if strings.HasPrefix(got.Primary.Action.Href, "/study") {
 		t.Errorf("primary points at the closed reference library: %q", got.Primary.Action.Href)
+	}
+}
+
+func TestRecommend_TargetedRemediation_KeyPrerequisitesInjectedAtFront(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d", Subdomain: "s-a",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d", Subdomain: "s-b",
+			Prerequisites:    []string{"a"},
+			KeyPrerequisites: []string{"a"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	s := New(d)
+	now := time.Now()
+
+	// Learner halts on b with key prerequisite a injected into the task shelf.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    10,
+		ConceptsMastered: 1,
+		KeyPrerequisites: []string{"a"},
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": masteredAt(now),
+			"b": {Status: mastery.StatusPracticing, Streak: 0, WeaknessScore: 0.8, LastAttempted: now},
+		},
+	})
+
+	if got.Primary == nil {
+		t.Fatal("expected primary recommendation")
+	}
+	if got.Primary.ConceptID != "a" {
+		t.Errorf("primary concept = %q, want key prerequisite a", got.Primary.ConceptID)
+	}
+	if got.Primary.Reason != ReasonPrerequisite {
+		t.Errorf("primary reason = %q, want %q", got.Primary.Reason, ReasonPrerequisite)
+	}
+	if got.Primary.Badge != "Remediation" {
+		t.Errorf("primary badge = %q, want Remediation", got.Primary.Badge)
+	}
+	if got.Primary.CTA != "Review prerequisite →" {
+		t.Errorf("primary cta = %q, want Review prerequisite →", got.Primary.CTA)
+	}
+	if got.Primary.Action.Href != "/learn?concept=a" {
+		t.Errorf("primary href = %q, want /learn?concept=a", got.Primary.Action.Href)
+	}
+}
+
+func TestRecommend_TargetedRemediation_OutranksQuizDue(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d", Subdomain: "s-a",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d", Subdomain: "s-b",
+			Prerequisites:    []string{"a"},
+			KeyPrerequisites: []string{"a"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	s := New(d)
+	now := time.Now()
+
+	// Targeted remediation outranks QuizDue at the head of the task shelf.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    10,
+		ConceptsMastered: 1,
+		QuizDue:          true,
+		KeyPrerequisites: []string{"a"},
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": masteredAt(now),
+			"b": {Status: mastery.StatusPracticing, Streak: 0, WeaknessScore: 0.8, LastAttempted: now},
+		},
+	})
+
+	if got.Primary == nil || got.Primary.ConceptID != "a" {
+		t.Fatalf("primary = %+v, want key prerequisite a", got.Primary)
+	}
+	if !hasKind(got.Alternatives, KindMasteryCheck) {
+		t.Errorf("expected mastery check in alternatives, got %+v", got.Alternatives)
+	}
+}
+
+func TestRecommend_TargetedRemediation_MultipleKeyPrerequisites(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d", Subdomain: "s-a",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d", Subdomain: "s-b",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+		{
+			ID: "c", Label: "Concept C", Domain: "d", Subdomain: "s-c",
+			Prerequisites:    []string{"a", "b"},
+			KeyPrerequisites: []string{"a", "b"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	s := New(d)
+	now := time.Now()
+
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    15,
+		ConceptsMastered: 2,
+		HaltedConceptID:  "c",
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": masteredAt(now),
+			"b": masteredAt(now),
+			"c": {Status: mastery.StatusPracticing, Streak: 0, WeaknessScore: 0.8, LastAttempted: now},
+		},
+	})
+
+	if got.Primary == nil || got.Primary.ConceptID != "a" {
+		t.Fatalf("primary = %+v, want first key prerequisite a", got.Primary)
+	}
+	if len(got.Alternatives) == 0 || got.Alternatives[0].ConceptID != "b" {
+		t.Fatalf("expected second key prerequisite b as first alternative, got %+v", got.Alternatives)
+	}
+}
+
+func TestRecommend_TargetedRemediation_GracefulFallbackWhenNoKeyPrerequisites(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d", Subdomain: "s-a",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	s := New(d)
+	now := time.Now()
+
+	// Halted concept with no KeyPrerequisites falls back to standard remediation path.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    5,
+		ConceptsMastered: 0,
+		HaltedConceptID:  "a",
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": {Status: mastery.StatusPracticing, Streak: 1, WeaknessScore: 0.5, LastAttempted: now},
+		},
+	})
+
+	if got.Primary == nil {
+		t.Fatal("expected primary recommendation on fallback path")
+	}
+	if got.Primary.ConceptID != "a" {
+		t.Errorf("primary = %q, want concept a", got.Primary.ConceptID)
+	}
+	if got.Primary.Reason != ReasonNeedsPractice {
+		t.Errorf("primary reason = %q, want %q", got.Primary.Reason, ReasonNeedsPractice)
+	}
+}
+
+func TestRecommend_TargetedRemediation_NormalCompletionPath(t *testing.T) {
+	d := miniDAG(t)
+	s := New(d)
+	now := time.Now()
+
+	// When no key prerequisites or halts exist, recommendations follow normal completion path.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    10,
+		ConceptsMastered: 1,
+		Snapshots: map[string]*ConceptSnapshot{
+			"a": masteredAt(now),
+		},
+	})
+
+	if got.Primary == nil {
+		t.Fatal("expected primary recommendation on normal path")
+	}
+	if got.Primary.Reason != ReasonNew {
+		t.Errorf("primary reason = %q, want %q", got.Primary.Reason, ReasonNew)
+	}
+}
+
+func TestEffectiveState_HighFSRSStability_DoesNotDecayAt15Days(t *testing.T) {
+	now := time.Now()
+	lastRev := now.AddDate(0, 0, -15)
+	due := now.AddDate(0, 0, 30)
+	stability := 60.0
+
+	snap := &ConceptSnapshot{
+		Status:         mastery.StatusMastered,
+		LastReviewed:   lastRev,
+		NextReviewDue:  &due,
+		FSRSStability:  &stability,
+		FSRSLastReview: &lastRev,
+	}
+
+	status, isReview := effectiveState(snap, now)
+	if status != mastery.StatusMastered {
+		t.Errorf("status = %q, want %q at 15 days with stability 60", status, mastery.StatusMastered)
+	}
+	if isReview {
+		t.Error("expected isReview=false at 15 days when stability is 60 and NextReviewDue is in future")
+	}
+}
+
+func TestRecommend_TargetedRemediation_FallsBackToDAGPrereqWhenNoKeyPrerequisites(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "p1", Label: "Prereq 1", Domain: "d", Subdomain: "s",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+		{
+			ID: "p2", Label: "Prereq 2", Domain: "d", Subdomain: "s",
+			Prerequisites:    []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+		{
+			ID: "c", Label: "Concept C", Domain: "d", Subdomain: "s",
+			Prerequisites:    []string{"p1", "p2"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 10},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	s := New(d)
+	now := time.Now()
+
+	// Student halted on c. Concept c has no KeyPrerequisites declared.
+	// p1 is mastered (streak 5). p2 is learning (streak 1).
+	// Scheduler must fall back to the weakest prerequisite (p2) for targeted remediation.
+	got := s.Recommend(RecommendInput{
+		Now:              now,
+		AttemptedDays:    5,
+		ConceptsMastered: 1,
+		HaltedConceptID:  "c",
+		Snapshots: map[string]*ConceptSnapshot{
+			"p1": {Status: mastery.StatusMastered, Streak: 5, LastReviewed: now},
+			"p2": {Status: mastery.StatusLearning, Streak: 1, LastAttempted: now},
+			"c":  {Status: mastery.StatusPracticing, Streak: 0, LastAttempted: now},
+		},
+	})
+
+	if got.Primary == nil {
+		t.Fatal("expected primary recommendation on remedial fallback")
+	}
+	if got.Primary.ConceptID != "p2" {
+		t.Errorf("primary concept = %q, want weakest prerequisite p2", got.Primary.ConceptID)
+	}
+	if got.Primary.Reason != ReasonPrerequisite {
+		t.Errorf("primary reason = %q, want %q", got.Primary.Reason, ReasonPrerequisite)
 	}
 }

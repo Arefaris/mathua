@@ -17,7 +17,7 @@ export default function MonthlyCards({ data }: Props) {
   const t = useT()
   const locale = useLocale()
   // Horizontal month strip, oldest → newest: only months with activity plus
-  // the current month as an anchor — never a wall of empty accordions. Every
+  // the current month as an anchor, never a wall of empty accordions. Every
   // visible month shows its grid (no expand/collapse); the strip opens
   // scrolled to the newest end.
   const months = useMemo(() => {

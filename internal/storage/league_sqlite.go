@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -109,7 +110,7 @@ func (s *SQLiteStore) ResolveLeagueWeek(week string, prevFrom, prevTo time.Time)
 	for _, tier := range LeagueTiers {
 		next = append(next, cutCohorts(tier, byTier[tier])...)
 	}
-	if err := insertCohorts(tx, week, next); err != nil {
+	if err := insertCohorts(tx, week, next, rebindQuestion); err != nil {
 		return err
 	}
 	if err := tx.Commit(); err != nil {
@@ -142,17 +143,21 @@ func (s *SQLiteStore) bootstrapLeagues(tx *sql.Tx, week string) error {
 	if err := rows.Err(); err != nil {
 		return fmt.Errorf("seed leagues: %w", err)
 	}
-	return insertCohorts(tx, week, cutCohorts(LeagueTiers[0], members))
+	return insertCohorts(tx, week, cutCohorts(LeagueTiers[0], members), rebindQuestion)
 }
 
-func insertCohorts(tx *sql.Tx, week string, cohorts []leagueCohort) error {
+// insertCohorts writes one week's seats. Both engines call it, so the caller
+// supplies the placeholder spelling: SQLite takes `?`, Postgres takes `$n`. The
+// statement used to hardcode `?`, which made a Postgres bootstrap fail with a
+// syntax error at the first comma, so a league week could never form there.
+func insertCohorts(tx *sql.Tx, week string, cohorts []leagueCohort, rebind func(string) string) error {
+	const insert = `INSERT INTO league_members (week, student_id, tier, league_no, xp, rank)
+		 VALUES (?, ?, ?, ?, 0, 0)
+		 ON CONFLICT(week, student_id) DO NOTHING`
+	query := rebind(insert)
 	for _, c := range cohorts {
 		for _, m := range c.Members {
-			if _, err := tx.Exec(
-				`INSERT INTO league_members (week, student_id, tier, league_no, xp, rank)
-				 VALUES (?, ?, ?, ?, 0, 0)
-				 ON CONFLICT(week, student_id) DO NOTHING`,
-				week, m.StudentID, c.Tier, c.LeagueNo); err != nil {
+			if _, err := tx.Exec(query, week, m.StudentID, c.Tier, c.LeagueNo); err != nil {
 				return fmt.Errorf("insert league member: %w", err)
 			}
 		}
@@ -282,5 +287,39 @@ func (s *SQLiteStore) LeagueRoster(week, tier string, leagueNo int, from, to tim
 		return nil, fmt.Errorf("read league roster: %w", err)
 	}
 	rankInCohort(out)
+	return out, nil
+}
+
+// LeagueCohorts lists the week's leagues in pyramid order: bronze first, then
+// by league number inside each tier. The database groups and counts; the tier
+// order comes from LeagueTiers rather than from an alphabetical sort, which
+// would put bronze between diamond and gold.
+func (s *SQLiteStore) LeagueCohorts(week string) ([]LeagueCohort, error) {
+	rows, err := s.db.Query(
+		`SELECT tier, league_no, COUNT(*) FROM league_members
+		 WHERE week = ?
+		 GROUP BY tier, league_no`, week)
+	if err != nil {
+		return nil, fmt.Errorf("read league cohorts: %w", err)
+	}
+	defer rows.Close()
+	var out []LeagueCohort
+	for rows.Next() {
+		var c LeagueCohort
+		if err := rows.Scan(&c.Tier, &c.LeagueNo, &c.Size); err != nil {
+			return nil, fmt.Errorf("scan league cohort: %w", err)
+		}
+		c.Tier = validTier(c.Tier)
+		out = append(out, c)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("read league cohorts: %w", err)
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		if out[i].Tier != out[j].Tier {
+			return tierIndex(out[i].Tier) < tierIndex(out[j].Tier)
+		}
+		return out[i].LeagueNo < out[j].LeagueNo
+	})
 	return out, nil
 }

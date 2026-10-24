@@ -1,6 +1,6 @@
 // Non-binding feedback on a learner's own expression.
 //
-// What this is NOT: a grade. It never sees the expected answer — the server holds
+// What this is NOT: a grade. It never sees the expected answer, the server holds
 // that, and shipping it to the browser to compute a hint would turn every hint into
 // an answer oracle and quietly undo the "the server grades" rule in ADR-005. So
 // there is no comparison against a reference anywhere in this file. What it can do
@@ -28,6 +28,7 @@ export interface Engine {
   valid(expr: Expression): boolean
   simplify(expr: Expression): Expression
   latexOf(expr: Expression): string
+  isEquivalent?: (a: Expression, b: Expression) => boolean
 }
 
 export interface Expression {
@@ -53,19 +54,19 @@ export interface Expression {
  * ## Nothing renders a verdict from this, for any of the three
  *
  * There is no correctness feedback built on this function, and that is deliberate
- * rather than unfinished. The client does not hold the expected answer — grading is
- * server-side and answers are anchored there (ADR-005) — so there is nothing here to
+ * rather than unfinished. The client does not hold the expected answer, grading is
+ * server-side and answers are anchored there (ADR-005), so there is nothing here to
  * compare *against* without shipping the answer to the browser, which would turn any
  * hint into an answer oracle.
  *
  * `simplificationHint` is what the UI uses instead: it reports what the learner's own
  * expression simplifies to, and cannot produce a correctness verdict even in principle
  * because it never sees a second expression. `test/selfCheck.test.tsx` asserts that for
- * all three states, including 'unknown', nothing resembling a verdict reaches the DOM —
+ * all three states, including 'unknown', nothing resembling a verdict reaches the DOM, 
  * no "correct", no "incorrect", no "wrong", no "try again".
  *
  * Naming: a string union rather than `true | false | undefined`. The three outcomes are
- * not truthy/falsy-shaped — 'unknown' is an absence, and `undefined` would be
+ * not truthy/falsy-shaped, 'unknown' is an absence, and `undefined` would be
  * indistinguishable from a function that simply failed to return. The states are
  * compared by name at every call site.
  */
@@ -77,7 +78,7 @@ let enginePromise: Promise<Engine | null> | null = null
 /**
  * Load Compute Engine once, on first use.
  *
- * It is ~1.1 MB gzipped — five times MathLive — so it is never in any route's initial
+ * It is ~1.1 MB gzipped, five times MathLive, so it is never in any route's initial
  * JS and never loaded until a learner has actually typed something worth checking.
  * A load failure returns null and every function here degrades to "say nothing",
  * which is the whole failure mode of this feature: it is optional by construction.
@@ -96,6 +97,15 @@ export function loadEngine(): Promise<Engine | null> {
           const withLatex = e as unknown as { toLatex?: () => string }
           // CE's own serialization. Falls back to the display form if unavailable.
           return withLatex.toLatex?.() ?? e.toString()
+        },
+        isEquivalent: (a: Expression, b: Expression): boolean => {
+          try {
+            if (a.isIdenticallyEqual(b) === true) return true
+            const diff = (ce.box(['Subtract', a as any, b as any]) as any).simplify().toString()
+            return diff === '0'
+          } catch {
+            return false
+          }
         },
       }
     })
@@ -121,7 +131,7 @@ export function resetEngineForTests(): void {
  *
  *  - it returns `undefined` for identities it has not been taught, notably
  *    `sin^2(x) + cos^2(x)` vs `1`, so the canonical form of each side is compared as
- *    a second opinion — `simplify()` does reduce that pair to `1`.
+ *    a second opinion, `simplify()` does reduce that pair to `1`.
  *  - it returns `undefined`, not `false`, for plainly different symbolic expressions
  *    like `2x+3` vs `2x+4`. Those stay `unknown`. Reporting them as `different` would
  *    be a claim the tool cannot support.
@@ -157,17 +167,20 @@ export function simplificationHint(
 ): { latex: string; text: string } | null {
   // Nothing to simplify in a lone symbol, and no reason to pay for a parse.
   if (!HAS_ARITHMETIC.test(latex)) return null
-  const expr = tryParse(engine, latex)
+  const cleaned = stripLatexSpaces(latex)
+  const expr = tryParse(engine, cleaned)
   if (!expr) return null
 
   let simplified: string
   let asTyped: string
+  let simpExpr: Expression
   try {
-    simplified = engine.simplify(expr).toString()
+    simpExpr = engine.simplify(expr)
+    simplified = simpExpr.toString()
     // `ce.parse` canonicalises eagerly, so the *parsed* form is already the answer.
     // The comparison has to be against what the learner actually wrote, or every
     // expression looks identical to its own simplification and the hint never fires.
-    asTyped = engine.rawOf(latex)
+    asTyped = engine.rawOf(cleaned)
   } catch {
     return null
   }
@@ -175,6 +188,17 @@ export function simplificationHint(
   // Cosmetic spacing and implicit-multiplication markers are not a simplification:
   // "2x+3" and "2x + 3" are the same expression.
   if (compact(simplified) === compact(asTyped)) return null
+
+  // A valid simplification must be mathematically equivalent to the parsed expression.
+  if (engine.isEquivalent && !engine.isEquivalent(expr, simpExpr)) {
+    return null
+  }
+
+  // Never suggest space-separated juxtaposition of variable terms as implicit multiplication:
+  // e.g. "16x^2 8x" must not simplify to "128x^3" while typing terms.
+  if (/\b\d*[a-zA-Z](\^\{?\w+\}?)?\s+\d*[a-zA-Z]/u.test(cleaned)) {
+    return null
+  }
 
   return {
     latex: simplified,
@@ -186,7 +210,7 @@ export function simplificationHint(
  * Reduce two renderings to something comparable.
  *
  * Strips whitespace, the parentheses CE keeps around whole forms, and the
- * `InvisibleOperator(a, b)` it prints for implicit multiplication — `2x` prints as
+ * `InvisibleOperator(a, b)` it prints for implicit multiplication, `2x` prints as
  * `InvisibleOperator(2, x)`, which is the same thing the learner typed, not a
  * simplification of it.
  */
@@ -201,7 +225,7 @@ const INVISIBLE = 'InvisibleOperator('
  *
  * `2x` prints as `InvisibleOperator(2, x)` and `2(x+1)` as
  * `InvisibleOperator(2, (x + 1))`, so the arguments have to be split at the top-level
- * comma — a regular expression cannot do that when an argument contains parentheses of
+ * comma, a regular expression cannot do that when an argument contains parentheses of
  * its own, which is exactly the case that matters.
  */
 function expandInvisibleOperators(s: string): string {
@@ -262,10 +286,22 @@ function stripWhitespace(s: string): string {
 // present is what keeps that out of a learner-facing hint.
 const HAS_ARITHMETIC = /[0-9]|\^|[{}]|\\frac|\\sqrt|[+\-*/=]/u
 
+/**
+ * Remove LaTeX spacing macros from raw formula strings.
+ *
+ * MathLive inserts spacing commands such as `\;`, `\,` and `\:` when learners
+ * press the spacebar. Compute Engine misparses tokens preceded by spacing macros
+ * around operators (for example reading `16x^2 \; + \; 8x` as a product).
+ */
+export function stripLatexSpaces(s: string): string {
+  return s.replace(/\\[;,:\!\s]|\\(?:quad|qquad|thinspace|medspace|thickspace|enspace)\b/g, ' ')
+}
+
 function tryParse(engine: Engine, latex: string): Expression | null {
-  if (!latex.trim()) return null
+  const cleaned = stripLatexSpaces(latex)
+  if (!cleaned.trim()) return null
   try {
-    const e = engine.parse(latex)
+    const e = engine.parse(cleaned)
     return engine.valid(e) ? e : null
   } catch {
     return null

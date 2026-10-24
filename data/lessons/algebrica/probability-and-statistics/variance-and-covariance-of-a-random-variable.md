@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/variance-and-covariance-of-a-random-variable/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/variance-and-covariance-of-a-random-variable/), CC BY-NC 4.0
 
 ## What is the variance of a random variable?
 

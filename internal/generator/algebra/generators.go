@@ -141,7 +141,15 @@ type slopeInterceptGen struct{}
 
 func (g *slopeInterceptGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	// Higher ctx.Difficulty → fractional slopes and larger intercepts
-	if ctx.Difficulty > 0.6 && rand.Intn(2) == 0 {
+	isFraction := false
+	if ctx.KPOrdinal == 3 {
+		isFraction = true
+	} else if ctx.KPOrdinal == 1 || ctx.KPOrdinal == 2 {
+		isFraction = false
+	} else if ctx.Difficulty > 0.6 && rand.Intn(2) == 0 {
+		isFraction = true
+	}
+	if isFraction {
 		m := rand.Intn(3) + 1
 		n := rand.Intn(3) + 2
 		if rand.Intn(2) == 0 {
@@ -195,19 +203,15 @@ func (g *stdFormGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 	y := rand.Intn(5) + 1
 	c := a*x + b*y
 	if rand.Intn(2) == 0 {
-		return generator.Problem{
-			Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x, y, a, b, c),
-			Answer:      "yes",
-			Explanation: fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\). Yes!", a, x, b, y, a*x, b*y, c),
-			Facts:       map[string]string{"x": strconv.Itoa(x), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * x), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*x + b*y), "verdict": "yes"},
-		}
+		p := generator.MultipleChoice(fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x, y, a, b, c), "yes", "no")
+		p.Explanation = fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\). Yes!", a, x, b, y, a*x, b*y, c)
+		p.Facts = map[string]string{"x": strconv.Itoa(x), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * x), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*x + b*y), "verdict": "yes"}
+		return p
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x+1, y, a, b, c),
-		Answer:      "no",
-		Explanation: fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\), not %d. No!", a, x+1, b, y, a*(x+1), b*y, a*(x+1)+b*y, c),
-		Facts:       map[string]string{"x": strconv.Itoa(x + 1), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * (x + 1)), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*(x+1) + b*y), "verdict": "no"},
-	}
+	p := generator.MultipleChoice(fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(%dx + %dy = %d\\)?", x+1, y, a, b, c), "no", "yes")
+	p.Explanation = fmt.Sprintf("\\(%d(%d) + %d(%d) = %d + %d = %d\\), not %d. No!", a, x+1, b, y, a*(x+1), b*y, a*(x+1)+b*y, c)
+	p.Facts = map[string]string{"x": strconv.Itoa(x + 1), "y": strconv.Itoa(y), "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "ax": strconv.Itoa(a * (x + 1)), "by": strconv.Itoa(b * y), "total": strconv.Itoa(a*(x+1) + b*y), "verdict": "no"}
+	return p
 }
 
 type parallelPerpGen struct{}
@@ -244,7 +248,7 @@ type multiStepEqGen struct{}
 func (g *multiStepEqGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	d := ctx.Difficulty
 	// Staged ladder: plain ax+b=c → larger/subtraction → parentheses probe.
-	if d >= 0.75 {
+	if ctx.KPOrdinal == 3 || (ctx.KPOrdinal == 0 && d >= 0.75) {
 		a := rand.Intn(4) + 2
 		x := rand.Intn(8) + 2
 		b := rand.Intn(8) + 1
@@ -258,6 +262,11 @@ func (g *multiStepEqGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		}
 	}
 	scale := int(1 + d*8)
+	if ctx.KPOrdinal == 1 {
+		scale = 1
+	} else if ctx.KPOrdinal == 2 {
+		scale = 4
+	}
 	x := rand.Intn(scale*2) + 2
 	a := rand.Intn(scale) + 2
 	b := rand.Intn(scale*2) + 2
@@ -275,7 +284,13 @@ type varsBothSidesGen struct{}
 func (g *varsBothSidesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	// Staged ladder: small coefficients → larger spread → bigger solutions.
 	coefMax := 5
-	if ctx.Difficulty >= 0.7 {
+	if ctx.KPOrdinal == 1 {
+		coefMax = 4
+	} else if ctx.KPOrdinal == 2 {
+		coefMax = 7
+	} else if ctx.KPOrdinal == 3 {
+		coefMax = 10
+	} else if ctx.Difficulty >= 0.7 {
 		coefMax = 9
 	} else if ctx.Difficulty >= 0.45 {
 		coefMax = 7
@@ -304,11 +319,19 @@ type varsBothSidesWordGen struct{}
 // learner has to find is an exact integer and the pool discriminates.
 func (g *varsBothSidesWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	maxPer, maxUses := 9, 8
-	if ctx.Difficulty >= 0.45 {
+	if ctx.KPOrdinal == 1 {
+		maxPer, maxUses = 6, 5
+	} else if ctx.KPOrdinal == 2 {
 		maxPer, maxUses = 13, 12
-	}
-	if ctx.Difficulty >= 0.7 {
+	} else if ctx.KPOrdinal == 3 {
 		maxPer, maxUses = 18, 20
+	} else {
+		if ctx.Difficulty >= 0.45 {
+			maxPer, maxUses = 13, 12
+		}
+		if ctx.Difficulty >= 0.7 {
+			maxPer, maxUses = 18, 20
+		}
 	}
 	perA := rand.Intn(maxPer) + 6     // 6..maxPer+5
 	perB := perA - (rand.Intn(3) + 1) // 1..3 cheaper per use
@@ -345,11 +368,19 @@ type ineqWordGen struct{}
 
 func (g *ineqWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	maxPer, maxCount := 5, 8
-	if ctx.Difficulty >= 0.45 {
+	if ctx.KPOrdinal == 1 {
+		maxPer, maxCount = 4, 6
+	} else if ctx.KPOrdinal == 2 {
 		maxPer, maxCount = 9, 12
-	}
-	if ctx.Difficulty >= 0.7 {
+	} else if ctx.KPOrdinal == 3 {
 		maxPer, maxCount = 15, 20
+	} else {
+		if ctx.Difficulty >= 0.45 {
+			maxPer, maxCount = 9, 12
+		}
+		if ctx.Difficulty >= 0.7 {
+			maxPer, maxCount = 15, 20
+		}
 	}
 	base := rand.Intn(15) + 5        // flat fee 5..19
 	per := rand.Intn(maxPer-1) + 2   // 2..maxPer
@@ -395,15 +426,21 @@ func (g *literalEqGen) Generate(ctx generator.GeneratorContext) generator.Proble
 
 type multiStepIneqGen struct{}
 
+// multiStepIneqGen asks for the boundary of a two-step inequality: a x + b > c
+// has the solution x > x when c - b is exactly a times the boundary. The earlier
+// version added a random remainder to c, so the true boundary was a fraction
+// (7x + 4 > 31 gives x > 27/7) while the answer was a whole number, and a learner
+// who typed 27/7 or 3 6/7, was marked wrong for being right. The remainder is
+// gone and the arithmetic is exact.
 func (g *multiStepIneqGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	x := rand.Intn(8) + 2
 	a := rand.Intn(6) + 2
 	b := rand.Intn(10) + 1
-	c := a*(x-1) + b + rand.Intn(a)
+	c := a*x + b
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(%dx + %d > %d\\)", a, b, c),
+		Question:    fmt.Sprintf("Solve \\(%dx + %d > %d\\). What is the boundary of the solution set, the number that \\(x\\) must exceed?", a, b, c),
 		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("\\(%dx + %d > %d\\) → \\(%dx > %d\\) → \\(x > %d\\), so \\(x \\ge %d\\)", a, b, c, a, c-b, c-b, x),
+		Explanation: fmt.Sprintf("\\(%dx + %d > %d\\) → \\(%dx > %d\\) → \\(x > %d\\)", a, b, c, a, a*x, x),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "x": strconv.Itoa(x)},
 	}
 }
@@ -439,7 +476,10 @@ func (g *sysSubstitutionGen) Generate(ctx generator.GeneratorContext) generator.
 	x := rand.Intn(8) + 2
 	y := rand.Intn(8) + 2
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(y = %d\\),  \\(x + y = %d\\)", y, x+y),
+		// "Solve:" alone invited half an answer: a learner found x and wrote
+		// "x = 2", which a tuple graded wrong because it wanted the pair
+		// (report 147). The stem now says which form to use.
+		Question:    fmt.Sprintf("Solve the system \\(y = %d\\), \\(x + y = %d\\). Give both values as \\((x, y)\\).", y, x+y),
 		Answer:      fmt.Sprintf("(%d,%d)", x, y),
 		Explanation: fmt.Sprintf("Substitute \\(y=%d\\): \\(x + %d = %d\\) → \\(x = %d\\). Solution: \\((%d,%d)\\)", y, y, x+y, x, x, y),
 		Facts:       map[string]string{"y": strconv.Itoa(y), "sum": strconv.Itoa(x + y), "x": strconv.Itoa(x)},
@@ -453,11 +493,17 @@ func (g *sysEliminationGen) Generate(ctx generator.GeneratorContext) generator.P
 	y := rand.Intn(8) + 2
 	a := rand.Intn(5) + 2
 	b := rand.Intn(5) + 2
-	c := rand.Intn(5) + 2
+	// The x coefficients must differ, or both equations are the same one and
+	// the system has no unique solution: report 229 quoted
+	// "6x + 4y = 50, 6x + 4y = 50" and no answer could be right.
+	c := a
+	for c == a {
+		c = rand.Intn(5) + 2
+	}
 	eq1 := a*x + b*y
 	eq2 := c*x + b*y
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(%dx + %dy = %d\\),  \\(%dx + %dy = %d\\)", a, b, eq1, c, b, eq2),
+		Question:    fmt.Sprintf("Solve the system \\(%dx + %dy = %d\\), \\(%dx + %dy = %d\\). Give both values as \\((x, y)\\).", a, b, eq1, c, b, eq2),
 		Answer:      fmt.Sprintf("(%d,%d)", x, y),
 		Explanation: fmt.Sprintf("Subtract: \\(%dx = %d\\) → \\(x = %d\\); \\(y = %d\\). Solution: \\((%d,%d)\\)", a-c, eq1-eq2, x, y, x, y),
 		Facts:       map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "eq1": strconv.Itoa(eq1), "eq2": strconv.Itoa(eq2), "coef": strconv.Itoa(a - c), "rhs": strconv.Itoa(eq1 - eq2), "x": strconv.Itoa(x), "y": strconv.Itoa(y)},
@@ -467,15 +513,20 @@ func (g *sysEliminationGen) Generate(ctx generator.GeneratorContext) generator.P
 type sysWordGen struct{}
 
 func (g *sysWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	a := rand.Intn(8) + 3
-	b := rand.Intn(8) + 3
-	sum := a + b
-	diff := a - b
+	// The numbers are drawn so the bigger one comes first in the algebra and
+	// the answer, which is what the question asks for: "smaller first". Before
+	// this the pair was drawn independently, so a draw with a < b printed a
+	// negative difference and answered larger-first, and a learner who read the
+	// question and wrote the smaller number first was marked wrong (report 218).
+	small := rand.Intn(8) + 3
+	big := small + rand.Intn(6) + 1
+	sum := big + small
+	diff := big - small
 	return generator.Problem{
 		Question:    fmt.Sprintf("Two numbers sum to %d and differ by %d. Find both numbers (smaller first).", sum, diff),
-		Answer:      fmt.Sprintf("%d,%d", b, a),
-		Explanation: fmt.Sprintf("\\(x + y = %d\\), \\(x - y = %d\\). Add: \\(2x = %d\\) → \\(x = %d\\). \\(y = %d\\)", sum, diff, a+b, a, b),
-		Facts:       map[string]string{"sum": strconv.Itoa(sum), "diff": strconv.Itoa(diff), "two_x": strconv.Itoa(a + b), "big": strconv.Itoa(a), "small": strconv.Itoa(b)},
+		Answer:      fmt.Sprintf("%d,%d", small, big),
+		Explanation: fmt.Sprintf("\\(x + y = %d\\), \\(x - y = %d\\). Add: \\(2x = %d\\) → \\(x = %d\\). \\(y = %d\\)", sum, diff, sum+diff, big, small),
+		Facts:       map[string]string{"sum": strconv.Itoa(sum), "diff": strconv.Itoa(diff), "two_x": strconv.Itoa(sum + diff), "big": strconv.Itoa(big), "small": strconv.Itoa(small)},
 	}
 }
 
@@ -602,16 +653,37 @@ func (g *factorDiffSquaresGen) Generate(ctx generator.GeneratorContext) generato
 type factorACMethodGen struct{}
 
 func (g *factorACMethodGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	// The concept is "ax^2 + bx + c by the AC method", so the leading
+	// coefficient must not be 1, and the printed trinomial must be the product
+	// the answer claims. It used to draw the leading coefficient as a sum
+	// offset (b = a + r1*r2) while answering (x + r1)(x + r2), so x^2 + 9x + 1
+	// was served with (x+1)(x+1), which multiplies out to x^2 + 2x + 1. Report
+	// 196 quoted exactly that pair.
+	//
+	// (ax + q)(x + s) = ax^2 + (as + q)x + qs, and the two numbers the method
+	// looks for are as and q: they multiply to ac = a*qs and add to b.
 	a := rand.Intn(4) + 2
-	r1 := rand.Intn(4) + 1
-	r2 := rand.Intn(4) + 1
-	b := a + r1*r2
-	c := r1 * r2
+	q := rand.Intn(5) + 1
+	s := rand.Intn(5) + 1
+	b := a*s + q
+	c := q * s
+	ac := a * c
 	return generator.Problem{
-		Question:    fmt.Sprintf("Factor: \\(x^{2} + %dx + %d\\)", b, c),
-		Answer:      fmt.Sprintf("(x + %d)(x + %d)", r1, r2),
-		Explanation: fmt.Sprintf("Find numbers multiplying to %d and adding to %d: %d and %d.", c, b, r1, r2),
-		Facts:       map[string]string{"q": formatQuadratic(b, c), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
+		Question: fmt.Sprintf("Factor: \\(%dx^{2} + %dx + %d\\)", a, b, c),
+		Answer:   fmt.Sprintf("(%dx + %d)(x + %d)", a, q, s),
+		Explanation: fmt.Sprintf("Multiply the leading coefficient by the constant: \\(%d \\times %d = %d\\). "+
+			"The two numbers that multiply to %d and add to %d are %d and %d. "+
+			"Split the middle term and group: \\(%dx^{2} + %dx + %dx + %d = %dx(x + %d) + %d(x + %d) = (%dx + %d)(x + %d)\\).",
+			a, c, ac, ac, b, a*s, q, a, a*s, q, c, a, s, q, s, a, q, s),
+		Facts: map[string]string{
+			"a":  strconv.Itoa(a),
+			"b":  strconv.Itoa(b),
+			"c":  strconv.Itoa(c),
+			"ac": strconv.Itoa(ac),
+			"m":  strconv.Itoa(a * s),
+			"n":  strconv.Itoa(q),
+			"s":  strconv.Itoa(s),
+		},
 	}
 }
 
@@ -627,10 +699,19 @@ func (g *quadSolveFactorGen) Generate(ctx generator.GeneratorContext) generator.
 	b := -(r1 + r2)
 	c := r1 * r2
 	q := formatQuadratic(b, c)
+	// A repeated root is one number, so the answer is one number. Written as
+	// "-1,-1" it asked the learner to repeat themselves, and "-1" was rejected
+	// for having the wrong number of parts (report 219).
+	answer := fmt.Sprintf("%d,%d", r1, r2)
+	explanation := fmt.Sprintf("Factors: \\((x %+d)(x %+d) = 0\\), so \\(x = %d\\) or \\(x = %d\\)", -r1, -r2, r1, r2)
+	if r1 == r2 {
+		answer = strconv.Itoa(r1)
+		explanation = fmt.Sprintf("Factors: \\((x %+d)^2 = 0\\), so \\(x = %d\\) is the only root", -r1, r1)
+	}
 	return generator.Problem{
 		Question:    fmt.Sprintf("Solve: %s = 0", q),
-		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("Factors: \\((x %+d)(x %+d) = 0\\), so \\(x = %d\\) or \\(x = %d\\)", -r1, -r2, r1, r2),
+		Answer:      answer,
+		Explanation: explanation,
 		Facts:       map[string]string{"q": q, "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
@@ -650,16 +731,28 @@ func (g *quadCompleteSquareGen) Generate(ctx generator.GeneratorContext) generat
 
 type quadFormulaGen struct{}
 
+// quadFormulaGen answers with the two roots. A repeated root is one number, and
+// the concept grades numerically rather than as a tuple so that the order the
+// learner writes the roots in does not decide the mark: a report on 22 October
+// gave "5, 7" for the roots of x^2 - 12x + 35 and was marked wrong.
 func (g *quadFormulaGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	r1 := rand.Intn(8) + 1
 	r2 := rand.Intn(8) + 1
 	b := -(r1 + r2)
 	c := r1 * r2
 	q := formatQuadratic(b, c)
+	answer := fmt.Sprintf("%d,%d", r1, r2)
+	explanation := fmt.Sprintf("\\(x = \\frac{%d \\pm \\sqrt{%d - 4(%d)}}{2} = %d\\) or %d", b, b*b, c, r1, r2)
+	if r1 == r2 {
+		// The discriminant is zero, so both roots are the same number and the
+		// answer is a single value rather than a list of two of it.
+		answer = strconv.Itoa(r1)
+		explanation = fmt.Sprintf("\\(x = \\frac{%d \\pm \\sqrt{0}}{2} = %d\\) twice: the root is repeated.", b, r1)
+	}
 	return generator.Problem{
 		Question:    fmt.Sprintf("Solve using quadratic formula: %s = 0", q),
-		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("\\(x = \\frac{%d \\pm \\sqrt{%d - 4(%d)}}{2} = %d\\) or %d", b, b*b, c, r1, r2),
+		Answer:      answer,
+		Explanation: explanation,
 		Facts:       map[string]string{"q": q, "b": strconv.Itoa(b), "c": strconv.Itoa(c), "b2": strconv.Itoa(b * b), "four_c": strconv.Itoa(4 * c), "disc": strconv.Itoa(b*b - 4*c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
@@ -676,12 +769,16 @@ func (g *quadDiscriminantGen) Generate(ctx generator.GeneratorContext) generator
 	} else if disc < 0 {
 		count = "zero real"
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("How many real solutions? \\(x^{2} + %dx + %d = 0\\)", b, c),
-		Answer:      count,
-		Explanation: fmt.Sprintf("Discriminant: \\(%d^{2} - 4(%d) = %d\\). %s solutions.", b, c, disc, count),
-		Facts:       map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "b2": strconv.Itoa(b * b), "four_c": strconv.Itoa(4 * c), "disc": strconv.Itoa(disc), "count": count},
-	}
+	// "two real" is a phrase, and a phrase cannot be typed into the math field,
+	// so the count is offered rather than entered.
+	p := generator.MultipleChoice(
+		fmt.Sprintf("How many real solutions? \\(x^{2} + %dx + %d = 0\\)", b, c),
+		count,
+		"two real", "one real", "zero real", "infinitely many",
+	)
+	p.Explanation = fmt.Sprintf("Discriminant: \\(%d^{2} - 4(%d) = %d\\). %s solutions.", b, c, disc, count)
+	p.Facts = map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "b2": strconv.Itoa(b * b), "four_c": strconv.Itoa(4 * c), "disc": strconv.Itoa(disc), "count": count}
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -763,20 +860,16 @@ func (g *funcLinearGen) Generate(ctx generator.GeneratorContext) generator.Probl
 			m = 1
 		}
 		b := rand.Intn(10) - 5
-		return generator.Problem{
-			Question:    fmt.Sprintf("Is \\(%s\\) a function? (yes/no)", formatLinear(m, b)),
-			Answer:      "yes",
-			Explanation: fmt.Sprintf("Linear equations always define functions (passes vertical line test)."),
-			Facts:       map[string]string{"m": strconv.Itoa(m), "b": strconv.Itoa(b), "is_linear_yes": "yes"},
-		}
+		linear := generator.MultipleChoice(fmt.Sprintf("Is \\(%s\\) a function?", formatLinear(m, b)), "yes", "no")
+		linear.Explanation = "Linear equations always define functions (passes vertical line test)."
+		linear.Facts = map[string]string{"m": strconv.Itoa(m), "b": strconv.Itoa(b), "is_linear_yes": "yes"}
+		return linear
 	}
 	c := rand.Intn(5) + 1
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\(x = %d\\) a function? (yes/no)", c),
-		Answer:      "no",
-		Explanation: fmt.Sprintf("x = %d is a vertical line — it fails the vertical line test.", c),
-		Facts:       map[string]string{"c": strconv.Itoa(c), "is_vertical": "yes"},
-	}
+	vertical := generator.MultipleChoice(fmt.Sprintf("Is \\(x = %d\\) a function?", c), "no", "yes")
+	vertical.Explanation = fmt.Sprintf("x = %d is a vertical line, it fails the vertical line test.", c)
+	vertical.Facts = map[string]string{"c": strconv.Itoa(c), "is_vertical": "yes"}
+	return vertical
 }
 
 type funcQuadGen struct{}
@@ -828,12 +921,19 @@ func (g *logConceptGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	base := rand.Intn(3) + 2
 	exp := rand.Intn(4) + 1
 	val := mathutil.IntPow(base, exp)
-	return generator.Problem{
-		Question:    fmt.Sprintf("Write as a logarithm: \\(%d^{%d} = %d\\)", base, exp, val),
-		Answer:      fmt.Sprintf("log_%d(%d) = %d", base, val, exp),
-		Explanation: fmt.Sprintf("\\(\\log_{%d}(%d) = %d\\)", base, val, exp),
-		Facts:       map[string]string{"base": strconv.Itoa(base), "exp": strconv.Itoa(exp), "val": strconv.Itoa(val)},
-	}
+	// The answer is a whole equation, which the math field turns into one
+	// unreadable token (report #198). The three wrong statements are the same
+	// equation with two of the three numbers swapped.
+	p := generator.MultipleChoice(
+		fmt.Sprintf("Write as a logarithm: \\(%d^{%d} = %d\\)", base, exp, val),
+		fmt.Sprintf("log_%d(%d) = %d", base, val, exp),
+		fmt.Sprintf("log_%d(%d) = %d", val, base, exp),
+		fmt.Sprintf("log_%d(%d) = %d", base, exp, val),
+		fmt.Sprintf("log_%d(%d) = %d", exp, base, val),
+	)
+	p.Explanation = fmt.Sprintf("\\(\\log_{%d}(%d) = %d\\)", base, val, exp)
+	p.Facts = map[string]string{"base": strconv.Itoa(base), "exp": strconv.Itoa(exp), "val": strconv.Itoa(val)}
+	return p
 }
 
 type logEvaluateGen struct{}
@@ -1024,8 +1124,12 @@ func (g *ineqTwoVarGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	if satisfies {
 		ans = "yes"
 	}
+	choice := generator.MultipleChoice(
+		fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(y %s %dx + %d\\)?", testX, testY, op, m, b),
+		ans, "yes", "no",
+	)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Is \\((%d,%d)\\) a solution to \\(y %s %dx + %d\\)?", testX, testY, op, m, b),
+		Question:    choice.Question,
 		Answer:      ans,
 		Explanation: fmt.Sprintf("At x=%d: y should be %s %d. y=%d %s %d = %t.", testX, op, expected, testY, op, expected, satisfies),
 		Facts:       map[string]string{"tx": strconv.Itoa(testX), "ty": strconv.Itoa(testY), "op": op, "m": strconv.Itoa(m), "b": strconv.Itoa(b), "expected": strconv.Itoa(expected), "ans": ans},
@@ -1177,10 +1281,10 @@ func (g *extraneousRootsGen) Generate(ctx generator.GeneratorContext) generator.
 		exp      string
 	}
 	entries := []entry{
-		{"Can squaring both sides of an equation introduce extraneous roots? (yes/no)", "yes", "Squaring is not reversible: if a=b then a²=b², but b²=a² does not imply a=b (e.g. a=2, b=-2). So squaring can introduce extraneous roots — always check candidates in the original equation."},
+		{"Can squaring both sides of an equation introduce extraneous roots? (yes/no)", "yes", "Squaring is not reversible: if a=b then a²=b², but b²=a² does not imply a=b (e.g. a=2, b=-2). So squaring can introduce extraneous roots, always check candidates in the original equation."},
 		{"Solve \\(\\sqrt{x} = -2\\). How many solutions? (enter a number)", "0", "The principal square root is always \\(\\geq 0\\), so \\(\\sqrt{x} = -2\\) has no solution."},
 		{"The candidates when solving \\(\\sqrt{x+3} = x-3\\) are \\(x = 1\\) and \\(x = 6\\). Which one satisfies the original equation? (enter a number)", "6", "Check: \\(\\sqrt{1+3} = 2\\) but \\(1-3 = -2\\), so \\(x=1\\) is extraneous; \\(\\sqrt{6+3} = 3\\) and \\(6-3 = 3\\), so \\(x=6\\) works. Extraneous roots satisfy the squared equation but not the original."},
-		{"If you multiply both sides of an equation by \\((x - 2)\\), should you check whether \\(x = 2\\) is extraneous? (yes/no)", "yes", "If you multiply by something that equals 0 for some x, you may introduce extraneous solutions — always substitute candidates back into the original equation."},
+		{"If you multiply both sides of an equation by \\((x - 2)\\), should you check whether \\(x = 2\\) is extraneous? (yes/no)", "yes", "If you multiply by something that equals 0 for some x, you may introduce extraneous solutions, always substitute candidates back into the original equation."},
 	}
 	e := entries[rand.Intn(len(entries))]
 	return generator.Problem{
@@ -1471,24 +1575,48 @@ func (g *ineqIntervalGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	b := a + rand.Intn(5) + 2
 	type interval struct {
 		q, a, key string
+		// others are the brackets that read almost the same, so a tap tests
+		// which endpoint the inequality includes rather than which symbol
+		// shape the learner happened to guess.
+		others []string
 	}
 	// key is published as its own fact so an authored schema can key one step
 	// per bracket shape. A shared "shape" fact would be present on every
 	// question, so every step would render every time.
 	types := []interval{
-		{fmt.Sprintf("Write in interval notation: \\%d \\leq x < %d\\).", a, b), fmt.Sprintf("[%d,%d)", a, b), "a_left_closed"},
-		{fmt.Sprintf("Write in interval notation: \\(x > %d\\).", a), fmt.Sprintf("(%d,\\infty)", a), "a_right_unbounded"},
-		{fmt.Sprintf("Write in interval notation: \\(x \\leq %d\\).", b), fmt.Sprintf("(-\\infty,%d]", b), "a_left_unbounded"},
-		{fmt.Sprintf("Write in interval notation: \\%d < x < %d\\).", a, b), fmt.Sprintf("(%d,%d)", a, b), "a_both_open"},
+		{
+			fmt.Sprintf("Write in interval notation: \\(%d \\leq x < %d\\).", a, b),
+			fmt.Sprintf("[%d, %d)", a, b),
+			"a_left_closed",
+			[]string{fmt.Sprintf("(%d, %d)", a, b), fmt.Sprintf("[%d, %d]", a, b), fmt.Sprintf("(%d, %d]", a, b)},
+		},
+		{
+			fmt.Sprintf("Write in interval notation: \\(x > %d\\).", a),
+			fmt.Sprintf("(%d, ∞)", a),
+			"a_right_unbounded",
+			[]string{fmt.Sprintf("[%d, ∞)", a), fmt.Sprintf("(-∞, %d)", a), fmt.Sprintf("(-∞, %d]", a)},
+		},
+		{
+			fmt.Sprintf("Write in interval notation: \\(x \\leq %d\\).", b),
+			fmt.Sprintf("(-∞, %d]", b),
+			"a_left_unbounded",
+			[]string{fmt.Sprintf("(-∞, %d)", b), fmt.Sprintf("[%d, ∞)", b), fmt.Sprintf("(%d, ∞)", b)},
+		},
+		{
+			fmt.Sprintf("Write in interval notation: \\(%d < x < %d\\).", a, b),
+			fmt.Sprintf("(%d, %d)", a, b),
+			"a_both_open",
+			[]string{fmt.Sprintf("[%d, %d]", a, b), fmt.Sprintf("[%d, %d)", a, b), fmt.Sprintf("(%d, %d]", a, b)},
+		},
 	}
 	e := types[rand.Intn(len(types))]
-	facts := map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), e.key: "yes"}
-	return generator.Problem{
-		Question:    e.q,
-		Answer:      e.a,
-		Explanation: fmt.Sprintf("The interval notation for this set is %s.", e.a),
-		Facts:       facts,
-	}
+	// The answer is served as options because a bracket pair cannot be typed on
+	// a phone keypad: `[2, 5)` has no key, and the free-text grader would have to
+	// parse bracket syntax to accept it.
+	p := generator.MultipleChoice(e.q, e.a, e.others...)
+	p.Explanation = fmt.Sprintf("The interval notation for this set is %s.", e.a)
+	p.Facts = map[string]string{"a": strconv.Itoa(a), "b": strconv.Itoa(b), e.key: "yes"}
+	return p
 }
 
 type ineqIrrationalGen struct{}
@@ -1633,11 +1761,23 @@ func (g *polyRootsGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	r2 := rand.Intn(6) - 3
 	b := -(r1 + r2)
 	c := r1 * r2
+	// The stem comes from formatQuadratic, which prints "x^2 - 2x - 3". The
+	// old "x^{2} + %dx + %d" format printed "x^2 + -2x + 0" whenever a
+	// coefficient was negative or zero, which is what report 224 quoted.
+	q := formatQuadratic(b, c)
+	answer := fmt.Sprintf("%d,%d", r1, r2)
+	explanation := fmt.Sprintf("\\((x %+d)(x %+d) = 0\\) \u2192 roots are %d and %d", -r1, -r2, r1, r2)
+	if r1 == r2 {
+		// A double root is one root, not two: publishing "2,2" rejected the
+		// learner who wrote 2, the same defect the quadratic solver had.
+		answer = fmt.Sprintf("%d", r1)
+		explanation = fmt.Sprintf("\\((x %+d)^{2} = 0\\), so %d is a double root", -r1, r1)
+	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("Find the roots of \\(x^{2} + %dx + %d = 0\\).", b, c),
-		Answer:      fmt.Sprintf("%d,%d", r1, r2),
-		Explanation: fmt.Sprintf("\\((x %+d)(x %+d) = 0\\) → roots are %d and %d", -r1, -r2, r1, r2),
-		Facts:       map[string]string{"q": formatQuadratic(b, c), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
+		Question:    fmt.Sprintf("Find the roots of \\(%s = 0\\).", q),
+		Answer:      answer,
+		Explanation: explanation,
+		Facts:       map[string]string{"q": q, "b": strconv.Itoa(b), "c": strconv.Itoa(c), "r1": strconv.Itoa(r1), "r2": strconv.Itoa(r2)},
 	}
 }
 
@@ -1720,15 +1860,24 @@ func (g *quadIncompleteGen) Generate(ctx generator.GeneratorContext) generator.P
 	}
 }
 
+// quadParametricGen asks for the positive k that makes x² + kx + p² a perfect
+// square, so the discriminant is k² - 4p².
+//
+// The parameter has to appear in the printed equation. Before 23 October 2026
+// the question showed x² + 2px + p² and asked for k, which was not in it, and
+// the explanation "solved" a discriminant that is already zero for every p.
+// Nine learners reported the same missing k that day, which is the whole reason
+// this comment names the failure rather than the shape.
 type quadParametricGen struct{}
 
 func (g *quadParametricGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	p := rand.Intn(5) + 1
+	k := 2 * p
 	return generator.Problem{
-		Question:    fmt.Sprintf("For what value(s) of \\(k\\) does \\(x^{2} + %dx + %d = 0\\) have exactly one solution?", 2*p, p*p),
-		Answer:      fmt.Sprintf("%d", p),
-		Explanation: fmt.Sprintf("Discriminant = 0: \\((%d)^{2} - 4(%d) = %d - %d = 0\\) → \\(k = %d\\)", 2*p, p*p, 4*p*p, 4*p*p, p),
-		Facts:       map[string]string{"coef": strconv.Itoa(2 * p), "const": strconv.Itoa(p * p), "k": strconv.Itoa(p)},
+		Question:    fmt.Sprintf("For what positive value of \\(k\\) does \\(x^{2} + kx + %d = 0\\) have exactly one solution?", p*p),
+		Answer:      strconv.Itoa(k),
+		Explanation: fmt.Sprintf("Exactly one solution means the discriminant is zero: \\(k^{2} - 4(%d) = 0\\), so \\(k^{2} = %d\\) and the positive value is \\(k = %d\\).", p*p, k*k, k),
+		Facts:       map[string]string{"coef": strconv.Itoa(k), "const": strconv.Itoa(p * p), "k": strconv.Itoa(k)},
 	}
 }
 

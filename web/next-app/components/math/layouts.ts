@@ -2,7 +2,7 @@
 //
 // These are Mathua's layouts, not MathLive's: five small grids chosen by
 // `keyboards.ts` from the concept's domain. A learner on `arith.add.single` sees
-// digits, four operations, a fraction, a root and an exponent — no `∫ ∂ Σ lim`,
+// digits, four operations, a fraction, a root and an exponent, no `∫ ∂ Σ lim`,
 // because MathLive can do calculus and this exercise cannot.
 //
 // Two rules the keycaps obey:
@@ -11,7 +11,7 @@
 //     `\frac{#@}{#0}` (with a real placeholder to navigate into), not the
 //     character `/`. A root key inserts `\sqrt{#0}`, not `√`. Typing `x²`
 //     through MathLive must leave a power with a navigable exponent slot, and it
-//     does — but only because the keycap is a structure, not a glyph.
+//     does, but only because the keycap is a structure, not a glyph.
 //  2. The visible label is separate from the inserted LaTeX wherever the
 //     LaTeX would read badly. The fraction key shows `a⁄b` and inserts a
 //     fraction; the exponent key shows `xⁿ` and inserts `#@^{#?}`.
@@ -37,7 +37,7 @@ export type Keycap = string | Partial<VirtualKeyboardKeycap>
  *
  * A page is a MathLive *layout*, not a MathLive *layer*, and that distinction is
  * load-bearing. MathLive's keypad toolbar builds its switcher by iterating `kb.layouts`
- * and emitting `data-layer="${layout.layers[0].id}"` per entry — so it navigates
+ * and emitting `data-layer="${layout.layers[0].id}"` per entry, so it navigates
  * between layouts and there is no navigation between the `layers` of a single layout.
  * Verified rather than assumed: with a three-layer layout installed, the toolbar offered
  * exactly one switcher entry (MathLive's `alphabetic`), and pressing a keycap that
@@ -80,14 +80,14 @@ const LAYER_LETTERS_TEMPLATE: MathuaLayer = { id: LAYER_LETTERS, label: 'abc', r
 // `label`, not `latex`, and that distinction is the whole reason these two work.
 //
 // MathLive resolves a keycap in this order (`executeKeycapCommand`): `command`,
-// then `insert`, then `key`, then **`latex` — which it runs as an insert**, and
+// then `insert`, then `key`, then **`latex`, which it runs as an insert**, and
 // only then `typedText(label)`. Separately, `normalizeKeycap` merges the
 // library's own definition for a keycap in only two cases: the keycap is a bare
 // string, or it carries a `label` or `key` that names a known shortcut.
 //
 // These two used `latex`, which is neither. So they missed the shortcut table
 // *and* fell through to the insert branch, which meant backspace typed the
-// literal text `[backspace]` into the field and the zero key typed `[0]` — in all
+// literal text `[backspace]` into the field and the zero key typed `[0]`, in all
 // five layouts. Both are fixed by naming the shortcut in `label`, which is also
 // what MathLive's own layouts do (`{ label: "[backspace]", width: 1 }`).
 //
@@ -202,7 +202,7 @@ const LETTER_LAYERS: MathuaLayer[] = [
 // The reason is measurable: MathLive's panel is about 330px wide on a 412px phone,
 // so a row of eight keycaps can only be 37px each. Six or fewer per row clears the
 // 44px touch-target floor. That costs one extra row and buys keys a thumb can hit
-// without a second attempt — worth it on the screen where mistakes cost the most.
+// without a second attempt, worth it on the screen where mistakes cost the most.
 const ARITHMETIC: Layout = {
   label: 'Arithmetic',
   tooltip: 'Numbers, the four operations, fractions and powers',

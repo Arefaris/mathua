@@ -4,7 +4,7 @@ import { Skeleton } from '../ui/skeleton'
 import { useT } from '../../lib/i18n'
 
 // Row-level skeletons for leaderboard/page.tsx: table body + leagues.
-// Page keeps its static header/countdown/formula rendered — only the
+// Page keeps its static header/countdown/formula rendered, only the
 // dynamic zones below are placeholder rows, so no layout shift on swap.
 export function LeaderboardTableSkeleton({ rows = 8 }: { rows?: number }) {
   return (

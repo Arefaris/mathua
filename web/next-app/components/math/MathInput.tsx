@@ -11,8 +11,8 @@
 //        └─ MathLiveField.tsx   ← the only file importing 'mathlive'
 //
 // Why a fallback at all: MathLive is ~800 kB and registers a custom element that
-// needs real text measurement. If that chunk fails to load — old browser, blocked
-// asset, flaky connection — the learner must still be able to answer. So a failure
+// needs real text measurement. If that chunk fails to load, old browser, blocked
+// asset, flaky connection, the learner must still be able to answer. So a failure
 // degrades to the plain `<Input>` Mathua already had, which grades identically for
 // every concept. That is the whole point of the fallback: it is not a lesser
 // editor, it is the editor that always works.
@@ -32,7 +32,7 @@ const EMPTY: MathInputValue = { latex: '', plainAnswer: '' }
 
 // `React.lazy` rather than `next/dynamic({ ssr: false })`.
 //
-// Both give the same production result — MathLive lands in its own chunk that is
+// Both give the same production result, MathLive lands in its own chunk that is
 // never fetched during server rendering or on a route without an answer field.
 // But `next/dynamic` resolves through Next's build-time chunk loader, which does
 // not exist under vitest, so the loading state there never resolves and the
@@ -99,20 +99,20 @@ class MathLiveBoundary extends Component<
  *
  * Once when the MathLive chunk fails and Mathua has no choice, and once while that
  * chunk is still *loading*. The second case used to render
- * `<div className="h-12" aria-hidden />` — a div of exactly the right size in exactly
+ * `<div className="h-12" aria-hidden />`, a div of exactly the right size in exactly
  * the right place, which is the worst kind of loading state, because it looks like an
  * answer field and silently swallows the tap.
  *
  * Measured (`e2e/answer-diagnosis.spec.ts`): between the answer UI appearing and the
  * editor being usable there is a window of 322ms with the chunk cached and 3116ms
- * with a 3s chunk delay — which on a real phone connection is longer still. During
+ * with a 3s chunk delay, which on a real phone connection is longer still. During
  * that window a tap on the answer area landed on that div, the keystrokes went
  * nowhere, and Check Answer was correctly but unhelpfully disabled because no answer
  * existed. Value propagation was never at fault: once the editor was up, input
  * reached React state in 2-7ms and the first tap submitted in 12-14ms.
  *
  * So this is not a cosmetic placeholder. It is the editor that always works, shown
- * while the better one loads — and whatever is typed here carries across, because the
+ * while the better one loads and whatever is typed here carries across, because the
  * typed text is reported as the LaTeX too and `MathLiveField` pushes it in on mount.
  */
 function PlainAnswerInput({
@@ -140,7 +140,7 @@ function PlainAnswerInput({
   /**
    * Marks the loading instance. The attribute is not decoration: the editor and the
    * loading input share a placeholder, so without it a query for "the answer field"
-   * can return the transient control and a tap on it goes nowhere — which is the
+   * can return the transient control and a tap on it goes nowhere, which is the
    * exact failure this component was changed to fix, reappearing in the tests.
    */
   loading?: boolean
@@ -209,8 +209,14 @@ export default function MathInput({
   const [focusRequest, setFocusRequest] = useState(0)
   // What the learner actually typed, for the optional self-check. Tracked separately
   // from `value` because a host's value is the *plain* answer it will submit, and it
-  // only catches up after a render — the hint must not wait for the round trip.
+  // only catches up after a render, the hint must not wait for the round trip.
   const [typedLatex, setTypedLatex] = useState('')
+
+  useEffect(() => {
+    if (!value) {
+      setTypedLatex('')
+    }
+  }, [value])
   // What has been typed into the plain input while MathLive loads. Local, because the
   // host's `value` is LaTeX and this control is showing plain text; the two only meet
   // when `MathLiveField` mounts and pushes `value` in.
@@ -303,10 +309,10 @@ export default function MathInput({
         </Suspense>
         {/* Its own boundary, deliberately outside the field's. A lazily-loaded
             sibling suspending inside the field's <Suspense> re-suspends that boundary
-            and React discards the already-rendered field — remounting it, which reset
+            and React discards the already-rendered field, remounting it, which reset
             the answer to the host's last value and lost what the learner had typed. */}
         <Suspense fallback={null}>
-          <SelfCheck latex={typedLatex} active={!isDisabled} />
+          <SelfCheck latex={typedLatex} active={!isDisabled && status === 'default'} />
         </Suspense>
       </div>
     </MathLiveBoundary>
@@ -324,8 +330,8 @@ export default function MathInput({
 // two nested bordered rectangles around the answer field: the wrapper drew
 // `border border-mathua-border bg-mathua-code px-3 py-2 focus-within:border-mathua-blue`
 // while `<math-field>` drew its own `border: 1px solid var(--border)` and turned blue
-// on `:focus-within` (app/globals.css). Same blue — `mathua-blue` *is*
-// `var(--accent-blue)`, tailwind.config.js — so it read as one colour in two states
+// on `:focus-within` (app/globals.css). Same blue, `mathua-blue` *is*
+// `var(--accent-blue)`, tailwind.config.js, so it read as one colour in two states
 // rather than as a deliberate two-tone treatment. Both transition over 0.15s, so they
 // lit up together.
 //
@@ -353,7 +359,7 @@ function fallbackStatusClasses(status: MathInputStatus, disabled: boolean): stri
 }
 
 // ---------------------------------------------------------------------------
-// MathAnswerInput — what the answer hosts actually render.
+// MathAnswerInput, what the answer hosts actually render.
 //
 // One component, two controls behind it, chosen from the question's own metadata.
 // The important property is what the host does *not* have to know: it keeps a plain
@@ -421,7 +427,7 @@ export function MathAnswerInput({
   // A host may replace the answer from outside this control: ChoiceOptions fills
   // the field, a retry wipes it, or the next question arrives with an empty answer.
   // Without this the editor kept showing the previous question's LaTeX, because
-  // `latexRef` was only ever written by the field itself — so the next question
+  // `latexRef` was only ever written by the field itself, so the next question
   // started with the old text still in the box, and the submit button disabled
   // because the host's string was empty. Adopt an external value, ignore the echo
   // of our own.

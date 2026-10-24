@@ -48,23 +48,33 @@ func LoadDir(dir string) (*DAG, error) {
 		}
 		raw = append(raw, batch...)
 	}
-	// Merge enrichment heuristics (Variants, Encompasses, InterferenceGroup, KeyPrerequisites)
+	// Merge enrichment heuristics (Variants, Encompasses, InterferenceGroup, KeyPrerequisites, Prerequisites)
 	if err := mergeEnrichment(dir, raw); err != nil {
 		return nil, err
 	}
+	// Ingest knowledge points from data/lessons/kp/<concept_id>.json
+	if err := mergeKnowledgePoints(dir, raw); err != nil {
+		return nil, err
+	}
+	// Density is enforced in one place only, by validate(). A second copy here
+	// measured in-degree as len(Prerequisites) while validate() measures
+	// len(Prerequisites)+len(Encompasses), so two gates could disagree about the
+	// same corpus and report different floors for it.
 	return Build(raw)
 }
 
 // enrichmentEntry mirrors the loose schema in data/concepts/enrichment.json.
 type enrichmentEntry struct {
-	ID                string    `json:"id"`
-	Heuristic         string    `json:"heuristic"`
-	Note              string    `json:"note"`
-	Encompasses       []string  `json:"encompasses"`
-	KeyPrerequisites  []string  `json:"key_prerequisites"`
-	InterferenceGroup string    `json:"interference_group"`
-	Members           []string  `json:"members"`
-	Variants          []Variant `json:"variants"`
+	ID                string           `json:"id"`
+	Heuristic         string           `json:"heuristic"`
+	Note              string           `json:"note"`
+	Prerequisites     []string         `json:"prerequisites"`
+	Encompasses       []string         `json:"encompasses"`
+	KeyPrerequisites  []string         `json:"key_prerequisites"`
+	InterferenceGroup string           `json:"interference_group"`
+	Members           []string         `json:"members"`
+	Variants          []Variant        `json:"variants"`
+	KnowledgePoints   []KnowledgePoint `json:"knowledge_points"`
 }
 
 func mergeEnrichment(dir string, raw []Concept) error {
@@ -91,11 +101,14 @@ func mergeEnrichment(dir string, raw []Concept) error {
 			if !ok {
 				return fmt.Errorf("enrichment id %q not found in DAG", e.ID)
 			}
+			if len(e.Prerequisites) > 0 {
+				c.Prerequisites = appendUnique(c.Prerequisites, e.Prerequisites)
+			}
 			if len(e.Encompasses) > 0 {
-				c.Encompasses = append(c.Encompasses, e.Encompasses...)
+				c.Encompasses = appendUnique(c.Encompasses, e.Encompasses)
 			}
 			if len(e.KeyPrerequisites) > 0 {
-				c.KeyPrerequisites = append(c.KeyPrerequisites, e.KeyPrerequisites...)
+				c.KeyPrerequisites = appendUnique(c.KeyPrerequisites, e.KeyPrerequisites)
 			}
 			if e.InterferenceGroup != "" {
 				if c.InterferenceGroup != "" && c.InterferenceGroup != e.InterferenceGroup {
@@ -105,6 +118,9 @@ func mergeEnrichment(dir string, raw []Concept) error {
 			}
 			if len(e.Variants) > 0 {
 				c.Variants = append(c.Variants, e.Variants...)
+			}
+			if len(e.KnowledgePoints) > 0 {
+				c.KnowledgePoints = append(c.KnowledgePoints, e.KnowledgePoints...)
 			}
 		} else if e.InterferenceGroup != "" && len(e.Members) > 0 {
 			for _, mid := range e.Members {
@@ -118,6 +134,84 @@ func mergeEnrichment(dir string, raw []Concept) error {
 				c.InterferenceGroup = e.InterferenceGroup
 			}
 		}
+	}
+	return nil
+}
+
+func appendUnique(slice []string, items []string) []string {
+	seen := make(map[string]bool, len(slice))
+	for _, s := range slice {
+		seen[s] = true
+	}
+	for _, item := range items {
+		if !seen[item] {
+			seen[item] = true
+			slice = append(slice, item)
+		}
+	}
+	return slice
+}
+
+type kpShardItem struct {
+	Label    string   `json:"label"`
+	Section  string   `json:"section"`
+	Subgoals []string `json:"subgoals"`
+}
+
+func findKPDir(dir string) string {
+	candidate := filepath.Join(filepath.Dir(dir), "lessons", "kp")
+	if info, err := os.Stat(candidate); err == nil && info.IsDir() {
+		return candidate
+	}
+	for _, fallback := range []string{
+		"data/lessons/kp",
+		"../data/lessons/kp",
+		"../../data/lessons/kp",
+		"../../../data/lessons/kp",
+	} {
+		if info, err := os.Stat(fallback); err == nil && info.IsDir() {
+			return fallback
+		}
+	}
+	return ""
+}
+
+func mergeKnowledgePoints(dir string, raw []Concept) error {
+	kpDir := findKPDir(dir)
+	if kpDir == "" {
+		return nil
+	}
+	for i := range raw {
+		c := &raw[i]
+		if len(c.KnowledgePoints) > 0 {
+			continue
+		}
+		path := filepath.Join(kpDir, c.ID+".json")
+		data, err := os.ReadFile(path)
+		if err != nil {
+			if os.IsNotExist(err) {
+				continue
+			}
+			return fmt.Errorf("read kp shard %s: %w", path, err)
+		}
+		var items []kpShardItem
+		if err := json.Unmarshal(data, &items); err != nil {
+			return fmt.Errorf("parse kp shard %s: %w", path, err)
+		}
+		kps := make([]KnowledgePoint, 0, len(items))
+		for idx, item := range items {
+			title := item.Label
+			if title == "" {
+				title = item.Section
+			}
+			kps = append(kps, KnowledgePoint{
+				Ordinal:  idx + 1,
+				Title:    title,
+				Section:  item.Section,
+				Subgoals: item.Subgoals,
+			})
+		}
+		c.KnowledgePoints = kps
 	}
 	return nil
 }
@@ -182,7 +276,7 @@ func build(raw []Concept) *DAG {
 		}
 	}
 
-	// Topological sort via Kahn's algorithm — includes prerequisites + encompasses as edges
+	// Topological sort via Kahn's algorithm, includes prerequisites + encompasses as edges
 	inDegree := make(map[string]int, len(raw))
 	for _, c := range raw {
 		inDegree[c.ID] = len(c.Prerequisites) + len(c.Encompasses)
@@ -294,6 +388,17 @@ func validate(raw []Concept) error {
 				return fmt.Errorf("concept %q variant missing label", c.ID)
 			}
 		}
+		for i, kp := range c.KnowledgePoints {
+			expectedOrdinal := i + 1
+			if kp.Ordinal != expectedOrdinal {
+				return fmt.Errorf("concept %q knowledge point %d has invalid ordinal %d (must be %d)", c.ID, i, kp.Ordinal, expectedOrdinal)
+			}
+			for _, kpid := range kp.KeyPrerequisites {
+				if !ids[kpid] {
+					return fmt.Errorf("concept %q knowledge point %d key_prerequisite %q does not exist", c.ID, kp.Ordinal, kpid)
+				}
+			}
+		}
 		// Grading type enum check (allow empty for test fixtures)
 		allowedGrading := map[string]bool{
 			"multiple_choice": true, "numeric": true, "symbolic": true, "complex": true,
@@ -332,7 +437,7 @@ func validate(raw []Concept) error {
 		}
 	}
 
-	// Detect cycles via topological sort (Kahn's) — includes prerequisites + encompasses
+	// Detect cycles via topological sort (Kahn's), includes prerequisites + encompasses
 	cmap := make(map[string]*Concept, len(raw))
 	depMap := make(map[string][]string)
 	inDegree := make(map[string]int, len(raw))
@@ -369,6 +474,34 @@ func validate(raw []Concept) error {
 	}
 	if processed != len(raw) {
 		return fmt.Errorf("concept graph contains a cycle (including encompasses)")
+	}
+
+	// Enforce density invariants on the full curriculum graph
+	if len(raw) >= 1000 {
+		totalInDegree := 0
+		keyPrereqCount := 0
+		encompassCount := 0
+		for _, c := range raw {
+			totalInDegree += len(c.Prerequisites) + len(c.Encompasses)
+			if len(c.KeyPrerequisites) > 0 {
+				keyPrereqCount++
+			}
+			if len(c.Encompasses) > 0 {
+				encompassCount++
+			}
+		}
+		meanInDegree := float64(totalInDegree) / float64(len(raw))
+		if meanInDegree < 2.20 {
+			return fmt.Errorf("curriculum mean in-degree %.2f is below density floor 2.20", meanInDegree)
+		}
+		keyPrereqPct := float64(keyPrereqCount) / float64(len(raw))
+		if keyPrereqPct < 0.80 {
+			return fmt.Errorf("curriculum key_prerequisites coverage %.1f%% is below 80.0%% floor", keyPrereqPct*100)
+		}
+		encompassPct := float64(encompassCount) / float64(len(raw))
+		if encompassPct < 0.50 {
+			return fmt.Errorf("curriculum encompasses coverage %.1f%% is below 50.0%% floor", encompassPct*100)
+		}
 	}
 
 	return nil

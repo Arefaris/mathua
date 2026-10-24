@@ -16,11 +16,13 @@ package probability
 // recompute the answer rather than trusting the author's arithmetic.
 
 import (
+	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
 
 	"github.com/chuma-beep/mathua/internal/generator"
+	"github.com/chuma-beep/mathua/internal/mathutil"
 )
 
 // ---------------------------------------------------------------------------
@@ -30,37 +32,48 @@ import (
 type marginalGen struct{}
 
 func (g *marginalGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		weights []int
-		reason  string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var totalOptions []int
+	switch tier {
+	case 0:
+		totalOptions = []int{10, 20}
+	case 1:
+		totalOptions = []int{20, 25, 40, 50}
+	default:
+		totalOptions = []int{50, 80, 100}
 	}
-	claims := []claim{
-		{weights: []int{1, 2, 3, 4}, reason: "X is one at the last two pairs, which carry 3 and 4 of the total 10, so the marginal is 7/10 = 0.7."},
-		{weights: []int{2, 2, 1, 5}, reason: "(1 + 5)/10 = 0.6."},
-		{weights: []int{3, 3, 1, 3}, reason: "(1 + 3)/10 = 0.4."},
-		{weights: []int{4, 1, 1, 4}, reason: "(1 + 4)/10 = 0.5."},
-		{weights: []int{5, 2, 2, 1}, reason: "(2 + 1)/10 = 0.3."},
-		{weights: []int{1, 1, 2, 6}, reason: "(2 + 6)/10 = 0.8."},
+	total := totalOptions[rand.Intn(len(totalOptions))]
+
+	wX := 2 + rand.Intn(total-3)
+	if wX >= total-1 {
+		wX = total - 2
 	}
-	c := claims[rand.Intn(len(claims))]
-	total := 0
-	for _, w := range c.weights {
-		total += w
-	}
-	answer := decimal6(float64(c.weights[2]+c.weights[3]) / float64(total))
-	parts := make([]string, len(c.weights))
-	for i, w := range c.weights {
+	w10 := 1 + rand.Intn(wX-1)
+	w11 := wX - w10
+	rem := total - wX
+	w00 := 1 + rand.Intn(rem-1)
+	w01 := rem - w00
+
+	weights := []int{w00, w01, w10, w11}
+	answer := decimal6(float64(w10+w11) / float64(total))
+	parts := make([]string, len(weights))
+	for i, w := range weights {
 		parts[i] = strconv.Itoa(w)
 	}
-	return generator.Problem{
+
+	p := generator.Problem{
 		Question: "A joint mass function on the four pairs (0,0), (0,1), (1,0) and (1,1) is proportional to the weights " +
 			strings.Join(parts, ", ") + " in that order. What is the marginal P(X = 1)? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "The marginal sums the joint masses over all values of the other variable; " + c.reason,
+		Answer: answer,
 		Facts: map[string]string{
-			"weights": strings.Join(parts, ","), "total": strconv.Itoa(total), "answer": answer,
+			"weights": strings.Join(parts, ","),
+			"total":   strconv.Itoa(total),
+			"answer":  answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. The marginal probability P(X = 1) is found by summing joint probabilities across all values of Y: P(X = 1) = P(X = 1, Y = 0) + P(X = 1, Y = 1) = (w10 + w11) / T.\nSubgoal 2: Substitute parameters. The weights corresponding to X = 1 are w10 = %d and w11 = %d out of total weight T = %d.\nSubgoal 3: Evaluate and simplify. P(X = 1) = (%d + %d) / %d = %d/%d = %s.",
+		w10, w11, total, w10, w11, total, w10+w11, total, answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -70,31 +83,37 @@ func (g *marginalGen) Generate(ctx generator.GeneratorContext) generator.Problem
 type jointDensityGen struct{}
 
 func (g *jointDensityGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		a, b, x, y int
-		reason     string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var dims []int
+	switch tier {
+	case 0:
+		dims = []int{2, 4, 5, 10}
+	case 1:
+		dims = []int{4, 5, 8, 10, 20}
+	default:
+		dims = []int{5, 8, 10, 16, 20, 25, 40, 50}
 	}
-	claims := []claim{
-		{a: 4, b: 5, x: 2, y: 3, reason: "(2/4)(3/5) = 0.3."},
-		{a: 10, b: 10, x: 5, y: 4, reason: "(5/10)(4/10) = 0.2."},
-		{a: 2, b: 5, x: 1, y: 4, reason: "(1/2)(4/5) = 0.4."},
-		{a: 5, b: 5, x: 3, y: 4, reason: "(3/5)(4/5) = 0.48."},
-		{a: 8, b: 10, x: 4, y: 5, reason: "(4/8)(5/10) = 0.25."},
-		{a: 5, b: 4, x: 1, y: 1, reason: "(1/5)(1/4) = 0.05."},
-	}
-	c := claims[rand.Intn(len(claims))]
-	answer := decimal6(float64(c.x) / float64(c.a) * float64(c.y) / float64(c.b))
-	return generator.Problem{
-		Question: "A pair (X, Y) is uniform on the rectangle from 0 to " + strconv.Itoa(c.a) +
-			" in x and 0 to " + strconv.Itoa(c.b) + " in y. What is P(X ≤ " + strconv.Itoa(c.x) +
-			" and Y ≤ " + strconv.Itoa(c.y) + ")? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "A uniform pair has independent coordinates, so the joint probability is the product of the two marginal probabilities; " + c.reason,
+	a := dims[rand.Intn(len(dims))]
+	b := dims[rand.Intn(len(dims))]
+	x := 1 + rand.Intn(a)
+	y := 1 + rand.Intn(b)
+
+	answer := decimal6(float64(x) / float64(a) * float64(y) / float64(b))
+	p := generator.Problem{
+		Question: fmt.Sprintf("A pair (X, Y) is uniform on the rectangle from 0 to %d in x and 0 to %d in y. What is P(X ≤ %d and Y ≤ %d)? (enter a decimal)",
+			a, b, x, y),
+		Answer: answer,
 		Facts: map[string]string{
-			"a": strconv.Itoa(c.a), "b": strconv.Itoa(c.b), "x": strconv.Itoa(c.x),
-			"y": strconv.Itoa(c.y), "answer": answer,
+			"a":      strconv.Itoa(a),
+			"b":      strconv.Itoa(b),
+			"x":      strconv.Itoa(x),
+			"y":      strconv.Itoa(y),
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. For a uniform distribution on the rectangle [0, a] × [0, b], coordinates X and Y are independent with uniform marginals, so P(X ≤ x and Y ≤ y) = (x/a) · (y/b).\nSubgoal 2: Substitute parameters. Substitute bounds a = %d and b = %d with evaluated thresholds x = %d and y = %d.\nSubgoal 3: Evaluate and simplify. P(X ≤ %d and Y ≤ %d) = (%d/%d) · (%d/%d) = %d/%d = %s.",
+		a, b, x, y, x, y, x, a, y, b, x*y, a*b, answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -155,37 +174,56 @@ func (g *rvIndependenceGen) Generate(ctx generator.GeneratorContext) generator.P
 type conditionalGen struct{}
 
 func (g *conditionalGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		weights []int
-		y       int
-		reason  string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	y := rand.Intn(2)
+	var colSums []int
+	switch tier {
+	case 0:
+		colSums = []int{2, 4, 5, 10}
+	case 1:
+		colSums = []int{4, 5, 8, 10, 20}
+	default:
+		colSums = []int{10, 20, 25, 40, 50}
 	}
-	claims := []claim{
-		{weights: []int{1, 1, 3, 1}, y: 0, reason: "With Y = 0 the only pairs are (0,0) and (1,0), and X is one with chance 3/(1+3) = 0.75."},
-		{weights: []int{3, 1, 1, 1}, y: 0, reason: "X is one with chance 1/(3+1) = 0.25."},
-		{weights: []int{2, 2, 3, 3}, y: 0, reason: "X is one with chance 3/(2+3) = 0.6."},
-		{weights: []int{4, 1, 1, 4}, y: 1, reason: "With Y = 1 the pairs are (0,1) and (1,1), and X is one with chance 4/(1+4) = 0.8."},
-		{weights: []int{3, 7, 2, 8}, y: 0, reason: "X is one with chance 2/(3+2) = 0.4."},
-		{weights: []int{1, 9, 9, 1}, y: 1, reason: "X is one with chance 1/(9+1) = 0.1."},
+	targetSum := colSums[rand.Intn(len(colSums))]
+	otherSum := colSums[rand.Intn(len(colSums))]
+
+	wChosen1 := 1 + rand.Intn(targetSum-1)
+	wChosen0 := targetSum - wChosen1
+
+	wOther1 := 1 + rand.Intn(otherSum-1)
+	wOther0 := otherSum - wOther1
+
+	// weights order: (0,0), (0,1), (1,0), (1,1)
+	var weights []int
+	if y == 0 {
+		weights = []int{wChosen0, wOther0, wChosen1, wOther1}
+	} else {
+		weights = []int{wOther0, wChosen0, wOther1, wChosen1}
 	}
-	c := claims[rand.Intn(len(claims))]
-	// Pairs are (0,0), (0,1), (1,0), (1,1), so X = 0 at index y and X = 1 at index 2+y.
-	num := c.weights[2+c.y]
-	den := c.weights[c.y] + num
+
+	num := weights[2+y]
+	den := weights[y] + num
 	answer := decimal6(float64(num) / float64(den))
-	parts := make([]string, len(c.weights))
-	for i, w := range c.weights {
+
+	parts := make([]string, len(weights))
+	for i, w := range weights {
 		parts[i] = strconv.Itoa(w)
 	}
-	return generator.Problem{
+
+	p := generator.Problem{
 		Question: "A joint mass function on the four pairs (0,0), (0,1), (1,0) and (1,1) is proportional to the weights " +
-			strings.Join(parts, ", ") + " in that order. What is E[X | Y = " + strconv.Itoa(c.y) + "]? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Conditioning on Y fixes a column of the table, and the conditional mean is the weighted average of X within it; " + c.reason,
+			strings.Join(parts, ", ") + " in that order. What is E[X | Y = " + strconv.Itoa(y) + "]? (enter a decimal)",
+		Answer: answer,
 		Facts: map[string]string{
-			"weights": strings.Join(parts, ","), "y": strconv.Itoa(c.y), "answer": answer,
+			"weights": strings.Join(parts, ","),
+			"y":       strconv.Itoa(y),
+			"answer":  answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. Conditioning on Y = %d fixes the column Y = %d. For a binary indicator variable X ∈ {0, 1}, the conditional expectation is E[X | Y = %d] = P(X = 1 | Y = %d) = w_{1%d} / (w_{0%d} + w_{1%d}).\nSubgoal 2: Substitute parameters. For column Y = %d, the weights are w_{0%d} = %d and w_{1%d} = %d.\nSubgoal 3: Evaluate and simplify. E[X | Y = %d] = %d / (%d + %d) = %d/%d = %s.",
+		y, y, y, y, y, y, y, y, y, weights[y], y, num, y, num, weights[y], num, num, den, answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -195,32 +233,47 @@ func (g *conditionalGen) Generate(ctx generator.GeneratorContext) generator.Prob
 type totalExpectationGen struct{}
 
 func (g *totalExpectationGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		ca, cb, pn, pd int
-		reason         string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var denomOptions []int
+	switch tier {
+	case 0:
+		denomOptions = []int{2, 4, 5, 10}
+	case 1:
+		denomOptions = []int{4, 5, 8, 10, 20}
+	default:
+		denomOptions = []int{5, 8, 10, 16, 20, 25}
 	}
-	claims := []claim{
-		{ca: 1, cb: 3, pn: 1, pd: 2, reason: "(1/2)(1) + (1/2)(3) = 2."},
-		{ca: 2, cb: 4, pn: 1, pd: 4, reason: "(3/4)(2) + (1/4)(4) = 2.5."},
-		{ca: 0, cb: 5, pn: 1, pd: 5, reason: "(4/5)(0) + (1/5)(5) = 1."},
-		{ca: 3, cb: 7, pn: 1, pd: 2, reason: "(1/2)(3) + (1/2)(7) = 5."},
-		{ca: 1, cb: 2, pn: 3, pd: 4, reason: "(1/4)(1) + (3/4)(2) = 1.75."},
-		{ca: 4, cb: 8, pn: 1, pd: 2, reason: "(1/2)(4) + (1/2)(8) = 6."},
+	pd := denomOptions[rand.Intn(len(denomOptions))]
+	pn := 1 + rand.Intn(pd-1)
+	for mathutil.GCD(pn, pd) > 1 {
+		pn = 1 + rand.Intn(pd-1)
 	}
-	c := claims[rand.Intn(len(claims))]
-	p := float64(c.pn) / float64(c.pd)
-	answer := decimal6((1-p)*float64(c.ca) + p*float64(c.cb))
-	return generator.Problem{
-		Question: "A variable Y takes the values zero and one with P(Y = 1) = " + strconv.Itoa(c.pn) + "/" +
-			strconv.Itoa(c.pd) + ". Given Y, the conditional mean of X is " + strconv.Itoa(c.ca) +
-			" when Y is zero and " + strconv.Itoa(c.cb) + " when Y is one. What is E[X]? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "The law of total expectation averages the conditional means with the probabilities of the conditioning variable; " + c.reason,
+
+	maxMean := mathutil.ScaleInt(ctx.Difficulty, 6, 25)
+	ca := rand.Intn(maxMean + 1)
+	cb := rand.Intn(maxMean + 1)
+	for ca == cb {
+		cb = rand.Intn(maxMean + 1)
+	}
+
+	p := float64(pn) / float64(pd)
+	answer := decimal6((1-p)*float64(ca) + p*float64(cb))
+
+	pb := generator.Problem{
+		Question: fmt.Sprintf("A variable Y takes the values zero and one with P(Y = 1) = %d/%d. Given Y, the conditional mean of X is %d when Y is zero and %d when Y is one. What is E[X]? (enter a decimal)",
+			pn, pd, ca, cb),
+		Answer: answer,
 		Facts: map[string]string{
-			"ca": strconv.Itoa(c.ca), "cb": strconv.Itoa(c.cb),
-			"pn": strconv.Itoa(c.pn), "pd": strconv.Itoa(c.pd), "answer": answer,
+			"ca":     strconv.Itoa(ca),
+			"cb":     strconv.Itoa(cb),
+			"pn":     strconv.Itoa(pn),
+			"pd":     strconv.Itoa(pd),
+			"answer": answer,
 		},
 	}
+	pb.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. By the law of total expectation, E[X] = E[E[X | Y]] = P(Y = 0) · E[X | Y = 0] + P(Y = 1) · E[X | Y = 1].\nSubgoal 2: Substitute parameters. The probabilities are P(Y = 0) = %d/%d and P(Y = 1) = %d/%d with conditional expectations E[X | Y = 0] = %d and E[X | Y = 1] = %d.\nSubgoal 3: Evaluate and simplify. E[X] = (%d/%d)(%d) + (%d/%d)(%d) = %s.",
+		pd-pn, pd, pn, pd, ca, cb, pd-pn, pd, ca, pn, pd, cb, answer)
+	return pb
 }
 
 // ---------------------------------------------------------------------------
@@ -230,33 +283,36 @@ func (g *totalExpectationGen) Generate(ctx generator.GeneratorContext) generator
 type totalVarianceGen struct{}
 
 func (g *totalVarianceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		m0, m1, v0, v1 int
-		reason         string
+	maxM := mathutil.ScaleInt(ctx.Difficulty, 5, 20)
+	maxV := mathutil.ScaleInt(ctx.Difficulty, 4, 15)
+
+	m0 := rand.Intn(maxM + 1)
+	m1 := rand.Intn(maxM + 1)
+	v0 := 1 + rand.Intn(maxV)
+	v1 := 1 + rand.Intn(maxV)
+	for m0 == m1 && v0 == v1 {
+		m1 = rand.Intn(maxM + 1)
 	}
-	claims := []claim{
-		{m0: 0, m1: 2, v0: 1, v1: 3, reason: "E[Var(X|Y)] = 2 and Var(E[X|Y]) = (0 − 2)²/4 = 1, so Var(X) = 3."},
-		{m0: 1, m1: 3, v0: 2, v1: 2, reason: "E[Var(X|Y)] = 2 and Var(E[X|Y]) = 1, so Var(X) = 3."},
-		{m0: 0, m1: 4, v0: 1, v1: 1, reason: "E[Var(X|Y)] = 1 and Var(E[X|Y]) = 4, so Var(X) = 5."},
-		{m0: 2, m1: 4, v0: 2, v1: 4, reason: "E[Var(X|Y)] = 3 and Var(E[X|Y]) = 1, so Var(X) = 4."},
-		{m0: 0, m1: 0, v0: 1, v1: 2, reason: "E[Var(X|Y)] = 1.5 and Var(E[X|Y]) = 0, so Var(X) = 1.5."},
-		{m0: 1, m1: 4, v0: 3, v1: 5, reason: "E[Var(X|Y)] = 4 and Var(E[X|Y]) = (1 − 4)²/4 = 2.25, so Var(X) = 6.25."},
-	}
-	c := claims[rand.Intn(len(claims))]
-	between := float64((c.m0-c.m1)*(c.m0-c.m1)) / 4.0
-	within := float64(c.v0+c.v1) / 2.0
+
+	between := float64((m0-m1)*(m0-m1)) / 4.0
+	within := float64(v0+v1) / 2.0
 	answer := decimal6(within + between)
-	return generator.Problem{
-		Question: "A variable Y takes the values zero and one with equal probability. Given Y, the conditional mean of X is " +
-			strconv.Itoa(c.m0) + " or " + strconv.Itoa(c.m1) + ", and the conditional variance is " +
-			strconv.Itoa(c.v0) + " or " + strconv.Itoa(c.v1) + ". What is Var(X)? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "The law of total variance adds the mean of the conditional variances to the variance of the conditional means; " + c.reason,
+
+	p := generator.Problem{
+		Question: fmt.Sprintf("A variable Y takes the values zero and one with equal probability. Given Y, the conditional mean of X is %d or %d and the conditional variance is %d or %d. What is Var(X)? (enter a decimal)",
+			m0, m1, v0, v1),
+		Answer: answer,
 		Facts: map[string]string{
-			"m0": strconv.Itoa(c.m0), "m1": strconv.Itoa(c.m1),
-			"v0": strconv.Itoa(c.v0), "v1": strconv.Itoa(c.v1), "answer": answer,
+			"m0":     strconv.Itoa(m0),
+			"m1":     strconv.Itoa(m1),
+			"v0":     strconv.Itoa(v0),
+			"v1":     strconv.Itoa(v1),
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. The law of total variance (Eve's law) partitions variance as Var(X) = E[Var(X | Y)] + Var(E[X | Y]).\nSubgoal 2: Substitute parameters. Since Y takes states 0 and 1 with probability 1/2 each, E[Var(X | Y)] = (%d + %d)/2 = %s and Var(E[X | Y]) = (%d - %d)²/4 = %s.\nSubgoal 3: Evaluate and simplify. Var(X) = %s + %s = %s.",
+		v0, v1, decimal6(within), m0, m1, decimal6(between), decimal6(within), decimal6(between), answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -266,40 +322,58 @@ func (g *totalVarianceGen) Generate(ctx generator.GeneratorContext) generator.Pr
 type covarianceGen struct{}
 
 func (g *covarianceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		weights []int
-		reason  string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var totalOptions []int
+	switch tier {
+	case 0:
+		totalOptions = []int{10, 20}
+	case 1:
+		totalOptions = []int{20, 25, 40, 50}
+	default:
+		totalOptions = []int{50, 80, 100}
 	}
-	claims := []claim{
-		{weights: []int{1, 1, 1, 7}, reason: "E[XY] = 0.7, E[X] = E[Y] = 0.8, so the covariance is 0.7 − 0.64 = 0.06."},
-		{weights: []int{2, 1, 1, 6}, reason: "E[XY] = 0.6 and E[X] = E[Y] = 0.7, so 0.6 − 0.49 = 0.11."},
-		{weights: []int{1, 1, 2, 6}, reason: "E[XY] = 0.6, E[X] = 0.8 and E[Y] = 0.7, so 0.6 − 0.56 = 0.04."},
-		{weights: []int{2, 2, 1, 5}, reason: "E[XY] = 0.5, E[X] = 0.6 and E[Y] = 0.7, so 0.5 − 0.42 = 0.08."},
-		{weights: []int{3, 1, 1, 5}, reason: "E[XY] = 0.5 and E[X] = E[Y] = 0.6, so 0.5 − 0.36 = 0.14."},
-		{weights: []int{4, 1, 1, 4}, reason: "E[XY] = 0.4 and E[X] = E[Y] = 0.5, so 0.4 − 0.25 = 0.15."},
+	total := totalOptions[rand.Intn(len(totalOptions))]
+
+	var w00, w01, w10, w11, num int
+	for attempts := 0; attempts < 100; attempts++ {
+		w11 = 1 + rand.Intn(total/2)
+		rem := total - w11
+		w10 = 1 + rand.Intn(rem/2)
+		rem2 := rem - w10
+		w01 = 1 + rand.Intn(rem2)
+		w00 = rem2 - w01
+		if w00 >= 1 {
+			num = w11*total - (w10+w11)*(w01+w11)
+			if num != 0 {
+				break
+			}
+		}
 	}
-	c := claims[rand.Intn(len(claims))]
-	total := 0
-	for _, w := range c.weights {
-		total += w
+	if w00 < 1 || num == 0 {
+		w00, w01, w10, w11 = 1, 1, 1, total-3
+		num = w11*total - (w10+w11)*(w01+w11)
 	}
-	_, w01, w10, w11 := c.weights[0], c.weights[1], c.weights[2], c.weights[3]
-	// E[XY] = w11/T; E[X] = (w10+w11)/T; E[Y] = (w01+w11)/T. Keep it in integers.
-	num := w11*total - (w10+w11)*(w01+w11)
+
+	weights := []int{w00, w01, w10, w11}
 	answer := decimal6(float64(num) / float64(total*total))
-	parts := make([]string, len(c.weights))
-	for i, w := range c.weights {
+	parts := make([]string, len(weights))
+	for i, w := range weights {
 		parts[i] = strconv.Itoa(w)
 	}
-	return generator.Problem{
+
+	p := generator.Problem{
 		Question: "A joint mass function on the four pairs (0,0), (0,1), (1,0) and (1,1) is proportional to the weights " +
 			strings.Join(parts, ", ") + " in that order. What is Cov(X, Y) = E[XY] − E[X]E[Y]? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Only the pair (1,1) contributes to E[XY], and the two means come from the margins; " + c.reason,
+		Answer: answer,
 		Facts: map[string]string{
-			"weights": strings.Join(parts, ","), "total": strconv.Itoa(total), "answer": answer,
+			"weights": strings.Join(parts, ","),
+			"total":   strconv.Itoa(total),
+			"answer":  answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. For indicator variables, Cov(X, Y) = E[XY] - E[X]E[Y] = (w11/T) - ((w10 + w11)/T)((w01 + w11)/T) = (w11 · T - (w10 + w11)(w01 + w11)) / T².\nSubgoal 2: Substitute parameters. Total weight T = %d, joint weight w11 = %d, marginal weight for X is %d and marginal weight for Y is %d.\nSubgoal 3: Evaluate and simplify. Cov(X, Y) = (%d · %d - %d · %d) / %d² = (%d - %d) / %d = %d/%d = %s.",
+		total, w11, w10+w11, w01+w11, w11, total, w10+w11, w01+w11, total, w11*total, (w10+w11)*(w01+w11), total*total, num, total*total, answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -309,29 +383,43 @@ func (g *covarianceGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type correlationGen struct{}
 
 func (g *correlationGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		cov, sx, sy int
-		reason      string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var sxOptions, syOptions []int
+	switch tier {
+	case 0:
+		sxOptions = []int{2, 4, 5}
+		syOptions = []int{2, 4, 5}
+	case 1:
+		sxOptions = []int{2, 4, 5, 8, 10}
+		syOptions = []int{2, 4, 5, 8, 10}
+	default:
+		sxOptions = []int{4, 5, 8, 10, 20}
+		syOptions = []int{4, 5, 8, 10, 20}
 	}
-	claims := []claim{
-		{cov: 6, sx: 3, sy: 5, reason: "6/(3·5) = 6/15 = 0.4."},
-		{cov: 9, sx: 3, sy: 5, reason: "9/15 = 0.6."},
-		{cov: 4, sx: 2, sy: 4, reason: "4/8 = 0.5."},
-		{cov: 2, sx: 4, sy: 5, reason: "2/20 = 0.1."},
-		{cov: 14, sx: 4, sy: 5, reason: "14/20 = 0.7."},
-		{cov: 3, sx: 2, sy: 4, reason: "3/8 = 0.375."},
+	sx := sxOptions[rand.Intn(len(sxOptions))]
+	sy := syOptions[rand.Intn(len(syOptions))]
+
+	maxCov := sx * sy
+	cov := 1 + rand.Intn(maxCov)
+	if rand.Intn(3) == 0 {
+		cov = -cov
 	}
-	c := claims[rand.Intn(len(claims))]
-	answer := decimal6(float64(c.cov) / float64(c.sx*c.sy))
-	return generator.Problem{
-		Question: "X and Y have covariance " + strconv.Itoa(c.cov) + " and standard deviations " +
-			strconv.Itoa(c.sx) + " and " + strconv.Itoa(c.sy) + ". What is their correlation? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Correlation is the covariance divided by the product of the standard deviations; " + c.reason,
+
+	answer := decimal6(float64(cov) / float64(sx*sy))
+	p := generator.Problem{
+		Question: fmt.Sprintf("X and Y have covariance %d and standard deviations %d and %d. What is their correlation? (enter a decimal)",
+			cov, sx, sy),
+		Answer: answer,
 		Facts: map[string]string{
-			"cov": strconv.Itoa(c.cov), "sx": strconv.Itoa(c.sx), "sy": strconv.Itoa(c.sy), "answer": answer,
+			"cov":    strconv.Itoa(cov),
+			"sx":     strconv.Itoa(sx),
+			"sy":     strconv.Itoa(sy),
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. The Pearson correlation coefficient is defined as ρ = Cov(X, Y) / (σX · σY).\nSubgoal 2: Substitute parameters. Substitute Cov(X, Y) = %d, σX = %d and σY = %d.\nSubgoal 3: Evaluate and simplify. ρ = %d / (%d · %d) = %d/%d = %s.",
+		cov, sx, sy, cov, sx, sy, cov, sx*sy, answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -647,39 +735,70 @@ func (g *slutskyGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 type deltaMethodGen struct{}
 
 func (g *deltaMethodGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		fn      string // "square" or "sqrt"
-		mu, sig int
-		reason  string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	fn := "square"
+	if rand.Intn(2) == 1 {
+		fn = "sqrt"
 	}
-	claims := []claim{
-		{fn: "square", mu: 2, sig: 1, reason: "The derivative is 2μ = 4, so the variance is 1·16 = 16."},
-		{fn: "square", mu: 3, sig: 2, reason: "The derivative is 6, so σ²·6² = 4·36 = 144."},
-		{fn: "square", mu: 1, sig: 3, reason: "The derivative is 2, so 9·4 = 36."},
-		{fn: "square", mu: 4, sig: 1, reason: "The derivative is 8, so 1·64 = 64."},
-		{fn: "sqrt", mu: 4, sig: 2, reason: "The derivative of the square root at 4 is 1/(2·2) = 0.25, so 4·0.0625 = 0.25."},
-		{fn: "sqrt", mu: 1, sig: 2, reason: "The derivative at 1 is 1/2, so 4·0.25 = 1."},
-	}
-	c := claims[rand.Intn(len(claims))]
+
+	var mu, sig int
 	var answer string
 	var label string
-	if c.fn == "square" {
+	var derivStr, evalDerivStr string
+
+	if fn == "square" {
 		label = "x squared"
-		answer = decimal6(float64(4 * c.mu * c.mu * c.sig * c.sig))
+		switch tier {
+		case 0:
+			mu = 1 + rand.Intn(4)
+			sig = 1 + rand.Intn(3)
+		case 1:
+			mu = 3 + rand.Intn(6)
+			sig = 2 + rand.Intn(4)
+		default:
+			mu = 5 + rand.Intn(10)
+			sig = 3 + rand.Intn(6)
+		}
+		derivVal := 2 * mu
+		asympVar := float64(4 * mu * mu * sig * sig)
+		answer = decimal6(asympVar)
+		derivStr = "g'(x) = 2x"
+		evalDerivStr = fmt.Sprintf("g'(%d) = 2(%d) = %d", mu, mu, derivVal)
 	} else {
 		label = "the square root of x"
-		answer = decimal6(float64(c.sig*c.sig) / float64(4*c.mu))
+		var muChoices []int
+		switch tier {
+		case 0:
+			muChoices = []int{1, 4}
+			sig = 1 + rand.Intn(4)
+		case 1:
+			muChoices = []int{1, 2, 4, 5, 8, 10}
+			sig = 2 + rand.Intn(5)
+		default:
+			muChoices = []int{4, 5, 8, 10, 16, 20, 25}
+			sig = 2 + rand.Intn(8)
+		}
+		mu = muChoices[rand.Intn(len(muChoices))]
+		asympVar := float64(sig*sig) / float64(4*mu)
+		answer = decimal6(asympVar)
+		derivStr = "g'(x) = 1 / (2√x)"
+		evalDerivStr = fmt.Sprintf("g'(%d) = 1 / (2√%d)", mu, mu)
 	}
-	return generator.Problem{
-		Question: "A sample mean of n observations has mean μ = " + strconv.Itoa(c.mu) + " and variance σ² = " +
-			strconv.Itoa(c.sig*c.sig) + ". The delta method gives the asymptotic variance of g(sample mean) as σ² times the square of the derivative of g at μ. For g(x) equal to " +
-			label + ", what is that asymptotic variance? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Differentiate the transformation and square it, then multiply by the asymptotic variance of the sample mean; " + c.reason,
+
+	p := generator.Problem{
+		Question: fmt.Sprintf("A sample mean of n observations has mean μ = %d and variance σ² = %d. The delta method gives the asymptotic variance of g(sample mean) as σ² times the square of the derivative of g at μ. For g(x) equal to %s, what is that asymptotic variance? (enter a decimal)",
+			mu, sig*sig, label),
+		Answer: answer,
 		Facts: map[string]string{
-			"fn": c.fn, "mu": strconv.Itoa(c.mu), "sigma": strconv.Itoa(c.sig), "answer": answer,
+			"fn":     fn,
+			"mu":     strconv.Itoa(mu),
+			"sigma":  strconv.Itoa(sig),
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. The delta method states that the asymptotic variance of g(X̄_n) is [g'(μ)]² · σ².\nSubgoal 2: Substitute parameters. For g(x) equal to %s, the derivative is %s, which evaluated at μ = %d gives %s with base variance σ² = %d.\nSubgoal 3: Evaluate and simplify. The asymptotic variance is [g'(%d)]² · %d = %s.",
+		label, derivStr, mu, evalDerivStr, sig*sig, mu, sig*sig, answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -740,30 +859,38 @@ func (g *characteristicGen) Generate(ctx generator.GeneratorContext) generator.P
 type characteristicMomentsGen struct{}
 
 func (g *characteristicMomentsGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		pn, pd int
-		reason string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var denomOptions []int
+	switch tier {
+	case 0:
+		denomOptions = []int{2, 4, 5, 10}
+	case 1:
+		denomOptions = []int{8, 16, 20, 25, 40, 50}
+	default:
+		denomOptions = []int{80, 100, 125, 200, 250, 400, 500, 1000}
 	}
-	claims := []claim{
-		{pn: 1, pd: 2, reason: "p = 0.5, so Var(X) = 0.5·0.5 = 0.25."},
-		{pn: 1, pd: 4, reason: "p = 0.25, so Var(X) = 0.25·0.75 = 0.1875."},
-		{pn: 1, pd: 5, reason: "p = 0.2, so Var(X) = 0.2·0.8 = 0.16."},
-		{pn: 2, pd: 5, reason: "p = 0.4, so Var(X) = 0.4·0.6 = 0.24."},
-		{pn: 1, pd: 10, reason: "p = 0.1, so Var(X) = 0.1·0.9 = 0.09."},
-		{pn: 3, pd: 10, reason: "p = 0.3, so Var(X) = 0.3·0.7 = 0.21."},
+	pd := denomOptions[rand.Intn(len(denomOptions))]
+	pn := 1 + rand.Intn(pd-1)
+	for mathutil.GCD(pn, pd) > 1 {
+		pn = 1 + rand.Intn(pd-1)
 	}
-	c := claims[rand.Intn(len(claims))]
-	p := float64(c.pn) / float64(c.pd)
+
+	p := float64(pn) / float64(pd)
 	answer := decimal6(p * (1 - p))
-	return generator.Problem{
-		Question: "A random variable X takes the value zero with probability 1 − p and one with probability p, so its characteristic function is (1 − p) + p e^{it}. For p = " +
-			strconv.Itoa(c.pn) + "/" + strconv.Itoa(c.pd) + ", what is Var(X)? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Differentiating the characteristic function twice at zero gives the second moment, and the variance is the second moment minus the square of the mean; " + c.reason,
+
+	pb := generator.Problem{
+		Question: fmt.Sprintf("A random variable X takes the value zero with probability 1 − p and one with probability p, so its characteristic function is (1 − p) + p e^{it}. For p = %d/%d, what is Var(X)? (enter a decimal)",
+			pn, pd),
+		Answer: answer,
 		Facts: map[string]string{
-			"pn": strconv.Itoa(c.pn), "pd": strconv.Itoa(c.pd), "answer": answer,
+			"pn":     strconv.Itoa(pn),
+			"pd":     strconv.Itoa(pd),
+			"answer": answer,
 		},
 	}
+	pb.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. Derivatives of the characteristic function at the origin evaluate moments: E[X] = -i φ'(0) = p and E[X²] = -φ''(0) = p, giving Var(X) = E[X²] - (E[X])² = p(1 - p).\nSubgoal 2: Substitute parameters. Substitute success probability p = %d/%d, so failure probability is 1 - p = %d/%d.\nSubgoal 3: Evaluate and simplify. Var(X) = (%d/%d)(%d/%d) = %d/%d = %s.",
+		pn, pd, pd-pn, pd, pn, pd, pd-pn, pd, pn*(pd-pn), pd*pd, answer)
+	return pb
 }
 
 // ---------------------------------------------------------------------------
@@ -926,31 +1053,49 @@ func (g *characteristicCLTGen) Generate(ctx generator.GeneratorContext) generato
 type markovChainGen struct{}
 
 func (g *markovChainGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		p00, p01, p11 string
-		reason        string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var p01Val, p11Val float64
+	switch tier {
+	case 0:
+		k := 1 + rand.Intn(9)
+		p01Val = float64(k) / 10.0
+		m := 1 + rand.Intn(9)
+		p11Val = float64(m) / 10.0
+	case 1:
+		k := 1 + rand.Intn(19)
+		p01Val = float64(k) * 0.05
+		m := 1 + rand.Intn(19)
+		p11Val = float64(m) * 0.05
+	default:
+		k := 2 + rand.Intn(96)
+		p01Val = float64(k) / 100.0
+		m := 2 + rand.Intn(96)
+		p11Val = float64(m) / 100.0
 	}
-	claims := []claim{
-		{p00: "0.5", p01: "0.5", p11: "0.5", reason: "0.5·0.5 + 0.5·0.5 = 0.5."},
-		{p00: "0.6", p01: "0.4", p11: "0.7", reason: "0.6·0.4 + 0.4·0.7 = 0.52."},
-		{p00: "0.8", p01: "0.2", p11: "0.9", reason: "0.8·0.2 + 0.2·0.9 = 0.34."},
-		{p00: "0.7", p01: "0.3", p11: "0.6", reason: "0.7·0.3 + 0.3·0.6 = 0.39."},
-		{p00: "0.9", p01: "0.1", p11: "0.8", reason: "0.9·0.1 + 0.1·0.8 = 0.17."},
-		{p00: "0.4", p01: "0.6", p11: "0.5", reason: "0.4·0.6 + 0.6·0.5 = 0.54."},
-	}
-	c := claims[rand.Intn(len(claims))]
+	p00Val := 1.0 - p01Val
+
+	p00 := decimal6(p00Val)
+	p01 := decimal6(p01Val)
+	p11 := decimal6(p11Val)
+
 	f := func(s string) float64 { v, _ := strconv.ParseFloat(s, 64); return v }
-	answer := decimal6(f(c.p00)*f(c.p01) + f(c.p01)*f(c.p11))
-	return generator.Problem{
-		Question: "A two-state Markov chain has P(state 0 to state 0) = " + c.p00 + ", P(state 0 to state 1) = " +
-			c.p01 + " and P(state 1 to state 1) = " + c.p11 +
-			". What is the two-step probability P(X_2 = 1 | X_0 = 0)? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "A two-step transition sums over the intermediate state, here 0 to 0 to 1 plus 0 to 1 to 1; " + c.reason,
+	v00, v01, v11 := f(p00), f(p01), f(p11)
+	answer := decimal6(v00*v01 + v01*v11)
+
+	p := generator.Problem{
+		Question: fmt.Sprintf("A two-state Markov chain has P(state 0 to state 0) = %s, P(state 0 to state 1) = %s and P(state 1 to state 1) = %s. What is the two-step probability P(X_2 = 1 | X_0 = 0)? (enter a decimal)",
+			p00, p01, p11),
+		Answer: answer,
 		Facts: map[string]string{
-			"p00": c.p00, "p01": c.p01, "p11": c.p11, "answer": answer,
+			"p00":    p00,
+			"p01":    p01,
+			"p11":    p11,
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. By the Chapman-Kolmogorov equations, the two-step transition probability sums over the intermediate state X_1: P(X_2 = 1 | X_0 = 0) = P(0 → 0)P(0 → 1) + P(0 → 1)P(1 → 1) = P_00 · P_01 + P_01 · P_11.\nSubgoal 2: Substitute parameters. Substitute transition probabilities P_00 = %s, P_01 = %s and P_11 = %s.\nSubgoal 3: Evaluate and simplify. P(X_2 = 1 | X_0 = 0) = (%s)(%s) + (%s)(%s) = %s + %s = %s.",
+		p00, p01, p11, p00, p01, p01, p11, decimal6(v00*v01), decimal6(v01*v11), answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -960,31 +1105,57 @@ func (g *markovChainGen) Generate(ctx generator.GeneratorContext) generator.Prob
 type transitionMatrixGen struct{}
 
 func (g *transitionMatrixGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		pi0, pi1, p01, p11 string
-		reason             string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var pi0Val, p01Val, p11Val float64
+	switch tier {
+	case 0:
+		k := 1 + rand.Intn(9)
+		pi0Val = float64(k) / 10.0
+		a := 1 + rand.Intn(9)
+		p01Val = float64(a) / 10.0
+		b := 1 + rand.Intn(9)
+		p11Val = float64(b) / 10.0
+	case 1:
+		k := 1 + rand.Intn(19)
+		pi0Val = float64(k) * 0.05
+		a := 1 + rand.Intn(19)
+		p01Val = float64(a) * 0.05
+		b := 1 + rand.Intn(19)
+		p11Val = float64(b) * 0.05
+	default:
+		k := 2 + rand.Intn(96)
+		pi0Val = float64(k) / 100.0
+		a := 2 + rand.Intn(96)
+		p01Val = float64(a) / 100.0
+		b := 2 + rand.Intn(96)
+		p11Val = float64(b) / 100.0
 	}
-	claims := []claim{
-		{pi0: "0.5", pi1: "0.5", p01: "0.4", p11: "0.8", reason: "0.5·0.4 + 0.5·0.8 = 0.6."},
-		{pi0: "0.6", pi1: "0.4", p01: "0.5", p11: "0.5", reason: "0.6·0.5 + 0.4·0.5 = 0.5."},
-		{pi0: "0.3", pi1: "0.7", p01: "0.2", p11: "0.6", reason: "0.3·0.2 + 0.7·0.6 = 0.48."},
-		{pi0: "0.8", pi1: "0.2", p01: "0.1", p11: "0.9", reason: "0.8·0.1 + 0.2·0.9 = 0.26."},
-		{pi0: "0.4", pi1: "0.6", p01: "0.7", p11: "0.3", reason: "0.4·0.7 + 0.6·0.3 = 0.46."},
-		{pi0: "0.2", pi1: "0.8", p01: "0.3", p11: "0.4", reason: "0.2·0.3 + 0.8·0.4 = 0.38."},
-	}
-	c := claims[rand.Intn(len(claims))]
+	pi1Val := 1.0 - pi0Val
+
+	pi0 := decimal6(pi0Val)
+	pi1 := decimal6(pi1Val)
+	p01 := decimal6(p01Val)
+	p11 := decimal6(p11Val)
+
 	f := func(s string) float64 { v, _ := strconv.ParseFloat(s, 64); return v }
-	answer := decimal6(f(c.pi0)*f(c.p01) + f(c.pi1)*f(c.p11))
-	return generator.Problem{
-		Question: "A chain starts with P(X_0 = 0) = " + c.pi0 + " and P(X_0 = 1) = " + c.pi1 +
-			". Its one-step probabilities are P(state 0 to state 1) = " + c.p01 + " and P(state 1 to state 1) = " +
-			c.p11 + ". What is P(X_1 = 1)? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "The distribution after one step is the initial distribution multiplied by the transition matrix; " + c.reason,
+	vPi0, vPi1, v01, v11 := f(pi0), f(pi1), f(p01), f(p11)
+	answer := decimal6(vPi0*v01 + vPi1*v11)
+
+	p := generator.Problem{
+		Question: fmt.Sprintf("A chain starts with P(X_0 = 0) = %s and P(X_0 = 1) = %s. Its one-step probabilities are P(state 0 to state 1) = %s and P(state 1 to state 1) = %s. What is P(X_1 = 1)? (enter a decimal)",
+			pi0, pi1, p01, p11),
+		Answer: answer,
 		Facts: map[string]string{
-			"pi0": c.pi0, "pi1": c.pi1, "p01": c.p01, "p11": c.p11, "answer": answer,
+			"pi0":    pi0,
+			"pi1":    pi1,
+			"p01":    p01,
+			"p11":    p11,
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. The state distribution after one transition is obtained by multiplying the initial distribution by the transition matrix: P(X_1 = 1) = P(X_0 = 0)P(0 → 1) + P(X_0 = 1)P(1 → 1) = π_0 · P_01 + π_1 · P_11.\nSubgoal 2: Substitute parameters. Substitute initial probabilities π_0 = %s and π_1 = %s with transition rates P_01 = %s and P_11 = %s.\nSubgoal 3: Evaluate and simplify. P(X_1 = 1) = (%s)(%s) + (%s)(%s) = %s + %s = %s.",
+		pi0, pi1, p01, p11, pi0, p01, pi1, p11, decimal6(vPi0*v01), decimal6(vPi1*v11), answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -994,32 +1165,50 @@ func (g *transitionMatrixGen) Generate(ctx generator.GeneratorContext) generator
 type stationaryGen struct{}
 
 func (g *stationaryGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		p01, p10 string
-		reason   string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	type pair struct{ up, down string }
+	var pool []pair
+	switch tier {
+	case 0:
+		pool = []pair{
+			{"0.3", "0.7"}, {"0.5", "0.5"}, {"0.4", "0.6"}, {"0.1", "0.9"},
+			{"0.2", "0.8"}, {"0.6", "0.4"}, {"0.7", "0.3"}, {"0.8", "0.2"},
+			{"0.1", "0.4"}, {"0.2", "0.3"}, {"0.3", "0.2"}, {"0.4", "0.1"},
+		}
+	case 1:
+		pool = []pair{
+			{"0.2", "0.6"}, {"0.6", "0.2"}, {"0.1", "0.7"}, {"0.3", "0.5"},
+			{"0.5", "0.3"}, {"0.7", "0.1"}, {"0.1", "0.3"}, {"0.3", "0.1"},
+			{"0.15", "0.85"}, {"0.35", "0.65"}, {"0.45", "0.55"}, {"0.25", "0.75"},
+		}
+	default:
+		pool = []pair{
+			{"0.25", "0.55"}, {"0.05", "0.75"}, {"0.45", "0.35"}, {"0.65", "0.15"},
+			{"0.12", "0.68"}, {"0.28", "0.52"}, {"0.36", "0.44"}, {"0.48", "0.32"},
+			{"0.16", "0.64"}, {"0.32", "0.48"}, {"0.64", "0.16"}, {"0.72", "0.08"},
+		}
 	}
-	claims := []claim{
-		{p01: "0.3", p10: "0.7", reason: "0.3/(0.3 + 0.7) = 0.3."},
-		{p01: "0.2", p10: "0.6", reason: "0.2/0.8 = 0.25."},
-		{p01: "0.5", p10: "0.5", reason: "0.5/1 = 0.5."},
-		{p01: "0.4", p10: "0.6", reason: "0.4/1 = 0.4."},
-		{p01: "0.1", p10: "0.9", reason: "0.1/1 = 0.1."},
-		{p01: "0.6", p10: "0.2", reason: "0.6/0.8 = 0.75."},
-	}
-	c := claims[rand.Intn(len(claims))]
+	selected := pool[rand.Intn(len(pool))]
+	p01, p10 := selected.up, selected.down
+
 	f := func(s string) float64 { v, _ := strconv.ParseFloat(s, 64); return v }
-	up, down := f(c.p01), f(c.p10)
-	answer := decimal6(up / (up + down))
-	return generator.Problem{
-		Question: "A two-state Markov chain has P(state 0 to state 1) = " + c.p01 +
-			" and P(state 1 to state 0) = " + c.p10 +
-			". What is the stationary probability of state 1? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Stationarity balances the flow between the states, so π1 = p01/(p01 + p10); " + c.reason,
+	up, down := f(p01), f(p10)
+	sumVal := up + down
+	answer := decimal6(up / sumVal)
+
+	p := generator.Problem{
+		Question: fmt.Sprintf("A two-state Markov chain has P(state 0 to state 1) = %s and P(state 1 to state 0) = %s. What is the stationary probability of state 1? (enter a decimal)",
+			p01, p10),
+		Answer: answer,
 		Facts: map[string]string{
-			"p01": c.p01, "p10": c.p10, "answer": answer,
+			"p01":    p01,
+			"p10":    p10,
+			"answer": answer,
 		},
 	}
+	p.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. The stationary distribution balances flow between states: π_0 · P_01 = π_1 · P_10. Since π_0 + π_1 = 1, substituting π_0 = 1 - π_1 yields π_1 = P_01 / (P_01 + P_10).\nSubgoal 2: Substitute parameters. Substitute transition probabilities P_01 = %s and P_10 = %s.\nSubgoal 3: Evaluate and simplify. π_1 = %s / (%s + %s) = %s / %s = %s.",
+		p01, p10, p01, p01, p10, p01, decimal6(sumVal), answer)
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -1029,31 +1218,43 @@ func (g *stationaryGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type randomWalkGen struct{}
 
 func (g *randomWalkGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type claim struct {
-		n, pn, pd int
-		reason    string
+	tier := mathutil.DifficultyTier(ctx.Difficulty)
+	var denomOptions []int
+	var n int
+	switch tier {
+	case 0:
+		denomOptions = []int{2, 4, 5}
+		n = 5 + rand.Intn(20)
+	case 1:
+		denomOptions = []int{4, 5, 8, 10}
+		n = 20 + rand.Intn(45)
+	default:
+		denomOptions = []int{8, 10, 16, 20}
+		n = 50 + rand.Intn(150)
 	}
-	claims := []claim{
-		{n: 10, pn: 1, pd: 2, reason: "An unbiased step has variance one, so the sum has variance n = 10."},
-		{n: 25, pn: 1, pd: 2, reason: "The variance is n = 25."},
-		{n: 10, pn: 1, pd: 4, reason: "4·10·0.25·0.75 = 7.5."},
-		{n: 20, pn: 1, pd: 2, reason: "The variance is n = 20."},
-		{n: 10, pn: 2, pd: 5, reason: "4·10·0.4·0.6 = 9.6."},
-		{n: 50, pn: 1, pd: 2, reason: "The variance is n = 50."},
+	pd := denomOptions[rand.Intn(len(denomOptions))]
+	pn := 1 + rand.Intn(pd-1)
+	for mathutil.GCD(pn, pd) > 1 {
+		pn = 1 + rand.Intn(pd-1)
 	}
-	c := claims[rand.Intn(len(claims))]
-	p := float64(c.pn) / float64(c.pd)
-	answer := decimal6(4 * float64(c.n) * p * (1 - p))
-	return generator.Problem{
-		Question: "A random walk takes a step of plus one with probability p = " + strconv.Itoa(c.pn) +
-			"/" + strconv.Itoa(c.pd) + " and minus one otherwise. What is Var(S_n) after n = " +
-			strconv.Itoa(c.n) + " steps? (enter a decimal)",
-		Answer:      answer,
-		Explanation: "Each step has variance 4p(1 − p), and independent steps add, so the sum has variance 4np(1 − p); " + c.reason,
+
+	p := float64(pn) / float64(pd)
+	answer := decimal6(4 * float64(n) * p * (1 - p))
+
+	pb := generator.Problem{
+		Question: fmt.Sprintf("A random walk takes a step of plus one with probability p = %d/%d and minus one otherwise. What is Var(S_n) after n = %d steps? (enter a decimal)",
+			pn, pd, n),
+		Answer: answer,
 		Facts: map[string]string{
-			"n": strconv.Itoa(c.n), "pn": strconv.Itoa(c.pn), "pd": strconv.Itoa(c.pd), "answer": answer,
+			"n":      strconv.Itoa(n),
+			"pn":     strconv.Itoa(pn),
+			"pd":     strconv.Itoa(pd),
+			"answer": answer,
 		},
 	}
+	pb.Explanation = fmt.Sprintf("Subgoal 1: State governing formula. A single step X_1 takes values ±1 with probability p and 1 - p, having variance Var(X_1) = 1 - (2p - 1)² = 4p(1 - p). For n independent identically distributed steps, Var(S_n) = n · Var(X_1) = 4np(1 - p).\nSubgoal 2: Substitute parameters. Substitute number of steps n = %d with step success probability p = %d/%d and failure probability 1 - p = %d/%d.\nSubgoal 3: Evaluate and simplify. Var(S_n) = 4(%d)(%d/%d)(%d/%d) = %s.",
+		n, pn, pd, pd-pn, pd, n, pn, pd, pd-pn, pd, answer)
+	return pb
 }
 
 // ---------------------------------------------------------------------------

@@ -126,6 +126,9 @@ export interface Question {
   }
   diagram?: string
   grading_type?: string
+  scaffold_active?: boolean
+  scaffold_step?: number
+  scaffold_total?: number
 }
 
 export interface AnswerRes {
@@ -148,6 +151,9 @@ export interface AnswerResult {
   xp: number
   expected_answer: string
   ungraded?: boolean
+  scaffold_active?: boolean
+  scaffold_step?: number
+  scaffold_total?: number
   /** One sentence naming the mistake, when it is certain. Empty otherwise. */
   diagnosis?: string
 }
@@ -687,13 +693,18 @@ export async function submitGoalAnswer(
 	dontKnow?: boolean,
 ): Promise<GoalDiagAnswerRes> {
 	const res = await authedFetch(`${API_BASE}/api/goal/diagnostic/answer`, {
-		// The server now records each verdict in diagnostic_answers, keyed by
-		// session and concept, and replays a duplicate instead of grading twice.
-		// That makes one automatic retry safe in both cases: if the first request
+		// The server records each verdict in diagnostic_answers, keyed by session
+		// and concept, and replays a duplicate instead of grading twice. That
+		// makes one automatic retry safe in both cases: if the first request
 		// committed, the retry receives the stored verdict; if it never arrived,
 		// the retry is graded fresh. Without it, a single dropped packet on
 		// mobile data ended the whole run.
-		timeoutMs: 25000,
+		//
+		// Twelve seconds, not twenty-five: with the retry the worst case is half
+		// a minute, and learners reported the screen sitting there for "a good
+		// minute" before it gave up. A tutor endpoint that has not answered in
+		// twelve seconds is better retried than waited on.
+		timeoutMs: 12000,
 		retryAttempts: 1,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
@@ -725,7 +736,7 @@ export async function skipGoalQuestion(sessionId: string): Promise<GoalDiagAnswe
 
 // Void the superseded question's miss and restore it ("silly mistake"
 // retry). The concept_id names the question being retried and must match
-// the voidable attempt — a stale client that already moved on gets a 400
+// the voidable attempt, a stale client that already moved on gets a 400
 // instead of voiding the wrong answer.
 export async function retryGoalQuestion(sessionId: string, conceptId: string): Promise<GoalDiagAnswerRes> {
 	const res = await authedFetch(`${API_BASE}/api/goal/diagnostic/retry`, {
@@ -860,7 +871,7 @@ export async function resetAccount(phrase: string): Promise<void> {
 // The server's own account payload. `role` was missing here and zod strips unknown keys, so the
 // field was being silently discarded on the way in: `/api/auth/me` sent it, `getMe()` dropped
 // it, and the Admin navigation entry could never appear. A schema is a filter, so a field the
-// type does not name is a field the application does not have — which is the second half of
+// type does not name is a field the application does not have, which is the second half of
 // ADR-043's duplicate-schema lesson, arriving from the other direction.
 const MeSchema = z.object({
 	student_id: z.string(),
@@ -1181,10 +1192,11 @@ export interface LessonKpsRes {
 	diagram?: string
 }
 
-export async function getLessonPractice(conceptId: string, count = 5, opts?: { seed?: number; exclude?: string[]; difficulty?: number }): Promise<LessonPracticeRes> {
+export async function getLessonPractice(conceptId: string, count = 5, opts?: { seed?: number; exclude?: string[]; difficulty?: number; kp_ordinal?: number }): Promise<LessonPracticeRes> {
 	const params = new URLSearchParams({ count: String(count) })
 	if (opts?.seed) params.set('seed', String(opts.seed))
 	if (opts?.difficulty !== undefined) params.set('difficulty', String(opts.difficulty))
+	if (opts?.kp_ordinal) params.set('kp_ordinal', String(opts.kp_ordinal))
 	for (const ex of opts?.exclude ?? []) params.append('exclude', ex)
 	const res = await authedFetch(`${API_BASE}/api/lessons/${encodeURIComponent(conceptId)}/practice?${params.toString()}`)
 	if (!res.ok) throw new Error(`Lesson practice fetch failed: ${res.status}`)
@@ -1195,7 +1207,7 @@ export async function getLessonPractice(conceptId: string, count = 5, opts?: { s
 //
 // `/learn` needs it twice on one page: LearnStepper renders the worked example for the current
 // section, and the reference panel renders every block for the same concept. Two callers, one
-// payload, and the shard is authored content that does not change while the tab is open — so
+// payload, and the shard is authored content that does not change while the tab is open, so
 // this is the in-flight cache rather than the session cache, because a later visit should
 // re-read it (a shard can be corrected, and a stale copy of a teaching section is a wrong
 // lesson rather than a stale progress bar).
@@ -1228,8 +1240,8 @@ export type RecommendationReason = 'new' | 'review_due' | 'needs_practice' | 'pr
  * One worthwhile task, decided by the engine.
  *
  * The wording is the server's, and that is the point: `/profile` and `/learn` used to format
- * one head two ways — "Currently working towards X / Answer it" beside "Next up / Continue: X",
- * sometimes with different labels for the same concept — because each derived its own copy.
+ * one head two ways, "Currently working towards X / Answer it" beside "Next up / Continue: X",
+ * sometimes with different labels for the same concept, because each derived its own copy.
  */
 export interface Recommendation {
   id: string
@@ -1249,7 +1261,7 @@ export interface Recommendation {
 /**
  * The engine's answer: one dominant task plus the alternatives the learner may pick.
  *
- * "The engine chooses; the learner disposes" — so `alternatives` is part of the contract rather
+ * "The engine chooses; the learner disposes", so `alternatives` is part of the contract rather
  * than an afterthought, and a learner who disagrees with the head can act on it.
  */
 export interface RecommendationRes {
@@ -1259,7 +1271,7 @@ export interface RecommendationRes {
 }
 
 /**
- * GET /api/next — the single answer to "what should I do now?".
+ * GET /api/next, the single answer to "what should I do now?".
  *
  * A successful response with no head degrades to the same orientation card the
  * server uses, so an older build or a proxy that drops the field cannot turn
@@ -1267,7 +1279,7 @@ export interface RecommendationRes {
  *
  * A *failed* request does not. It used to return that card too, and the comment
  * here used to defend it as graceful degradation. It is not: with the API
- * blocked, the learn page told the learner "All learned — nothing is due right
+ * blocked, the learn page told the learner "All learned, nothing is due right
  * now" while their queue was untouched and simply unreachable. A learning app
  * that reports an outage as an empty queue is lying about the one fact it
  * exists to state, and the honest failure state cannot be reached at all
@@ -1284,7 +1296,7 @@ export async function getNext(exclude?: string[]): Promise<RecommendationRes> {
       priority: 0,
       action: { type: 'learn', href: '/graph' },
       badge: 'All learned',
-      detail: 'Nothing is due right now — the graph shows what builds on what you have',
+      detail: 'Nothing is due right now, the graph shows what builds on what you have',
       cta: 'See the graph →',
     },
     alternatives: [],
@@ -1293,7 +1305,7 @@ export async function getNext(exclude?: string[]): Promise<RecommendationRes> {
   const params = new URLSearchParams()
   if (exclude?.length) params.set('exclude', exclude.join(','))
   const qs = params.toString()
-  const res = await authedFetch(`${API_BASE}/api/next${qs ? `?${qs}` : ''}`, { cache: 'no-store' })
+  const res = await authedFetch(`${API_BASE}/api/next${qs ? `?${qs}` : ''}`, { cache: 'no-store', timeoutMs: 10000 })
   if (!res.ok) await throwWithResponse(res, tNow('learn.page.loadFailed.error'))
   const data = (await res.json()) as Partial<RecommendationRes>
   if (!data.primary) return fallback
@@ -1347,6 +1359,9 @@ export interface StudyAnswerRes {
 	xp: number
 	expected_answer?: string
 	ungraded?: boolean
+	scaffold_active?: boolean
+	scaffold_step?: number
+	scaffold_total?: number
 	/** One sentence naming the mistake, when it is certain. Empty otherwise. */
 	diagnosis?: string
 	/**
@@ -1358,7 +1373,7 @@ export interface StudyAnswerRes {
 	evidence_score?: number
 	/**
 	 * `evidence_score` in plain language, from `mastery.EvidenceBand`. Presentational only,
-	 * and deliberately claiming nothing about retention — the evidence model has no spacing
+	 * and deliberately claiming nothing about retention, the evidence model has no spacing
 	 * term, so it cannot support such a claim.
 	 *
 	 * Empty before the evidence floor is met, which is what stops a single correct answer
@@ -1489,7 +1504,7 @@ export interface QuizAnswerRes {
    * Authoritative mastery evidence score, 0..1.
    *
    * Absent on an ungraded answer (nothing was recorded, so there is no new evidence).
-   * This is a progress reading, not a mastery verdict — `new_status` is the verdict, and
+   * This is a progress reading, not a mastery verdict, `new_status` is the verdict, and
    * the score alone never means anything without the evidence floor the ladder also
    * requires.
    */
@@ -1585,12 +1600,12 @@ export async function validateToken(): Promise<{ valid: boolean; student_id: str
 		const me = await res.json()
 		return { valid: true, student_id: typeof me?.student_id === 'string' ? me.student_id : '' }
 	} catch {
-		// Unparseable body is NOT a valid session — never report valid:true.
+		// Unparseable body is NOT a valid session, never report valid:true.
 		return { valid: false, student_id: '' }
 	}
 }
 
-// Content reports — users complain about questions, explanations,
+// Content reports, users complain about questions, explanations,
 // lesson bodies, worked examples, or diagrams.
 export type ReportKind = 'question' | 'explanation' | 'lesson_body' | 'worked_example' | 'diagram' | 'message'
 export type ReportReason = 'wrong_answer' | 'bad_explanation' | 'unclear' | 'formatting' | 'other'
@@ -1649,7 +1664,7 @@ export async function submitReport(input: SubmitReportInput): Promise<SubmitRepo
 //
 // A different mechanism from the triage session above, on purpose. Triage is gated by a shared
 // password from the deployment environment and confers no account identity; these calls carry
-// the learner's own token and are authorized by the role on that account. The server decides —
+// the learner's own token and are authorized by the role on that account. The server decides, 
 // a 403 here means the backend said no, and hiding the pages in the UI is a convenience on top
 // of that, never the control.
 //
@@ -1729,6 +1744,118 @@ export async function adminOverview(): Promise<AdminOverview> {
 	return validateResponse(AdminOverviewSchema, await res.json(), 'adminOverview')
 }
 
+// The account page reads one response: profile, role history, counts and the reports that
+// account filed. Splitting it into four requests would give the page four ways to half-load,
+// and the counts would disagree with the list while the slower one was still arriving.
+const AdminActivitySchema = z.object({
+	xp_total: z.number(),
+	xp_today: z.number(),
+	concepts_touched: z.number(),
+	concepts_mastered: z.number(),
+	attempts: z.number(),
+	last_attempt_at: z.string(),
+	last_active_day: z.string(),
+	diagnostic_completed_at: z.string(),
+	reports_filed: z.number(),
+})
+
+// Only the fields the page renders. A report carries the learner's answer and the expected
+// answer; the account page does not need either to say who sent it, and a schema that omits
+// them is why they cannot appear here by accident.
+const AdminUserReportSchema = z.object({
+	id: z.number(),
+	kind: z.string(),
+	concept_id: z.string(),
+	reason: z.string(),
+	status: z.string(),
+	detail: z.string(),
+	created_at: z.string(),
+})
+
+export type AdminUserReport = z.infer<typeof AdminUserReportSchema>
+export type AdminActivity = z.infer<typeof AdminActivitySchema>
+
+export interface AdminUserDetail {
+	user: AdminUser
+	history: AdminAuditEvent[]
+	activity: AdminActivity
+	reports: AdminUserReport[]
+}
+
+export async function getAdminUser(id: string): Promise<AdminUserDetail> {
+	const res = await authedFetch(`${API_BASE}/api/admin/users/${encodeURIComponent(id)}`, { cache: 'no-store' })
+	if (!res.ok) await throwWithResponse(res, 'Could not load that account')
+	const data = await res.json()
+	return validateResponse(
+		z.object({
+			user: AdminUserSchema,
+			history: z.array(AdminAuditEventSchema),
+			activity: AdminActivitySchema,
+			reports: z.array(AdminUserReportSchema),
+		}),
+		data,
+		'adminUserDetail',
+	)
+}
+
+// The administrator's view of the weekly leagues.
+//
+// The public league endpoint answers only "where am I", so an administrator cannot see a cohort
+// at all. This payload is the pyramid: every league that exists in a week, and one roster when a
+// tier and league number are given. Member rows carry the account id, which the public board
+// deliberately withholds, because this is the surface where a row has to link to an account.
+const AdminLeagueMemberSchema = z.object({
+	rank: z.number(),
+	name: z.string(),
+	username: z.string(),
+	student_id: z.string(),
+	xp: z.number(),
+})
+
+const AdminLeagueSchema = z.object({
+	tier: z.string(),
+	league_no: z.number(),
+	size: z.number(),
+	movers: z.number(),
+	members: z.array(AdminLeagueMemberSchema).optional(),
+})
+
+const AdminLeaguesSchema = z.object({
+	week: z.string(),
+	week_start: z.string(),
+	week_end: z.string(),
+	promote: z.number(),
+	demote: z.number(),
+	seats: z.number(),
+	leagues: z.array(AdminLeagueSchema),
+})
+
+export type AdminLeague = z.infer<typeof AdminLeagueSchema>
+export type AdminLeagueMember = z.infer<typeof AdminLeagueMemberSchema>
+export type AdminLeagues = z.infer<typeof AdminLeaguesSchema>
+
+/**
+ * Read the week's leagues, or one league's standings.
+ *
+ * All three parameters travel together or not at all: a tier without a league number is refused
+ * by the server rather than ignored, because a page that asked for one tier and then rendered the
+ * whole pyramid would be showing something other than what it requested.
+ */
+export async function getAdminLeagues(
+	query: { week?: string; tier?: string; league?: number } = {},
+): Promise<AdminLeagues> {
+	const params = new URLSearchParams()
+	if (query.week) params.set('week', query.week)
+	if (query.tier && query.league) {
+		params.set('tier', query.tier)
+		params.set('league', String(query.league))
+	}
+	const qs = params.toString()
+	const res = await authedFetch(`${API_BASE}/api/admin/leagues${qs ? `?${qs}` : ''}`, { cache: 'no-store' })
+	if (!res.ok) await throwWithResponse(res, 'Could not load leagues')
+	return validateResponse(AdminLeaguesSchema, await res.json(), 'adminLeagues')
+}
+
 export async function searchAdminUsers(q: string): Promise<AdminUsersRes> {
 	const params = new URLSearchParams()
 	if (q.trim()) params.set('q', q.trim())
@@ -1744,7 +1871,7 @@ export async function searchAdminUsers(q: string): Promise<AdminUsersRes> {
  *
  * `role` is a closed union here as well as on the server. Both ends reject anything else, and
  * the reason they both bother is that coercing would let the response say one thing and the row
- * say another — which is exactly the sort of quiet disagreement the rest of this client has been
+ * say another, which is exactly the sort of quiet disagreement the rest of this client has been
  * bitten by.
  */
 export async function setUserRole(userId: string, role: Role): Promise<{ user: AdminUser; changed: boolean }> {
@@ -1888,7 +2015,7 @@ export interface BulkModerationRes {
 
 // One decision across a concept's unsettled reports: a fix is usually one bug,
 // not one report. The server still writes one transaction, stamp and audit row
-// per report — this call only saves the operator from retyping the same reason.
+// per report, this call only saves the operator from retyping the same reason.
 export async function bulkModerateReports(
 	selector: { ids?: number[]; concept_id?: string },
 	status: ModerationStatus,
@@ -2022,7 +2149,7 @@ export async function askAssistant(body: { message: string; history?: AssistantT
 export interface GoalScopeRes {
 	/** Destination ids the model chose, validated against the server's own list. */
 	destinations: string[]
-	/** False when AI is off, failed, or chose nothing — use the deterministic match. */
+	/** False when AI is off, failed, or chose nothing, use the deterministic match. */
 	used_ai: boolean
 	/**
 	 * Why AI did not contribute, set only when used_ai is false. The server

@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 4.5 Add and Subtract Fractions with Different Denominators
 
@@ -17,7 +17,7 @@ By the end of this section, you will be able to:
 
 In the previous section, we explained how to add and subtract fractions with a common denominator. But how can we add and subtract fractions with unlike denominators?
 
-Let’s think about coins again. Can you add one quarter and one dime? You could say there are two coins, but that’s not very useful. To find the total value of one quarter plus one dime, you change them to the same kind of unit—cents. One quarter equals 25 cents and one dime equals 10 cents, so the sum is 35 cents. See Figure 4.7.
+Let’s think about coins again. Can you add one quarter and one dime? You could say there are two coins, but that’s not very useful. To find the total value of one quarter plus one dime, you change them to the same kind of unit, cents. One quarter equals 25 cents and one dime equals 10 cents, so the sum is 35 cents. See Figure 4.7.
 
 ![Together, a quarter and a dime are worth 35 cents, or 35/100 of a dollar.](/diagrams/prealgebra/4.7.png)
 
@@ -353,9 +353,9 @@ When we use the Equivalent Fractions Property, there is a quick way to find the 
 
 The LCD, 36, has 2 factors of 2 and 2 factors of 3.
 
-Twelve has two factors of 2, but only one of 3—so it is ‘missing‘ one 3. We multiplied the numerator and denominator of $\frac{7}{12}$ by 3 to get an equivalent fraction with denominator 36.
+Twelve has two factors of 2, but only one of 3, so it is ‘missing‘ one 3. We multiplied the numerator and denominator of $\frac{7}{12}$ by 3 to get an equivalent fraction with denominator 36.
 
-Eighteen is missing one factor of 2—so you multiply the numerator and denominator $\frac{5}{18}$ by 2 to get an equivalent fraction with denominator 36. We will apply this method as we subtract the fractions in the next example.
+Eighteen is missing one factor of 2, so you multiply the numerator and denominator $\frac{5}{18}$ by 2 to get an equivalent fraction with denominator 36. We will apply this method as we subtract the fractions in the next example.
 
 ### Example 4.70
 

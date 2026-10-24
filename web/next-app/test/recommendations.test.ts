@@ -5,8 +5,8 @@ import type { RecommendationRes } from '../lib/api'
 /**
  * The client's half of "the engine decides".
  *
- * Everything below is presentation. The decision — which concept, in what order, why, and with
- * what wording — is made in internal/scheduler and arrives over `/api/next`; the tests that
+ * Everything below is presentation. The decision, which concept, in what order, why, and with
+ * what wording, is made in internal/scheduler and arrives over `/api/next`; the tests that
  * matter for it are `internal/scheduler/recommend_test.go` and `TestNext_*` in internal/server.
  *
  * What is asserted here is the contract the surfaces rely on, because that is the part a
@@ -120,7 +120,7 @@ describe('fetchShelf', () => {
   })
 
   it('reports an outage as an outage, never as an empty queue', async () => {
-    // It used to answer a 500 with "All learned — nothing is due right now". With
+    // It used to answer a 500 with "All learned, nothing is due right now". With
     // the API unreachable that is a lie about the one fact this page exists to
     // state, and it makes the honest failure branch unreachable.
     vi.stubGlobal('fetch', vi.fn(async () => ({

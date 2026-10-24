@@ -47,36 +47,62 @@ func Register(reg *generator.Registry) {
 
 type radiansGen struct{}
 
+// trig.basics.radians is a multiple-choice concept, but this generator served a
+// bare question whose answer was "\\(\\pi/2\\)", delimiters included, and no
+// options to tap. A learner typed pi/2, which is right, and the choice grader
+// compared it with the delimited string and marked it wrong (report 119). The
+// options are plain text so they render in a button, and the answer is the
+// option's own text so a tap resolves to it.
 func (g *radiansGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		deg      int
-		radHTML  string
-		radLatex string
+	table := []struct {
+		deg   int
+		label string
+	}{
+		{30, "\u03c0/6"},
+		{45, "\u03c0/4"},
+		{60, "\u03c0/3"},
+		{90, "\u03c0/2"},
+		{180, "\u03c0"},
+		{270, "3\u03c0/2"},
+		{360, "2\u03c0"},
 	}
-	table := []entry{
-		{30, "\\(\\pi/6\\)", "\\pi/6"},
-		{45, "\\(\\pi/4\\)", "\\pi/4"},
-		{60, "\\(\\pi/3\\)", "\\pi/3"},
-		{90, "\\(\\pi/2\\)", "\\pi/2"},
-		{180, "\\(\\pi\\)", "\\pi"},
-		{270, "\\(3\\pi/2\\)", "3\\pi/2"},
-		{360, "\\(2\\pi\\)", "2\\pi"},
+	made := make([]string, len(table))
+	for i, e := range table {
+		made[i] = e.label
 	}
-	e := table[rand.Intn(len(table))]
+	i := rand.Intn(len(table))
+	e := table[i]
 	if rand.Intn(2) == 0 {
-		return generator.Problem{
-			Question:    fmt.Sprintf("Convert \\(%d^{\\circ}\\) to radians.", e.deg),
-			Answer:      e.radHTML,
-			Explanation: fmt.Sprintf("\\(%d^{\\circ} \\times \\frac{\\pi}{180} = %s\\).", e.deg, e.radHTML),
-			Facts:       map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.radHTML, "factor": "\\frac{\\pi}{180}"},
+		p := generator.MultipleChoice(
+			fmt.Sprintf("Convert \\(%d^{\\circ}\\) to radians.", e.deg),
+			e.label, others(made, e.label)...,
+		)
+		p.Explanation = fmt.Sprintf("\\(%d^{\\circ} \\times \\frac{\\pi}{180} = %s\\).", e.deg, e.label)
+		p.Facts = map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.label, "factor": "\\frac{\\pi}{180}"}
+		return p
+	}
+	degrees := make([]string, len(table))
+	for j, other := range table {
+		degrees[j] = strconv.Itoa(other.deg)
+	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("Convert %s radians to degrees.", e.label),
+		strconv.Itoa(e.deg), others(degrees, strconv.Itoa(e.deg))...,
+	)
+	p.Explanation = fmt.Sprintf("%s \\(\\times \\frac{180}{\\pi} = %d^{\\circ}\\).", e.label, e.deg)
+	p.Facts = map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.label, "factor": "\\frac{180}{\\pi}"}
+	return p
+}
+
+// others returns every value except one, for use as distractors.
+func others(values []string, except string) []string {
+	out := make([]string, 0, len(values))
+	for _, v := range values {
+		if v != except {
+			out = append(out, v)
 		}
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Convert %s to degrees.", e.radHTML),
-		Answer:      fmt.Sprintf("%d", e.deg),
-		Explanation: fmt.Sprintf("%s \\(\\times \\frac{180}{\\pi} = %d^{\\circ}\\).", e.radHTML, e.deg),
-		Facts:       map[string]string{"deg": strconv.Itoa(e.deg), "rad": e.radHTML, "factor": "\\frac{180}{\\pi}"},
-	}
+	return out
 }
 
 type unitCircleGen struct{}
@@ -137,19 +163,52 @@ func (g *unitCircleGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	angle := fmt.Sprintf("%d^{\\circ}", a.deg)
 	label := fmt.Sprintf("\\(%s\\)", angle)
 	if rand.Intn(2) == 0 {
-		return generator.Problem{
-			Question:    fmt.Sprintf("What is \\(\\sin(%s)\\)?", angle),
-			Answer:      a.sin,
-			Explanation: fmt.Sprintf("On the unit circle, \\(\\sin(%s) = %s\\).", angle, bare(a.sin)),
-			Facts:       map[string]string{"label": label, "val": a.sin, "fn": "\\sin"},
+		return unitCircleProblem(angle, fmt.Sprintf("What is \\(\\sin(%s)\\)?", angle), a.sin, "\\sin", label)
+	}
+	return unitCircleProblem(angle, fmt.Sprintf("What is \\(\\cos(%s)\\)?", angle), a.cos, "\\cos", label)
+}
+
+// unitCirclePlainValues are the answers a unit-circle question can have, written
+// the way a learner reads them. They are option labels, so they carry no math
+// delimiters: the option row renders plain text.
+var unitCirclePlainValues = []string{
+	"-1", "-√3/2", "-√2/2", "-1/2", "0", "1/2", "√2/2", "√3/2", "1",
+}
+
+// plainUnitValue turns a table value into its plain label. The table writes
+// radicals as LaTeX because the question embeds them inside a math region.
+func plainUnitValue(v string) string {
+	v = bare(v)
+	v = strings.ReplaceAll(v, "\\sqrt{2}", "√2")
+	v = strings.ReplaceAll(v, "\\sqrt{3}", "√3")
+	return v
+}
+
+// unitCircleDistractors returns three other values from the same family, so the
+// choice tests which coordinate the angle gives rather than which symbol looks
+// familiar.
+func unitCircleDistractors(want string) []string {
+	pool := make([]string, 0, len(unitCirclePlainValues))
+	for _, v := range unitCirclePlainValues {
+		if v != want {
+			pool = append(pool, v)
 		}
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is \\(\\cos(%s)\\)?", angle),
-		Answer:      a.cos,
-		Explanation: fmt.Sprintf("On the unit circle, \\(\\cos(%s) = %s\\).", angle, bare(a.cos)),
-		Facts:       map[string]string{"label": label, "val": a.cos, "fn": "\\cos"},
-	}
+	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	return pool[:3]
+}
+
+// unitCircleProblem serves the value as options because a radical and a fraction
+// slash have no key on a phone keypad: report 28 was a learner who could not
+// enter the answer at all. The answer text is the plain value the learner reads.
+// Facts["val"] keeps its math delimiters because the solution schema quotes it
+// inside prose ("its vertical coordinate is [[val]]").
+func unitCircleProblem(angle, question, value, fn, label string) generator.Problem {
+	plain := plainUnitValue(value)
+	p := generator.MultipleChoice(question, plain, unitCircleDistractors(plain)...)
+	p.Explanation = fmt.Sprintf("On the unit circle, \\(%s(%s) = %s\\).", fn, angle, bare(value))
+	p.Facts = map[string]string{"label": label, "val": value, "fn": fn}
+	return p
 }
 
 type sinCosDefGen struct{}
@@ -162,79 +221,73 @@ var pythagoreanTriples = []triple{
 	{8, 15, 17},
 	{7, 24, 25},
 	{9, 40, 41},
-	{6, 8, 10},
-	{10, 24, 26},
-	{12, 16, 20},
-}
-
-var easySinTriples = []triple{
-	{3, 4, 5},
-	{6, 8, 10},
-	{5, 12, 13},
-	{9, 12, 15},
-}
-
-var hardSinTriples = []triple{
-	{8, 15, 17},
-	{7, 24, 25},
-	{9, 40, 41},
-	{10, 24, 26},
-	{12, 16, 20},
-	{15, 8, 17},
-	{24, 7, 25},
-	{40, 9, 41},
+	{20, 21, 29},
+	{12, 35, 37},
+	{28, 45, 53},
+	{11, 60, 61},
+	{13, 84, 85},
+	{16, 63, 65},
+	{33, 56, 65},
+	{36, 77, 85},
+	{39, 80, 89},
 }
 
 func (g *sinCosDefGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	var triples []triple
-	if ctx.Difficulty > 0.5 {
-		triples = hardSinTriples
-	} else {
-		triples = easySinTriples
+	maxTriples := 3 + int(ctx.Difficulty*float64(len(pythagoreanTriples)-3))
+	if maxTriples > len(pythagoreanTriples) {
+		maxTriples = len(pythagoreanTriples)
 	}
-	if ctx.Difficulty > 0.7 && rand.Intn(2) == 0 {
-		triples = append(triples, easySinTriples...)
-	}
-	t := triples[rand.Intn(len(triples))]
+	t := pythagoreanTriples[rand.Intn(maxTriples)]
+	k := 1 + rand.Intn(1+int(ctx.Difficulty*4))
 	if rand.Intn(2) == 0 {
-		gcd := mathutil.GCD(t.opp, t.hyp)
-		num := t.opp / gcd
-		den := t.hyp / gcd
+		opp := t.opp * k
+		hyp := t.hyp * k
+		gcdVal := mathutil.GCD(opp, hyp)
+		num := opp / gcdVal
+		den := hyp / gcdVal
 		return generator.Problem{
-			Question:    fmt.Sprintf("In a right triangle with opposite = %d and hypotenuse = %d, what is \\(\\sin(\\theta)\\)?", t.opp, t.hyp),
+			Question:    fmt.Sprintf("In a right triangle with opposite = %d and hypotenuse = %d, what is \\(\\sin(\\theta)\\)?", opp, hyp),
 			Answer:      fmt.Sprintf("%d/%d", num, den),
-			Explanation: fmt.Sprintf("sin(θ) = opp/hyp = %d/%d = %d/%d.", t.opp, t.hyp, num, den),
-			Facts:       map[string]string{"opp": strconv.Itoa(t.opp), "hyp": strconv.Itoa(t.hyp), "num": strconv.Itoa(num), "den": strconv.Itoa(den)},
+			Explanation: fmt.Sprintf("The sine of an angle is defined as the ratio of opposite leg to hypotenuse: \\(\\sin(\\theta) = \\frac{\\text{opposite}}{\\text{hypotenuse}}\\). Substitute the given side lengths %d and %d: \\(\\sin(\\theta) = \\frac{%d}{%d}\\). Simplifying the fraction by dividing numerator and denominator by their greatest common divisor yields %d/%d.", opp, hyp, opp, hyp, num, den),
+			Facts:       map[string]string{"opp": strconv.Itoa(opp), "hyp": strconv.Itoa(hyp), "num": strconv.Itoa(num), "den": strconv.Itoa(den)},
 		}
 	}
-	gcd := mathutil.GCD(t.adj, t.hyp)
-	num := t.adj / gcd
-	den := t.hyp / gcd
+	adj := t.adj * k
+	hyp := t.hyp * k
+	gcdVal := mathutil.GCD(adj, hyp)
+	num := adj / gcdVal
+	den := hyp / gcdVal
 	return generator.Problem{
-		Question:    fmt.Sprintf("In a right triangle with adjacent = %d and hypotenuse = %d, what is \\(\\cos(\\theta)\\)?", t.adj, t.hyp),
+		Question:    fmt.Sprintf("In a right triangle with adjacent = %d and hypotenuse = %d, what is \\(\\cos(\\theta)\\)?", adj, hyp),
 		Answer:      fmt.Sprintf("%d/%d", num, den),
-		Explanation: fmt.Sprintf("cos(θ) = adj/hyp = %d/%d = %d/%d.", t.adj, t.hyp, num, den),
-		Facts:       map[string]string{"adj": strconv.Itoa(t.adj), "hyp": strconv.Itoa(t.hyp), "num": strconv.Itoa(num), "den": strconv.Itoa(den)},
+		Explanation: fmt.Sprintf("The cosine of an angle is defined as the ratio of adjacent leg to hypotenuse: \\(\\cos(\\theta) = \\frac{\\text{adjacent}}{\\text{hypotenuse}}\\). Substitute the given side lengths %d and %d: \\(\\cos(\\theta) = \\frac{%d}{%d}\\). Simplifying the fraction by dividing numerator and denominator by their greatest common divisor yields %d/%d.", adj, hyp, adj, hyp, num, den),
+		Facts:       map[string]string{"adj": strconv.Itoa(adj), "hyp": strconv.Itoa(hyp), "num": strconv.Itoa(num), "den": strconv.Itoa(den)},
 	}
 }
 
 type tanDefGen struct{}
 
 func (g *tanDefGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	maxTriples := 3 + int(ctx.Difficulty*float64(len(pythagoreanTriples)-3))
+	if maxTriples > len(pythagoreanTriples) {
+		maxTriples = len(pythagoreanTriples)
+	}
+	t := pythagoreanTriples[rand.Intn(maxTriples)]
 	// Half the time use right triangle sides, half use sin/cos ratio
 	if rand.Intn(2) == 0 {
-		t := pythagoreanTriples[rand.Intn(len(pythagoreanTriples))]
-		gcd := mathutil.GCD(t.opp, t.adj)
-		num := t.opp / gcd
-		den := t.adj / gcd
+		k := 1 + rand.Intn(1+int(ctx.Difficulty*4))
+		opp := t.opp * k
+		adj := t.adj * k
+		gcdVal := mathutil.GCD(opp, adj)
+		num := opp / gcdVal
+		den := adj / gcdVal
 		return generator.Problem{
-			Question:    fmt.Sprintf("In a right triangle with opposite = %d and adjacent = %d, what is \\(\\tan(\\theta)\\)?", t.opp, t.adj),
+			Question:    fmt.Sprintf("In a right triangle with opposite = %d and adjacent = %d, what is \\(\\tan(\\theta)\\)?", opp, adj),
 			Answer:      fmt.Sprintf("%d/%d", num, den),
-			Explanation: fmt.Sprintf("tan(θ) = opp/adj = %d/%d = %d/%d.", t.opp, t.adj, num, den),
-			Facts:       map[string]string{"opp": strconv.Itoa(t.opp), "adj": strconv.Itoa(t.adj), "num": strconv.Itoa(num), "den": strconv.Itoa(den)},
+			Explanation: fmt.Sprintf("The tangent of an angle is defined as the ratio of opposite leg to adjacent leg: \\(\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}}\\). Substitute the given side lengths %d and %d: \\(\\tan(\\theta) = \\frac{%d}{%d}\\). Simplifying the fraction by dividing numerator and denominator by their greatest common divisor yields %d/%d.", opp, adj, opp, adj, num, den),
+			Facts:       map[string]string{"opp": strconv.Itoa(opp), "adj": strconv.Itoa(adj), "num": strconv.Itoa(num), "den": strconv.Itoa(den)},
 		}
 	}
-	t := pythagoreanTriples[rand.Intn(len(pythagoreanTriples))]
 	gcdOpp := mathutil.GCD(t.opp, t.hyp)
 	gcdAdj := mathutil.GCD(t.adj, t.hyp)
 	sinNum := t.opp / gcdOpp
@@ -247,7 +300,7 @@ func (g *tanDefGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	return generator.Problem{
 		Question:    fmt.Sprintf("If \\(\\sin(\\theta) = %d/%d\\) and \\(\\cos(\\theta) = %d/%d\\), what is \\(\\tan(\\theta)\\)?", sinNum, sinDen, cosNum, cosDen),
 		Answer:      fmt.Sprintf("%d/%d", tanNum, tanDen),
-		Explanation: fmt.Sprintf("tan(θ) = sin(θ)/cos(θ) = (%d/%d)/(%d/%d) = %d/%d.", sinNum, sinDen, cosNum, cosDen, tanNum, tanDen),
+		Explanation: fmt.Sprintf("The tangent of an angle is defined as the quotient of sine and cosine: \\(\\tan(\\theta) = \\frac{\\sin(\\theta)}{\\cos(\\theta)}\\). Substitute the given ratios: \\(\\tan(\\theta) = \\frac{%d/%d}{%d/%d} = \\frac{%d}{%d} \\times \\frac{%d}{%d}\\). Multiplying and reducing to lowest terms yields %d/%d.", sinNum, sinDen, cosNum, cosDen, sinNum, sinDen, cosDen, cosNum, tanNum, tanDen),
 		Facts:       map[string]string{"sin_num": strconv.Itoa(sinNum), "sin_den": strconv.Itoa(sinDen), "cos_num": strconv.Itoa(cosNum), "cos_den": strconv.Itoa(cosDen), "num": strconv.Itoa(tanNum), "den": strconv.Itoa(tanDen)},
 	}
 }
@@ -255,7 +308,11 @@ func (g *tanDefGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 type reciprocalGen struct{}
 
 func (g *reciprocalGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	t := pythagoreanTriples[rand.Intn(len(pythagoreanTriples))]
+	maxTriples := 3 + int(ctx.Difficulty*float64(len(pythagoreanTriples)-3))
+	if maxTriples > len(pythagoreanTriples) {
+		maxTriples = len(pythagoreanTriples)
+	}
+	t := pythagoreanTriples[rand.Intn(maxTriples)]
 	funcs := []struct {
 		name  string
 		num   int
@@ -267,13 +324,13 @@ func (g *reciprocalGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		{"\\(\\tan(\\theta)\\)", t.opp, t.adj, "\\(\\cot(\\theta)\\)"},
 	}
 	fn := funcs[rand.Intn(3)]
-	gcd := mathutil.GCD(fn.den, fn.num)
-	recipNum := fn.den / gcd
-	recipDen := fn.num / gcd
+	gcdVal := mathutil.GCD(fn.den, fn.num)
+	recipNum := fn.den / gcdVal
+	recipDen := fn.num / gcdVal
 	return generator.Problem{
 		Question:    fmt.Sprintf("If %s = %d/%d, what is %s?", fn.name, fn.num, fn.den, fn.recip),
 		Answer:      fmt.Sprintf("%d/%d", recipNum, recipDen),
-		Explanation: fmt.Sprintf("%s = 1/%s = 1/(%d/%d) = %d/%d.", fn.recip, fn.name, fn.num, fn.den, recipNum, recipDen),
+		Explanation: fmt.Sprintf("The reciprocal of a trigonometric function is defined as one divided by that function: %s = 1/%s. Substitute the given fraction %d/%d: 1/(%d/%d) = %d/%d. Simplifying to lowest terms yields %d/%d.", fn.recip, fn.name, fn.num, fn.den, fn.num, fn.den, fn.den, fn.num, recipNum, recipDen),
 		Facts:       map[string]string{"name": fn.name, "num": strconv.Itoa(fn.num), "den": strconv.Itoa(fn.den), "recip": fn.recip, "recip_num": strconv.Itoa(recipNum), "recip_den": strconv.Itoa(recipDen)},
 	}
 }
@@ -281,7 +338,11 @@ func (g *reciprocalGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type pythagoreanIDGen struct{}
 
 func (g *pythagoreanIDGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	t := pythagoreanTriples[rand.Intn(len(pythagoreanTriples))]
+	maxTriples := 3 + int(ctx.Difficulty*float64(len(pythagoreanTriples)-3))
+	if maxTriples > len(pythagoreanTriples) {
+		maxTriples = len(pythagoreanTriples)
+	}
+	t := pythagoreanTriples[rand.Intn(maxTriples)]
 	// Randomly ask for sin from cos or cos from sin
 	if rand.Intn(2) == 0 {
 		sinGcd := mathutil.GCD(t.opp, t.hyp)
@@ -293,7 +354,7 @@ func (g *pythagoreanIDGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		return generator.Problem{
 			Question:    fmt.Sprintf("If \\(\\sin(\\theta) = %d/%d\\), find \\(\\cos(\\theta)\\) using \\(\\sin^{2}\\theta + \\cos^{2}\\theta = 1\\) (assume \\(\\theta\\) is acute).", sinNum, sinDen),
 			Answer:      fmt.Sprintf("%d/%d", cosNum, cosDen),
-			Explanation: fmt.Sprintf("cos²θ = 1 - sin²θ = 1 - (%d/%d)² = 1 - %d/%d = %d/%d, so cos(θ) = √(%d/%d) = %d/%d.", sinNum, sinDen, sinNum*sinNum, sinDen*sinDen, sinDen*sinDen-sinNum*sinNum, sinDen*sinDen, sinDen*sinDen-sinNum*sinNum, sinDen*sinDen, cosNum, cosDen),
+			Explanation: fmt.Sprintf("By the Pythagorean trigonometric identity, \\(\\sin^{2}\\theta + \\cos^{2}\\theta = 1\\). Substitute \\(\\sin(\\theta) = %d/%d\\) and solve for cosine: \\(\\cos^{2}\\theta = 1 - (%d/%d)^{2} = 1 - %d/%d = %d/%d\\). Taking the principal square root for acute \\(\\theta\\) and simplifying gives \\(\\cos(\\theta) = %d/%d\\).", sinNum, sinDen, sinNum, sinDen, sinNum*sinNum, sinDen*sinDen, sinDen*sinDen-sinNum*sinNum, sinDen*sinDen, cosNum, cosDen),
 			Facts:       map[string]string{"known": strconv.Itoa(sinNum) + "/" + strconv.Itoa(sinDen), "known_num": strconv.Itoa(sinNum), "known_den": strconv.Itoa(sinDen), "want": "$\\cos(\\theta)$", "sq_num": strconv.Itoa(sinNum * sinNum), "sq_den": strconv.Itoa(sinDen * sinDen), "rem_num": strconv.Itoa(sinDen*sinDen - sinNum*sinNum), "num": strconv.Itoa(cosNum), "den": strconv.Itoa(cosDen)},
 		}
 	}
@@ -306,11 +367,16 @@ func (g *pythagoreanIDGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	return generator.Problem{
 		Question:    fmt.Sprintf("If \\(\\cos(\\theta) = %d/%d\\), find \\(\\sin(\\theta)\\) using \\(\\sin^{2}\\theta + \\cos^{2}\\theta = 1\\) (assume \\(\\theta\\) is acute).", cosNum, cosDen),
 		Answer:      fmt.Sprintf("%d/%d", sinNum, sinDen),
-		Explanation: fmt.Sprintf("sin²θ = 1 - cos²θ = 1 - (%d/%d)² = 1 - %d/%d = %d/%d, so sin(θ) = √(%d/%d) = %d/%d.", cosNum, cosDen, cosNum*cosNum, cosDen*cosDen, cosDen*cosDen-cosNum*cosNum, cosDen*cosDen, cosDen*cosDen-cosNum*cosNum, cosDen*cosDen, sinNum, sinDen),
+		Explanation: fmt.Sprintf("By the Pythagorean trigonometric identity, \\(\\sin^{2}\\theta + \\cos^{2}\\theta = 1\\). Substitute \\(\\cos(\\theta) = %d/%d\\) and solve for sine: \\(\\sin^{2}\\theta = 1 - (%d/%d)^{2} = 1 - %d/%d = %d/%d\\). Taking the principal square root for acute \\(\\theta\\) and simplifying gives \\(\\sin(\\theta) = %d/%d\\).", cosNum, cosDen, cosNum, cosDen, cosNum*cosNum, cosDen*cosDen, cosDen*cosDen-cosNum*cosNum, cosDen*cosDen, sinNum, sinDen),
 		Facts:       map[string]string{"known": strconv.Itoa(cosNum) + "/" + strconv.Itoa(cosDen), "known_num": strconv.Itoa(cosNum), "known_den": strconv.Itoa(cosDen), "want": "$\\sin(\\theta)$", "sq_num": strconv.Itoa(cosNum * cosNum), "sq_den": strconv.Itoa(cosDen * cosDen), "rem_num": strconv.Itoa(cosDen*cosDen - cosNum*cosNum), "num": strconv.Itoa(sinNum), "den": strconv.Itoa(sinDen)},
 	}
 }
 
+// trig.basics.special_angles is a multiple-choice concept that served its value
+// as LaTeX with no options to tap: report 28 arrived from a learner who had no
+// way to enter sqrt(3)/2 that the choice grader would accept. The values are
+// plain text now, so a tap resolves to the answer and a typed square root still
+// reads as itself.
 type specialAnglesGen struct{}
 
 func (g *specialAnglesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -321,11 +387,11 @@ func (g *specialAnglesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		tan   string
 	}
 	table := []entry{
-		{"\\(30^{\\circ}\\)", "\\(\\frac{1}{2}\\)", "\\(\\frac{\\sqrt{3}}{2}\\)", "\\(\\frac{\\sqrt{3}}{3}\\)"},
-		{"\\(45^{\\circ}\\)", "\\(\\frac{\\sqrt{2}}{2}\\)", "\\(\\frac{\\sqrt{2}}{2}\\)", "1"},
-		{"\\(60^{\\circ}\\)", "\\(\\frac{\\sqrt{3}}{2}\\)", "\\(\\frac{1}{2}\\)", "\\(\\sqrt{3}\\)"},
+		{"\\(30^{\\circ}\\)", "1/2", "\u221a3/2", "\u221a3/3"},
+		{"\\(45^{\\circ}\\)", "\u221a2/2", "\u221a2/2", "1"},
+		{"\\(60^{\\circ}\\)", "\u221a3/2", "1/2", "\u221a3"},
 	}
-	e := table[rand.Intn(3)]
+	e := table[rand.Intn(len(table))]
 	funcs := []struct {
 		name string
 		val  string
@@ -335,14 +401,24 @@ func (g *specialAnglesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		{"tan", e.tan},
 	}
 	fn := funcs[rand.Intn(3)]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is the exact value of %s(%s)?", fn.name, e.label),
-		Answer:      fn.val,
-		Explanation: fmt.Sprintf("%s(%s) = %s.", fn.name, e.label, fn.val),
-		Facts:       map[string]string{"fn": fn.name, "label": e.label, "val": fn.val},
+	pool := []string{"1/2", "\u221a2/2", "\u221a3/2", "\u221a3/3", "1", "\u221a3"}
+	distractors := make([]string, 0, len(pool))
+	for _, v := range pool {
+		if v != fn.val {
+			distractors = append(distractors, v)
+		}
 	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What is the exact value of %s(%s)?", fn.name, e.label),
+		fn.val, distractors...)
+	p.Explanation = fmt.Sprintf("%s(%s) = %s.", fn.name, e.label, fn.val)
+	p.Facts = map[string]string{"fn": fn.name, "label": e.label, "val": fn.val}
+	return p
 }
 
+// trig.basics.reference_angle is also a multiple-choice concept, and it answered
+// "60\u00b0" with no options, so a learner had nothing to tap and a typed 60 did
+// not match the degree sign. The three acute answers are options now.
 type referenceAngleGen struct{}
 
 func (g *referenceAngleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -362,12 +438,18 @@ func (g *referenceAngleGen) Generate(ctx generator.GeneratorContext) generator.P
 		{330, 30},
 	}
 	e := table[rand.Intn(len(table))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is the reference angle for %d°?", e.angle),
-		Answer:      fmt.Sprintf("%d°", e.ref),
-		Explanation: fmt.Sprintf("The reference angle for %d° is the acute angle it makes with the x-axis: %d°.", e.angle, e.ref),
-		Facts:       map[string]string{"angle": strconv.Itoa(e.angle), "ref": strconv.Itoa(e.ref)},
+	ans := fmt.Sprintf("%d\u00b0", e.ref)
+	var distractors []string
+	for _, v := range []string{"30\u00b0", "45\u00b0", "60\u00b0"} {
+		if v != ans {
+			distractors = append(distractors, v)
+		}
 	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What is the reference angle for %d\u00b0?", e.angle), ans, distractors...)
+	p.Explanation = fmt.Sprintf("The reference angle for %d\u00b0 is the acute angle it makes with the x-axis: %s.", e.angle, ans)
+	p.Facts = map[string]string{"angle": strconv.Itoa(e.angle), "ref": strconv.Itoa(e.ref)}
+	return p
 }
 
 type graphSinGen struct{}
@@ -388,11 +470,37 @@ func (g *graphSinGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		{"Where does \\(\\sin(x)\\) start on the \\(y\\)-axis?", "0", "\\(\\sin(0) = 0\\)"},
 	}
 	q := questions[rand.Intn(len(questions))]
-	return generator.Problem{
-		Question:    q.q,
-		Answer:      q.a,
-		Explanation: q.e,
+	return graphTrigProblem(q.q, q.a, q.e)
+}
+
+// graphNumberValues and graphDegreeValues are the answer families a sine or
+// cosine graph question draws from. Options stay inside one family so a period
+// question never offers "-1" beside "360°".
+var graphNumberValues = []string{"-1", "0", "1", "2"}
+var graphDegreeValues = []string{"90°", "180°", "270°", "360°"}
+
+// graphTrigProblem serves the value as options because a degree sign has no key
+// on a phone keypad, and only one of these questions asks for a number a learner
+// could type anyway.
+func graphTrigProblem(question, answer, explanation string) generator.Problem {
+	plain := strings.ReplaceAll(bare(answer), "^{\\circ}", "°")
+	p := generator.MultipleChoice(question, plain, graphValueDistractors(plain)...)
+	p.Explanation = explanation
+	return p
+}
+
+func graphValueDistractors(want string) []string {
+	pool := graphNumberValues
+	if strings.HasSuffix(want, "°") {
+		pool = graphDegreeValues
 	}
+	out := make([]string, 0, len(pool))
+	for _, v := range pool {
+		if v != want {
+			out = append(out, v)
+		}
+	}
+	return out
 }
 
 type graphCosGen struct{}
@@ -413,11 +521,7 @@ func (g *graphCosGen) Generate(ctx generator.GeneratorContext) generator.Problem
 		{"Where does \\(\\cos(x)\\) start on the \\(y\\)-axis?", "1", "\\(\\cos(0) = 1\\)"},
 	}
 	q := questions[rand.Intn(len(questions))]
-	return generator.Problem{
-		Question:    q.q,
-		Answer:      q.a,
-		Explanation: q.e,
-	}
+	return graphTrigProblem(q.q, q.a, q.e)
 }
 
 type periodGen struct{}
@@ -481,71 +585,81 @@ func (g *inverseGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 		{"\\(\\arccos(-1/2)\\)", "-1/2", "\\(120^{\\circ}\\)", "\\(\\arccos(-1/2) = 120^{\\circ}\\)"},
 	}
 	e := table[rand.Intn(len(table))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What is %s?", e.f),
-		Answer:      e.result,
-		Explanation: e.desc,
+	// The answer is an angle, and a degree sign has no key on a phone keypad, so
+	// it is served as a tap. Report 28 was the same defect on special angles.
+	answer := strings.ReplaceAll(bare(e.result), "^{\\circ}", "°")
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What is %s?", e.f), answer, inverseAngleDistractors(answer)...)
+	p.Explanation = e.desc
+	return p
+}
+
+// inverseAngleValues are the principal angles an inverse-function question can
+// return, including the negative arcsin value.
+var inverseAngleValues = []string{"-30°", "0°", "30°", "45°", "60°", "90°", "120°"}
+
+func inverseAngleDistractors(want string) []string {
+	pool := make([]string, 0, len(inverseAngleValues))
+	for _, v := range inverseAngleValues {
+		if v != want {
+			pool = append(pool, v)
+		}
 	}
+	rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+	return pool[:3]
 }
 
 type lawSinesGen struct{}
 
 func (g *lawSinesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type triangle struct {
+	type anglePair struct {
 		A, B int
-		a    int
 	}
-	configs := []triangle{
-		{30, 45, 10},
-		{30, 60, 12},
-		{45, 60, 8},
-		{30, 30, 15},
-		{45, 30, 10},
-		{60, 30, 14},
-		{30, 90, 10},
-		{45, 90, 12},
+	pairs := []anglePair{
+		{30, 45}, {30, 60}, {45, 60}, {30, 30},
+		{45, 30}, {60, 30}, {30, 90}, {45, 90},
+		{60, 45}, {60, 90}, {45, 45},
 	}
-	c := configs[rand.Intn(len(configs))]
-	sinA := math.Sin(float64(c.A) * math.Pi / 180)
-	sinB := math.Sin(float64(c.B) * math.Pi / 180)
-	b := float64(c.a) * sinB / sinA
-	bRounded := math.Round(b*10) / 10
-	aDeg := c.A
-	bDeg := c.B
+	p := pairs[rand.Intn(len(pairs))]
+	a := 6 + rand.Intn(10+int(ctx.Difficulty*30))
+	sinA := math.Sin(float64(p.A) * math.Pi / 180.0)
+	sinB := math.Sin(float64(p.B) * math.Pi / 180.0)
+	b := float64(a) * sinB / sinA
+	bRounded := math.Round(b*10.0) / 10.0
+	bStr := fmt.Sprintf("%.1f", bRounded)
 	return generator.Problem{
-		Question:    fmt.Sprintf("In triangle ABC, \\(A = %d^{\\circ}\\), \\(B = %d^{\\circ}\\), and side \\(a = %d\\). Find side \\(b\\) using the law of sines.", aDeg, bDeg, c.a),
-		Answer:      fmt.Sprintf("%.1f", bRounded),
-		Explanation: fmt.Sprintf("a/sin(A) = b/sin(B), so b = a·sin(B)/sin(A) = %d·sin(%d°)/sin(%d°) = %.1f.", c.a, bDeg, aDeg, bRounded),
-		Facts:       map[string]string{"a": strconv.Itoa(c.a), "A": strconv.Itoa(aDeg), "B": strconv.Itoa(bDeg), "b": fmt.Sprintf("%.1f", bRounded)},
+		Question:    fmt.Sprintf("In triangle ABC, \\(A = %d^{\\circ}\\), \\(B = %d^{\\circ}\\) and side \\(a = %d\\). Find side \\(b\\) using the law of sines.", p.A, p.B, a),
+		Answer:      bStr,
+		Explanation: fmt.Sprintf("By the law of sines, the ratio of a side to the sine of its opposite angle is constant: \\(\\frac{a}{\\sin(A)} = \\frac{b}{\\sin(B)}\\). Rearrange to solve for side b: \\(b = \\frac{a \\sin(B)}{\\sin(A)} = \\frac{%d \\sin(%d^{\\circ})}{\\sin(%d^{\\circ})}\\). Evaluating with trigonometric values and rounding to one decimal place yields %s.", a, p.B, p.A, bStr),
+		Facts:       map[string]string{"a": strconv.Itoa(a), "A": strconv.Itoa(p.A), "B": strconv.Itoa(p.B), "b": bStr},
 	}
 }
 
 type lawCosinesGen struct{}
 
 func (g *lawCosinesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type triangle struct {
-		a, b int
-		C    int
-		c2   int
-	}
-	configs := []triangle{
-		{5, 6, 60, 31},
-		{3, 4, 60, 13},
-		{7, 8, 60, 57},
-		{5, 5, 60, 25},
-		{6, 7, 60, 43},
-		{4, 9, 60, 61},
-		{8, 10, 60, 84},
-		{5, 8, 60, 49},
-	}
-	c := configs[rand.Intn(len(configs))]
-	cVal := math.Sqrt(float64(c.c2))
-	cRounded := math.Round(cVal*10) / 10
+	C := 60
+	a := 3 + rand.Intn(6+int(ctx.Difficulty*15))
+	b := a + 1 + rand.Intn(5+int(ctx.Difficulty*10))
+	crossTerm := a * b // 2 * a * b * cos(60) = a * b
+	c2 := a*a + b*b - crossTerm
+	cVal := math.Sqrt(float64(c2))
+	cRounded := math.Round(cVal*10.0) / 10.0
+	cStr := fmt.Sprintf("%.1f", cRounded)
 	return generator.Problem{
-		Question:    fmt.Sprintf("In triangle ABC, \\(a = %d\\), \\(b = %d\\), and \\(C = %d^{\\circ}\\). Find side \\(c\\) using the law of cosines.", c.a, c.b, c.C),
-		Answer:      fmt.Sprintf("%.1f", cRounded),
-		Explanation: fmt.Sprintf("c² = a² + b² - 2ab·cos(C) = %d² + %d² - 2(%d)(%d)·cos(%d°) = %d + %d - %d = %d, so c = √%d ≈ %.1f.", c.a, c.b, c.a, c.b, c.C, c.a*c.a, c.b*c.b, c.a*c.b, c.c2, c.c2, cRounded),
-		Facts:       map[string]string{"a": strconv.Itoa(c.a), "b": strconv.Itoa(c.b), "C": strconv.Itoa(c.C), "a_sq": strconv.Itoa(c.a * c.a), "b_sq": strconv.Itoa(c.b * c.b), "two_ab": strconv.Itoa(2 * c.a * c.b), "c_sq": strconv.Itoa(c.c2), "c": fmt.Sprintf("%.1f", cRounded)},
+		Question:    fmt.Sprintf("In triangle ABC, \\(a = %d\\), \\(b = %d\\) and \\(C = %d^{\\circ}\\). Find side \\(c\\) using the law of cosines.", a, b, C),
+		Answer:      cStr,
+		Explanation: fmt.Sprintf("By the law of cosines, the unknown side satisfies \\(c^{2} = a^{2} + b^{2} - 2ab\\cos(C)\\). Substitute the given parameters: \\(c^{2} = %d^{2} + %d^{2} - 2(%d)(%d)\\cos(%d^{\\circ}) = %d + %d - %d = %d\\). Taking the square root and rounding to one decimal place yields \\(c = \\sqrt{%d} \\approx %s\\).", a, b, a, b, C, a*a, b*b, crossTerm, c2, c2, cStr),
+		Facts: map[string]string{
+			"a":      strconv.Itoa(a),
+			"b":      strconv.Itoa(b),
+			"C":      strconv.Itoa(C),
+			"a_sq":   strconv.Itoa(a * a),
+			"b_sq":   strconv.Itoa(b * b),
+			"two_ab": strconv.Itoa(crossTerm),
+			"c_sq":   strconv.Itoa(c2),
+			"c":      cStr,
+		},
 	}
 }
 
@@ -786,6 +900,22 @@ type funcEntry struct {
 	exp      string
 }
 
+// functionChoices gives the options for the prose answers in the function pools.
+// A word cannot survive the math field: report #198 recorded a whole sentence
+// with every space stripped. Numeric answers are left as typed input.
+var functionChoices = map[string][]string{
+	"odd":           {"odd", "even", "neither"},
+	"even":          {"odd", "even", "neither"},
+	"neither":       {"odd", "even", "neither"},
+	"increasing":    {"increasing", "decreasing", "neither"},
+	"decreasing":    {"increasing", "decreasing", "neither"},
+	"all reals":     {"all reals", "[-1, 1]", "[0, pi]", "(-pi/2, pi/2)"},
+	"[-pi/2,pi/2]":  {"[-pi/2,pi/2]", "[-1, 1]", "[0, pi]", "all reals"},
+	"[-pi/2, pi/2]": {"[-pi/2, pi/2]", "[-1, 1]", "[0, pi]", "all reals"},
+	"[0, pi]":       {"[0, pi]", "[-1, 1]", "all reals", "(-pi/2, pi/2)"},
+	"(0, pi)":       {"(0, pi)", "[-1, 1]", "all reals", "[0, pi]"},
+}
+
 func funcPool(ctx generator.GeneratorContext, easy, hard []funcEntry) generator.Problem {
 	scale := int(1 + ctx.Difficulty*4)
 	pool := easy
@@ -793,6 +923,11 @@ func funcPool(ctx generator.GeneratorContext, easy, hard []funcEntry) generator.
 		pool = append(easy, hard...)
 	}
 	e := pool[rand.Intn(len(pool))]
+	if options, ok := functionChoices[e.answer]; ok {
+		p := generator.MultipleChoice(strings.ReplaceAll(e.question, " (type one word)", ""), e.answer, options...)
+		p.Explanation = e.exp
+		return p
+	}
 	return generator.Problem{Question: e.question, Answer: e.answer, Explanation: e.exp}
 }
 

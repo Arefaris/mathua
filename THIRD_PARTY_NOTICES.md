@@ -6,7 +6,7 @@ they are not scattered across the README and forgotten when a dependency changes
 
 ## Software dependencies
 
-### MathLive — `mathlive@0.111.0`
+### MathLive, `mathlive@0.111.0`
 
 Used for the answer editor in `web/next-app/components/math/`. Provides the
 `<math-field>` custom element: mathematical input, structure navigation, and the
@@ -42,12 +42,12 @@ SOFTWARE.
 
 Upstream: <https://github.com/arnog/mathlive> · Documentation: <https://mathlive.io/mathfield/>
 
-### Compute Engine — `@cortex-js/compute-engine@0.147.0`
+### Compute Engine, `@cortex-js/compute-engine@0.147.0`
 
 Used for one thing: `web/next-app/components/math/SelfCheck.tsx`, which tells a learner
 what their own expression simplifies to. Licensed under the MIT License.
 
-Compute Engine is **used, not vendored**, and is a browser dependency only — it is
+Compute Engine is **used, not vendored**, and is a browser dependency only, it is
 dynamically imported so it never enters any route's initial JS, and it is skipped on
 metered connections. It is *not* used for grading: the Go engine and SymPy remain the
 only graders (ADR-005), and the self-check cannot reach a submitted answer.
@@ -109,7 +109,7 @@ repository. SymPy (MIT) is the grading runtime; it is pinned in
 
 ## Content
 
-### Algebrica — CC BY-NC 4.0
+### Algebrica, CC BY-NC 4.0
 
 Vendored lesson content and diagrams are sourced from
 [Algebrica](https://algebrica.org) by Antonio Lupetti, used under
@@ -122,13 +122,13 @@ authoritative list: an entry with `"source": "algebrica"` is Algebrica's, and an
 content: the lesson material and diagrams remain CC BY-NC 4.0 and carry that
 restriction with them.
 
-### DiceBear — per-style licences
+### DiceBear, per-style licences
 
 Profile avatars are served by [DiceBear](https://www.dicebear.com). Individual avatar
 styles carry their own licences; see their
 [license overview](https://www.dicebear.com/licenses/).
 
-### Footer artwork — UNRESOLVED, do not ship without settling this
+### Footer artwork, UNRESOLVED, do not ship without settling this
 
 The nine prints in `web/next-app/public/footer/` are shipped to every visitor: three
 desktop landscapes and six phone portraits, drawn full-bleed behind the footer.
@@ -160,7 +160,7 @@ What follows from that, stated plainly:
 - Redistributing them is the risk. Mathua publishes this repository and deploys the
   static site from it, so the prints leave the machine.
 - Replacing them is the clean fix. The footer's contract is only that each file
-  exists, declares the real dimensions, and carries a tone — `test/footerArt.test.tsx`
+  exists, declares the real dimensions, and carries a tone, `test/footerArt.test.tsx`
   holds that contract, and it names no particular picture. Dropping in known-provenance
   artwork needs no code change.
 
@@ -168,17 +168,17 @@ To resolve this: record the author, source URL and licence for each print below,
 replace the set. Until one of those happens, treat every print in that directory as
 unlicensed.
 
-### OpenStax — CC BY-NC-SA 4.0
+### OpenStax, CC BY-NC-SA 4.0
 
 Lesson content is adapted from three OpenStax titles. Their terms were read on each
 book's own Citation/Attribution panel and in the openstax.org page footer, on
 2026-10-17:
 
-- **Prealgebra**, by Marecek & Anthony-Smith —
+- **Prealgebra**, by Marecek & Anthony-Smith, 
   <https://openstax.org/books/prealgebra/pages/1-introduction>
-- **Precalculus 2e**, by Abramson —
+- **Precalculus 2e**, by Abramson, 
   <https://openstax.org/books/precalculus-2e/pages/1-1-functions-and-function-notation>
-- **Calculus Volume 1**, by Strang & Herman —
+- **Calculus Volume 1**, by Strang & Herman, 
   <https://openstax.org/books/calculus-volume-1/pages/1-introduction>
 
 Every page of every title carries the same footer: "Except where otherwise noted,
@@ -207,7 +207,7 @@ AI offerings without OpenStax's prior written permission." The ingest scripts th
 read OpenStax are still in `scripts/`, so the clause is recorded here for whoever
 runs them.
 
-### ORCCA — CC BY 4.0
+### ORCCA, CC BY 4.0
 
 Forty-seven lessons are adapted from ORCCA, *Open Resources for Community College Algebra*
 (Portland Community College), <https://pcc.edu/orcca>, used under
@@ -225,15 +225,15 @@ attribution:
 The same section requires the math content to be reproduced "in a readable manner" and offered
 "in at least one web-accessible manner": Mathua renders it as KaTeX with the source retained,
 and the static site is the web-accessible copy. It also reserves the Portland Community College
-and ORCCA names and logos — "not subject to the Creative Commons license and may not be
-reproduced without the prior and express written consent" — which is why a credit here cites the
+and ORCCA names and logos, "not subject to the Creative Commons license and may not be
+reproduced without the prior and express written consent", which is why a credit here cites the
 site rather than the marks.
 
 **The page-view sentence renders on the two surfaces that show ORCCA text.** CC BY 4.0 section
 3(a)(1) requires attribution *in the manner specified by the licensor*, and ORCCA's Licensing
 section is that specification, so the sentence above is a licence term and not a courtesy.
 `web/next-app/components/LessonCredits.tsx` renders it under the article in `/study` and under the
-step panel in `/learn` — the first shows the lesson body, the second the worked example lifted out
+step panel in `/learn`, the first shows the lesson body, the second the worked example lifted out
 of it, and both are page views of the book's content. The token that selects it comes from
 `data/lessons/mapping.json` through `scripts/merge_concepts`, so the 47 concepts with an ORCCA
 lesson carry it and a concept with no lesson carries none. `test/lessonCredits.test.tsx` asserts
@@ -250,7 +250,7 @@ either. The `ocw.mit.edu` links in the corpus sit inside Algebrica's own source
 lists, not in material adapted for Mathua. See the Acknowledgements section of
 `README.md`.
 
-### Mathematical glossary sources — consulted, original wording
+### Mathematical glossary sources, consulted, original wording
 
 The glossary dataset (`web/next-app/data/glossary/`) was written in original
 wording for Mathua. Its sources were consulted as references, not copied: no
@@ -261,7 +261,7 @@ the reuse terms as verified at authoring time:
 - **OpenStax textbooks** (openstax.org) for elementary through university
   mathematics. The openstax.org footer states its textbooks are licensed
   under CC BY-NC-SA 4.0 (verified on the Introductory Statistics section
-  page, whose footer also restricts LLM training ingestion — not applicable
+  page, whose footer also restricts LLM training ingestion, not applicable
   here since no text is reused). Entries cite the book consulted and use
   original wording with no text reused, so no ShareAlike obligation is
   triggered; the license is recorded for accuracy.
@@ -323,6 +323,6 @@ excluded rather than published with invented attribution; the excluded
 candidates are listed in `web/next-app/scripts/glossary-validation-report.json`,
 which is not bundled with the app.
 
-The audit trail for these attributions — which page was opened for each term, what
-was verified there, and what was corrected — is in
+The audit trail for these attributions, which page was opened for each term, what
+was verified there, and what was corrected, is in
 [`docs/glossary-provenance.md`](docs/glossary-provenance.md).

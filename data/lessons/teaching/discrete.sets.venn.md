@@ -1,4 +1,4 @@
-> Content sourced from [Discrete Mathematics: An Open Introduction, 3rd ed](https://discrete.openmathbooks.org/dmoi3/sec_intro-sets.html) by Oscar Levin — CC BY-SA 4.0
+> Content sourced from [Discrete Mathematics: An Open Introduction, 3rd ed](https://discrete.openmathbooks.org/dmoi3/sec_intro-sets.html) by Oscar Levin, CC BY-SA 4.0
 
 # Venn Diagrams
 

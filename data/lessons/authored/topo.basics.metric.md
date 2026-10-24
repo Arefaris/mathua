@@ -13,7 +13,7 @@ A **metric space** is a set \(X\) together with a function \(d: X \times X \to \
 
 ## Examples
 
-The real line with ordinary distance \(d(x,y)=|x-y|\) is a metric space, and so is the plane with Euclidean distance. But the definition is deliberately flexible: the same set can carry many different metrics (discrete metric, taxicab metric), and the points need not be numbers at all — strings, functions, or images can live in a metric space whenever distances behave sensibly.
+The real line with ordinary distance \(d(x,y)=|x-y|\) is a metric space, and so is the plane with Euclidean distance. But the definition is deliberately flexible: the same set can carry many different metrics (discrete metric, taxicab metric), and the points need not be numbers at all, strings, functions, or images can live in a metric space whenever distances behave sensibly.
 
 ## Why Metrics Matter
 

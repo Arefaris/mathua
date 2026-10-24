@@ -40,7 +40,7 @@ vi.mock('../hooks/useAuthState', () => ({
 
 // vi.hoisted, because `vi.mock` factories are hoisted above the module body: a plain `let` here
 // is in its temporal dead zone when the factory first runs, and the component ends up reading a
-// different binding than the test writes to — so the assertion passes against a build that never
+// different binding than the test writes to, so the assertion passes against a build that never
 // had the gate in it. That is the failure mode a "does this test actually test anything" check is
 // for, and it caught exactly that.
 const { chromeRef } = vi.hoisted(() => ({ chromeRef: { visible: true } }))
@@ -67,7 +67,7 @@ describe('Header mobile nav menu', () => {
 
   // The panel used to live inside `<div class="min-h-0 overflow-hidden">`, which is the CSS
   // grid-collapse trick that hides the header on scroll. That clips absolutely positioned
-  // children, so on mobile the menu painted *behind* the page content instead of over it — the
+  // children, so on mobile the menu painted *behind* the page content instead of over it, the
   // one thing a dropdown must never do, and one no assertion here would have caught because the
   // panel was in the DOM and its links worked.
   //
@@ -75,7 +75,7 @@ describe('Header mobile nav menu', () => {
   // what is painted on top. What it can check is that the panel is not a descendant of the
   // clipping wrapper, which is the cause.
   // The bar's rule is the header's own edge and reaches both sides of the window; the links stay
-  // capped at 1100px so they line up with the page content below. Both halves matter — a
+  // capped at 1100px so they line up with the page content below. Both halves matter, a
   // full-width row would put the logo away from the corner, and a capped rule would leave the bar
   // reading as a floating strip with page either side of it. Structural, because jsdom has no
   // layout to measure pixels against.
@@ -96,7 +96,7 @@ describe('Header mobile nav menu', () => {
 
   // Both panels hang off the full-width header, so each needs the capped wrapper to measure its
   // `right-*` from the row. Without it a wide screen puts the menu a long way from the button
-  // that opened it — the same class of fault as the border, one axis over.
+  // that opened it, the same class of fault as the border, one axis over.
   it('anchors each panel to the capped row rather than the viewport', () => {
     render(<Header />)
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation menu' }))
@@ -248,8 +248,8 @@ describe('Header profile menu', () => {
   })
 
   // Deliberately a second test rather than an extra assertion above. The nav panel and the
-  // profile panel are fixed by the same change and can regress independently — someone editing
-  // one of them to hang off the row again would leave the other's test green — so each is
+  // profile panel are fixed by the same change and can regress independently, someone editing
+  // one of them to hang off the row again would leave the other's test green, so each is
   // asserted in its own right rather than sharing a helper that hides which one broke.
   it('anchors the profile panel below the header, like the nav panel', () => {
     mockUser = { student_id: 's1', name: 'Nelson', username: 'wis' }
@@ -283,7 +283,7 @@ describe('Header profile menu', () => {
   })
 
   // The panel is no longer a descendant of the trigger, so outside-click has to test both.
-  // Getting this wrong closes the menu on the mousedown that is about to activate an item —
+  // Getting this wrong closes the menu on the mousedown that is about to activate an item, 
   // which reads as "the menu item sometimes does nothing".
   // The header collapses on scroll and the panel hangs off the header rather than the row, so it
   // is gated on chromeVisible for the same reason the nav panel is: a panel whose trigger has
@@ -299,11 +299,11 @@ describe('Header profile menu', () => {
 
     render(<Header />)
 
-    // `hidden: true` because the header is `inert` while the chrome is hidden — which is the
+    // `hidden: true` because the header is `inert` while the chrome is hidden, which is the
     // point: the trigger is no longer reachable by a real user either, so there is nothing to
     // press and the panel cannot be opened at all.
     const trigger = screen.getByRole('button', { name: 'Open profile menu', hidden: true })
-    // Pressed directly because the header is `inert` while the chrome is hidden — which is the
+    // Pressed directly because the header is `inert` while the chrome is hidden, which is the
     // point: a real user cannot reach it either. jsdom still runs the handler, so this reaches the
     // `open` state the gate is supposed to be filtering on.
     fireEvent.click(trigger)
@@ -311,7 +311,7 @@ describe('Header profile menu', () => {
 
     // `hidden: true` is what makes this discriminating. The default role query skips anything
     // inside an `inert` subtree, so without it the assertion passes whether or not the gate
-    // exists — the panel is in the DOM either way and simply unreadable. Asking for the
+    // exists, the panel is in the DOM either way and simply unreadable. Asking for the
     // inaccessible ones too is the only way to see that the gate removed it.
     expect(screen.queryByRole('menu', { name: 'Profile', hidden: true })).toBeNull()
   })
@@ -381,7 +381,7 @@ describe('Header compass menu and the Admin entry', () => {
   // has to name the panel as well as the trigger. It did not, which closed the menu on the
   // mousedown that was about to activate a link and unmounted it first: every destination in the
   // mobile menu was present in the DOM and unreachable in the browser. A presence assertion
-  // cannot see that, so it is asserted here as behaviour — the link must still be attached after
+  // cannot see that, so it is asserted here as behaviour, the link must still be attached after
   // the mousedown that precedes its own activation. (e2e/admin.spec.ts drives the real click.)
   it('keeps a menu link alive through its own mousedown, so it can be activated', () => {
     mockUser = { student_id: 's1', name: 'Nelson', username: 'wis' }

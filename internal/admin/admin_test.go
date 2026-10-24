@@ -25,7 +25,7 @@ func TestPermittedMatrix(t *testing.T) {
 		{storage.RoleOwner, ContentManage, true},
 
 		// Admin runs the place but cannot crown an owner, and cannot touch the audit trail's
-		// shape — it can read it, which is the point.
+		// shape, it can read it, which is the point.
 		{storage.RoleAdmin, ReportsModerate, true},
 		{storage.RoleAdmin, AdminsManage, true},
 		{storage.RoleAdmin, AuditRead, true},

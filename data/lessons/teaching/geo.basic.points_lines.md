@@ -5,7 +5,7 @@ Geometry begins with three undefined building blocks: the **point**, the **line*
 
 ## The Basic Objects
 
-A **point** names an exact location. It has no size and no shape — we draw it as a dot and label it with a capital letter, like point $A$.
+A **point** names an exact location. It has no size and no shape, we draw it as a dot and label it with a capital letter, like point $A$.
 
 A **line** is a straight path of points that continues forever in both directions. A line through points $A$ and $B$ is written $\overleftrightarrow{AB}$. Any two points determine exactly one line.
 

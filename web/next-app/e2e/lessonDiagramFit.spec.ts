@@ -7,7 +7,7 @@ import { resolve } from 'node:path'
  *
  * `LessonDiagram` bounds a figure at 180px by default, and the bound belongs on the SVG. It used
  * to sit on the wrapping box, which also had `overflow: hidden`: a figure taller than the bound
- * was cut off rather than shrunk. That is not a corner case — 123 of the 127 mapped SVGs are
+ * was cut off rather than shrunk. That is not a corner case, 123 of the 127 mapped SVGs are
  * taller than 180px and the arithmetic ones are 360x200, so the bottom of nearly every diagram
  * was missing at any width that did not force a scale, which on a desktop panel is all of them.
  *
@@ -15,7 +15,7 @@ import { resolve } from 'node:path'
  * the article through `KatexContent` as a plain `<img>`, and an `<img>` scales under `max-height`
  * correctly. The clipping was only in the step renderer, which sets the SVG inline. This spec
  * covers that renderer, and its negative control restores the old rule to show the measurement
- * can report a clip — a "not clipped" assertion that cannot fail is not a guard.
+ * can report a clip, a "not clipped" assertion that cannot fail is not a guard.
  */
 
 const ROOT = resolve(__dirname, '../../..')

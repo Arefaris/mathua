@@ -5,8 +5,8 @@ import { tNow } from './i18n'
 /**
  * The engine's recommendation, in the shape the surfaces already render.
  *
- * This is a presentation adapter and nothing else. The decision — which concept, in what order,
- * why, and with what wording — is made once, in `internal/scheduler`, and arrives over
+ * This is a presentation adapter and nothing else. The decision, which concept, in what order,
+ * why, and with what wording, is made once, in `internal/scheduler`, and arrives over
  * `/api/next`. It used to be made here, in the browser, from five API calls plus a bundled copy
  * of the corpus, while the scheduler sat unreachable between `/learn` and `/profile`.
  *
@@ -70,7 +70,7 @@ export function recommendationResToShelf(res: RecommendationRes): Shelf {
  * Fetch the engine's answer and adapt it.
  *
  * `exclude` drops concepts the caller has just finished, so a concept is never offered back as
- * the next thing to do — which is why the server takes the parameter rather than the client
+ * the next thing to do, which is why the server takes the parameter rather than the client
  * filtering afterwards.
  */
 export async function fetchShelf(exclude?: string[]): Promise<Shelf> {

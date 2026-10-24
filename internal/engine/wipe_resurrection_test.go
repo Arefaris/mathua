@@ -55,7 +55,7 @@ func TestReset_InFlightPracticeCannotResurrectProgress(t *testing.T) {
 
 // The narrower race: an answer already being graded when the wipe lands.
 // Reconstructed deterministically by restoring the pre-wipe question object
-// the way a blocked grader would still hold it — no sleeps, no flakes.
+// the way a blocked grader would still hold it, no sleeps, no flakes.
 func TestReset_MidGradePracticeCannotResurrectProgress(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("wiped-midgrade")
@@ -85,7 +85,7 @@ func TestReset_MidGradePracticeCannotResurrectProgress(t *testing.T) {
 // The study path's positive control: work genuinely started after the wipe
 // (anchor re-seeded by a re-serve, snapshotting the current generation)
 // must still record. The generation guard refuses only questions anchored
-// before the wipe — i.e. an answer graded across it, symmetric with the
+// before the wipe, i.e. an answer graded across it, symmetric with the
 // practice reconstruction above.
 func TestReset_PostWipeStudyWorkStillRecords(t *testing.T) {
 	e := testEngine(t)

@@ -51,8 +51,8 @@ func TestChangePassword_EdgeCases(t *testing.T) {
 	if err != nil {
 		t.Fatalf("create student: %v", err)
 	}
-	if err := svc.ChangePassword(st.ID, "Old!", "NewPass123!"); err == nil || err.Error() != "no password set — use password reset instead" {
-		t.Fatalf("expected 'no password set — use password reset instead', got: %v", err)
+	if err := svc.ChangePassword(st.ID, "Old!", "NewPass123!"); err == nil || err.Error() != "no password set, use password reset instead" {
+		t.Fatalf("expected 'no password set, use password reset instead', got: %v", err)
 	}
 }
 

@@ -2,6 +2,9 @@ package geometry
 
 import (
 	"math/rand"
+	"regexp"
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/chuma-beep/mathua/internal/generator"
@@ -56,5 +59,60 @@ func TestFuzz(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestCircleAnswersCarryTwoDecimalPlaces(t *testing.T) {
+	cases := []struct {
+		name string
+		gen  generator.Generator
+		rate float64
+	}{
+		{"circumference", &circumferenceGen{}, 2},
+		{"area", &circleAreaGen{}, 1},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			for i := 0; i < 100; i++ {
+				p := tc.gen.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+				if !strings.Contains(p.Question, "two decimal places") {
+					t.Fatalf("question does not state the precision: %q", p.Question)
+				}
+				if !strings.Contains(p.Answer, ".") || len(p.Answer)-strings.Index(p.Answer, ".") != 3 {
+					t.Fatalf("answer %q does not carry two decimal places", p.Answer)
+				}
+				got, err := strconv.ParseFloat(p.Answer, 64)
+				if err != nil {
+					t.Fatalf("answer %q does not parse: %v", p.Answer, err)
+				}
+				r, err := strconv.Atoi(p.Facts["r"])
+				if err != nil {
+					t.Fatalf("fact r = %q does not parse", p.Facts["r"])
+				}
+				want := 3.14 * float64(r*r)
+				if tc.rate == 2 {
+					want = 2 * 3.14 * float64(r)
+				}
+				if diff := got - want; diff > 0.005 || diff < -0.005 {
+					t.Fatalf("answer %q does not match the exact value %.4f", p.Answer, want)
+				}
+			}
+		})
+	}
+}
+
+func TestVerticalAngles_ReadOffAvoidance(t *testing.T) {
+	gen := &verticalAnglesGen{}
+	for i := 0; i < 500; i++ {
+		p := gen.Generate(generator.GeneratorContext{
+			Difficulty: rand.Float64(),
+			Seed:       int64(i*37 + 11),
+		})
+		ans := strings.TrimSpace(p.Answer)
+		// Check that the numerical answer does not appear verbatim in the stem
+		pattern := `(^|\D)` + ans + `(\D|$)`
+		if matched, _ := regexp.MatchString(pattern, p.Question); matched {
+			t.Fatalf("draw %d: vertical angles question %q prints answer %q in stem", i, p.Question, ans)
+		}
 	}
 }

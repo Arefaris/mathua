@@ -106,7 +106,7 @@ func (rl *rateLimiter) middleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if !rl.allow(rl.key(r)) {
 			w.Header().Set("Retry-After", "2")
-			http.Error(w, `{"error":"too many answers at once — retrying in a moment"}`, 429)
+			http.Error(w, `{"error":"too many answers at once, retrying in a moment"}`, 429)
 			return
 		}
 		next(w, r)

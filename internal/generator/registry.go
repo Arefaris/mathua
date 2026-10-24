@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"sort"
+	"strings"
 	"sync"
 
 	"github.com/chuma-beep/mathua/internal/i18n"
@@ -16,6 +17,12 @@ type Registry struct {
 	gens      map[string]Generator
 	solutions *solutions.Loader
 	randMu    sync.Mutex
+	// duplicates records every concept that a second Register call was refused for. Callers in
+	// every generator package ignore Register's error, so a concept claimed by two packages used
+	// to fail silently: one implementation became unreachable while its own tests kept passing
+	// against the type directly. Two packages did exactly that with the six basic combinatorics
+	// counts on 23 October 2026. Duplicates lets a test see the collision.
+	duplicates []string
 }
 
 func NewRegistry() *Registry {
@@ -66,6 +73,7 @@ func (r *Registry) Register(conceptID string, gen Generator) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if _, exists := r.gens[conceptID]; exists {
+		r.duplicates = append(r.duplicates, conceptID)
 		return fmt.Errorf("generator already registered for concept %q", conceptID)
 	}
 	// Self-check: if this is a GradedGenerator, make sure it can grade its own output.
@@ -127,10 +135,16 @@ func (r *Registry) GenerateContext(conceptID string, ctx GeneratorContext) (Prob
 		rand.Seed(ctx.Seed)
 		r.randMu.Unlock()
 	}
-	p := gen.Generate(ctx)
+	p := booleanChoices(gen.Generate(ctx))
 	p.Question = latex.Canonicalize(p.Question, latex.Generators)
 	p.Explanation = r.explain(conceptID, p)
 	p.Difficulty = difficultyOf(ctx.Difficulty)
+	p.KPOrdinal = ctx.KPOrdinal
+	if len(p.ScaffoldSteps) == 0 {
+		if sp, ok := gen.(ScaffoldProblem); ok {
+			p.ScaffoldSteps = sp.ScaffoldSteps(ctx)
+		}
+	}
 	for _, w := range latex.Validate(p.Question+"\n"+p.Explanation, latex.Generators) {
 		fmt.Printf("latex warning in generator %q: %s\n", conceptID, w)
 	}
@@ -194,6 +208,7 @@ func (r *Registry) BatchGenerateContext(conceptID string, count int, ctx Generat
 		p.Question = latex.Canonicalize(p.Question, latex.Generators)
 		p.Explanation = r.explain(conceptID, p)
 		p.Difficulty = difficultyOf(ctx.Difficulty)
+		p.KPOrdinal = ctx.KPOrdinal
 		for _, w := range latex.Validate(p.Question+"\n"+p.Explanation, latex.Generators) {
 			fmt.Printf("latex warning in generator %q (batch): %s\n", conceptID, w)
 		}
@@ -218,6 +233,17 @@ func (r *Registry) Count() int {
 	return len(r.gens)
 }
 
+// Duplicates returns the concepts that were registered more than once, in the order the refused
+// registrations arrived. It is empty for a registry built by hand from one package; a registry
+// built by all.Register should be empty too, and a test there asserts it.
+func (r *Registry) Duplicates() []string {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	out := make([]string, len(r.duplicates))
+	copy(out, r.duplicates)
+	return out
+}
+
 func (r *Registry) Concepts() []string {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -227,4 +253,46 @@ func (r *Registry) Concepts() []string {
 	}
 	sort.Strings(ids)
 	return ids
+}
+
+// booleanChoices turns a yes/no answer into tappable options.
+//
+// One hundred and eighteen concepts in this corpus answered "yes", "no", "true"
+// or "false" with no option list, across topology, calculus, complex analysis,
+// abstract algebra and machine learning. A maths field cannot take the word: it
+// strips the spaces and reads the letters as variables, and 118 of them were
+// reported with a learner typing "y" for yes (report 118). The rule belongs
+// here rather than in each generator, because the fault is a property of the
+// answer, not of any one question.
+//
+// The stem's own "(yes/no)" hint is removed, because the options now say it.
+func booleanChoices(p Problem) Problem {
+	word := strings.ToLower(strings.TrimSpace(p.Answer))
+	other := ""
+	switch word {
+	case "yes":
+		other = "no"
+	case "no":
+		other = "yes"
+	case "true":
+		other = "false"
+	case "false":
+		other = "true"
+	default:
+		return p
+	}
+	stem := strings.TrimSpace(p.Question)
+	for _, hint := range []string{" (yes/no)", " (true/false)", " (enter yes or no)", " (enter true or false)"} {
+		stem = strings.ReplaceAll(stem, hint, "")
+	}
+	if ChoiceOptions(p.Question) != nil {
+		// The generator already supplied options; only the stale hint goes.
+		p.Question = stem
+		return p
+	}
+	q := MultipleChoice(stem, p.Answer, other)
+	q.Explanation = p.Explanation
+	q.Facts = p.Facts
+	q.Difficulty = p.Difficulty
+	return q
 }

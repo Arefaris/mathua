@@ -33,7 +33,7 @@ import (
 //
 // Every data path used to be a bare relative string, which made the server depend on its
 // working directory: started anywhere but the repo root, `data/courses.json` was missing,
-// the planner came back nil, and — because that error was discarded — nothing said so.
+// the planner came back nil, and, because that error was discarded, nothing said so.
 // Resolution order is $MATHUA_DATA_DIR, then the executable's own directory, then the
 // working directory, so an installed binary works without configuration and the repo-root
 // case keeps working unchanged.
@@ -131,7 +131,7 @@ func adminCommand(args []string) error {
 			// Refusing to create the account is the important half. A bootstrap that can sign
 			// someone up would be reachable by anyone who can guess an address, and an
 			// administrator with no password is an administrator nobody can attribute.
-			return fmt.Errorf("no account with email %q — sign up through the app first, then promote", email)
+			return fmt.Errorf("no account with email %q, sign up through the app first, then promote", email)
 		}
 
 		// The bootstrap grants owner, not admin. V1 had only `admin`; V2 has owner at the top
@@ -147,7 +147,7 @@ func adminCommand(args []string) error {
 		case err != nil:
 			return err
 		}
-		fmt.Printf("promoted %s (%s) to owner — audit %s by %s\n",
+		fmt.Printf("promoted %s (%s) to owner, audit %s by %s\n",
 			email, st.ID, res.Action, adminActorCLI)
 		return nil
 	default:
@@ -157,7 +157,7 @@ func adminCommand(args []string) error {
 
 func main() {
 	// Accepted and ignored: the server always starts, and it did before this flag meant
-	// anything — both arms of the branch it used to select opened the same store. The Dockerfile
+	// anything, both arms of the branch it used to select opened the same store. The Dockerfile
 	// passes it, so removing it would break a deployment for no gain. Kept because deleting it
 	// silently would be the only real change, and it is not one worth making at the same time
 	// as adding administration.
@@ -170,7 +170,7 @@ func main() {
 
 	// Subcommands run before anything else is loaded. They are operator tools: someone with
 	// shell access to the box, not someone with a token. That distinction is the whole reason
-	// the first administrator is created here and not through an endpoint — there is no
+	// the first administrator is created here and not through an endpoint, there is no
 	// /register-admin route, no ?role=admin, and no request a browser can make that reaches
 	// this code.
 	if len(flag.Args()) > 0 {
@@ -229,7 +229,7 @@ func main() {
 	}
 
 	// Corpus solution schemas: authored prose per concept, interpolated with
-	// the facts each generator publishes. Optional — without them every problem
+	// the facts each generator publishes. Optional, without them every problem
 	// keeps the generator's own explanation.
 	if sol, err := solutions.Load("data/lessons/solutions"); err != nil {
 		fmt.Printf("solution schemas not loaded: %v (using generator explanations)\n", err)
@@ -256,19 +256,19 @@ func main() {
 	}
 
 	// The learning planner is optional in the sense that the rest of the server runs without
-	// it — but it was loaded with `_`, so a missing or unreadable catalog left `planner` nil
+	// it, but it was loaded with `_`, so a missing or unreadable catalog left `planner` nil
 	// with nothing logged, and every /api/destinations/{id}/estimate then answered 404
 	// "planner unavailable". From the learner's side that was a planner page with an empty
 	// dropdown and no message. Fail loudly instead.
 	planner, err := planning.Load(dataPath("courses.json"), dag)
 	if err != nil {
-		log.Printf("WARNING: course catalog unavailable (%v) — the learning planner and every "+
+		log.Printf("WARNING: course catalog unavailable (%v), the learning planner and every "+
 			"destination estimate will be unavailable. Set MATHUA_DATA_DIR if the data "+
 			"directory is not next to the binary or the working directory", err)
 	}
 	if planner != nil {
 		if ds, err := planning.LoadDestinations(dataPath("destinations.json")); err != nil {
-			log.Printf("WARNING: destinations unavailable (%v) — destination estimates will "+
+			log.Printf("WARNING: destinations unavailable (%v), destination estimates will "+
 				"return 404 until this is fixed", err)
 		} else {
 			planner.SetDestinations(ds)
@@ -311,7 +311,7 @@ func main() {
 	if ll != nil {
 		lessonCount = ll.Count()
 	}
-	fmt.Printf("mathua build %s — %d generators, %d lessons ingested\n", rev, reg.Count(), lessonCount)
+	fmt.Printf("mathua build %s, %d generators, %d lessons ingested\n", rev, reg.Count(), lessonCount)
 
 	fmt.Printf("starting web server on :%d", *port)
 	var authSvc *auth.AuthService
@@ -406,7 +406,7 @@ func nextStaticFS(root string) http.Handler {
 		}
 		localPath := filepath.Join(root, filepath.FromSlash(cleaned))
 		// Regular files only. `os.Stat` succeeds for a directory too, and a Next.js export
-		// creates one for any route that has child routes — `/admin` because of /admin/users,
+		// creates one for any route that has child routes, `/admin` because of /admin/users,
 		// `/docs` because of /docs/architecture. Handing a directory to http.FileServer makes
 		// it redirect to the trailing-slash form and then render a directory listing, so
 		// `/admin` answered 301 and its target answered 200 with a list of files instead of the

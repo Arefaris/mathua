@@ -115,7 +115,13 @@ type addWordGen struct{}
 func (g *addWordGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	// Staged ladder: small counts → two-digit sums.
 	maxN := 20
-	if ctx.Difficulty >= 0.7 {
+	if ctx.KPOrdinal == 1 {
+		maxN = 10
+	} else if ctx.KPOrdinal == 2 {
+		maxN = 25
+	} else if ctx.KPOrdinal == 3 {
+		maxN = 50
+	} else if ctx.Difficulty >= 0.7 {
 		maxN = 50
 	} else if ctx.Difficulty >= 0.45 {
 		maxN = 35
@@ -159,7 +165,7 @@ func (g *subBorrowGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	tensA := rand.Intn(max(1, scale*2)) + 1
 	// onesA stays under 9 so that 10-onesA is always a positive bound. A zero
 	// or negative bound panics rand.Intn, and the old range reached 11 at
-	// difficulty 1.0 — which the Learn stepper does request, taking the handler
+	// difficulty 1.0, which the Learn stepper does request, taking the handler
 	// down with a panic instead of serving a question.
 	onesA := rand.Intn(max(1, min(8, scale*2-1))) + 1
 	onesB := onesA + rand.Intn(10-onesA) + 1
@@ -204,29 +210,33 @@ func (g *placeValueGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		max = 2
 	}
 	n := rand.Intn(max) + 1
-	var placeUnit int
+	// The zero-value generator carries no label, and an empty label means the
+	// tens place, so the default has to be usable rather than zero.
+	placeUnit := 10
 	switch g.label {
-	case "tens":
-		placeUnit = 10
 	case "hundreds":
 		placeUnit = 100
 	case "thousands":
 		placeUnit = 1000
 	}
-	var digit, value int
-	switch g.label {
-	case "tens":
-		digit = (n / 10) % 10
-		value = digit * 10
-	case "hundreds":
-		digit = (n / 100) % 10
-		value = digit * 100
-	case "thousands":
-		digit = (n / 1000) % 10
-		value = digit * 1000
+	// A number below the place unit has no digit there: "the digit 0 is in the
+	// tens place of 7" is not a question, so lift it into the place.
+	if n < placeUnit {
+		n += placeUnit
 	}
+	// A zero in the place makes the answer zero, which teaches nothing. Shift
+	// to the next number whose digit there is nonzero: 7308 becomes 7310 for
+	// tens, 7400 for hundreds.
+	if (n/placeUnit)%10 == 0 {
+		n += placeUnit - n%placeUnit
+	}
+	digit := (n / placeUnit) % 10
+	value := digit * placeUnit
+	// The stem names the digit and asks for its value. Asking for "the value of
+	// the digit in the tens place" of 87 let a learner answer 8, which is the
+	// digit, and be marked wrong for a question the stem did not settle.
 	return generator.Problem{
-		Question:    fmt.Sprintf("In the number %d, what is the value of the digit in the %s place?", n, g.label),
+		Question:    fmt.Sprintf("In the number %d, the digit %d is in the %s place. What is the value of that digit?", n, digit, g.label),
 		Answer:      fmt.Sprintf("%d", value),
 		Explanation: fmt.Sprintf("The %s digit is %d, value = %d x %d = %d", g.label, digit, digit, placeUnit, value),
 		Facts:       map[string]string{"n": strconv.Itoa(n), "digit": strconv.Itoa(digit), "place_unit": strconv.Itoa(placeUnit), "value": strconv.Itoa(value), "label": g.label},
@@ -363,20 +373,21 @@ func (g *divBasicGen) Generate(ctx generator.GeneratorContext) generator.Problem
 
 type divRemainderGen struct{}
 
-// AnswerFormat declares the syntax its Grade method accepts. The concept is
-// declared numeric, which used to put a digits-only keypad in front of an
-// answer that needs a letter and a space: two learners reported the question
-// as badly formatted, one asking how to type the comma it never asked for.
-func (g *divRemainderGen) AnswerFormat() generator.AnswerFormat {
-	return generator.AnswerFormat{Hint: "Quotient and remainder, e.g. 5 R 2", InputMode: "text"}
-}
-
-var remainderRe = regexp.MustCompile(`^(-?\d+)\s*R\s*(\d+)$`)
-
+// The question asks for the remainder alone. It used to ask for "Q R" and
+// grade it with a regex, which needs a letter between two numbers: a phone
+// keypad cannot type R, so the answer box collected nothing and the report
+// arrived with an empty answer. A remainder is one integer, so the numeric
+// keypad is enough and this generator needs no Grade method of its own.
 func (g *divRemainderGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	// Staged ladder: small divisor → larger divisor and quotient.
 	divMax := 5
-	if ctx.Difficulty >= 0.7 {
+	if ctx.KPOrdinal == 1 {
+		divMax = 5
+	} else if ctx.KPOrdinal == 2 {
+		divMax = 8
+	} else if ctx.KPOrdinal == 3 {
+		divMax = 12
+	} else if ctx.Difficulty >= 0.7 {
 		divMax = 12
 	} else if ctx.Difficulty >= 0.45 {
 		divMax = 8
@@ -385,23 +396,11 @@ func (g *divRemainderGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	r := rand.Intn(b-1) + 1
 	a := b*(rand.Intn(divMax)+1) + r
 	return generator.Problem{
-		Question:    fmt.Sprintf("\\(%d \\div %d = ?\\) (give answer with remainder: Q R)", a, b),
-		Answer:      fmt.Sprintf("%d R %d", a/b, r),
-		Explanation: fmt.Sprintf("Given %d ÷ %d. Step 1: %d × %d = %d (largest multiple ≤ %d). Step 2: remainder %d − %d = %d. Answer: %d R %d", a, b, b, a/b, (a/b)*b, a, a, (a/b)*b, r, a/b, r),
+		Question:    fmt.Sprintf("What is the remainder when %d is divided by %d?", a, b),
+		Answer:      strconv.Itoa(r),
+		Explanation: fmt.Sprintf("%d divided by %d is %d with %d left over: %d × %d = %d, and %d − %d = %d.", a, b, a/b, r, b, a/b, (a/b)*b, a, (a/b)*b, r),
 		Facts:       map[string]string{"dividend": strconv.Itoa(a), "divisor": strconv.Itoa(b), "quotient": strconv.Itoa(a / b), "remainder": strconv.Itoa(r), "used": strconv.Itoa((a / b) * b)},
 	}
-}
-
-func (g *divRemainderGen) Grade(expected, answer string) grader.Result {
-	e := remainderRe.FindStringSubmatch(expected)
-	a := remainderRe.FindStringSubmatch(answer)
-	if e == nil || a == nil {
-		return grader.Result{Correct: false, Score: 0, Feedback: "Expected format: Q R (e.g. 5 R 3)"}
-	}
-	if e[1] == a[1] && e[2] == a[2] {
-		return grader.Result{Correct: true, Score: 1}
-	}
-	return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect"}
 }
 
 type divLongGen struct{}
@@ -503,21 +502,18 @@ func (g *primeGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	composites := []int{4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25}
 	if rand.Intn(2) == 0 {
 		p := primes[rand.Intn(min(len(primes), scale*3))]
-		return generator.Problem{
-			Question:    fmt.Sprintf("Is %d prime?", p),
-			Answer:      "yes",
-			Explanation: fmt.Sprintf("%d is prime — only divisible by 1 and itself.", p),
-			Facts:       map[string]string{"p": strconv.Itoa(p)},
-		}
+		// A yes/no verdict is a word, so it is offered rather than typed.
+		choice := generator.MultipleChoice(fmt.Sprintf("Is %d prime?", p), "yes", "no")
+		choice.Explanation = fmt.Sprintf("%d is prime, only divisible by 1 and itself.", p)
+		choice.Facts = map[string]string{"p": strconv.Itoa(p)}
+		return choice
 	}
 	c := composites[rand.Intn(min(len(composites), scale*3))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is %d prime?", c),
-		Answer:      "no",
-		Explanation: fmt.Sprintf("%d is composite.", c),
-		// Same key as the prime branch: one schema covers both verdicts.
-		Facts: map[string]string{"p": strconv.Itoa(c)},
-	}
+	choice := generator.MultipleChoice(fmt.Sprintf("Is %d prime?", c), "no", "yes")
+	choice.Explanation = fmt.Sprintf("%d is composite.", c)
+	// Same key as the prime branch: one schema covers both verdicts.
+	choice.Facts = map[string]string{"p": strconv.Itoa(c)}
+	return choice
 }
 
 type primeFactGen struct{}
@@ -600,12 +596,16 @@ func (g *compositeGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		ans = "yes"
 		exp = fmt.Sprintf("%d is composite.", n)
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is %d composite?", n),
-		Answer:      ans,
-		Explanation: exp,
-		Facts:       map[string]string{"n": strconv.Itoa(n), "ans": ans, "is_composite": strconv.FormatBool(isComposite)},
+	// "yes" and "no" are words, so the learner needs options: the math field
+	// strips the spaces a typed sentence relies on.
+	other := "no"
+	if ans == "no" {
+		other = "yes"
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("Is %d composite?", n), ans, other)
+	p.Explanation = exp
+	p.Facts = map[string]string{"n": strconv.Itoa(n), "ans": ans, "is_composite": strconv.FormatBool(isComposite)}
+	return p
 }
 
 type expConceptGen struct{}
@@ -711,13 +711,53 @@ func (g *sqrtSimplifyGen) AnswerFormat() generator.AnswerFormat {
 	return generator.AnswerFormat{Hint: "Coefficient and radical, e.g. 5 sqrt(2)", InputMode: "text"}
 }
 
-var sqrtRe = regexp.MustCompile(`^(-?\d+)\s*sqrt\(\s*(\d+)\s*\)$`)
+var sqrtPartsRe = regexp.MustCompile(`^(-?\d*)sqrt\(?(\d+)\)?$`)
+
+// sqrtParts reads the forms a learner actually writes: "5 sqrt(2)",
+// "5sqrt(2)", "5√2", "5\sqrt{2}" and "sqrt(2)". The grader used to require
+// exactly "a sqrt(b)", so a learner who computed a perfect square and typed the
+// integer, 12 for sqrt(144), was told they were wrong (reports 138 and 221).
+func sqrtParts(s string) (coef, rad int, ok bool) {
+	v := strings.ToLower(strings.TrimSpace(s))
+	v = strings.NewReplacer("\\", "", "{", "", "}", "", " ", "", "\u221a", "sqrt").Replace(v)
+	// MathLive writes a radical as sqrt() while the radicand is being typed, so
+	// a learner who tapped the radical template and then the digits submitted
+	// "3sqrt()2" and was told their answer was malformed (report 233).
+	v = strings.ReplaceAll(v, "sqrt()", "sqrt")
+	m := sqrtPartsRe.FindStringSubmatch(v)
+	if m == nil {
+		return 0, 0, false
+	}
+	coef = 1
+	if m[1] != "" && m[1] != "-" {
+		parsed, err := strconv.Atoi(m[1])
+		if err != nil {
+			return 0, 0, false
+		}
+		coef = parsed
+	} else if m[1] == "-" {
+		coef = -1
+	}
+	rad, err := strconv.Atoi(m[2])
+	if err != nil || rad < 2 {
+		return 0, 0, false
+	}
+	return coef, rad, true
+}
+
+// squareFreeFactors are the radicands this generator may leave inside the
+// radical. Every one is square-free, so the answer cannot be simplified
+// further. Before this the remainder was drawn at random, so sqrt(100) was
+// served with the answer "5 sqrt(4)": not simplified, and 10, the value a
+// learner computes, was rejected as unparseable.
+var squareFreeFactors = []int{2, 3, 5, 6, 7, 10, 11, 13}
 
 func (g *sqrtSimplifyGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	perfects := []int{2, 3, 4, 5, 6}
 	square := perfects[rand.Intn(len(perfects))]
-	b := rand.Intn(max(1, scale*2)) + 2
+	pool := minInt(len(squareFreeFactors), 2+scale)
+	b := squareFreeFactors[rand.Intn(pool)]
 	n := square * square * b
 	return generator.Problem{
 		Question:    fmt.Sprintf("Simplify: \\(\\sqrt{%d}\\)", n),
@@ -728,15 +768,22 @@ func (g *sqrtSimplifyGen) Generate(ctx generator.GeneratorContext) generator.Pro
 }
 
 func (g *sqrtSimplifyGen) Grade(expected, answer string) grader.Result {
-	e := sqrtRe.FindStringSubmatch(expected)
-	a := sqrtRe.FindStringSubmatch(answer)
-	if e == nil || a == nil {
+	eCoef, eRad, eOK := sqrtParts(expected)
+	aCoef, aRad, aOK := sqrtParts(answer)
+	if !eOK || !aOK {
 		return grader.Result{Correct: false, Score: 0, Feedback: "Expected format: a sqrt(b) (e.g. 3 sqrt(2))"}
 	}
-	if e[1] == a[1] && e[2] == a[2] {
+	if eCoef == aCoef && eRad == aRad {
 		return grader.Result{Correct: true, Score: 1}
 	}
 	return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect"}
+}
+
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 type negNumberLineGen struct{}
@@ -744,7 +791,7 @@ type negNumberLineGen struct{}
 func (g *negNumberLineGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	a := rand.Intn(scale*2) - scale
-	// 0 is its own opposite — trivial and confusing; re-roll to non-zero.
+	// 0 is its own opposite, trivial and confusing; re-roll to non-zero.
 	for a == 0 {
 		a = rand.Intn(scale*2) - scale
 		if scale <= 1 {
@@ -767,6 +814,13 @@ type negAddSubGen struct{}
 
 func (g *negAddSubGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
+	if ctx.KPOrdinal == 1 {
+		scale = 1
+	} else if ctx.KPOrdinal == 2 {
+		scale = 3
+	} else if ctx.KPOrdinal == 3 {
+		scale = 5
+	}
 	a := rand.Intn(scale*4) - scale*2
 	b := rand.Intn(scale*2) - scale
 	return generator.Problem{
@@ -804,6 +858,13 @@ type orderOpsGen struct {
 
 func (g *orderOpsGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
+	if ctx.KPOrdinal == 1 {
+		scale = 1
+	} else if ctx.KPOrdinal == 2 {
+		scale = 3
+	} else if ctx.KPOrdinal == 3 {
+		scale = 5
+	}
 	a := rand.Intn(scale*2) + 1
 	b := rand.Intn(scale*2) + 1
 	c := rand.Intn(max(1, scale)) + 1

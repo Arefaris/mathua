@@ -113,7 +113,7 @@ The Darboux criterion is the foundation, but in practice most functions you enco
 
 A bounded function \( f:[a,b]\to\mathbb{R} \) is Riemann integrable if and only if its set of discontinuities has Lebesgue measure zero. A set \( D \subset [a,b] \) has measure zero if for every \( \varepsilon > 0 \) you can cover \( D \) with a countable collection of intervals whose total length is less than \( \varepsilon \). The discontinuities can be hidden inside intervals that, taken together, occupy as little of the real line as you want. Two examples show what this means in practice.
 
-> Lebesgue measure is the standard way of assigning length to subsets of the real line. For an interval \( [c,d] \) it equals \( d - c \). A set has measure zero if it can be covered by intervals of arbitrarily small total length — it occupies no space on the line in any meaningful sense. Finite and countable sets, such as the rationals, all have measure zero.
+> Lebesgue measure is the standard way of assigning length to subsets of the real line. For an interval \( [c,d] \) it equals \( d - c \). A set has measure zero if it can be covered by intervals of arbitrarily small total length, it occupies no space on the line in any meaningful sense. Finite and countable sets, such as the rationals, all have measure zero.
 
 
 Dirichlet's function is defined as:

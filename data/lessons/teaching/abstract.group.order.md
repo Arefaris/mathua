@@ -28,7 +28,7 @@ So in $S_n$, cycle type reads off the order: disjoint cycle lengths, take the lc
 
 The lcm rule is worth seeing on a case where the answer is not a cycle length. Take the permutation $(1\,2)(3\,4\,5)$ in $S_5$: the first cycle needs two applications to close and the second needs three, so the whole permutation closes when both have, which is at 6. The order is $\operatorname{lcm}(2,3)=6$, and no power smaller than 6 returns every point: after 2 the transposition is the identity but the 3-cycle has moved, after 3 the reverse.
 
-Because the cycle lengths of an element of $S_n$ form a partition of $n$, the possible orders are the lcms of partitions of $n$. For $n=5$ those partitions give $1, 2, 3, 4, 5, 6$, and 6 is the largest order — reached by the cycle type $2+3$ above. The largest order in $S_n$ is therefore not $n$ once $n\ge5$, and grows like $e^{\sqrt{n\log n}}$, not like $n$.
+Because the cycle lengths of an element of $S_n$ form a partition of $n$, the possible orders are the lcms of partitions of $n$. For $n=5$ those partitions give $1, 2, 3, 4, 5, 6$, and 6 is the largest order, reached by the cycle type $2+3$ above. The largest order in $S_n$ is therefore not $n$ once $n\ge5$, and grows like $e^{\sqrt{n\log n}}$, not like $n$.
 
 The lcm is also the reason a group's exponent can exceed every element's order. In an abelian group the order of $gh$ divides $\operatorname{lcm}(\operatorname{ord}g,\operatorname{ord}h)$; in a non-abelian group it need not, and the product of two involutions can have any order at all.
 

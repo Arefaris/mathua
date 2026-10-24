@@ -18,7 +18,7 @@ import (
 // This is the property that could not be expressed before: an image lived only as literal
 // markdown inside an opaque body, so a figure that failed to resolve and a figure that
 // rendered correctly were indistinguishable. If this test fails, a body has grown a
-// reference shape the extractor does not understand — and the consequence would be a
+// reference shape the extractor does not understand and the consequence would be a
 // diagram that silently stops appearing on `/learn`, which is exactly the bug that started
 // this.
 func TestAssetExtractionCoversEveryImageReference(t *testing.T) {
@@ -43,7 +43,7 @@ func TestAssetExtractionCoversEveryImageReference(t *testing.T) {
 		// Counted per paragraph, the same way the extractor finds them, so the two numbers
 		// are comparable. Two earlier counting methods were both wrong: per line disagrees for
 		// any reference whose alt text wraps, and whole-body disagrees in the other direction
-		// — a single match can swallow the figures in between and report 148 for a corpus that
+		//, a single match can swallow the figures in between and report 148 for a corpus that
 		// holds 292.
 		for _, chunk := range paragraphChunks(body) {
 			refs += len(imageRe.FindAllStringIndex(chunk.text, -1))
@@ -76,7 +76,7 @@ func TestAssetExtractionCoversEveryImageReference(t *testing.T) {
 			len(broken), sample)
 	}
 	if extracted != refs {
-		t.Errorf("extracted %d assets for %d well-formed references across %d lesson files — "+
+		t.Errorf("extracted %d assets for %d well-formed references across %d lesson files, "+
 			"a figure the extractor misses silently disappears from /learn",
 			extracted, refs, bodies)
 	}
@@ -87,7 +87,7 @@ func TestAssetExtractionCoversEveryImageReference(t *testing.T) {
 //
 // This is the gate `scripts/audit_lessons.py` could not write. It validated the
 // hand-maintained concept->diagram map in `internal/engine`, which says nothing about the
-// figures the lesson bodies actually cite — so a body could reference a missing diagram
+// figures the lesson bodies actually cite, so a body could reference a missing diagram
 // indefinitely and the audit would report clean. The resolution rule is duplicated from
 // `web/next-app/components/KatexContent.tsx:181-192`, and that duplication is deliberate
 // rather than incidental: the Go side needs it to gate the corpus, the client needs it to
@@ -158,7 +158,7 @@ func TestEveryAssetResolvesToAShippedDiagram(t *testing.T) {
 // Alt text may contain brackets, and the extractor must agree with the renderer about that.
 //
 // A caption of "The interval [a, b] has been divided into 6 subintervals" is ordinary Markdown
-// — CommonMark allows balanced brackets inside alt text, and react-markdown renders it. An
+// , CommonMark allows balanced brackets inside alt text, and react-markdown renders it. An
 // extractor that stops at the first `]` therefore disagrees with the renderer, and reports a
 // reference the learner sees as a working image as a corrupt one.
 func TestAssetAltTextMayContainBrackets(t *testing.T) {
@@ -354,7 +354,7 @@ func TestPlacedFiguresAreInTheSectionTheirPlacementNamed(t *testing.T) {
 // A diagram's accessible name must describe the diagram.
 //
 // `LessonDiagram` wraps an inlined SVG in `role="img"` with an `aria-label` from the alt text,
-// so a screen reader is unaffected either way — but `sanitizeSvg` returns early when the SVG
+// so a screen reader is unaffected either way, but `sanitizeSvg` returns early when the SVG
 // already has a `<title>`, so whatever that title says is what a browser shows as the hover
 // tooltip over the figure. The vendored algebrica SVGs carried `<title>Group 42</title>` and
 // friends from whatever batch generated them: 68 of the 69 that had a title, with the numbers
@@ -428,7 +428,7 @@ func allSvgs(t *testing.T, root string) []string {
 // The rune-at-a-time scan in BrokenImageRefs depends on two properties, and both are asserted
 // here rather than left as reasoning.
 //
-// This is *not* a regression test for a bug: the previous byte-at-a-time loop was lossless —
+// This is *not* a regression test for a bug: the previous byte-at-a-time loop was lossless,
 // it compared bytes for equality and appended the index it was standing on, so it never
 // truncated anything. ADR-038 records the same false alarm on `cmd/latexfix`, where a test
 // written to prove byte iteration corrupted UTF-8 passed against the unfixed code. What the
@@ -437,7 +437,7 @@ func allSvgs(t *testing.T, root string) []string {
 // The two properties: a continuation byte can never be `[`, and the offsets returned are byte
 // offsets, because the caller turns them into line numbers by counting newlines.
 func TestBrokenImageRefsReportsByteOffsetsAroundMultibyteText(t *testing.T) {
-	body := "α β γ — an em dash and 2π/3, plus !π not a bracket.\n" +
+	body := "α β γ, an em dash and 2π/3, plus !π not a bracket.\n" +
 		"\n" +
 		"![legit](/diagrams/algebrica/a.svg)\n" +
 		"\n" +
@@ -453,7 +453,7 @@ func TestBrokenImageRefsReportsByteOffsetsAroundMultibyteText(t *testing.T) {
 		t.Errorf("reported offset points at %q, want %q", got, "![")
 	}
 	if line := strings.Count(body[:off[0]], "\n") + 1; line != 5 {
-		t.Errorf("offset resolved to line %d, want 5 — offsets must be byte offsets", line)
+		t.Errorf("offset resolved to line %d, want 5, offsets must be byte offsets", line)
 	}
 }
 
@@ -494,7 +494,7 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 //	    worked answers has two of them, so a tier-based rule deletes a heading from 15
 //	    geometry lessons.
 //
-// The third reason is the lesson's prose citing the figure — by number ("as shown in
+// The third reason is the lesson's prose citing the figure, by number ("as shown in
 // Figure 1.2") or by position ("the graph above illustrates"), where removing the caption would
 // leave the prose pointing at nothing. It kept no row between 2026-10-16 and 2026-10-17,
 // because every caption a lesson cited by number had been reclaimed and the tier was empty; the
@@ -529,7 +529,7 @@ func TestContinuationByteIsNeverAnOpeningBracket(t *testing.T) {
 // that single movement.
 //
 // This is a ceiling on a known, explained remainder, not an assertion that 153 is correct.
-// The audit is the tool for that judgement — see docs/lesson-media.md — and it is a report,
+// The audit is the tool for that judgement, see docs/lesson-media.md and it is a report,
 // because the remaining cases are per instance.
 func TestOrphanCaptionsDoNotGrow(t *testing.T) {
 	root := "../../data/lessons"
@@ -579,7 +579,7 @@ func TestOrphanCaptionsDoNotGrow(t *testing.T) {
 //
 // This deliberately mirrors `section_a_candidates` in scripts/audit_lesson_media.py rather than
 // being a convenient second version of the rule. An earlier permissive version counted 416
-// against the audit's 324, and the ceiling below is only meaningful if the two agree — so
+// against the audit's 324, and the ceiling below is only meaningful if the two agree, so
 // agreement is itself the cross-check, and a drift shows up as a failing number rather than as
 // a silently weaker gate. The pruning script imports the audit for the same reason: two
 // versions of this rule disagreed by 74, and the extra 74 included content that had to stay.
@@ -587,7 +587,7 @@ func TestOrphanCaptionsDoNotGrow(t *testing.T) {
 // Drift can also come from the image pattern rather than from the caption rule, and it did:
 // `imageRe` here has carried a `\]` alternative since it was written, for the two vendored alts
 // that contain a bracket, while the audit's pattern stopped at the first `]` until Figure
-// 2.16's alt — "over [-2.5, 5]" — made the difference visible on 2026-10-16, at 259 here against
+// 2.16's alt, "over [-2.5, 5]", made the difference visible on 2026-10-16, at 259 here against
 // 260 there on the same corpus. The ceiling is an upper bound, so neither number failed and the
 // disagreement was found by recomputing both plans by hand; the audit's pattern is what changed.
 //

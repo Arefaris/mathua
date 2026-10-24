@@ -156,7 +156,7 @@ function GraphContent() {
   // tier advance, so the bar dropped from 100% to ~10% three times while the learner was
   // doing everything right, and a bundled threshold is a second source of truth that
   // drifts from the server's whenever the corpus is rebuilt. The server now derives it
-  // from the tier and the streak together — see `mastery.MasteryPct`.
+  // from the tier and the streak together, see `mastery.MasteryPct`.
   //
   // `decaying` still reads as a full bar, for the same reason `mastered` does: the
   // competence was demonstrated and what is outstanding is a retrieval check, not

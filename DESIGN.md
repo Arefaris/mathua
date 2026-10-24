@@ -6,9 +6,9 @@ A mathematics learning platform design system built on a geometric sans (Space G
 
 ## Design Philosophy
 
-**One family, two voices.** Space Grotesk carries all text — headings and body use weight alone for hierarchy. JetBrains Mono carries code, labels, nav, and structure. A grotesque for reading, a coding mono for structure: the pairing reads modern and technical without clashing.
+**One family, two voices.** Space Grotesk carries all text, headings and body use weight alone for hierarchy. JetBrains Mono carries code, labels, nav, and structure. A grotesque for reading, a coding mono for structure: the pairing reads modern and technical without clashing.
 
-The palette is defined as CSS custom properties in `web/next-app/app/globals.css`, and the colors are authored in **OKLCH**, not hex. OKLCH is perceptually uniform, so a lightness step is an even step to the eye, and the light and dark sets can share hue and chroma while differing only in lightness. A warm **gold** (`#c8a96e`) survives as the brand mark in two places that predate the token system — the 3D concept graph (`components/MathConceptGraph3D.tsx`) and the global error page (`app/global-error.tsx`) — but it is not a theme token and does not follow light and dark mode. The theme accent is blue.
+The palette is defined as CSS custom properties in `web/next-app/app/globals.css`, and the colors are authored in **OKLCH**, not hex. OKLCH is perceptually uniform, so a lightness step is an even step to the eye, and the light and dark sets can share hue and chroma while differing only in lightness. A warm **gold** (`#c8a96e`) survives as the brand mark in two places that predate the token system, the 3D concept graph (`components/MathConceptGraph3D.tsx`) and the global error page (`app/global-error.tsx`), but it is not a theme token and does not follow light and dark mode. The theme accent is blue.
 
 This document describes the tokens; `globals.css` is the source. If the two disagree, the CSS is right.
 
@@ -114,13 +114,13 @@ Examples:
 | Buttons | No border-radius (`borderRadius: 0`) |
 | Code blocks | `border none` with `background: var(--surface)` |
 
-Prefer 0.5px borders throughout — they render as 1px on most displays and feel lighter than full 1px lines. No border-radius on buttons. Code blocks get surface backgrounds instead of borders.
+Prefer 0.5px borders throughout, they render as 1px on most displays and feel lighter than full 1px lines. No border-radius on buttons. Code blocks get surface backgrounds instead of borders.
 
 ---
 
 ## Link Hover Effect
 
-All clickable text links use the `.link-underline` class — a line that animates from left to right on hover via a `::after` pseudo-element:
+All clickable text links use the `.link-underline` class, a line that animates from left to right on hover via a `::after` pseudo-element:
 
 ```css
 .link-underline {
@@ -159,12 +159,12 @@ Sticky blurred nav bar at the top of every page. In `components/Header.tsx`.
 - Position: `sticky top-0 z-100`, backdrop-filter: `blur(8px)`
 - Background: semitransparent surface, driven by `--surface`
 - Font: JetBrains Mono, 12px links, 13px brand name
-- Mobile: horizontal scroll (`overflow-x: auto`) with `white-space: nowrap` — no hamburger, no JS state
+- Mobile: horizontal scroll (`overflow-x: auto`) with `white-space: nowrap`, no hamburger, no JS state
 - Theme toggle: inline button in bar (not floating), hidden until `mounted`
 
 ### Footer
 
-In `components/Footer.tsx`. Links use `display: flex; flex-wrap: wrap` with `gap: 4px 12px` — wraps gracefully on any screen width. Tagline in Space Grotesk.
+In `components/Footer.tsx`. Links use `display: flex; flex-wrap: wrap` with `gap: 4px 12px`, wraps gracefully on any screen width. Tagline in Space Grotesk.
 
 ### FormulaBlock
 
@@ -204,8 +204,8 @@ Generate with `npm run diagrams`.
 
 | Pattern | Implementation |
 |---|---|
-| Container padding | `px-6 max-sm:px-4` — 24px → 16px |
-| Vertical spacing | `py-20 max-sm:py-12` — 80px → 48px |
+| Container padding | `px-6 max-sm:px-4`, 24px → 16px |
+| Vertical spacing | `py-20 max-sm:py-12`, 80px → 48px |
 | Column stacking | `flex flex-wrap gap-8 max-sm:flex-col max-sm:gap-4` |
 | Nav overflow | Horizontal scroll on mobile (`overflow-x: auto`) |
 | Footer wrapping | `display: flex; flex-wrap: wrap; gap: 4px 12px` |

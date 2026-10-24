@@ -2,7 +2,7 @@
 
 Status: **design. No migration written, no unit authored, no threshold chosen.**
 
-This is the decision map for **ADR-046** (`docs/adr/ADR-046-a-mastery-assessment-verifies-evidence-it-does.md`). ADR-046 settles the *shape* — a
+This is the decision map for **ADR-046** (`docs/adr/ADR-046-a-mastery-assessment-verifies-evidence-it-does.md`). ADR-046 settles the *shape*, a
 mastery unit is a named partition of the existing concept DAG, an assessment contributes
 evidence rather than writing mastery, two unit states are stored and five are derived, and
 `Engine.ProgressionGate` is the single server-side answer to "can this learner progress".
@@ -19,15 +19,15 @@ Read this before writing any migration. Two of these (D1, D2) determine the tabl
 
 The expensive part is not the code. It is:
 
-- **D3** — the partition over 666 concepts. Nothing in the corpus *states* block boundaries:
+- **D3**, the partition over 666 concepts. Nothing in the corpus *states* block boundaries:
   `data/concepts/*.json` carries only `id`, `label`, `domain`, `subdomain`, `prerequisites`,
   `grading_type`, `mastery_threshold`; `data/courses.json` has 22 entries of 4 loose `targets`
   each; `data/concepts/enrichment.json` is 10 heuristic overrides of which 2 carry
   `encompasses`. **A draft now exists** (`data/mastery_units.json`, width 3, 91 units) and it is
-  reported in full below — including the finding that no band width produces an
+  reported in full below, including the finding that no band width produces an
   assessment-grade partition, which is the result D3 was asked to produce and which makes the
   authoring decision *larger* rather than smaller.
-- **D4** — the pass threshold, which is a content judgement about what "can demonstrate this
+- **D4**, the pass threshold, which is a content judgement about what "can demonstrate this
   independently" means for this corpus, and which no test can tell us.
 
 D4 remains unanswered and unblocked by D3: a pass threshold is meaningful for a unit of any size,
@@ -37,7 +37,7 @@ so it can be decided in parallel with the authoring.
 
 ## Decisions
 
-### D1 — What is stored for an assessment attempt?
+### D1, What is stored for an assessment attempt?
 
 **Blocks:** D5, and the table migration.
 
@@ -47,11 +47,11 @@ not say what a result *is*.
 Open: is an attempt a single row (latest wins) or an append-only log of every attempt? The
 retake policy (D5) needs the log; the dashboard needs only the latest.
 
-- **Option A — one row per (unit, student), overwritten.** Simplest; retake policy has to
+- **Option A, one row per (unit, student), overwritten.** Simplest; retake policy has to
   infer history from a counter.
-- **Option B — append-only `mastery_unit_attempts`.** Every attempt is a row; the current state
+- **Option B, append-only `mastery_unit_attempts`.** Every attempt is a row; the current state
   is a query. Retake policy, analytics, and "attempts" in the spec all fall out.
-- **Option C — a row per attempt *plus* a materialised current-state row.** B's history with
+- **Option C, a row per attempt *plus* a materialised current-state row.** B's history with
   A's cheap read, at the cost of two things that can disagree.
 
 Recommended: **B**. The cost of an extra table is one insert; the cost of losing attempt
@@ -62,7 +62,7 @@ already exists per session (`internal/quiz/quiz.go:19`) but is deleted on comple
 Carry into the ADR: attempts are an event log; "is an assessment currently required" is derived
 from it, not stored as a boolean that events must keep in sync.
 
-### D2 — Is `assessment_required` stored, or derived?
+### D2, Is `assessment_required` stored or derived?
 
 **Blocks:** D5, the table migration, `ProgressionGate`.
 
@@ -72,19 +72,19 @@ which is not in `concept_progress`). It is less obviously true for `assessment_r
 may be derivable: "the active unit has all concepts learned and its assessment has not passed
 since".
 
-- **Option A — store both.** Simple queries; two state machines to keep consistent with the
+- **Option A, store both.** Simple queries; two state machines to keep consistent with the
   ladder.
-- **Option B — store only `remediation_required`**, derive `assessment_required` from unit
+- **Option B, store only `remediation_required`**, derive `assessment_required` from unit
   membership plus ladder state plus attempt history.
-- **Option C — store neither**; both are queries over the attempt log.
+- **Option C, store neither**; both are queries over the attempt log.
 
 Recommended: **B**, pending D1, because deriving the "required" case removes a state that must
-agree with the ladder — and every disagreement between a stored status and the ladder is the
+agree with the ladder and every disagreement between a stored status and the ladder is the
 ADR-037 bug class again. If D1 lands on B (append-only log), C becomes cheap enough to prefer.
 
 Carry into the ADR: the count of stored unit states, currently two.
 
-### D3 — How are mastery units authored?
+### D3, How are mastery units authored?
 
 **Blocks:** D4 (you cannot set a pass threshold for an undefined unit), and everything.
 
@@ -97,13 +97,13 @@ measurement was **wrong**, and correcting it is the substance of this entry.
 It reported "32 units, 22 backward edges, condensation depth 13, 0 unresolved", computed by a
 Python Kahn's algorithm that **enqueued a subdomain the moment it was first seen rather than when
 its in-degree reached zero**. That processes a node before its predecessors are done, which
-assigns it an under-estimated depth — and it silently "resolves" cycles, because a node in a
+assigns it an under-estimated depth and it silently "resolves" cycles, because a node in a
 cycle is popped and then its unprocessed predecessor is never required to have run. The
 `0 unresolved` was the tell and it was read as success.
 
 The Go implementation has the same trap available to it and initially fell into it in a worse
 way: a missing map entry reads as `0`, so 26 cyclic subdomains were assigned depth 0 and banded
-as if they were foundations. **That produced 36 units and 96 backward edges — a confidently wrong
+as if they were foundations. **That produced 36 units and 96 backward edges, a confidently wrong
 answer rather than a missing one**, which is the failure mode this ADR exists to prevent.
 `SubdomainDepths` now returns the unresolved set and callers cannot ignore it.
 
@@ -111,7 +111,7 @@ answer rather than a missing one**, which is the failure mode this ADR exists to
 
 | Observation | Value | Consequence |
 |---|---|---|
-| `subdomain` values | 125 | — |
+| `subdomain` values | 125 |, |
 | **Subdomain condensation depth** | **does not exist for 60 of 125** | 26 subdomains sit inside 9 cycles (`abstract_algebra.{fields,groups,rings,structures}`, `calculus.{advanced,derivatives,integrals,limits}`, `algebra.{factoring,polynomials,quadratics}` ↔ `complex_numbers.basics`, `topology.{algebraic,covering,manifolds}`, `linear_algebra.{determinants,matrices,vectors}`, and three more) and 34 more sit downstream, which Kahn cannot order either because ordering requires predecessors first. |
 | Domain condensation depth | **does not exist for 14 of 17** | Only 3 domains level. Grouping loses the DAG's acyclicity. |
 | Concept depth | resolves **666 of 666**, max 44 | The only well-defined depth function. |
@@ -119,7 +119,7 @@ answer rather than a missing one**, which is the failure mode this ADR exists to
 
 **The 22 backward edges were never a property of the corpus.** They were the same Kahn bug. Under
 concept depth there are **zero backward edges at every band width from 1 to 45**, by
-construction — a proper topological ranking on an acyclic graph.
+construction, a proper topological ranking on an acyclic graph.
 
 ### No band width produces an assessment-grade partition
 
@@ -134,7 +134,7 @@ construction — a proper topological ranking on an acyclic graph.
 | 45 | 17 | 26 | 128 | 0 | 0 | 11 |
 
 Small widths fragment into per-concept quizzes, which §12 forbids. Large widths produce units too
-large to assess — at width 45 the partition is just the 17 domains and calculus is 128 concepts.
+large to assess, at width 45 the partition is just the 17 domains and calculus is 128 concepts.
 The usable widths trade fragmentation against size rather than resolving either. **The rule alone
 does not produce assessment-grade boundaries**, so D3's answer is a derived draft *plus* hand
 merging, not a derivation.
@@ -153,7 +153,7 @@ duplicate membership, referential integrity, and drift from the declared rule.
 
 ### Now the open decision
 
-Not "which width" — that question is now secondary, because no width is clean. The real question
+Not "which width", that question is now secondary, because no width is clean. The real question
 is whether the unit boundary should be **derived from depth at all**, or authored around
 curriculum blocks with the derivation used only as a *check*. The draft says the former produces
 fragmentation; only someone who knows the learning model can say whether the fragmentation is a
@@ -163,38 +163,38 @@ Open sub-question: **a unit of one concept.** Permitted by the rules, reported a
 rather than an error. With 18 singletons at width 3 this is no longer hypothetical, and whether
 they are an error or a judgement is content, not schema.
 
-### D4 — What is the pass threshold?
+### D4, What is the pass threshold?
 
 **Blocks:** D5, and it is unanswerable before D3.
 
-Open: PASS is currently undefined — there is no score at all, only `IsComplete`. Options:
+Open: PASS is currently undefined, there is no score at all, only `IsComplete`. Options:
 
-- **Option A — proportion correct on the unit's assessment.** Needs a number.
-- **Option B — the evidence model.** A pass means the assessment's own answers cleared
+- **Option A, proportion correct on the unit's assessment.** Needs a number.
+- **Option B, the evidence model.** A pass means the assessment's own answers cleared
   `mastery.MasteryThreshold` (0.6) for every concept tested, rather than a single number. This
   is the most consistent with ADR-038, and it means "pass" is defined by the same model that
-  will judge mastery — which is either elegant or circular, and that is the thing to decide.
-- **Option C — per-unit thresholds.** Most faithful to "can demonstrate this independently",
+  will judge mastery, which is either elegant or circular and that is the thing to decide.
+- **Option C, per-unit thresholds.** Most faithful to "can demonstrate this independently",
   least maintainable.
 
-Also unresolved, and related: **the assessment-readiness heuristic** — when a unit becomes
+Also unresolved, and related: **the assessment-readiness heuristic**, when a unit becomes
 `assessment_ready`. ADR-046 permits the existing `xp.QuizGateXP` (50) as a starting proxy but
 requires it stay separate from the boundary, because ADR-046's whole premise is that XP is
 evidence of effort rather than of competence.
 
-### D5 — What clears a failed assessment?
+### D5, What clears a failed assessment?
 
 **Blocks:** the retake policy, `ProgressionGate`, and the remediation UI.
 
 Spec requires `FAIL → remediation → sufficient new evidence → available again`, and forbids
 immediate retakes. Open: what counts as "sufficient new evidence"?
 
-- **Option A — XP since the failure** past some fraction of `QuizGateXP`. Cheap, and it is the
+- **Option A, XP since the failure** past some fraction of `QuizGateXP`. Cheap and it is the
   metric that triggered the requirement in the first place.
-- **Option B — attempts on the failed concepts** past a floor, using `mastery.MasteryEvidenceFloor`
+- **Option B, attempts on the failed concepts** past a floor, using `mastery.MasteryEvidenceFloor`
   (6). Consistent with how mastery is measured; a learner can pass the floor on concepts that
   are not the ones they failed.
-- **Option C — the failed concepts reach `mastery` again.** Strictest, and the only version that
+- **Option C, the failed concepts reach `mastery` again.** Strictest and the only version that
   cannot be satisfied by unrelated work. Also the most frustrating, and it interacts with
   ADR-037: failing does not un-learn a concept, so "reach mastery again" may already hold at
   the moment of failure.
@@ -207,14 +207,14 @@ A or B with extra steps.
 Recommended: **B**, per failed concept, with the count stored on the attempt so it is not
 re-derived from a moving window.
 
-### D6 — Where is the boundary enforced?
+### D6, Where is the boundary enforced?
 
 **Blocks:** nothing, but it determines the test surface.
 
 ADR-046 names `Engine.ProgressionGate` as the single implementation and says it is called by
 `RecommendNext`, `NextQuestion` and the practice endpoint. Open: what does "blocked" refuse?
 
-The spec is explicit that it must **not** be a lock on the app — Graph, History,
+The spec is explicit that it must **not** be a lock on the app, Graph, History,
 Settings, and remediation all stay reachable. The remaining question is whether
 `/learn?concept=<a concept beyond the boundary>` is a refusal or a warning, given ADR-017 made
 `/learn` a soft dismissible banner rather than an auto-redirect.
@@ -240,7 +240,7 @@ Per the spec's §18. ADR-046 places these; this is the index.
 | 5 | Failing does not clear it | table transition test |
 | 6 | Failing yields remediation, not immediate retake | table transition test + `ProgressionGate` |
 | 7 | The server decides, not the frontend | assert the three call sites route through the gate |
-| 8 | A constructed URL cannot bypass it | HTTP-level test on `/api/lessons/{id}/practice` — a client-side test proves nothing |
+| 8 | A constructed URL cannot bypass it | HTTP-level test on `/api/lessons/{id}/practice`, a client-side test proves nothing |
 | 9 | Study/reference stays reachable | assert `ProgressionGate` is not called from Study/Graph/History/Settings |
 | 10 | Remediation is reachable while blocked | practice endpoint serves the failed concepts |
 

@@ -6,7 +6,7 @@ import (
 )
 
 // A diagnostic used to live only in the server's map, so a deploy answered the
-// next question with 404 "diagnostic session not found" — the screenshot a
+// next question with 404 "diagnostic session not found", the screenshot a
 // learner sent in was that message. The test simulates the restart precisely:
 // the map entry disappears, the row does not.
 func TestDiagnosticSession_SurvivesMemoryLoss(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 // seedBoardStudent creates an account, optionally names it, and awards xp in
 // this week. The key carries the name so one test can seed fifty learners
 // without inventing fifty keys by hand.
-func seedBoardStudent(t *testing.T, store *SQLiteStore, name, username string, xp int) string {
+func seedBoardStudent(t *testing.T, store Repository, name, username string, xp int) string {
 	t.Helper()
 	st, err := store.CreateStudent(name)
 	if err != nil {
@@ -129,9 +129,7 @@ func TestLeaderboardPage_AllTimeOutlivesTheWeek(t *testing.T) {
 	store := newTestStore(t)
 	sid := seedBoardStudent(t, store, "Last Week", "lastweek", 10)
 	old := time.Now().UTC().Add(-8 * 24 * time.Hour).UnixNano()
-	if _, err := store.db.Exec(`UPDATE xp_events SET created_at = ? WHERE student_id = ?`, old, sid); err != nil {
-		t.Fatalf("backdate event: %v", err)
-	}
+	execSeed(t, store, `UPDATE xp_events SET created_at = ? WHERE student_id = ?`, old, sid)
 
 	week := time.Now().UTC().Add(-24 * time.Hour)
 	weekly, wTotal, err := store.LeaderboardPage("weekly", week, 25, 0)
@@ -159,6 +157,18 @@ func TestLeaderboardPage_TiesAreDeterministic(t *testing.T) {
 	var ids []string
 	for i := 0; i < 5; i++ {
 		ids = append(ids, seedBoardStudent(t, store, fmt.Sprintf("Tie %d", i), "", 20))
+	}
+	// Pin created_at to an identical value across all candidates so the tie reaches id.
+	sameCreated := time.Now().UTC().Format(time.RFC3339)
+	switch s := store.(type) {
+	case *SQLiteStore:
+		if _, err := s.db.Exec("UPDATE students SET created_at = ?", sameCreated); err != nil {
+			t.Fatalf("pin created_at: %v", err)
+		}
+	case *PostgresStore:
+		if _, err := s.db.Exec("UPDATE students SET created_at = $1", sameCreated); err != nil {
+			t.Fatalf("pin created_at: %v", err)
+		}
 	}
 	week := time.Now().UTC().Add(-24 * time.Hour)
 

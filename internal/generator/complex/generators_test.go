@@ -19,12 +19,12 @@ func fuzzGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestConceptGen(t *testing.T)      { fuzzGen(t, &conceptGen{}) }
-func TestAddSubGen(t *testing.T)       { fuzzGen(t, &addSubGen{}) }
-func TestMultGen(t *testing.T)         { fuzzGen(t, &multGen{}) }
-func TestConjugateGen(t *testing.T)    { fuzzGen(t, &conjugateGen{}) }
-func TestDivideGen(t *testing.T)       { fuzzGen(t, &divideGen{}) }
-func TestPolarGen(t *testing.T)        { fuzzGen(t, &polarGen{}) }
+func TestConceptGen(t *testing.T)   { fuzzGen(t, &conceptGen{}) }
+func TestAddSubGen(t *testing.T)    { fuzzGen(t, &addSubGen{}) }
+func TestMultGen(t *testing.T)      { fuzzGen(t, &multGen{}) }
+func TestConjugateGen(t *testing.T) { fuzzGen(t, &conjugateGen{}) }
+func TestDivideGen(t *testing.T)    { fuzzGen(t, &divideGen{}) }
+func TestPolarGen(t *testing.T)     { fuzzGen(t, &polarGen{}) }
 
 func TestPolarGenExactAngles(t *testing.T) {
 	gen := &polarGen{}

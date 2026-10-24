@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/power-series/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/power-series/), CC BY-NC 4.0
 
 # Power Series
 
@@ -39,5 +39,5 @@ The coefficients of a convergent power series are forced:
 \(c_n = f^{(n)}(a)/n!\). Every power series is the Taylor series of the
 function it defines. Conversely, an infinitely differentiable function need
 not equal its Taylor series (the classic \(e^{-1/x^2}\) is flat at 0 but
-nonzero nearby) — equality requires remainder estimates, not just existence
+nonzero nearby), equality requires remainder estimates, not just existence
 of derivatives.

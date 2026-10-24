@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/fermat-theorem/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/fermat-theorem/), CC BY-NC 4.0
 
 # Fermat's Theorem
 
@@ -90,7 +90,7 @@ At \( x = 0 \), we have \(f'(0) = 0\). Thus, \( x = 0 \) is a stationary point. 
 
 ## Stationary points and boundary behavior
 
-The presence of a stationary point—namely, a point at which the derivative vanishes—does not by itself determine whether the function achieves a local maximum or minimum there. The classification of such points requires a more refined analysis of the function in a neighborhood of the candidate point, as well as an understanding of the structure of the domain. Consider, for instance, the [absolute value function](https://algebrica.org/absolute-value-function/)
+The presence of a stationary point, namely, a point at which the derivative vanishes, does not by itself determine whether the function achieves a local maximum or minimum there. The classification of such points requires a more refined analysis of the function in a neighborhood of the candidate point, as well as an understanding of the structure of the domain. Consider, for instance, the [absolute value function](https://algebrica.org/absolute-value-function/)
 
 \[y = f(x) = |x| = \begin{cases} +x & \text{if } x \ge 0\\\\[4pt] -x & \text{if } x < 0 \end{cases} \]
 

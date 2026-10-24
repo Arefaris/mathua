@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/inequalities-with-absolute-value/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/inequalities-with-absolute-value/), CC BY-NC 4.0
 
 # Inequalities with Absolute Value
 

@@ -6,7 +6,7 @@ For \(\sum a_{n}\) with \(a_{n} \neq 0\), compute
 
 \[L = \lim_{n\to\infty}\left|\frac{a_{n+1}}{a_{n}}\right|\]
 
-Then \(L < 1\) forces absolute convergence, \(L > 1\) (including \(\infty\)) forces divergence, and \(L = 1\) is inconclusive — the test says nothing and a comparison, integral, or root test is needed.
+Then \(L < 1\) forces absolute convergence, \(L > 1\) (including \(\infty\)) forces divergence, and \(L = 1\) is inconclusive, the test says nothing and a comparison, integral, or root test is needed.
 
 The ratio is the asymptotic growth factor of the terms. If \(|a_{n+1}|/|a_{n}|\) settles below some \(q < 1\), every term is eventually smaller than \(q\) times the one before it, so the tail is dominated by a geometric series \(q^{N}(1 + q + q^{2} + \cdots)\). That comparison is the proof: \(L<1\) means the terms decay geometrically, and geometric decay is what absolute convergence is.
 

@@ -46,7 +46,7 @@ func (a *AuthService) RequestEmailVerification(studentID string) error {
 		return errors.New("student not found")
 	}
 	if strings.TrimSpace(st.Email) == "" {
-		return errors.New("no email on file — add one in Settings first")
+		return errors.New("no email on file, add one in Settings first")
 	}
 	if !smtpConfigured() || frontendBase() == "" {
 		return errors.New("email verification not configured")
@@ -70,7 +70,7 @@ func (a *AuthService) RequestEmailVerification(studentID string) error {
 
 // VerifyEmail burns a verification token and marks the email verified.
 // Refuses with ErrEmailInUse when another verified row already holds the
-// address (e.g. an OAuth fork created before this verification landed) —
+// address (e.g. an OAuth fork created before this verification landed),
 // the holder logs in and connects instead of forking a duplicate.
 func (a *AuthService) VerifyEmail(token string) (string, error) {
 	if strings.TrimSpace(token) == "" {

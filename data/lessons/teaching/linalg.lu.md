@@ -11,7 +11,7 @@ Take $L = [[1,0],[2,1]]$, $b = [1,3]$:
 2. So $y = [1, 1]$: forward substitution reads top-down.
 3. Then $Ux = y$ solves bottom-up the same way.
 
-So triangular systems never need elimination — substitution walks straight through.
+So triangular systems never need elimination, substitution walks straight through.
 
 A $3\times3$ case shows where the multipliers come from. With
 
@@ -44,7 +44,7 @@ So LU factors the determinant computation into a diagonal read-off.
 
 The identity behind it is $\det(A)=\det(L)\det(U)$. A triangular matrix's determinant is the product of its diagonal, and $L$'s diagonal is all ones by construction, so $\det(A)$ is the product of $U$'s diagonal. The $3\times3$ example above has $U$ diagonal $(1,-3,1)$, so $\det(A) = -3$; expanding along the first row gives $1(50-48) - 2(40-42) + 3(32-35) = 2 + 4 - 9 = -3$, which agrees.
 
-One warning: a determinant of zero shows up as a zero on $U$'s diagonal, and that is exactly the case where the factorisation without pivoting failed. The determinant is still defined — the matrix is singular — but the elimination stopped, so the value has to come from a factorisation with a permutation, where the sign of $\det(P)$ enters: $\det(PA)=\det(P)\det(A)$.
+One warning: a determinant of zero shows up as a zero on $U$'s diagonal, and that is exactly the case where the factorisation without pivoting failed. The determinant is still defined, the matrix is singular, but the elimination stopped, so the value has to come from a factorisation with a permutation, where the sign of $\det(P)$ enters: $\det(PA)=\det(P)\det(A)$.
 
 ## Pivoting
 

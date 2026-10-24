@@ -114,40 +114,50 @@ func TestAllocateCredit_ReplaysWithoutBankingTwice(t *testing.T) {
 
 func TestAllocateCredit_BanksOncePerWholeRepetitionAndCapsLifetime(t *testing.T) {
 	store := newCreditStore(t)
-	student := creditLearner(t, store)
 
-	// 900k three times is 2.7 repetitions: two ordinals, 0.7 left over.
+	// A review cycle banks one ordinal, so 900k three times is 2.7 repetitions of
+	// credit that yield a single advance: the first two allocations reach a whole
+	// repetition, the third arrives after the cycle advanced and is refused. The
+	// refused credit is accounted rather than dropped, so the ledger still
+	// explains every unit.
+	cyclic := creditLearner(t, store)
+	var last CreditAllocation
 	for i := 0; i < 3; i++ {
-		if _, _, err := store.AllocateCredit(student, fmt.Sprintf("attempt:%d", 10+i), 1,
-			[]CreditCandidate{{ConceptID: "a", RawUnits: 900_000}}); err != nil {
+		alloc, _, err := store.AllocateCredit(cyclic, fmt.Sprintf("attempt:%d", 10+i), 1,
+			[]CreditCandidate{{ConceptID: "a", RawUnits: 900_000}})
+		if err != nil {
 			t.Fatalf("allocate %d: %v", i, err)
 		}
+		last = alloc
 	}
-	acc := account(t, store, student, "a", 1)
-	if acc.Banked != 2 || acc.Balance() != 700_000 {
-		t.Fatalf("account = %+v balance=%d, want 2 ordinals and 700000", acc, acc.Balance())
+	acc := account(t, store, cyclic, "a", 1)
+	if acc.Banked != 1 {
+		t.Fatalf("banked %d ordinals in one cycle, want 1", acc.Banked)
+	}
+	// 1.8M retained against one 1M ordinal leaves 800k of unfinished credit.
+	if acc.RetainedUnits != 1_800_000 || acc.Balance() != 800_000 {
+		t.Fatalf("account = %+v balance=%d, want 1800000 retained and 800000 balance", acc, acc.Balance())
+	}
+	ev := last.Events[0]
+	if ev.RetainedUnits != 0 || ev.DiscardedUnits != 900_000 || ev.DiscardReason != "cycle_already_advanced" {
+		t.Fatalf("refused event = %+v, want 900000 discarded for cycle_already_advanced", ev)
 	}
 
-	// A fourth 900k crosses the cap: 300k is retained, 600k discarded.
-	alloc, _, err := store.AllocateCredit(student, "attempt:20", 1, []CreditCandidate{{ConceptID: "a", RawUnits: 900_000}})
-	if err != nil {
-		t.Fatalf("allocate over cap: %v", err)
-	}
-	ev := alloc.Events[0]
-	if ev.RetainedUnits != 300_000 || ev.DiscardedUnits != 600_000 || ev.DiscardReason != "epoch_bank_limit" {
-		t.Fatalf("over-cap event = %+v", ev)
-	}
-	if got := account(t, store, student, "a", 1).RetainedUnits; got != 3*repetition.Micro {
-		t.Errorf("retained = %d, want the lifetime cap", got)
-	}
+	// The per-epoch bank limit is no longer reachable through the public API: the
+	// cycle guard refuses the second ordinal before the limit can apply, so its
+	// branch is a safety net rather than a path a learner can trigger. That is
+	// why this test proves the cycle invariant instead of the cap.
 }
 
-func TestProjectCredit_ChainsFromTheRealDueAndLeavesItAlone(t *testing.T) {
+func TestProjectCredit_AdvancesOneCycleAndLeavesTheRealDueAlone(t *testing.T) {
 	store := newCreditStore(t)
 	student := creditLearner(t, store)
 	realDue := time.Date(2026, 11, 1, 9, 30, 0, 0, time.UTC)
 	seedDue(t, store, student, "a", realDue)
 
+	// Two answers in one cycle: the first banks the single ordinal the cycle
+	// allows and the second is refused, so projection has one step to take.
+	// Two steps is what the old test asserted, and two steps is the compounding.
 	for i := 0; i < 2; i++ {
 		if _, _, err := store.AllocateCredit(student, fmt.Sprintf("attempt:%d", 30+i), 1,
 			[]CreditCandidate{{ConceptID: "a", RawUnits: 1_000_000}}); err != nil {
@@ -160,11 +170,14 @@ func TestProjectCredit_ChainsFromTheRealDueAndLeavesItAlone(t *testing.T) {
 	if err != nil {
 		t.Fatalf("project: %v", err)
 	}
-	if len(ordinals) != 2 {
-		t.Fatalf("projected %d ordinals, want 2", len(ordinals))
+	if len(ordinals) != 1 {
+		t.Fatalf("projected %d ordinals in one review cycle, want 1", len(ordinals))
 	}
-	if ordinals[0].CounterfactualDue != "2026-11-26T09:30:00Z" || ordinals[1].CounterfactualDue != "2026-12-21T09:30:00Z" {
-		t.Errorf("chain = %q then %q", ordinals[0].CounterfactualDue, ordinals[1].CounterfactualDue)
+	if got := ordinals[0].CounterfactualDue; got != "2026-11-26T09:30:00Z" {
+		t.Errorf("counterfactual due = %q, want one 25-day step from 2026-11-01", got)
+	}
+	if got := epochOf(t, store, student, "a"); got != 2 {
+		t.Fatalf("epoch after consuming the cycle = %d, want 2", got)
 	}
 
 	var stored string
@@ -176,14 +189,88 @@ func TestProjectCredit_ChainsFromTheRealDueAndLeavesItAlone(t *testing.T) {
 		t.Fatalf("production due date moved to %q", stored)
 	}
 
-	again, err := store.ProjectCredit(student, "a", 1, 25, now)
+	// A repeated projection has nothing banked in the current cycle, so it must
+	// consume nothing and must not advance the epoch a second time.
+	again, err := store.ProjectCredit(student, "a", 0, 25, now)
 	if err != nil {
 		t.Fatalf("retry projection: %v", err)
 	}
-	for i := range again {
-		if again[i].CounterfactualDue != ordinals[i].CounterfactualDue {
-			t.Errorf("retry changed ordinal %d: %q vs %q", i, again[i].CounterfactualDue, ordinals[i].CounterfactualDue)
+	if len(again) != 0 {
+		t.Errorf("retry projected %d ordinals, want none", len(again))
+	}
+	if got := epochOf(t, store, student, "a"); got != 2 {
+		t.Errorf("retry advanced the epoch to %d, want 2", got)
+	}
+}
+
+func TestProjectCredit_ALaterCycleEarnsAnotherAdvance(t *testing.T) {
+	store := newCreditStore(t)
+	student := creditLearner(t, store)
+	realDue := time.Date(2026, 11, 1, 9, 30, 0, 0, time.UTC)
+	seedDue(t, store, student, "a", realDue)
+	now := time.Date(2026, 10, 25, 0, 0, 0, 0, time.UTC)
+
+	if _, _, err := store.AllocateCredit(student, "attempt:1", 0,
+		[]CreditCandidate{{ConceptID: "a", RawUnits: 1_000_000}}); err != nil {
+		t.Fatalf("first allocate: %v", err)
+	}
+	first, err := store.ProjectCredit(student, "a", 0, 25, now)
+	if err != nil || len(first) != 1 {
+		t.Fatalf("first projection = %d ordinals, %v", len(first), err)
+	}
+
+	// The collapse is per cycle, not for the concept's lifetime: credit earned
+	// after the cycle closed still advances it once.
+	if _, _, err := store.AllocateCredit(student, "attempt:2", 0,
+		[]CreditCandidate{{ConceptID: "a", RawUnits: 1_000_000}}); err != nil {
+		t.Fatalf("second allocate: %v", err)
+	}
+	second, err := store.ProjectCredit(student, "a", 0, 25, now)
+	if err != nil {
+		t.Fatalf("second projection: %v", err)
+	}
+	if len(second) != 1 {
+		t.Fatalf("second projection = %d ordinals, want 1", len(second))
+	}
+	if got := epochOf(t, store, student, "a"); got != 3 {
+		t.Errorf("epoch after the second cycle = %d, want 3", got)
+	}
+}
+
+func epochOf(t *testing.T, store *SQLiteStore, student, concept string) int {
+	t.Helper()
+	var epoch int
+	if err := store.db.QueryRow(
+		`SELECT credit_epoch FROM implicit_credit_targets WHERE student_id = ? AND target_concept_id = ?`,
+		student, concept).Scan(&epoch); err != nil {
+		t.Fatalf("read epoch: %v", err)
+	}
+	return epoch
+}
+
+func TestAllocateCredit_DifferentSessionsShareOneCycle(t *testing.T) {
+	store := newCreditStore(t)
+	student := creditLearner(t, store)
+	seedDue(t, store, student, "a", time.Date(2026, 11, 1, 9, 30, 0, 0, time.UTC))
+
+	// The guard is keyed on the concept's review cycle, not on the session that
+	// produced the answer. Two sittings inside one cycle are still one review,
+	// so the second session must not bank a second ordinal.
+	for _, attempt := range []string{"session-morning:7", "session-evening:2"} {
+		if _, _, err := store.AllocateCredit(student, attempt, 1,
+			[]CreditCandidate{{ConceptID: "a", RawUnits: 1_000_000}}); err != nil {
+			t.Fatalf("allocate %s: %v", attempt, err)
 		}
+	}
+
+	var banked int
+	if err := store.db.QueryRow(
+		`SELECT COUNT(*) FROM implicit_credit_ordinals WHERE student_id = ? AND target_concept_id = ? AND state = 'banked'`,
+		student, "a").Scan(&banked); err != nil {
+		t.Fatalf("count banked: %v", err)
+	}
+	if banked != 1 {
+		t.Fatalf("banked %d ordinals across two sessions in one cycle, want 1", banked)
 	}
 }
 

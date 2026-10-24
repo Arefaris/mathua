@@ -90,17 +90,24 @@ export default function TableOfContents({
             {t('shell.toc.contents')}
           </button>
         </SheetTrigger>
-        <SheetContent side="bottom" className="max-h-[70vh] overflow-y-auto">
+        {/* A card at the bottom-right, not a full-width bar: nine entries used to fill the whole
+            width and read as a page takeover. The card is 240px wide, so a strip of the page
+            stays visible and every label sits on one line, and each row keeps a 44px tap
+            target. */}
+        <SheetContent
+          side="bottom"
+          className="inset-x-auto right-3 bottom-3 w-[min(15rem,calc(100vw-1.5rem))] max-h-[60vh] overflow-y-auto rounded-xl border px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-lg"
+        >
           <SheetTitle style={{ fontFamily: mono, fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
             {heading}
           </SheetTitle>
-          <nav aria-label={t('shell.toc.label')} className="mt-2 flex flex-col">
+          <nav aria-label={t('shell.toc.label')} className="mt-1 flex flex-col">
             {headings.map(h => (
               <button
                 key={h.id}
                 type="button"
                 onClick={() => jump(h.id)}
-                className="min-h-[44px] border-b border-mathua-border py-2 text-left font-mono text-[13px]"
+                className="min-h-[44px] border-b border-mathua-border py-1.5 text-left font-mono text-[12px] leading-tight"
                 style={{ color: active === h.id ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
               >
                 {h.text}

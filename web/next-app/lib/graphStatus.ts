@@ -22,14 +22,14 @@ export { type MasteryState }
  * This used to carry its own copies of both mastery predicates, and had already drifted
  * from them: it mapped MASTERED, PRACTICING and LEARNING but not DECAYING, so a concept
  * the learner had mastered and not reviewed for a fortnight was neither recorded as
- * started nor as mastered. It therefore rendered as `unseen` — with no progress bar, as
- * if never attempted — and, because it was missing from the `mastered` set, it locked
+ * started nor as mastered. It therefore rendered as `unseen`, with no progress bar, as
+ * if never attempted and, because it was missing from the `mastered` set, it locked
  * every concept downstream of it.
  *
  * That is precisely the failure `lib/progress.ts` was extracted to prevent, and its own
  * comment predicted it: "they would drift the moment one was edited, and a drift here is
  * invisible: Profile would count a concept as mastered while the scheduler scheduled it
- * for review." Here it was worse — the graph relocked the frontier. Both questions are
+ * for review." Here it was worse, the graph relocked the frontier. Both questions are
  * now asked of `lib/progress.ts`, which is also what
  * `scheduler.prereqsMet` mirrors on the server.
  */
@@ -44,7 +44,7 @@ export function deriveStatuses(
     if (!knownIds.has(id)) continue
     const state = masteryState(p)
     // `unseen` here means "no usable progress row", which is the same as having no row
-    // at all — so it is not recorded and the concept is judged on its prerequisites.
+    // at all, so it is not recorded and the concept is judged on its prerequisites.
     if (state === 'unseen') continue
     states.set(id, state)
   }

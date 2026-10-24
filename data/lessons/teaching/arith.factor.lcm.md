@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 2.5 Prime Factorization and the Least Common Multiple
 
@@ -29,7 +29,7 @@ $$
 
 #### Prime Factorization Using the Factor Tree Method
 
-One way to find the prime factorization of a number is to make a factor tree. We start by writing the number, and then writing it as the product of two factors. We write the factors below the number and connect them to the number with a small line segment—a “branch” of the factor tree.
+One way to find the prime factorization of a number is to make a factor tree. We start by writing the number, and then writing it as the product of two factors. We write the factors below the number and connect them to the number with a small line segment, a “branch” of the factor tree.
 
 If a factor is prime, we circle it (like a bud on a tree), and do not factor that “branch” any further. If a factor is not prime, we repeat this process, writing it as the product of two factors and adding new branches to the tree.
 
@@ -276,7 +276,7 @@ One of the reasons we look at multiples and primes is to use these techniques to
 
 #### Listing Multiples Method
 
-A common multiple of two numbers is a number that is a multiple of both numbers. Suppose we want to find common multiples of 10 and 25. We can list the first several multiples of each number. Then we look for multiples that are common to both lists—these are the common multiples.
+A common multiple of two numbers is a number that is a multiple of both numbers. Suppose we want to find common multiples of 10 and 25. We can list the first several multiples of each number. Then we look for multiples that are common to both lists, these are the common multiples.
 
 $$
 \begin{array}{l}

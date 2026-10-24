@@ -13,6 +13,7 @@ import Loading from '../../components/Loading'
 import type { DiagnosticProgress, GoalPlanRes } from '../../lib/api'
 import type { AnswerFormat } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
+import { stemWithoutChoices } from '../../lib/choices'
 import { domainLabels, type DomainInfo } from './domains'
 import { useT } from '../../lib/i18n'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
@@ -70,6 +71,9 @@ export function WelcomeStep({
           </p>
           <p className="text-mathua-muted text-xs mt-2 px-2">
             {t('goals.onboard.confirmDuration')}
+          </p>
+          <p className="text-mathua-muted text-xs mt-1 px-2">
+            {t('goals.onboard.confirmFoundations')}
           </p>
         </div>
         <BriefingCard eyebrow={t('goals.onboard.expect')} items={DIAGNOSTIC_BRIEFING} />
@@ -225,7 +229,7 @@ export function WelcomeStep({
           A learner can start any topic whose prerequisites are met without ever
           taking the diagnostic: /learn?concept=… is gated server-side, not by
           this flag, and /domains is already browsable. Nothing here records a
-          result, seeds placement, or grants credit — it only makes an existing
+          result, seeds placement, or grants credit, it only makes an existing
           path findable from the screen a learner is actually looking at. */}
       <div className="text-center px-4 mt-6">
         <Link
@@ -262,6 +266,7 @@ export function DiagnosticStep({
   onSkip,
   skipsLeft,
   onRestart,
+  onRetrySubmit,
   onRetryPlan,
   retryAvailable,
   onRetryQuestion,
@@ -288,6 +293,9 @@ export function DiagnosticStep({
   onSkip: () => void
   skipsLeft: number
   onRestart: () => void
+  /** Retry the failed submission as the kind of answer it was. Optional because
+   *  a caller that only ever submits graded answers can rely on onSubmit. */
+  onRetrySubmit?: () => void
   onRetryPlan: () => void
   retryAvailable: boolean
   onRetryQuestion: () => void
@@ -309,7 +317,7 @@ export function DiagnosticStep({
         <div className="bg-mathua-surface border border-mathua-border rounded-none p-4 sm:p-6 mb-6 w-full max-w-full min-w-0 overflow-hidden">
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4 w-full max-w-full min-w-0 overflow-hidden">
             <div className="w-full max-w-full min-w-0 overflow-hidden">
-              <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{question}</KatexContent>
+              <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{stemWithoutChoices(question)}</KatexContent>
             </div>
           </div>
           {/* The controls belong to the question that is still unanswered.
@@ -350,18 +358,20 @@ export function DiagnosticStep({
           )}
           <div className="mt-2 flex items-center justify-between gap-2">
             <p className="font-mono text-[11px] text-mathua-muted">{answerFormat.hint}</p>
-            {!lastResult && !loading && (
+            {!lastResult && (
               <button
                 type="button"
                 onClick={onDontKnow}
-                className="shrink-0 font-mono text-[11px] text-mathua-muted hover:text-mathua-red underline underline-offset-2"
+                disabled={loading}
+                className="shrink-0 font-mono text-[11px] text-mathua-muted hover:text-mathua-red underline underline-offset-2 disabled:opacity-50"
               >
-                {t('goals.question.dontKnow')}
+                {loading ? t('goals.question.submitting') : t('goals.question.dontKnow')}
               </button>
             )}
           </div>
           <div className="mt-2 flex justify-end">
             <ReportButton
+              key={`diag-${shownNumber}-${question}`}
               conceptId={conceptId}
               kind="question"
               question={question}
@@ -377,6 +387,18 @@ export function DiagnosticStep({
         {lastResult && (
           <div className={`bg-mathua-surface border rounded-none p-4 mb-4 text-center ${lastResult.correct ? 'border-mathua-green' : 'border-mathua-red'}`}>
             <KatexContent className={lastResult.correct ? 'text-mathua-green' : 'text-mathua-red'}>{lastResult.feedback}</KatexContent>
+            {/* A miss offers the teaching surface as a deliberate next step, not
+                as the answer. The feedback above is a verdict; this is the only
+                route from it to an explanation, and it leaves the assessment
+                rather than injecting instruction into it. */}
+            {!lastResult.correct && !done && conceptId && (
+              <Link
+                href={`/learn?concept=${encodeURIComponent(conceptId)}`}
+                className="mt-3 inline-flex items-center border border-mathua-blue text-mathua-blue hover:bg-mathua-blue-faint px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em]"
+              >
+                {t('goals.question.learnThis')}
+              </Link>
+            )}
             {!lastResult.correct && !done && retryAvailable && (
               <button
                 type="button"
@@ -394,7 +416,7 @@ export function DiagnosticStep({
           <div className="mb-4">
             <SubmitErrorBlock
               error={submitError}
-              onRetry={onSubmit}
+              onRetry={onRetrySubmit ?? onSubmit}
               onSkip={onSkip}
               skipsLeft={skipsLeft}
               onRestart={onRestart}

@@ -7,7 +7,7 @@
 Take $|A|=3$, $|B|=4$, $|A\cap B|=1$:
 1. Adding counts gives $3+4=7$, but the shared element was counted twice.
 2. Subtract the overlap once: $7-1=6$.
-3. Check: 2 elements only in $A$, 3 only in $B$, 1 shared — $2+3+1=6$.
+3. Check: 2 elements only in $A$, 3 only in $B$, 1 shared, $2+3+1=6$.
 
 So $|A\cup B|=|A|+|B|-|A\cap B|$ corrects exactly the double count.
 
@@ -16,7 +16,7 @@ So $|A\cup B|=|A|+|B|-|A\cap B|$ corrects exactly the double count.
 Count $n\le10$ divisible by neither 2 nor 3:
 1. Multiples of 2: $\lfloor10/2\rfloor=5$; of 3: $\lfloor10/3\rfloor=3$; of both, i.e. of 6: $\lfloor10/6\rfloor=1$.
 2. Sieve: $10-5-3+1=3$.
-3. Survivors are 1, 5, 7 — indeed 3 numbers.
+3. Survivors are 1, 5, 7, indeed 3 numbers.
 
 So each divisibility condition removes its multiples and the overlap is added back once.
 

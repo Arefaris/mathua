@@ -6,8 +6,8 @@
 // attempt to load it here ends in a blank field or a thrown selector error.
 //
 // Stubbing is therefore the honest option for the component suite: these tests are
-// about Mathua's behaviour — which control is chosen, what gets submitted, what the
-// learner sees — and none of that is MathLive's. What the real library does inside
+// about Mathua's behaviour, which control is chosen, what gets submitted, what the
+// learner sees and none of that is MathLive's. What the real library does inside
 // the field is verified by the Playwright suites (`e2e/math-input.spec.ts`,
 // `e2e/mobile-math.spec.ts`), which run Chromium for real.
 //

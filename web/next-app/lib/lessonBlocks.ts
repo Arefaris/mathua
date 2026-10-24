@@ -9,7 +9,7 @@ import { stripMathDelimiters } from './lessonMath'
 //
 // The dedupe rule is the interesting part and is preserved exactly. A KP shard may name the same
 // lesson section twice under byte-different headings, so identical bodies recur. Rendering one
-// of them and pointing at the other is not an option — there is no second place to point, and
+// of them and pointing at the other is not an option, there is no second place to point, and
 // the learner would read it twice.
 
 /** Normalize a section name the way Go's `normSectionKey` does. Mirrored by `norm_section` in `scripts/audit_lessons.py`. */
@@ -53,7 +53,7 @@ export function buildExampleBlocks(conceptId: string, res: LessonKpsRes): Exampl
   kps.forEach((kp, k) => {
     // The shard is an external payload, so every field is defaulted here rather than at the
     // point of use. A KP with no label reaches `stripMathDelimiters` on the way to the
-    // summary text, and that function calls `.replace` on what it is given — so a missing
+    // summary text, and that function calls `.replace` on what it is given, so a missing
     // label took down the whole page rather than rendering an unlabelled example.
     const body = kp.worked_example ?? ''
     const label = kp.label ?? ''

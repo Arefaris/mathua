@@ -18,6 +18,8 @@ type TransitionCtx struct {
 	RequiredStreak    int
 	AvgResponseTime   float64
 	ResponseThreshold float64
+	// KPState tracks the Knowledge Point state machine if defined for the concept.
+	KPState *KPStateMachine
 }
 
 // Machine steps from one mastery status to the next based on evidence.
@@ -31,7 +33,7 @@ type TransitionCtx struct {
 //
 // All three used to be gated on the single condition
 // `streak >= required AND avg time <= threshold`, which made the ladder one test repeated
-// until the streak was long enough — 30 consecutive correct answers for the 459 concepts
+// until the streak was long enough, 30 consecutive correct answers for the 459 concepts
 // whose threshold is 10, and no new information at any rung. See
 // docs/mastery-semantics.md.
 //
@@ -42,6 +44,24 @@ type Machine struct{}
 
 // Next computes the next status.
 func (m *Machine) Next(current Status, ctx TransitionCtx) Status {
+	// Knowledge points gate and pace the ladder; they never replace it. Completing every
+	// knowledge point used to return MASTERED here, so a concept with points granted
+	// mastery on evidence the ladder refuses (four correct answers, one instance, one
+	// difficulty, against `RungDemonstrated` which wants variety and difficulty). The
+	// state machine is now an input: an unfinished concept is held at its current rung,
+	// a finished one still has to climb. See docs/mastery-invariants.md.
+	if ctx.KPState != nil && ctx.KPState.TotalKPs > 0 && !ctx.KPState.Completed {
+		if current == StatusUnseen {
+			if ctx.KPState.CurrentStreak > 0 || ctx.KPState.CurrentOrdinal > 1 {
+				return StatusLearning
+			}
+			return StatusUnseen
+		}
+		if ctx.KPState.CurrentOrdinal > 1 && current == StatusLearning {
+			return StatusPracticing
+		}
+		return current
+	}
 	switch current {
 	case StatusUnseen, StatusLearning, StatusPracticing:
 		if HighestRung(ctx.Evidence) >= requiredRung(current) {
@@ -106,14 +126,14 @@ func SM2Quality(streakMet bool, timeRatio float64) int {
 //
 // It used to be computed as `streak / required_streak`, which is wrong for this purpose
 // because the engine resets the streak to 1 on every tier advance (Engine.submitAnswerWithTask).
-// A concept therefore sat at 100% and then dropped to ~10%, three times on the way up —
+// A concept therefore sat at 100% and then dropped to ~10%, three times on the way up,
 // the learner watched their progress fall while doing everything right. Any streak-derived
 // ratio inherits that sawtooth.
 //
 // Attainment is measured from the tier, not the counter: each of the three transitions is
 // worth a third, and progress within the current tier fills the rest. That is monotonic
 // across an advance, because the tier's baseline jump is larger than the within-tier reset
-// it replaces — LEARNING at 9/10 of its streak reads 63%, and the same instant as
+// it replaces, LEARNING at 9/10 of its streak reads 63%, and the same instant as
 // PRACTICING at 1/10 reads 70%.
 //
 // Uses only columns that already exist (status, streak, threshold), so it needs no

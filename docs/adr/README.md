@@ -27,9 +27,9 @@ One file per decision. The domain language stays in [`CONTEXT.md`](../../CONTEXT
 | [ADR-021](ADR-021-study-is-reference-only-detail.md) | Study is reference-only detail | 2026-09-29 |
 | [ADR-022](ADR-022-reset-clears-evidence-keeps-choices.md) | Reset clears evidence, keeps choices | 2026-09-29 |
 | [ADR-023](ADR-023-single-next-head-over-a-ranked-shelf.md) | Single Next head over a ranked shelf | 2026-09-30 |
-| [ADR-024](ADR-024-progress-moved-off-the-hub-2026-10.md) | Progress moved off the hub (2026-10-01) — **partly superseded by ADR-025** |  |
+| [ADR-024](ADR-024-progress-moved-off-the-hub-2026-10.md) | Progress moved off the hub (2026-10-01), **partly superseded by ADR-025** |  |
 | [ADR-025](ADR-025-the-report-lives-on-the-hub.md) | The report lives on the hub | 2026-10-01 |
-| [ADR-026](ADR-026-a-wipe-must-be-unwritable-and-must.md) | A wipe must be unwritable, and must not lie about why (2026-10-03) — amends ADR-022 |  |
+| [ADR-026](ADR-026-a-wipe-must-be-unwritable-and-must.md) | A wipe must be unwritable, and must not lie about why (2026-10-03), amends ADR-022 |  |
 | [ADR-027](ADR-027-the-self-check-is-a-simplification-not.md) | The self-check is a simplification, not an equivalence check | 2026-10-03 |
 | [ADR-028](ADR-028-a-corpus-checker-must-state-what-it.md) | A corpus checker must state what it did not check | 2026-10-03 |
 | [ADR-029](ADR-029-a-keycap-s-latex-is-an-insert.md) | A keycap's `latex` is an insert, not a command | 2026-10-03 |
@@ -39,7 +39,7 @@ One file per decision. The domain language stays in [`CONTEXT.md`](../../CONTEXT
 | [ADR-033](ADR-033-a-confirmation-phrase-is-compared-case-insensitively.md) | A confirmation phrase is compared case-insensitively, because phones capitalise it | 2026-10-03 |
 | [ADR-034](ADR-034-mathlive-is-universal-and-the-keypad-answers.md) | MathLive is universal, and the keypad answers for the corpus rather than for arithmetic | 2026-10-03 |
 | [ADR-035](ADR-035-the-spacebar-was-never-broken-it-was.md) | The spacebar was never broken, it was empty | 2026-10-04 |
-| [ADR-036](ADR-036-one-box-square-corners-and-no-border.md) | One box, square corners, and no border outside the palette (2026-10-04) — three independent commits, because the report bundled three unrelated defects |  |
+| [ADR-036](ADR-036-one-box-square-corners-and-no-border.md) | One box, square corners, and no border outside the palette (2026-10-04), three independent commits, because the report bundled three unrelated defects |  |
 | [ADR-037](ADR-037-mastery-is-an-exit-and-decay-is.md) | Mastery is an exit, and decay is not a return to class | 2026-10-04 |
 | [ADR-038](ADR-038-mastery-is-decided-by-evidence-and-the.md) | Mastery is decided by evidence, and the ladder is three different questions | 2026-10-04 |
 | [ADR-039](ADR-039-difficulty-belongs-to-the-question-not-to.md) | Difficulty belongs to the question, not to the host that graded it | 2026-10-05 |

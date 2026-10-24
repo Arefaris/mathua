@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/ai"
+	"github.com/chuma-beep/mathua/internal/fsrs"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -113,6 +114,10 @@ CREATE TABLE IF NOT EXISTS concept_progress (
     mastered_at      TEXT,
     weakness_score   DOUBLE PRECISION NOT NULL DEFAULT 0,
     placement_seeded INTEGER NOT NULL DEFAULT 0,
+    is_provisional   INTEGER NOT NULL DEFAULT 0,
+    fsrs_stability   DOUBLE PRECISION,
+    fsrs_difficulty  DOUBLE PRECISION,
+    fsrs_last_review TEXT,
     PRIMARY KEY (student_id, concept_id)
 );
 
@@ -171,6 +176,8 @@ CREATE TABLE IF NOT EXISTS active_sessions (
     last_concept_id TEXT NOT NULL DEFAULT '',
     session_review  INTEGER NOT NULL DEFAULT 0,
     session_new     INTEGER NOT NULL DEFAULT 0,
+    difficulty      DOUBLE PRECISION,
+    kp_ordinal      INTEGER NOT NULL DEFAULT 0,
     updated_at      TEXT NOT NULL DEFAULT (now()::text)
 );
 
@@ -183,7 +190,7 @@ CREATE TABLE IF NOT EXISTS student_topic_speed (
     efactor       REAL NOT NULL DEFAULT 2.5,
     interval      INTEGER NOT NULL DEFAULT 0,
     repetitions   INTEGER NOT NULL DEFAULT 0,
-    learning_speed REAL NOT NULL DEFAULT 1.0,
+    learning_speed DOUBLE PRECISION NOT NULL DEFAULT 1.0,
     updated_at    TEXT NOT NULL DEFAULT (now()::text),
     PRIMARY KEY (student_id, concept_id),
     FOREIGN KEY (student_id) REFERENCES students(id)
@@ -333,6 +340,17 @@ CREATE TABLE IF NOT EXISTS implicit_credit_ordinals (
     PRIMARY KEY (student_id, target_concept_id, credit_epoch, ordinal)
 );
 
+-- Targeted remedial queue: 2-miss halt remedial prerequisites survive restarts.
+CREATE TABLE IF NOT EXISTS student_remedial_queue (
+    student_id TEXT NOT NULL,
+    concept_id TEXT NOT NULL,
+    priority   INTEGER NOT NULL,
+    created_at BIGINT NOT NULL,
+    PRIMARY KEY (student_id, concept_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_remedial_queue_student ON student_remedial_queue(student_id, priority, created_at);
+
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version    INTEGER PRIMARY KEY,
     applied_at TEXT NOT NULL DEFAULT (now()::text)
@@ -362,7 +380,7 @@ func NewPostgresStore(dsn string) (*PostgresStore, error) {
 	if err != nil {
 		return nil, fmt.Errorf("open postgres: %w", err)
 	}
-	// Fix 7: bounded pool — previously unlimited (database/sql default).
+	// Fix 7: bounded pool, previously unlimited (database/sql default).
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
@@ -384,10 +402,30 @@ func (s *PostgresStore) Migrate() error {
 	return pgAuthMigrate(s.db)
 }
 
+// rebindDollars renumbers `?` placeholders for Postgres. Statements shared by
+// both engines are written once, in the SQLite spelling, and the Postgres
+// caller rewrites them here rather than keeping a second copy that can drift.
+func rebindDollars(query string) string {
+	var b strings.Builder
+	n := 0
+	for _, r := range query {
+		if r == '?' {
+			n++
+			b.WriteString(fmt.Sprintf("$%d", n))
+			continue
+		}
+		b.WriteRune(r)
+	}
+	return b.String()
+}
+
 func pgAuthMigrate(db *sql.DB) error {
 	migrations := []string{
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS username TEXT",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS password_hash TEXT",
+		// REAL is four bytes in Postgres and eight in SQLite, so 1.4 came back as
+		// 1.39999997 and a round trip stopped being equal to the value written.
+		"ALTER TABLE student_topic_speed ALTER COLUMN learning_speed TYPE DOUBLE PRECISION",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS course_id TEXT",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS xp_total INTEGER NOT NULL DEFAULT 0",
 		"ALTER TABLE students ADD COLUMN IF NOT EXISTS xp_today INTEGER NOT NULL DEFAULT 0",
@@ -410,6 +448,10 @@ func pgAuthMigrate(db *sql.DB) error {
 		"CREATE INDEX IF NOT EXISTS idx_students_google_id ON students(google_id)",
 		"ALTER TABLE concept_progress ADD COLUMN IF NOT EXISTS weakness_score DOUBLE PRECISION NOT NULL DEFAULT 0",
 		"ALTER TABLE concept_progress ADD COLUMN IF NOT EXISTS placement_seeded INTEGER NOT NULL DEFAULT 0",
+		"ALTER TABLE concept_progress ADD COLUMN IF NOT EXISTS is_provisional INTEGER NOT NULL DEFAULT 0",
+		"ALTER TABLE concept_progress ADD COLUMN IF NOT EXISTS fsrs_stability DOUBLE PRECISION",
+		"ALTER TABLE concept_progress ADD COLUMN IF NOT EXISTS fsrs_difficulty DOUBLE PRECISION",
+		"ALTER TABLE concept_progress ADD COLUMN IF NOT EXISTS fsrs_last_review TEXT",
 		"ALTER TABLE active_sessions ADD COLUMN IF NOT EXISTS last_concept_id TEXT NOT NULL DEFAULT ''",
 		"ALTER TABLE active_sessions ADD COLUMN IF NOT EXISTS session_review INTEGER NOT NULL DEFAULT 0",
 		"ALTER TABLE active_sessions ADD COLUMN IF NOT EXISTS session_new INTEGER NOT NULL DEFAULT 0",
@@ -420,6 +462,7 @@ func pgAuthMigrate(db *sql.DB) error {
 		// plausible-looking number would be fabricating evidence.
 		"ALTER TABLE attempts ADD COLUMN IF NOT EXISTS difficulty DOUBLE PRECISION",
 		"ALTER TABLE active_sessions ADD COLUMN IF NOT EXISTS difficulty DOUBLE PRECISION",
+		"ALTER TABLE active_sessions ADD COLUMN IF NOT EXISTS kp_ordinal INTEGER NOT NULL DEFAULT 0",
 		// The administrative role. NOT NULL DEFAULT 'student' migrates every existing account
 		// to a learner, which is the only safe direction: nothing in a pre-role database
 		// carries evidence about who was administering anything, because it could not.
@@ -482,7 +525,7 @@ func pgAuthMigrate(db *sql.DB) error {
 			}
 		}
 	}
-	// One-time data backfills, version-guarded (Fix 7) — see sqlite twin.
+	// One-time data backfills, version-guarded (Fix 7), see sqlite twin.
 	dataMigrations := map[int][]string{
 		1: {"UPDATE students SET daily_xp_goal = 30 WHERE daily_xp_goal = 150"},
 		2: {`UPDATE students SET username = lower(username)
@@ -494,7 +537,7 @@ func pgAuthMigrate(db *sql.DB) error {
 		// (30→10, 150→50, 100→33); goals already at/below 10 are untouched.
 		3: {"UPDATE students SET daily_xp_goal = GREATEST(1, ROUND(daily_xp_goal / 3.0)) WHERE daily_xp_goal > 10"},
 		// v4 daily goal range: bounded 10..100, default 30. Mirrors the SQLite migration
-		// exactly — ADR-012 requires the two stores agree on an observable result.
+		// exactly, ADR-012 requires the two stores agree on an observable result.
 		4: {`UPDATE students SET daily_xp_goal = 30 WHERE daily_xp_goal = 10`,
 			`UPDATE students SET daily_xp_goal = 100 WHERE daily_xp_goal > 100`,
 			`UPDATE students SET daily_xp_goal = 10 WHERE daily_xp_goal < 10`},
@@ -519,7 +562,7 @@ func pgAuthMigrate(db *sql.DB) error {
 }
 
 // ensureEmailUniqueIndexPostgres enforces one-email-one-account at the DB
-// layer for every writer at once — the app-level 409 checks are
+// layer for every writer at once, the app-level 409 checks are
 // check-then-insert and race. Expression index on lower(email) matches
 // FindByEmail's lookup semantics; the partial predicate keeps legacy ”
 // rows legal. While real duplicates exist the index is skipped with a log
@@ -1123,7 +1166,8 @@ func (s *PostgresStore) GetProgress(studentID, conceptID string) (*ConceptProgre
 		SELECT student_id, concept_id, status, streak, best_streak,
 		       avg_response_time, attempts, last_attempted, last_reviewed,
 		       next_review_due, sm2_repetitions, sm2_interval, sm2_efactor,
-		       mastered_at, weakness_score, placement_seeded
+		       mastered_at, weakness_score, placement_seeded, is_provisional,
+		       fsrs_stability, fsrs_difficulty, fsrs_last_review
 		FROM concept_progress
 		WHERE student_id = $1 AND concept_id = $2
 	`, studentID, conceptID)
@@ -1140,7 +1184,8 @@ func (s *PostgresStore) GetAllProgress(studentID string) (map[string]*ConceptPro
 		SELECT student_id, concept_id, status, streak, best_streak,
 		       avg_response_time, attempts, last_attempted, last_reviewed,
 		       next_review_due, sm2_repetitions, sm2_interval, sm2_efactor,
-		       mastered_at, weakness_score, placement_seeded
+		       mastered_at, weakness_score, placement_seeded, is_provisional,
+		       fsrs_stability, fsrs_difficulty, fsrs_last_review
 		FROM concept_progress
 		WHERE student_id = $1
 	`, studentID)
@@ -1166,8 +1211,9 @@ func (s *PostgresStore) UpsertProgress(p *ConceptProgress) error {
 			(student_id, concept_id, status, streak, best_streak,
 			 avg_response_time, attempts, last_attempted, last_reviewed,
 			 next_review_due, sm2_repetitions, sm2_interval, sm2_efactor,
-			 mastered_at, weakness_score, placement_seeded)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+			 mastered_at, weakness_score, placement_seeded, is_provisional,
+			 fsrs_stability, fsrs_difficulty, fsrs_last_review)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
 		ON CONFLICT(student_id, concept_id) DO UPDATE SET
 			status            = EXCLUDED.status,
 			streak            = EXCLUDED.streak,
@@ -1181,13 +1227,20 @@ func (s *PostgresStore) UpsertProgress(p *ConceptProgress) error {
 			sm2_interval      = EXCLUDED.sm2_interval,
 			sm2_efactor       = EXCLUDED.sm2_efactor,
 			mastered_at       = EXCLUDED.mastered_at,
-			weakness_score    = EXCLUDED.weakness_score
+			weakness_score    = EXCLUDED.weakness_score,
+			placement_seeded  = EXCLUDED.placement_seeded,
+			is_provisional    = EXCLUDED.is_provisional,
+			fsrs_stability    = EXCLUDED.fsrs_stability,
+			fsrs_difficulty   = EXCLUDED.fsrs_difficulty,
+			fsrs_last_review  = EXCLUDED.fsrs_last_review
 	`,
 		p.StudentID, p.ConceptID, p.Status, p.Streak, p.BestStreak,
 		p.AvgResponseTime, p.Attempts,
 		nullTime(p.LastAttempted), nullTime(p.LastReviewed),
 		nullTime(p.NextReviewDue), p.SM2Repetitions, p.SM2Interval,
 		p.SM2EFactor, nullTime(p.MasteredAt), p.WeaknessScore, boolToInt(p.PlacementSeeded),
+		boolToInt(p.IsProvisional),
+		nullFloat(p.FSRSStability), nullFloat(p.FSRSDifficulty), nullTime(p.FSRSLastReview),
 	)
 	if err != nil {
 		return fmt.Errorf("upsert progress: %w", err)
@@ -1208,8 +1261,9 @@ func (s *PostgresStore) UpsertProgressBatch(ps []*ConceptProgress) error {
 			(student_id, concept_id, status, streak, best_streak,
 			 avg_response_time, attempts, last_attempted, last_reviewed,
 			 next_review_due, sm2_repetitions, sm2_interval, sm2_efactor,
-			 mastered_at, weakness_score, placement_seeded)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+			 mastered_at, weakness_score, placement_seeded, is_provisional,
+			 fsrs_stability, fsrs_difficulty, fsrs_last_review)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
 		ON CONFLICT(student_id, concept_id) DO UPDATE SET
 			status            = EXCLUDED.status,
 			streak            = EXCLUDED.streak,
@@ -1224,7 +1278,11 @@ func (s *PostgresStore) UpsertProgressBatch(ps []*ConceptProgress) error {
 			sm2_efactor       = EXCLUDED.sm2_efactor,
 			mastered_at       = EXCLUDED.mastered_at,
 			weakness_score    = EXCLUDED.weakness_score,
-			placement_seeded  = EXCLUDED.placement_seeded
+			placement_seeded  = EXCLUDED.placement_seeded,
+			is_provisional    = EXCLUDED.is_provisional,
+			fsrs_stability    = EXCLUDED.fsrs_stability,
+			fsrs_difficulty   = EXCLUDED.fsrs_difficulty,
+			fsrs_last_review  = EXCLUDED.fsrs_last_review
 	`)
 	if err != nil {
 		tx.Rollback()
@@ -1238,6 +1296,8 @@ func (s *PostgresStore) UpsertProgressBatch(ps []*ConceptProgress) error {
 			nullTime(p.LastAttempted), nullTime(p.LastReviewed),
 			nullTime(p.NextReviewDue), p.SM2Repetitions, p.SM2Interval,
 			p.SM2EFactor, nullTime(p.MasteredAt), p.WeaknessScore, boolToInt(p.PlacementSeeded),
+			boolToInt(p.IsProvisional),
+			nullFloat(p.FSRSStability), nullFloat(p.FSRSDifficulty), nullTime(p.FSRSLastReview),
 		); err != nil {
 			tx.Rollback()
 			return fmt.Errorf("exec progress batch: %w", err)
@@ -1393,7 +1453,7 @@ func (s *PostgresStore) PruneAIUsage(beforeDay string) (int64, error) {
 }
 
 func (s *PostgresStore) SweepServerSessions() error {
-	// expires_at is RFC3339 UTC — compare in Go (see sqlite twin).
+	// expires_at is RFC3339 UTC, compare in Go (see sqlite twin).
 	rows, err := s.db.Query("SELECT kind, key, expires_at FROM server_sessions WHERE expires_at != ''")
 	if err != nil {
 		return fmt.Errorf("sweep server sessions: %w", err)
@@ -1427,7 +1487,7 @@ func (s *PostgresStore) GetActiveSession(sessionID string) (*ActiveSession, erro
 	row := s.db.QueryRow(`
 		SELECT session_id, student_id, concept_id, concept_name, expected_answer,
 		       attempt_id, question, explanation, diagram, is_review, answered,
-		       last_concept_id, session_review, session_new, difficulty, updated_at
+		       last_concept_id, session_review, session_new, difficulty, kp_ordinal, updated_at
 		FROM active_sessions WHERE session_id = $1
 	`, sessionID)
 	var a ActiveSession
@@ -1435,7 +1495,7 @@ func (s *PostgresStore) GetActiveSession(sessionID string) (*ActiveSession, erro
 	var updatedAt string
 	if err := row.Scan(&a.SessionID, &a.StudentID, &a.ConceptID, &a.ConceptName, &a.ExpectedAnswer,
 		&a.AttemptID, &a.Question, &a.Explanation, &a.Diagram, &isReview, &answered,
-		&a.LastConceptID, &a.SessionReview, &a.SessionNew, &a.Difficulty, &updatedAt); err != nil {
+		&a.LastConceptID, &a.SessionReview, &a.SessionNew, &a.Difficulty, &a.KPOrdinal, &updatedAt); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
@@ -1457,8 +1517,8 @@ func (s *PostgresStore) UpsertActiveSession(a *ActiveSession) error {
 		INSERT INTO active_sessions
 			(session_id, student_id, concept_id, concept_name, expected_answer,
 			 attempt_id, question, explanation, diagram, is_review, answered,
-			 last_concept_id, session_review, session_new, difficulty, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+			 last_concept_id, session_review, session_new, difficulty, kp_ordinal, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
 		ON CONFLICT(session_id) DO UPDATE SET
 			student_id      = EXCLUDED.student_id,
 			concept_id      = EXCLUDED.concept_id,
@@ -1474,10 +1534,11 @@ func (s *PostgresStore) UpsertActiveSession(a *ActiveSession) error {
 			session_review  = EXCLUDED.session_review,
 			session_new     = EXCLUDED.session_new,
 			difficulty      = EXCLUDED.difficulty,
+			kp_ordinal      = EXCLUDED.kp_ordinal,
 			updated_at      = EXCLUDED.updated_at
 	`, a.SessionID, a.StudentID, a.ConceptID, a.ConceptName, a.ExpectedAnswer,
 		a.AttemptID, a.Question, a.Explanation, a.Diagram, boolToInt(a.IsReview), boolToInt(a.Answered),
-		a.LastConceptID, a.SessionReview, a.SessionNew, a.Difficulty, now)
+		a.LastConceptID, a.SessionReview, a.SessionNew, a.Difficulty, a.KPOrdinal, now)
 	if err != nil {
 		return fmt.Errorf("upsert active session: %w", err)
 	}
@@ -1514,6 +1575,7 @@ func (s *PostgresStore) ResetProgress(studentID string) error {
 		{"DELETE FROM concept_progress WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM student_topic_speed WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM quiz_completions WHERE student_id = $1", []interface{}{studentID}},
+		{"DELETE FROM student_remedial_queue WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM server_sessions WHERE kind IN ('study_expected','study_plan') AND (key = $1 OR key LIKE $1 || '|%')", []interface{}{studentID}},
 		{`UPDATE students SET xp_total = 0, xp_today = 0, diagnostic_completed = 0, diagnostic_completed_at = '',
 			league = 'bronze', league_week = '', league_moved = 0 WHERE id = $1`, []interface{}{studentID}},
@@ -1557,6 +1619,7 @@ func (s *PostgresStore) DeleteAccount(studentID string) error {
 		{"DELETE FROM concept_progress WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM student_topic_speed WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM quiz_completions WHERE student_id = $1", []interface{}{studentID}},
+		{"DELETE FROM student_remedial_queue WHERE student_id = $1", []interface{}{studentID}},
 		{"DELETE FROM server_sessions WHERE kind IN ('study_expected','study_plan','study_plan_prefs') AND (key = $1 OR key LIKE $1 || '|%')", []interface{}{studentID}},
 		{"DELETE FROM question_reports WHERE reporter_id = $1", []interface{}{studentID}},
 		{"DELETE FROM ai_usage WHERE usage_key = $1", []interface{}{studentID}},
@@ -2467,4 +2530,170 @@ func (s *PostgresStore) DiagnosticAttemptResponse(attemptID string) (string, boo
 		return "", false, fmt.Errorf("read diagnostic attempt: %w", err)
 	}
 	return response, true, nil
+}
+
+// SeedFSRSFromSM2 backfills FSRS state from existing SM-2 intervals for unseeded rows.
+// It is idempotent: only rows where fsrs_stability is NULL are seeded.
+func (s *PostgresStore) SeedFSRSFromSM2(now time.Time) (int, error) {
+	rows, err := s.db.Query(`
+		SELECT student_id, concept_id, sm2_interval, next_review_due, last_reviewed
+		FROM concept_progress
+		WHERE fsrs_stability IS NULL AND sm2_interval >= 1 AND next_review_due IS NOT NULL AND next_review_due != ''
+		ORDER BY student_id, concept_id
+	`)
+	if err != nil {
+		return 0, fmt.Errorf("query unseeded fsrs rows: %w", err)
+	}
+	defer rows.Close()
+
+	type toSeed struct {
+		studentID string
+		conceptID string
+		interval  int
+		nextDue   string
+		lastRev   sql.NullString
+	}
+	var batch []toSeed
+	for rows.Next() {
+		var item toSeed
+		if err := rows.Scan(&item.studentID, &item.conceptID, &item.interval, &item.nextDue, &item.lastRev); err != nil {
+			return 0, fmt.Errorf("scan unseeded fsrs row: %w", err)
+		}
+		batch = append(batch, item)
+	}
+	if err := rows.Err(); err != nil {
+		return 0, fmt.Errorf("iterate unseeded fsrs rows: %w", err)
+	}
+
+	params := fsrs.DefaultParameters()
+	defaultDiff := params.InitialDifficulty(fsrs.Good)
+
+	stmt, err := s.db.Prepare(`
+		UPDATE concept_progress
+		SET fsrs_stability = $1, fsrs_difficulty = $2, fsrs_last_review = $3
+		WHERE student_id = $4 AND concept_id = $5 AND fsrs_stability IS NULL
+	`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare update fsrs seed: %w", err)
+	}
+	defer stmt.Close()
+
+	count := 0
+	for _, item := range batch {
+		due, err := time.Parse(time.RFC3339, item.nextDue)
+		if err != nil {
+			due, err = time.Parse("2006-01-02 15:04:05", item.nextDue)
+		}
+		if err != nil {
+			continue
+		}
+		seeded, err := fsrs.SeedFromInterval(item.interval, due, now)
+		if err != nil {
+			continue
+		}
+		lastReview := now.Format(time.RFC3339)
+		if item.lastRev.Valid && item.lastRev.String != "" {
+			lastReview = item.lastRev.String
+		}
+		res, err := stmt.Exec(seeded.Stability, defaultDiff, lastReview, item.studentID, item.conceptID)
+		if err != nil {
+			return count, fmt.Errorf("seed fsrs progress: %w", err)
+		}
+		affected, _ := res.RowsAffected()
+		count += int(affected)
+	}
+
+	return count, nil
+}
+
+// EnqueueRemedial mirrors the SQLite method; see the schema comment.
+func (s *PostgresStore) EnqueueRemedial(studentID string, conceptIDs ...string) error {
+	if len(conceptIDs) == 0 {
+		return nil
+	}
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("begin enqueue remedial: %w", err)
+	}
+	defer tx.Rollback()
+
+	rows, err := tx.Query(`SELECT concept_id, priority FROM student_remedial_queue WHERE student_id = $1 ORDER BY priority ASC, created_at ASC FOR UPDATE`, studentID)
+	if err != nil {
+		return fmt.Errorf("query remedial queue: %w", err)
+	}
+	seen := make(map[string]bool)
+	maxPriority := -1
+	count := 0
+	for rows.Next() {
+		var cid string
+		var pri int
+		if err := rows.Scan(&cid, &pri); err != nil {
+			rows.Close()
+			return fmt.Errorf("scan remedial queue: %w", err)
+		}
+		seen[cid] = true
+		if pri > maxPriority {
+			maxPriority = pri
+		}
+		count++
+	}
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf("iterate remedial queue: %w", err)
+	}
+
+	now := time.Now().Unix()
+	stmt, err := tx.Prepare(`INSERT INTO student_remedial_queue (student_id, concept_id, priority, created_at) VALUES ($1, $2, $3, $4) ON CONFLICT (student_id, concept_id) DO NOTHING`)
+	if err != nil {
+		return fmt.Errorf("prepare insert remedial: %w", err)
+	}
+	defer stmt.Close()
+
+	for _, cid := range conceptIDs {
+		if seen[cid] || count >= MaxRemedialQueue {
+			continue
+		}
+		seen[cid] = true
+		maxPriority++
+		count++
+		if _, err := stmt.Exec(studentID, cid, maxPriority, now); err != nil {
+			return fmt.Errorf("insert remedial queue: %w", err)
+		}
+	}
+
+	return tx.Commit()
+}
+
+// GetRemedialQueue mirrors the SQLite method; see the schema comment.
+func (s *PostgresStore) GetRemedialQueue(studentID string) ([]string, error) {
+	rows, err := s.db.Query(`SELECT concept_id FROM student_remedial_queue WHERE student_id = $1 ORDER BY priority ASC, created_at ASC`, studentID)
+	if err != nil {
+		return nil, fmt.Errorf("get remedial queue: %w", err)
+	}
+	defer rows.Close()
+
+	var result []string
+	for rows.Next() {
+		var cid string
+		if err := rows.Scan(&cid); err != nil {
+			return nil, fmt.Errorf("scan remedial queue item: %w", err)
+		}
+		result = append(result, cid)
+	}
+	return result, rows.Err()
+}
+
+// RemoveRemedial mirrors the SQLite method; see the schema comment.
+func (s *PostgresStore) RemoveRemedial(studentID, conceptID string) error {
+	if _, err := s.db.Exec(`DELETE FROM student_remedial_queue WHERE student_id = $1 AND concept_id = $2`, studentID, conceptID); err != nil {
+		return fmt.Errorf("remove remedial: %w", err)
+	}
+	return nil
+}
+
+// ClearRemedialQueue mirrors the SQLite method; see the schema comment.
+func (s *PostgresStore) ClearRemedialQueue(studentID string) error {
+	if _, err := s.db.Exec(`DELETE FROM student_remedial_queue WHERE student_id = $1`, studentID); err != nil {
+		return fmt.Errorf("clear remedial queue: %w", err)
+	}
+	return nil
 }

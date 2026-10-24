@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 // the Learn loop. /learn (no concept) loads the Next head directly, so this
 // stub forwards old links and bookmarks.
 //
-// Same open question as /concept, and for the same reasons — nothing internal
+// Same open question as /concept, and for the same reasons, nothing internal
 // links here, and the only caller is an inbound link from outside. See
 // test/deprecatedRoutes.test.tsx, which pins what this forwards so the decision
 // to keep or delete is made on evidence rather than by accident.

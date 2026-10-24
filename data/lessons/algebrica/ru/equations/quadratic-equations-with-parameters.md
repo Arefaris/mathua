@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/quadratic-equations-with-parameters/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/quadratic-equations-with-parameters/), CC BY-NC 4.0
 
 Тема
 

@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Precalculus 2e](https://openstax.org/details/books/precalculus-2e) by Jay Abramson — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Precalculus 2e](https://openstax.org/details/books/precalculus-2e) by Jay Abramson, CC BY-NC-SA 4.0
 
 ## 6.1 Graphs of the Sine and Cosine Functions
 

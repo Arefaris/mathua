@@ -2,7 +2,6 @@ package geometry
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 	"strconv"
 
@@ -47,7 +46,7 @@ func (g *pointsLinesGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	items := []string{"point", "line", "ray", "line segment"}
 	// Predicates, not noun phrases, because the stem supplies the noun. The
 	// earlier stem was `What is: %s?` with `has two endpoints`, which asked
-	// "What is: has two endpoints?" — a sentence with its subject missing, on a
+	// "What is: has two endpoints?", a sentence with its subject missing, on a
 	// screen where the learner had one field and no way to say "the question,
 	// not me, is broken".
 	descs := []string{
@@ -57,12 +56,22 @@ func (g *pointsLinesGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		"has two endpoints",
 	}
 	i := rand.Intn(4)
-	return generator.Problem{
-		Question:    fmt.Sprintf("Which geometric term describes something that %s?", descs[i]),
-		Answer:      items[i],
-		Explanation: fmt.Sprintf("A %s is a figure that %s.", items[i], descs[i]),
-		Facts:       map[string]string{"term": items[i], "desc": descs[i]},
+	// The answer is a phrase, so it has to be recognisable rather than typeable:
+	// a learner who knows the term was still stuck behind a math field, which
+	// dropped the space in "line segment" and compared the wreckage to the
+	// authored string. The options carry the phrase intact.
+	others := make([]string, 0, len(items)-1)
+	for j, it := range items {
+		if j != i {
+			others = append(others, it)
+		}
 	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("Which geometric term describes something that %s?", descs[i]),
+		items[i], others...)
+	p.Explanation = fmt.Sprintf("A %s is a figure that %s.", items[i], descs[i])
+	p.Facts = map[string]string{"term": items[i], "desc": descs[i]}
+	return p
 }
 
 type angleTypesGen struct{}
@@ -103,12 +112,21 @@ func (g *angleTypesGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		pool = append(tableEasy, tableHard...)
 	}
 	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("An angle of %d degrees is classified as:", e.deg),
-		Answer:      e.cls,
-		Explanation: fmt.Sprintf("Acute < 90, right = 90, obtuse > 90 and < 180, straight = 180. %d is %s.", e.deg, e.cls),
-		Facts:       map[string]string{"given": strconv.Itoa(e.deg), "deg": strconv.Itoa(e.deg), "cls": e.cls},
+	// "obtuse" and "straight angle" cannot be typed into a math field, so the
+	// four classifications are offered as options and the phrase stays intact.
+	classes := []string{"acute", "right", "obtuse", "straight"}
+	others := make([]string, 0, len(classes)-1)
+	for _, c := range classes {
+		if c != e.cls {
+			others = append(others, c)
+		}
 	}
+	p := generator.MultipleChoice(
+		fmt.Sprintf("An angle of %d degrees is classified as:", e.deg),
+		e.cls, others...)
+	p.Explanation = fmt.Sprintf("Acute < 90, right = 90, obtuse > 90 and < 180, straight = 180. %d is %s.", e.deg, e.cls)
+	p.Facts = map[string]string{"given": strconv.Itoa(e.deg), "deg": strconv.Itoa(e.deg), "cls": e.cls}
+	return p
 }
 
 type angleMeasureGen struct{}
@@ -149,12 +167,19 @@ func (g *angleMeasureGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		pool = append(tableEasy, tableHard...)
 	}
 	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("An angle of %d degrees is a:", e.deg),
-		Answer:      e.cls,
-		Explanation: fmt.Sprintf("%d degrees is %s.", e.deg, e.cls),
-		Facts:       map[string]string{"given": strconv.Itoa(e.deg), "deg": strconv.Itoa(e.deg), "cls": e.cls},
+	// The answer is a phrase, and a phrase cannot survive the math field: report
+	// #200 showed "line segment" arriving as one word. Offer the classes instead.
+	classes := []string{"acute angle", "right angle", "obtuse angle", "straight angle"}
+	distractors := make([]string, 0, len(classes)-1)
+	for _, c := range classes {
+		if c != e.cls {
+			distractors = append(distractors, c)
+		}
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("An angle of %d degrees is a:", e.deg), e.cls, distractors...)
+	p.Explanation = fmt.Sprintf("%d degrees is %s.", e.deg, e.cls)
+	p.Facts = map[string]string{"given": strconv.Itoa(e.deg), "deg": strconv.Itoa(e.deg), "cls": e.cls}
+	return p
 }
 
 type complementaryGen struct{}
@@ -173,13 +198,23 @@ func (g *complementaryGen) Generate(ctx generator.GeneratorContext) generator.Pr
 type verticalAnglesGen struct{}
 
 func (g *verticalAnglesGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*5)
-	a := rand.Intn(max(1, scale*30)) + 1
+	// An angle adjacent to angle 1 has measure d degrees. Find the vertical angle to angle 1.
+	// This tests supplementary adjacent angles and vertical angle equality without reading
+	// off the answer from the stem.
+	d := 20 + rand.Intn(141) // 20 to 160
+	if d == 90 {
+		d = 85
+	}
+	ans := 180 - d
 	return generator.Problem{
-		Question:    fmt.Sprintf("Two lines intersect. One angle is %d degrees. What is the vertical angle?", a),
-		Answer:      fmt.Sprintf("%d", a),
-		Explanation: fmt.Sprintf("Vertical angles are equal: %d = %d.", a, a),
-		Facts:       map[string]string{"a": strconv.Itoa(a)},
+		Question:    fmt.Sprintf("Two lines intersect. An angle adjacent to \\(\\angle 1\\) measures %d degrees. What is the measure of the vertical angle to \\(\\angle 1\\) (in degrees)?", d),
+		Answer:      fmt.Sprintf("%d", ans),
+		Explanation: fmt.Sprintf("Adjacent angles along a straight line are supplementary (sum to 180 degrees), so \\(\\angle 1 = 180 - %d = %d^\\circ\\). Vertical angles are equal, so the vertical angle also measures %d degrees.", d, ans, ans),
+		Facts: map[string]string{
+			"adjacent": strconv.Itoa(d),
+			"a":        strconv.Itoa(ans),
+			"vertical": strconv.Itoa(ans),
+		},
 	}
 }
 
@@ -194,12 +229,14 @@ func (g *triangleTypesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	} else if sides[0] == sides[1] || sides[1] == sides[2] || sides[0] == sides[2] {
 		ans = "isosceles"
 	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("A triangle has sides %d, %d, %d. By side length, it is:", sides[0], sides[1], sides[2]),
-		Answer:      ans,
-		Explanation: fmt.Sprintf("All 3 equal = equilateral. Two equal = isosceles. None equal = scalene."),
-		Facts:       map[string]string{"s1": strconv.Itoa(sides[0]), "s2": strconv.Itoa(sides[1]), "s3": strconv.Itoa(sides[2]), "kind": ans},
-	}
+	// The three kinds are names, so they are offered rather than typed.
+	p := generator.MultipleChoice(
+		fmt.Sprintf("A triangle has sides %d, %d, %d. By side length, it is:", sides[0], sides[1], sides[2]),
+		ans, "scalene", "isosceles", "equilateral",
+	)
+	p.Explanation = "All 3 equal = equilateral. Two equal = isosceles. None equal = scalene."
+	p.Facts = map[string]string{"s1": strconv.Itoa(sides[0]), "s2": strconv.Itoa(sides[1]), "s3": strconv.Itoa(sides[2]), "kind": ans}
+	return p
 }
 
 type triangleAnglesGen struct{}
@@ -341,12 +378,16 @@ func (g *quadTypesGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		{"trapezoid", "one pair of parallel sides"},
 	}
 	i := rand.Intn(len(types))
-	return generator.Problem{
-		Question:    fmt.Sprintf("A quadrilateral with %s is a:", types[i].desc),
-		Answer:      types[i].name,
-		Explanation: types[i].desc + " describes a " + types[i].name + ".",
-		Facts:       map[string]string{"name": types[i].name, "desc": types[i].desc},
+	others := make([]string, 0, len(types)-1)
+	for _, t := range types {
+		if t.name != types[i].name {
+			others = append(others, t.name)
+		}
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("A quadrilateral with %s is a:", types[i].desc), types[i].name, others...)
+	p.Explanation = types[i].desc + " describes a " + types[i].name + "."
+	p.Facts = map[string]string{"name": types[i].name, "desc": types[i].desc}
+	return p
 }
 
 type quadAreaGen struct{}
@@ -384,12 +425,16 @@ func (g *circlePartsGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	parts := []string{"radius", "diameter", "circumference", "chord"}
 	descs := []string{"distance from center to edge", "distance across the circle through center", "distance around the circle", "a line from one edge to another (not through center)"}
 	i := rand.Intn(4)
-	return generator.Problem{
-		Question:    fmt.Sprintf("The %s is the:", descs[i]),
-		Answer:      parts[i],
-		Explanation: descs[i] + " = " + parts[i] + ".",
-		Facts:       map[string]string{"term": parts[i], "desc": descs[i]},
+	others := make([]string, 0, len(parts)-1)
+	for _, part := range parts {
+		if part != parts[i] {
+			others = append(others, part)
+		}
 	}
+	p := generator.MultipleChoice(fmt.Sprintf("The %s is the:", descs[i]), parts[i], others...)
+	p.Explanation = descs[i] + " = " + parts[i] + "."
+	p.Facts = map[string]string{"term": parts[i], "desc": descs[i]}
+	return p
 }
 
 type circumferenceGen struct{}
@@ -398,12 +443,15 @@ func (g *circumferenceGen) Generate(ctx generator.GeneratorContext) generator.Pr
 	scale := int(1 + ctx.Difficulty*5)
 	r := rand.Intn(max(1, scale*4)) + 5
 	pi := 3.14
-	circ := math.Round(2 * pi * float64(r))
+	// Two decimal places, because the learner computes 2 x 3.14 x r exactly and
+	// rounding the answer to a whole number rejected 69.08 for r = 11 (report
+	// 213, 23 October 2026).
+	circ := 2 * pi * float64(r)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Circle radius = %d. Find the circumference (use pi = 3.14).", r),
-		Answer:      fmt.Sprintf("%.0f", circ),
-		Explanation: fmt.Sprintf("\\(C = 2 \\pi r = 2 \\times 3.14 \\times %d = %.0f\\).", r, 2*3.14*float64(r)),
-		Facts:       map[string]string{"r": strconv.Itoa(r), "circ": fmt.Sprintf("%.0f", circ), "twice_r": strconv.Itoa(2 * r)},
+		Question:    fmt.Sprintf("Circle radius = %d. Find the circumference to two decimal places (use pi = 3.14).", r),
+		Answer:      fmt.Sprintf("%.2f", circ),
+		Explanation: fmt.Sprintf("\\(C = 2 \\pi r = 2 \\times 3.14 \\times %d = %.2f\\).", r, circ),
+		Facts:       map[string]string{"r": strconv.Itoa(r), "circ": fmt.Sprintf("%.2f", circ), "twice_r": strconv.Itoa(2 * r)},
 	}
 }
 
@@ -412,12 +460,14 @@ type circleAreaGen struct{}
 func (g *circleAreaGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	r := rand.Intn(max(1, scale*2)) + 3
-	area := math.Round(3.14 * float64(r*r))
+	// Same precision rule as the circumference: the learner computes
+	// 3.14 x r x r exactly, so the answer carries two decimal places.
+	area := 3.14 * float64(r*r)
 	return generator.Problem{
-		Question:    fmt.Sprintf("Circle radius = %d. Find the area (use pi = 3.14).", r),
-		Answer:      fmt.Sprintf("%.0f", area),
-		Explanation: fmt.Sprintf("\\(A = \\pi r^{2} = 3.14 \\times %d^{2} = 3.14 \\times %d = %.0f\\).", r, r*r, 3.14*float64(r*r)),
-		Facts:       map[string]string{"r": strconv.Itoa(r), "r_sq": strconv.Itoa(r * r), "area": fmt.Sprintf("%.0f", area)},
+		Question:    fmt.Sprintf("Circle radius = %d. Find the area to two decimal places (use pi = 3.14).", r),
+		Answer:      fmt.Sprintf("%.2f", area),
+		Explanation: fmt.Sprintf("\\(A = \\pi r^{2} = 3.14 \\times %d^{2} = 3.14 \\times %d = %.2f\\).", r, r*r, area),
+		Facts:       map[string]string{"r": strconv.Itoa(r), "r_sq": strconv.Itoa(r * r), "area": fmt.Sprintf("%.2f", area)},
 	}
 }
 
@@ -466,12 +516,15 @@ func (g *coordPlotGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		pool = append(tableEasy, tableHard...)
 	}
 	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What quadrant is the point \\((%d, %d)\\) in?", e.x, e.y),
-		Answer:      quad(e.x, e.y),
-		Explanation: fmt.Sprintf("(%d,%d) is in %s.", e.x, e.y, quad(e.x, e.y)),
-		Facts:       map[string]string{"x": strconv.Itoa(e.x), "y": strconv.Itoa(e.y), "quadrant": quad(e.x, e.y)},
-	}
+	// A quadrant is a name, not something a learner can type in a math field.
+	p := generator.MultipleChoice(
+		fmt.Sprintf("What quadrant is the point \\((%d, %d)\\) in?", e.x, e.y),
+		quad(e.x, e.y),
+		"Quadrant I", "Quadrant II", "Quadrant III", "Quadrant IV", "on an axis",
+	)
+	p.Explanation = fmt.Sprintf("(%d,%d) is in %s.", e.x, e.y, quad(e.x, e.y))
+	p.Facts = map[string]string{"x": strconv.Itoa(e.x), "y": strconv.Itoa(e.y), "quadrant": quad(e.x, e.y)}
+	return p
 }
 
 func quad(x, y int) string {

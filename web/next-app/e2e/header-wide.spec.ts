@@ -2,7 +2,7 @@ import { test, expect } from './fixtures'
 
 // Layout at a width nothing in jsdom can measure.
 //
-// Every other header test here is structural — it can check that a panel is not a descendant of
+// Every other header test here is structural, it can check that a panel is not a descendant of
 // the clipper, which is the *cause* of the paint-order bug, but not that two boxes land in the
 // right place. These two measure geometry, because the wide-screen faults are geometry faults: the
 // rule that stopped at 1100px and the menu that drifted to the window edge both rendered, both
@@ -15,7 +15,7 @@ test('the header rule reaches both edges of the window', async ({ page }) => {
   await page.goto('/')
   // `/` is a client page: until the theme has mounted and the logged-in redirect
   // check has resolved it returns a bare placeholder div, so the exported HTML for
-  // `/` contains no <header> at all — grep out/index.html and count them. The
+  // `/` contains no <header> at all, grep out/index.html and count them. The
   // selector below therefore runs against a document that may still be empty, and
   // reading `.firstElementChild` on null is what turned this test red on a loaded
   // runner three attempts in a row. Wait for the header to be attached; the subject
@@ -81,6 +81,6 @@ test('the profile menu opens beside its trigger, not at the window edge', async 
   const p = (await panel.boundingBox())!
   // The panel's trailing edge lines up with the trigger's, the way it does on a narrow screen.
   // It hung off the full-width <header> without a capped wrapper, so `right-6` put it at the
-  // window edge — roughly 250px from the avatar at this width, and further on a wider one.
+  // window edge, roughly 250px from the avatar at this width, and further on a wider one.
   expect(Math.abs((p.x + p.width) - (t.x + t.width))).toBeLessThan(40)
 })

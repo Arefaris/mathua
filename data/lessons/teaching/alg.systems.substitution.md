@@ -3,7 +3,7 @@
 Substitution solves a system by turning two equations in two unknowns into one
 equation in one unknown: isolate a variable in one equation, then substitute
 that expression wherever the variable appears in the other equation. Use it
-when one equation already isolates a variable — or isolates one cheaply.
+when one equation already isolates a variable or isolates one cheaply.
 
 ## Isolate one variable
 
@@ -24,7 +24,7 @@ equation, which always solves the same way.
 
 ## Check in both equations
 
-A pair solves the system only if it satisfies *every* equation — checking one
+A pair solves the system only if it satisfies *every* equation, checking one
 is not enough. For \((3, 2)\): \(3 + 2(2) = 7\) and \(3(3) - 2 = 7\), so the
 pair checks out in both. If a check fails, the substitution or the arithmetic
 slipped; rework the same steps rather than starting over.

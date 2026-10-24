@@ -12,7 +12,7 @@ The factor is the length of the cross product of the two tangent vectors, which 
 
 For \(z = 2x + 2y\) over a rectangle of sides \(p\) and \(q\), the factor is \(\sqrt{1 + 4 + 4} = 3\), a constant. The area is therefore \(3pq\), three times the area of the rectangle it sits above.
 
-A flat surface with \(f_x = f_y = 0\) gives the factor 1, which recovers the ordinary area — the surface integral over the plane \(z = 0\) is just a double integral.
+A flat surface with \(f_x = f_y = 0\) gives the factor 1, which recovers the ordinary area, the surface integral over the plane \(z = 0\) is just a double integral.
 
 ## When the factor varies
 

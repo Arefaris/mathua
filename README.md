@@ -37,14 +37,14 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 
 | Area | English words | Ukrainian | Russian |
 |---|--:|---|---|
-| Interface | 6,515 | `████████████████████` 100% | `████████████████████` 100% |
+| Interface | 6,630 | `████████████████████` 100% | `████████████████████` 100% |
 | Topic names | 4,665 | `████████████████████` 100% | `████████████████████` 100% |
 | Courses | 439 | `████████████████████` 100% | `████████████████████` 100% |
 | Lesson steps | 90,483 | `████████████████████` 100% | `████████████████████` 100% |
-| Lesson texts | 728,478 | `█░░░░░░░░░░░░░░░░░░░` 4% | `████░░░░░░░░░░░░░░░░` 21% |
-| Worked solutions | 25,879 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| Problem texts | 17,342 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **873,801** | **`███░░░░░░░░░░░░░░░░░` 15%** | **`█████░░░░░░░░░░░░░░░` 29%** |
+| Lesson texts | 728,462 | `█░░░░░░░░░░░░░░░░░░░` 4% | `████░░░░░░░░░░░░░░░░` 21% |
+| Worked solutions | 25,907 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| Problem texts | 20,685 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| **Overall** | **877,271** | **`███░░░░░░░░░░░░░░░░░` 15%** | **`█████░░░░░░░░░░░░░░░` 29%** |
 
 _Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._
 <!-- i18n-progress:end -->
@@ -53,13 +53,13 @@ How it works and what is planned: [TRANSLATION_PLAN.md](TRANSLATION_PLAN.md). Te
 
 ---
 
-Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 1250 atomic concepts and 28 courses — never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 3750 worked examples (1250 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
+Mathua is a local-first adaptive math learning engine inspired by the mastery-gating philosophy of Math Academy. It guides a learner from arithmetic through university math through a dependency graph of 1250 atomic concepts and 28 courses, never advancing until speed and accuracy thresholds are both met. Knowledge is scaffolded into 3750 worked examples (1250 KP shard files × 3 subgoals each) with subgoal labels and 183 dual-coded diagrams. It runs as a single Go binary with a web server delivery mode and React + Next.js for leagues, parent/teacher share links and graph visualisation. Transcripts export as CSV via the API.
 
 ---
 
 ## What makes it different
 
-- **You cannot advance until you have mastered the prerequisite.** The concept graph enforces this — if you cannot reliably add fractions with different denominators, the system will not show you mixed number addition.
+- **You cannot advance until you have mastered the prerequisite.** The concept graph enforces this, if you cannot reliably add fractions with different denominators, the system will not show you mixed number addition.
 - **Speed matters, not just accuracy.** A correct answer that took 45 seconds on a concept with a 12-second threshold counts as weak mastery. You need to be both right and fast.
 - **Nothing is forgotten.** Concepts resurface automatically through per-topic spaced repetition (SM-2 scaled by your learning speed). A concept mastered three weeks ago will reappear before it decays.
 - **Problems are generated, not stored.** Every problem is produced on demand by a parameterised generator. The same concept gives you a different problem every time. There is nothing to memorise.
@@ -99,16 +99,16 @@ through the app first.
 Run this on the machine that holds the database. The command needs no flag, no token and no
 env var. Do not add a role field to a signup request. A client cannot choose its own role.
 
-The command refuses to create an account, and it grants `owner` — the first promotion must be
+The command refuses to create an account, and it grants `owner`, the first promotion must be
 able to create the rest. Everyone after that is added from `/admin/contributors`: an owner or
 admin issues an invitation bound to an email, and accepting it assigns the role. No deployment
 secret is involved, because a shared password cannot say which person used it.
 
 One administrator can demote nobody, including themselves. Promote a second administrator first.
 
-> **Requirements:** Go 1.26+ (module targets `go 1.26.6`; CI/Docker build with 1.27). Python 3.11+ with `sympy` (pinned in `grading/requirements.txt`) grades `symbolic`/`polynomial`/`expression`/`complex` answers — **required for those ~32% of concepts**; the production Docker image installs it and fails the build if grading is unavailable. Runs without Python only for the pure-Go grading types.
+> **Requirements:** Go 1.26+ (module targets `go 1.26.6`; CI/Docker build with 1.27). Python 3.11+ with `sympy` (pinned in `grading/requirements.txt`) grades `symbolic`/`polynomial`/`expression`/`complex` answers, **required for those ~32% of concepts**; the production Docker image installs it and fails the build if grading is unavailable. Runs without Python only for the pure-Go grading types.
 >
-> **Env:** `DATABASE_URL` (`sqlite:mathua.db` default, or `postgres://` for production via `pgx` `postgres.go:21` / `main.go:69`), `PORT` (default `8080`), `JWT_SECRET` (hex 32 bytes or raw ≥32 chars — **required in production**, else random per run and tokens invalidate on restart `internal/auth/auth.go:45`), `CORS_ALLOWED_ORIGINS` (comma-separated allowlist, empty = allow all dev; supports `*` wildcard suffix like `https://*.vercel.app` for previews `internal/server/server.go:32`), On Fly: `fly secrets set JWT_SECRET=$(openssl rand -hex 32) CORS_ALLOWED_ORIGINS=https://mathua.vercel.app,https://*.vercel.app`. See `.env.example`.
+> **Env:** `DATABASE_URL` (`sqlite:mathua.db` default, or `postgres://` for production via `pgx` `postgres.go:21` / `main.go:69`), `PORT` (default `8080`), `JWT_SECRET` (hex 32 bytes or raw ≥32 chars, **required in production**, else random per run and tokens invalidate on restart `internal/auth/auth.go:45`), `CORS_ALLOWED_ORIGINS` (comma-separated allowlist, empty = allow all dev; supports `*` wildcard suffix like `https://*.vercel.app` for previews `internal/server/server.go:32`), On Fly: `fly secrets set JWT_SECRET=$(openssl rand -hex 32) CORS_ALLOWED_ORIGINS=https://mathua.vercel.app,https://*.vercel.app`. See `.env.example`.
 
 ---
 
@@ -116,9 +116,9 @@ One administrator can demote nobody, including themselves. Promote a second admi
 
 ### The concept graph
 
-All math knowledge in Mathua is a directed acyclic graph. Each node is an atomic concept — something small enough to fail independently. Each edge is a prerequisite relationship.
+All math knowledge in Mathua is a directed acyclic graph. Each node is an atomic concept, something small enough to fail independently. Each edge is a prerequisite relationship.
 
-The graph contains **1250 concepts** across **21 domains** (1250 KP shard files × 3 = 3750 KPs). The scheduler reads your progress and the graph structure to decide what to show next — it will never surface a concept whose prerequisites you have not mastered.
+The graph contains **1250 concepts** across **21 domains** (1250 KP shard files × 3 = 3750 KPs). The scheduler reads your progress and the graph structure to decide what to show next, it will never surface a concept whose prerequisites you have not mastered.
 
 ### Mastery gating
 
@@ -130,7 +130,7 @@ A concept moves through five states:
 UNSEEN → LEARNING → PRACTICING → MASTERED → DECAYING
 ```
 
-`DECAYING` means you mastered the concept but have not seen it in over 14 days. The scheduler treats decaying concepts as urgent — they appear before new material until you demonstrate you still know them.
+`DECAYING` means you mastered the concept but have not seen it in over 14 days. The scheduler treats decaying concepts as urgent, they appear before new material until you demonstrate you still know them.
 
 ### The scheduler
 
@@ -182,19 +182,19 @@ When a concept reaches MASTERED, Mathua schedules its next review using SM-2 sca
 
 ## Architecture
 
-Mathua is a single Go binary with one delivery method. The engine core is identical — only the UI delivery layer differs.
+Mathua is a single Go binary with one delivery method. The engine core is identical, only the UI delivery layer differs.
 
 ```
 Web (React + Next.js) ═══ REST API ═══ Core Engine ── Grading ── Storage
 ```
 
-The five-layer architecture — UI, API, Core Engine, Grading, Storage — is fully documented at **[`docs/architecture.md`](docs/architecture.md)** and in the interactive **[web docs](/docs/architecture)** with React Flow diagrams and pre-rendered D2 SVGs.
+The five-layer architecture, UI, API, Core Engine, Grading, Storage, is fully documented at **[`docs/architecture.md`](docs/architecture.md)** and in the interactive **[web docs](/docs/architecture)** with React Flow diagrams and pre-rendered D2 SVGs.
 
 ---
 
 ## Courses and transcripts
 
-28 courses from 4th grade to university are wired through the DAG — including Calculus I/II, Linear Algebra, Discrete Math I/II, Probability & Statistics, Differential Equations, Abstract Algebra I/II, Topology and Machine Learning. Each course shows mastered/total, percent and an estimate of days remaining at your daily XP goal. Transcripts export as CSV via `GET /api/transcript?format=csv` and the read-only share link (Settings → Share) lets a parent or teacher follow along.
+28 courses from 4th grade to university are wired through the DAG, including Calculus I/II, Linear Algebra, Discrete Math I/II, Probability & Statistics, Differential Equations, Abstract Algebra I/II, Topology and Machine Learning. Each course shows mastered/total, percent and an estimate of days remaining at your daily XP goal. Transcripts export as CSV via `GET /api/transcript?format=csv` and the read-only share link (Settings → Share) lets a parent or teacher follow along.
 
 ## Contributing
 
@@ -213,7 +213,7 @@ go run scripts/validate_graph.go
 python3 scripts/audit_lessons.py  # lessons + KP shards + diagrams + course targets (1250 files ×3 =3750 KPs)
 python3 scripts/counts.py --check # docs counts match the data (run --write after a content wave)
 
-# Generator fuzz — 1000 local (make fuzz), 100 lightweight in CI (.github/workflows/ci.yml:27)
+# Generator fuzz, 1000 local (make fuzz), 100 lightweight in CI (.github/workflows/ci.yml:27)
 go test ./internal/generator/... -run TestFuzz -count 1000  # local full; CI runs -count 100 for speed
 ```
 
@@ -225,7 +225,7 @@ go test ./internal/generator/... -run TestFuzz -count 1000  # local full; CI run
 # Build for Linux
 GOOS=linux GOARCH=amd64 go build -o mathua ./cmd/mathua
 
-# Run (SQLite — local)
+# Run (SQLite, local)
 ./mathua --serve --port 8080
 # Or Postgres for production (implemented via pgx internal/storage/postgres.go:7)
 DATABASE_URL=postgres://user:pass@host/mathua PORT=8080 ./mathua --serve
@@ -253,7 +253,7 @@ It re-grades every incorrect attempt with the canonical grader (`Engine.GradeAns
 
 ## Acknowledgements
 
-Mathua's sequencing philosophy is directly inspired by [Math Academy](https://mathacademy.com) — a commercial product that demonstrated what mastery-gated, dependency-aware math learning can achieve. Mathua uses none of their content or code — it is an independent open implementation of similar ideas, built openly.
+Mathua's sequencing philosophy is directly inspired by [Math Academy](https://mathacademy.com), a commercial product that demonstrated what mastery-gated, dependency-aware math learning can achieve. Mathua uses none of their content or code, it is an independent open implementation of similar ideas, built openly.
 
 Lesson content and diagrams are adapted from [OpenStax](https://openstax.org) textbooks (Prealgebra, Precalculus 2e and Calculus Volume 1), used under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), and from [Algebrica](https://algebrica.org) by Antonio Lupetti, used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Algebrica provides a free, ad-free university-level mathematics knowledge base. Both licenses carry the NonCommercial term, so Mathua's MIT license does not extend to the adapted lesson content.
 
@@ -261,7 +261,7 @@ Lesson content and diagrams are adapted from [OpenStax](https://openstax.org) te
 
 Profile characters served by [DiceBear](https://www.dicebear.com) (individual avatar styles carry their own licenses, see their [license overview](https://www.dicebear.com/licenses/)).
 
-Mathematical answers are entered through [MathLive](https://mathlive.io/mathfield/) (MIT) — used as published, not forked. See [docs/math-input.md](docs/math-input.md) for how an answer reaches a verdict, [docs/mobile-device-checklist.md](docs/mobile-device-checklist.md) for what still needs a real phone and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for license obligations.
+Mathematical answers are entered through [MathLive](https://mathlive.io/mathfield/) (MIT), used as published, not forked. See [docs/math-input.md](docs/math-input.md) for how an answer reaches a verdict, [docs/mobile-device-checklist.md](docs/mobile-device-checklist.md) for what still needs a real phone and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for license obligations.
 
 ---
 

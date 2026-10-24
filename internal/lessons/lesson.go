@@ -19,7 +19,7 @@ type Lesson struct {
 	Concepts []string
 	// Source is the corpus the lesson came from ("teaching", "algebrica", "authored").
 	// It is provenance for the prose, not an attribution of any individual claim, and it is
-	// never synthesised — a lesson with no known corpus reports "".
+	// never synthesised, a lesson with no known corpus reports "".
 	Source string
 	// Assets are the lesson's figures, extracted from Body by ExtractAssets. Derived, not
 	// stored, so the body remains the single source and the two cannot disagree; see
@@ -131,7 +131,7 @@ func Load(lessonsDir string) (*Loader, error) {
 	}
 
 	// Deterministic per-concept pick: when a concept maps to several sources,
-	// the last in reverse-lexicographic order wins — authored teaching/*
+	// the last in reverse-lexicographic order wins, authored teaching/*
 	// beats vendored algebrica/* (alphabetically 't' > 'a').
 	concepts := make(map[string]*Lesson, len(conceptSources))
 	for id, srcs := range conceptSources {
@@ -150,7 +150,7 @@ func Load(lessonsDir string) (*Loader, error) {
 }
 
 // loadKPs reads <dir>/kp/<concept_id>.json shard files (a JSON array of KP).
-// A missing kp directory is not an error — shards are optional enrichment.
+// A missing kp directory is not an error, shards are optional enrichment.
 func loadKPs(dir string) map[string][]KP {
 	return loadKPDir(filepath.Join(dir, "kp"))
 }

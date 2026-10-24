@@ -4,8 +4,8 @@ import { getRenderLocale } from './i18n/locale'
 // Server remains the authority for estimates; these only recompute
 // displayed days from an already-fetched xp_remaining.
 
-// Daily XP goal policy. One place, because the default used to be written four times —
-// `PlanEditor`, `clampGoal`, the preset list, and `server.go`'s estimate route — and they
+// Daily XP goal policy. One place, because the default used to be written four times, 
+// `PlanEditor`, `clampGoal`, the preset list and `server.go`'s estimate route, and they
 // had drifted: the shipped default is DEFAULT_DAILY_GOAL, but the planner's fallbacks
 // still said 30 while `engine/plan.go` and `POST /api/plans/current` said 10. A learner with
 // no stored goal was therefore planning against 3x the XP/day they were actually banking,
@@ -35,7 +35,7 @@ export function daysFor(xpRemaining: number, dailyRate: number, restDaysPerWeek:
   return xpRemaining / effective
 }
 
-// monthLabel renders a YYYY-MM-DD date as "June 2026" ("июнь 2026 г." in Russian) — estimates
+// monthLabel renders a YYYY-MM-DD date as "June 2026" ("июнь 2026 г." in Russian), estimates
 // are ranges, never promises, so day precision is deliberately dropped. The caller must be a
 // component that reads the locale, or the label will not follow a switch.
 export function monthLabel(isoDate: string): string {

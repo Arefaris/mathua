@@ -72,7 +72,7 @@
       "label": "( 07 · Questions, answered. )",
       "account": {
         "q": "Do I need an account to start?",
-        "a": "No. Begin studying immediately — accounts are optional and only needed to sync progress across devices."
+        "a": "No. Begin studying immediately, accounts are optional and only needed to sync progress across devices."
       },
       "speed": {
         "q": "Why does speed matter, not just accuracy?",
@@ -84,7 +84,7 @@
       },
       "free": {
         "q": "Is Mathua free and open-source?",
-        "a": "Yes — MIT licensed, with no paywall on the graph. Every concept and generator is in the repository."
+        "a": "Yes, MIT licensed, with no paywall on the graph. Every concept and generator is in the repository."
       },
       "extendLabel": "( 08 · How it is extended. )",
       "extendBody": "Every concept is a JSON node. Every problem is a Go generator function. Every contribution goes through a graph validator that rejects cycles and orphaned nodes automatically.",
@@ -196,14 +196,14 @@
     },
     "grading": {
       "title": "Expression Grading with SymPy",
-      "p1": "From algebra onward, answers are expressions: {examples} where numeric comparison is no longer sufficient. Mathua uses a mixed Go/Python grading system: the router dispatches nine grading types — six pure-Go graders — and mathematical equivalence for algebra, calculus, differential equations and trigonometry is handled by a Python subprocess running {sympy}, bundled into the production image.",
+      "p1": "From algebra onward, answers are expressions: {examples} where numeric comparison is no longer sufficient. Mathua uses a mixed Go/Python grading system: the router dispatches nine grading types, six pure-Go graders and mathematical equivalence for algebra, calculus, differential equations and trigonometry is handled by a Python subprocess running {sympy}, bundled into the production image.",
       "p2": "The {router} selects the grader by {gradingType}. Concepts with type {symbolic}, {polynomial} or {expression} route to {gradeSymPy}, which runs a long-lived Python 3 subprocess. The production image installs SymPy (pinned) and fails the build if it cannot grade, so there is no fallback path.",
       "p3": "The Go client sends JSON requests to the Python subprocess via stdin. SymPy parses both expressions into trees and checks equivalence with {check}. This catches identities that string or coefficient comparison never could:",
       "p4": "Examples of equivalences SymPy can detect:"
     },
     "measuring": {
       "title": "Measuring Learning",
-      "p1": "Every answer in Mathua writes one row to an attempt log: student, concept, correctness, elapsed seconds, timestamp. Nothing is sampled or aggregated at write time — every metric below is computed from that raw log, per student or product-wide.",
+      "p1": "Every answer in Mathua writes one row to an attempt log: student, concept, correctness, elapsed seconds, timestamp. Nothing is sampled or aggregated at write time, every metric below is computed from that raw log, per student or product-wide.",
       "metric": "Metric",
       "meaning": "What it means",
       "rows": {
@@ -213,7 +213,7 @@
         },
         "secondPass": {
           "name": "Second-pass rate",
-          "text": "Share correct within the first two attempts — the recovery metric. A gap between first- and second-pass means material is learnable with feedback but not yet automatic."
+          "text": "Share correct within the first two attempts, the recovery metric. A gap between first- and second-pass means material is learnable with feedback but not yet automatic."
         },
         "attempts": {
           "name": "Average attempts per concept",
@@ -229,8 +229,8 @@
         }
       },
       "figureAlt": "First-pass and second-pass rates across all learners, with Math Academy parity markers",
-      "p2": "These are usage metrics, not an efficacy claim: no control group, no randomisation. Compare within a student over weeks, not across learners at different frontiers — and always read a weekly rate alongside its active-student count, since a week with three attempts can show 0% or 100% by accident.",
-      "p3": "The figure above refreshes weekly from the live product-wide log — read it with its sample size, which rides in the caption. Early numbers move a lot; that is normal, not a verdict. Your live per-student numbers are on your {profile}, and the full methodology with regeneration commands lives in {docs}.",
+      "p2": "These are usage metrics, not an efficacy claim: no control group, no randomisation. Compare within a student over weeks, not across learners at different frontiers and always read a weekly rate alongside its active-student count, since a week with three attempts can show 0% or 100% by accident.",
+      "p3": "The figure above refreshes weekly from the live product-wide log, read it with its sample size, which rides in the caption. Early numbers move a lot; that is normal, not a verdict. Your live per-student numbers are on your {profile}, and the full methodology with regeneration commands lives in {docs}.",
       "profileLink": "Profile",
       "docsLink": "Docs"
     },
@@ -261,6 +261,9 @@
     "intro": "Browse a domain and pick a topic. Eligibility is checked by Mathua; you cannot start a topic whose prerequisites are unmet.",
     "loading": "Loading curriculum",
     "loadError": "Couldn't load the curriculum.",
+    "retryCurriculum": "Retry loading curriculum",
+    "detailError": "Couldn't load domain details.",
+    "retryDomain": "Retry loading domain",
     "available": {
       "one": "{available} / {count} concept available",
       "other": "{available} / {count} concepts available"
@@ -360,7 +363,7 @@
       "text": "Text",
       "math": "Math: f(x)",
       "label": "Search symbols, names or meanings",
-      "placeholder": "Search a symbol, name or meaning — e.g. ∀, integral, lambda",
+      "placeholder": "Search a symbol, name or meaning, e.g. ∀, integral, lambda",
       "mathLabel": "Search by math notation",
       "mathPlaceholder": "Type a symbol, e.g. ∫ or \\alpha",
       "tags": "Tags",

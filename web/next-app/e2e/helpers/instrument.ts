@@ -9,7 +9,7 @@
 //   4. the button is enabled but the tap never reaches the submit handler
 //
 // Every mark below is `performance.now()`, which is already relative to
-// `performance.timeOrigin` — i.e. to navigation start. That is what makes the
+// `performance.timeOrigin`, i.e. to navigation start. That is what makes the
 // numbers comparable between a cold throttled load and a warm one.
 //
 // Nothing here records an answer. The brief was explicit that complete answers do
@@ -110,7 +110,7 @@ export async function installInstrumentation(page: Page): Promise<void> {
 
     // Observe `document`, not `document.documentElement`. Init scripts run before the
     // root element is parsed, so `documentElement` is null here and `observe(null)`
-    // throws — which killed every mark after `script-installed` and left a trace that
+    // throws, which killed every mark after `script-installed` and left a trace that
     // looked like the page never rendered. `document` is always safe to observe.
     const obs = new MutationObserver(checkField)
     const WATCH = { childList: true, subtree: true } as const

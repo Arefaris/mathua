@@ -7,6 +7,11 @@
       "body": "The engine could not be reached, so your queue was not read. Nothing was lost.",
       "retry": "Try again",
       "browse": "Browse domains"
+    },
+    "diagnosticInProgress": {
+      "title": "Diagnostic test in progress",
+      "body": "You have an active diagnostic session. Resume it to find your starting point.",
+      "resume": "Resume diagnostic test →"
     }
   },
   "review": {
@@ -39,8 +44,8 @@
     "restart": "Restart review",
     "wrappingUp": "Wrapping up…",
     "errors": {
-      "start": "Review failed to start — try again.",
-      "ungraded": "Grading is temporarily unavailable — please try again.",
+      "start": "Review failed to start, try again.",
+      "ungraded": "Grading is temporarily unavailable, please try again.",
       "submit": "Failed to submit review answer."
     }
   },
@@ -55,7 +60,7 @@
         "detail": "The test adapts to you. Clear answers mean fewer questions."
       },
       "honest": {
-        "title": "Answer from what you know — no searching",
+        "title": "Answer from what you know, no searching",
         "detail": "Honest answers put you at the right starting point. Looked-up answers put you in the wrong place."
       },
       "speed": {
@@ -91,7 +96,7 @@
         "detail": "Questions come from concepts whose memory is fading."
       },
       "honest": {
-        "title": "Answer from what you remember — no searching",
+        "title": "Answer from what you remember, no searching",
         "detail": "Honest answers recalibrate your next review date."
       },
       "speed": {
@@ -111,7 +116,7 @@
     "allLearned": {
       "badge": "All learned",
       "title": "Concept graph",
-      "detail": "Nothing is due right now — the graph shows what builds on what you have",
+      "detail": "Nothing is due right now, the graph shows what builds on what you have",
       "cta": "See the graph →"
     }
   },
@@ -142,13 +147,13 @@
     "ariaLabel": "Answer choices"
   },
   "submitError": {
-    "sessionGone": "Session expired — the server restarted and forgot this run.",
-    "throttled": "Saving is catching up — your answer is kept and will be sent again.",
-    "failed": "Couldn't submit your answer — it's still in the box.",
+    "sessionGone": "Session expired, the server restarted and forgot this run.",
+    "throttled": "Saving is catching up, your answer is kept and will be sent again.",
+    "failed": "Couldn't submit your answer, it's still in the box.",
     "retry": "Retry",
     "retrying": "Retrying…",
     "skip": "Skip →",
-    "noSkips": "No skips left — restart for a fresh run."
+    "noSkips": "No skips left, restart for a fresh run."
   },
   "answer": {
     "label": "Your answer",
@@ -191,14 +196,15 @@
     "also": " · also {names}",
     "diagramAlt": "Worked diagram for {label}",
     "fullLesson": "Full lesson",
-    "fullLessonTitled": "Full lesson — {title}",
-    "note": "Reference explains. It does not count as progress — only the questions below move this concept.",
-    "summary": "Reference — the full lesson"
+    "fullLessonTitled": "Full lesson, {title}",
+    "note": "Reference explains. It does not count as progress, only the questions below move this concept.",
+    "summary": "Reference, the full lesson"
   },
   "report": {
     "menuLabel": "Report options, example {blockId}",
     "label": "Report a problem",
-    "thanks": "✓ Thanks — reported",
+    "thanks": "✓ Thanks, reported",
+    "dismiss": "Dismiss confirmation",
     "title": "Complain about this question or explanation",
     "whatsWrong": "What's wrong?",
     "reasons": {
@@ -267,7 +273,7 @@
       "checkbox": "I am 13 or older, and I understand this.",
       "privacy": "Privacy notice"
     },
-    "intro": "Ask what Mathua is, or where to begin. Answers are short, and you can follow the links.",
+    "intro": "Ask what Mathua is or where to begin. Answers are short, and you can follow the links.",
     "thinking": "Thinking…",
     "placeholder": "Ask about Mathua",
     "questionLabel": "Your question",
@@ -278,24 +284,25 @@
     "loadFailed": "Failed to load lesson",
     "chooseAnother": "← Choose another topic",
     "prereqIntro": {
-      "dueCheck": "You have already learned {names} — a short check is due, or continue anyway.",
+      "dueCheck": "You have already learned {names}, a short check is due or continue anyway.",
       "allLearned": "You have already learned what this builds on. You can revisit it any time.",
-      "unmet": "This builds on {names}. A quick study helps — or continue anyway."
+      "unmet": "This builds on {names}. A quick study helps or continue anyway."
     },
     "section": "Section {number} of {total}",
     "correctSoFar": "· {correct}/{answered} correct",
     "xpGained": "· +{xp} XP",
-    "bandTitle": "How you're doing on this concept, from your recent answers. Progress only — mastery is decided separately.",
+    "bandTitle": "How you're doing on this concept, from your recent answers. Progress only, mastery is decided separately.",
     "introFallbackLabel": "Learn",
-    "workedExampleMissing": "Worked example unavailable — start practicing instead.",
+    "workedExampleMissing": "Worked example unavailable, start practicing instead.",
     "diagramAlt": "Diagram for {label}",
     "thisTopic": "this topic",
     "subgoals": "Steps ({count})",
     "subgoal": "Step {number}: ",
     "next": "Next →",
+    "practiceAgain": "Practice again →",
     "nextSection": "Next: {label} (worked example)",
     "kpFallback": "Knowledge point {number}",
-    "halt": "Stepping down a level — easier question below.",
+    "halt": "Stepping down a level, easier question below.",
     "studyPrereq": "Study {title}",
     "otherTask": "Other task →",
     "check": "Check",
@@ -309,25 +316,33 @@
     "errors": {
       "exhaustedEnd": "This topic ran out of new questions, so the section ended here.",
       "exhaustedNothingLeft": "This topic ran out of new questions, so there was nothing left to work through.",
-      "noQuestion": "Could not load a question — check your connection and reload.",
-      "expiredFresh": "That question had expired on the server, so it could not be graded. Here is a fresh one — nothing was recorded.",
+      "noQuestion": "Could not load a question, check your connection and reload.",
+      "expiredFresh": "That question had expired on the server, so it could not be graded. Here is a fresh one, nothing was recorded.",
       "expiredNoReplacement": "That question had expired and no replacement could be loaded. Reload to continue.",
-      "unreachable": "Could not reach the server to grade that answer. Check your connection and submit again — nothing was recorded."
+      "unreachable": "Could not reach the server to grade that answer. Check your connection and submit again, nothing was recorded."
+    },
+    "mastered": {
+      "title": "✓ You have mastered this concept",
+      "body": "You can move on to the next recommended concept or practice this lesson again below.",
+      "continue": "Continue to Next Concept →",
+      "continueTo": "Continue to Next Concept ({title}) →",
+      "finding": "Finding next concept…",
+      "profile": "Profile"
     }
   },
   "done": {
-    "complete": "✓ Complete — {correct}/{answered} correct · +{xp} XP · {band}",
+    "complete": "✓ Complete, {correct}/{answered} correct · +{xp} XP · {band}",
     "scrollUp": "Scroll up to review anything. Reviews are scheduled automatically.",
     "findingNext": "Finding what's next…",
     "practiceAgain": "Practice again",
-    "comingUp": "Coming up — unlocks once this concept is mastered",
+    "comingUp": "Coming up, unlocks once this concept is mastered",
     "needs": "Needs: {names}"
   },
   "answerFormat": {
     "numeric": "Answer with a number, fraction or mixed number (e.g. 4 1/10)",
     "expression": "Answer as an expression",
     "symbolic": "Answer in simplest form",
-    "multipleChoice": "Type the exact answer",
+    "multipleChoice": "Select an option or type its letter",
     "comparison": "Answer <, > or =",
     "ordering": "Answer in order, separated by commas",
     "tuple": "Separate values with commas, e.g. 2, 3 or (2, 3)",

@@ -53,8 +53,8 @@ type Schema struct {
 //
 // Fact is load-bearing. A step is only rendered when its fact is present, so a
 // schema can cover both questions a multi-shape generator asks. Mark the step
-// optional when its absence is that design — "classify this angle" versus "find
-// the complement" — and leave it required when a missing fact would mean the
+// optional when its absence is that design, "classify this angle" versus "find
+// the complement" and leave it required when a missing fact would mean the
 // schema and its generator had drifted apart.
 type Step struct {
 	Fact string `json:"fact"`
@@ -63,7 +63,7 @@ type Step struct {
 	// multi-shape generator asks. When its fact is absent the step is skipped
 	// and nothing is reported, because its absence is the design rather than
 	// drift. A step without this flag must have its fact, and a missing one
-	// drops the whole schema — that is what catches a renamed fact.
+	// drops the whole schema, that is what catches a renamed fact.
 	Optional bool `json:"optional,omitempty"`
 }
 
@@ -244,7 +244,7 @@ func render(s *Schema, facts map[string]string, strictFacts bool) (string, []str
 }
 
 // placeholderRe matches a placeholder's contents: a snake_case fact name. The
-// restriction is not cosmetic — the row-echelon form a systems question is
+// restriction is not cosmetic, the row-echelon form a systems question is
 // graded against is literally written [[a,b,c],[0,d,e]], so an unrestricted
 // [[...]] would chew up the answer it is supposed to be embedding. A typo like
 // [[Num]] is therefore left as literal text and caught by the leak test rather
@@ -290,7 +290,7 @@ func lookup(text string, facts map[string]string, note func(string)) string {
 }
 
 // Unresolved returns the placeholder-looking spans still present in text after
-// assembly — that is, a test for a schema that referenced a fact its generator
+// assembly, that is, a test for a schema that referenced a fact its generator
 // does not publish. Matrix notation such as [[4,3,6],[0,1,1]] is not a
 // placeholder and is not reported.
 func Unresolved(text string) []string {

@@ -13,7 +13,7 @@ import (
 //
 // Returning "" is the normal case and means "nothing here we can state with
 // certainty". Anything guessed from a fuzzy distance would be worse than
-// silence — a learner told the wrong reason for a mistake learns the wrong
+// silence, a learner told the wrong reason for a mistake learns the wrong
 // lesson, which is the opposite of what an explanation is for.
 func Diagnose(gradingType GradingType, expected, answer string) string {
 	if strings.TrimSpace(answer) == "" {
@@ -41,13 +41,13 @@ func diagnoseNumeric(expected, answer string) string {
 		return ""
 	}
 	if e == a {
-		// Equal to within tolerance — the numeric grader already called this
+		// Equal to within tolerance, the numeric grader already called this
 		// correct. Nothing to diagnose.
 		return ""
 	}
 	switch {
 	case e == -a:
-		return fmt.Sprintf("You have the right number with the sign flipped — the answer is %s.", strings.TrimSpace(answer))
+		return fmt.Sprintf("You have the right number with the sign flipped, the answer is %s.", strings.TrimSpace(answer))
 	case math.Abs(e-a) == 1:
 		return "You are exactly one away, so a count or a boundary is off by one."
 	}
@@ -55,7 +55,7 @@ func diagnoseNumeric(expected, answer string) string {
 	// rounded rather than found.
 	if eIsFloat && aIsFloat {
 		if decimalsOf(strings.TrimSpace(answer)) < decimalsOf(strings.TrimSpace(expected)) {
-			return fmt.Sprintf("That is the answer rounded to fewer decimal places than it needs — %s keeps them.", strings.TrimSpace(expected))
+			return fmt.Sprintf("That is the answer rounded to fewer decimal places than it needs, %s keeps them.", strings.TrimSpace(expected))
 		}
 	}
 	return ""
@@ -68,7 +68,7 @@ func diagnoseComparison(expected, answer string) string {
 	a := strings.TrimSpace(answer)
 	flipped := map[string]string{">": "<", "<": ">", "=": "="}
 	if want, ok := flipped[e]; ok && a == want {
-		return fmt.Sprintf("The comparison goes the other way round — it should be %s, not %s.", e, a)
+		return fmt.Sprintf("The comparison goes the other way round, it should be %s, not %s.", e, a)
 	}
 	return ""
 }

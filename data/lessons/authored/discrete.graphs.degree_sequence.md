@@ -18,4 +18,4 @@ A consequence is that the number of odd degrees is even, because the sum is even
 
 **Havel–Hakimi** decides whether a sequence is graphical: take the largest degree \(d\), connect that vertex to the \(d\) next-largest, remove it, and repeat; the sequence is graphical exactly when the process ends at all zeros.
 
-For \(3, 3, 2, 2, 2\): connect the first vertex to the next three, leaving \(2, 1, 1, 2\); reorder to \(2, 2, 1, 1\); connect and continue, and the process reaches zeros. For \(3, 3, 3, 1\) the same procedure fails, and no graph has that sequence — the handshake test passes there, so feasibility needs the stronger algorithm.
+For \(3, 3, 2, 2, 2\): connect the first vertex to the next three, leaving \(2, 1, 1, 2\); reorder to \(2, 2, 1, 1\); connect and continue, and the process reaches zeros. For \(3, 3, 3, 1\) the same procedure fails, and no graph has that sequence, the handshake test passes there, so feasibility needs the stronger algorithm.

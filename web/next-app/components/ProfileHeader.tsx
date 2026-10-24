@@ -15,7 +15,7 @@ import { levelName } from '../lib/accountNames'
  * It replaced a bordered stat strip (avatar, LV tile, XP/TOTAL/STREAK/WEEKLY tiles, one progress
  * bar) stacked on a position card (big number, second bar, 3-column grid). Every fact below used
  * to have its own tile and label; now each line carries several, which is the whole reduction.
- * TOTAL XP and the WEEKLY leaderboard link were cut as part of it — the first is vanity next to
+ * TOTAL XP and the WEEKLY leaderboard link were cut as part of it, the first is vanity next to
  * today's goal, the second is navigation, and neither answers "where am I".
  *
  * What the rewrite must not lose (all pinned by tests): the `Where you are` region, the literal

@@ -4,7 +4,7 @@ import { clampGoal, daysFor, monthLabel, GOAL_PRESETS, GOAL_MIN, GOAL_MAX, DEFAU
 describe('clampGoal', () => {
   it('clamps to the server bounds', () => {
     // 10..100, matching the server's check in handleSetDailyXPGoal. These were 1..10000,
-    // and the planner's fallbacks said 30 while the shipped default was 10 — so a learner
+    // and the planner's fallbacks said 30 while the shipped default was 10, so a learner
     // with no stored goal planned against 3x the XP/day they were actually banking.
     expect(clampGoal(0)).toBe(GOAL_MIN)
     expect(clampGoal(-5)).toBe(GOAL_MIN)

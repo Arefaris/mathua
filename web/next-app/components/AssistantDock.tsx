@@ -10,8 +10,8 @@ import { useT, type MessageKey, type TFunction } from '../lib/i18n'
 
 // KaTeX is a large dependency and the dock is mounted in the root layout, so it
 // would otherwise be pulled into every route's bundle. Loading it through a
-// dynamic import means a reply with no mathematics — an orientation answer, which
-// is most of them — never downloads it.
+// dynamic import means a reply with no mathematics, an orientation answer, which
+// is most of them, never downloads it.
 const AssistantMath = dynamic(() => import('./AssistantMath'), { ssr: false })
 
 // AssistantText renders one prose segment of a reply. Mathematics inside it is
@@ -64,7 +64,7 @@ const SUGGESTIONS: MessageKey[] = ['learn.assistant.suggestions.what', 'learn.as
 
 // AREAS is what the panel offers when the assistant cannot answer. These are
 // routes the app owns regardless of AI, so the dock is useful in a deployment
-// with no provider — which is every fresh checkout until a key is set.
+// with no provider, which is every fresh checkout until a key is set.
 const AREAS: { label: MessageKey; href: string }[] = [
 	{ label: 'learn.assistant.areas.learn', href: '/learn' },
 	{ label: 'learn.assistant.areas.diagnose', href: '/diagnose' },
@@ -134,8 +134,8 @@ export default function AssistantDock() {
 		}
 	}, [])
 
-	// Read the acceptance once, on mount. Storage can be unavailable — a private window,
-	// blocked cookies — and the safe failure is to show the notice again, not to assume it
+	// Read the acceptance once, on mount. Storage can be unavailable, a private window,
+	// blocked cookies and the safe failure is to show the notice again, not to assume it
 	// was given.
 	useEffect(() => {
 		let stored = ''

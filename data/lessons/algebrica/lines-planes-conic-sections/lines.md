@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/lines/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/lines/), CC BY-NC 4.0
 
 ## What are lines
 

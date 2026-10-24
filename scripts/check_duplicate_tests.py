@@ -3,9 +3,9 @@
 
 Two pull requests can each be green and still land an uncompilable package:
 each suite was written against a main branch that did not yet contain its
-sibling. That happened twice on 2026-10-23 — `TestCheckPassword` was declared
+sibling. That happened twice on 2026-10-23, `TestCheckPassword` was declared
 three times in `internal/auth`, and `TestEngine_SettleCurrent` twice in
-`internal/diagnostic` — and in both cases only the combination was broken, so
+`internal/diagnostic` and in both cases only the combination was broken, so
 no individual pull request check could see it. `go test ./...` catches it, but
 only after the merge. This check runs before it, so the failure names the
 duplicate instead of printing a compiler error against the package.

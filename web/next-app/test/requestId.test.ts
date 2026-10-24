@@ -16,7 +16,7 @@ afterEach(() => {
 })
 
 // Without an id, a learner's failure report and the server's log line can only
-// be matched by guessing at timestamps — which is exactly what happened when a
+// be matched by guessing at timestamps, which is exactly what happened when a
 // diagnostic answer "just froze".
 describe('request correlation', () => {
   it('sends a request id the server can echo', async () => {

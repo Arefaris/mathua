@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/even-and-odd-functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/even-and-odd-functions/), CC BY-NC 4.0
 
 ## Поведение функции
 

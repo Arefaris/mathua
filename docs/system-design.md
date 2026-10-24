@@ -78,13 +78,13 @@ Eighteen tables. The five that carry the learning loop are `students`, `concept_
 | `username` | TEXT | Unique login identifier |
 | `password_hash` | TEXT | bcrypt hash |
 | `course_id` | TEXT | Active course filter |
-| `xp_total` | INTEGER | Lifetime XP (`MAX(0, xp_total+?)` floor `sqlite.go:199`) |
+| `xp_total` | INTEGER | Lifetime XP (`MAX(0, xp_total+?)` floor in `AwardXP`) |
 | `xp_today` | INTEGER | Resets via `xp_date` check (`MAX(0, …)`) |
 | `xp_date` | TEXT | Date of `xp_today` bucket (`YYYY-MM-DD`) |
 | `daily_xp_goal` | INTEGER | Daily goal (default 30, `xp.DefaultDailyGoal`; migrated from legacy 150 via versioned backfill `sqlite.go`) |
 | `settings` | TEXT (JSON) | Arbitrary key-value settings (`pause_until`, `accommodations.extra_time`) |
 | `diagnostic_completed` | INTEGER | Boolean flag |
-| `share_token` | TEXT | `s_` + 12 random bytes (`engine.go:1270`) |
+| `share_token` | TEXT | `s_` + 12 random bytes (`internal/engine/engine.go`) |
 | `league` | TEXT | `bronze`→`diamond` (`leaderboard`) |
 | `league_week` | TEXT | ISO week |
 | `league_moved` | INTEGER | Promotion/demotion flag |
@@ -103,6 +103,9 @@ Eighteen tables. The five that carry the learning loop are `students`, `concept_
 | `sm2_efactor` | REAL | Easiness factor (≥ 1.3) |
 | `next_review_due` | TEXT | ISO 8601 date for spaced repetition |
 | `weakness_score` | REAL | 0.0–1.0, propagated to dependents |
+| `fsrs_stability` | REAL | FSRS-6 stability in days |
+| `fsrs_difficulty` | REAL | FSRS-6 difficulty (1.0–10.0) |
+| `fsrs_last_review` | TEXT | ISO 8601 timestamp of last review |
 
 **`sessions`**  --  Practice sessions
 
@@ -139,7 +142,7 @@ Eighteen tables. The five that carry the learning loop are `students`, `concept_
 ### Indexes
 
 - `concept_progress(student_id)`  --  Fast progress lookups
-- `concept_progress(student_id, status, mastered_at)`  --  Weekly leaderboard (`sqlite.go:1549` `GetWeeklyLeaderboard`)
+- `concept_progress(student_id, status, mastered_at)`  --  Weekly leaderboard (`GetWeeklyLeaderboard` in `internal/storage/sqlite.go`)
 - `sessions(student_id)`  --  Session history
 - `attempts(session_id)`  --  Attempts per session
 - `attempts(student_id, timestamp)`  --  Time-series queries
@@ -166,7 +169,7 @@ Migrations are embedded directly in the application binary  --  no external migr
 The `Repository` interface abstracts the storage layer (`store.go:127`):
 
 - **SQLiteStore**  --  Fully implemented (`sqlite.go:1`, `WAL` `migrate.go:23`), used for local dev and `DATABASE_URL=sqlite:mathua.db` / `:memory:` tests
-- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:21` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions) — used when `DATABASE_URL=postgres://` `main.go:69`
+- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:21` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions), used when `DATABASE_URL=postgres://` `main.go:69`
 
 The codebase checks `DATABASE_URL` at startup and opens `pgx` for `postgres://` else `SQLite` (`mathua.db`).
 
@@ -181,11 +184,11 @@ The engine is the central orchestrator. It holds references to every subsystem a
 | Module | File | Responsibility |
 |--------|------|----------------|
 | **DAG Loader** | `internal/concepts/` (`loader.go:13`, `dag.go`) | Loads `data/concepts/*.json` + `enrichment.json` heuristics (`Encompasses`, `InterferenceGroup`, `Variants`), validates no cycles/orphans/dup IDs, no singletons, encompass cycles, produces topological sort via Kahn's algorithm |
-| **Scheduler** | `internal/scheduler/` (`scheduler.go:243`, `scheduler.go:87`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
-| **Generators** | 22 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74` — no static question bank |
+| **Scheduler** | `internal/scheduler/` (`computePriority`, `NextSmart` in `internal/scheduler/`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
+| **Generators** | 22 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74`, no static question bank |
 | **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:41`, `sm2.go:34`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `mastery/status.go:24`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
 | **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `xp.DefaultDailyGoal` (`xp/policy.go`) |
-| **Weakness Propagation** | In engine `engine.go:1575` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
+| **Weakness Propagation** | `Engine.PropagateWeakness` in `internal/engine/engine.go` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
 | **Diagnostic** | `internal/diagnostic/` (`cat.go:1`, `report.go:11`) | Compressed covering set + info-gain CAT with `±0.3` evidence propagation, per-concept `KnowledgeConfidence 0–1`, frontier at max belief drop, supplemental when `<0.7` |
 | **Planner** | `internal/planning/` | Course paths loaded from `data/courses.json` (28 courses) |
 | **Lessons** | `internal/lessons/` | Markdown lesson content from `data/lessons/` + 1250 KP shards `data/lessons/kp/*.json` ×3 `audit_lessons.py:191` |
@@ -250,7 +253,7 @@ information, rather than dropped.
 
 **Status only moves forward.** A miss lowers the evidence score but does not un-learn a concept:
 `MASTERED` is an exit, and decay asks about retention, not attainment. The `required_streak` and
-`time_threshold` fields still exist — SM-2 reads the streak to grade a review — but they no
+`time_threshold` fields still exist, SM-2 reads the streak to grade a review, but they no
 longer gate the ladder.
 
 This replaced a streak-based ladder, and the cost of the old one is worth recording because it
@@ -386,7 +389,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | GET | `/api/graph` | no | Full DAG node list |
 | GET | `/api/leaderboard` | no | Weekly leaderboard |
 | GET | `/api/leagues` | auth | Weekly leagues with promotion/demotion |
-| POST | `/api/share` | auth | Enable/disable share link (`s_` token `engine.go:1270`) |
+| POST | `/api/share` | auth | Enable/disable share link (`s_` token `internal/engine/engine.go`) |
 | GET | `/api/share/{token}` | shareLimiter, public | Read-only parent/teacher report |
 | GET | `/api/courses` | auth | Available courses (22) |
 | GET | `/api/courses/{id}` | auth | Course detail + progress |
@@ -404,14 +407,14 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/reviews/answer` | write: writeLimiter, auth | Submit review answer |
 | GET | `/api/lessons` | no | All lessons with progress (`?student_id=`) |
 | GET | `/api/lessons/body` | no | Single lesson markdown body |
-| GET | `/api/lessons/{id}/practice` | no | Generated/curated practice questions (`?count=5`) — also writes the study anchor (expected answer + explanation) that `/api/study/answer` grades against, so a client cannot grade itself |
+| GET | `/api/lessons/{id}/practice` | no | Generated/curated practice questions (`?count=5`), also writes the study anchor (expected answer + explanation) that `/api/study/answer` grades against, so a client cannot grade itself |
 | GET | `/api/lessons/{id}/kp` | no | KP shards (3 per concept) with worked example |
-| POST | `/api/study/answer` | write: writeLimiter, optional | Study seam `LessonQuiz→SubmitAnswer` (`CONTEXT.md` Seam) — graded against the server-side anchor, never a client-supplied expected; 409 + re-serve when no anchor exists, `student_id` impersonation guard |
+| POST | `/api/study/answer` | write: writeLimiter, optional | Study seam `LessonQuiz→SubmitAnswer` (`CONTEXT.md` Seam), graded against the server-side anchor, never a client-supplied expected; 409 + re-serve when no anchor exists, `student_id` impersonation guard |
 | POST | `/api/quiz/session` | write: writeLimiter, optional | Quiz every 50 XP at 80% difficulty (`quiz.go:1`) |
-| POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer (`TaskQuiz 20` `engine.go:1126`) |
+| POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer; a correct answer earns 20 XP through `QuizXP` (`internal/engine/engine.go`) |
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
-| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
+| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}`, the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
 | GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route and no update or delete method on either store |
 | GET | `/api/activity` | auth | Daily activity heatmap (`?days=365`) |
 | GET | `/api/efficacy` | auth | First-pass/second-pass efficacy |
@@ -488,7 +491,7 @@ Here's the complete flow when a student submits an answer:
 
 1. **Client** sends `POST /api/study/answer` with `{concept_id, answer, question}`
 2. **Auth middleware** validates JWT, injects `studentID` into request context
-3. **Handler** looks the question up in the server-side anchor — written when the question was served — and calls `Engine.SubmitStudyAnswer(studentID, conceptID, answer, elapsed)`. There is no client-supplied expected answer to fall back on: no anchor means a 409 and a re-serve, not a guess.
+3. **Handler** looks the question up in the server-side anchor, written when the question was served and calls `Engine.SubmitStudyAnswer(studentID, conceptID, answer, elapsed)`. There is no client-supplied expected answer to fall back on: no anchor means a 409 and a re-serve, not a guess.
 4. **Grading**  --  route to the correct grader based on `grading_type`: numeric graders parse the answer, SymPy handles symbolic equivalence, etc.
 5. **Machine**  --  `mastery.Machine.Next()` determines if the student's performance qualifies for a state transition (UNSEEN → LEARNING → etc.)
 6. **SM-2**  --  `scheduler.ComputeSM2()` computes new repetition count, interval and easiness factor
@@ -518,14 +521,14 @@ Mathua implements a compressed-covering + info-gain CAT to locate a student's kn
 5. Propagate evidence: **correct** → `+0.3` belief to all prerequisites; **wrong** → `-0.3` to all dependents + related (Bayes conflict weighting)
 6. Track per-concept `KnowledgeConfidence 0–1`; `Frontier` is the highest belief drop between sorted beliefs
 7. Stop when every concept has `≥2` probes and `confidence ≥0.7`; otherwise run `supplementalDiagnostic()` to probe low-confidence concepts
-8. Report `DiagnosticReport{PlacementCourseID, FrontierIdx, GapsByDomain, MasteryLevels, CompletionEstimates}` (`report.go:11`) with `50/100/300 XP` completion estimates (`report.go:41`)
+8. Report `DiagnosticReport{PlacementCourseID, FrontierIdx, GapsByDomain, MasteryLevels, CompletionEstimates}` (`report.go:11`) with `50/100/300 XP` completion estimates (`report.go:43`)
 
 ### Key Properties
 
 - **Covering-set + info-gain efficiency**: `2 × |cover|` probes, `≤ 45` total, vs `666` exhaustive; `80%` difficulty targeting via `engine.computeDifficulty` `engine.go:157`
-- **Evidence propagation**: correct boosts prereqs, wrong penalizes postrequisites — finds frontier even with conflicting evidence
+- **Evidence propagation**: correct boosts prereqs, wrong penalizes postrequisites, finds frontier even with conflicting evidence
 - **Mastery + automaticity**: `fast` (`elapsed < timeThreshold`) distinguishes `PRACTICING` vs `LEARNING` placement
-- **Optimistic merge**: Retaking does not delete progress; `ApplyGoalResults` `engine.go:1947` merges with `Practicing/Learning` vs `Unseen`
+- **Optimistic merge**: Retaking does not delete progress; `ApplyGoalResults` in `internal/engine/engine.go` merges with `Practicing/Learning` vs `Unseen`
 - **Time-bounded**: Per-concept `AvgTimeSeconds` threshold; slow answers are `!fast` for diagnostic purposes
 
 ### Goal-Oriented Diagnostic
@@ -574,7 +577,7 @@ Trade-off: generation latency. Complex polynomial questions require a SymPy subp
 
 ### Why No ORM?
 
-The schema has 28 tables with straightforward relationships. Raw SQL with `database/sql` gives:
+The schema has 29 tables with straightforward relationships. Raw SQL with `database/sql` gives:
 - Full control over query optimization (especially the SM-2 upsert and leaderboard queries)
 - No query generation overhead
 - Transparent SQL for debugging
@@ -602,5 +605,5 @@ The Go binary serves the Next.js static export directly. This means:
 
 ## Summary
 
-Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:21` / `storage/sqlite.go:1`, same `Repository` `store.go:477`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 22 domain registries (1250 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
+Mathua is an intentionally simple system. One language (Go), two databases (SQLite + PostgreSQL via `pgx/v5` `storage/postgres.go:21` / `storage/sqlite.go:1`, same `Repository` `internal/storage/store.go`), one engine core with a single delivery method through the REST API. The complexity is in the algorithms  --  SM-2 spaced repetition scaled by `learningSpeed`, CAT compressed-cover + info-gain diagnostics, 22 domain registries (1250 concepts), 9 grading types via `Router`  --  not in the infrastructure. Every component can be understood by reading its source file start to finish.
 

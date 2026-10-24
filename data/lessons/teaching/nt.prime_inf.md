@@ -28,11 +28,11 @@ Take primes 2,3,5,7: $N=2\cdot3\cdot5\cdot7+1=211$. 211 is prime.
 
 Take primes 2,3,5,7,11,13: $N=30031=59\times509$. Both 59 and 509 are new primes not in the original list.
 
-The last case is the one worth keeping, because it shows the theorem's shape rather than its conclusion. The number built from the first six primes is composite, and neither of its factors is in the list — the argument never needed $N$ to be prime, only that its factors are new. Running the construction again on the six primes plus 59 and 509 would produce another number, and so on; each step adds at least one prime that was not there before.
+The last case is the one worth keeping, because it shows the theorem's shape rather than its conclusion. The number built from the first six primes is composite, and neither of its factors is in the list, the argument never needed $N$ to be prime, only that its factors are new. Running the construction again on the six primes plus 59 and 509 would produce another number, and so on; each step adds at least one prime that was not there before.
 
 ## Why This Proves Infinitude
 
-If there were only finitely many primes, Euclid's construction applied to the complete finite list would produce a prime outside the list — contradiction.
+If there were only finitely many primes, Euclid's construction applied to the complete finite list would produce a prime outside the list, contradiction.
 
 Written out, suppose the primes are exactly $p_1,\dots,p_k$, and let $N=p_1\cdots p_k+1$. Every prime divides the product, so none divides $N$, yet $N>1$ has a prime divisor. The divisor is a prime that is not one of the $p_i$, contradicting the assumption that the list was complete. The hypothesis is therefore false, which is the theorem.
 

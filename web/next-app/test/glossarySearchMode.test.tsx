@@ -40,7 +40,7 @@ describe('glossary search input modes', () => {
     renderSearch({ mode: 'math' })
     expect(screen.queryByRole('searchbox', { name: 'Search symbols, names or meanings' })).toBeNull()
     // Either the MathLive field (stubbed element) or its loading/fallback
-    // plain input — both carry the same accessible name by contract.
+    // plain input, both carry the same accessible name by contract.
     const field = await screen.findByLabelText('Search by math notation')
     expect(field).toBeVisible()
   })

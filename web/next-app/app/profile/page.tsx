@@ -26,20 +26,20 @@ import { useT } from '../../lib/i18n'
 // UserInfo is imported rather than redeclared. This page had its own copy of the shape, which
 // is ADR-043's failure mode in its smallest form: a second schema describing the same payload,
 // so a field added to the real one type-checks here as a *missing property* instead of as a
-// change — and when `role` arrived from /api/auth/me, this copy did not have it. The compiler
+// change and when `role` arrived from /api/auth/me, this copy did not have it. The compiler
 // said the field did not exist, which is the one symptom of the duplication that anyone noticed;
 // the other is that it never would have been noticed at all.
 
 // Every branch below returns through this. /profile used to repeat
 // <SidebarProvider>…</SidebarProvider> in some return paths and nothing at all in others, and
 // the chrome was opt-in per branch. That is how this page ended up with no mobile navigation
-// and no theme control: three of the six paths — both error paths and the "Loading scores…"
-// wait — simply opted out, and the tab bar was never restored when BottomTabs came back. Wrapping
+// and no theme control: three of the six paths, both error paths and the "Loading scores…"
+// wait, simply opted out, and the tab bar was never restored when BottomTabs came back. Wrapping
 // once makes a bare branch impossible to write by accident, which is the failure itself.
 //
 // `isStaffRole` used to live here as a second copy of the predicate, and it is now
 // imported from lib/auth: the copy here had no way to learn that the server's staff set is
-// moderator-or-above, so the two answers to "is this account staff" were free to disagree —
+// moderator-or-above, so the two answers to "is this account staff" were free to disagree, 
 // which is the duplicate-schema failure in its smallest form (ADR-043).
 
 function ProfileShell({
@@ -54,7 +54,7 @@ function ProfileShell({
           {/* The opener for the overlay sheet, dressed as the same control the collapsed desktop
               rail uses: λ over a right-pointing chevron. shadcn's SidebarTrigger defaults to a bare
               λ, which on mobile is the app's logo sitting at the top-left behaving like a wordmark
-              rather than a button — the exact thing 114a3e25 fixed on the desktop rail and the
+              rather than a button, the exact thing 114a3e25 fixed on the desktop rail and the
               reason this opener was missed here. On mobile the nav slides in from the left, so
               right is also the honest direction for it to point. */}
           <div className="mb-2 flex justify-start md:hidden px-4 sm:px-6 pt-8">
@@ -103,7 +103,7 @@ export default function ProfilePage() {
     }
   }, [mounted])
 
-  // Null when an older server omits it. The bar hides rather than substituting a literal — a
+  // Null when an older server omits it. The bar hides rather than substituting a literal, a
   // bar computed against a gate the engine does not use is a claim about this learner, and is
   // worse than no bar. The banner and its CTA still render, because `quiz_due` is the flag that
   // actually says whether the quiz is open, and dropping the way into it would cost a learner
@@ -121,7 +121,7 @@ export default function ProfilePage() {
   // The head, as the engine ranked it.
   //
   // This used to be re-derived here from `progress`, `weaknesses`, `activity`, `dueReviews`
-  // and `scores` — five inputs the browser combined with its own copy of the eligibility and
+  // and `scores`, five inputs the browser combined with its own copy of the eligibility and
   // ranking rules, which had already drifted from internal/scheduler: a duplicated XP award
   // that still halved reviews, and a different ranking order. Now it arrives decided.
   //
@@ -130,7 +130,7 @@ export default function ProfilePage() {
   const head = shelf
 
   // What the head names, for "where am I". Read off the same head as the recommendation, so
-  // the two cannot disagree — which is the property that matters, and the reason this block
+  // the two cannot disagree, which is the property that matters, and the reason this block
   // keeps the label even though it no longer offers a button: the engine owns both the name
   // and the destination, so a learner is never shown one concept's name and sent to another.
   const frontierLabel = head?.next.title ?? null
@@ -138,6 +138,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!mounted) return
+
+    // Requests started here outlive the page. When a learner navigates away or a
+    // test file's last case finishes, a `.then` that lands after teardown calls
+    // setState on a document that no longer exists, and React resolves that through
+    // `window` and throws `ReferenceError: window is not defined`. Vitest counts an
+    // unhandled error as a failure even when every test passes, so the guard is what
+    // keeps a correct suite from going red, and it also closes the same warning for
+    // a learner who leaves mid-load.
+    let alive = true
 
     const info = getUserInfo()
     setUser(info)
@@ -161,12 +170,14 @@ export default function ProfilePage() {
         setAvatarPreset(resolved.preset ?? null)
         setAvatarUrl(resolved.url)
       }
-      getSettings().then(hydrateAvatar).catch(() => {
-        if (info?.avatar_url) setAvatarUrl(info.avatar_url)
+      getSettings().then(s => {
+        if (alive) hydrateAvatar(s)
+      }).catch(() => {
+        if (alive && info?.avatar_url) setAvatarUrl(info.avatar_url)
       })
       // Surprise DiceBear combo for photo-less users (all auth flows land here).
       ensureDicebearAvatar().then(pick => {
-        if (pick) hydrateAvatar({ avatar_dicebear: { style: pick.style, seed: pick.seed } })
+        if (alive && pick) hydrateAvatar({ avatar_dicebear: { style: pick.style, seed: pick.seed } })
       }).catch(() => {})
 
      async function fetchData() {
@@ -178,8 +189,9 @@ export default function ProfilePage() {
             getProgress(info!.student_id).catch(() => ({} as Record<string, ConceptProgress>)),
             getWeaknesses().catch(() => ({ by_domain: {} } as WeaknessRes)),
           ])
+          if (!alive) return
           if (!scoresRes) {
-            // 401 or fetch failure — token likely expired (JWT_SECRET rotated) or network.
+            // 401 or fetch failure, token likely expired (JWT_SECRET rotated) or network.
             // Keep guest-like state so page doesn't hang on "Loading scores…"
             setError(t('account.profile.sessionExpired'))
           }
@@ -187,22 +199,30 @@ export default function ProfilePage() {
           setActivity(activityRes)
           setProgress(progressRes)
           setWeaknesses(weaknessesRes)
-          getDueReviews().then(r => setDueReviews(r.count)).catch(() => {})
-          getEfficacy().then(setEfficacy).catch(() => {})
+          getDueReviews().then(r => {
+            if (alive) setDueReviews(r.count)
+          }).catch(() => {})
+          getEfficacy().then(e => {
+            if (alive) setEfficacy(e)
+          }).catch(() => {})
           // Placement from the server. The client must not infer diagnostic
           // completion from the displayed question or from local storage.
-          getMe().then(me => setPlacementCompleted(me.diagnostic_completed ?? false)).catch(() => {
-            setPlacementCompleted(info?.diagnostic_completed ?? false)
+          getMe().then(me => {
+            if (alive) setPlacementCompleted(me.diagnostic_completed ?? false)
+          }).catch(() => {
+            if (alive) setPlacementCompleted(info?.diagnostic_completed ?? false)
           })
           // The recommendation is the engine's answer, not a re-ranking of the fetches above.
           // Fetched beside them rather than derived from them: the report's numbers and the
           // recommendation come from one authority each, and neither is computed from the other.
           fetchShelf()
             .then((next) => {
+              if (!alive) return
               setShelf(next)
               setShelfFailed(false)
             })
             .catch(() => {
+              if (!alive) return
               setShelf(null)
               setShelfFailed(true)
             })
@@ -213,19 +233,24 @@ export default function ProfilePage() {
             getActivity().catch(() => [] as DailyActivity[]),
             guestId ? getProgress(guestId).catch(() => ({} as Record<string, ConceptProgress>)) : Promise.resolve({} as Record<string, ConceptProgress>),
           ])
+          if (!alive) return
           setActivity(activityRes as DailyActivity[])
           setScores(null)
           setProgress(progressRes as Record<string, ConceptProgress>)
           setWeaknesses(null)
         }
       } catch {
-        if (info) setError(t('account.profile.loadFailed'))
+        if (alive && info) setError(t('account.profile.loadFailed'))
       } finally {
-        setLoading(false)
+        if (alive) setLoading(false)
       }
     }
 
     fetchData()
+
+    return () => {
+      alive = false
+    }
   }, [mounted, t])
 
   const monoFont = "var(--font-jetbrains-mono), 'JetBrains Mono', monospace"

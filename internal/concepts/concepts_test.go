@@ -161,19 +161,19 @@ func TestDAG_Lookups_Nonexistent(t *testing.T) {
 func TestDAG_Available(t *testing.T) {
 	d := buildTestDAG(t)
 
-	// Nothing mastered — only concepts with no prereqs should be available.
+	// Nothing mastered, only concepts with no prereqs should be available.
 	avail := d.Available(map[string]bool{})
 	if len(avail) != 1 || avail[0].ID != "arith.add.single" {
 		t.Errorf("expected only arith.add.single available, got %v", avail)
 	}
 
-	// Root mastered — its dependents become available.
+	// Root mastered, its dependents become available.
 	avail = d.Available(map[string]bool{"arith.add.single": true})
 	if len(avail) != 2 {
 		t.Errorf("expected 2 available after root mastered, got %d", len(avail))
 	}
 
-	// Everything mastered — nothing available.
+	// Everything mastered, nothing available.
 	all := map[string]bool{
 		"arith.add.single":    true,
 		"arith.sub.single":    true,
@@ -339,5 +339,162 @@ func TestVariants_InvalidDifficulty(t *testing.T) {
 	}
 	if err := validate(raw); err == nil {
 		t.Fatal("expected error for invalid variant difficulty")
+	}
+}
+
+func TestKnowledgePoints_Valid(t *testing.T) {
+	raw := []Concept{
+		{ID: "base", Label: "Base", Domain: "d", Prerequisites: []string{}, MasteryThreshold: MasteryThreshold{Streak: 1, AvgTimeSeconds: 1}},
+		{
+			ID: "a", Label: "A", Domain: "d", Prerequisites: []string{"base"},
+			MasteryThreshold: MasteryThreshold{Streak: 1, AvgTimeSeconds: 1},
+			KnowledgePoints: []KnowledgePoint{
+				{Ordinal: 1, Title: "Step 1", WorkedExample: "Ex 1", KeyPrerequisites: []string{"base"}},
+				{Ordinal: 2, Title: "Step 2", WorkedExample: "Ex 2", VariantKey: "v2"},
+			},
+		},
+	}
+	if err := validate(raw); err != nil {
+		t.Fatalf("expected valid knowledge points, got %v", err)
+	}
+}
+
+func TestKnowledgePoints_InvalidOrdinalZero(t *testing.T) {
+	raw := []Concept{
+		{
+			ID: "a", Label: "A", Domain: "d", Prerequisites: []string{},
+			MasteryThreshold: MasteryThreshold{Streak: 1, AvgTimeSeconds: 1},
+			KnowledgePoints: []KnowledgePoint{
+				{Ordinal: 0, Title: "Zero", WorkedExample: "Ex 0"},
+			},
+		},
+	}
+	if err := validate(raw); err == nil {
+		t.Fatal("expected error for 0-indexed knowledge point ordinal")
+	}
+}
+
+func TestKnowledgePoints_InvalidOrdinalGap(t *testing.T) {
+	raw := []Concept{
+		{
+			ID: "a", Label: "A", Domain: "d", Prerequisites: []string{},
+			MasteryThreshold: MasteryThreshold{Streak: 1, AvgTimeSeconds: 1},
+			KnowledgePoints: []KnowledgePoint{
+				{Ordinal: 1, Title: "Step 1", WorkedExample: "Ex 1"},
+				{Ordinal: 3, Title: "Step 3", WorkedExample: "Ex 3"},
+			},
+		},
+	}
+	if err := validate(raw); err == nil {
+		t.Fatal("expected error for non-sequential ordinal gap")
+	}
+}
+
+func TestKnowledgePoints_DanglingKeyPrerequisite(t *testing.T) {
+	raw := []Concept{
+		{
+			ID: "a", Label: "A", Domain: "d", Prerequisites: []string{},
+			MasteryThreshold: MasteryThreshold{Streak: 1, AvgTimeSeconds: 1},
+			KnowledgePoints: []KnowledgePoint{
+				{Ordinal: 1, Title: "Step 1", WorkedExample: "Ex 1", KeyPrerequisites: []string{"missing_concept"}},
+			},
+		},
+	}
+	if err := validate(raw); err == nil {
+		t.Fatal("expected error for dangling key prerequisite in knowledge point")
+	}
+}
+
+func TestConcept_KnowledgePointByOrdinal(t *testing.T) {
+	c := &Concept{
+		ID: "a",
+		KnowledgePoints: []KnowledgePoint{
+			{Ordinal: 1, Title: "One"},
+			{Ordinal: 2, Title: "Two"},
+		},
+	}
+	if c.KnowledgePointByOrdinal(0) != nil {
+		t.Errorf("expected nil for ordinal 0")
+	}
+	if c.KnowledgePointByOrdinal(3) != nil {
+		t.Errorf("expected nil for ordinal 3")
+	}
+	kp1 := c.KnowledgePointByOrdinal(1)
+	if kp1 == nil || kp1.Title != "One" {
+		t.Errorf("expected Title One, got %v", kp1)
+	}
+	kp2 := c.KnowledgePointByOrdinal(2)
+	if kp2 == nil || kp2.Title != "Two" {
+		t.Errorf("expected Title Two, got %v", kp2)
+	}
+}
+
+func TestCurriculumEnrichment_LoadedAndVerified(t *testing.T) {
+	dag, err := LoadDir("../../data/concepts")
+	if err != nil {
+		t.Fatalf("load curriculum: %v", err)
+	}
+	if dag.Count() != 1250 {
+		t.Errorf("expected 1250 concepts, got %d", dag.Count())
+	}
+
+	encompassedCount := 0
+	keyPrereqCount := 0
+	totalInDegree := 0
+	for _, c := range dag.Order() {
+		totalInDegree += len(c.Prerequisites) + len(c.Encompasses)
+		if len(c.Encompasses) > 0 {
+			encompassedCount++
+		}
+		if len(c.KeyPrerequisites) > 0 {
+			keyPrereqCount++
+			for _, kp := range c.KeyPrerequisites {
+				found := false
+				for _, p := range c.Prerequisites {
+					if p == kp {
+						found = true
+						break
+					}
+				}
+				if !found {
+					t.Errorf("concept %s key_prerequisite %s is not in prerequisites %v", c.ID, kp, c.Prerequisites)
+				}
+			}
+		}
+	}
+	if encompassedCount < 625 {
+		t.Errorf("expected at least 625 concepts with encompasses populated (50%%), got %d", encompassedCount)
+	}
+	if keyPrereqCount < 1000 {
+		t.Errorf("expected at least 1000 concepts with key_prerequisites populated (80%%), got %d", keyPrereqCount)
+	}
+	meanInDegree := float64(totalInDegree) / float64(dag.Count())
+	if meanInDegree < 2.20 {
+		t.Errorf("expected mean in-degree >= 2.20, got %.2f", meanInDegree)
+	}
+}
+
+func TestKnowledgePoints_LoadedFromShards(t *testing.T) {
+	dag, err := LoadDir("../../data/concepts")
+	if err != nil {
+		t.Fatalf("load curriculum: %v", err)
+	}
+	totalKPs := 0
+	for _, c := range dag.Order() {
+		if len(c.KnowledgePoints) != 3 {
+			t.Errorf("concept %s has %d knowledge points, want 3", c.ID, len(c.KnowledgePoints))
+		}
+		totalKPs += len(c.KnowledgePoints)
+		for i, kp := range c.KnowledgePoints {
+			if kp.Ordinal != i+1 {
+				t.Errorf("concept %s kp %d has ordinal %d, want %d", c.ID, i, kp.Ordinal, i+1)
+			}
+			if kp.Title == "" {
+				t.Errorf("concept %s kp %d has empty title", c.ID, kp.Ordinal)
+			}
+		}
+	}
+	if totalKPs != 3750 {
+		t.Errorf("expected 3750 total knowledge points across 1250 concepts, got %d", totalKPs)
 	}
 }

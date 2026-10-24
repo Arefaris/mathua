@@ -46,7 +46,7 @@ export default function AttemptList({ attempts }: { attempts: AttemptRecord[] })
           )}
           <p className="mt-2 font-mono text-xs break-words [overflow-wrap:anywhere]">
             <span className={a.correct ? 'text-mathua-green' : 'text-mathua-red'}>
-              {a.correct ? '✓' : '✗'} {t('account.attempts.you', { answer: a.answer === '' ? '—' : a.answer })}
+              {a.correct ? '✓' : '✗'} {t('account.attempts.you', { answer: a.answer === '' ? ', ' : a.answer })}
             </span>
             {!a.correct && (
               <span className="text-mathua-secondary"> · {t('account.attempts.correct', { expected: a.expected })}</span>

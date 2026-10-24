@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/the-washer-method/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/the-washer-method/), CC BY-NC 4.0
 
 ## Plane regions separated from the axis of revolution
 

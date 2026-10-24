@@ -1,4 +1,4 @@
-> Content sourced from [Discrete Mathematics: An Open Introduction, 3e](https://discrete.openmathbooks.org/dmoi3/sec_recurrence.html) by Oscar Levin — CC BY-SA 4.0
+> Content sourced from [Discrete Mathematics: An Open Introduction, 3e](https://discrete.openmathbooks.org/dmoi3/sec_recurrence.html) by Oscar Levin, CC BY-SA 4.0
 ##  Section 2.4 Solving Recurrence Relations
 
 ######  Investigate!
@@ -46,7 +46,7 @@ Check that \(a_n = 2^n + 1\) is a solution to the recurrence relation \(a_n = 2a
 Sometimes we can be clever and solve a recurrence relation by inspection. We generate the sequence using the recurrence relation and keep track of what we are doing so that we can see how to jump to finding just the \(a_n\) term. Here are two examples of how you might do that.
 
 
-Telescoping refers to the phenomenon when many terms in a large sum cancel out—so the sum “telescopes.” For example:
+Telescoping refers to the phenomenon when many terms in a large sum cancel out, so the sum “telescopes.” For example:
 
 \begin{equation*} (2 - 1) + (3 - 2) + (4 - 3) + \cdots + (100 - 99) + (101 - 100) = -1 + 101 \end{equation*} 
 

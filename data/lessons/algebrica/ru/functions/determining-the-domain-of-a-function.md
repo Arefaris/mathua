@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/determining-the-domain-of-a-function/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/determining-the-domain-of-a-function/), CC BY-NC 4.0
 
 ## Систематический метод нахождения области определения функции
 

@@ -1259,7 +1259,7 @@
     "relatedCategories": [
       "calculus"
     ],
-    "definition": "A complex function differentiable at every point of an open set — far stronger than real differentiability. Holomorphic functions are automatically infinitely differentiable and equal their Taylor series; entire means holomorphic everywhere.",
+    "definition": "A complex function differentiable at every point of an open set, far stronger than real differentiability. Holomorphic functions are automatically infinitely differentiable and equal their Taylor series; entire means holomorphic everywhere.",
     "reading": "“holomorphic”.",
     "examples": [
       {
@@ -1594,7 +1594,7 @@
       "exponential diophantine"
     ],
     "category": "advanced",
-    "definition": "A polynomial equation whose solutions are sought in integers (or rationals). Some have infinitely many solutions, some none — deciding which drove centuries of number theory, including Fermat's Last Theorem.",
+    "definition": "A polynomial equation whose solutions are sought in integers (or rationals). Some have infinitely many solutions, some none, deciding which drove centuries of number theory, including Fermat's Last Theorem.",
     "reading": "“Diophantine equation”.",
     "examples": [
       {
@@ -1711,7 +1711,7 @@
       "gauss theorem"
     ],
     "category": "advanced",
-    "definition": "Every non-constant polynomial with complex coefficients has a complex root — hence exactly n roots counting multiplicity for degree n. The complex numbers are algebraically closed: no extension is ever needed.",
+    "definition": "Every non-constant polynomial with complex coefficients has a complex root, hence exactly n roots counting multiplicity for degree n. The complex numbers are algebraically closed: no extension is ever needed.",
     "reading": "“the fundamental theorem of algebra”.",
     "examples": [
       {
@@ -2056,7 +2056,7 @@
       "isomorphism of categories"
     ],
     "category": "advanced",
-    "definition": "Functors F, G in opposite directions with natural isomorphisms GF ≅ Id and FG ≅ Id: the categories have the same structure up to isomorphism. This is strictly weaker than isomorphism of categories (rare on-the-nose equality) — and it is the notion that matters in practice.",
+    "definition": "Functors F, G in opposite directions with natural isomorphisms GF ≅ Id and FG ≅ Id: the categories have the same structure up to isomorphism. This is strictly weaker than isomorphism of categories (rare on-the-nose equality) and it is the notion that matters in practice.",
     "reading": "“C equivalent to D”.",
     "examples": [
       {
@@ -2293,7 +2293,7 @@
     "relatedCategories": [
       "linear-discrete"
     ],
-    "definition": "Bounded operators send bounded sets to bounded sets — equivalently, for linear maps, they are continuous, with finite operator norm. Unbounded operators (like differentiation) can only be densely defined; an everywhere-defined symmetric operator is automatically bounded.",
+    "definition": "Bounded operators send bounded sets to bounded sets, equivalently, for linear maps, they are continuous, with finite operator norm. Unbounded operators (like differentiation) can only be densely defined; an everywhere-defined symmetric operator is automatically bounded.",
     "reading": "“bounded operator”.",
     "examples": [
       {
@@ -2335,7 +2335,7 @@
     "relatedCategories": [
       "linear-discrete"
     ],
-    "definition": "The operator T* defined by ⟨Tx, y⟩ = ⟨x, T*y⟩. In finite dimensions it is the conjugate transpose; for unbounded operators it lives on the subspace where the relation makes sense — which is why domains matter.",
+    "definition": "The operator T* defined by ⟨Tx, y⟩ = ⟨x, T*y⟩. In finite dimensions it is the conjugate transpose; for unbounded operators it lives on the subspace where the relation makes sense, which is why domains matter.",
     "reading": "“T star”.",
     "examples": [
       {
@@ -2374,7 +2374,7 @@
     "relatedCategories": [
       "linear-discrete"
     ],
-    "definition": "Densely defined with A = A* — including equal domains. Symmetric (⟨Ax,y⟩ = ⟨x,Ay⟩ on its domain) is strictly weaker: a symmetric operator can fail to be self-adjoint when its adjoint lives on a larger domain. Observables in quantum mechanics must be self-adjoint, with real spectrum.",
+    "definition": "Densely defined with A = A*, including equal domains. Symmetric (⟨Ax,y⟩ = ⟨x,Ay⟩ on its domain) is strictly weaker: a symmetric operator can fail to be self-adjoint when its adjoint lives on a larger domain. Observables in quantum mechanics must be self-adjoint, with real spectrum.",
     "reading": "“self-adjoint”.",
     "examples": [
       {
@@ -2503,7 +2503,7 @@
       "discrete spectrum"
     ],
     "category": "advanced",
-    "definition": "Maps bounded sets to sets with compact closure — norm-limits of finite-rank operators on Hilbert space. The spectrum is discrete except possibly 0, and compact self-adjoint operators keep an orthonormal eigenbasis: the friendliest infinite-dimensional case.",
+    "definition": "Maps bounded sets to sets with compact closure, norm-limits of finite-rank operators on Hilbert space. The spectrum is discrete except possibly 0, and compact self-adjoint operators keep an orthonormal eigenbasis: the friendliest infinite-dimensional case.",
     "reading": "“compact operator”.",
     "examples": [
       {
@@ -2545,7 +2545,7 @@
     "examples": [
       {
         "tex": "\\sigma = [0, 1]",
-        "explanation": "Multiplication by t on L²[0,1] has this whole interval as spectrum — with no eigenvalues at all."
+        "explanation": "Multiplication by t on L²[0,1] has this whole interval as spectrum, with no eigenvalues at all."
       }
     ],
     "commonMistakes": [
@@ -2657,7 +2657,7 @@
       "H_n"
     ],
     "category": "advanced",
-    "definition": "Cycles modulo boundaries: Hₙ = ker(dₙ)/im(dₙ₊₁). It measures exactly how far a complex is from exactness — zero homology means every cycle is a boundary. H₀ counts path components.",
+    "definition": "Cycles modulo boundaries: Hₙ = ker(dₙ)/im(dₙ₊₁). It measures exactly how far a complex is from exactness, zero homology means every cycle is a boundary. H₀ counts path components.",
     "reading": "“H n”.",
     "examples": [
       {
@@ -2955,7 +2955,7 @@
       "same map on homology"
     ],
     "category": "advanced",
-    "definition": "Chain maps differing by dh + hd for degree-shifting maps h: homotopic in the algebraic sense. Homotopic maps induce the identical map on homology — the algebraic shadow of homotopic spaces giving equal homology.",
+    "definition": "Chain maps differing by dh + hd for degree-shifting maps h: homotopic in the algebraic sense. Homotopic maps induce the identical map on homology, the algebraic shadow of homotopic spaces giving equal homology.",
     "reading": "“f homotopic to g”.",
     "examples": [
       {
@@ -2992,7 +2992,7 @@
       "hypersurface"
     ],
     "category": "advanced",
-    "definition": "The common zero locus V(S) of polynomials in affine space — an affine algebraic set, and a variety when irreducible (not a union of two proper closed subsets). Equations become geometry.",
+    "definition": "The common zero locus V(S) of polynomials in affine space, an affine algebraic set, and a variety when irreducible (not a union of two proper closed subsets). Equations become geometry.",
     "reading": "“V of S”.",
     "examples": [
       {
@@ -3064,7 +3064,7 @@
       "structure ring"
     ],
     "category": "advanced",
-    "definition": "Polynomial functions on V: the polynomial ring modulo the ideal of functions vanishing on V. Hilbert's Nullstellensatz makes this the algebra-geometry dictionary — points match maximal ideals, irreducible means integral domain.",
+    "definition": "Polynomial functions on V: the polynomial ring modulo the ideal of functions vanishing on V. Hilbert's Nullstellensatz makes this the algebra-geometry dictionary, points match maximal ideals, irreducible means integral domain.",
     "reading": "“the coordinate ring of V”.",
     "examples": [
       {
@@ -3104,7 +3104,7 @@
     "examples": [
       {
         "tex": "\\mathbb{A}^1",
-        "explanation": "Closed subsets of the affine line: finite point sets and the whole line — nothing in between."
+        "explanation": "Closed subsets of the affine line: finite point sets and the whole line, nothing in between."
       }
     ],
     "commonMistakes": [
@@ -3174,7 +3174,7 @@
       "codimension"
     ],
     "category": "advanced",
-    "definition": "The length of the longest chain of irreducible closed subsets (Krull dimension): curves have 1, surfaces 2. Equivalently the transcendence degree of the function field — the number of independent parameters.",
+    "definition": "The length of the longest chain of irreducible closed subsets (Krull dimension): curves have 1, surfaces 2. Equivalently the transcendence degree of the function field, the number of independent parameters.",
     "reading": "“dimension of V”.",
     "examples": [
       {
@@ -3291,7 +3291,7 @@
       "sections"
     ],
     "category": "advanced",
-    "definition": "Local data attached to opens with restriction maps, satisfying locality (matching restrictions agree) and gluing (compatible local data assemble uniquely). The stalk at a point is the germ-level limit — the local ring in scheme theory.",
+    "definition": "Local data attached to opens with restriction maps, satisfying locality (matching restrictions agree) and gluing (compatible local data assemble uniquely). The stalk at a point is the germ-level limit, the local ring in scheme theory.",
     "reading": "“sheaf” and “stalk”.",
     "examples": [
       {
@@ -3329,7 +3329,7 @@
       "DVR"
     ],
     "category": "advanced",
-    "definition": "A ring with exactly one maximal ideal: everything outside it is a unit. Stalks of structure sheaves and localizations (e.g. rationals with odd denominator) are the archetypes — algebra zoomed into one point.",
+    "definition": "A ring with exactly one maximal ideal: everything outside it is a unit. Stalks of structure sheaves and localizations (e.g. rationals with odd denominator) are the archetypes, algebra zoomed into one point.",
     "reading": "“local ring”.",
     "examples": [
       {
@@ -3402,7 +3402,7 @@
       "G-stable"
     ],
     "category": "advanced",
-    "definition": "A subspace carried into itself by every group element: ρ(g)W ⊆ W for all g. Restricting the action gives a subrepresentation — a smaller representation living inside.",
+    "definition": "A subspace carried into itself by every group element: ρ(g)W ⊆ W for all g. Restricting the action gives a subrepresentation, a smaller representation living inside.",
     "reading": "“invariant subspace”.",
     "examples": [
       {
@@ -3440,7 +3440,7 @@
       "decomposable"
     ],
     "category": "advanced",
-    "definition": "A nonzero representation with no proper subrepresentations: the atoms of the theory. Complete reducibility (splitting into irreducibles) needs hypotheses — Maschke's theorem gives it when the characteristic avoids the group order, e.g. always over ℂ for finite groups.",
+    "definition": "A nonzero representation with no proper subrepresentations: the atoms of the theory. Complete reducibility (splitting into irreducibles) needs hypotheses, Maschke's theorem gives it when the characteristic avoids the group order, e.g. always over ℂ for finite groups.",
     "reading": "“irreducible representation”.",
     "examples": [
       {
@@ -3517,7 +3517,7 @@
       "dixmier version"
     ],
     "category": "advanced",
-    "definition": "A nonzero equivariant map between irreducibles is an isomorphism — there is nothing in between. Consequently, over an algebraically closed field, equivariant self-maps are just scalars.",
+    "definition": "A nonzero equivariant map between irreducibles is an isomorphism, there is nothing in between. Consequently, over an algebraically closed field, equivariant self-maps are just scalars.",
     "reading": "“Schur's lemma”.",
     "examples": [
       {
@@ -3708,7 +3708,7 @@
     "relatedCategories": [
       "geometry-trig"
     ],
-    "definition": "A chart identifies an open patch with Euclidean space; an atlas covers the manifold. It is smooth when all transition maps between overlapping charts are smooth — the maximal such atlas is the smooth structure itself.",
+    "definition": "A chart identifies an open patch with Euclidean space; an atlas covers the manifold. It is smooth when all transition maps between overlapping charts are smooth, the maximal such atlas is the smooth structure itself.",
     "reading": "“chart”.",
     "examples": [
       {
@@ -3748,7 +3748,7 @@
       "geometry-trig",
       "calculus"
     ],
-    "definition": "The n-dimensional vector space of directions at p: derivations on germs (or velocity vectors of curves, or chart-based vectors — equivalent views). Not the calculus tangent line: that is one affine line, this is the whole linear space of directions.",
+    "definition": "The n-dimensional vector space of directions at p: derivations on germs (or velocity vectors of curves, or chart-based vectors, equivalent views). Not the calculus tangent line: that is one affine line, this is the whole linear space of directions.",
     "reading": "“T p M”.",
     "examples": [
       {
@@ -3948,7 +3948,7 @@
     "relatedCategories": [
       "calculus"
     ],
-    "definition": "Differentiates vector fields along directions with the Leibniz rule: ∇_X Y. Christoffel symbols are its coordinates; metric-compatible and torsion-free gives the unique Levi-Civita connection. Shares its glyph with the gradient — a different concept.",
+    "definition": "Differentiates vector fields along directions with the Leibniz rule: ∇_X Y. Christoffel symbols are its coordinates; metric-compatible and torsion-free gives the unique Levi-Civita connection. Shares its glyph with the gradient, a different concept.",
     "reading": "“connection” (nabla here is not the gradient).",
     "examples": [
       {
@@ -4189,7 +4189,7 @@
     "relatedCategories": [
       "calculus"
     ],
-    "definition": "Differentiates tensors by dragging them along a vector field's flow — no connection or metric needed. Cartan's formula L_X = dι_X + ι_Xd ties it to the exterior derivative; on functions it is just the directional derivative.",
+    "definition": "Differentiates tensors by dragging them along a vector field's flow, no connection or metric needed. Cartan's formula L_X = dι_X + ι_Xd ties it to the exterior derivative; on functions it is just the directional derivative.",
     "reading": "“Lie derivative along X”.",
     "examples": [
       {

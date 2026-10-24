@@ -48,7 +48,7 @@ def load_dag_ids():
 
 def norm_section(s):
     """Strip math delimiters so shard sections (raw Algebrica `\\(...)`)
-    compare equal to canonicalized headings (`$...$`) — the same rule as
+    compare equal to canonicalized headings (`$...$`), the same rule as
     normSectionKey in internal/lessons/lesson.go. Keep in sync."""
     s = re.sub(r"\\\\[()\[\]]|\\[()\[\]]|\$\$?", "", s)
     return " ".join(s.split())
@@ -61,8 +61,8 @@ def doubled_caption_run(line):
     """Return the first immediately repeated token run in a caption, or None.
 
     The OpenStax captions were ingested with `figcaption.get_text(' ', strip=True)`.
-    A figcaption's math is present twice — presentation MathML plus its
-    annotation-xml — so the flattened caption carried both copies and read
+    A figcaption's math is present twice, presentation MathML plus its
+    annotation-xml, so the flattened caption carried both copies and read
     "the number 138 . 138 .". The bug doubles numbers, letters, expressions and
     percentages alike: "The region R R", "the graph shows f ( x ) . f ( x ) .".
     A caption is one line of prose, so an adjacent repeated token run is that
@@ -108,7 +108,7 @@ def main():
         errors.append(f"stale lessons.json ids (not in DAG): {len(stale)}\n  " + ", ".join(stale))
 
     # 2b. Concepts with multiple lesson sources (loader silently shadows all
-    # but the reverse-lexicographic winner — resolve to exactly one entry).
+    # but the reverse-lexicographic winner, resolve to exactly one entry).
     multi = sorted(cid for cid, srcs in concept_sources.items() if len(srcs) > 1)
     if multi:
         detail = "; ".join(f"{cid}: {sorted(concept_sources[cid])}" for cid in multi)
@@ -258,7 +258,7 @@ def main():
             if hard:
                 errors.append(f"threshold problems ({len(hard)}):\n  " + "\n  ".join(hard))
             else:
-                # log outlier but not fail — print to stderr for visibility
+                # log outlier but not fail, print to stderr for visibility
                 print(f"note: threshold outliers ({len(thresh_warn)}): " + "; ".join(thresh_warn[:5]), file=sys.stderr)
     except Exception as e:
         errors.append(f"grading/threshold audit failed: {e}")
@@ -287,7 +287,7 @@ def main():
     # with ~30 words, or teaching placeholders with the concept id in the
     # prose). Scans teaching/** recursively (placeholders hid in
     # teaching/fractions/) and algebrica/. Ratcheted against
-    # scripts/audit_baseline.json — waves shrink it to empty; new stubs fail.
+    # scripts/audit_baseline.json, waves shrink it to empty; new stubs fail.
     # 11. Placeholder KP subgoals: generic "Review X / Work the example /
     # Verify" filler instead of moves naming the actual computation.
     try:
@@ -360,7 +360,7 @@ def main():
 
     # 12. Cliché KP subgoals: filler verbs that never name the move
     # ("Follow the worked example", "Apply the rule", "Check the result",
-    # "Understand X"). Ratcheted like 10/11 — waves rewrite to move-naming
+    # "Understand X"). Ratcheted like 10/11, waves rewrite to move-naming
     # subgoals (P1 template) and shrink the baseline to empty.
     cliche_re = re.compile(r"^follow the worked|^apply the rule$|^check the result$|^understand\b", re.I)
     cliche_now = []

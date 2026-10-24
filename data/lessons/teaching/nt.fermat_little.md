@@ -25,4 +25,4 @@ Check: $5 \times 3 = 15 \equiv 1 \pmod{7}$. ✓
 
 **Application: Primality testing**
 If $a^{n-1} \not\equiv 1 \pmod{n}$ for some $a$, then $n$ is composite.
-(But the converse is not true — Carmichael numbers like 561 are composite yet satisfy the condition for all $a$ coprime to $n$.)
+(But the converse is not true, Carmichael numbers like 561 are composite yet satisfy the condition for all $a$ coprime to $n$.)

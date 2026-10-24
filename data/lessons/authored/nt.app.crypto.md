@@ -8,7 +8,7 @@ RSA is the classic scheme. Alice picks two large primes \(p\) and \(q\), publish
 c \equiv m^{e} \pmod{N},
 \]
 
-which anyone can do — \(N\) and \(e\) are public. Alice recovers \(m\) by computing \(c^{d} \bmod N\).
+which anyone can do, \(N\) and \(e\) are public. Alice recovers \(m\) by computing \(c^{d} \bmod N\).
 
 Why does decryption work? Euler's theorem (the generalization of Fermat's little theorem to composite moduli) guarantees \(m^{ed} \equiv m \pmod N\) whenever \(\gcd(m,N)=1\), because \(ed = 1 + k(p-1)(q-1) = 1 + k\varphi(N)\).
 

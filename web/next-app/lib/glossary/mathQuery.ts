@@ -5,14 +5,14 @@ import type { GlossaryEntry } from './types'
  *
  * MathLive reports LaTeX (`\forall x \in ...`), while entries store canonical
  * commands (`\forall`) and glyphs (`∀`). This bridges the two by extracting
- * matchable terms — backslash commands and non-ASCII symbols — and matching
+ * matchable terms, backslash commands and non-ASCII symbols and matching
  * them against entry latex/symbol fields.
  *
  * Matching stays case-sensitive on commands (`\Sigma` is not `\sigma`) for
  * the same reason text search is: case changes the meaning. Prose typed into
  * the math field yields no terms (MathLive splits words into spaced letters
  * rather than words, so there is nothing word-like to match) and therefore no
- * filtering — the name search box remains the path for words.
+ * filtering, the name search box remains the path for words.
  */
 export function mathLatexToTerms(latex: string): string[] {
   const terms: string[] = []

@@ -7,7 +7,7 @@ import (
 )
 
 // MyLeague is one learner's weekly league: the seat, the standings in it, and
-// their place among them. It is deliberately not a list of every tier — the
+// their place among them. It is deliberately not a list of every tier, the
 // old page rendered the whole pyramid, which told a bronze learner nothing
 // about the thirty people they are actually competing with.
 //

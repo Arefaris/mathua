@@ -3,11 +3,11 @@
 // These are not unit tests of a mock: Compute Engine is installed and imported
 // directly, because every assertion here is about its actual behaviour, including
 // the parts that are inconvenient. The four edge cases this file exists for were each
-// measured first and the measurement is what got asserted — see the note on each.
+// measured first and the measurement is what got asserted, see the note on each.
 
 import { describe, it, expect, beforeAll } from 'vitest'
 import { ComputeEngine } from '@cortex-js/compute-engine'
-import { loadEngine, equivalence, simplificationHint, type Engine, resetEngineForTests } from '../components/math/equivalence'
+import { loadEngine, equivalence, simplificationHint, stripLatexSpaces, type Engine, resetEngineForTests } from '../components/math/equivalence'
 
 let engine: Engine
 
@@ -18,7 +18,7 @@ beforeAll(async () => {
   engine = e
 })
 
-describe('equivalence — the four edge cases', () => {
+describe('equivalence, the four edge cases', () => {
   it('implicit multiplication: 2x+3 is 2*x+3', () => {
     expect(equivalence(engine, '2x+3', '2*x+3')).toBe('equivalent')
     expect(equivalence(engine, '3(4+5)', '3*9')).toBe('equivalent')
@@ -26,7 +26,7 @@ describe('equivalence — the four edge cases', () => {
   })
 
   it('differently factored: (x+1)² is x²+2x+1', () => {
-    // `isEqual` alone returns `undefined` here — it compares values and cannot
+    // `isEqual` alone returns `undefined` here, it compares values and cannot
     // establish a symbolic identity. That is why the primitive uses
     // `isIdenticallyEqual` and falls back to canonical forms.
     expect(equivalence(engine, '(x+1)^2', 'x^2+2x+1')).toBe('equivalent')
@@ -86,7 +86,7 @@ describe('simplificationHint', () => {
 
   it('gives |x| for sqrt(x²), not x', () => {
     // The reason this uses a CAS at all. A regex would happily return `x`, which is
-    // wrong for every negative x — and this is the exact mistake a learner makes.
+    // wrong for every negative x and this is the exact mistake a learner makes.
     expect(simplificationHint(engine, '\\sqrt{x^2}')?.latex).toBe('|x|')
   })
 
@@ -101,6 +101,17 @@ describe('simplificationHint', () => {
 
   it('says something the learner can act on', () => {
     expect(simplificationHint(engine, '2(x+1)')?.text).toBe('That simplifies to 2x + 2.')
+  })
+
+  it('normalises MathLive spacing macros so sums are not misparsed as products', () => {
+    // MathLive inserts spacing commands like `\;` on spacebar presses.
+    // Compute Engine must not read `16x^2 \; + \; 8x \; + \; 1` as `128x^3`.
+    expect(simplificationHint(engine, '16x^2 \\; + \\; 8x \\; + \\; 1')).toBeNull()
+    expect(simplificationHint(engine, '16x^2 + 8x + 1')).toBeNull()
+    expect(simplificationHint(engine, '16x^2 8x')).toBeNull()
+    expect(simplificationHint(engine, '16x^2 8x + 1')).toBeNull()
+    expect(simplificationHint(engine, '\\frac{1}{2} \\; + \\; \\frac{1}{3}')?.latex).toBe('5/6')
+    expect(stripLatexSpaces('16x^2 \\; + \\; 8x \\; + \\; 1')).toBe('16x^2   +   8x   +   1')
   })
 })
 

@@ -79,7 +79,7 @@ function warnFontOnce(): void {
     const fonts = (window as unknown as { fonts?: { check(spec: string): boolean } }).fonts
     if (fonts && !fonts.check('16px KaTeX_Main')) {
       // eslint-disable-next-line no-console
-      console.warn('[KatexContent] KaTeX_Main webfont not loaded — math symbols may show as boxes')
+      console.warn('[KatexContent] KaTeX_Main webfont not loaded, math symbols may show as boxes')
     }
   } catch {
     // Font check API unavailable; nothing to diagnose.
@@ -137,7 +137,7 @@ function rehypeKatexFallback() {
             : source
         parent.children[index] = {
           type: 'element',
-          // NOTE: plain span, not code — the components.code override below
+          // NOTE: plain span, not code, the components.code override below
           // would discard a code node's className/title.
           tagName: 'span',
           properties: {
@@ -161,7 +161,7 @@ export default function KatexContent({ children, className = '' }: { children: s
   useLocale()
   const content = prepareLessonMath(children)
   // In production KaTeX errors are still non-throwing (labeled fallback via
-  // rehypeKatexFallback below) but we emit a console warning for telemetry —
+  // rehypeKatexFallback below) but we emit a console warning for telemetry, 
   // vitest corpus gate uses throwOnError:true. Note spans are entity-encoded
   // by prepareLessonMath (`&#92;`), so the suspect check below only ever
   // matches prose leaks, never span contents.

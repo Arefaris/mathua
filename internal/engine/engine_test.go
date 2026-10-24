@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/concepts"
+	"github.com/chuma-beep/mathua/internal/diagnostic"
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/mastery"
 	"github.com/chuma-beep/mathua/internal/storage"
@@ -148,7 +149,7 @@ func TestEngine_MasteryProgression(t *testing.T) {
 			t.Fatalf("expected correct on attempt %d", i+1)
 		}
 	}
-	// One clean answer is LEARNING — the cheap first rung.
+	// One clean answer is LEARNING, the cheap first rung.
 	one, _ := e.CreateStudent("prog_one")
 	answerCorrectly(t, e, one.ID, 1)
 	if p := mustProgress(t, e, one.ID)["a"]; p == nil || p.Status != "LEARNING" {
@@ -159,7 +160,7 @@ func TestEngine_MasteryProgression(t *testing.T) {
 	// window, so the top rung is out of reach however good the answers are.
 	//
 	// This used to assert LEARNING, because the old rule needed the streak to *reach* the
-	// threshold before it would move at all — and then a further full threshold for each of
+	// threshold before it would move at all and then a further full threshold for each of
 	// the next two tiers.
 	progress, _ := e.GetProgress(st.ID)
 	if p, ok := progress["a"]; !ok || p.Status != "PRACTICING" {
@@ -199,8 +200,8 @@ func TestEngine_GetScores(t *testing.T) {
 }
 
 // A duplicate of one attempt may race the real submission. Every caller must
-// get the recorded result back — a retry the learner made because the first
-// response was lost is not an error — but only one grading may happen, so the
+// get the recorded result back, a retry the learner made because the first
+// response was lost is not an error, but only one grading may happen, so the
 // progress is written once and no second attempt is recorded.
 func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	e := testEngine(t)
@@ -351,7 +352,7 @@ func TestEngine_FullMasteryCycle(t *testing.T) {
 	//
 	// This loop used to ask for concept "a" nine times and fail if it got anything else,
 	// because the old rule needed 3 × required_streak correct answers per concept. Under
-	// the evidence ladder "a" is mastered in three and the scheduler moves to "b" — so the
+	// the evidence ladder "a" is mastered in three and the scheduler moves to "b", so the
 	// test now asserts the *frontier advancing*, which is the behaviour the ladder exists
 	// to produce. It is the clearest available proof of the cost change: 3 answers, not 9,
 	// and not 30.
@@ -504,11 +505,420 @@ func TestEngine_Halt_AfterTwoConsecutiveMisses(t *testing.T) {
 	if haltedAfter {
 		t.Error("expected halt cleared after remedial success")
 	}
-	// Scheduling resumes — a remains the only unlocked concept in this DAG,
+	// Scheduling resumes, a remains the only unlocked concept in this DAG,
 	// so it must be served again (b still gated on a's mastery).
 	q4, _ := e.NextQuestion(sess.ID, st.ID)
 	if q4 == nil {
 		t.Fatal("expected scheduling to resume")
+	}
+}
+
+func TestEngine_Halt_KeyPrerequisites_TargetedRemediation(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 2, AvgTimeSeconds: 60},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{"a"},
+			KeyPrerequisites: []string{"a"},
+			Variants: []concepts.Variant{
+				{Difficulty: 0.3, TimeThresh: 60.0, Label: "b-easy"},
+			},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 2, AvgTimeSeconds: 60},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	store, err := storage.NewSQLiteStore(":memory:")
+	if err != nil {
+		t.Fatalf("create store: %v", err)
+	}
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &testGen{answer: "42"})
+	reg.Register("b", &testGen{answer: "99"})
+	e := New(store, d, reg, nil, nil)
+	st, _ := e.CreateStudent("targeted")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// Step 1: Mark prerequisite concept a mastered so concept b is unlocked.
+	now := time.Now().UTC()
+	if err := e.repo.UpsertProgress(&storage.ConceptProgress{
+		StudentID:     st.ID,
+		ConceptID:     "a",
+		Status:        string(mastery.StatusMastered),
+		Streak:        3,
+		LastAttempted: &now,
+		LastReviewed:  &now,
+	}); err != nil {
+		t.Fatalf("upsert progress: %v", err)
+	}
+
+	// Step 2: Now concept b is served.
+	q1, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || q1 == nil {
+		t.Fatalf("step 2 next: %v", err)
+	}
+	if q1.ConceptID != "b" {
+		t.Fatalf("expected concept b, got %s", q1.ConceptID)
+	}
+
+	// First miss on concept b.
+	res1, err := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 5.0)
+	if err != nil {
+		t.Fatalf("submit miss 1: %v", err)
+	}
+	if res1.Halted {
+		t.Error("expected no halt after first miss")
+	}
+	if res1.XP != 0 {
+		t.Errorf("expected 0 XP on miss, got %d", res1.XP)
+	}
+
+	// Second question served on concept b.
+	q2, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || q2 == nil {
+		t.Fatalf("step 2 next 2: %v", err)
+	}
+	if q2.ConceptID != "b" {
+		t.Fatalf("expected concept b, got %s", q2.ConceptID)
+	}
+
+	// Second consecutive miss on concept b triggers 2-fail halt.
+	res2, err := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "wrong", 5.0)
+	if err != nil {
+		t.Fatalf("submit miss 2: %v", err)
+	}
+	if !res2.Halted {
+		t.Error("expected halt after two consecutive misses")
+	}
+	if res2.XP != 0 {
+		t.Errorf("expected 0 XP on halt, got %d", res2.XP)
+	}
+	// Verify remedial queue contains key prerequisite a then b.
+	if len(res2.Remedial) != 2 || res2.Remedial[0] != "a" || res2.Remedial[1] != "b" {
+		t.Fatalf("expected remedial [a b], got %v", res2.Remedial)
+	}
+	// Verify student-level remedial queue is populated.
+	rem := e.RemedialQueue(st.ID)
+	if len(rem) != 1 || rem[0] != "a" {
+		t.Fatalf("expected engine remedial queue [a], got %v", rem)
+	}
+
+	// Step 3: Verify learner task shelf shows targeted key prerequisite at the front.
+	rec, err := e.RecommendNext(st.ID, nil)
+	if err != nil {
+		t.Fatalf("recommend next: %v", err)
+	}
+	if rec.Primary == nil || rec.Primary.ConceptID != "a" {
+		t.Fatalf("expected primary recommendation to be key prerequisite a, got %+v", rec.Primary)
+	}
+	if rec.Primary.Badge != "Remediation" {
+		t.Errorf("expected badge Remediation, got %s", rec.Primary.Badge)
+	}
+	if rec.Primary.CTA != "Review prerequisite →" {
+		t.Errorf("expected cta 'Review prerequisite →', got %s", rec.Primary.CTA)
+	}
+
+	// Step 4: NextQuestion serves key prerequisite a.
+	qRemPrereq, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || qRemPrereq == nil {
+		t.Fatalf("next remedial prereq: %v", err)
+	}
+	if qRemPrereq.ConceptID != "a" {
+		t.Fatalf("expected remedial key prerequisite a, got %s", qRemPrereq.ConceptID)
+	}
+
+	// Submit correct answer for key prerequisite a.
+	resRemPrereq, err := e.SubmitAnswer(sess.ID, st.ID, qRemPrereq.AttemptID, "42", 5.0)
+	if err != nil || !resRemPrereq.Correct {
+		t.Fatalf("submit remedial prereq: %v", err)
+	}
+
+	// Key prerequisite is now drained from student remedial queue.
+	if len(e.RemedialQueue(st.ID)) != 0 {
+		t.Errorf("expected empty remedial queue after key prereq success, got %v", e.RemedialQueue(st.ID))
+	}
+
+	// Step 5: NextQuestion serves concept b at easier variant.
+	qRemConcept, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || qRemConcept == nil {
+		t.Fatalf("next remedial concept: %v", err)
+	}
+	if qRemConcept.ConceptID != "b" {
+		t.Fatalf("expected remedial concept b, got %s", qRemConcept.ConceptID)
+	}
+
+	// Submit correct answer for concept b.
+	resRemConcept, err := e.SubmitAnswer(sess.ID, st.ID, qRemConcept.AttemptID, "99", 5.0)
+	if err != nil || !resRemConcept.Correct {
+		t.Fatalf("submit remedial concept: %v", err)
+	}
+
+	// Session halt is cleared.
+	e.mu.Lock()
+	halted := e.sessions[sess.ID].halted
+	e.mu.Unlock()
+	if halted {
+		t.Error("expected halt cleared after completing remedial sequence")
+	}
+
+	// Normal completion path resumes.
+	qResume, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || qResume == nil {
+		t.Fatal("expected scheduling to resume normally")
+	}
+}
+
+func TestEngine_RemedialQueue_PersistenceAcrossRestart(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 2, AvgTimeSeconds: 60},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{"a"},
+			KeyPrerequisites: []string{"a"},
+			Variants: []concepts.Variant{
+				{Difficulty: 0.3, TimeThresh: 60.0, Label: "b-easy"},
+			},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 2, AvgTimeSeconds: 60},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	store, err := storage.NewSQLiteStore(":memory:")
+	if err != nil {
+		t.Fatalf("create store: %v", err)
+	}
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &testGen{answer: "42"})
+	reg.Register("b", &testGen{answer: "99"})
+
+	// First server instance
+	e1 := New(store, d, reg, nil, nil)
+	st, _ := e1.CreateStudent("persistent-student")
+	sess, _ := e1.repo.CreateSession(st.ID)
+
+	now := time.Now().UTC()
+	if err := e1.repo.UpsertProgress(&storage.ConceptProgress{
+		StudentID:     st.ID,
+		ConceptID:     "a",
+		Status:        string(mastery.StatusMastered),
+		Streak:        3,
+		LastAttempted: &now,
+		LastReviewed:  &now,
+	}); err != nil {
+		t.Fatalf("upsert progress: %v", err)
+	}
+
+	q1, err := e1.NextQuestion(sess.ID, st.ID)
+	if err != nil || q1 == nil {
+		t.Fatalf("q1: %v", err)
+	}
+	_, _ = e1.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 5.0)
+
+	q2, err := e1.NextQuestion(sess.ID, st.ID)
+	if err != nil || q2 == nil {
+		t.Fatalf("q2: %v", err)
+	}
+	res2, err := e1.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "wrong", 5.0)
+	if err != nil || !res2.Halted {
+		t.Fatalf("expected halt on second miss, res: %+v, err: %v", res2, err)
+	}
+
+	// Verify remedial queue is in storage
+	storedRem, err := store.GetRemedialQueue(st.ID)
+	if err != nil {
+		t.Fatalf("get stored remedial: %v", err)
+	}
+	if len(storedRem) != 1 || storedRem[0] != "a" {
+		t.Fatalf("expected stored remedial queue [a], got %v", storedRem)
+	}
+
+	// Simulate server restart by creating a completely new engine instance sharing the same store
+	e2 := New(store, d, reg, nil, nil)
+
+	// e2 must read the persistent remedial queue from storage
+	remAfterRestart := e2.RemedialQueue(st.ID)
+	if len(remAfterRestart) != 1 || remAfterRestart[0] != "a" {
+		t.Fatalf("expected remedial queue [a] after restart, got %v", remAfterRestart)
+	}
+
+	// Recommendations on new engine must place the remedial prerequisite at the front
+	rec, err := e2.RecommendNext(st.ID, nil)
+	if err != nil {
+		t.Fatalf("recommend on restarted engine: %v", err)
+	}
+	if rec.Primary == nil || rec.Primary.ConceptID != "a" {
+		t.Fatalf("expected primary recommendation 'a', got %+v", rec.Primary)
+	}
+	if rec.Primary.Badge != "Remediation" {
+		t.Errorf("expected badge Remediation, got %s", rec.Primary.Badge)
+	}
+
+	// Fresh session on the restarted server must serve the persistent remedial prerequisite
+	sess2, _ := e2.repo.CreateSession(st.ID)
+	qRem, err := e2.NextQuestion(sess2.ID, st.ID)
+	if err != nil || qRem == nil {
+		t.Fatalf("next question on restarted server: %v", err)
+	}
+	if qRem.ConceptID != "a" {
+		t.Fatalf("expected remedial concept 'a', got %s", qRem.ConceptID)
+	}
+
+	// Answering correctly drains the remedial queue in storage
+	resRem, err := e2.SubmitAnswer(sess2.ID, st.ID, qRem.AttemptID, "42", 5.0)
+	if err != nil || !resRem.Correct {
+		t.Fatalf("submit remedial answer: %v", err)
+	}
+
+	storedRemAfterSolve, err := store.GetRemedialQueue(st.ID)
+	if err != nil {
+		t.Fatalf("get stored remedial after solve: %v", err)
+	}
+	if len(storedRemAfterSolve) != 0 {
+		t.Fatalf("expected empty remedial queue after solving prerequisite, got %v", storedRemAfterSolve)
+	}
+}
+
+func TestEngine_Halt_DistinctConceptMissesDoNotHalt(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	store, err := storage.NewSQLiteStore(":memory:")
+	if err != nil {
+		t.Fatalf("create store: %v", err)
+	}
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &testGen{answer: "42"})
+	reg.Register("b", &testGen{answer: "99"})
+	e := New(store, d, reg, nil, nil)
+	st, _ := e.CreateStudent("interleaved")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// Question 1 is missed.
+	q1, _ := e.NextQuestion(sess.ID, st.ID)
+	res1, _ := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 5.0)
+	if res1.Halted {
+		t.Error("unexpected halt on first miss")
+	}
+
+	// Serve the other concept next so misses are across distinct concepts.
+	otherConcept := "b"
+	otherAnswer := "99"
+	if q1.ConceptID == "b" {
+		otherConcept = "a"
+		otherAnswer = "42"
+	}
+
+	e.mu.Lock()
+	as := e.sessions[sess.ID]
+	as.conceptID = otherConcept
+	as.attemptID = newAttemptID()
+	as.expectedAnswer = otherAnswer
+	as.answered = false
+	e.mu.Unlock()
+
+	// Question on the second concept is missed. Since this is only 1 miss on this concept, no halt occurs.
+	res2, err := e.SubmitAnswer(sess.ID, st.ID, as.attemptID, "wrong", 5.0)
+	if err != nil {
+		t.Fatalf("submit miss on second concept: %v", err)
+	}
+	if res2.Halted {
+		t.Error("expected no halt when misses occur across different concepts")
+	}
+}
+
+func TestEngine_Halt_StudyPath_KeyPrerequisites(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "a", Label: "Concept A", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 2, AvgTimeSeconds: 60},
+		},
+		{
+			ID: "b", Label: "Concept B", Domain: "d",
+			GradingType: "numeric", Prerequisites: []string{"a"},
+			KeyPrerequisites: []string{"a"},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 2, AvgTimeSeconds: 60},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	store, err := storage.NewSQLiteStore(":memory:")
+	if err != nil {
+		t.Fatalf("create store: %v", err)
+	}
+	t.Cleanup(func() { store.Close() })
+	reg := generator.NewRegistry()
+	reg.Register("a", &testGen{answer: "42"})
+	reg.Register("b", &testGen{answer: "99"})
+	e := New(store, d, reg, nil, nil)
+	st, _ := e.CreateStudent("study-halt")
+
+	e.SetStudyAnchor(st.ID, "b", "99")
+
+	// Miss 1 on concept b
+	res1, err := e.SubmitStudyAnswer(st.ID, "b", "wrong", 5.0, "")
+	if err != nil {
+		t.Fatalf("miss 1: %v", err)
+	}
+	if res1.Halted {
+		t.Error("expected no halt on first study miss")
+	}
+
+	e.SetStudyAnchor(st.ID, "b", "99")
+
+	// Miss 2 on concept b triggers 2-fail halt
+	res2, err := e.SubmitStudyAnswer(st.ID, "b", "wrong", 5.0, "")
+	if err != nil {
+		t.Fatalf("miss 2: %v", err)
+	}
+	if !res2.Halted {
+		t.Error("expected halt on second study miss")
+	}
+	if res2.XP != 0 {
+		t.Errorf("expected 0 XP on halt, got %d", res2.XP)
+	}
+	if len(res2.Remedial) != 2 || res2.Remedial[0] != "a" || res2.Remedial[1] != "b" {
+		t.Errorf("expected remedial [a b], got %v", res2.Remedial)
+	}
+	rem := e.RemedialQueue(st.ID)
+	if len(rem) != 1 || rem[0] != "a" {
+		t.Errorf("expected engine remedial queue [a], got %v", rem)
+	}
+
+	// Correct answer on prerequisite drains the remedial queue
+	e.SetStudyAnchor(st.ID, "a", "42")
+	res3, err := e.SubmitStudyAnswer(st.ID, "a", "42", 5.0, "")
+	if err != nil || !res3.Correct {
+		t.Fatalf("correct remedial submit: %v", err)
+	}
+	if len(e.RemedialQueue(st.ID)) != 0 {
+		t.Errorf("expected empty remedial queue, got %v", e.RemedialQueue(st.ID))
 	}
 }
 
@@ -524,8 +934,78 @@ func TestEngine_NegativeXP_AfterSecondRush(t *testing.T) {
 	}
 	q2, _ := e.NextQuestion(sess.ID, st.ID)
 	res2, _ := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "wrong", 1.0)
-	if res2.XP != -1 {
-		t.Errorf("expected -1 XP second rush, got %d", res2.XP)
+	if res2.XP != -5 {
+		t.Errorf("expected -5 XP second rapid guess, got %d", res2.XP)
+	}
+}
+
+func TestEngine_AntiGuessing_ResetOnCorrectAnswer(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("guess_reset")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// First rapid incorrect attempt: latency < 2s.
+	q1, _ := e.NextQuestion(sess.ID, st.ID)
+	res1, _ := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 1.0)
+	if res1.XP != 0 {
+		t.Errorf("expected 0 XP first rapid miss, got %d", res1.XP)
+	}
+
+	// Intervening correct attempt resets the consecutive rush counter.
+	q2, _ := e.NextQuestion(sess.ID, st.ID)
+	res2, _ := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "42", 5.0)
+	if !res2.Correct || res2.XP <= 0 {
+		t.Fatalf("expected positive XP for correct answer, got %d", res2.XP)
+	}
+
+	// Another rapid incorrect attempt: not consecutive, so no penalty yet.
+	q3, _ := e.NextQuestion(sess.ID, st.ID)
+	res3, _ := e.SubmitAnswer(sess.ID, st.ID, q3.AttemptID, "wrong", 1.0)
+	if res3.XP != 0 {
+		t.Errorf("expected 0 XP after reset, got %d", res3.XP)
+	}
+}
+
+func TestEngine_Accommodation_TimeMultiplierScalesThreshold(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("accom_mult")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// Test settings with top level time_multiplier.
+	_ = e.repo.UpdateSettings(st.ID, `{"time_multiplier": 1.5}`)
+	q1, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || q1 == nil {
+		t.Fatalf("next question: %v", err)
+	}
+	e.mu.Lock()
+	as1 := e.sessions[sess.ID]
+	e.mu.Unlock()
+	if as1 == nil {
+		t.Fatal("expected active session")
+	}
+	// Concept "a" baseline is 60s. 60s * 1.5 = 90s.
+	if as1.timeThreshold != 90.0 {
+		t.Errorf("expected timeThreshold 90.0 with 1.5x multiplier, got %f", as1.timeThreshold)
+	}
+
+	// Test settings with accommodations.time_multiplier.
+	_ = e.repo.UpdateSettings(st.ID, `{"accommodations": {"time_multiplier": 2.0}}`)
+	// Answer q1 to advance active session.
+	_, _ = e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "42", 10.0)
+
+	q2, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || q2 == nil {
+		t.Fatalf("next question: %v", err)
+	}
+	e.mu.Lock()
+	as2 := e.sessions[sess.ID]
+	e.mu.Unlock()
+	if as2 == nil {
+		t.Fatal("expected active session")
+	}
+	// 60s * 2.0 = 120s.
+	if as2.timeThreshold != 120.0 {
+		t.Errorf("expected timeThreshold 120.0 with 2.0x multiplier, got %f", as2.timeThreshold)
 	}
 }
 
@@ -575,11 +1055,133 @@ func TestEngine_StudyPath_NegativeXPOnRush(t *testing.T) {
 	if err != nil {
 		t.Fatalf("study submit 2: %v", err)
 	}
-	if r2.XP != -1 {
-		t.Errorf("expected -1 XP second study rush, got %d", r2.XP)
+	if r2.XP != xppolicy.RushPenalty {
+		t.Errorf("expected %d XP second study rush, got %d", xppolicy.RushPenalty, r2.XP)
 	}
 	if !r2.Halted {
 		t.Error("expected halted flag after 2 consecutive study misses")
+	}
+}
+
+// A tapped choice arrives as a letter, because the browser cannot return the
+// option text faithfully. The anchor stores the authored text, so the letter has
+// to be resolved before the comparison: reports #154, #160, #163, #172 and #179
+// were all correct taps graded wrong by a rendering difference (spaces gone,
+// LaTeX turned into glyphs, U+2212 turned into a hyphen).
+func TestResolveChoiceAnswerMapsALetterToTheAuthoredOption(t *testing.T) {
+	const question = "Which statement is true?\n\nA) 1 − P(A)\n\nB) P(A)\n\nC) \\(x^{2}<0\\)\n\nD) down on the left"
+
+	if got := resolveChoiceAnswer(question, "D"); got != "down on the left" {
+		t.Errorf("D resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "D)"); got != "down on the left" {
+		t.Errorf("D) resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "(d)"); got != "down on the left" {
+		t.Errorf("(d) resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "Option D"); got != "down on the left" {
+		t.Errorf("Option D resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, " c "); got != `\(x^{2}<0\)` {
+		t.Errorf("lowercase letter with spaces resolved to %q", got)
+	}
+	if got := resolveChoiceAnswer(question, "downontheleft"); got != "down on the left" {
+		t.Errorf("downontheleft without spaces resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "down on the left."); got != "down on the left" {
+		t.Errorf("down on the left with trailing dot resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "1 − P(A)"); got != "1 − P(A)" {
+		t.Errorf("a full option text was rewritten to %q", got)
+	}
+	// A letter with no option, a number, and a stem without options all pass through.
+	if got := resolveChoiceAnswer(question, "E"); got != "E" {
+		t.Errorf("unmatched letter became %q", got)
+	}
+	if got := resolveChoiceAnswer(question, "42"); got != "42" {
+		t.Errorf("numeric answer became %q", got)
+	}
+	if got := resolveChoiceAnswer("Solve for x: 2x = 4", "A"); got != "A" {
+		t.Errorf("letter against a free-text question became %q", got)
+	}
+}
+
+type testChoiceGen struct {
+	question string
+	answer   string
+}
+
+func (g *testChoiceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	return generator.Problem{
+		Question:    g.question,
+		Answer:      g.answer,
+		Explanation: "Explanation here.",
+	}
+}
+
+func TestEngine_SubmitAnswer_MultipleChoiceLetterResolution(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "mc-concept", Label: "Ray Concept", Domain: "geometry",
+			GradingType: "multiple_choice", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	store, err := storage.NewSQLiteStore(":memory:")
+	if err != nil {
+		t.Fatalf("create store: %v", err)
+	}
+	t.Cleanup(func() { store.Close() })
+
+	reg := generator.NewRegistry()
+	reg.Register("mc-concept", &testChoiceGen{
+		question: "Which term describes a part of a line with one endpoint?\n\nA) ray\nB) segment\nC) line\nD) angle",
+		answer:   "ray",
+	})
+	e := New(store, d, reg, nil, nil)
+
+	st, err := e.CreateStudent("luminxyia")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+
+	for _, ans := range []string{"A", "a", "Option A", "A)", "(A)"} {
+		sess, err := e.repo.CreateSession(st.ID)
+		if err != nil {
+			t.Fatalf("create session: %v", err)
+		}
+		q, err := e.NextQuestion(sess.ID, st.ID)
+		if err != nil {
+			t.Fatalf("next question: %v", err)
+		}
+		res, err := e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, ans, 2.0)
+		if err != nil {
+			t.Fatalf("submit answer %q: %v", ans, err)
+		}
+		if !res.Correct {
+			t.Errorf("expected answer %q to be marked correct, got incorrect", ans)
+		}
+	}
+
+	// Verify wrong option letter grades false
+	sess, err := e.repo.CreateSession(st.ID)
+	if err != nil {
+		t.Fatalf("create session: %v", err)
+	}
+	q, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil {
+		t.Fatalf("next question: %v", err)
+	}
+	res, err := e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "B", 2.0)
+	if err != nil {
+		t.Fatalf("submit answer B: %v", err)
+	}
+	if res.Correct {
+		t.Errorf("expected answer B to be marked incorrect, got correct")
 	}
 }
 
@@ -596,7 +1198,7 @@ func TestEngine_StudyPath_ExplanationOnBothVerdicts(t *testing.T) {
 		question: {Answer: "5/4", Explanation: why},
 	})
 
-	// 7/4, not 1.25 — the numeric grader would (correctly) call 1.25 equal to 5/4.
+	// 7/4, not 1.25, the numeric grader would (correctly) call 1.25 equal to 5/4.
 	miss, err := e.SubmitStudyAnswer(st.ID, "a", "7/4", 5.0, question)
 	if err != nil {
 		t.Fatalf("submit miss: %v", err)
@@ -624,7 +1226,7 @@ func TestEngine_StudyPath_ExplanationOnBothVerdicts(t *testing.T) {
 // questions and fetches a fresh batch while the learner is still reading the
 // one in front of them, so a replace-on-write blob made every question past the
 // first ungradeable: the submit hit ErrNoStudyAnchor, the server answered 409,
-// and the client swapped in a different question — which read as Learn skipping
+// and the client swapped in a different question, which read as Learn skipping
 // questions the learner had just answered.
 func TestEngine_StudyAnchor_MergesAcrossBatches(t *testing.T) {
 	e := testEngine(t)
@@ -664,7 +1266,7 @@ func TestEngine_StudyAnchor_MergesAcrossBatches(t *testing.T) {
 }
 
 // Incoming entries win on identical text. Deterministic generators give the
-// same text the same answer, so this is not lossy — but a re-serve carrying a
+// same text the same answer, so this is not lossy, but a re-serve carrying a
 // corrected explanation must not be shadowed by the stale copy.
 func TestEngine_StudyAnchor_IncomingWinsOnSameText(t *testing.T) {
 	e := testEngine(t)
@@ -727,7 +1329,7 @@ func TestEngine_StudyPath_RefusesWithoutAnchor(t *testing.T) {
 	if !errors.Is(err, ErrNoStudyAnchor) {
 		t.Fatalf("expected ErrNoStudyAnchor, got %v", err)
 	}
-	// Nothing recorded — no progress row means no streak, weakness or XP moved.
+	// Nothing recorded, no progress row means no streak, weakness or XP moved.
 	if p, _ := e.GetProgress(st.ID); len(p) != 0 {
 		t.Errorf("an ungradeable answer must record nothing, got %v", p)
 	}
@@ -767,7 +1369,7 @@ func TestEngine_Review_ExplanationOnCorrect(t *testing.T) {
 	if err != nil {
 		t.Fatalf("next question: %v", err)
 	}
-	// Question carries no Expected on purpose — it is never sent to the client.
+	// Question carries no Expected on purpose, it is never sent to the client.
 	// Read it off the active session to submit a genuinely correct answer.
 	e.mu.Lock()
 	expected := e.sessions[sess.ID].expectedAnswer
@@ -787,7 +1389,7 @@ func TestEngine_Review_ExplanationOnCorrect(t *testing.T) {
 	}
 }
 
-// Session 5: efficacy instrumentation — first-pass / second-pass rates.
+// Session 5: efficacy instrumentation, first-pass / second-pass rates.
 func TestEngine_Efficacy(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("efficacy")
@@ -881,7 +1483,7 @@ func TestEngine_SubmitQuizAnswer_TaskQuizXP(t *testing.T) {
 		t.Fatalf("get xp: %v", err)
 	}
 	// Single-path invariant: exactly what the response reports is what the
-	// DB received — no lesson-rate write + quiz-rate display divergence.
+	// DB received, no lesson-rate write + quiz-rate display divergence.
 	if after-before != res.XP {
 		t.Errorf("DB delta %d != response XP %d", after-before, res.XP)
 	}
@@ -931,7 +1533,7 @@ func TestEngine_StudyAnchor_SurvivesRestart(t *testing.T) {
 func TestEngine_StudyAnchorBatch_PerQuestion(t *testing.T) {
 	e := testEngine(t)
 	// Distinct questions on the same concept must each grade against their own
-	// answer — the bug was anchoring only the first question — and each is owed
+	// answer, the bug was anchoring only the first question and each is owed
 	// its own explanation, not the set's first one.
 	e.SetStudyAnchorBatch("stu1", "a", map[string]Anchor{
 		"Q1": {Answer: "5^4", Explanation: "5^4 = 5·5·5·5 = 625."},
@@ -951,7 +1553,7 @@ func TestEngine_StudyAnchorBatch_PerQuestion(t *testing.T) {
 // A blob written before the explanation was carried must still grade: the
 // session it belongs to is in flight, and refusing it would turn a deploy into
 // a broken learner session. Only the two shapes that can actually be in
-// server_sessions are covered — every writer marshals a map, so a bare string
+// server_sessions are covered, every writer marshals a map, so a bare string
 // was never stored and the old fallback was dead too.
 func TestDecodeStudyAnchor_LegacyShapes(t *testing.T) {
 	for name, tc := range map[string]struct{ blob, key, answer string }{
@@ -1027,7 +1629,7 @@ func TestEngine_QuizMiss_EnqueuesRemedial(t *testing.T) {
 	}
 }
 
-// Quiz gate — due at 50 XP since last completion, reset on record.
+// Quiz gate, due at 50 XP since last completion, reset on record.
 
 func TestEngine_QuizGate_DueAndReset(t *testing.T) {
 	e := testEngine(t)
@@ -1100,19 +1702,19 @@ func TestEngine_Diagnosis(t *testing.T) {
 				t.Fatalf("submit: %v", err)
 			}
 			if res.Correct != tc.wantCorrect {
-				t.Errorf("correct = %v, want %v — %s", res.Correct, tc.wantCorrect, tc.why)
+				t.Errorf("correct = %v, want %v, %s", res.Correct, tc.wantCorrect, tc.why)
 			}
 			if tc.wantDiagnosis && res.Diagnosis == "" {
-				t.Errorf("expected a diagnosis for %q, got none — %s", tc.answer, tc.why)
+				t.Errorf("expected a diagnosis for %q, got none, %s", tc.answer, tc.why)
 			}
 			if !tc.wantDiagnosis && res.Diagnosis != "" {
-				t.Errorf("unexpected diagnosis %q — %s", res.Diagnosis, tc.why)
+				t.Errorf("unexpected diagnosis %q, %s", res.Diagnosis, tc.why)
 			}
 		})
 	}
 }
 
-// Decay is never persisted — the row stays MASTERED forever and the downgrade
+// Decay is never persisted, the row stays MASTERED forever and the downgrade
 // happens on read. Before GetProgress applied it, /api/progress reported a
 // stale concept as mastered while the scheduler treated it as DECAYING and
 // scheduled it for review: two parts of the app disagreeing about one fact, and
@@ -1222,7 +1824,7 @@ func TestGetProgress_LeavesOtherStatusesAlone(t *testing.T) {
 // answerCorrectly answers concept "a" correctly n times, using the engine's own question
 // pool. It is not usable for long runs: the pool for a two-concept DAG runs out after a
 // handful of questions, which is why the exhaustive monotonicity proof lives in
-// internal/mastery — where it can drive the transition rules directly — and what is
+// internal/mastery, where it can drive the transition rules directly and what is
 // asserted here is that the endpoint derives from the server's threshold.
 func answerCorrectly(t *testing.T, e *Engine, studentID string, n int) {
 	t.Helper()
@@ -1304,7 +1906,7 @@ func TestProgressWithMasteryPct_NeverFallsOnAdvance(t *testing.T) {
 	// engine resets the streak to 1 on the tier advance; a streak-derived ratio therefore
 	// falls from 1.0 to 0.33 here. Tier-derived attainment rises instead.
 	//
-	// The exhaustive version — every answer through all three advances — is
+	// The exhaustive version, every answer through all three advances, is
 	// TestMasteryPct_NeverGoesBackwards in internal/mastery, which drives the transition
 	// rules directly and so is not limited by the question pool.
 	if got := mastery.MasteryPct(mastery.StatusLearning, 3, 3); math.Abs(got-2.0/3.0) > 1e-9 {
@@ -1320,7 +1922,7 @@ func TestProgressWithMasteryPct_NeverFallsOnAdvance(t *testing.T) {
 }
 
 // A decayed concept keeps a full bar. Decay is signalled by colour alone, and a shorter
-// bar would read as losing the competence — the one thing decay does not mean.
+// bar would read as losing the competence, the one thing decay does not mean.
 func TestProgressWithMasteryPct_DecayingIsFull(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("pct_decaying")
@@ -1340,7 +1942,7 @@ func TestProgressWithMasteryPct_DecayingIsFull(t *testing.T) {
 }
 
 // The evidence model weights a correct answer by how hard the question was. That is only
-// usable if the server records the difficulty it generated at — and records *nothing*
+// usable if the server records the difficulty it generated at and records *nothing*
 // rather than a guess when it does not know.
 func TestEngine_RecordsServedQuestionDifficulty(t *testing.T) {
 	e := testEngine(t)
@@ -1404,7 +2006,7 @@ func TestEngine_NeverRecordsZeroDifficulty(t *testing.T) {
 // mastery.NeutralDifficulty is what BuildEvidence credits a correct answer with when the
 // attempt carries no difficulty, and difficultyFromWeakness is what the engine serves when
 // it has no information about the learner. If those two drift apart, an unknown-difficulty
-// attempt silently becomes worth more or less than the questions actually being served —
+// attempt silently becomes worth more or less than the questions actually being served,
 // which is precisely the bug that made the quiz surface more permissive than the study
 // surface.
 func TestNeutralDifficultyMatchesEngineDefault(t *testing.T) {
@@ -1425,7 +2027,7 @@ func TestNeutralDifficultyMatchesEngineDefault(t *testing.T) {
 // surface.
 //
 // `submitAnswerWithTask` serves both the study/Learn loop and quizzes, and it used to hand
-// the mastery authority a hardcoded `difficulty: 0` — meaning "unknown" — while
+// the mastery authority a hardcoded `difficulty: 0`, meaning "unknown", while
 // `SubmitAnswer` passed the real difficulty off the active session. Unknown difficulty was
 // then scored as `difficultyTerm = 1.0`, the top of the range, so the same answers were worth
 // more on the quiz path than on the study path. Measured at 50% accuracy: 0.65 and cleared
@@ -1438,10 +2040,10 @@ func TestStudyAndQuizProduceEquivalentMasteryEvidence(t *testing.T) {
 	diff := served
 	question := "3/4 + 1/2 = ?"
 
-	// Six answers at 50% accuracy — the exact case the asymmetry decided.
+	// Six answers at 50% accuracy, the exact case the asymmetry decided.
 	outcomes := []bool{true, false, true, false, true, true}
 
-	// Study: the anchor is the record of what was served, so the difficulty rides there —
+	// Study: the anchor is the record of what was served, so the difficulty rides there,
 	// no caller supplies it.
 	studyEngine, studyStudent := func() (*Engine, *storage.Student) {
 		e := testEngine(t)
@@ -1490,7 +2092,7 @@ func TestStudyAndQuizProduceEquivalentMasteryEvidence(t *testing.T) {
 	}
 	for i := range outcomes {
 		if studyRows[i].Difficulty == nil || quizRows[i].Difficulty == nil {
-			t.Fatalf("attempt %d: study difficulty %v, quiz difficulty %v — both must carry "+
+			t.Fatalf("attempt %d: study difficulty %v, quiz difficulty %v, both must carry "+
 				"the served difficulty", i, studyRows[i].Difficulty, quizRows[i].Difficulty)
 		}
 		if math.Abs(*studyRows[i].Difficulty-*quizRows[i].Difficulty) > 1e-9 {
@@ -1508,7 +2110,7 @@ func TestStudyAndQuizProduceEquivalentMasteryEvidence(t *testing.T) {
 	quizEv := evidenceFromRows(quizRows)
 	if math.Abs(studyEv.Score-quizEv.Score) > 1e-9 {
 		t.Errorf("study evidence scored %.4f and quiz evidence %.4f for the same answers on "+
-			"the same questions — the surface is changing what the learner demonstrated",
+			"the same questions, the surface is changing what the learner demonstrated",
 			studyEv.Score, quizEv.Score)
 	}
 	if studyEv.Attempts != quizEv.Attempts {
@@ -1580,7 +2182,7 @@ func TestUnknownDifficultyHostIsNotMoreGenerous(t *testing.T) {
 	knownEv := evidenceFromRows(knownRows)
 	unknownEv := evidenceFromRows(unknownRows)
 	if unknownEv.Score > knownEv.Score+1e-9 {
-		t.Errorf("unknown difficulty scored %.4f against %.4f for known difficulty %.2f — "+
+		t.Errorf("unknown difficulty scored %.4f against %.4f for known difficulty %.2f, "+
 			"a missing value is buying more evidence than a recorded one",
 			unknownEv.Score, knownEv.Score, *knownRows[5].Difficulty)
 	}
@@ -1604,8 +2206,8 @@ func evidenceFromRows(rows []storage.AttemptEntry) mastery.Evidence {
 // own.
 //
 // `web/next-app/lib/progression.ts` kept a second implementation of the mastery evidence
-// model — different weights, different variety population, a flat 60s time cliff instead of
-// the concept threshold — and rendered a band from it in the Learn header. That is only
+// model, different weights, different variety population, a flat 60s time cliff instead of
+// the concept threshold and rendered a band from it in the Learn header. That is only
 // removable if the number is available, so this asserts it is, and that the band comes from
 // the same place as the verdict.
 func TestAnswerResponseCarriesAuthoritativeEvidence(t *testing.T) {
@@ -1675,7 +2277,7 @@ func TestUngradedAnswerCarriesNoEvidence(t *testing.T) {
 // The practice path counted its own sub-2-second wrong answers on the active session; the
 // study/quiz path required two misses on the concept as well, so a learner who rushed twice
 // but was wrong for ordinary reasons was never penalised there. Same behaviour, two
-// different rules — now both xp.RushSeconds / xp.RushAfter.
+// different rules, now both xp.RushSeconds / xp.RushAfter.
 func TestRushPenaltyIsIdenticalAcrossHosts(t *testing.T) {
 	e := testEngine(t)
 	st, err := e.CreateStudent("rush_parity")
@@ -1738,5 +2340,386 @@ func TestDontKnowIsNeverRushed(t *testing.T) {
 		if res.XP != 0 {
 			t.Errorf("an admitted don't-know paid %d XP, want 0", res.XP)
 		}
+	}
+}
+
+// Weakness on a downstream concept propagates backward to immediate prerequisites
+// so learners who struggle downstream have foundation gaps surfaced for remediation.
+func TestEngine_PropagateWeaknessBackwardToPrerequisites(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("weakness_propagation")
+	now := time.Now().UTC()
+	// Prerequisite "a" was mastered previously.
+	if err := e.repo.UpsertProgress(&storage.ConceptProgress{
+		StudentID:     st.ID,
+		ConceptID:     "a",
+		Status:        string(mastery.StatusMastered),
+		Streak:        3,
+		WeaknessScore: 0.0,
+		LastReviewed:  &now,
+	}); err != nil {
+		t.Fatalf("upsert prereq: %v", err)
+	}
+	// Downstream concept "b" (which depends on "a") has high weakness due to struggles.
+	if err := e.repo.UpsertProgress(&storage.ConceptProgress{
+		StudentID:     st.ID,
+		ConceptID:     "b",
+		Status:        string(mastery.StatusPracticing),
+		Streak:        0,
+		WeaknessScore: 0.8,
+		LastAttempted: &now,
+	}); err != nil {
+		t.Fatalf("upsert dependent: %v", err)
+	}
+
+	e.PropagateWeakness(st.ID)
+
+	pA, err := e.repo.GetProgress(st.ID, "a")
+	if err != nil {
+		t.Fatalf("get prereq progress: %v", err)
+	}
+	if pA.WeaknessScore < 0.35 {
+		t.Errorf("prerequisite weakness = %v, want >= 0.35 after backward propagation from struggling dependent", pA.WeaknessScore)
+	}
+}
+
+func TestEngine_DiagnosticConditionalCompletion_Persistence(t *testing.T) {
+	e := testEngine(t)
+	st, err := e.CreateStudent("provisional_student")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+
+	report := &diagnostic.DiagnosticReport{
+		ConditionallyCompleted: []string{"Concept A"},
+	}
+	if err := e.ApplyDiagnosticReport(st.ID, report); err != nil {
+		t.Fatalf("apply diagnostic report: %v", err)
+	}
+
+	p, err := e.repo.GetProgress(st.ID, "a")
+	if err != nil {
+		t.Fatalf("get progress: %v", err)
+	}
+	if p == nil {
+		t.Fatal("expected progress row for conditionally completed concept")
+	}
+	if p.Status != string(mastery.StatusLearning) {
+		// A conditional completion is a placement, so it must not read MASTERED:
+		// that unlocked dependents as though evidence existed, and hysteresis then
+		// made the guess permanent after one correct answer.
+		t.Errorf("status = %q, want LEARNING", p.Status)
+	}
+	if !p.IsProvisional {
+		t.Error("expected IsProvisional true")
+	}
+	if !p.PlacementSeeded {
+		t.Error("expected PlacementSeeded true")
+	}
+}
+
+func TestEngine_ProvisionalFallback_DemotionOnStruggle(t *testing.T) {
+	e := testEngine(t)
+	st, err := e.CreateStudent("struggle_student")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+
+	// Concept a is conditionally completed (provisional mastered).
+	report := &diagnostic.DiagnosticReport{
+		ConditionallyCompleted: []string{"a"},
+	}
+	if err := e.ApplyDiagnosticReport(st.ID, report); err != nil {
+		t.Fatalf("apply report: %v", err)
+	}
+
+	// Concept b depends on a.
+	sess, err := e.repo.CreateSession(st.ID)
+	if err != nil {
+		t.Fatalf("create session: %v", err)
+	}
+
+	// Active session serving b.
+	e.mu.Lock()
+	e.sessions[sess.ID] = &activeSession{
+		studentID:      st.ID,
+		conceptID:      "b",
+		expectedAnswer: "99",
+		attemptID:      "att-1",
+		requiredStreak: 3,
+		timeThreshold:  60.0,
+	}
+	e.mu.Unlock()
+
+	// Learner struggles on b with a wrong answer.
+	res, err := e.SubmitAnswer(sess.ID, st.ID, "att-1", "wrong", 5.0)
+	if err != nil {
+		t.Fatalf("submit answer: %v", err)
+	}
+
+	if !res.Halted {
+		t.Error("expected session halted after provisional prerequisite fallback")
+	}
+	if len(res.Remedial) == 0 || res.Remedial[0] != "a" {
+		t.Errorf("expected remedial queue head to be prerequisite a, got %v", res.Remedial)
+	}
+
+	// Verify prerequisite a demoted from MASTERED to LEARNING.
+	pA, err := e.repo.GetProgress(st.ID, "a")
+	if err != nil {
+		t.Fatalf("get progress a: %v", err)
+	}
+	if pA.Status != string(mastery.StatusLearning) {
+		t.Errorf("status a = %q, want LEARNING", pA.Status)
+	}
+	if pA.Streak != 0 {
+		t.Errorf("streak a = %d, want 0", pA.Streak)
+	}
+	if pA.WeaknessScore != 0.8 {
+		t.Errorf("weakness a = %v, want 0.8", pA.WeaknessScore)
+	}
+	if !pA.IsProvisional {
+		t.Error("expected IsProvisional to remain true while learning")
+	}
+
+	// Prerequisite a must be served first in active session.
+	nextQ, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil {
+		t.Fatalf("next question: %v", err)
+	}
+	if nextQ.ConceptID != "a" {
+		t.Errorf("next concept = %q, want remedial concept a", nextQ.ConceptID)
+	}
+}
+
+func TestEngine_ProvisionalClearing_OnTrueMastery(t *testing.T) {
+	e := testEngine(t)
+	st, err := e.CreateStudent("mastery_student")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+
+	// Concept a was provisional and demoted to LEARNING.
+	now := time.Now().UTC()
+	if err := e.repo.UpsertProgress(&storage.ConceptProgress{
+		StudentID:     st.ID,
+		ConceptID:     "a",
+		Status:        string(mastery.StatusLearning),
+		Streak:        0,
+		IsProvisional: true,
+		LastAttempted: &now,
+	}); err != nil {
+		t.Fatalf("seed progress: %v", err)
+	}
+
+	sess, err := e.repo.CreateSession(st.ID)
+	if err != nil {
+		t.Fatalf("create session: %v", err)
+	}
+
+	// Practice a until true mastery is achieved.
+	for i := 0; i < 6; i++ {
+		e.mu.Lock()
+		e.sessions[sess.ID] = &activeSession{}
+		e.mu.Unlock()
+		q, err := e.NextQuestion(sess.ID, st.ID)
+		if err != nil {
+			t.Fatalf("next question %d: %v", i+1, err)
+		}
+		if q == nil || q.ConceptID != "a" {
+			break
+		}
+		res, err := e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "42", 1.0)
+		if err != nil {
+			t.Fatalf("submit answer %d: %v", i+1, err)
+		}
+		if res.NewStatus == mastery.StatusMastered {
+			break
+		}
+	}
+
+	// IsProvisional must now be false and status must be MASTERED.
+	pA, err := e.repo.GetProgress(st.ID, "a")
+	if err != nil {
+		t.Fatalf("get progress a: %v", err)
+	}
+	if pA.Status != string(mastery.StatusMastered) {
+		t.Fatalf("status = %q, want MASTERED", pA.Status)
+	}
+	if pA.IsProvisional {
+		t.Error("expected IsProvisional cleared to false after true mastery")
+	}
+
+	// Subsequent struggle on dependent b must NOT demote a.
+	e.mu.Lock()
+	e.sessions[sess.ID] = &activeSession{
+		studentID:      st.ID,
+		conceptID:      "b",
+		expectedAnswer: "99",
+		attemptID:      "att-b",
+		requiredStreak: 3,
+		timeThreshold:  60.0,
+	}
+	e.mu.Unlock()
+
+	_, err = e.SubmitAnswer(sess.ID, st.ID, "att-b", "wrong", 5.0)
+	if err != nil {
+		t.Fatalf("submit answer b: %v", err)
+	}
+
+	pAAfter, err := e.repo.GetProgress(st.ID, "a")
+	if err != nil {
+		t.Fatalf("get progress a: %v", err)
+	}
+	if pAAfter.Status != string(mastery.StatusMastered) {
+		t.Errorf("status a = %q, want to remain MASTERED after independent mastery", pAAfter.Status)
+	}
+}
+
+func TestEngine_ProvisionalFallback_StudyAnchorPath(t *testing.T) {
+	e := testEngine(t)
+	st, err := e.CreateStudent("study_fallback")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+
+	report := &diagnostic.DiagnosticReport{
+		ConditionallyCompleted: []string{"a"},
+	}
+	if err := e.ApplyDiagnosticReport(st.ID, report); err != nil {
+		t.Fatalf("apply report: %v", err)
+	}
+
+	// Set study anchor for concept b.
+	e.SetStudyAnchorBatch(st.ID, "b", map[string]Anchor{
+		"Question B text": {Answer: "99", Explanation: "Explanation B"},
+	})
+
+	// Submit incorrect study answer for b.
+	res, err := e.SubmitStudyAnswer(st.ID, "b", "wrong", 5.0, "Question B text")
+	if err != nil {
+		t.Fatalf("submit study answer: %v", err)
+	}
+	if !res.Halted {
+		t.Error("expected study result halted after provisional fallback")
+	}
+	if len(res.Remedial) == 0 || res.Remedial[0] != "a" {
+		t.Errorf("expected remedial to contain demoted concept a, got %v", res.Remedial)
+	}
+
+	pA, err := e.repo.GetProgress(st.ID, "a")
+	if err != nil {
+		t.Fatalf("get progress a: %v", err)
+	}
+	if pA.Status != string(mastery.StatusLearning) {
+		t.Errorf("status a = %q, want LEARNING", pA.Status)
+	}
+}
+
+func TestEngine_FSRS_LiveStateTransitions(t *testing.T) {
+	e := testEngine(t)
+	st, err := e.CreateStudent("fsrs-learner")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+	sess, err := e.repo.CreateSession(st.ID)
+	if err != nil {
+		t.Fatalf("create session: %v", err)
+	}
+
+	// First question on concept a
+	q1, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil {
+		t.Fatalf("next question: %v", err)
+	}
+	ans1, err := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "42", 3.0)
+	if err != nil {
+		t.Fatalf("submit answer 1: %v", err)
+	}
+	if !ans1.Correct {
+		t.Fatalf("expected answer 1 correct")
+	}
+
+	p1, err := e.repo.GetProgress(st.ID, q1.ConceptID)
+	if err != nil {
+		t.Fatalf("get progress 1: %v", err)
+	}
+	if p1.FSRSStability == nil || *p1.FSRSStability <= 0 {
+		t.Fatalf("expected valid FSRSStability after first correct attempt, got %v", p1.FSRSStability)
+	}
+	if p1.FSRSDifficulty == nil || *p1.FSRSDifficulty <= 0 {
+		t.Fatalf("expected valid FSRSDifficulty after first correct attempt, got %v", p1.FSRSDifficulty)
+	}
+	stab1 := *p1.FSRSStability
+
+	// Second question on concept a
+	q2, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil {
+		t.Fatalf("next question 2: %v", err)
+	}
+	ans2, err := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "42", 2.5)
+	if err != nil {
+		t.Fatalf("submit answer 2: %v", err)
+	}
+	if !ans2.Correct {
+		t.Fatalf("expected answer 2 correct")
+	}
+
+	p2, err := e.repo.GetProgress(st.ID, q2.ConceptID)
+	if err != nil {
+		t.Fatalf("get progress 2: %v", err)
+	}
+	stab2 := *p2.FSRSStability
+	if stab2 <= stab1 {
+		t.Errorf("expected stability to increase on repeated correct recall: stab1=%f stab2=%f", stab1, stab2)
+	}
+
+	// Test decay detection via retrievability
+	now := time.Now().UTC()
+	past := now.Add(-30 * 24 * time.Hour)
+	p2.Status = string(mastery.StatusMastered)
+	p2.FSRSLastReview = &past
+	futureDue := now.Add(10 * 24 * time.Hour)
+	p2.NextReviewDue = &futureDue
+	if err := e.repo.UpsertProgress(p2); err != nil {
+		t.Fatalf("upsert progress past review: %v", err)
+	}
+
+	dueCount, err := e.ReviewsDue(st.ID)
+	if err != nil {
+		t.Fatalf("reviews due: %v", err)
+	}
+	if dueCount < 1 {
+		t.Errorf("expected at least 1 review due when FSRS retrievability decays, got %d", dueCount)
+	}
+}
+
+func TestEngine_AntiGuessing_SlowMissBreaksTheRun(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("guess_slow")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// First rapid miss: the run starts but nothing is charged yet.
+	q1, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 1.0); res.XP != 0 {
+		t.Errorf("expected 0 XP first rapid miss, got %d", res.XP)
+	}
+
+	// A slow wrong answer is considered, so it ends the run rather than extending it.
+	q2, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "wrong", 9.0); res.XP != 0 {
+		t.Errorf("expected 0 XP for a considered miss, got %d", res.XP)
+	}
+
+	// The next rapid miss is the first of a new run, so it is not penalised.
+	q3, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q3.AttemptID, "wrong", 1.0); res.XP != 0 {
+		t.Errorf("expected 0 XP after the run was broken, got %d", res.XP)
+	}
+
+	// A second consecutive rapid miss is what earns the penalty.
+	q4, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q4.AttemptID, "wrong", 1.0); res.XP != xppolicy.RushPenalty {
+		t.Errorf("expected %d XP for two consecutive rapid misses, got %d", xppolicy.RushPenalty, res.XP)
 	}
 }

@@ -11,6 +11,7 @@ import ReportButton from '../../components/ReportButton'
 import { startQuizSession, submitQuizAnswer, skipQuizQuestion } from '../../lib/api'
 import { formatForGradingType, formatForQuestion, type AnswerFormat, type QuestionFormatFields } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
+import { stemWithoutChoices } from '../../lib/choices'
 import SubmitErrorBlock, {
   MAX_SKIPS,
   toSubmitError,
@@ -23,7 +24,7 @@ import { focusClearOfTabs } from '../../lib/focusClearOfTabs'
 
 // 'failed' exists because 'done' used to carry two meanings. Any thrown request
 // set phase to 'done', and the done screen reads "No questions available" while
-// the accuracy counters are still zero — so a network blip, a 500 or an expired
+// the accuracy counters are still zero, so a network blip, a 500 or an expired
 // token told the learner the corpus had no questions for them. The engine cannot
 // actually produce that state: a session with no picked concepts falls back to
 // the first five concepts in DAG order, so a real empty result needs an empty
@@ -42,6 +43,7 @@ export default function QuizHost() {
   const [startError, setStartError] = useState('')
 
   const quizSessionId = useRef('')
+  const quizAttemptId = useRef('')
   const quizInputRef = useRef<MathFocusHandle | null>(null)
   const quizShownAt = useRef<number | null>(null)
   const quizConceptId = useRef('')
@@ -66,7 +68,7 @@ export default function QuizHost() {
   const [finished, setFinished] = useState(false)
   const [skipCount, setSkipCount] = useState(0)
   const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(() => formatForGradingType())
-  // Next question staged from the submit response — revealed by goNextQuiz(),
+  // Next question staged from the submit response, revealed by goNextQuiz(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingQuizNext = useRef<{
     question: string
@@ -115,13 +117,13 @@ export default function QuizHost() {
     }
   }
 
-  // The quiz starts from the intro screen, not on mount — timing and
+  // The quiz starts from the intro screen, not on mount, timing and
   // question reveal begin at Start, so the briefing costs nothing.
 
   // Per-question countdown for the timed closed-book quiz. Informational:
   // the engine grades over-time answers as slow, it never blocks submission.
   // Keyboard flow: the answer form unmounts while feedback shows, so the
-  // cursor is restored here — whenever a fresh question is revealed.
+  // cursor is restored here, whenever a fresh question is revealed.
   useEffect(() => {
     if (phase === 'quiz' && !quizLastResult && quizQuestion) quizInputRef.current?.focus()
   }, [phase, quizLastResult, quizQuestion])
@@ -337,7 +339,7 @@ export default function QuizHost() {
         </div>
         <div className={`bg-mathua-surface border rounded-none p-4 sm:p-6 mb-6 transition-colors w-full max-w-full min-w-0 overflow-hidden ${quizLastResult ? (quizLastResult.correct ? 'border-mathua-green-faint' : 'border-mathua-red-faint') : 'border-mathua-border'}`}>
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4">
-            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{quizQuestion}</KatexContent>
+            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{stemWithoutChoices(quizQuestion)}</KatexContent>
           </div>
           <ChoiceOptions question={quizQuestion} value={quizAnswerInput} onPick={setQuizAnswerInput} disabled={loading} />
           {!quizLastResult ? (
@@ -373,12 +375,13 @@ export default function QuizHost() {
               </div>
               <div className="mt-2 flex justify-end">
                 <ReportButton
-                  key={quizQuestion}
+                  key={`quiz-${quizCount}-${quizAttemptId.current || quizQuestion}`}
                   conceptId={quizConceptId.current}
                   kind="question"
                   question={quizQuestion}
                   source="quiz"
                   sessionId={quizSessionId.current}
+                  attemptId={quizAttemptId.current}
                   answerGiven={quizAnswerInput}
                   gradingType={quizGradingType.current || undefined}
                   answerHint={answerFormat.hint}

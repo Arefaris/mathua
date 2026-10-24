@@ -1,6 +1,6 @@
 # QR Decomposition
 
-**QR decomposition:** $A = QR$ with $Q$ orthogonal ($Q^TQ = I$) and $R$ upper triangular. Via Gram-Schmidt or Householder reflections; $R$'s diagonal positive by convention. It solves least squares as $Rx = Q^Tb$ — stabler than the normal equations.
+**QR decomposition:** $A = QR$ with $Q$ orthogonal ($Q^TQ = I$) and $R$ upper triangular. Via Gram-Schmidt or Householder reflections; $R$'s diagonal positive by convention. It solves least squares as $Rx = Q^Tb$, stabler than the normal equations.
 
 ## Worked: normalize (1,1)
 
@@ -16,7 +16,7 @@ So orthonormalization is normalize-as-you-go; each $q$ is a unit vector by const
 For $2 \times 2$ upper-triangular $R$:
 1. Diagonal: 2 entries.
 2. Above diagonal: 1 entry.
-3. So 3 possibly-nonzero entries — the zeros below the diagonal are structural.
+3. So 3 possibly-nonzero entries, the zeros below the diagonal are structural.
 
 So triangularity is a sparsity promise: half the matrix is known zeros.
 

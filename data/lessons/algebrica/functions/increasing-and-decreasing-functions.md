@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/increasing-and-decreasing-functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/increasing-and-decreasing-functions/), CC BY-NC 4.0
 
 # Increasing and Decreasing Functions
 

@@ -16,7 +16,7 @@ So the modulus is ordinary Euclidean distance: $|a+bi|$ is the hypotenuse of the
 Check $|z|^2=z\bar{z}$ on $z=3+4i$:
 1. Form the conjugate: $\bar{z}=3-4i$.
 2. Multiply: $z\bar{z}=(3+4i)(3-4i)=9+12i-12i+16=25$.
-3. Compare with $|z|^2=25$ from the previous computation — they agree.
+3. Compare with $|z|^2=25$ from the previous computation, they agree.
 
 So $|z|^2=z\bar{z}$ in general: the cross terms cancel, leaving $a^2+b^2$.
 

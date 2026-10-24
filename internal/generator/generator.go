@@ -5,6 +5,17 @@ import (
 	"github.com/chuma-beep/mathua/internal/i18n"
 )
 
+// MaxDrawAttempts bounds a generator that redraws until its problem is
+// acceptable, for example until the stem no longer contains the answer.
+//
+// Every such loop needs a ceiling. A condition that no draw can satisfy
+// turns an unbounded loop into a request that never returns, and the
+// generator is the wrong place to discover that: the caller has a timeout,
+// the learner has a spinner. After this many draws the generator returns
+// what it has and the leak, if any, is a quality defect rather than an
+// outage.
+const MaxDrawAttempts = 200
+
 type GeneratorContext struct {
 	Difficulty float64
 	Seed       int64
@@ -13,13 +24,16 @@ type GeneratorContext struct {
 	// i18n.Default for a zero value, so a generator can compare against i18n.RU without
 	// first checking for the empty string.
 	Locale i18n.Locale
+	// KPOrdinal is the 1-indexed knowledge point ordinal (1, 2 or 3).
+	// Zero indicates unguided or continuous difficulty scaling.
+	KPOrdinal int
 }
 
 type Problem struct {
 	Question    string
 	Answer      string
 	Explanation string
-	// Facts are the named values this instance was built from — the operands
+	// Facts are the named values this instance was built from, the operands
 	// and the derived quantities, already computed and already reduced. A
 	// corpus solution schema interpolates them into authored prose; it never
 	// recomputes them, so an explanation cannot contradict the answer.
@@ -29,7 +43,7 @@ type Problem struct {
 	// contract test will say so.
 	Facts map[string]string
 
-	// Difficulty the question was generated at, 0.3-1.0. Nil means unknown — a problem
+	// Difficulty the question was generated at, 0.3-1.0. Nil means unknown, a problem
 	// that did not come from a difficulty-parameterised generator, such as a curated row
 	// read straight out of the questions table.
 	//
@@ -39,9 +53,13 @@ type Problem struct {
 	// recorded `attempts.difficulty = NULL`. Mastery evidence therefore depended on which
 	// screen the learner happened to use, which is not a property a learner should be able
 	// to change by tapping a different button. Carrying it on the Problem makes generation
-	// and grading agree by construction — the registry fills this in, so no caller can
+	// and grading agree by construction, the registry fills this in, so no caller can
 	// generate a question and forget what it was generated at.
 	Difficulty *float64
+	// KPOrdinal records the 1-indexed knowledge point ordinal the problem was generated for.
+	KPOrdinal int
+	// ScaffoldSteps holds intermediate subgoals for active cognitive step-down when missed.
+	ScaffoldSteps []ScaffoldStep
 }
 
 type Generator interface {

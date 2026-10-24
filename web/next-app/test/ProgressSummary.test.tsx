@@ -27,8 +27,8 @@ describe('ProgressSummary', () => {
   })
 
   it('draws no bordered box rounded', () => {
-    // These tiles carried `rounded-lg` while the rest of the app — including
-    // `components/ui/button.tsx`, whose comment reads "No rounded-*" — did not. They are
+    // These tiles carried `rounded-lg` while the rest of the app, including
+    // `components/ui/button.tsx`, whose comment reads "No rounded-*", did not. They are
     // the most visible boxes on /graph, so the inconsistency read as the graph page
     // being built to a different spec.
     //

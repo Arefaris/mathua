@@ -7,7 +7,7 @@
 Compute the dot product:
 1. Multiply componentwise: $1 \cdot 3 = 3$ and $2 \cdot 4 = 8$.
 2. Add: $3 + 8 = 11$.
-3. So $(1,2)\cdot(3,4) = 11$ — and $\|(3,4)\| = 5$ since $\sqrt{9+16} = 5$.
+3. So $(1,2)\cdot(3,4) = 11$ and $\|(3,4)\| = 5$ since $\sqrt{9+16} = 5$.
 
 So the dot product is multiply-then-add; the norm is its square root at $u = v$.
 
@@ -16,7 +16,7 @@ So the dot product is multiply-then-add; the norm is its square root at $u = v$.
 Test $\langle u,v\rangle = 2u_1v_1 + u_2v_2$:
 1. Bilinear and symmetric: clear from the formula.
 2. Positive definite: $2u_1^2 + u_2^2 \ge 0$, zero only at $u = 0$.
-3. So it is an inner product — positive weights keep definiteness.
+3. So it is an inner product, positive weights keep definiteness.
 
 So weights are allowed as long as every weight stays positive; a zero or negative weight breaks it.
 

@@ -16,10 +16,10 @@ So the four probes feel the curvature that Euler ignores.
 Compare at $x = 0.1$ (exact $e^{0.1} \approx 1.10517$):
 1. RK4 gives 1.10517: error around $10^{-7}$.
 2. Euler gave 1.1: error around 0.0052.
-3. Same step size, five orders of magnitude apart — the extra probes pay off.
+3. Same step size, five orders of magnitude apart, the extra probes pay off.
 
 So RK4 dominates Euler whenever function evaluations are affordable.
 
 ## Order costs evaluations
 
-RK4 needs four evaluations per step for local error $O(h^5)$ and global error $O(h^4)$ — halving $h$ cuts global error sixteenfold, versus Euler's twofold. Higher order per step beats smaller steps per order.
+RK4 needs four evaluations per step for local error $O(h^5)$ and global error $O(h^4)$, halving $h$ cuts global error sixteenfold, versus Euler's twofold. Higher order per step beats smaller steps per order.

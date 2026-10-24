@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/hopital-rule/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/hopital-rule/), CC BY-NC 4.0
 
 ## Indeterminate forms
 
@@ -118,7 +118,7 @@ The resulting expression is now an indeterminate form of type \(\dfrac{\infty}{\
 
 ## Selected references
 
-  * **MIT, E. Herman**. [Calculus Vol. 1 — 4.8 L’Hôpital’s Rule](https://openstax.org/books/calculus-volume-1/pages/4-8-lhopitals-rule-introduction-to-improper-integrals)
+  * **MIT, E. Herman**. [Calculus Vol. 1, 4.8 L’Hôpital’s Rule](https://openstax.org/books/calculus-volume-1/pages/4-8-lhopitals-rule-introduction-to-improper-integrals)
 
   * **University of British Columbia (Feldman, Rechnitzer, Yeager)**. [L’Hôpital’s Rule](https://personal.math.ubc.ca/~CLP/CLP1/clp_1_dc/sec_4_7.html)
 

@@ -1,11 +1,11 @@
-> Content adapted from [OpenStax Prealgebra §4.2](https://openstax.org/books/prealgebra/pages/4-2-multiply-and-divide-fractions) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content adapted from [OpenStax Prealgebra §4.2](https://openstax.org/books/prealgebra/pages/4-2-multiply-and-divide-fractions) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 # Dividing Fractions in Word Problems
 
 Division word problems with fractions ask how many groups fit: "how many
 \(\frac{1}{4}\)-cup servings in \(\frac{3}{4}\) cup?" or "how many
 \(\frac{2}{3}\)-mile laps make 4 miles?" The arithmetic is always the
-same — flip the second fraction and multiply — so the real work is reading:
+same, flip the second fraction and multiply, so the real work is reading:
 identify the total and the size of one group.
 
 ## Word Problems
@@ -24,7 +24,7 @@ fraction over 1, so it divides the same way.
 
 Read the problem twice: first for the story (how much total, how big is one
 group), second for which number is the divisor. Keep the first number, change
-\(\div\) to \(\cdot\), and flip the second fraction — then multiply
+\(\div\) to \(\cdot\), and flip the second fraction, then multiply
 numerators and denominators and simplify. Remember the second fraction can
 never have numerator 0 (nothing has a reciprocal of 0). Finish by asking
 whether the answer makes sense: dividing by a proper fraction must give more
@@ -35,4 +35,4 @@ groups than you started with.
 How many \(\frac{3}{8}\)-liter bottles fill a \(\frac{3}{4}\)-liter jug?
 \(\frac{3}{4} \div \frac{3}{8} = \frac{3}{4} \cdot \frac{8}{3} =
 \frac{24}{12} = 2\) bottles. Check: 2 bottles at \(\frac{3}{8}\) liter each is
-\(\frac{6}{8} = \frac{3}{4}\) liter — the division checks out.
+\(\frac{6}{8} = \frac{3}{4}\) liter, the division checks out.

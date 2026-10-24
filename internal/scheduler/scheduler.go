@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/chuma-beep/mathua/internal/concepts"
+	"github.com/chuma-beep/mathua/internal/fsrs"
 	"github.com/chuma-beep/mathua/internal/mastery"
 )
 
@@ -46,6 +47,29 @@ type ConceptSnapshot struct {
 	// It is not mastery and is never used to decide mastery, XP, the quiz gate or
 	// review (ADR-008, ADR-050).
 	Placement bool
+	// IsProvisional marks a conditionally completed prerequisite from diagnostic
+	// placement. If a learner struggles on a dependent concept, the prerequisite
+	// demotes to LEARNING and blocks progression until relearned.
+	IsProvisional bool
+
+	// FIRe: Fractional Implicit Repetition fields.
+	// BankedOrdinals is the count of whole implicit repetitions banked from downstream practice.
+	BankedOrdinals int
+	// Repetitions is the current count of successful reviews under SM-2.
+	Repetitions int
+	// Interval is the current SM-2 interval in days.
+	Interval int
+	// EFactor is the current SM-2 easiness factor.
+	EFactor float64
+	// LearningSpeed scales review interval calculations.
+	LearningSpeed float64
+	// Encompassed marks whether this concept is encompassed by other concepts in the curriculum.
+	Encompassed bool
+
+	// FSRS-6 fields.
+	FSRSStability  *float64
+	FSRSDifficulty *float64
+	FSRSLastReview *time.Time
 }
 
 // Next picks the next concept for a student to work on.
@@ -116,17 +140,35 @@ func (s *Scheduler) NextSmart(
 			break
 		}
 	}
+	if len(out) < 3 {
+		for _, c := range candidates {
+			if added[c.Concept.ID] {
+				continue
+			}
+			out = append(out, NextConcept{Concept: c.Concept, IsReview: c.IsReview})
+			added[c.Concept.ID] = true
+			if len(out) >= 3 {
+				break
+			}
+		}
+	}
 	return out
 }
 
 // buildCandidatesAdvanced adds PR 1.4 edges to candidate construction:
-// interleaving exclusion (same Subdomain as last 2), layering +2, non-interference -3.
+// interleaving exclusion (same Subdomain as last 2 tasks), layering +2, non-interference -3.
 func buildCandidatesAdvanced(dag *concepts.DAG, snapshots map[string]*ConceptSnapshot, now time.Time, prevIDs []string, weakness map[string]float64) []Candidate {
 	prevSet := make(map[string]bool, len(prevIDs))
-	prevSubs := make(map[string]bool)
-	prevGroups := make(map[string]bool)
 	for _, id := range prevIDs {
 		prevSet[id] = true
+	}
+	windowIDs := prevIDs
+	if len(windowIDs) > 2 {
+		windowIDs = windowIDs[len(windowIDs)-2:]
+	}
+	prevSubs := make(map[string]bool)
+	prevGroups := make(map[string]bool)
+	for _, id := range windowIDs {
 		if c := dag.Concept(id); c != nil {
 			if c.Subdomain != "" {
 				prevSubs[c.Subdomain] = true
@@ -143,23 +185,39 @@ func buildCandidatesAdvanced(dag *concepts.DAG, snapshots map[string]*ConceptSna
 		if prevSet[c.ID] {
 			continue
 		}
-		// Interleaving window: skip same subdomain as recent practice, but never
-		// starve the session (fall back if the filter empties the set).
+		// Interleaving window: skip same subdomain as recent practice (last 2 tasks),
+		// but never starve the session (fall back if the filter empties the set).
 		if len(prevSubs) > 0 && prevSubs[c.Subdomain] {
 			continue
 		}
-		priority := cand.Priority
-		priority += layeringBonus(c, weakness)
-		if prevGroups[c.InterferenceGroup] {
-			priority -= 3.0
-		}
+		priority := ComputePriorityWithContext(snapshots[c.ID], now, cand.IsReview, c, weakness, prevGroups)
 		out = append(out, Candidate{Concept: c, IsReview: cand.IsReview, Priority: priority})
 	}
 	if len(out) == 0 {
-		// Interleaving would starve the session — degrade to no-window candidates.
+		// Interleaving would starve the session, degrade to no-window candidates.
 		out = base
 	}
 	return out
+}
+
+// ComputePriorityWithContext computes priority including layering bonus (+2 if encompasses
+// a weak prerequisite) and non-interference penalty (-3 if sharing an interference group).
+func ComputePriorityWithContext(
+	snap *ConceptSnapshot,
+	now time.Time,
+	isDecaying bool,
+	c *concepts.Concept,
+	weakness map[string]float64,
+	recentInterferenceGroups map[string]bool,
+) float64 {
+	p := computePriority(snap, now, isDecaying)
+	if c != nil {
+		p += layeringBonus(c, weakness)
+		if c.InterferenceGroup != "" && recentInterferenceGroups != nil && recentInterferenceGroups[c.InterferenceGroup] {
+			p -= 3.0
+		}
+	}
+	return p
 }
 
 // layeringBonus: +2 when this concept encompasses a weak prerequisite
@@ -173,6 +231,79 @@ func layeringBonus(c *concepts.Concept, weakness map[string]float64) float64 {
 	return 0
 }
 
+// AdvanceSnapshotInterval advances the review interval and moves NextReviewDue forward
+// when banked implicit credit satisfies an explicit review. It consumes one banked ordinal.
+func AdvanceSnapshotInterval(snap *ConceptSnapshot, now time.Time) int {
+	if snap == nil {
+		return 0
+	}
+	interval := snap.Interval
+	if interval < 1 {
+		interval = 1
+	}
+	efactor := snap.EFactor
+	if efactor < 1.3 {
+		efactor = 2.5
+	}
+	speed := snap.LearningSpeed
+	if speed <= 0 {
+		speed = 1.0
+	}
+	reps := snap.Repetitions
+	if reps <= 0 {
+		if interval >= 6 {
+			reps = 2
+		} else if interval >= 1 {
+			reps = 1
+		}
+	}
+	nextSM2 := ComputeSM2WithSpeed(SM2{Repetitions: reps, Interval: interval, EFactor: efactor}, 4, speed)
+	stepDays := nextSM2.Interval
+	if stepDays < 1 {
+		stepDays = 1
+	}
+
+	if snap.FSRSStability != nil && *snap.FSRSStability > 0 {
+		params := fsrs.DefaultParameters()
+		diff := params.InitialDifficulty(fsrs.Good)
+		if snap.FSRSDifficulty != nil && *snap.FSRSDifficulty > 0 {
+			diff = *snap.FSRSDifficulty
+		}
+		var elapsed float64
+		if snap.FSRSLastReview != nil && !snap.FSRSLastReview.IsZero() {
+			elapsed = now.Sub(*snap.FSRSLastReview).Hours() / 24.0
+		}
+		if elapsed < 0 {
+			elapsed = 0
+		}
+		r := params.Retrievability(elapsed, *snap.FSRSStability)
+		nextStab := params.NextStability(*snap.FSRSStability, diff, r, fsrs.Good)
+		snap.FSRSStability = &nextStab
+		fsrsInterval := params.Interval(nextStab)
+		if fsrsInterval > stepDays {
+			stepDays = fsrsInterval
+		}
+		snap.FSRSLastReview = &now
+	}
+
+	baseline := now
+	if snap.NextReviewDue != nil && !snap.NextReviewDue.IsZero() {
+		baseline = *snap.NextReviewDue
+	}
+	nextDue := baseline.AddDate(0, 0, stepDays)
+	floor := now.AddDate(0, 0, 1)
+	if nextDue.Before(floor) {
+		nextDue = floor
+	}
+	snap.NextReviewDue = &nextDue
+	snap.LastReviewed = now
+	snap.Interval = stepDays
+	if snap.BankedOrdinals > 0 {
+		snap.BankedOrdinals--
+	}
+	return stepDays
+}
+
 func buildCandidates(dag *concepts.DAG, snapshots map[string]*ConceptSnapshot, now time.Time, skipID string) []Candidate {
 	var out []Candidate
 	for _, c := range dag.Order() {
@@ -181,8 +312,18 @@ func buildCandidates(dag *concepts.DAG, snapshots map[string]*ConceptSnapshot, n
 		}
 		snap := snapshots[c.ID]
 		effStatus, isReview := effectiveState(snap, now)
-		if effStatus == mastery.StatusMastered {
-			continue
+		isEncompassed := (snap != nil && snap.Encompassed) || (dag != nil && len(dag.EncompassedBy(c.ID)) > 0)
+		if isReview && snap != nil && snap.BankedOrdinals > 0 && isEncompassed {
+			isReview = false
+			if effStatus == "DECAYING" {
+				effStatus = mastery.StatusMastered
+			}
+			AdvanceSnapshotInterval(snap, now)
+		}
+		if effStatus == mastery.StatusMastered && !isReview {
+			if snap == nil || snap.WeaknessScore < weaknessPracticeFloor {
+				continue
+			}
 		}
 		if !prereqsMet(dag, c, snapshots, now) {
 			continue
@@ -197,9 +338,21 @@ func effectiveState(snap *ConceptSnapshot, now time.Time) (mastery.Status, bool)
 	if snap == nil {
 		return mastery.StatusUnseen, false
 	}
-	status := mastery.EffectiveStatus(snap.Status, daysSince(snap.LastReviewed), mastery.DecayDays)
+	if snap.Status != mastery.StatusMastered {
+		return snap.Status, false
+	}
+	var elapsedDays float64
+	if snap.FSRSLastReview != nil && !snap.FSRSLastReview.IsZero() {
+		elapsedDays = now.Sub(*snap.FSRSLastReview).Hours() / 24.0
+	} else if !snap.LastReviewed.IsZero() {
+		elapsedDays = now.Sub(snap.LastReviewed).Hours() / 24.0
+	}
+	if elapsedDays < 0 {
+		elapsedDays = 0
+	}
+	status := mastery.EffectiveStatusFSRS(snap.Status, elapsedDays, snap.FSRSStability, mastery.DecayDays)
 	isReview := status == "DECAYING"
-	if snap.Status == mastery.StatusMastered && snap.NextReviewDue != nil && !snap.NextReviewDue.After(now) {
+	if snap.NextReviewDue != nil && !snap.NextReviewDue.After(now) {
 		isReview = true
 	}
 	return status, isReview
@@ -211,10 +364,14 @@ func prereqsMet(dag *concepts.DAG, c *concepts.Concept, snapshots map[string]*Co
 		if snap == nil {
 			return false
 		}
+		// A demoted provisional prerequisite blocks dependent progression.
+		if snap.IsProvisional && snap.Status == mastery.StatusLearning {
+			return false
+		}
 		// Placement-seeded prerequisites count as satisfied. The diagnostic
 		// established the learner's frontier; refusing to let them start the
 		// concept just past it would make placement inert. This is reachability,
-		// not mastery — placement never appears in countsAsMastered, the quiz
+		// not mastery, placement never appears in countsAsMastered, the quiz
 		// gate or XP.
 		if snap.Placement {
 			continue
@@ -242,7 +399,25 @@ func computePriority(snap *ConceptSnapshot, now time.Time, isDecaying bool) floa
 	}
 	priority := 0.5*daysSinceLastSeen + 0.2*(1.0-masteryScore) + 0.3*weakness
 	if isDecaying {
-		priority += 5.0
+		if snap == nil || snap.BankedOrdinals == 0 || !snap.Encompassed {
+			priority += 5.0
+		}
+		if snap != nil && snap.FSRSStability != nil && *snap.FSRSStability > 0 {
+			var elapsedDays float64
+			if snap.FSRSLastReview != nil && !snap.FSRSLastReview.IsZero() {
+				elapsedDays = now.Sub(*snap.FSRSLastReview).Hours() / 24.0
+			} else if !snap.LastReviewed.IsZero() {
+				elapsedDays = now.Sub(snap.LastReviewed).Hours() / 24.0
+			}
+			if elapsedDays < 0 {
+				elapsedDays = 0
+			}
+			r := fsrs.DefaultParameters().Retrievability(elapsedDays, *snap.FSRSStability)
+			priority += (1.0 - r) * 5.0
+		}
+	}
+	if snap != nil && snap.Status == mastery.StatusMastered && weakness >= weaknessPracticeFloor {
+		priority += 4.0
 	}
 	return priority
 }

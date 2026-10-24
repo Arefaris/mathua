@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"hash/fnv"
 	"log"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/diagnostic"
+	"github.com/chuma-beep/mathua/internal/fsrs"
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/grader"
 	"github.com/chuma-beep/mathua/internal/i18n"
@@ -21,11 +23,20 @@ import (
 	"github.com/chuma-beep/mathua/internal/lessons"
 	"github.com/chuma-beep/mathua/internal/mastery"
 	"github.com/chuma-beep/mathua/internal/planning"
+	"github.com/chuma-beep/mathua/internal/repetition"
 	"github.com/chuma-beep/mathua/internal/scheduler"
 	"github.com/chuma-beep/mathua/internal/scoring"
 	"github.com/chuma-beep/mathua/internal/storage"
 	xppolicy "github.com/chuma-beep/mathua/internal/xp"
 )
+
+type activeScaffoldSession struct {
+	ParentConceptID    string
+	ParentQuestionText string
+	ParentDifficulty   float64
+	Steps              []generator.ScaffoldStep
+	CurrentStepIndex   int
+}
 
 type activeSession struct {
 	// Owner of the in-flight question. Sessions are keyed by client-supplied
@@ -35,7 +46,7 @@ type activeSession struct {
 	// Wipe generation at serve time. SubmitAnswer refuses the write when the
 	// counter has moved since, so an answer graded across a reset cannot
 	// resurrect wiped rows. Stamped wherever a question is (re)served, never
-	// at submit time — snapshotting at submit would bless a stale question.
+	// at submit time, snapshotting at submit would bless a stale question.
 	writeGen       uint64
 	conceptID      string
 	conceptName    string
@@ -62,6 +73,7 @@ type activeSession struct {
 	lastConceptID  string
 	recentConcepts []string
 	// PR 1.5 halt/re-attempt + negative XP
+	missConceptID      string
 	consecutiveMisses  int
 	halted             bool
 	remedialQueue      []string
@@ -71,10 +83,20 @@ type activeSession struct {
 	// rather than a fabricated one.
 	questionDifficulty float64
 	rushCount          int
+	kpOrdinal          int
+	activeScaffold     *activeScaffoldSession
+	pendingScaffold    []generator.ScaffoldStep
+}
+
+func (as *activeSession) currentKPOrdinal() int {
+	if as == nil {
+		return 0
+	}
+	return as.kpOrdinal
 }
 
 // ErrNoActiveQuestion is returned when a session has no unanswered question
-// ready for grading — e.g. a duplicate/stale submission racing the current one.
+// ready for grading, e.g. a duplicate/stale submission racing the current one.
 var ErrNoActiveQuestion = fmt.Errorf("no active question")
 
 // ErrUnknownConcept is returned when an answer references a concept_id absent
@@ -84,7 +106,7 @@ var ErrUnknownConcept = fmt.Errorf("unknown concept")
 
 // ErrNoStudyAnchor means the server has no record of the question being
 // answered, so it cannot grade it. Distinct from a wrong answer: nothing is
-// recorded — no attempt, no streak, no weakness, no XP — and the caller should
+// recorded, no attempt, no streak, no weakness, no XP and the caller should
 // re-serve the question. The anchor TTL is 24h, so the realistic trigger is a
 // tab left open overnight.
 var ErrNoStudyAnchor = fmt.Errorf("no server-side anchor for this question")
@@ -101,7 +123,7 @@ const (
 	// Ceiling on how many served-but-unanswered questions one student/concept
 	// keeps anchored. Generators draw from a finite parameter space (nine
 	// values per operand for arith.add.single, for one), so the set of live
-	// question texts is small — but a long session with difficulty stepping and
+	// question texts is small, but a long session with difficulty stepping and
 	// variant changes could otherwise grow the blob without limit. At the cap the
 	// batch just served is kept in full and older entries are dropped, which
 	// degrades those questions to the 409 re-serve path rather than to a wrong
@@ -129,7 +151,12 @@ type Question struct {
 	Diagram     string          `json:"diagram,omitempty"`
 	// GradingType lets every answer host (study, review, quiz, diagnostic)
 	// show the right input hint/keyboard. Empty means "unknown".
-	GradingType string `json:"grading_type,omitempty"`
+	GradingType    string                   `json:"grading_type,omitempty"`
+	KPOrdinal      int                      `json:"kp_ordinal,omitempty"`
+	KnowledgePoint *concepts.KnowledgePoint `json:"knowledge_point,omitempty"`
+	ScaffoldActive bool                     `json:"scaffold_active,omitempty"`
+	ScaffoldStep   int                      `json:"scaffold_step,omitempty"`
+	ScaffoldTotal  int                      `json:"scaffold_total,omitempty"`
 }
 
 type AnswerResult struct {
@@ -143,6 +170,11 @@ type AnswerResult struct {
 	ExpectedAnswer string         `json:"expected_answer"`
 	Halted         bool           `json:"halted,omitempty"`
 	Remedial       []string       `json:"remedial,omitempty"`
+	KPOrdinal      int            `json:"kp_ordinal,omitempty"`
+	KPAdvanced     bool           `json:"kp_advanced,omitempty"`
+	ScaffoldActive bool           `json:"scaffold_active,omitempty"`
+	ScaffoldStep   int            `json:"scaffold_step,omitempty"`
+	ScaffoldTotal  int            `json:"scaffold_total,omitempty"`
 	// Ungraded marks a grader infrastructure fault: the answer was NOT
 	// evaluated and nothing was recorded. Clients should retry, not penalize.
 	Ungraded bool `json:"ungraded,omitempty"`
@@ -155,7 +187,7 @@ type AnswerResult struct {
 	// It is sent so a client can render the learner's progress from the same number the
 	// ladder decides on. `web/next-app/lib/progression.ts` used to compute its own score
 	// from its own attempt history, which made a second definition of "how well are they
-	// doing" that could not be reconciled with this one — it weighted difficulty per
+	// doing" that could not be reconciled with this one, it weighted difficulty per
 	// attempt against this file's mean-of-correct-attempts, counted a wider population for
 	// the variety term, and applied a flat 60s time cliff instead of the concept's own
 	// threshold. Removing that copy is only possible because the number is here.
@@ -194,7 +226,7 @@ type Engine struct {
 	studyRush map[string]int
 	// PR 1.5: stable per-student session id for study/quiz attempt FK.
 	studySessions map[string]string
-	// H1b: server-side anchors for the study seam — the answer each served
+	// H1b: server-side anchors for the study seam, the answer each served
 	// question must be graded against plus the explanation owed for it.
 	studyAnchor map[string]string
 	// Batch 1: immediate remedial queue from quiz misses (studentID → conceptIDs).
@@ -206,6 +238,8 @@ type Engine struct {
 	// answer graded across a reset is refused instead of resurrecting wiped
 	// progress (the write-time half of the ADR-026 guarantee).
 	resetGen map[string]uint64
+	// kpStates tracks Knowledge Point progress per student and concept.
+	kpStates map[string]*mastery.KPStateMachine
 }
 
 // QuizGateXP is the mastery-check interval. It delegates so there is one definition: the
@@ -215,6 +249,9 @@ const QuizGateXP = xppolicy.QuizGateXP
 
 // maxQuizRemedial caps the per-student quiz remedial queue.
 const maxQuizRemedial = 10
+
+// The targeted remedial cap lives in storage as storage.MaxRemedialQueue: the queue is
+// persisted, and the cap is enforced inside the enqueue transaction that owns it.
 
 func New(repo storage.Repository, dag *concepts.DAG, reg *generator.Registry, ll *lessons.Loader, planner *planning.Planner) *Engine {
 	return &Engine{
@@ -237,13 +274,58 @@ func New(repo storage.Repository, dag *concepts.DAG, reg *generator.Registry, ll
 		studyAnchor:   make(map[string]string),
 		quizRemedial:  make(map[string][]string),
 		resetGen:      make(map[string]uint64),
+		kpStates:      make(map[string]*mastery.KPStateMachine),
 	}
+}
+
+// persistedKPOrdinalLocked reports the knowledge-point position stored with the
+// learner's live session for this concept, or 0 when there is none. Callers hold
+// e.mu.
+func (e *Engine) persistedKPOrdinalLocked(studentID, conceptID string) int {
+	for _, as := range e.sessions {
+		if as != nil && as.studentID == studentID && as.conceptID == conceptID && as.kpOrdinal > 0 {
+			return as.kpOrdinal
+		}
+	}
+	return 0
+}
+
+// GetKPState returns the current Knowledge Point state machine for a student and concept.
+// It returns nil if the concept has no Knowledge Points defined.
+func (e *Engine) GetKPState(studentID, conceptID string) *mastery.KPStateMachine {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.getKPStateLocked(studentID, conceptID)
+}
+
+func (e *Engine) getKPStateLocked(studentID, conceptID string) *mastery.KPStateMachine {
+	key := studentID + "|" + conceptID
+	if sm, ok := e.kpStates[key]; ok && sm != nil {
+		return sm
+	}
+	if e.dag != nil {
+		if c := e.dag.Concept(conceptID); c != nil && len(c.KnowledgePoints) > 0 {
+			// Rebuild from where the learner actually was. The ordinal is
+			// persisted on the active session, so a deploy that empties this map
+			// used to restart everyone at KP 1 even mid-topic. Completion is not
+			// inferred from a MASTERED progress row on purpose: only the evidence
+			// ladder certifies mastery, and a seeded completion would be the same
+			// bypass this repair removed from Machine.Next.
+			sm := mastery.NewKPStateMachineAt(len(c.KnowledgePoints), e.persistedKPOrdinalLocked(studentID, conceptID))
+			if e.kpStates == nil {
+				e.kpStates = make(map[string]*mastery.KPStateMachine)
+			}
+			e.kpStates[key] = sm
+			return sm
+		}
+	}
+	return nil
 }
 
 // Anchor is the server-side record of one served question: the answer it must
 // be graded against, and the explanation the learner is owed for it. Both come
 // from the same generator call over the same values, so storing them together
-// is what lets a later submit address the exact instance the learner saw — the
+// is what lets a later submit address the exact instance the learner saw, the
 // only place in the system that knows which instance a question text refers to.
 type Anchor struct {
 	Answer      string `json:"answer"`
@@ -274,7 +356,7 @@ func (e *Engine) SetStudyAnchor(studentID, conceptID, expected string) {
 //
 // The blob MERGES rather than replaces, and that is load-bearing. The Learn
 // client keeps a buffer of served-but-unanswered questions across several
-// fetches, and serves a new batch whenever the buffer runs low — which happens
+// fetches, and serves a new batch whenever the buffer runs low, which happens
 // while the learner is still reading the question in front of them. Replacing
 // meant each new batch erased the previous one, so the next submit looked up a
 // question the server had genuinely forgotten, got ErrNoStudyAnchor, and came
@@ -317,7 +399,7 @@ func (e *Engine) SetStudyAnchorBatch(studentID, conceptID string, byQuestion map
 	if len(merged) > studyAnchorMaxEntries {
 		// Keep the batch just served in full: every question the learner is
 		// looking at right now is in it. Older entries are evicted in map order
-		// (deliberately not sorted — any order is fine and this stays O(1) per
+		// (deliberately not sorted, any order is fine and this stays O(1) per
 		// eviction). An evicted question degrades to the existing 409 recovery,
 		// which is the correct response for an anchor that is genuinely gone.
 		for question := range merged {
@@ -383,7 +465,7 @@ func (e *Engine) studyAnchorFor(studentID, conceptID, question string) (Anchor, 
 // the explanation was carried: {"q": "answer"}. A session opened before a
 // deploy therefore still grades; it simply has no explanation to return, and
 // the caller falls back. The final bare-string return is a defensive
-// last resort — every writer marshals a map, so no stored blob has that shape.
+// last resort, every writer marshals a map, so no stored blob has that shape.
 func decodeStudyAnchor(blob string) map[string]Anchor {
 	var byQuestion map[string]Anchor
 	if err := json.Unmarshal([]byte(blob), &byQuestion); err == nil {
@@ -510,7 +592,7 @@ func difficultyFromWeakness(m map[string]float64, conceptID string) float64 {
 }
 
 // accommodatedThreshold applies the student's accommodations
-// (settings.accommodations.extra_time 0-2.0 → 1.0-2.5x) to a time threshold.
+// (settings.time_multiplier or settings.accommodations.extra_time/time_multiplier) to a time threshold.
 func (e *Engine) accommodatedThreshold(studentID string, base float64) float64 {
 	if base <= 0 {
 		return base
@@ -523,16 +605,36 @@ func (e *Engine) accommodatedThreshold(studentID string, base float64) float64 {
 		return base
 	}
 	var cfg struct {
-		Accommodations struct {
-			ExtraTime float64 `json:"extra_time"`
+		TimeMultiplier      float64 `json:"time_multiplier"`
+		TimeMultiplierCamel float64 `json:"timeMultiplier"`
+		Accommodations      struct {
+			ExtraTime           float64 `json:"extra_time"`
+			TimeMultiplier      float64 `json:"time_multiplier"`
+			TimeMultiplierCamel float64 `json:"timeMultiplier"`
 		} `json:"accommodations"`
 	}
-	if json.Unmarshal([]byte(raw), &cfg) != nil || cfg.Accommodations.ExtraTime <= 0 {
+	if json.Unmarshal([]byte(raw), &cfg) != nil {
 		return base
 	}
-	m := 1.0 + cfg.Accommodations.ExtraTime
-	if m > 2.5 {
-		m = 2.5
+	m := 1.0
+	if cfg.TimeMultiplier > 0 {
+		m = cfg.TimeMultiplier
+	} else if cfg.TimeMultiplierCamel > 0 {
+		m = cfg.TimeMultiplierCamel
+	} else if cfg.Accommodations.TimeMultiplier > 0 {
+		m = cfg.Accommodations.TimeMultiplier
+	} else if cfg.Accommodations.TimeMultiplierCamel > 0 {
+		m = cfg.Accommodations.TimeMultiplierCamel
+	} else if cfg.Accommodations.ExtraTime > 0 {
+		m = 1.0 + cfg.Accommodations.ExtraTime
+	} else {
+		return base
+	}
+	if m < 0.5 {
+		m = 0.5
+	}
+	if m > 3.0 {
+		m = 3.0
 	}
 	return base * m
 }
@@ -544,6 +646,9 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 // NextQuestionIn is NextQuestion for a learner who asked for loc: the concept name is
 // localized and the generator is told which language to write in.
 func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*Question, error) {
+	if studentID != "" {
+		_ = e.SatisfyImplicitReviews(studentID)
+	}
 	progress, err := e.repo.GetAllProgress(studentID)
 	if err != nil {
 		return nil, fmt.Errorf("load progress: %w", err)
@@ -565,6 +670,55 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 	as := e.sessions[sessionID]
 	if as == nil {
 		as = &activeSession{studentID: studentID}
+		if rem, err := e.repo.GetRemedialQueue(studentID); err == nil && len(rem) > 0 {
+			as.halted = true
+			as.remedialQueue = append([]string(nil), rem...)
+		}
+		e.sessions[sessionID] = as
+	}
+
+	// Active scaffold step-down mode: serve the current intermediate subgoal.
+	if as.activeScaffold != nil && as.activeScaffold.CurrentStepIndex < len(as.activeScaffold.Steps) {
+		step := as.activeScaffold.Steps[as.activeScaffold.CurrentStepIndex]
+		as.answered = false
+		as.attemptID = newAttemptID()
+		as.conceptID = as.activeScaffold.ParentConceptID
+		c := e.dag.Concept(as.conceptID)
+		cLabel := as.conceptID
+		if c != nil {
+			cLabel = e.dag.Label(c, loc)
+		}
+		as.conceptName = cLabel
+		as.questionText = fmt.Sprintf("[Subgoal %d of %d] %s", step.Ordinal, len(as.activeScaffold.Steps), step.Prompt)
+		as.expectedAnswer = step.Answer
+		as.explanation = step.Explanation
+		as.isReview = false
+		as.questionDifficulty = as.activeScaffold.ParentDifficulty
+		as.studentID = studentID
+		as.writeGen = e.resetGen[studentID]
+		as.timeThreshold = 60.0
+		if c != nil {
+			as.timeThreshold = e.accommodatedThreshold(studentID, c.MasteryThreshold.AvgTimeSeconds)
+		}
+		e.sessions[sessionID] = as
+		e.persistActiveSession(sessionID, studentID, as, as.questionText)
+		var lesson *lessons.Lesson
+		if e.ll != nil {
+			lesson = e.ll.LessonIn(as.conceptID, loc)
+		}
+		return &Question{
+			ConceptID:      as.conceptID,
+			ConceptName:    cLabel,
+			Question:       as.questionText,
+			GradingType:    e.gradingTypeFor(as.conceptID),
+			IsReview:       false,
+			AttemptID:      as.attemptID,
+			Lesson:         lesson,
+			Diagram:        diagramForConcept(as.conceptID),
+			ScaffoldActive: true,
+			ScaffoldStep:   step.Ordinal,
+			ScaffoldTotal:  len(as.activeScaffold.Steps),
+		}, nil
 	}
 
 	// PR 1.5 halt: after 2 consecutive misses, serve the remedial queue first
@@ -589,7 +743,21 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 		if as.remedialDifficulty > 0 {
 			diff = as.remedialDifficulty
 		}
-		ctx := generator.GeneratorContext{Difficulty: diff, Seed: hashSeed(studentID + "|" + cid + "|" + as.attemptID), Locale: loc}
+		var activeKP *concepts.KnowledgePoint
+		as.kpOrdinal = 0
+		if len(c.KnowledgePoints) > 0 {
+			sm := e.getKPStateLocked(studentID, cid)
+			if sm != nil {
+				as.kpOrdinal = sm.CurrentOrdinal
+				activeKP = c.KnowledgePointByOrdinal(as.kpOrdinal)
+			}
+		}
+		ctx := generator.GeneratorContext{
+			Difficulty: diff,
+			Seed:       hashSeed(studentID + "|" + cid + "|" + as.attemptID),
+			KPOrdinal:  as.currentKPOrdinal(),
+			Locale:     loc,
+		}
 		prob, err := e.registry.GenerateContext(cid, ctx)
 		if err != nil {
 			return nil, fmt.Errorf("generate remedial problem: %w", err)
@@ -601,6 +769,7 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 		as.questionDifficulty = diff
 		as.studentID = studentID
 		as.writeGen = e.resetGen[studentID]
+		as.pendingScaffold = prob.ScaffoldSteps
 		e.sessions[sessionID] = as
 		e.persistActiveSession(sessionID, studentID, as, as.questionText)
 		var lesson *lessons.Lesson
@@ -608,13 +777,15 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 			lesson = e.ll.LessonIn(cid, loc)
 		}
 		return &Question{
-			ConceptID:   cid,
-			ConceptName: as.conceptName,
-			Question:    prob.Question,
-			GradingType: e.gradingTypeFor(cid),
-			IsReview:    false,
-			AttemptID:   as.attemptID,
-			Lesson:      lesson,
+			ConceptID:      cid,
+			ConceptName:    as.conceptName,
+			Question:       prob.Question,
+			GradingType:    e.gradingTypeFor(cid),
+			IsReview:       false,
+			AttemptID:      as.attemptID,
+			Lesson:         lesson,
+			KPOrdinal:      as.kpOrdinal,
+			KnowledgePoint: activeKP,
 		}, nil
 	}
 
@@ -635,10 +806,29 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 	}
 	next := cands[0]
 	difficulty := difficultyFromWeakness(weakness, next.Concept.ID)
+
+	var activeKP *concepts.KnowledgePoint
+	kpOrdinal := 0
+	if len(next.Concept.KnowledgePoints) > 0 {
+		sm := e.getKPStateLocked(studentID, next.Concept.ID)
+		if sm != nil {
+			kpOrdinal = sm.CurrentOrdinal
+			activeKP = next.Concept.KnowledgePointByOrdinal(kpOrdinal)
+			if activeKP != nil && activeKP.VariantKey != "" {
+				for _, v := range next.Concept.Variants {
+					if v.Label == activeKP.VariantKey {
+						difficulty = v.Difficulty
+						break
+					}
+				}
+			}
+		}
+	}
+	as.kpOrdinal = kpOrdinal
 	prevQuestion := as.questionText
 	attemptID := newAttemptID()
 	seedBase := hashSeed(studentID + "|" + next.Concept.ID + "|" + attemptID)
-	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase, Locale: loc}
+	ctx := generator.GeneratorContext{Difficulty: difficulty, Seed: seedBase, Locale: loc, KPOrdinal: as.currentKPOrdinal()}
 	prob, err := e.registry.GenerateContext(next.Concept.ID, ctx)
 	if err != nil {
 		return nil, fmt.Errorf("generate problem: %w", err)
@@ -661,6 +851,7 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 	as.attemptID = attemptID
 	as.questionText = prob.Question
 	as.questionDifficulty = difficulty
+	as.pendingScaffold = prob.ScaffoldSteps
 	as.recentConcepts = append(as.recentConcepts, next.Concept.ID)
 	if len(as.recentConcepts) > 3 {
 		as.recentConcepts = as.recentConcepts[len(as.recentConcepts)-3:]
@@ -678,14 +869,16 @@ func (e *Engine) NextQuestionIn(loc i18n.Locale, sessionID, studentID string) (*
 	diagram := diagramForConcept(next.Concept.ID)
 
 	return &Question{
-		ConceptID:   next.Concept.ID,
-		ConceptName: as.conceptName,
-		Question:    prob.Question,
-		GradingType: e.gradingTypeFor(next.Concept.ID),
-		IsReview:    next.IsReview,
-		AttemptID:   as.attemptID,
-		Lesson:      lesson,
-		Diagram:     diagram,
+		ConceptID:      next.Concept.ID,
+		ConceptName:    as.conceptName,
+		Question:       prob.Question,
+		GradingType:    e.gradingTypeFor(next.Concept.ID),
+		IsReview:       next.IsReview,
+		AttemptID:      as.attemptID,
+		Lesson:         lesson,
+		Diagram:        diagram,
+		KPOrdinal:      as.kpOrdinal,
+		KnowledgePoint: activeKP,
 	}, nil
 }
 
@@ -696,6 +889,9 @@ func (e *Engine) NextReviewQuestion(sessionID, studentID string) (*Question, err
 
 // NextReviewQuestionIn is NextReviewQuestion for a learner who asked for loc.
 func (e *Engine) NextReviewQuestionIn(loc i18n.Locale, sessionID, studentID string) (*Question, error) {
+	if studentID != "" {
+		_ = e.SatisfyImplicitReviews(studentID)
+	}
 	progress, err := e.repo.GetAllProgress(studentID)
 	if err != nil {
 		return nil, fmt.Errorf("load progress: %w", err)
@@ -714,6 +910,7 @@ func (e *Engine) NextReviewQuestionIn(loc i18n.Locale, sessionID, studentID stri
 		return nil, nil
 	}
 	difficulty := difficultyFromWeakness(e.weaknessMapFromProgress(progress), next.Concept.ID)
+	as.kpOrdinal = 0
 	prevQuestion := as.questionText
 	attemptID := newAttemptID()
 	seedBase := hashSeed(studentID + "|" + next.Concept.ID + "|" + attemptID)
@@ -908,7 +1105,7 @@ var conceptDiagrams = map[string]string{
 	"precalc.polar.coordinates":       "/diagrams/algebrica/polar-coordinates-1-1.png",
 	"precalc.polar.graph":             "/diagrams/algebrica/polar-coordinates-2-1.png",
 	"ode.basics.concept":              "/diagrams/algebrica/differential-equations-1-1.png",
-	// Batch C1: pool remap — verified against rendered image content,
+	// Batch C1: pool remap, verified against rendered image content,
 	// one asset per concept; wrong mappings dropped, not replaced.
 	"calc.limit.epsilon_delta":   "/diagrams/algebrica/limits-1.svg",
 	"calc.limit.infinite":        "/diagrams/algebrica/limits-2.svg",
@@ -1040,6 +1237,14 @@ func (e *Engine) GradeAnswer(conceptID, expectedAnswer, userAnswer string) grade
 	return e.gradeAnswer(conceptID, expectedAnswer, userAnswer)
 }
 
+// GradeAnswerForQuestion grades against the stem that was served, so a choice
+// tapped by letter is resolved to the option the learner saw. GradeAnswer
+// cannot do that, because it never sees the question. Every caller that still
+// holds the served problem should use this one.
+func (e *Engine) GradeAnswerForQuestion(conceptID, question, expectedAnswer, userAnswer string) grader.Result {
+	return e.gradeAnswer(conceptID, expectedAnswer, resolveChoiceAnswer(question, userAnswer))
+}
+
 // gradingTypeFor returns a concept's grading_type ("" if unknown), so served
 // questions can tell every answer host which input to show.
 func (e *Engine) gradingTypeFor(conceptID string) string {
@@ -1111,6 +1316,17 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	// reset landing during grading must refuse the write below instead of
 	// resurrecting wiped rows.
 	gen := as.writeGen
+	isScaffold := as.activeScaffold != nil
+	var scaffoldCurrentStep generator.ScaffoldStep
+	var scaffoldStepIdx, scaffoldTotalSteps int
+	if isScaffold {
+		scaffoldStepIdx = as.activeScaffold.CurrentStepIndex
+		scaffoldTotalSteps = len(as.activeScaffold.Steps)
+		if scaffoldStepIdx < scaffoldTotalSteps {
+			scaffoldCurrentStep = as.activeScaffold.Steps[scaffoldStepIdx]
+		}
+	}
+	pendingScaffold := as.pendingScaffold
 	sessionFields := struct {
 		conceptID          string
 		expectedAnswer     string
@@ -1120,6 +1336,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		requiredStreak     int
 		timeThreshold      float64
 		isReview           bool
+		kpOrdinal          int
 	}{
 		conceptID:          as.conceptID,
 		expectedAnswer:     as.expectedAnswer,
@@ -1129,6 +1346,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		requiredStreak:     as.requiredStreak,
 		timeThreshold:      as.timeThreshold,
 		isReview:           as.isReview,
+		kpOrdinal:          as.kpOrdinal,
 	}
 	// Mark answered while still holding the lock so a concurrent
 	// SubmitAnswer for the same attemptID is rejected as ErrNoActiveQuestion.
@@ -1138,9 +1356,9 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	as.answerDone = make(chan struct{})
 	e.mu.Unlock()
 
-	gr := e.gradeAnswer(sessionFields.conceptID, sessionFields.expectedAnswer, answer)
+	gr := e.gradeAnswer(sessionFields.conceptID, sessionFields.expectedAnswer, resolveChoiceAnswer(sessionFields.questionText, answer))
 	if gr.Unavailable {
-		// Grader infrastructure fault — never a student miss. Re-arm the
+		// Grader infrastructure fault, never a student miss. Re-arm the
 		// pending question so the client can retry, and record nothing.
 		e.mu.Lock()
 		if cur := e.sessions[sessionID]; cur == as {
@@ -1170,6 +1388,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	}
 
 	newStatus, evidence, err := e.applyGradedAttempt(progress, gradedAttempt{
+		attemptID:      attemptID,
 		studentID:      studentID,
 		conceptID:      sessionFields.conceptID,
 		requiredStreak: sessionFields.requiredStreak,
@@ -1178,6 +1397,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		correct:        gr.Correct,
 		questionText:   sessionFields.questionText,
 		difficulty:     difficultyOrNil(sessionFields.questionDifficulty),
+		kpOrdinal:      sessionFields.kpOrdinal,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("save progress: %w", err)
@@ -1223,44 +1443,89 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	}
 	xp := computeXPForTask(gr.Correct, elapsedSeconds, sessionFields.timeThreshold, progress.Streak, taskType)
 
-	// PR 1.5: consecutive-miss tracking — halt after 2 (XP=0) + remedial queue.
+	// PR 1.5: consecutive-miss tracking, halt after 2 (XP=0) + remedial queue.
 	halted := false
 	var remedial []string
 	if !gr.Correct {
-		as.consecutiveMisses++
+		demoted, _ := e.CheckProvisionalFallback(studentID, sessionFields.conceptID)
+		if as.missConceptID != sessionFields.conceptID {
+			as.missConceptID = sessionFields.conceptID
+			as.consecutiveMisses = 1
+		} else {
+			as.consecutiveMisses++
+		}
 		if as.consecutiveMisses >= 2 && !as.halted {
 			halted = true
 			xp = 0
 			as.halted = true
 			as.remedialDifficulty = 0.3
-			if c := e.dag.Concept(sessionFields.conceptID); c != nil {
+			c := e.dag.Concept(sessionFields.conceptID)
+			if c != nil {
 				if len(c.Variants) > 0 {
 					as.remedialDifficulty = c.Variants[0].Difficulty
 				}
-				for _, kp := range c.KeyPrerequisites {
-					if e.dag.Concept(kp) != nil {
-						as.remedialQueue = append(as.remedialQueue, kp)
-						remedial = append(remedial, kp)
+				var targets []string
+				if kp := c.KnowledgePointByOrdinal(sessionFields.kpOrdinal); kp != nil {
+					for _, req := range kp.KeyPrerequisites {
+						if e.dag.Concept(req) != nil {
+							targets = append(targets, req)
+						}
 					}
+				}
+				if len(targets) == 0 {
+					targets = e.resolveRemedialPrerequisites(studentID, sessionFields.conceptID)
+				}
+				if len(targets) > 0 {
+					for _, t := range targets {
+						as.remedialQueue = append(as.remedialQueue, t)
+						remedial = append(remedial, t)
+					}
+					_ = e.repo.EnqueueRemedial(studentID, targets...)
 				}
 			}
 			as.remedialQueue = append(as.remedialQueue, sessionFields.conceptID)
 			remedial = append(remedial, sessionFields.conceptID)
 		}
+		if len(demoted) > 0 {
+			halted = true
+			as.halted = true
+			var mergedRemedial []string
+			seenRemedial := make(map[string]bool)
+			for _, id := range demoted {
+				if !seenRemedial[id] {
+					seenRemedial[id] = true
+					mergedRemedial = append(mergedRemedial, id)
+				}
+			}
+			for _, id := range remedial {
+				if !seenRemedial[id] {
+					seenRemedial[id] = true
+					mergedRemedial = append(mergedRemedial, id)
+				}
+			}
+			remedial = mergedRemedial
+		}
 	} else {
 		as.consecutiveMisses = 0
+		as.missConceptID = ""
+		_ = e.repo.RemoveRemedial(studentID, sessionFields.conceptID)
 		// Remedial recovery: clear the halt once the queue is drained.
 		if as.halted && len(as.remedialQueue) == 0 {
 			as.halted = false
 		}
 	}
 
-	// PR 1.5: negative XP for rushing/guessing — elapsed <2s incorrect twice.
+	// PR 1.5: negative XP for rapid unreflective guessing, elapsed <2s incorrect twice consecutively.
 	if !gr.Correct && elapsedSeconds < xppolicy.RushSeconds {
 		as.rushCount++
 		if as.rushCount >= xppolicy.RushAfter {
 			xp = xppolicy.RushPenalty
 		}
+	} else {
+		// Any other outcome breaks the run. A slow wrong answer is a considered
+		// wrong answer, not a guess, so it must not leave the counter part-way to
+		// a penalty; before this, a slow miss between two fast ones still cost XP.
+		as.rushCount = 0
 	}
 	if xp != 0 {
 		if err := e.repo.AwardXP(studentID, xp, "study", fmt.Sprintf("attempt:%d", xpAttemptID)); err != nil {
@@ -1280,8 +1545,85 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	// answered already true from the early mark; keep it true.
 	as.conceptID = ""
 	as.questionText = ""
+	as.kpOrdinal = 0
+
+	var resScaffoldActive bool
+	var resScaffoldStep, resScaffoldTotal int
+	if isScaffold {
+		if gr.Correct {
+			as.activeScaffold.CurrentStepIndex++
+			scaffoldCompleted := as.activeScaffold.CurrentStepIndex >= len(as.activeScaffold.Steps)
+			if scaffoldCompleted {
+				as.activeScaffold = nil
+				as.pendingScaffold = nil
+			} else {
+				resScaffoldActive = true
+				resScaffoldStep = as.activeScaffold.CurrentStepIndex + 1
+				resScaffoldTotal = len(as.activeScaffold.Steps)
+			}
+		} else {
+			// Subgoal missed: Prerequisite Attribution Invariant
+			if scaffoldCurrentStep.PrereqConcept != "" {
+				prereqID := scaffoldCurrentStep.PrereqConcept
+				_, _ = e.repo.RecordAttempt(storage.AttemptEntry{
+					SessionID:      sessionID,
+					StudentID:      studentID,
+					ConceptID:      prereqID,
+					Answer:         answer,
+					Expected:       scaffoldCurrentStep.Answer,
+					Correct:        false,
+					ElapsedSeconds: elapsedSeconds,
+					Timestamp:      nowUTC(),
+					Question:       sessionFields.questionText,
+					Source:         "scaffold_prereq",
+					Explanation:    scaffoldCurrentStep.Explanation,
+				})
+				if prereqProg, err := e.repo.GetProgress(studentID, prereqID); err == nil && prereqProg != nil {
+					prereqProg.Streak = 0
+					if prereqProg.Status == string(mastery.StatusMastered) {
+						prereqProg.Status = string(mastery.StatusPracticing)
+					}
+					_ = e.repo.UpsertProgress(prereqProg)
+				}
+				_ = e.repo.EnqueueRemedial(studentID, prereqID)
+				as.remedialQueue = append(as.remedialQueue, prereqID)
+				as.halted = true
+				halted = true
+				remedial = append(remedial, prereqID)
+			}
+			resScaffoldActive = true
+			resScaffoldStep = scaffoldStepIdx + 1
+			resScaffoldTotal = scaffoldTotalSteps
+		}
+	} else {
+		if gr.Correct {
+			as.pendingScaffold = nil
+		} else if len(pendingScaffold) > 0 {
+			as.activeScaffold = &activeScaffoldSession{
+				ParentConceptID:    sessionFields.conceptID,
+				ParentQuestionText: sessionFields.questionText,
+				ParentDifficulty:   sessionFields.questionDifficulty,
+				Steps:              pendingScaffold,
+				CurrentStepIndex:   0,
+			}
+			as.pendingScaffold = nil
+			resScaffoldActive = true
+			resScaffoldStep = 1
+			resScaffoldTotal = len(as.activeScaffold.Steps)
+		}
+	}
+
 	e.persistActiveSession(sessionID, studentID, as, "")
 	e.mu.Unlock()
+
+	var resKPOrdinal int
+	var resKPAdvanced bool
+	if sm := e.GetKPState(studentID, sessionFields.conceptID); sm != nil {
+		resKPOrdinal = sm.CurrentOrdinal
+		if sm.Completed || (sessionFields.kpOrdinal > 0 && sm.CurrentOrdinal > sessionFields.kpOrdinal) {
+			resKPAdvanced = true
+		}
+	}
 
 	return &AnswerResult{
 		Correct:        gr.Correct,
@@ -1297,6 +1639,11 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		ExpectedAnswer: sessionFields.expectedAnswer,
 		Halted:         halted,
 		Remedial:       remedial,
+		KPOrdinal:      resKPOrdinal,
+		KPAdvanced:     resKPAdvanced,
+		ScaffoldActive: resScaffoldActive,
+		ScaffoldStep:   resScaffoldStep,
+		ScaffoldTotal:  resScaffoldTotal,
 	}, nil
 }
 
@@ -1310,8 +1657,8 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 // could use to grade its own homework, and no code path that grades a study
 // answer against client input.
 //
-// A question with no anchor — the anchor's TTL expired, or the tab sat open
-// longer than it — returns ErrNoStudyAnchor so the caller can re-serve rather
+// A question with no anchor, the anchor's TTL expired, or the tab sat open
+// longer than it, returns ErrNoStudyAnchor so the caller can re-serve rather
 // than accept an ungradeable attempt.
 // It takes no difficulty argument, and does not need one: the difficulty comes from the
 // study anchor, which is the durable record of the question that was actually served. That
@@ -1326,21 +1673,21 @@ func (e *Engine) SubmitStudyAnswer(studentID, conceptID, answer string, elapsedS
 }
 
 // SubmitQuizAnswer is the single-path quiz grader: TaskQuiz base XP (20),
-// progress update, and exactly one AddXP — DB and response agree by
+// progress update, and exactly one AddXP, DB and response agree by
 // construction. Unlike SubmitStudyAnswer it never consults the study anchor:
 // the quiz expected answer comes from the quiz session.
 //
 // difficulty is the difficulty the quiz question was generated at, from
 // `quiz.Session.LastProblem.Difficulty`. It is a parameter rather than something re-derived
 // here because re-deriving it from the learner's *current* weakness would credit the
-// attempt with a difficulty nobody actually served — and because the whole point of this
+// attempt with a difficulty nobody actually served and because the whole point of this
 // argument is that the quiz path produces the same evidence as the study path.
 func (e *Engine) SubmitQuizAnswer(studentID, conceptID, answer, expected string, elapsedSeconds float64, questionText string, difficulty *float64) (*AnswerResult, error) {
 	return e.submitAnswerWithTask(studentID, conceptID, answer, expected, elapsedSeconds, TaskQuiz, false, false, questionText, difficulty)
 }
 
 // SubmitQuizDontKnow records an admitted unknown ("I don't know" button) as
-// a quiz miss: weakness up, streak reset, remedial queued — but no XP and no
+// a quiz miss: weakness up, streak reset, remedial queued, but no XP and no
 // rushing penalty (an instant admit is honesty, not rushing).
 func (e *Engine) SubmitQuizDontKnow(studentID, conceptID, expected string, elapsedSeconds float64, questionText string, difficulty *float64) (*AnswerResult, error) {
 	return e.submitAnswerWithTask(studentID, conceptID, "", expected, elapsedSeconds, TaskQuiz, false, true, questionText, difficulty)
@@ -1400,15 +1747,19 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	if timeThreshold == 0 {
 		timeThreshold = 10.0
 	}
-	// Grade using concept's grading type via registry/router — skipped for
+	// Grade using concept's grading type via registry/router, skipped for
 	// admitted unknowns, which are forced misses (no XP, no rushing penalty).
 	gen := e.writeGeneration(studentID)
-	gr := e.gradeAnswer(conceptID, expected, answer)
+	// A tapped option arrives as its letter, because the browser cannot send the
+	// option text back unchanged: the answer control rewrites what it renders.
+	// The attempt keeps the letter the learner chose; the grader needs the text
+	// the anchor stores.
+	gr := e.gradeAnswer(conceptID, expected, resolveChoiceAnswer(questionText, answer))
 	if dontKnow {
 		gr = grader.Result{Correct: false}
 	}
 	if gr.Unavailable {
-		// Grader infrastructure fault — never a student miss; record nothing.
+		// Grader infrastructure fault, never a student miss; record nothing.
 		return &AnswerResult{Ungraded: true, Feedback: gr.Feedback}, nil
 	}
 	if !e.writeGenerationOK(studentID, gen) {
@@ -1431,6 +1782,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 		}
 	}
 	newStatus, evidence, err := e.applyGradedAttempt(progress, gradedAttempt{
+		attemptID:      fmt.Sprintf("task:%s:%s:%d", studentID, conceptID, nowUTC().UnixNano()),
 		studentID:      studentID,
 		conceptID:      conceptID,
 		requiredStreak: requiredStreak,
@@ -1483,15 +1835,32 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	missKey := studentID + "|" + conceptID
 	halted := false
 	var remedial []string
+	var demoted []string
+	if !gr.Correct {
+		demoted, _ = e.CheckProvisionalFallback(studentID, conceptID)
+		if len(demoted) > 0 {
+			halted = true
+		}
+	}
 	e.mu.Lock()
 	if !gr.Correct {
 		e.studyMisses[missKey]++
 		if e.studyMisses[missKey] >= 2 {
 			halted = true
+			xp = 0
+			c := e.dag.Concept(conceptID)
+			if c != nil {
+				targets := e.resolveRemedialPrerequisites(studentID, conceptID)
+				if len(targets) > 0 {
+					_ = e.repo.EnqueueRemedial(studentID, targets...)
+					remedial = append(remedial, targets...)
+				}
+				remedial = append(remedial, conceptID)
+			}
 		}
 		// Same rule as the practice path: a wrong answer answered implausibly fast, twice.
 		// It used to require two misses on the concept as well, so a learner who rushed once
-		// and was wrong twice for ordinary reasons was never penalised here — the same
+		// and was wrong twice for ordinary reasons was never penalised here, the same
 		// behaviour was penalised on one route and not the other.
 		if !dontKnow && elapsedSeconds < xppolicy.RushSeconds {
 			e.studyRush[missKey]++
@@ -1499,15 +1868,18 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 				xp = xppolicy.RushPenalty
 			}
 		}
-		// Batch 1: immediate remedial enqueue on quiz miss — missed concept
+		// Immediate remedial enqueue on quiz miss, missed concept
 		// plus its key prerequisites surface first in Study after the quiz.
 		if taskType == TaskQuiz {
 			e.enqueueQuizRemedialLocked(studentID, conceptID)
 			remedial = append([]string(nil), e.quizRemedial[studentID]...)
+		} else if len(demoted) > 0 {
+			remedial = append([]string(nil), demoted...)
 		}
 	} else {
 		delete(e.studyMisses, missKey)
 		delete(e.studyRush, missKey)
+		_ = e.repo.RemoveRemedial(studentID, conceptID)
 	}
 	e.mu.Unlock()
 	if xp != 0 {
@@ -1515,6 +1887,15 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 			log.Printf("warning: failed to add XP for student %s: %v", studentID, err)
 		}
 	}
+	var resKPOrdinal int
+	var resKPAdvanced bool
+	if sm := e.GetKPState(studentID, conceptID); sm != nil {
+		resKPOrdinal = sm.CurrentOrdinal
+		if sm.Completed {
+			resKPAdvanced = true
+		}
+	}
+
 	return &AnswerResult{
 		Correct:        gr.Correct,
 		Feedback:       gr.Feedback,
@@ -1529,6 +1910,8 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 		ExpectedAnswer: expected,
 		Halted:         halted,
 		Remedial:       remedial,
+		KPOrdinal:      resKPOrdinal,
+		KPAdvanced:     resKPAdvanced,
 	}, nil
 }
 
@@ -1672,6 +2055,102 @@ func (e *Engine) ClearQuizRemedial(studentID string) {
 	delete(e.quizRemedial, studentID)
 }
 
+// RemedialQueue returns a snapshot of pending remedial concepts for a student.
+func (e *Engine) RemedialQueue(studentID string) []string {
+	q, err := e.repo.GetRemedialQueue(studentID)
+	if err != nil {
+		return nil
+	}
+	return q
+}
+
+// ClearRemedial drains the remedial queue for a student.
+func (e *Engine) ClearRemedial(studentID string) {
+	_ = e.repo.ClearRemedialQueue(studentID)
+}
+
+// EnqueueRemedial queues concepts for targeted remediation.
+func (e *Engine) EnqueueRemedial(studentID string, conceptIDs ...string) {
+	var valid []string
+	for _, id := range conceptIDs {
+		if e.dag.Concept(id) != nil {
+			valid = append(valid, id)
+		}
+	}
+	if len(valid) == 0 {
+		return
+	}
+	_ = e.repo.EnqueueRemedial(studentID, valid...)
+}
+
+// resolveRemedialPrerequisites identifies target concepts to enqueue when a student halts.
+// It prioritizes explicit KeyPrerequisites declared on the concept. When none exist in the DAG,
+// it falls back to the concept's prerequisites in the DAG (e.dag.PrereqsOf), selecting the weakest
+// prerequisite (unseen or in-progress first, then lowest streak).
+func (e *Engine) resolveRemedialPrerequisites(studentID string, conceptID string) []string {
+	if e.dag == nil {
+		return nil
+	}
+	c := e.dag.Concept(conceptID)
+	if c == nil {
+		return nil
+	}
+
+	var keyPrereqs []string
+	for _, kp := range c.KeyPrerequisites {
+		if e.dag.Concept(kp) != nil {
+			keyPrereqs = append(keyPrereqs, kp)
+		}
+	}
+	if len(keyPrereqs) > 0 {
+		return keyPrereqs
+	}
+
+	prereqs := e.dag.PrereqsOf(conceptID)
+	if len(prereqs) == 0 {
+		return nil
+	}
+
+	progressMap, err := e.repo.GetAllProgress(studentID)
+	if err != nil {
+		return []string{prereqs[0].ID}
+	}
+
+	var weakestID string
+	bestRank := 999
+	bestStreak := 999999
+
+	for _, p := range prereqs {
+		prog := progressMap[p.ID]
+		var rank int
+		var streak int
+		if prog == nil || prog.Status == string(mastery.StatusUnseen) || prog.Status == "" {
+			rank = 0
+			streak = 0
+		} else if prog.Status == string(mastery.StatusLearning) || prog.Status == string(mastery.StatusPracticing) {
+			rank = 1
+			streak = prog.Streak
+		} else if prog.Status == "DECAYING" {
+			rank = 2
+			streak = prog.Streak
+		} else {
+			rank = 3
+			streak = prog.Streak
+		}
+
+		if rank < bestRank || (rank == bestRank && streak < bestStreak) {
+			bestRank = rank
+			bestStreak = streak
+			weakestID = p.ID
+		}
+	}
+
+	if weakestID != "" {
+		return []string{weakestID}
+	}
+	return nil
+}
+
 // computeXP retains bool-based API for backward compatibility (isReview=true→review 5, false→lesson 10).
 func computeXP(correct bool, elapsed, timeThreshold float64, streak int, isReview bool) int {
 	taskType := TaskLesson
@@ -1683,8 +2162,8 @@ func computeXP(correct bool, elapsed, timeThreshold float64, streak int, isRevie
 
 // GetProgress returns the learner's progress with decay applied at read time.
 //
-// The database stores MASTERED forever — decay is deliberately not persisted
-// (mastery.EffectiveStatus) — so the raw row claims a concept is mastered long
+// The database stores MASTERED forever, decay is deliberately not persisted
+// (mastery.EffectiveStatus), so the raw row claims a concept is mastered long
 // after its review went stale. That made Profile count it as mastered while the
 // scheduler simultaneously treated it as DECAYING and scheduled it for review:
 // two parts of the app disagreeing about the same fact, with nothing to show
@@ -1706,10 +2185,15 @@ func (e *Engine) GetProgress(studentID string) (map[string]*storage.ConceptProgr
 		// No review timestamp means we cannot claim it is fresh, so treat it as
 		// fully decayed rather than pretending it was reviewed just now.
 		days := 999.0
-		if p.LastReviewed != nil {
+		if p.FSRSLastReview != nil && !p.FSRSLastReview.IsZero() {
+			days = now.Sub(*p.FSRSLastReview).Hours() / 24
+		} else if p.LastReviewed != nil {
 			days = now.Sub(*p.LastReviewed).Hours() / 24
 		}
-		p.Status = string(mastery.EffectiveStatus(mastery.StatusMastered, days, mastery.DecayDays))
+		if days < 0 {
+			days = 0
+		}
+		p.Status = string(mastery.EffectiveStatusFSRS(mastery.StatusMastered, days, p.FSRSStability, mastery.DecayDays))
 	}
 	return progress, nil
 }
@@ -1911,7 +2395,7 @@ func (e *Engine) RetryDiagnosticQuestion(s *diagnostic.Session, conceptID string
 }
 
 // DecodeDiagnosticSession restores a run encoded by Session.Encode. The server
-// calls it when a session id it does not hold in memory arrives — the ordinary
+// calls it when a session id it does not hold in memory arrives, the ordinary
 // case after a deploy, and the reason that deploy no longer ends a run.
 func (e *Engine) DecodeDiagnosticSession(data []byte) (*diagnostic.Session, error) {
 	return e.diag.Decode(data)
@@ -1950,7 +2434,10 @@ func (e *Engine) StartGoalDiagnosticIn(loc i18n.Locale, studentID string, concep
 	if err != nil {
 		return nil, nil, fmt.Errorf("goal path: %w", err)
 	}
-	session := e.diag.StartWithPath(path.Concepts)
+	// conceptIDs are the concepts the learner chose; path.Concepts is their whole
+	// prerequisite closure. Passing the selection as the focus keeps the first
+	// probes inside the chosen areas.
+	session := e.diag.StartWithPathFocus(path.Concepts, conceptIDs)
 	if session.State == diagnostic.StateDone || len(path.Concepts) == 0 {
 		return session, nil, nil
 	}
@@ -2022,6 +2509,14 @@ func (e *Engine) ApplyGoalResults(studentID string, session *diagnostic.Session)
 	if err := e.repo.UpsertProgressBatch(batch); err != nil {
 		return fmt.Errorf("save diagnostic progress: %w", err)
 	}
+	if e.diag != nil {
+		report := e.diag.Report(session)
+		if report != nil && len(report.ConditionallyCompleted) > 0 {
+			if err := e.ApplyDiagnosticReport(studentID, report); err != nil {
+				return err
+			}
+		}
+	}
 	// Set active path to the diagnostic's concept set for focused practice
 	if len(session.Attempts) > 0 {
 		e.mu.Lock()
@@ -2033,6 +2528,159 @@ func (e *Engine) ApplyGoalResults(studentID string, session *diagnostic.Session)
 		e.mu.Unlock()
 	}
 	return nil
+}
+
+// ApplyDiagnosticReport marks conditionally completed concepts from the diagnostic
+// report as provisional. When a learner struggles on a dependent concept,
+// provisional prerequisites demote to LEARNING and schedule for remedial review.
+func (e *Engine) ApplyDiagnosticReport(studentID string, report *diagnostic.DiagnosticReport) error {
+	if report == nil || len(report.ConditionallyCompleted) == 0 {
+		return nil
+	}
+	now := time.Now().UTC()
+	seen := make(map[string]bool, len(report.ConditionallyCompleted))
+	for _, raw := range report.ConditionallyCompleted {
+		cid := e.resolveConceptID(raw)
+		if cid == "" || seen[cid] {
+			continue
+		}
+		seen[cid] = true
+
+		existing, err := e.repo.GetProgress(studentID, cid)
+		if err != nil {
+			return fmt.Errorf("load provisional progress %s: %w", cid, err)
+		}
+		if existing == nil {
+			existing = &storage.ConceptProgress{
+				StudentID: studentID,
+				ConceptID: cid,
+				// A conditional completion is a placement: it grants reachability so the
+				// learner can work the frontier, and it is deliberately not mastery. The
+				// row used to be written MASTERED, which unlocked dependents and, through
+				// hysteresis, quietly became permanent after one correct answer.
+				Status:          string(mastery.StatusLearning),
+				PlacementSeeded: true,
+				IsProvisional:   true,
+				SM2EFactor:      2.5,
+				LastAttempted:   &now,
+			}
+		} else {
+			// If already mastered through normal practice without placement seeding,
+			// keep genuine mastery intact.
+			if existing.Status == string(mastery.StatusMastered) && !existing.PlacementSeeded && !existing.IsProvisional {
+				continue
+			}
+			existing.IsProvisional = true
+			existing.Status = string(mastery.StatusLearning)
+			existing.PlacementSeeded = true
+			if existing.LastAttempted == nil {
+				existing.LastAttempted = &now
+			}
+		}
+		if err := e.repo.UpsertProgress(existing); err != nil {
+			return fmt.Errorf("save provisional progress %s: %w", cid, err)
+		}
+	}
+	return nil
+}
+
+// resolveConceptID resolves a concept ID or Label to a valid concept ID in DAG.
+func (e *Engine) resolveConceptID(idOrLabel string) string {
+	if e.dag == nil {
+		return idOrLabel
+	}
+	if c := e.dag.Concept(idOrLabel); c != nil {
+		return c.ID
+	}
+	for _, c := range e.dag.Order() {
+		if c.Label == idOrLabel {
+			return c.ID
+		}
+	}
+	return idOrLabel
+}
+
+// CheckProvisionalFallback inspects the immediate prerequisites of conceptID.
+// If any prerequisite has IsProvisional set, it demotes from MASTERED to
+// LEARNING, marks with high weakness (0.8) and streak 0, persists to storage
+// and schedules for remedial study first.
+func (e *Engine) CheckProvisionalFallback(studentID, conceptID string) ([]string, error) {
+	if e.dag == nil {
+		return nil, nil
+	}
+	c := e.dag.Concept(conceptID)
+	if c == nil {
+		return nil, nil
+	}
+	var demoted []string
+	for _, prereqID := range c.Prerequisites {
+		p, err := e.repo.GetProgress(studentID, prereqID)
+		if err != nil {
+			return nil, fmt.Errorf("load prerequisite progress %s: %w", prereqID, err)
+		}
+		if p != nil && p.IsProvisional {
+			p.Status = string(mastery.StatusLearning)
+			p.Streak = 0
+			p.WeaknessScore = 0.8
+			if err := e.repo.UpsertProgress(p); err != nil {
+				return nil, fmt.Errorf("demote provisional prerequisite %s: %w", prereqID, err)
+			}
+			demoted = append(demoted, prereqID)
+		}
+	}
+	if len(demoted) > 0 {
+		e.enqueueRemedialHead(studentID, demoted)
+	}
+	return demoted, nil
+}
+
+// enqueueRemedialHead prepends demoted provisional concepts to the student remedial queues.
+func (e *Engine) enqueueRemedialHead(studentID string, demoted []string) {
+	if len(demoted) == 0 {
+		return
+	}
+	e.mu.Lock()
+	defer e.mu.Unlock()
+
+	// Prepend to quiz and study remedial queue
+	existingQuiz := e.quizRemedial[studentID]
+	newQuiz := make([]string, 0, len(demoted)+len(existingQuiz))
+	seen := make(map[string]bool)
+	for _, id := range demoted {
+		if !seen[id] {
+			seen[id] = true
+			newQuiz = append(newQuiz, id)
+		}
+	}
+	for _, id := range existingQuiz {
+		if !seen[id] {
+			seen[id] = true
+			newQuiz = append(newQuiz, id)
+		}
+	}
+	e.quizRemedial[studentID] = newQuiz
+
+	// Prepend to active practice sessions for this student
+	for _, as := range e.sessions {
+		if as.studentID == studentID {
+			as.halted = true
+			newRemedial := make([]string, 0, len(demoted)+len(as.remedialQueue))
+			seenSession := make(map[string]bool)
+			for _, id := range demoted {
+				if !seenSession[id] {
+					seenSession[id] = true
+					newRemedial = append(newRemedial, id)
+				}
+			}
+			for _, id := range as.remedialQueue {
+				if !seenSession[id] {
+					seenSession[id] = true
+					newRemedial = append(newRemedial, id)
+				}
+			}
+			as.remedialQueue = newRemedial
+		}
+	}
 }
 
 func (e *Engine) WeaknessMap(studentID string) map[string]float64 {
@@ -2083,39 +2731,45 @@ func (e *Engine) PropagateWeakness(studentID string) {
 		return
 	}
 	weakness := e.weaknessMapFromProgress(progress)
-	type update struct {
-		cid string
-		w   float64
-	}
-	var updates []update
+	// Propagate forward to dependents (upstream struggles carry risk downstream)
+	// and backward to immediate prerequisites (downstream failure suggests shaky foundations).
+	targetWeakness := make(map[string]float64)
 	for cid, w := range weakness {
 		if w > 0.3 {
 			for _, dep := range e.dag.DependentsOf(cid) {
-				if weakness[dep.ID] < w*0.3 {
-					updates = append(updates, update{dep.ID, w * 0.3})
+				newW := w * 0.3
+				if current := weakness[dep.ID]; current < newW && targetWeakness[dep.ID] < newW {
+					targetWeakness[dep.ID] = newW
+				}
+			}
+		}
+		if w > 0.4 {
+			for _, prereq := range e.dag.PrereqsOf(cid) {
+				newW := w * 0.5
+				if current := weakness[prereq.ID]; current < newW && targetWeakness[prereq.ID] < newW {
+					targetWeakness[prereq.ID] = newW
 				}
 			}
 		}
 	}
-	if len(updates) == 0 {
+	if len(targetWeakness) == 0 {
 		return
 	}
-	// One batched write from the single fetched snapshot — no per-dependent
-	// Get/Upsert round trips.
-	batch := make([]*storage.ConceptProgress, 0, len(updates))
-	for _, u := range updates {
-		prog := progress[u.cid]
+	// One batched write from the single fetched snapshot, no per-node round trips.
+	batch := make([]*storage.ConceptProgress, 0, len(targetWeakness))
+	for cid, w := range targetWeakness {
+		prog := progress[cid]
 		if prog == nil {
 			prog = &storage.ConceptProgress{
 				StudentID: studentID,
-				ConceptID: u.cid,
+				ConceptID: cid,
 				Status:    string(mastery.StatusUnseen),
 			}
 		} else {
 			cp := *prog
 			prog = &cp
 		}
-		prog.WeaknessScore = u.w
+		prog.WeaknessScore = w
 		batch = append(batch, prog)
 	}
 	if err := e.repo.UpsertProgressBatch(batch); err != nil {
@@ -2200,6 +2854,7 @@ func (e *Engine) persistActiveSession(sessionID, studentID string, as *activeSes
 		SessionReview:  as.sessionReview,
 		SessionNew:     as.sessionNew,
 		Difficulty:     attemptDifficulty(as),
+		KPOrdinal:      as.kpOrdinal,
 	}
 	if err := e.repo.UpsertActiveSession(rec); err != nil {
 		log.Printf("warning: persist active session %s: %v", sessionID, err)
@@ -2242,6 +2897,19 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 		timeThresh = c.MasteryThreshold.AvgTimeSeconds
 		reqStreak = c.MasteryThreshold.Streak
 	}
+	if rec.KPOrdinal > 0 && rec.ConceptID != "" && e.dag != nil {
+		if c != nil && len(c.KnowledgePoints) > 0 {
+			key := rec.StudentID + "|" + rec.ConceptID
+			if sm := e.kpStates[key]; sm == nil {
+				sm = mastery.NewKPStateMachine(len(c.KnowledgePoints))
+				sm.CurrentOrdinal = rec.KPOrdinal
+				if e.kpStates == nil {
+					e.kpStates = make(map[string]*mastery.KPStateMachine)
+				}
+				e.kpStates[key] = sm
+			}
+		}
+	}
 	return &activeSession{
 		studentID:      studentID,
 		conceptID:      rec.ConceptID,
@@ -2257,6 +2925,7 @@ func (e *Engine) rehydrateActiveSession(sessionID, studentID string) *activeSess
 		lastConceptID:  rec.LastConceptID,
 		sessionReview:  rec.SessionReview,
 		sessionNew:     rec.SessionNew,
+		kpOrdinal:      rec.KPOrdinal,
 	}
 }
 
@@ -2292,15 +2961,23 @@ func (e *Engine) GetCurrentQuestionIn(loc i18n.Locale, sessionID, studentID stri
 	if c := e.dag.Concept(as.conceptID); c != nil {
 		name = e.dag.Label(c, loc)
 	}
+	var activeKP *concepts.KnowledgePoint
+	if as.kpOrdinal > 0 && e.dag != nil {
+		if c := e.dag.Concept(as.conceptID); c != nil {
+			activeKP = c.KnowledgePointByOrdinal(as.kpOrdinal)
+		}
+	}
 	return &Question{
-		ConceptID:   as.conceptID,
-		ConceptName: name,
-		Question:    as.questionText,
-		GradingType: e.gradingTypeFor(as.conceptID),
-		IsReview:    as.isReview,
-		AttemptID:   as.attemptID,
-		Lesson:      lesson,
-		Diagram:     diagramForConcept(as.conceptID),
+		ConceptID:      as.conceptID,
+		ConceptName:    name,
+		Question:       as.questionText,
+		GradingType:    e.gradingTypeFor(as.conceptID),
+		IsReview:       as.isReview,
+		AttemptID:      as.attemptID,
+		Lesson:         lesson,
+		Diagram:        diagramForConcept(as.conceptID),
+		KPOrdinal:      as.kpOrdinal,
+		KnowledgePoint: activeKP,
 	}, nil
 }
 
@@ -2341,11 +3018,11 @@ func attemptDifficulty(as *activeSession) *float64 {
 //
 // It fetches the concept's most recent attempts and appends the one being graded, which
 // has not been written yet. Reading a bounded window rather than the learner's history is
-// the point: GetAttemptsForStudent returns everything — 15,774 rows for someone who has
-// worked through the corpus — and this runs on every graded answer.
+// the point: GetAttemptsForStudent returns everything, 15,774 rows for someone who has
+// worked through the corpus and this runs on every graded answer.
 //
 // A failed read is not fatal. With no window the ladder simply does not advance, and the
-// learner's next answer will see a full one. The alternative — advancing on no evidence —
+// learner's next answer will see a full one. The alternative, advancing on no evidence,
 // would be mastery without a record of what it was based on.
 func (e *Engine) buildEvidenceWindow(studentID, conceptID string, current mastery.Attempt) mastery.Evidence {
 	opts := mastery.EvidenceOptions{}
@@ -2378,6 +3055,7 @@ func (e *Engine) buildEvidenceWindow(studentID, conceptID string, current master
 
 // gradedAttempt is what one graded answer contributes to a concept's progress.
 type gradedAttempt struct {
+	attemptID      string
 	studentID      string
 	conceptID      string
 	requiredStreak int
@@ -2388,15 +3066,16 @@ type gradedAttempt struct {
 	// difficulty the question that produced this attempt was generated at, or nil when it
 	// is genuinely unknown. A pointer, not a float64 with 0 meaning unknown: 0 is not a
 	// difficulty the engine ever serves, so overloading it would let a forgotten value and
-	// a deliberate "unknown" be indistinguishable at the call site — which is exactly the
+	// a deliberate "unknown" be indistinguishable at the call site, which is exactly the
 	// bug that let the quiz path record unknown difficulty for every attempt.
 	difficulty *float64
+	kpOrdinal  int
 }
 
 // applyGradedAttempt is the single mastery authority.
 //
-// It used to exist twice — once in SubmitAnswer for study and review, once in
-// submitAnswerWithTask for quizzes and the diagnostic — with identical logic and different
+// It used to exist twice, once in SubmitAnswer for study and review, once in
+// submitAnswerWithTask for quizzes and the diagnostic, with identical logic and different
 // variable names. Two copies of the state machine is how a quiz answer ends up graded
 // differently from a study answer, which is the class of divergence ADR-037 spent a week
 // removing. There is one now, and both hosts call it.
@@ -2444,8 +3123,8 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 
 	// Mastery transition, on evidence rather than on the streak.
 	//
-	// The window includes the attempt being graded. It has not been written yet —
-	// RecordAttempt runs at the end of this function — so without appending it here the
+	// The window includes the attempt being graded. It has not been written yet,
+	// RecordAttempt runs at the end of this function, so without appending it here the
 	// very first answer on a concept would be judged on an empty window and a learner
 	// could not leave UNSEEN until they had answered twice before being credited with
 	// anything.
@@ -2456,26 +3135,49 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 		Instance:   o.questionText,
 	})
 
+	var kpSM *mastery.KPStateMachine
+	if e.dag != nil {
+		if c := e.dag.Concept(o.conceptID); c != nil && len(c.KnowledgePoints) > 0 {
+			key := o.studentID + "|" + o.conceptID
+			e.mu.Lock()
+			sm := e.kpStates[key]
+			if sm == nil {
+				sm = mastery.NewKPStateMachine(len(c.KnowledgePoints))
+				if e.kpStates == nil {
+					e.kpStates = make(map[string]*mastery.KPStateMachine)
+				}
+				e.kpStates[key] = sm
+			}
+			if o.kpOrdinal > 0 && sm.CurrentOrdinal != o.kpOrdinal && !sm.Completed {
+				sm.CurrentOrdinal = o.kpOrdinal
+			}
+			sm.Transition(o.correct)
+			kpSM = sm
+			e.mu.Unlock()
+		}
+	}
+
 	ctx := mastery.TransitionCtx{
 		Evidence:          evidence,
 		Streak:            progress.Streak,
 		RequiredStreak:    o.requiredStreak,
 		AvgResponseTime:   progress.AvgResponseTime,
 		ResponseThreshold: o.timeThreshold,
+		KPState:           kpSM,
 	}
 	newStatus := e.machine.Next(mastery.Status(progress.Status), ctx)
 	oldStatus := progress.Status
 	progress.Status = string(newStatus)
 	advanced := newStatus != mastery.Status(oldStatus)
 
-	// Reset the streak on a tier advance. It no longer gates anything — the ladder above
-	// does — but it is still the honest running count of consecutive correct answers, it
+	// Reset the streak on a tier advance. It no longer gates anything, the ladder above
+	// does, but it is still the honest running count of consecutive correct answers, it
 	// still feeds SM-2 quality, and the shelf still reads it to tell "resume" from "new".
 	if advanced && o.correct {
 		progress.Streak = 1
 	}
 
-	// SM-2 update — PR 1.2 student model: scale interval by per-topic learningSpeed
+	// SM-2 update, PR 1.2 student model: scale interval by per-topic learningSpeed
 	quality := mastery.SM2Quality(
 		o.correct && progress.Streak >= o.requiredStreak,
 		progress.AvgResponseTime/o.timeThreshold,
@@ -2506,12 +3208,82 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 		log.Printf("warning: upsert topic speed %s/%s: %v", o.studentID, o.conceptID, err)
 	}
 
+	// FSRS-6 update: compute continuous stability and difficulty
+	fsrsParams := fsrs.DefaultParameters()
+	fsrsRating := fsrs.NativeRating(o.correct)
+	var prevStab, prevDiff float64
+	if progress.FSRSStability != nil && *progress.FSRSStability > 0 {
+		prevStab = *progress.FSRSStability
+	} else if progress.SM2Interval >= 1 {
+		due := nowUTC().AddDate(0, 0, progress.SM2Interval)
+		if progress.NextReviewDue != nil && !progress.NextReviewDue.IsZero() {
+			due = *progress.NextReviewDue
+		}
+		if s, err := fsrs.SeedFromInterval(progress.SM2Interval, due, nowUTC()); err == nil {
+			prevStab = s.Stability
+		} else {
+			prevStab = fsrsParams.InitialStability(fsrsRating)
+		}
+	} else {
+		prevStab = fsrsParams.InitialStability(fsrsRating)
+	}
+
+	if progress.FSRSDifficulty != nil && *progress.FSRSDifficulty > 0 {
+		prevDiff = *progress.FSRSDifficulty
+	} else {
+		prevDiff = fsrsParams.InitialDifficulty(fsrsRating)
+	}
+
+	var elapsedDays float64
+	if progress.FSRSLastReview != nil && !progress.FSRSLastReview.IsZero() {
+		elapsedDays = nowUTC().Sub(*progress.FSRSLastReview).Hours() / 24.0
+	} else if progress.LastReviewed != nil && !progress.LastReviewed.IsZero() {
+		elapsedDays = nowUTC().Sub(*progress.LastReviewed).Hours() / 24.0
+	}
+	if elapsedDays < 0 {
+		elapsedDays = 0
+	}
+
+	var nextStab, nextDiff float64
+	if progress.FSRSStability == nil && progress.SM2Interval < 1 {
+		nextStab = fsrsParams.InitialStability(fsrsRating)
+		nextDiff = fsrsParams.InitialDifficulty(fsrsRating)
+	} else {
+		retrievability := fsrsParams.Retrievability(elapsedDays, prevStab)
+		nextStab = fsrsParams.NextStability(prevStab, prevDiff, retrievability, fsrsRating)
+		nextDiff = fsrsParams.NextDifficulty(prevDiff, fsrsRating)
+	}
+	progress.FSRSStability = &nextStab
+	progress.FSRSDifficulty = &nextDiff
+	// The review clock moves on every graded answer, not only on an advance.
+	//
+	// Stability is computed from the elapsed time since the previous review, so the clock
+	// has to be the previous review and it then has to move, or the next computation
+	// measures from the same stale instant again. Leaving it behind inflated stability on
+	// every repeat: the learner answered, the elapsed time did not grow, and the estimate
+	// grew anyway. A miss and a correct answer that does not yet advance a tier both move
+	// the clock here; only NextReviewDue is gated on the tier, below, because a review date
+	// that moved on every attempt would walk away from a learner who is still working.
+	reviewedAt := nowUTC()
+	progress.FSRSLastReview = &reviewedAt
+
 	if newStatus == mastery.StatusMastered && mastery.Status(oldStatus) != mastery.StatusMastered {
 		now := nowUTC()
 		progress.MasteredAt = &now
 	}
 	if newStatus == mastery.StatusMastered {
 		progress.WeaknessScore = 0.0
+		// A placement is reachability, not evidence. The machine's hysteresis keeps a
+		// seeded row at MASTERED after one correct answer, so clearing the flag whenever
+		// the status read MASTERED turned a diagnostic guess into permanent mastery in a
+		// single attempt and removed the fallback that made it conditional. Only the
+		// ladder's own demonstration retires the placement, and the same transition is
+		// what makes the concept safe to reseed-proof: PlacementSeeded cleared here is
+		// what ApplyDiagnosticReport reads to tell genuine mastery from a seed.
+		if mastery.EnoughForMastery(evidence) {
+			progress.IsProvisional = false
+			progress.PlacementSeeded = false
+		}
 	}
 	// The decay clock starts when a tier is attained, not when a streak happens to reach
 	// the old threshold.
@@ -2520,7 +3292,7 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	// "a tier was just advanced" back when that was what advancement meant. It is not any
 	// more: the ladder advances on evidence, so a concept can reach MASTERED with a streak
 	// of 1. That left `LastReviewed` nil, and `GetProgress` treats a nil `LastReviewed` as
-	// fully decayed — so a concept could be MASTERED and simultaneously read as DECAYING,
+	// fully decayed, so a concept could be MASTERED and simultaneously read as DECAYING,
 	// depending on which rule fired first. Seen in the engine tests as the ladder passing
 	// through DECAYING on its way up.
 	//
@@ -2529,14 +3301,66 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	if advanced || (progress.Streak >= o.requiredStreak && progress.AvgResponseTime <= o.timeThreshold) {
 		now := nowUTC()
 		progress.LastReviewed = &now
-		nextReview := now.AddDate(0, 0, nextSM2.Interval)
+		progress.FSRSLastReview = &now
+		fsrsInterval := fsrsParams.Interval(nextStab)
+		reviewInterval := nextSM2.Interval
+		if fsrsInterval > reviewInterval {
+			reviewInterval = fsrsInterval
+		}
+		if reviewInterval < 1 {
+			reviewInterval = 1
+		}
+		nextReview := now.AddDate(0, 0, reviewInterval)
 		progress.NextReviewDue = &nextReview
+	}
+
+	// A miss is a lapse, and a lapse has to be scheduled as one.
+	//
+	// Stability collapses above, from hundreds of days to about a week for a concept the
+	// learner had mastered, but the block just above moves FSRSLastReview and
+	// NextReviewDue only when a tier advanced. So a missed review reset the stability while
+	// both the review timestamp and the due date kept the values from the last successful
+	// review: retrievability then computed from a stale clock, which read zero forever and
+	// made the concept permanently due, while the shelf displayed a date months away. The
+	// queue and the record disagreed, and the record was the one the learner saw.
+	//
+	// The due date is now, not now plus the FSRS interval, because a concept the learner has
+	// just failed belongs in front of them rather than in a week. Remediation still routes
+	// through the existing rules, two consecutive misses enqueue the concept and its key
+	// prerequisites, so this changes when the review is offered, not what a miss is worth.
+	if !o.correct {
+		missedAt := nowUTC()
+		progress.FSRSLastReview = &missedAt
+		progress.NextReviewDue = &missedAt
 	}
 
 	if err := e.repo.UpsertProgress(progress); err != nil {
 		return mastery.Status(progress.Status), evidence, err
 	}
 	e.PropagateWeakness(o.studentID)
+
+	// Allocate implicit repetition credit for encompassed prerequisites
+	if o.correct {
+		if c := e.dag.Concept(o.conceptID); c != nil && len(c.Encompasses) > 0 {
+			if cs, ok := e.repo.(storage.CreditStore); ok {
+				cands := make([]storage.CreditCandidate, 0, len(c.Encompasses))
+				for _, eid := range c.Encompasses {
+					cands = append(cands, storage.CreditCandidate{
+						ConceptID: eid,
+						RawUnits:  repetition.Micro,
+					})
+				}
+				attemptKey := o.attemptID
+				if attemptKey == "" {
+					attemptKey = fmt.Sprintf("attempt:%s:%s:%d", o.studentID, o.conceptID, nowUTC().UnixNano())
+				}
+				if _, _, err := cs.AllocateCredit(o.studentID, attemptKey, 0, cands); err != nil {
+					log.Printf("warning: allocate implicit credit %s/%s: %v", o.studentID, o.conceptID, err)
+				}
+			}
+		}
+	}
+
 	return newStatus, evidence, nil
 }
 
@@ -2545,7 +3369,7 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 // The ledger started mid-week, so without this the weekly board would count only
 // the hours since the deploy and would hide the effort of everyone who worked
 // earlier in the week. A correct attempt's award depends only on the concept's
-// time threshold — the performance multiplier cannot change an integer award —
+// time threshold, the performance multiplier cannot change an integer award,
 // so a replay is faithful to what the award path would have paid.
 //
 // The lifetime and daily counters already include these awards, so the replay
@@ -2582,4 +3406,62 @@ func (e *Engine) BackfillWeeklyXP(now time.Time) (int, error) {
 		}
 	}
 	return replayed, nil
+}
+
+// resolveChoiceAnswer turns a tapped option letter into the option text the
+// question carries and the anchor stores, or returns the answer unchanged.
+//
+// The client submits the letter because it cannot submit the text faithfully.
+// Tapping an option fills the answer control, and that control is a math field:
+// it drops spaces ("down on the left" arrived as "downontheleft"), turns LaTeX
+// into glyphs (\forall became ∀) and rewrites U+2212 as a hyphen. The server
+// compared that rendering to the authored string, so the correct option was
+// graded wrong on four independent grounds. A letter has no rendering problem,
+// and resolving it here means the comparison the anchor was designed for still
+// happens.
+//
+// Multi-character answers, and stems without a parseable option list, pass
+// through untouched: this must never let a learner answer a numeric question by
+// typing a letter.
+var choicePrefixRe = regexp.MustCompile(`^(?i)(?:option|choice)?\s*\(?([A-E])(?:\)|\.|\:)?$`)
+
+func collapseAlphanumeric(s string) string {
+	var b strings.Builder
+	for _, r := range strings.ToLower(s) {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
+func resolveChoiceAnswer(question, answer string) string {
+	opts := generator.ChoiceOptions(question)
+	if len(opts) == 0 {
+		return answer
+	}
+	trimmed := strings.TrimSpace(answer)
+	if m := choicePrefixRe.FindStringSubmatch(trimmed); len(m) > 1 {
+		letter := strings.ToUpper(m[1])
+		if text, ok := opts[letter]; ok {
+			return text
+		}
+	}
+	for _, text := range opts {
+		if strings.EqualFold(trimmed, strings.TrimSpace(text)) {
+			return text
+		}
+		if strings.EqualFold(strings.TrimRight(trimmed, ".!?,;"), strings.TrimRight(strings.TrimSpace(text), ".!?,;")) {
+			return text
+		}
+	}
+	ca := collapseAlphanumeric(trimmed)
+	if ca != "" {
+		for _, text := range opts {
+			if ca == collapseAlphanumeric(text) {
+				return text
+			}
+		}
+	}
+	return answer
 }

@@ -12,7 +12,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 // /concept and /session are client redirect stubs with no internal caller: no nav entry, not in
-// the indexable routes, no link in the app, and — until this file — no test. The only thing
+// the indexable routes, no link in the app, and, until this file, no test. The only thing
 // keeping them is external links and old bookmarks, which cannot be measured from here.
 //
 // So this test does not decide whether they stay. It pins what they currently do, so that

@@ -4,8 +4,8 @@ import { test, expect, type Page } from './fixtures'
  * Admin V2, at the browser level.
  *
  * The Go suite proves the authorization boundary; this proves the deployed UI reaches it and
- * degrades honestly when the server refuses. It is not the security test — every stub here is a
- * server that already decided — it is the "does the operational interface work" test.
+ * degrades honestly when the server refuses. It is not the security test, every stub here is a
+ * server that already decided, it is the "does the operational interface work" test.
  *
  * CORS: the production frontend is a static export on one origin and the Go API on another, so
  * administrative calls are cross-origin. The stubs answer the preflight and mark responses,
@@ -207,7 +207,7 @@ function stubLearnerApi(page: Page) {
  *
  * `LEARNER_API` deliberately does not cover `/api/auth/me`: it is the endpoint under test here,
  * and stubbing it with the generic list is how the real fetch went unanswered in the first
- * version of this test — a stub that returns nothing is indistinguishable from a server that
+ * version of this test, a stub that returns nothing is indistinguishable from a server that
  * says "not staff", which is the exact confusion this feature is about.
  */
 function stubAccount(page: Page, role: Role) {
@@ -329,7 +329,7 @@ test.describe('administrator management', () => {
   // The mobile case, on a phone viewport. The desktop rail on /profile has carried Admin since
   // Admin V2, but /profile is one tap from the tab bar and no other surface offered it, so an
   // administrator on a phone could reach administration only by typing the URL. This drives the
-  // real navigation a phone renders — the compass overflow in the header — not a resized desktop.
+  // real navigation a phone renders, the compass overflow in the header, not a resized desktop.
   test('an administrator can reach /admin from a phone', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     stubApi(page, [ROOT, CONTRIBUTOR], 'owner')
@@ -360,12 +360,12 @@ test.describe('administrator management', () => {
   //
   // The role lived only in `mathua_user`, written once at login. A phone signed in before
   // Admin V2 has no `role` in it at all, and `establishSession` had been dropping `moderator`
-  // and `owner` anyway — so the Admin entry could not appear on that device at all, on a
+  // and `owner` anyway, so the Admin entry could not appear on that device at all, on a
   // sidebar or in the compass menu, while a desktop that had re-authenticated showed it.
   // Nothing re-read the role, so it never self-repaired. Every test that "proved" the entry
   // worked wrote `role` straight into localStorage and skipped the login path that loses it.
   //
-  // This drives a stale session — exactly what the phone has — and lets the app read the role
+  // This drives a stale session, exactly what the phone has and lets the app read the role
   // from the server on load.
   test('a session with no cached role picks the role up from the server on a phone', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })

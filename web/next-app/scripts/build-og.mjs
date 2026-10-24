@@ -77,7 +77,7 @@ const html = `<!doctype html>
   <div class="copy">
     <div class="brand">λ Mathua</div>
     <h1>Adaptive math<br/>learning platform</h1>
-    <p>Mastery-gated. Every concept unlocks only when its prerequisites are proven — fast and correct.</p>
+    <p>Mastery-gated. Every concept unlocks only when its prerequisites are proven, fast and correct.</p>
     <div class="meta">${concepts.length} concepts · ${domainCount} domains · MIT · open source</div>
   </div>
   <svg class="graph" viewBox="0 0 ${W} ${H}">${dots}</svg>

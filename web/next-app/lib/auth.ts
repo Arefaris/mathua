@@ -44,10 +44,10 @@ export function getAuthHeaders(): Record<string, string> {
 // authedFetch is the single choke point for API calls: it attaches the
 // registered token first (guest token as fallback, unless the caller set
 // its own Authorization header) and, when the server answers 401, clears
-// whichever stored token was actually sent — so a dead guest token never
+// whichever stored token was actually sent, so a dead guest token never
 // nukes a real login and vice versa. Callers that set their own header
 // (e.g. admin login) never trigger a clear.
-// Network failures reject — callers must not treat them as "invalid".
+// Network failures reject, callers must not treat them as "invalid".
 // Per-request timeout override: authedFetch(input, { timeoutMs: 5000 }).
 // Stripped before reaching fetch.
 export type FetchInit = RequestInit & {
@@ -58,6 +58,11 @@ export type FetchInit = RequestInit & {
    * a second attempt or a second award. Reads retry without asking.
    */
   retryAttempts?: number
+  /**
+   * Set internally when a guest bearer was reclaimed and the request is being
+   * repeated. It stops the recovery from looping.
+   */
+  guestRecovery?: boolean
 }
 
 const DEFAULT_TIMEOUT_MS = 30000
@@ -126,7 +131,7 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
   }
   if (!res) throw lastError ?? new Error('request failed')
   if (res.status === 401) {
-    // Clear the stored credential behind the 401 — but only when the failed
+    // Clear the stored credential behind the 401, but only when the failed
     // request actually carried it. A caller-set header that merely forwards
     // our stored token (e.g. validateToken) still clears; a foreign bearer
     // (e.g. an admin triage token) never nukes the user's login.
@@ -136,6 +141,16 @@ export async function authedFetch(input: RequestInfo | URL, init: FetchInit = {}
     } else if (failed && !registered && guest && failed === `Bearer ${guest}`) {
       clearGuestToken()
     }
+  }
+  if (res.status === 401 && !sent && !registered && guest && !init.guestRecovery) {
+    // A guest bearer expires, and clearing it alone leaves an anonymous learner
+    // looking signed out mid-run: the next call arrives with no credential and
+    // the diagnostic answers "sign in again" at the worst possible moment.
+    // Reclaim a bearer for the same guest id and repeat once.
+    // ensureGuestToken() mints it from the stored id, so the learner keeps the
+    // same row and the run keeps its progress. The flag stops a loop.
+    const fresh = await ensureGuestToken()
+    if (fresh) return authedFetch(input, { ...init, guestRecovery: true })
   }
   return res
 }
@@ -159,7 +174,7 @@ export interface UserInfo {
    * `'student' | 'admin'` while the server had sent four since Admin V2, so an
    * `owner` did not type-check as staff and the type quietly narrowed what the
    * app could offer. Present so the app can *offer* an Admin entry, and nothing
-   * more: a missing field — an old build, a stale cached bundle — reads as a
+   * more: a missing field, an old build, a stale cached bundle, reads as a
    * learner, which is the safe direction, because the pages stay reachable by URL
    * and the server refuses them.
    */
@@ -186,7 +201,7 @@ export type AccountRole = 'student' | 'moderator' | 'admin' | 'owner'
  * `establishSession` kept only `'admin' | 'student'` while the server has sent four
  * values since Admin V2, so a **moderator or owner was dropped at login**: the stored
  * `mathua_user` carried no role, `isStaffRole` answered false, and the Admin entry
- * appeared for no one — on a phone or anywhere. The type in `UserInfo` and the one in
+ * appeared for no one, on a phone or anywhere. The type in `UserInfo` and the one in
  * `MeSchema` both listed four; only this comparison had not been widened, which is
  * the same duplicate-schema failure ADR-043 recorded, arriving as a string
  * comparison nobody re-read. The check is now one function over the role list.
@@ -216,7 +231,7 @@ export function signOut() {
 }
 
 // clearGuest wipes guest identity + session (used after account deletion,
-// where nothing — including the guest row — may survive).
+// where nothing, including the guest row, may survive).
 export function clearGuest() {
   localStorage.removeItem(GUEST_KEY)
   localStorage.removeItem(GUEST_TOKEN_KEY)
@@ -242,7 +257,7 @@ export function ensureGuestId(): string | null {
   if (typeof window === 'undefined') return null
   let id = localStorage.getItem(GUEST_KEY)
   if (!id) {
-    // Ephemeral guest id — persisted locally so /profile works for guests.
+    // Ephemeral guest id, persisted locally so /profile works for guests.
     // crypto.randomUUID when available (unguessable capability, doubling as
     // the claim key for POST /api/auth/guest); legacy Math.random fallback.
     const rand = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
@@ -265,7 +280,7 @@ export function clearGuestToken() {
 }
 
 // ensureGuestToken mints (or reclaims) a server bearer token for the local
-// guest id and stores it under its own key — registered logins are never
+// guest id and stores it under its own key, registered logins are never
 // touched and isLoggedIn() keeps meaning "has a real account". Uses plain
 // fetch (not authedFetch) so a 401 here can never clear anything.
 // Best-effort: resolves null when the server is unreachable; callers fall
@@ -303,7 +318,7 @@ export async function ensureGuestToken(): Promise<string | null> {
  * Store a freshly issued token together with the account the server says it belongs to.
  *
  * Every sign-in path used to build its own `UserInfo` literal from whatever the login response
- * happened to contain — four copies, in the Google callback, One-Tap, password reset and the
+ * happened to contain, four copies, in the Google callback, One-Tap, password reset and the
  * password form, each filling `concepts_mastered` and `current_streak` with zeros because the
  * login response does not carry them. That is four copies of a schema to keep in step with
  * `/api/auth/me`, and it immediately cost something: `role` is reported by that endpoint, no
@@ -313,8 +328,8 @@ export async function ensureGuestToken(): Promise<string | null> {
  * password path, which was already calling `/api/auth/me` through `validateToken` to confirm the
  * token; this replaces that call rather than adding to it.
  *
- * Fails soft, in the direction that matters. If `/api/auth/me` fails the token is kept — the
- * login itself succeeded — and the partial object is stored, which simply has no `role`. An
+ * Fails soft, in the direction that matters. If `/api/auth/me` fails the token is kept, the
+ * login itself succeeded and the partial object is stored, which simply has no `role`. An
  * administrator whose profile fetch blipped does not see the Admin entry until it succeeds, and
  * a learner never sees it at all. Neither loses access to anything: the server decides.
  */
@@ -356,7 +371,7 @@ export async function establishSession(
  * This exists because the stored session is a *cache* of `/api/auth/me`, and a cache of a
  * privilege is only as good as its last write. A phone that signed in before Admin V2 carries
  * no `role` at all, and one that signed in after it had `moderator` and `owner` dropped by
- * `establishSession`'s `'admin' | 'student'` comparison — so on that device the Admin entry
+ * `establishSession`'s `'admin' | 'student'` comparison, so on that device the Admin entry
  * could never appear, on a sidebar or anywhere, while a desktop that had re-authenticated
  * showed it. The same person, two devices, one product defect.
  *

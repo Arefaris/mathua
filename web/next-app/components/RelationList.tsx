@@ -8,7 +8,7 @@ import { useT } from '../lib/i18n'
  * One DAG-neighbourhood list on the reference page: the direct prerequisites ("Depends on") or
  * the direct dependents ("Unlocks").
  *
- * Every row is a link, and a `Locked` state means "not eligible to practise" — never "cannot
+ * Every row is a link, and a `Locked` state means "not eligible to practise", never "cannot
  * read". A row that looked disabled because its concept is locked would be the exact dead end
  * ADR-054 removed, so the row's state is a label and the row itself is always interactive.
  *

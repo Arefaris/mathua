@@ -73,15 +73,21 @@ export default function DomainsPage() {
   // Element to return focus to when the dialog closes.
   const triggerRef = useRef<HTMLButtonElement | null>(null)
 
-  useEffect(() => {
-    if (!mounted) return
+  const loadDomains = useCallback(() => {
+    setError('')
+    setDomains(null)
     getCurriculumDomains()
       .then(setDomains)
       .catch(() => {
         setDomains([])
         setError(t('explore.domains.loadError'))
       })
-  }, [mounted, t])
+  }, [t])
+
+  useEffect(() => {
+    if (!mounted) return
+    loadDomains()
+  }, [mounted, loadDomains])
 
   const ordered = useMemo(() => {
     if (!domains) return []
@@ -102,12 +108,15 @@ export default function DomainsPage() {
     setDialog(null)
     setDetail(null)
     setDetailLoading(true)
+    setError('')
     try {
       setDetail(await getCurriculumDomain(id))
+    } catch {
+      setError(t('explore.domains.detailError'))
     } finally {
       setDetailLoading(false)
     }
-  }, [])
+  }, [t])
 
   async function baseEligibility(conceptId: string): Promise<boolean | EligibilityPrereq[] | null> {
     const el = await getLessonEligibility(conceptId)
@@ -202,9 +211,18 @@ export default function DomainsPage() {
             </p>
 
             {error && (
-              <p role="alert" className="mb-4 font-mono text-[11px] text-mathua-secondary">
-                {error}
-              </p>
+              <div className="mb-6 p-4 border border-mathua-border bg-mathua-surface">
+                <p role="alert" className="font-mono text-xs text-mathua-secondary mb-3">
+                  {error}
+                </p>
+                <button
+                  type="button"
+                  onClick={loadDomains}
+                  className="font-mono text-xs text-mathua-primary border border-mathua-border px-3 py-1 hover:bg-mathua-blue-faint transition-colors"
+                >
+                  {t('explore.domains.retryCurriculum')}
+                </button>
+              </div>
             )}
 
             <ul className="border border-mathua-border divide-y divide-mathua-border bg-mathua-surface">
@@ -232,7 +250,7 @@ export default function DomainsPage() {
           <>
             <button
               type="button"
-              onClick={() => { setSelected(null); setDetail(null); setDialog(null) }}
+              onClick={() => { setSelected(null); setDetail(null); setDialog(null); setError('') }}
               className="font-mono text-xs text-mathua-secondary hover:text-mathua-blue"
             >
               {t('explore.domains.back')}
@@ -249,6 +267,21 @@ export default function DomainsPage() {
                 {t('explore.domains.progress', { available: available(selectedRow), count: selectedRow.conceptCount })}
                 {selectedRow.masteredCount > 0 && t('explore.domains.masteredSuffix', { count: selectedRow.masteredCount })}
               </p>
+            )}
+
+            {error && !detailLoading && !detail && (
+              <div className="mb-6 p-4 border border-mathua-border bg-mathua-surface">
+                <p role="alert" className="font-mono text-xs text-mathua-secondary mb-3">
+                  {error}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => void openDomain(selected)}
+                  className="font-mono text-xs text-mathua-primary border border-mathua-border px-3 py-1 hover:bg-mathua-blue-faint transition-colors"
+                >
+                  {t('explore.domains.retryDomain')}
+                </button>
+              </div>
             )}
 
             {detailLoading && <p className="font-mono text-xs text-mathua-muted">{t('explore.domains.loadingTopics')}</p>}
@@ -330,7 +363,7 @@ export default function DomainsPage() {
               onRetry={retryDialog}
             />
 
-            {error && (
+            {error && detail && (
               <p role="alert" className="mt-4 font-mono text-[11px] text-mathua-secondary">
                 {error}
               </p>

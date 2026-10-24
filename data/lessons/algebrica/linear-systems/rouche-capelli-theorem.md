@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/rouche-capelli-theorem/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/rouche-capelli-theorem/), CC BY-NC 4.0
 
 ## Statement of the theorem
 

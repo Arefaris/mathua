@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"database/sql"
 	"testing"
 	"time"
 )
@@ -11,7 +12,15 @@ import (
 // count a session older than the window.
 func TestActiveLearnerCounts_SplitsGuestsAndWindows(t *testing.T) {
 	store := newTestStore(t)
-	now := time.Now().UTC()
+	// A fixed instant at midday, not time.Now().
+	//
+	// The test records an attempt an hour before "now" and expects it to count as
+	// active today, which is only true while now is at least an hour into the UTC day.
+	// Running the suite between 00:00 and 01:00 UTC put that attempt on the previous
+	// day and the assertion failed with "active today = 0 accounts", on a code path
+	// nobody had touched. Every timestamp the test writes is already explicit, so
+	// pinning the instant costs nothing and makes the case independent of the clock.
+	now := time.Date(2026, 10, 24, 12, 0, 0, 0, time.UTC)
 	dayStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
 
 	ada, err := store.CreateStudent("ada")
@@ -33,22 +42,14 @@ func TestActiveLearnerCounts_SplitsGuestsAndWindows(t *testing.T) {
 		if err := store.EnsureSession(sid, st.ID); err != nil {
 			t.Fatalf("session %d: %v", i, err)
 		}
-		if _, err := store.db.Exec(
-			`INSERT INTO active_sessions (session_id, student_id, concept_id, expected_answer, attempt_id, question)
-			 VALUES (?, ?, 'c1', '1', ?, 'q')`, sid, st.ID, "att-live-"+st.ID); err != nil {
-			t.Fatalf("active row %d: %v", i, err)
-		}
+		seedActiveSession(t, store, sid, st.ID, "att-live-"+st.ID, now)
 	}
 	// Ada also has a stale seat from earlier; it must not add to the count.
 	oldSid := "sess-old-" + ada.ID
 	if err := store.EnsureSession(oldSid, ada.ID); err != nil {
 		t.Fatalf("old session: %v", err)
 	}
-	if _, err := store.db.Exec(
-		`INSERT INTO active_sessions (session_id, student_id, concept_id, expected_answer, attempt_id, question, updated_at)
-		 VALUES (?, ?, 'c1', '1', ?, 'q', datetime('now', '-2 hours'))`, oldSid, ada.ID, "att-old-"+ada.ID); err != nil {
-		t.Fatalf("stale row: %v", err)
-	}
+	seedActiveSession(t, store, oldSid, ada.ID, "att-old-"+ada.ID, now.Add(-2*time.Hour))
 
 	// Ada and the guest answered today; Bob's only attempt is from yesterday.
 	record := func(st *Student, when time.Time, key string) {
@@ -82,5 +83,36 @@ func TestActiveLearnerCounts_SplitsGuestsAndWindows(t *testing.T) {
 	}
 	if activeToday != 1 || activeTodayGuests != 1 {
 		t.Errorf("active today = %d accounts / %d guests, want 1/1", activeToday, activeTodayGuests)
+	}
+}
+
+// seedActiveSession writes the row EnsureSession leaves behind, with the fields
+// it fills in for itself. The sweep is tested at a fixed instant, so the stale
+// seat needs an updated_at two hours old and no exported method can express
+// that. The two engines store the column differently: SQLite keeps a datetime
+// string and compares it with datetime(), while Postgres keeps text and casts
+// it to timestamptz, so the value is formatted for whichever engine is running.
+func seedActiveSession(t *testing.T, repo Repository, sessionID, studentID, attemptID string, updatedAt time.Time) {
+	t.Helper()
+	const columns = "(session_id, student_id, concept_id, expected_answer, attempt_id, question, updated_at)"
+	var (
+		db    *sql.DB
+		query string
+		stamp string
+	)
+	switch s := repo.(type) {
+	case *SQLiteStore:
+		db = s.db
+		query = "INSERT INTO active_sessions " + columns + " VALUES (?, ?, 'c1', '1', ?, 'q', ?)"
+		stamp = updatedAt.UTC().Format("2006-01-02 15:04:05")
+	case *PostgresStore:
+		db = s.db
+		query = "INSERT INTO active_sessions " + columns + " VALUES ($1, $2, 'c1', '1', $3, 'q', $4)"
+		stamp = updatedAt.UTC().Format("2006-01-02 15:04:05.000000+00")
+	default:
+		t.Fatalf("seedActiveSession: unsupported store %T", repo)
+	}
+	if _, err := db.Exec(query, sessionID, studentID, attemptID, stamp); err != nil {
+		t.Fatalf("insert active session %s: %v", sessionID, err)
 	}
 }

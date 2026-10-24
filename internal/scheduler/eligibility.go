@@ -54,7 +54,10 @@ func EligibilityOf(snapshots map[string]*ConceptSnapshot, now time.Time, c *conc
 			missing = append(missing, pid)
 			continue
 		}
-		if !ps.Placement {
+		if ps.IsProvisional && ps.Status == mastery.StatusLearning {
+			met = false
+			missing = append(missing, pid)
+		} else if !ps.Placement {
 			pstatus := mastery.EffectiveStatus(ps.Status, daysSince(ps.LastReviewed), mastery.DecayDays)
 			if pstatus != mastery.StatusMastered && pstatus != "DECAYING" {
 				met = false
@@ -71,7 +74,11 @@ func EligibilityOf(snapshots map[string]*ConceptSnapshot, now time.Time, c *conc
 	case snap != nil && snap.Status == mastery.StatusMastered:
 		// Decay is a review question, not a teaching one (ADR-037).
 		if _, isReview := effectiveState(snap, now); isReview {
-			state = StateDueForReview
+			if snap.BankedOrdinals > 0 && snap.Encompassed {
+				state = StateMastered
+			} else {
+				state = StateDueForReview
+			}
 		} else {
 			state = StateMastered
 		}

@@ -3,7 +3,7 @@ import { tNow } from './i18n'
 // Expected-answer-form microcopy for typed inputs. The server passes the
 // concept's grading_type alongside every question; this table turns it into
 // a one-line hint plus the right mobile keyboard. Unknown types fall back
-// to a generic line — never blank, never a guess at the format.
+// to a generic line, never blank, never a guess at the format.
 
 export interface AnswerFormat {
   hint: string

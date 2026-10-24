@@ -13,6 +13,16 @@ type Variant struct {
 	Label      string  `json:"label"`
 }
 
+type KnowledgePoint struct {
+	Ordinal          int      `json:"ordinal"`
+	Title            string   `json:"title"`
+	WorkedExample    string   `json:"worked_example,omitempty"`
+	KeyPrerequisites []string `json:"key_prerequisites,omitempty"`
+	VariantKey       string   `json:"variant_key,omitempty"`
+	Section          string   `json:"section,omitempty"`
+	Subgoals         []string `json:"subgoals,omitempty"`
+}
+
 type Concept struct {
 	ID                string           `json:"id"`
 	Label             string           `json:"label"`
@@ -25,6 +35,16 @@ type Concept struct {
 	InterferenceGroup string           `json:"interference_group,omitempty"`
 	Variants          []Variant        `json:"variants,omitempty"`
 	MasteryThreshold  MasteryThreshold `json:"mastery_threshold"`
+	KnowledgePoints   []KnowledgePoint `json:"knowledge_points,omitempty"`
+}
+
+// KnowledgePointByOrdinal returns the KnowledgePoint with the given 1-indexed ordinal.
+// It returns nil if the ordinal is out of range.
+func (c *Concept) KnowledgePointByOrdinal(ordinal int) *KnowledgePoint {
+	if ordinal < 1 || ordinal > len(c.KnowledgePoints) {
+		return nil
+	}
+	return &c.KnowledgePoints[ordinal-1]
 }
 
 type DAG struct {
@@ -76,6 +96,21 @@ func (d *DAG) PrereqsOf(id string) []*Concept {
 		return out
 	}
 	return nil
+}
+
+// KeyPrereqsOf returns the key prerequisites declared for a concept.
+func (d *DAG) KeyPrereqsOf(id string) []*Concept {
+	c := d.concepts[id]
+	if c == nil || len(c.KeyPrerequisites) == 0 {
+		return nil
+	}
+	out := make([]*Concept, 0, len(c.KeyPrerequisites))
+	for _, pid := range c.KeyPrerequisites {
+		if p := d.concepts[pid]; p != nil {
+			out = append(out, p)
+		}
+	}
+	return out
 }
 
 func (d *DAG) DependentsOf(id string) []*Concept {

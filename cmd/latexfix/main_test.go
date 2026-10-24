@@ -14,7 +14,7 @@ import (
 // The first version of this tool stripped the `$…$` off every span it touched,
 // turning rendered math into literal text across 33 files. It read like content
 // loss and it was invisible in the pass/fail count, because the spans still
-// "existed" — they were just prose now. These tests exist to make that impossible
+// "existed", they were just prose now. These tests exist to make that impossible
 // to reintroduce.
 
 func TestRepairPreservesDelimiters(t *testing.T) {
@@ -44,7 +44,7 @@ func TestRepairPreservesDelimiters(t *testing.T) {
 	}
 }
 
-// Prose inside math is prose. `\overset{\text{—}}{16}` means "16 repeats"; a blind
+// Prose inside math is prose. `\overset{\text{, }}{16}` means "16 repeats"; a blind
 // dash rewrite would silently change what the lesson says.
 func TestRepairLeavesTextGroupsAlone(t *testing.T) {
 	in := `$\overset{\text{—}}{16} + f’(x)$`

@@ -44,15 +44,28 @@ func (g *subWholeGen) Generate(ctx generator.GeneratorContext) generator.Problem
 	}
 }
 
+// metresWord writes "1 metre" rather than "1 metres".
+func metresWord(n int) string {
+	if n == 1 {
+		return "1 metre"
+	}
+	return fmt.Sprintf("%d metres", n)
+}
+
 // asDivisionGen is a fraction read as a division: a length cut into equal pieces.
 type asDivisionGen struct{}
 
 func (g *asDivisionGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	a := smallInt(1, 3+int(ctx.Difficulty*4))
 	b := smallInt(2, 5+int(ctx.Difficulty*5))
+	// A whole metre cut into an equal number of metres is the fraction 1/1 and
+	// reads as nonsense, so the ribbon is never exactly as long as it has pieces.
+	for b == a {
+		b = smallInt(2, 5+int(ctx.Difficulty*5))
+	}
 	n, dd := reduce(a, b)
 	return generator.Problem{
-		Question: fmt.Sprintf("A ribbon %d metres long is cut into %d equal pieces. How long is each piece, as a fraction of a metre in lowest terms?", a, b),
+		Question: fmt.Sprintf("A ribbon %s long is cut into %d equal pieces. How long is each piece, as a fraction of a metre in lowest terms?", metresWord(a), b),
 		Answer:   fmt.Sprintf("%d/%d", n, dd),
 		Explanation: fmt.Sprintf("Sharing %d equally among %d is the division %d ÷ %d, and a division can be written as a fraction: %d/%d, which reduces to %d/%d. That is why the fraction bar is a division sign.",
 			a, b, a, b, a, b, n, dd),

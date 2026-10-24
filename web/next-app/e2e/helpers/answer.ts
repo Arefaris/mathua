@@ -9,7 +9,7 @@
 
 import { expect, type Locator, type Page } from '@playwright/test'
 
-// The editor, or the plain input for a text-mode question — but never the *loading*
+// The editor, or the plain input for a text-mode question, but never the *loading*
 // plain input. `PlainAnswerInput` serves both the loading and the fallback state and
 // carries the same placeholder as the editor, so an unqualified query can return a
 // transient control that disappears a moment later, and a tap aimed at the editor
@@ -47,7 +47,7 @@ export async function answerLatex(page: Page): Promise<string> {
  * choice, so it cannot be forgotten at a new call site.
  *
  * MathLive focuses its contenteditable sink on `mousedown`. A single atomic
- * `locator.click()` — mousedown and mouseup in the same tick — leaves the field
+ * `locator.click()`, mousedown and mouseup in the same tick, leaves the field
  * unfocused here, so the press is split with a gap. `.focus()` is used as the
  * belt-and-braces path so a test never silently types into nothing.
  *
@@ -85,7 +85,7 @@ export async function enterAnswer(page: Page, value: string): Promise<void> {
   }
   // `showVirtualKeyboard` rather than focus-and-hope: it calls `kb.show()` directly, whereas
   // relying on focus leaves the panel's appearance to MathLive's own 300ms focusin timer. Under
-  // a loaded parallel suite that timer slipped past a 10s wait and the tap then failed — trading
+  // a loaded parallel suite that timer slipped past a 10s wait and the tap then failed, trading
   // one flake for another. Showing the panel is safe when it is already up (ADR-030).
   await showVirtualKeyboard(page)
   for (const ch of value) {
@@ -97,7 +97,7 @@ export async function enterAnswer(page: Page, value: string): Promise<void> {
  * Keystroke delay.
  *
  * MathLive parses as it types, on its own schedule. Synthetic keys fired back to back
- * race that and get dropped — "2+2" would reliably arrive as "2". A human types slower
+ * race that and get dropped, "2+2" would reliably arrive as "2". A human types slower
  * than a test does, so the delay is the honest way to reproduce real input rather
  * than a workaround for MathLive being fast.
  */
@@ -171,7 +171,7 @@ export function captureSubmittedAnswer(page: Page, urlFragment: string): () => s
  *
  * Focusing first is not optional: the wrapper installs the layout for the current
  * concept in its `onFocus` handler, so showing the keyboard on an unfocused field
- * raises MathLive's own default layout instead — and on an arithmetic exercise that
+ * raises MathLive's own default layout instead and on an arithmetic exercise that
  * default is the very thing this work removes.
  */
 export async function showVirtualKeyboard(page: Page): Promise<void> {
@@ -199,7 +199,7 @@ export function keyboardRows(page: Page): Locator {
  *
  * Matching is on the keycap's full text, because `hasText` is a substring match and
  * "7" would otherwise also match "78", "÷" and every digit row. A keycap's text
- * includes its `aside` caption — the √ key renders as "√\nsquare root" — so pass the
+ * includes its `aside` caption, the √ key renders as "√\nsquare root", so pass the
  * leading glyph.
  */
 /**

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import NoteContent from './NoteContent'
 
 export const metadata: Metadata = {
-  title: "Creator's Note — Mathua",
+  title: "Creator's Note, Mathua",
   description: 'Why Mathua exists, from the person building it.',
 }
 

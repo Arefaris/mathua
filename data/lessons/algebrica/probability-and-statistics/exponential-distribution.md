@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/exponential-distribution/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/exponential-distribution/), CC BY-NC 4.0
 
 ## What is the exponential probability distribution
 

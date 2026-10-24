@@ -2,6 +2,7 @@ package calculus
 
 import (
 	"math/rand"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -206,6 +207,45 @@ func TestDiscShellWasherGenDiscriminate(t *testing.T) {
 		}
 		if typed == 0 {
 			t.Errorf("%s: easy pool has no production (typed-answer) questions: recognition-only", id)
+		}
+	}
+}
+
+func TestSeqConvergenceAnswersAreChoices(t *testing.T) {
+	g := &seqConvergenceGen{}
+	for i := 0; i < 100; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		opts := generator.ChoiceOptions(p.Question)
+		if len(opts) < 2 {
+			t.Fatalf("no options to tap: %q", p.Question)
+		}
+		found := false
+		for _, text := range opts {
+			if text == p.Answer {
+				found = true
+			}
+		}
+		if !found {
+			t.Fatalf("answer %q is not one of the options: %q", p.Answer, p.Question)
+		}
+		if p.Explanation == "" {
+			t.Fatalf("no explanation for %q", p.Question)
+		}
+	}
+}
+
+func TestClosedExtrema_ReadOffAvoidance(t *testing.T) {
+	g := &closedExtremaGen{}
+	for i := 0; i < 500; i++ {
+		p := g.Generate(generator.GeneratorContext{
+			Difficulty: rand.Float64(),
+			Seed:       int64(i*43 + 17),
+		})
+		ans := strings.TrimSpace(p.Answer)
+		// Check that numeric answer does not appear verbatim in question
+		pattern := `(^|\D)` + ans + `(\D|$)`
+		if matched, _ := regexp.MatchString(pattern, p.Question); matched {
+			t.Fatalf("draw %d: closed extrema question %q prints answer %q in stem", i, p.Question, ans)
 		}
 	}
 }

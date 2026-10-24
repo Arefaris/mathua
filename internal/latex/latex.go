@@ -5,8 +5,8 @@
 //
 // The pipeline is region-based: latexnorm.Scan segments the text into Prose
 // and math regions with full contextual rules (escapes, text groups,
-// line-anchored blocks), and normalization is applied where it is valid —
-// inside math — while Prose dollars are escaped so downstream markdown
+// line-anchored blocks), and normalization is applied where it is valid,
+// inside math, while Prose dollars are escaped so downstream markdown
 // parsers never mistake prices for delimiters. Validation reports structural
 // problems as warnings attached to the canonicalized output; callers decide
 // whether to reject, quarantine, or serve with logging.
@@ -101,8 +101,8 @@ func restoreRowbreaks(s string) string {
 	return rbRestoreRe.ReplaceAllString(s, "\\\\$1")
 }
 
-// pureCurrencyRe matches content that is a price or measurement — digits,
-// separators, optional ÷/× chains, trailing punctuation — and nothing else.
+// pureCurrencyRe matches content that is a price or measurement, digits,
+// separators, optional ÷/× chains, trailing punctuation and nothing else.
 var pureCurrencyRe = regexp.MustCompile(`^[\d.,]+([ \t]?[÷×][ \t]?\d[\d.,]*)*[.,;:!?]?$`)
 
 // Brace-corruption repairs for scrape artifacts where an argument's opening
@@ -147,7 +147,7 @@ func repairBraces(s string) string {
 var rawDollarRe = regexp.MustCompile(`(^|[^\\])\$`)
 
 // hasDigitRe / proseMathMarkerRe / hasLetterRe support the Inline prose-shape
-// rule. `!` is a marker because factorials (7!) are math, never currency —
+// rule. `!` is a marker because factorials (7!) are math, never currency,
 // the worst case for an excited price ($5!) is rendering as math "5!", which
 // is visually identical, instead of leaking literal "$5!$" text.
 var (
@@ -166,7 +166,7 @@ func escapeDollars(s string) string {
 
 // preprocessGeneric runs for every source: HTML entity cleanup, leaked
 // wrapper spans, row-break protection, and doubled-backslash dialect
-// collapse (the doubled dialect is not Algebrica-exclusive — authored
+// collapse (the doubled dialect is not Algebrica-exclusive, authored
 // lessons use it too).
 func preprocessGeneric(s string) string {
 	s = entityReplacer.Replace(s)
@@ -196,13 +196,13 @@ func mathNorm(s string) string {
 	// (KaTeX rejects them as delimiters-in-math).
 	s = strings.ReplaceAll(s, `\(`, "(")
 	s = strings.ReplaceAll(s, `\)`, ")")
-	// Scrape artifact: \text{\pm}, \text{\sin} etc. inside math — unwrap the
+	// Scrape artifact: \text{\pm}, \text{\sin} etc. inside math, unwrap the
 	// command (KaTeX rejects \pm inside \text).
 	s = textCmdRe.ReplaceAllString(s, `\$1`)
 	s = textCmdRe.ReplaceAllString(s, `\$1`)
 	s = textPunctRe.ReplaceAllString(s, `$1`)
 	// Mangled set-builder highlights: \highlight{{}\mid{}} is a corrupted
-	// \highlight{\{} x \mid ... \highlight{\}} — render the divider.
+	// \highlight{\{} x \mid ... \highlight{\}}, render the divider.
 	s = strings.ReplaceAll(s, `\highlight{{}\mid{}}`, `\mid`)
 	s = strings.ReplaceAll(s, `\begin{align}`, `\begin{aligned}`)
 	s = strings.ReplaceAll(s, `\end{align}`, `\end{aligned}`)
@@ -218,7 +218,7 @@ var mathTagRe = regexp.MustCompile(`(?s)<math[^>]*>(.*?)</math>`)
 // pandoc, and the authored geometry lessons) already carry unambiguous
 // $...$/$$...$$ math with escaped currency; rewriting them here corrupted
 // valid input (brace "repairs" ate real closers). Those pass through
-// untouched — validation still runs via Validate.
+// untouched, validation still runs via Validate.
 //
 // The Algebrica scraper dialect (doubled backslashes, broken \sqrt}{, raw
 // <math> wrappers) predates the structured pipeline and still needs its
@@ -259,13 +259,13 @@ func canonicalizeOnce(s string, a Adapter) string {
 	var b strings.Builder
 	// lastRawDollar tracks whether the emitted output ends with an unescaped
 	// $ (a math region's closer). Two adjacent math regions then fuse their
-	// delimiters into $$ — a display opener — so a separator is inserted.
+	// delimiters into $$, a display opener, so a separator is inserted.
 	lastRawDollar := false
 	for _, r := range latexnorm.Scan(s) {
 		// Mismatched-delimiter defense: a math region whose content contains
 		// an unescaped $ has a broken closer (e.g. $$... opened, $ closed),
 		// so the scanner paired it with a distant delimiter and the region
-		// swallows prose. Degrade the whole region to escaped text — honest
+		// swallows prose. Degrade the whole region to escaped text, honest
 		// literal dollars beat swallowed headings and red render errors.
 		if r.Kind != latexnorm.Prose && rawDollarRe.MatchString(r.Content) {
 			b.WriteString(escapeDollars(r.Opener + r.Content + r.Closer))
@@ -283,7 +283,7 @@ func canonicalizeOnce(s string, a Adapter) string {
 			// Dollars in prose are prices or punctuation, never delimiters.
 			// Escaped dollars end in $ but are inert (the frontend honors
 			// the escape), so they do not set lastRawDollar. Stray \( and \)
-			// here are unmatched scrape leftovers — literal parens.
+			// here are unmatched scrape leftovers, literal parens.
 			prose := escapeDollars(r.Content)
 			prose = strings.ReplaceAll(prose, `\(`, "(")
 			prose = strings.ReplaceAll(prose, `\)`, ")")
@@ -306,8 +306,8 @@ func canonicalizeOnce(s string, a Adapter) string {
 			b.WriteString("$" + mathNorm(content) + "$")
 		case latexnorm.InlineBlock:
 			// Single-$ display dialect (line-anchored). ORCCA also wraps
-			// entire worked solutions — prose paragraphs with alignment
-			// markers — in this form. Blank lines inside mean prose: degrade
+			// entire worked solutions, prose paragraphs with alignment
+			// markers, in this form. Blank lines inside mean prose: degrade
 			// to escaped text rather than rendering mush.
 			if strings.Contains(r.Content, "\n\n") {
 				b.WriteString(escapeDollars(r.Opener + r.Content + r.Closer))

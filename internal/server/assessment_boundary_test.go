@@ -18,8 +18,8 @@ import (
 
 // The assessment boundary, as executable code.
 //
-// Diagnostics and tests measure knowledge. They do not teach. So no verdict —
-// including the final one — may carry the served worked solution, and no verdict
+// Diagnostics and tests measure knowledge. They do not teach. So no verdict,
+// including the final one, may carry the served worked solution, and no verdict
 // may carry a diagnosis that lets the learner derive the answer.
 //
 // This file exists because the opposite was once a deliberate feature:
@@ -265,7 +265,7 @@ func TestAssessmentBoundary_KeepsVerdictDropsDerivation(t *testing.T) {
 	_, body := postJSONRaw(t, mux, "/api/quiz/answer",
 		`{"session_id":"`+sess["session_id"].(string)+`","concept_id":"a","answer":"`+answerOneAwayWrong+`","elapsed":5}`, token)
 
-	// The wrong answer is reported as wrong — that is assessment state and it must survive.
+	// The wrong answer is reported as wrong, that is assessment state and it must survive.
 	if !strings.Contains(body, `"correct":false`) {
 		t.Errorf("the verdict must still cross the boundary: %s", body)
 	}
@@ -278,7 +278,7 @@ func TestAssessmentBoundary_KeepsVerdictDropsDerivation(t *testing.T) {
 // 8. Learn is unchanged. /api/study/answer is the teaching seam: it is
 // *supposed* to return the worked solution and the expected answer, because
 // Learn teaches and teaching is what it is for. If the assessment helper were
-// ever applied to it, this fails — which is the point of pinning it.
+// ever applied to it, this fails, which is the point of pinning it.
 func TestStudyAnswer_LearnSeamStillTeaches(t *testing.T) {
 	_, mux, _ := guestServer(t)
 	token, studentID := quizGuest(t, mux)

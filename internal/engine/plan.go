@@ -35,7 +35,7 @@ type StudyPlanPrefs struct {
 }
 
 // StudyPlanSnapshot is the persisted evidence baseline. The frontier is
-// never stored — it derives live from knowledge state on every estimate.
+// never stored, it derives live from knowledge state on every estimate.
 type StudyPlanSnapshot struct {
 	Destination string  `json:"destination"`
 	XPRemaining float64 `json:"xp_remaining"`

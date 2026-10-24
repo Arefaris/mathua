@@ -11,8 +11,8 @@ interface GlossaryEntryProps {
   onSelectRelated: (id: string) => void
 }
 
-// One glossary result. The symbol is always paired with its spoken name —
-// never symbol-alone — so the meaning survives without the glyph rendering.
+// One glossary result. The symbol is always paired with its spoken name, 
+// never symbol-alone, so the meaning survives without the glyph rendering.
 export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEntryProps) {
   const t = useT()
   return (
@@ -127,7 +127,7 @@ export default function GlossaryEntryCard({ entry, onSelectRelated }: GlossaryEn
 
       {/* The license was suppressed here because the full reuse terms are long and repeat on
           every card. Attribution is a condition of several of these sources, so it belongs on
-          the card and not only on /licenses — the note is the source and its license, once per
+          the card and not only on /licenses, the note is the source and its license, once per
           source, in the smallest type the card uses. */}
       {entry.sources.some(s => s.license) && (
         <p className="mt-1 font-mono text-[10px] text-mathua-muted">

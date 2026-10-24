@@ -15,7 +15,7 @@ import (
 // This is the measurement that was missing when a learner hit a dead end four questions into
 // `geo.basic.points_lines`. That generator has exactly four distinct question texts, so once a
 // session had seen all four, `/api/lessons/{id}/practice` returned `questions: []` with a
-// 200 — and the Learn feed read an empty list as success, stopped appending, and left the last
+// 200 and the Learn feed read an empty list as success, stopped appending, and left the last
 // verdict as the end of the page with no next step and no message.
 //
 // Nothing in the suite could see it. `TestEasyPoolsDiscriminate` checks that the *answers*
@@ -24,7 +24,7 @@ import (
 //
 // **The counts below are lower bounds, not exact banks.** Generators draw from the global
 // `math/rand`, which Go 1.24+ seeds automatically and `rand.Seed` can no longer override, so
-// repeated runs differ in the high digits — seeding was attempted and did not help. That is
+// repeated runs differ in the high digits, seeding was attempted and did not help. That is
 // fine for a guard, and the reason is directional: sampling can only *miss* variants, never
 // invent them, so a sample never over-reports. A concept measured at N has at least N
 // distinct questions. The property being gated ("cannot sustain a section") is therefore
@@ -46,7 +46,7 @@ const (
 	// twice within the first two cards, which is a correctness-adjacent problem rather than
 	// a variety one.
 	//
-	// Deliberately not higher. The measured distribution is what it is — see the log below —
+	// Deliberately not higher. The measured distribution is what it is, see the log below,
 	// and a threshold set above the corpus median would be a gate 378 of 657 concepts cannot
 	// pass, which is a content backlog wearing a test's clothes. The variety gap is reported
 	// instead; the dead end is fixed independently, in the practice endpoint and the Learn
@@ -68,7 +68,7 @@ var lowBankAllowlist = map[string]string{
 	// All three scale an integer range by difficulty: `scale := int(1 + ctx.Difficulty*5)`,
 	// so at difficulty 0.3 the range is 2 wide and `rand.Intn(scale)+1` yields two distinct
 	// questions. The feed opens a concept at difficulty 0.4, where the range is 3, so a
-	// learner meets two variants before any repeats — degrades to a repeat, not a dead end,
+	// learner meets two variants before any repeats, degrades to a repeat, not a dead end,
 	// now that the practice endpoint falls back rather than returning empty.
 	"calc.integral.power_rule":   "difficulty-scaled integer range is 2 wide at difficulty 0.3; widen the base range",
 	"calc.integral.substitution": "difficulty-scaled integer range is 2 wide at difficulty 0.3; widen the base range",
@@ -122,14 +122,14 @@ func TestGeneratorsCanFillAPracticeRequest(t *testing.T) {
 		}
 	}
 
-	// The shape is the finding. Print it compactly — the raw bucket list is a hundred long.
+	// The shape is the finding. Print it compactly, the raw bucket list is a hundred long.
 	var buckets []string
 	for _, n := range sortedKeys(histogram) {
 		buckets = append(buckets, fmt.Sprintf("%d:%d", n, histogram[n]))
 	}
 	t.Logf("%d generators; sampled distinct question texts (lower bound, %d samples x %v)",
 		len(ids), sampleCount, difficultiesSweptStr)
-	t.Logf("  distribution n:concepts — %s", strings.Join(buckets, " "))
+	t.Logf("  distribution n:concepts, %s", strings.Join(buckets, " "))
 	t.Logf("  %d of %d concepts (%.0f%%) fall under the %d-question variety reference",
 		len(belowVariety), len(ids), float64(len(belowVariety))/float64(len(ids))*100, varietyReference)
 
@@ -142,7 +142,7 @@ func TestGeneratorsCanFillAPracticeRequest(t *testing.T) {
 			continue
 		}
 		t.Errorf("generator cannot fill one %d-question practice request: %s\n"+
-			"Author more variants, or add the concept to lowBankAllowlist with a reason — "+
+			"Author more variants, or add the concept to lowBankAllowlist with a reason, "+
 			"which is a decision, not a silencing.", minDistinctQuestions, f)
 	}
 }

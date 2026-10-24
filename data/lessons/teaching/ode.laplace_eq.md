@@ -9,7 +9,7 @@ Test $u(x, y) = xy$:
 2. Differentiate in $y$ twice: $u_y = x$, so $u_{yy} = 0$.
 3. Add: $\Delta u = 0 + 0 = 0$.
 
-So $xy$ is harmonic — while $x^2 + y^2$ is not, since $\Delta(x^2+y^2) = 2 + 2 = 4$.
+So $xy$ is harmonic, while $x^2 + y^2$ is not, since $\Delta(x^2+y^2) = 2 + 2 = 4$.
 
 ## Worked: the center equals the average
 
@@ -18,8 +18,8 @@ Take the harmonic $u(x, y) = x^2 - y^2$ on the disk of radius 2:
 2. The mean value property says $u$ at the center equals that average: $u(0, 0) = 0$.
 3. Check directly: $0^2 - 0^2 = 0$.
 
-So interior values are forced by surrounding values — harmonic functions cannot freelance.
+So interior values are forced by surrounding values, harmonic functions cannot freelance.
 
 ## Maxima live on the boundary
 
-A non-constant harmonic function never attains its maximum (or minimum) inside the domain — both sit on the boundary. That is the maximum principle, and it makes the Dirichlet problem well-posed: boundary data $f$ extends inward to exactly one harmonic $u$.
+A non-constant harmonic function never attains its maximum (or minimum) inside the domain, both sit on the boundary. That is the maximum principle, and it makes the Dirichlet problem well-posed: boundary data $f$ extends inward to exactly one harmonic $u$.

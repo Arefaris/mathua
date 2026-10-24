@@ -40,7 +40,7 @@ type UsageStore interface {
 // Both are needed and they do different jobs. The per-identity cap stops one
 // learner spending the shared free tier; it does nothing about many learners at
 // once, which is what the global ceiling is for. The identity is chosen by the
-// caller — an authenticated student id, or an IP for a guest — and is
+// caller, an authenticated student id, or an IP for a guest and is
 // deliberately opaque here.
 type Quota struct {
 	store      UsageStore

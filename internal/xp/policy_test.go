@@ -37,15 +37,15 @@ func TestAwardMissIsZero(t *testing.T) {
 			t.Errorf("Award(false, ..., %q) = %d, want 0", task, got)
 		}
 	}
-	if RushPenalty != -1 {
-		t.Errorf("RushPenalty = %d, want -1 (engine rush paths)", RushPenalty)
+	if RushPenalty != -5 {
+		t.Errorf("RushPenalty = %d, want -5 (engine rush paths)", RushPenalty)
 	}
 }
 
 // There is exactly one multiplier, and it has two values.
 //
 // The old policy had a speed multiplier worth up to 1.25x for a fast answer and 0.5x for a
-// slow one, plus a streak multiplier up to 1.5x — so one correct answer could pay 1.875x its
+// slow one, plus a streak multiplier up to 1.5x, so one correct answer could pay 1.875x its
 // base. Both are gone: speed now only answers "did they work normally", and the streak pays
 // nothing.
 func TestPerformanceMultiplierHasExactlyTwoValues(t *testing.T) {
@@ -59,7 +59,7 @@ func TestPerformanceMultiplierHasExactlyTwoValues(t *testing.T) {
 		t.Errorf("just-past-threshold multiplier = %v, want 1.0", m)
 	}
 	if m := PerformanceMultiplier(100.0, 10.0); m != 1.0 {
-		t.Errorf("slow multiplier = %v, want 1.0 — a slow correct answer is still full credit", m)
+		t.Errorf("slow multiplier = %v, want 1.0, a slow correct answer is still full credit", m)
 	}
 	// A zero or absent threshold must not silently grant the top tier.
 	if m := PerformanceMultiplier(1.0, 0); m != 1.0 {
@@ -88,7 +88,7 @@ func TestTaskTypeDoesNotChangeTheBase(t *testing.T) {
 	for _, task := range []string{TaskLesson, TaskReview, TaskMultistep, TaskQuiz} {
 		want := Award(true, 10.0, 10.0, 0, TaskLesson)
 		if got := Award(true, 10.0, 10.0, 0, task); got != want {
-			t.Errorf("Award(%s) = %d, want %d — all task types earn the same effort base", task, got, want)
+			t.Errorf("Award(%s) = %d, want %d, all task types earn the same effort base", task, got, want)
 		}
 	}
 }

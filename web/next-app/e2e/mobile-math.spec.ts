@@ -110,7 +110,7 @@ test.describe('touch input', () => {
     // checking the sink is asking whether the learner can reach the field at all.
     // Either the host or its sink: which one holds focus is MathLive's business, and
     // both mean the learner reached the field. The test that actually matters is the
-    // one below — that a keypad tap then reaches the answer.
+    // one below, that a keypad tap then reaches the answer.
     const focused = await answerField(page).evaluate(el => {
       const sink = (el as HTMLElement & { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('[part=keyboard-sink]')
       return el === document.activeElement || sink?.matches(':focus') === true
@@ -393,7 +393,7 @@ test.describe('the whole loop on a phone', () => {
 
   // Deliberately no assertion that the keypad can be dismissed.
   //
-  // `mathVirtualKeyboard.hide()` does not work in MathLive 0.111.0 under Chromium —
+  // `mathVirtualKeyboard.hide()` does not work in MathLive 0.111.0 under Chromium, 
   // called directly from the page it left `visible === true` and the panel in the DOM,
   // under both the `auto` and `manual` policies. The wrapper calls it on an outside
   // touch, but the behaviour is unproven, so it is not claimed. Until it is fixed,
@@ -433,7 +433,7 @@ test.describe('the whole loop on a phone', () => {
     //
     // `:visible` matters now. `/learn` carries a collapsed reference panel whose own headings sit
     // earlier in the document than anything else, and a heading inside a closed `<details>` is
-    // display:none — so the first match was a heading no one can see or tap. Filtering by
+    // display:none, so the first match was a heading no one can see or tap. Filtering by
     // visibility keeps the locator pointing at something a finger could actually reach, which is
     // what the rest of the test assumes.
     const heading = page.locator('h1:visible, h2:visible, h3:visible').first()
@@ -445,7 +445,7 @@ test.describe('the whole loop on a phone', () => {
     // Whether focus survives an outside tap is platform behaviour, not ours:
     // Chromium blurs to the body, iOS Safari frequently does not. So this test does
     // not assert it. What matters, and is platform-neutral, is that another tap on
-    // the field brings the keypad back — that is the recovery path, and it is what the
+    // the field brings the keypad back, that is the recovery path, and it is what the
     // learner experiences as "I have to tap it several times".
     await page.waitForTimeout(400) // MathLive's own focusout -> hide timer is 300ms
     await answerField(page).tap()
@@ -552,7 +552,7 @@ test.describe('the whole loop on a phone', () => {
 
   // The reported "I have to type Check Answer multiple times", as two assertions.
   //
-  // The loading state used to be `<div className="h-12" aria-hidden />` — the right
+  // The loading state used to be `<div className="h-12" aria-hidden />`, the right
   // size in the right place, so a tap looked like it landed on an answer field and then
   // did nothing, and every keystroke went nowhere. Measured in
   // `e2e/answer-diagnosis.spec.ts`: the window is 322ms with the chunk cached and 3116ms
@@ -594,7 +594,7 @@ test.describe('the whole loop on a phone', () => {
     //
     // The two switches are inside the retry on purpose. MathLive assigns `currentLayer` and
     // re-renders the keypad asynchronously, and under CI's two workers that re-render can land
-    // after both switches were sent — so switching once and then reading the keypad asserts
+    // after both switches were sent, so switching once and then reading the keypad asserts
     // that the first switch took and measures the second one's re-render, which fails as
     // "the ≥ key is missing". Retrying the whole sequence states the actual property: eventually
     // both switches land and the key is there.

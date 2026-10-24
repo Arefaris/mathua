@@ -30,7 +30,7 @@ function errorKind(msg: string): string {
 
 function unescapeHtml(s: string): string {
   // Named entities plus the numeric refs prepareLessonMath uses to keep
-  // spans opaque to markdown (`&#92;` backslash, `&#10;` newline) — the same
+  // spans opaque to markdown (`&#92;` backslash, `&#10;` newline), the same
   // decoding rehype-raw performs before KaTeX.
   return s
     .replace(/&amp;/g, '&')
@@ -128,7 +128,7 @@ describe('lesson corpus renders through KaTeX', () => {
       for (const rel of Object.keys(katexBaseline).sort()) {
         if (!fresh[rel]) {
           throw new Error(
-            `${rel} no longer has KaTeX errors — remove it from latexCorpusBaseline.json (UPDATE_BASELINE=1)`
+            `${rel} no longer has KaTeX errors, remove it from latexCorpusBaseline.json (UPDATE_BASELINE=1)`
           )
         }
       }

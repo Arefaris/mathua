@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 # Scientific Notation
 
@@ -6,7 +6,7 @@ Scientific notation writes very large or very small numbers as a product of a nu
 
 ### Convert from Decimal Notation to Scientific Notation
 
-Remember working with place value for whole numbers and decimals? Our number system is based on powers of 10. We use tens, hundreds, thousands, and so on. Our decimal numbers are also based on powers of tens—tenths, hundredths, thousandths, and so on.
+Remember working with place value for whole numbers and decimals? Our number system is based on powers of 10. We use tens, hundreds, thousands, and so on. Our decimal numbers are also based on powers of tens, tenths, hundredths, thousandths, and so on.
 
 Consider the numbers 4000 and 0.004. We know that 4000 means $4\  \times \ 1000$ and 0.004 means $4\  \times \ \frac{1}{1000}.$ If we write the 1000 as a power of ten in exponential form, we can rewrite these numbers in this way:
 

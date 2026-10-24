@@ -20,63 +20,6 @@ func fuzzGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestFact(t *testing.T) {
-	cases := []struct {
-		n    int
-		want int
-	}{
-		{0, 1},
-		{1, 1},
-		{2, 2},
-		{3, 6},
-		{4, 24},
-		{5, 120},
-	}
-	for _, tc := range cases {
-		if got := fact(tc.n); got != tc.want {
-			t.Errorf("fact(%d) = %d, want %d", tc.n, got, tc.want)
-		}
-	}
-}
-
-func TestDerangements(t *testing.T) {
-	cases := []struct {
-		n    int
-		want int
-	}{
-		{0, 1},
-		{1, 0},
-		{2, 1},
-		{3, 2},
-		{4, 9},
-		{5, 44},
-	}
-	for _, tc := range cases {
-		if got := derangements(tc.n); got != tc.want {
-			t.Errorf("derangements(%d) = %d, want %d", tc.n, got, tc.want)
-		}
-	}
-}
-
-func TestCatalan(t *testing.T) {
-	cases := []struct {
-		n    int
-		want int
-	}{
-		{0, 1},
-		{1, 1},
-		{2, 2},
-		{3, 5},
-		{4, 14},
-		{5, 42},
-	}
-	for _, tc := range cases {
-		if got := catalan(tc.n); got != tc.want {
-			t.Errorf("catalan(%d) = %d, want %d", tc.n, got, tc.want)
-		}
-	}
-}
-
 func TestChoose(t *testing.T) {
 	if got := choose(5, -1); got != 0 {
 		t.Errorf("choose(5, -1) = %d, want 0", got)
@@ -104,56 +47,6 @@ func TestPick(t *testing.T) {
 	}
 }
 
-func TestSpan(t *testing.T) {
-	if got := span(0.0, 2, 5); got != 2 {
-		t.Errorf("span(0.0) = %d, want 2", got)
-	}
-	if got := span(1.0, 2, 5); got != 7 {
-		t.Errorf("span(1.0) = %d, want 7", got)
-	}
-}
-
-func TestProductChain(t *testing.T) {
-	if got := productChain(0); got != "1" {
-		t.Errorf("productChain(0) = %q, want 1", got)
-	}
-	if got := productChain(1); got != "1" {
-		t.Errorf("productChain(1) = %q, want 1", got)
-	}
-	if got := productChain(4); got != "1 x 2 x 3 x 4" {
-		t.Errorf("productChain(4) = %q, want 1 x 2 x 3 x 4", got)
-	}
-}
-
-func TestComposition(t *testing.T) {
-	if got := composition(5, 0); got != nil {
-		t.Errorf("composition(5, 0) = %v, want nil", got)
-	}
-	parts := composition(7, 3)
-	if len(parts) != 3 {
-		t.Fatalf("len(composition(7, 3)) = %d, want 3", len(parts))
-	}
-	sum := 0
-	for _, p := range parts {
-		if p < 1 {
-			t.Errorf("part %d < 1", p)
-		}
-		sum += p
-	}
-	if sum != 7 {
-		t.Errorf("sum = %d, want 7", sum)
-	}
-}
-
-func TestGenerators(t *testing.T) {
-	fuzzGen(t, &countingPrincipleGen{})
-	fuzzGen(t, &factorialGen{})
-	fuzzGen(t, &multinomialGen{})
-	fuzzGen(t, &circularGen{})
-	fuzzGen(t, &derangementGen{})
-	fuzzGen(t, &catalanGen{})
-}
-
 func TestRegistry(t *testing.T) {
 	reg := generator.NewRegistry()
 	Register(reg)
@@ -172,13 +65,9 @@ func TestRegistration(t *testing.T) {
 	reg := generator.NewRegistry()
 	Register(reg)
 
+	// The six basic counts are registered by internal/generator/discrete, not here: see the
+	// package comment. This package owns the techniques.
 	expected := []string{
-		"discrete.combinatorics.counting_principle",
-		"discrete.combinatorics.factorial",
-		"discrete.combinatorics.multinomial",
-		"discrete.combinatorics.circular",
-		"discrete.combinatorics.derangement",
-		"discrete.combinatorics.catalan",
 		"discrete.combinatorics.vandermonde",
 		"discrete.combinatorics.double_counting",
 		"discrete.combinatorics.surjections",
@@ -198,14 +87,6 @@ func TestRegistration(t *testing.T) {
 }
 
 func TestCombinatoricsAlgorithms(t *testing.T) {
-	// Factorials
-	factCases := map[int]int{0: 1, 1: 1, 2: 2, 3: 6, 4: 24, 5: 120, 6: 720, 7: 5040}
-	for n, want := range factCases {
-		if got := fact(n); got != want {
-			t.Errorf("fact(%d) = %d, want %d", n, got, want)
-		}
-	}
-
 	// Choose
 	chooseCases := []struct {
 		n, r, want int
@@ -222,22 +103,6 @@ func TestCombinatoricsAlgorithms(t *testing.T) {
 	for _, c := range chooseCases {
 		if got := choose(c.n, c.r); got != c.want {
 			t.Errorf("choose(%d, %d) = %d, want %d", c.n, c.r, got, c.want)
-		}
-	}
-
-	// Derangements
-	derangeCases := map[int]int{0: 1, 1: 0, 2: 1, 3: 2, 4: 9, 5: 44, 6: 265}
-	for n, want := range derangeCases {
-		if got := derangements(n); got != want {
-			t.Errorf("derangements(%d) = %d, want %d", n, got, want)
-		}
-	}
-
-	// Catalan numbers
-	catalanCases := map[int]int{0: 1, 1: 1, 2: 2, 3: 5, 4: 14, 5: 42, 6: 132, 7: 429}
-	for n, want := range catalanCases {
-		if got := catalan(n); got != want {
-			t.Errorf("catalan(%d) = %d, want %d", n, got, want)
 		}
 	}
 
@@ -261,13 +126,14 @@ func TestCombinatoricsAlgorithms(t *testing.T) {
 		}
 	}
 
-	// Surjection counts: ontoCount(m, n) = n! * S(m, n)
-	for _, c := range stirlingCases {
-		if c.n > 0 && c.m >= c.n {
-			wantOnto := fact(c.n) * c.want
-			if got := ontoCount(c.m, c.n); got != wantOnto {
-				t.Errorf("ontoCount(%d, %d) = %d, want %d", c.m, c.n, got, wantOnto)
-			}
+	// Surjection counts: ontoCount(m, n) = n! * S(m, n). The expectations are written out rather
+	// than computed with a factorial helper, because this package no longer keeps one.
+	ontoCases := map[[2]int]int{
+		{2, 1}: 1, {3, 2}: 6, {4, 2}: 14, {4, 3}: 36, {5, 2}: 30, {5, 3}: 150,
+	}
+	for key, want := range ontoCases {
+		if got := ontoCount(key[0], key[1]); got != want {
+			t.Errorf("ontoCount(%d, %d) = %d, want %d", key[0], key[1], got, want)
 		}
 	}
 
@@ -347,20 +213,14 @@ func fuzzNumericGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestCountingPrincipleGen(t *testing.T) { fuzzNumericGen(t, &countingPrincipleGen{}) }
-func TestFactorialGen(t *testing.T)         { fuzzNumericGen(t, &factorialGen{}) }
-func TestMultinomialGen(t *testing.T)       { fuzzNumericGen(t, &multinomialGen{}) }
-func TestCircularGen(t *testing.T)          { fuzzNumericGen(t, &circularGen{}) }
-func TestDerangementGen(t *testing.T)       { fuzzNumericGen(t, &derangementGen{}) }
-func TestCatalanGen(t *testing.T)           { fuzzNumericGen(t, &catalanGen{}) }
-func TestVandermondeGen(t *testing.T)       { fuzzNumericGen(t, &vandermondeGen{}) }
-func TestDoubleCountingGen(t *testing.T)    { fuzzNumericGen(t, &doubleCountingGen{}) }
-func TestSurjectionGen(t *testing.T)        { fuzzNumericGen(t, &surjectionGen{}) }
-func TestStirlingSecondGen(t *testing.T)    { fuzzNumericGen(t, &stirlingSecondGen{}) }
-func TestBellGen(t *testing.T)              { fuzzNumericGen(t, &bellGen{}) }
-func TestIntegerPartitionGen(t *testing.T)  { fuzzNumericGen(t, &integerPartitionGen{}) }
-func TestLatticePathGen(t *testing.T)       { fuzzNumericGen(t, &latticePathGen{}) }
-func TestCompositionGen(t *testing.T)       { fuzzNumericGen(t, &compositionGen{}) }
+func TestVandermondeGen(t *testing.T)      { fuzzNumericGen(t, &vandermondeGen{}) }
+func TestDoubleCountingGen(t *testing.T)   { fuzzNumericGen(t, &doubleCountingGen{}) }
+func TestSurjectionGen(t *testing.T)       { fuzzNumericGen(t, &surjectionGen{}) }
+func TestStirlingSecondGen(t *testing.T)   { fuzzNumericGen(t, &stirlingSecondGen{}) }
+func TestBellGen(t *testing.T)             { fuzzNumericGen(t, &bellGen{}) }
+func TestIntegerPartitionGen(t *testing.T) { fuzzNumericGen(t, &integerPartitionGen{}) }
+func TestLatticePathGen(t *testing.T)      { fuzzNumericGen(t, &latticePathGen{}) }
+func TestCompositionGen(t *testing.T)      { fuzzNumericGen(t, &compositionGen{}) }
 
 func TestFuzz(t *testing.T) {
 	reg := generator.NewRegistry()
@@ -413,33 +273,6 @@ func TestDifficultyScaling(t *testing.T) {
 }
 
 func TestCombinatoricsMathHelpers(t *testing.T) {
-	t.Run("fact", func(t *testing.T) {
-		expected := []int{1, 1, 2, 6, 24, 120, 720}
-		for n, want := range expected {
-			if got := fact(n); got != want {
-				t.Errorf("fact(%d) = %d, want %d", n, got, want)
-			}
-		}
-	})
-
-	t.Run("derangements", func(t *testing.T) {
-		expected := []int{1, 0, 1, 2, 9, 44, 265}
-		for n, want := range expected {
-			if got := derangements(n); got != want {
-				t.Errorf("derangements(%d) = %d, want %d", n, got, want)
-			}
-		}
-	})
-
-	t.Run("catalan", func(t *testing.T) {
-		expected := []int{1, 1, 2, 5, 14, 42, 132}
-		for n, want := range expected {
-			if got := catalan(n); got != want {
-				t.Errorf("catalan(%d) = %d, want %d", n, got, want)
-			}
-		}
-	})
-
 	t.Run("choose", func(t *testing.T) {
 		cases := []struct {
 			n, r, want int
@@ -472,45 +305,15 @@ func TestCombinatoricsMathHelpers(t *testing.T) {
 	})
 
 	t.Run("ontoCountMatchesStirlingTheorem", func(t *testing.T) {
-		// Theorem: ontoCount(m, n) == n! * S(m, n)
+		// Theorem: ontoCount(m, n) == n! * S(m, n), with n! written out for the small n checked.
+		factorials := []int{1, 1, 2, 6, 24, 120, 720}
 		for m := 2; m <= 6; m++ {
 			for n := 1; n <= m; n++ {
-				want := fact(n) * stirling2(m, n)
-				got := ontoCount(m, n)
-				if got != want {
-					t.Errorf("ontoCount(%d, %d) = %d, want %d (%d! * S(%d,%d))", m, n, got, want, n, m, n)
+				want := factorials[n] * stirling2(m, n)
+				if got := ontoCount(m, n); got != want {
+					t.Errorf("ontoCount(%d, %d) = %d, want %d", m, n, got, want)
 				}
 			}
-		}
-	})
-
-	t.Run("composition", func(t *testing.T) {
-		for n := 3; n <= 10; n++ {
-			for k := 1; k <= n; k++ {
-				parts := composition(n, k)
-				if len(parts) != k {
-					t.Fatalf("composition(%d, %d) returned %d parts, want %d", n, k, len(parts), k)
-				}
-				sum := 0
-				for _, p := range parts {
-					if p < 1 {
-						t.Fatalf("composition(%d, %d) contained non-positive part %d", n, k, p)
-					}
-					sum += p
-				}
-				if sum != n {
-					t.Fatalf("composition(%d, %d) parts sum to %d, want %d", n, k, sum, n)
-				}
-			}
-		}
-	})
-
-	t.Run("productChain", func(t *testing.T) {
-		if got := productChain(1); got != "1" {
-			t.Errorf("productChain(1) = %q, want \"1\"", got)
-		}
-		if got := productChain(4); got != "1 x 2 x 3 x 4" {
-			t.Errorf("productChain(4) = %q, want \"1 x 2 x 3 x 4\"", got)
 		}
 	})
 }

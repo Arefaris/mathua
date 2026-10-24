@@ -15,8 +15,8 @@ import (
 // This type is the answer to a question that used to be answered twice and disagreed: "what
 // should this learner do next?". Until now the client recomputed the whole decision in
 // `lib/nextUp.ts` from five API calls plus a bundled copy of the corpus, while
-// `internal/scheduler` — which holds the eligibility rules, the decay rule and the priority
-// weights — was unreachable from `/learn` and `/profile`. The two had already drifted: the
+// `internal/scheduler`, which holds the eligibility rules, the decay rule and the priority
+// weights, was unreachable from `/learn` and `/profile`. The two had already drifted: the
 // client still halved review XP, a rule ADR-020 removed from the server, and it ranked by
 // weakness-then-concept-id while the server ranked by a weighted score. So the engine answers
 // once, here, and both surfaces render it.
@@ -40,7 +40,7 @@ const (
 )
 
 // Reason is why the task was chosen, in language a learner can act on. None of these name the
-// graph, the frontier or the scheduler: "frontier concept — learn it next" told a learner
+// graph, the frontier or the scheduler: "frontier concept, learn it next" told a learner
 // nothing they could do, where "new · ready to learn" tells them what pressing the button
 // will start.
 type Reason string
@@ -64,10 +64,11 @@ type Action struct {
 type bucket string
 
 const (
-	bucketReview   bucket = "review"
-	bucketPractice bucket = "practice"
-	bucketNew      bucket = "new"
-	bucketResume   bucket = "resume"
+	bucketReview      bucket = "review"
+	bucketRemediation bucket = "remediation"
+	bucketPractice    bucket = "practice"
+	bucketNew         bucket = "new"
+	bucketResume      bucket = "resume"
 )
 
 // Recommendation is one worthwhile task.
@@ -122,12 +123,20 @@ type RecommendInput struct {
 	// DiagnosticCompleted is the server's own record that placement has happened. A
 	// learner who has completed the diagnostic is never offered it again, even if the
 	// diagnostic's seeded rows leave them with zero mastered concepts and no attempted
-	// day — which is exactly what placement does, because it seeds reachability rather
+	// day, which is exactly what placement does, because it seeds reachability rather
 	// than mastery. Without this, a finished diagnostic reappeared as the active task.
 	DiagnosticCompleted bool
-	// ExcludeConceptIds drops concepts already shown — the finished concept must not be offered
+	// ExcludeConceptIds drops concepts already shown, the finished concept must not be offered
 	// back as the next thing to learn.
 	ExcludeConceptIds []string
+
+	// KeyPrerequisites are explicit key prerequisite concepts targeted for remediation.
+	// When present, they inject at the front of the learner task shelf.
+	KeyPrerequisites []string
+	// RemedialConcepts are explicit remedial concepts scheduled at the front of the task shelf.
+	RemedialConcepts []string
+	// HaltedConceptID is an optional halted concept identifier whose KeyPrerequisites are targeted.
+	HaltedConceptID string
 }
 
 // RecommendCaps bound the set. Five is the number of cards the existing shelf shows, so the
@@ -155,7 +164,7 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 	resp := RecommendationResponse{Alternatives: []Recommendation{}, GeneratedAt: now}
 
 	// A learner with nothing behind them cannot be recommended a concept, because no concept
-	// has been shown to be learnable for them. The diagnostic is the honest answer — but only
+	// has been shown to be learnable for them. The diagnostic is the honest answer, but only
 	// once. A completed diagnostic is placement, not an active task, so the gate excludes it.
 	if !in.DiagnosticCompleted && in.ConceptsMastered == 0 && in.AttemptedDays == 0 {
 		resp.Primary = &Recommendation{
@@ -175,10 +184,106 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 		return resp
 	}
 
+	var remedialRecs []Recommendation
+	remedialSeen := make(map[string]bool)
+
+	var targetRemedials []string
+	if in.HaltedConceptID != "" {
+		if c := s.dag.Concept(in.HaltedConceptID); c != nil {
+			if len(c.KeyPrerequisites) > 0 {
+				for _, kp := range c.KeyPrerequisites {
+					if !remedialSeen[kp] {
+						remedialSeen[kp] = true
+						targetRemedials = append(targetRemedials, kp)
+					}
+				}
+			} else {
+				// Fall back to the weakest prerequisite from the DAG
+				prereqs := s.dag.PrereqsOf(in.HaltedConceptID)
+				if len(prereqs) > 0 {
+					var weakestID string
+					bestRank := 999
+					bestStreak := 999999
+					for _, p := range prereqs {
+						snap := in.Snapshots[p.ID]
+						var rank int
+						var streak int
+						if snap == nil || snap.Status == mastery.StatusUnseen || snap.Status == "" {
+							rank = 0
+							streak = 0
+						} else if snap.Status == mastery.StatusLearning || snap.Status == mastery.StatusPracticing {
+							rank = 1
+							streak = snap.Streak
+						} else if snap.Status == "DECAYING" {
+							rank = 2
+							streak = snap.Streak
+						} else {
+							rank = 3
+							streak = snap.Streak
+						}
+						if rank < bestRank || (rank == bestRank && streak < bestStreak) {
+							bestRank = rank
+							bestStreak = streak
+							weakestID = p.ID
+						}
+					}
+					if weakestID != "" && !remedialSeen[weakestID] {
+						remedialSeen[weakestID] = true
+						targetRemedials = append(targetRemedials, weakestID)
+					}
+				}
+			}
+		}
+	}
+	for _, kp := range in.KeyPrerequisites {
+		if !remedialSeen[kp] {
+			remedialSeen[kp] = true
+			targetRemedials = append(targetRemedials, kp)
+		}
+	}
+	for _, kp := range in.RemedialConcepts {
+		if !remedialSeen[kp] {
+			remedialSeen[kp] = true
+			targetRemedials = append(targetRemedials, kp)
+		}
+	}
+
+	excludeMap := make(map[string]bool, len(in.ExcludeConceptIds))
+	for _, id := range in.ExcludeConceptIds {
+		excludeMap[id] = true
+	}
+
+	for _, cid := range targetRemedials {
+		if excludeMap[cid] {
+			continue
+		}
+		c := s.dag.Concept(cid)
+		if c == nil {
+			continue
+		}
+		// Priority 200 ensures targeted remediation outranks regular tasks.
+		r := s.render(c, KindPractice, ReasonPrerequisite, 200.0)
+		r.bucket = bucketRemediation
+		remedialRecs = append(remedialRecs, r)
+	}
+
 	picked := s.selectTasks(in, now)
 
+	if len(remedialRecs) > 0 {
+		var remaining []Recommendation
+		for _, p := range picked {
+			if !remedialSeen[p.ConceptID] {
+				remaining = append(remaining, p)
+			}
+		}
+		picked = append(remedialRecs, remaining...)
+		if len(picked) > MaxRecommendations {
+			picked = picked[:MaxRecommendations]
+		}
+	}
+
 	// The XP gate is a task, not a banner. It becomes the head when it is the most valuable
-	// thing available, and an alternative otherwise — the point of surfacing it here is that a
+	// thing available, and an alternative otherwise, the point of surfacing it here is that a
 	// learner is told why taking it helps.
 	if in.QuizDue {
 		mc := Recommendation{
@@ -187,13 +292,13 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 			Reason:   ReasonMasteryReady,
 			Action:   Action{Type: KindMasteryCheck, Href: "/goals?quiz=1"},
 			Badge:    "Mastery check",
-			Detail:   fmt.Sprintf("You have earned %d XP since your last one — take it to lock in what you have learned", xp.QuizGateXP),
+			Detail:   fmt.Sprintf("You have earned %d XP since your last one, take it to lock in what you have learned", xp.QuizGateXP),
 			CTA:      "Take the check →",
 			Priority: 100,
 		}
-		// A due retrieval check outranks the quiz: it is worth more to the learner, and the
-		// quiz is still surfaced. Only when nothing is due does the quiz lead.
-		if len(picked) > 0 && picked[0].Kind == KindReview {
+		// A due retrieval check or targeted remediation outranks the quiz.
+		// Only when nothing is due does the quiz lead.
+		if len(picked) > 0 && (picked[0].Kind == KindReview || picked[0].Reason == ReasonPrerequisite) {
 			resp.Alternatives = append(resp.Alternatives, mc)
 		} else {
 			picked = append([]Recommendation{mc}, picked...)
@@ -207,11 +312,11 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 	if resp.Primary == nil {
 		// Nothing is eligible: nothing new is reachable, nothing is due for review, nothing
 		// needs practice. That is a real state, and it used to be reported by pointing at
-		// `/study` — "everything available is already learned, the reference library is open".
+		// `/study`, "everything available is already learned, the reference library is open".
 		//
 		// The library is closed. It was also the wrong answer while it existed: a learner with
 		// nothing due was told to go and read, which is the one thing that cannot help them.
-		// Orientation is the honest next surface — it makes no claim about progress, it cannot
+		// Orientation is the honest next surface, it makes no claim about progress, it cannot
 		// 401, and it shows what builds on what they already hold.
 		resp.Primary = &Recommendation{
 			ID:     "graph",
@@ -219,7 +324,7 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 			Reason: ReasonNew,
 			Action: Action{Type: KindLearn, Href: "/graph"},
 			Badge:  "All learned",
-			Detail: "Nothing is due right now — the graph shows what builds on what you have",
+			Detail: "Nothing is due right now, the graph shows what builds on what you have",
 			CTA:    "See the graph →",
 		}
 	}
@@ -265,6 +370,10 @@ func (s *Scheduler) selectTasks(in RecommendInput, now time.Time) []Recommendati
 	if in.DueReviews > 0 {
 		take(bucketReview, 1)
 	}
+	// Remediation gets its own slot rather than competing for the practice one. Sharing it
+	// meant a mastered prerequisite pushed the concept the learner is actually failing off
+	// the shelf entirely, because the two are the same bucket with one slot between them.
+	take(bucketRemediation, MaxConceptWeakness)
 	take(bucketPractice, MaxConceptWeakness)
 	take(bucketNew, MaxConceptNew)
 	take(bucketResume, MaxConceptResume)
@@ -325,7 +434,13 @@ func classify(c Candidate, in RecommendInput) (bucket, Kind, Reason) {
 		return bucketReview, KindReview, ReasonReviewDue
 	}
 	w := in.Weakness[c.Concept.ID]
+	if snap != nil && snap.WeaknessScore > w {
+		w = snap.WeaknessScore
+	}
 	if w >= weaknessPracticeFloor {
+		if snap != nil && snap.Status == mastery.StatusMastered {
+			return bucketRemediation, KindPractice, ReasonPrerequisite
+		}
 		return bucketPractice, KindPractice, ReasonNeedsPractice
 	}
 	if started {
@@ -362,12 +477,18 @@ func (s *Scheduler) render(c *concepts.Concept, kind Kind, reason Reason, priori
 		r.Detail = "Something you have learned is due a check"
 		r.CTA = "Review →"
 	case KindPractice:
-		r.Badge = "Practice"
-		r.Detail = "Worth another go — this one has not stuck yet"
-		r.CTA = "Keep practicing →"
+		if reason == ReasonPrerequisite {
+			r.Badge = "Remediation"
+			r.Detail = "Strengthen this prerequisite to break through a downstream block"
+			r.CTA = "Review prerequisite →"
+		} else {
+			r.Badge = "Practice"
+			r.Detail = "Worth another go, this one has not stuck yet"
+			r.CTA = "Keep practicing →"
+		}
 	default:
 		r.Badge = "New"
-		r.Detail = "Ready to learn — everything it needs, you have done"
+		r.Detail = "Ready to learn, everything it needs, you have done"
 		r.CTA = "Start →"
 	}
 	return r

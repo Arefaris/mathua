@@ -9,11 +9,11 @@ The three interior angles of any triangle always add up to exactly $180^\circ$.
 
 ## Why It Works
 
-Draw a triangle on a sheet of paper, then draw a straight line through one vertex parallel to the opposite side. The three angles of the triangle reappear at that vertex as three angles forming a straight line — and a straight line measures $180^\circ$. This is why the sum never changes: it is forced by the parallel lines.
+Draw a triangle on a sheet of paper, then draw a straight line through one vertex parallel to the opposite side. The three angles of the triangle reappear at that vertex as three angles forming a straight line and a straight line measures $180^\circ$. This is why the sum never changes: it is forced by the parallel lines.
 
 ## Using the Rule
 
-If you know two angles of a triangle, the third is automatic — subtract the two known angles from $180^\circ$:
+If you know two angles of a triangle, the third is automatic, subtract the two known angles from $180^\circ$:
 
 \[m\angle C = 180^\circ - m\angle A - m\angle B\]
 

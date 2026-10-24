@@ -76,6 +76,43 @@ func (s *SQLiteStore) GetReportByOrigin(originID string) (*QuestionReport, error
 	return &r, nil
 }
 
+// ListReportsByReporter returns one account's reports, newest first. Newest first because the
+// useful question is usually about the last thing they sent, and the cap keeps a prolific
+// reporter from turning the profile page into the moderation queue.
+func (s *SQLiteStore) ListReportsByReporter(reporterID string, limit int) ([]QuestionReport, error) {
+	if limit <= 0 || limit > 200 {
+		limit = 20
+	}
+	rows, err := s.db.Query(
+		reportSelectColumns+` WHERE reporter_id = ? ORDER BY created_at DESC, id DESC LIMIT ?`,
+		reporterID, limit,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("list reports by reporter: %w", err)
+	}
+	defer rows.Close()
+	var out []QuestionReport
+	for rows.Next() {
+		r, err := scanReportRow(rows)
+		if err != nil {
+			return nil, fmt.Errorf("scan report: %w", err)
+		}
+		out = append(out, r)
+	}
+	return out, rows.Err()
+}
+
+// CountReportsByReporter counts every report the account filed, including resolved ones. A
+// profile that showed only the recent list would understate a person who reported ten times.
+func (s *SQLiteStore) CountReportsByReporter(reporterID string) (int, error) {
+	var n int
+	err := s.db.QueryRow(`SELECT COUNT(*) FROM question_reports WHERE reporter_id = ?`, reporterID).Scan(&n)
+	if err != nil {
+		return 0, fmt.Errorf("count reports by reporter: %w", err)
+	}
+	return n, nil
+}
+
 // UpdateReportStatusAudited applies a moderation decision and records it together.
 //
 // The report row is edited, never deleted. Resolving or dismissing stamps who decided and when
@@ -246,7 +283,7 @@ func (s *SQLiteStore) RevokeAdminInvitation(actorID string, id int64) (AdminInvi
 
 // ConsumeAdminInvitation burns a token and grants the role it carried, in one transaction. The
 // role change and the audit event are part of the same unit as the burn, so there is no state in
-// which someone holds a staff role with no record of how they got it — and no state in which a
+// which someone holds a staff role with no record of how they got it and no state in which a
 // token is spent but the role was not granted.
 func (s *SQLiteStore) ConsumeAdminInvitation(tokenHash, studentID string) (*AdminInvitation, bool, error) {
 	tx, err := s.db.Begin()

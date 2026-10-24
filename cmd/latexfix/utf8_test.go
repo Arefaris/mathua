@@ -25,7 +25,7 @@ import (
 
 // Multi-byte content must pass through the delimiter rewrite untouched.
 func TestUnescapeDelimitersPreservesMultibyteRunes(t *testing.T) {
-	// Inputs are raw strings so the doubled backslashes are literal — that is the form the
+	// Inputs are raw strings so the doubled backslashes are literal, that is the form the
 	// Algebrica scrape emitted and the only form this function matches.
 	cases := []struct {
 		name string
@@ -72,7 +72,7 @@ func TestUnescapeDelimitersIsByteIdentityOutsideDelimiters(t *testing.T) {
 	}
 }
 
-// Group ranges are byte offsets — the caller slices with them — and each must start and end on
+// Group ranges are byte offsets, the caller slices with them and each must start and end on
 // a character boundary. A range starting mid-rune is a perfectly valid slice, so nothing would
 // panic; it would just silently begin one byte into a character.
 func TestTextGroupRangesLandOnRuneBoundaries(t *testing.T) {

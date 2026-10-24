@@ -156,7 +156,7 @@ describe('login persistence', () => {
 //
 // A `moderator` or an `owner` signing in on a phone had its role dropped here, so the stored
 // session carried no `role`, `isStaffRole` answered false, and the Admin entry never appeared on
-// that device — on the sidebar or in the compass menu — while a desktop that had re-authenticated
+// that device, on the sidebar or in the compass menu, while a desktop that had re-authenticated
 // showed it. The Admin link was therefore absent on exactly the devices nobody tests from.
 describe('establishSession keeps every role', () => {
   beforeEach(() => {

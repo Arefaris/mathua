@@ -14,7 +14,7 @@ import { useAuthState } from '../../../hooks/useAuthState'
 // Accepting a staff invitation.
 //
 // This is the one admin surface a non-staff account reaches, because it is how a learner becomes
-// staff. It requires the account to be signed in and — server-side — to hold the address the
+// staff. It requires the account to be signed in and, server-side, to hold the address the
 // invitation was issued to, so possessing the token is not by itself enough. On success the role
 // applies immediately; the account's existing session carries it because the role is read per
 // request, so no re-login is needed.

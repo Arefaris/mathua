@@ -6,7 +6,7 @@ import { lessonMacros, prepareLessonMath } from '../lib/lessonMath'
 
 // Guards the bundled dataset: unique ids, resolvable cross-links, no
 // same-category duplicates, and source/licensing metadata on every entry.
-// Notably it does NOT check mathematical truth — that was verified by hand at
+// Notably it does NOT check mathematical truth, that was verified by hand at
 // authoring time against the cited sources. Unverifiable candidates were
 // excluded instead (see scripts/glossary-validation-report.json).
 describe('glossary dataset integrity', () => {
@@ -92,7 +92,7 @@ describe('glossary dataset integrity', () => {
 
   it('renders every example through KaTeX with zero errors', () => {
     // Same strictness as the lesson corpus gate (test/latexCorpus.test.ts):
-    // examples must render, not fall back to source text. No baseline — with
+    // examples must render, not fall back to source text. No baseline, with
     // ~200 entries every span must be clean.
     const failures: string[] = []
     for (const e of GLOSSARY_ENTRIES) {
@@ -144,7 +144,7 @@ describe('glossary dataset integrity', () => {
     // Same deliberate typography exclusions as test/noEmoji.test.ts: arrows,
     // check marks, floor/ceiling brackets and mathematical symbols are notation,
     // not pictographs. The ⌊⌋⌈⌉ in the floor-ceiling entry are the subject itself.
-    const allowed = new Set('→←↑↓↔⇒⇔⟶⟹✓✗✔✕✖✦✧·•⌈⌉⌊⌋∈∑∏√∞≈×÷≠≥≤°²′…—–§†')
+    const allowed = new Set('→←↑↓↔⇒⇔⟶⟹✓✗✔✕✖✦✧·•⌈⌉⌊⌋∈∑∏√∞≈×÷≠≥≤°²′…, –§†')
     for (const e of GLOSSARY_ENTRIES) {
       const text = [...JSON.stringify(e)].filter(ch => !allowed.has(ch)).join('')
       expect(emoji.test(text), `${e.id} contains emoji`).toBe(false)

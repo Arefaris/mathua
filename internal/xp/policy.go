@@ -1,6 +1,6 @@
 // Package xp is the single source of truth for Mathua's XP award policy.
 //
-// Every XP number the system awards — and every number the workload estimator predicts —
+// Every XP number the system awards and every number the workload estimator predicts,
 // must derive from here. Estimators import this package; they must never duplicate its
 // constants.
 //
@@ -15,20 +15,20 @@
 //	practice lesson / word	effort-derived		0	-1 (see RushAfter)
 //	practice review		effort-derived		0	-1
 //	quiz			effort-derived		0 + remedial enqueue	-1
-//	quiz don't-know		—			forced miss, 0, no rush penalty
-//	diagnostic		—			0 XP always (no award path exists)
+//	quiz don't-know		, 			forced miss, 0, no rush penalty
+//	diagnostic		, 			0 XP always (no award path exists)
 //
 // Three deliberate properties:
 //
 //   - **The task type does not change the base.** Reviews and quizzes used to cost half and
-//     cost +1 respectively. Both were incentives to route around the main loop — review XP
+//     cost +1 respectively. Both were incentives to route around the main loop, review XP
 //     being cheap made it unrewarding to keep knowledge alive, and the quiz premium made a
 //     quiz worth more per question than the teaching it was meant to check. All three now
 //     earn the same effort-derived base.
 //   - **Speed is not rewarded.** The old TimeMultiplier was `2 - elapsed/threshold` clamped
 //     to [0.5, 1.25]: a fast answer earned up to 25% more and a slow one 50% less. That pays
-//     for guessing, and it punishes careful work. Elapsed time now answers one question —
-//     did the learner appear to have worked normally — and nothing else.
+//     for guessing, and it punishes careful work. Elapsed time now answers one question,
+//     did the learner appear to have worked normally and nothing else.
 //   - **There is no streak bonus.** StreakMultiplier reached 1.5x, above anything the product
 //     intends, so a learner on a long run out-earned the same work done carefully. Combined
 //     with the old time multiplier a single answer could pay 1.875x its base, which is what
@@ -56,7 +56,7 @@ const (
 // were actually banking.
 const (
 	// DefaultDailyGoal is the XP/day a learner is assumed to target when they have not
-	// chosen one. 30 XP/day is roughly 18 minutes of expected work, not 30 — see
+	// chosen one. 30 XP/day is roughly 18 minutes of expected work, not 30, see
 	// EffortBase on why the one-XP-per-minute invariant is an approximation.
 	DefaultDailyGoal = 30
 	// MinDailyGoal and MaxDailyGoal bound the choice. The client's lib/plan.ts pins the
@@ -70,15 +70,18 @@ const (
 // daily target would mean a learner who raised their goal started being tested more often.
 // ADR-020 set it to 50 alongside a 10 XP/day default; the daily default is now 30, so the
 // gate now arrives every ~1.7 days rather than ~10. That is a live product consequence, not
-// an oversight — see TestDailyGoalImpliedCadence, which reports it.
+// an oversight, see TestDailyGoalImpliedCadence, which reports it.
 const QuizGateXP = 50
 
-// RushPenalty is the negative XP assigned for rushing/guessing.
-const RushPenalty = -1
+// RushPenalty is the negative XP assigned for rushing/guessing. It must stay
+// large enough to register against an award of 1-5 XP and small enough that a
+// single lapse cannot erase a day of work: two successive guesses cost -10,
+// which is a third of the default daily goal.
+const RushPenalty = -5
 
 // RushAfter is how many sub-2-second wrong answers earn the penalty. It used to differ
-// between hosts — the practice path counted its own rushCount, the study/quiz path required
-// two misses on the concept as well — so the same behaviour was penalised on one route and
+// between hosts, the practice path counted its own rushCount, the study/quiz path required
+// two misses on the concept as well, so the same behaviour was penalised on one route and
 // not the other.
 const RushAfter = 2
 
@@ -92,7 +95,7 @@ const RushSeconds = 2.0
 // compresses the bottom end hard. TestEffortBaseOverTheCorpus measures it over the corpus at
 // mastery.NeutralDifficulty, the difficulty the engine serves with no learner information:
 // **490 of 666 concepts price at 1 XP** and the other 176 at 2 XP, so the corpus's 511.8
-// expected minutes are priced at 842 XP — 1.65 XP per real minute rather than 1. The worst are
+// expected minutes are priced at 842 XP, 1.65 XP per real minute rather than 1. The worst are
 // 6-second concepts such as arith.mult.tables at a 10x over-price. That is a deliberate floor:
 // sub-minute questions still count as work, and a fractional XP economy would make every
 // answer round to nothing.
@@ -134,8 +137,8 @@ func BaseXP(taskType string) int {
 //
 // **It cannot move an integer award**, and that is worth stating rather than hiding: the
 // base is clamped to 1-5 XP and Award truncates, so int(base x 1.1) == base for every base in
-// range (1->1, 2->2, ... 5->5). The tier is real in the model — ExpectedXP returns it as a
-// float and the estimator reads that — but on the integer award it is absorbed by rounding.
+// range (1->1, 2->2... 5->5). The tier is real in the model, ExpectedXP returns it as a
+// float and the estimator reads that, but on the integer award it is absorbed by rounding.
 // Making it pay would mean either raising the documented 1-5 ceiling (a 5 XP question at 5.5
 // rounds to 6) or dropping the clamp, and both change the effort calibration the estimator
 // depends on. So the honest reading of the product's 1.1x tier is "within threshold is the
@@ -143,7 +146,7 @@ func BaseXP(taskType string) int {
 //
 // Two tiers, from the product's own table: 1.1 for a correct answer inside the concept's
 // time threshold, 1.0 for a correct answer outside it. Elapsed time is read as "did the
-// learner appear to have worked normally", which is the honest use of it — the previous
+// learner appear to have worked normally", which is the honest use of it, the previous
 // formula made a fast answer worth 25% more and a slow one 50% less, so it paid for
 // guessing and penalised care.
 //

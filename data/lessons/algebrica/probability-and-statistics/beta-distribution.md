@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/beta-distribution/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/beta-distribution/), CC BY-NC 4.0
 
 ## Introduction to the beta distribution
 
@@ -96,7 +96,7 @@ Therefore, the mean can be expressed as:
 
 ## Variance of the beta distribution
 
-The [variance](<../variance-and-covariance-of-a-random-variable/>) of the beta distribution measures how much the random variable is expected to vary around its mean value. While the mean describes the central tendency of the distribution, the variance quantifies its spread — that is, how concentrated or dispersed the possible outcomes are within the interval \( (0, 1) \). Formally, the variance is defined as:
+The [variance](<../variance-and-covariance-of-a-random-variable/>) of the beta distribution measures how much the random variable is expected to vary around its mean value. While the mean describes the central tendency of the distribution, the variance quantifies its spread, that is, how concentrated or dispersed the possible outcomes are within the interval \( (0, 1) \). Formally, the variance is defined as:
 
 \[\sigma^2 = \mathrm{Var}(X) = E(X^2) - [E(X)]^2 \]
 

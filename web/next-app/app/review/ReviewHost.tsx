@@ -11,6 +11,7 @@ import ReportButton from '../../components/ReportButton'
 import { startReviewSession, submitReviewAnswer } from '../../lib/api'
 import { formatForGradingType, type AnswerFormat } from '../../lib/answerFormat'
 import ChoiceOptions from '../../components/ChoiceOptions'
+import { stemWithoutChoices } from '../../lib/choices'
 import SubmitErrorBlock, { toSubmitError, type SubmitError } from '../../components/SubmitErrorBlock'
 import { MathAnswerInput, type MathFocusHandle } from '@/components/math/MathInput'
 import { useT } from '@/lib/i18n'
@@ -44,7 +45,7 @@ export default function ReviewHost() {
   const [finished, setFinished] = useState(false)
   const [empty, setEmpty] = useState(false)
   const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(() => formatForGradingType())
-  // Next question staged from the submit response — revealed by goNext(),
+  // Next question staged from the submit response, revealed by goNext(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingReviewNext = useRef<{
     question: string
@@ -90,7 +91,7 @@ export default function ReviewHost() {
     }
   }
 
-  // The review starts from the intro screen, not on mount — timing and
+  // The review starts from the intro screen, not on mount, timing and
   // question reveal begin at Start, so the briefing costs nothing.
   useEffect(() => {
     if (phase === 'run' && !reviewLastResult && reviewQuestion) reviewInputRef.current?.focus()
@@ -239,7 +240,7 @@ export default function ReviewHost() {
         </div>
         <div className={`bg-mathua-surface border rounded-none p-4 sm:p-6 mb-6 transition-colors w-full max-w-full min-w-0 overflow-hidden ${reviewLastResult ? (reviewLastResult.correct ? 'border-mathua-green-faint' : 'border-mathua-red-faint') : 'border-mathua-border'}`}>
           <div className="bg-mathua-code border border-mathua-border rounded-none p-4 sm:p-6 text-center mb-4">
-            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{reviewQuestion}</KatexContent>
+            <KatexContent className="text-mathua-primary text-lg font-mono font-light whitespace-pre-wrap break-words">{stemWithoutChoices(reviewQuestion)}</KatexContent>
           </div>
           <ChoiceOptions question={reviewQuestion} value={reviewAnswerInput} onPick={setReviewAnswerInput} disabled={loading} />
           {!reviewLastResult ? (
@@ -267,7 +268,7 @@ export default function ReviewHost() {
               </div>
               <div className="mt-2 flex justify-end">
                 <ReportButton
-                  key={reviewQuestion}
+                  key={`rev-${reviewCount}-${reviewAttemptId.current || reviewQuestion}`}
                   conceptId={reviewConceptId.current}
                   kind="question"
                   question={reviewQuestion}

@@ -6,7 +6,7 @@ import { countsAsMastered, prereqMet } from './progress'
  *
  * **The decision lives in the engine now.** This module used to make it: `buildCandidates`
  * assembled the eligible concepts, `fixedWeightPolicy` ranked them, and `selectShelfHead`
- * chose the head — all in the browser, from five API calls plus a bundled copy of the corpus.
+ * chose the head, all in the browser, from five API calls plus a bundled copy of the corpus.
  * `internal/scheduler` holds the same rules for serving questions inside a session, and the two
  * had already drifted: the client kept its own copy of the XP award and still halved reviews,
  * a rule ADR-020 removed from the server, and it ranked by weakness-then-concept-id where the
@@ -41,7 +41,7 @@ export interface ShelfItem {
 
 // CatalogEntry is the shape the graph helpers read: id, label and prerequisites, with no
 // ranking attached. `CatalogEntry` used to carry avgTimeSeconds as well, which only existed so
-// the client could price XP for its own labels — a copy of internal/xp that had already drifted.
+// the client could price XP for its own labels, a copy of internal/xp that had already drifted.
 export interface CatalogEntry {
   id: string
   label: string
@@ -71,7 +71,7 @@ export function upcomingLocked(
     if (!(c.prerequisites ?? []).includes(conceptId)) continue
     if (countsAsMastered(progress[c.id])) continue
     const missing = (c.prerequisites ?? []).filter(pid => !prereqMet(progress, pid))
-    if (missing.length === 0) continue // eligible — already a `new` candidate
+    if (missing.length === 0) continue // eligible, already a `new` candidate
     out.push({ id: c.id, label: c.label, missing: missing.map(pid => labels.get(pid) ?? pid) })
   }
   out.sort((a, b) => (a.id < b.id ? -1 : 1))

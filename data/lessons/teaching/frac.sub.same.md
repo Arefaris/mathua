@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 4.4 Add and Subtract Fractions with Common Denominators
 
@@ -70,7 +70,7 @@ $\frac{1}{6} + \frac{4}{6}$
 
 ### Add Fractions with a Common Denominator
 
-Example 4.52 shows that to add the same-size pieces—meaning that the fractions have the same denominator—we just add the number of pieces.
+Example 4.52 shows that to add the same-size pieces, meaning that the fractions have the same denominator, we just add the number of pieces.
 
 ### Fraction Addition
 

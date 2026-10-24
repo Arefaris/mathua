@@ -52,8 +52,8 @@ type Asset struct {
 	// Src is the reference exactly as written in the body. Relative paths are resolved by
 	// the client, because only it knows the serving base.
 	Src string `json:"src,omitempty"`
-	// Alt is the markdown alt text. Frequently empty in the vendored corpus — 133 of 254
-	// algebrica references are `![]` — which is why Caption matters and why a figure with
+	// Alt is the markdown alt text. Frequently empty in the vendored corpus, 133 of 254
+	// algebrica references are `![]`, which is why Caption matters and why a figure with
 	// neither is worth reporting.
 	Alt string `json:"alt,omitempty"`
 	// Caption is a standalone italic line immediately after the figure, which is how both
@@ -83,14 +83,14 @@ type Asset struct {
 // tolerates escaped brackets because one lesson's alt text literally contains `\[a,b\]`.
 //
 // A reference-style definition (`[label]: path`) is *not* matched. No corpus uses one, and
-// supporting it would mean resolving document-scoped labels — the completeness test fails
+// supporting it would mean resolving document-scoped labels, the completeness test fails
 // if a reference appears, so it cannot arrive unnoticed.
 // Alt text may itself contain `]`, and the closing delimiter is the `]` followed by `(`.
 // CommonMark allows brackets inside alt text and the client renderer follows it, so a pattern
 // that stops at the first `]` is a parser that disagrees with the renderer it exists to
 // describe: `numerical-integration-1.svg` carries the caption "The interval [a, b] has been
 // divided into 6 subintervals", and `floor-and-ceiling-functions-1.svg` carries "[n, n+1)",
-// whose bracket is never closed at all. The `]` alternative is what makes both work — the
+// whose bracket is never closed at all. The `]` alternative is what makes both work, the
 // closing delimiter is tried first and falls back to consuming the bracket. Go's regexp
 // prefers the leftmost-first alternative, which is the behaviour needed; the tempting
 // `\](?!\()` is Perl syntax that does not compile here.
@@ -120,7 +120,7 @@ var headingRe = regexp.MustCompile(`^(#{1,6})\s+(.+?)\s*$`)
 //
 // Scans the whole body rather than line by line, because figures appear mid-sentence and
 // their alt text wraps. Sections come from the nearest preceding heading, which requires
-// tracking byte offset against the heading positions — hence the single pass with an index.
+// tracking byte offset against the heading positions, hence the single pass with an index.
 func ExtractAssets(body string, conceptIDs []string) []Asset {
 	lines := strings.Split(body, "\n")
 	// Offset of each line, so a byte index can be turned into a line number.
@@ -254,7 +254,7 @@ func BrokenImageRefs(body string) []int {
 	//
 	// Testing `body[i+1] == '['` after a `!` is safe even though `i` steps by rune width: `!`
 	// is one byte, so `i+1` is the start of the next character, and if that character is
-	// multi-byte then `body[i+1]` is a continuation byte — always >= 0x80, never `[` (0x5B).
+	// multi-byte then `body[i+1]` is a continuation byte, always >= 0x80, never `[` (0x5B).
 	for i, r := range body {
 		if r != '!' {
 			continue

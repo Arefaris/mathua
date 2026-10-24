@@ -72,7 +72,7 @@ def main():
         md = "\n\n".join(md_parts)
         attribution = (
             "> Content sourced from [Linear Algebra](https://hefferon.net/linearalgebra/) "
-            "by Jim Hefferon — CC BY-SA 2.5\n\n"
+            "by Jim Hefferon, CC BY-SA 2.5\n\n"
         )
         md = attribution + md.strip()
 

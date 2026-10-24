@@ -18,7 +18,7 @@ import { concepts, type ConceptRecord } from './conceptData'
 // assessed.
 //
 // The closure is the one figure worth putting in front of a learner, and it is a
-// pure walk of the prerequisite lists — no constants to mirror, so nothing here
+// pure walk of the prerequisite lists, no constants to mirror, so nothing here
 // can drift the way a copied cover size would. The server walks the same edges
 // from the same corpus; test/diagnosticScope.test.ts pins the two against each
 // other so a corpus edit cannot separate them quietly.
@@ -34,7 +34,7 @@ const byId = new Map<string, ConceptRecord>(
  * Mirrors `collectChain`: a breadth-first walk over `prerequisites`, upward only.
  * Unknown ids and unknown prerequisite references are skipped rather than thrown,
  * because this runs during render and a corpus gap must not blank the onboarding
- * screen — the server is still the authority and will reject what it cannot
+ * screen, the server is still the authority and will reject what it cannot
  * resolve.
  */
 export function prerequisiteClosure(ids: Iterable<string>): string[] {

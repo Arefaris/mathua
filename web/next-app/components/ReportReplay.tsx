@@ -8,8 +8,8 @@ import { formatForQuestion } from '../lib/answerFormat'
 
 // Replaying a report is the only way to answer the two questions a moderator
 // actually has: was the learner right, and is it still wrong? The stored words
-// are what make that possible — the question, the expected answer and the
-// concept — because a generator instance cannot be rebuilt from a seed.
+// are what make that possible, the question, the expected answer and the
+// concept, because a generator instance cannot be rebuilt from a seed.
 //
 // The grade endpoint is pure by construction: it calls GradeAnswer directly and
 // never enters SubmitAnswer, so replaying writes no attempt, XP, streak or

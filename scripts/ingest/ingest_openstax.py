@@ -37,7 +37,7 @@ BOOKS = {
         "attribution": (
             "> Content sourced from [OpenStax Prealgebra]"
             "(https://openstax.org/books/prealgebra/pages/1-introduction) "
-            "by Marecek & Anthony-Smith — CC BY-NC-SA 4.0\n"
+            "by Marecek & Anthony-Smith, CC BY-NC-SA 4.0\n"
         ),
     },
     "openstax_calc": {
@@ -45,7 +45,7 @@ BOOKS = {
         "attribution": (
             "> Content sourced from [OpenStax Calculus Volume 1]"
             "(https://openstax.org/books/calculus-volume-1/pages/1-introduction) "
-            "by Gilbert Strang & Edwin \"Jed\" Herman — CC BY-NC-SA 4.0\n"
+            "by Gilbert Strang & Edwin \"Jed\" Herman, CC BY-NC-SA 4.0\n"
         ),
     },
     # Precalculus 2e does not serve <book>/pages/1-introduction, so the
@@ -55,7 +55,7 @@ BOOKS = {
         "attribution": (
             "> Content sourced from [OpenStax Precalculus 2e]"
             "(https://openstax.org/details/books/precalculus-2e) "
-            "by Jay Abramson — CC BY-NC-SA 4.0\n"
+            "by Jay Abramson, CC BY-NC-SA 4.0\n"
         ),
     },
 }

@@ -13,7 +13,7 @@ import (
 // The last-admin rule.
 //
 // The interesting case is the one no sequential test can reach: two administrators demoting
-// each other at the same instant. A read of COUNT(*) followed by an UPDATE loses it — both
+// each other at the same instant. A read of COUNT(*) followed by an UPDATE loses it, both
 // read two, both write, and the system reaches zero through the very feature meant to prevent
 // it. That is why the count lives inside the UPDATE statement. These tests use a file-backed
 // store for the concurrent case, and the reason is not incidental; see the note on
@@ -184,7 +184,7 @@ func TestConcurrentDemotionsCannotReachZeroAdmins(t *testing.T) {
 			t.Fatalf("count: %v", err)
 		}
 		if n < 1 {
-			t.Fatalf("attempt %d: admins = %d — the system reached zero administrators", attempt, n)
+			t.Fatalf("attempt %d: admins = %d, the system reached zero administrators", attempt, n)
 		}
 		refusals := 0
 		for _, e := range errs {
@@ -301,7 +301,7 @@ func TestSearchAdminUsersEmptyQueryListsAll(t *testing.T) {
 }
 
 // The audit log is append-only. There is no update and no delete method on either store, so the
-// table cannot be rewritten through the repository — and these tests say so where a future
+// table cannot be rewritten through the repository and these tests say so where a future
 // method would be added.
 func TestAdminAuditIsAppendOnly(t *testing.T) {
 	s, _ := NewSQLiteStore(":memory:")
@@ -410,7 +410,7 @@ func TestFailedAuditInsertRollsBackPromotion(t *testing.T) {
 	}
 }
 
-// The same guarantee on the demotion path, which is the one carrying the last-admin guard — so
+// The same guarantee on the demotion path, which is the one carrying the last-admin guard, so
 // this also confirms the guard is evaluated inside the transaction and does not survive a
 // rollback as a partial state.
 func TestFailedAuditInsertRollsBackDemotion(t *testing.T) {
@@ -437,8 +437,8 @@ func TestFailedAuditInsertRollsBackDemotion(t *testing.T) {
 	}
 }
 
-// A refused demotion writes nothing and leaves the role alone, and — the part worth asserting
-// separately — a refusal is not an audit failure. If the last-owner guard fired *after* a
+// A refused demotion writes nothing and leaves the role alone, and, the part worth asserting
+// separately, a refusal is not an audit failure. If the last-owner guard fired *after* a
 // successful insert, the transaction would have to roll the insert back too.
 //
 // The invariant is on the owner in V2: an admin can be demoted freely (another owner or, in
@@ -498,8 +498,8 @@ func TestSetRoleAuditedWritesBothRoleAndEvent(t *testing.T) {
 	}
 }
 
-// A no-op reports itself and writes nothing, and — the part that matters now that the write is
-// transactional — it must not be mistaken for a failed change.
+// A no-op reports itself and writes nothing, and, the part that matters now that the write is
+// transactional, it must not be mistaken for a failed change.
 func TestSetRoleAuditedNoOpReportsItself(t *testing.T) {
 	s, ids := newAdminStore(t)
 	promote(t, s, ids[0])

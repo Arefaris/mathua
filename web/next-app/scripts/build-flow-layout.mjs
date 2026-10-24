@@ -7,8 +7,8 @@
 //
 // The artifact lives beside graph.meta.json (data/, commit it) rather than in
 // public/: it is imported synchronously so the first render already has real
-// positions. It is ~22KB — far smaller than the corpus the graph page already
-// bundles — and only reaches the dynamically-imported graph chunk.
+// positions. It is ~22KB, far smaller than the corpus the graph page already
+// bundles and only reaches the dynamically-imported graph chunk.
 //
 // Canonical input order replicates the Go DAG loader
 // (internal/concepts/loader.go: Kahn FIFO seeded in raw file order, with

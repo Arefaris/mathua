@@ -172,7 +172,7 @@ def facts() -> dict:
 
 
 def rules(f: dict) -> list:
-    """(path, pattern, replacement, minimum matches[, region]) — a pattern that matches nothing is an
+    """(path, pattern, replacement, minimum matches[, region]), a pattern that matches nothing is an
     error rather than a silent no-op, and a region restricts the rule to one part of a file.
 
     The region matters for the two table rows below: `| discrete_math | 31 | N |` appears in both
@@ -212,8 +212,8 @@ def rules(f: dict) -> list:
          f"{f['courses']} courses from `data/courses.json:1`", 1),
         ("docs/wasc-uc-ag-research.md", r"\d+ courses from 4th grade",
          f"{f['courses']} courses from 4th grade", 1),
-        ("docs/wasc-uc-ag-research.md", r"`data/courses.json:1` — \d+ courses",
-         f"`data/courses.json:1` — {f['courses']} courses", 1),
+        ("docs/wasc-uc-ag-research.md", r"`data/courses.json:1`, \d+ courses",
+         f"`data/courses.json:1`, {f['courses']} courses", 1),
         # The section 5.5 target table's own introduction names the current size, so it is a fact
         # too -- and it was written by hand, which is how it went stale within the same batch that
         # added it. The tool's verification caught it.
@@ -381,7 +381,7 @@ def main() -> int:
             blob = subprocess.run(["git", "hash-object", "-w", "--stdin"], input=text.encode(),
                                   capture_output=True, check=True).stdout.decode().strip()
             subprocess.run(["git", "update-index", "--cacheinfo", f"100644,{blob},{path}"], check=True)
-            print(f"  staged    {path} ({here} line(s), blob from HEAD — working tree untouched)")
+            print(f"  staged    {path} ({here} line(s), blob from HEAD, working tree untouched)")
         else:
             open(path, "w", encoding="utf-8").write(text)
             print(f"  rewrote   {path} ({here} line(s))")

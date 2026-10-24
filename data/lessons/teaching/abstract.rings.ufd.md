@@ -1,13 +1,13 @@
 # Unique Factorization Domains
 
-**UFD:** An integral domain where every nonzero non-unit factors into irreducibles, uniquely up to order and units. UFD is the precise sense in which "prime factorization works" — and it can fail.
+**UFD:** An integral domain where every nonzero non-unit factors into irreducibles, uniquely up to order and units. UFD is the precise sense in which "prime factorization works" and it can fail.
 
 ## Worked: 12 has three prime factors in Z
 
 Factor 12 in the integers:
 1. $12 = 2 \cdot 6 = 2 \cdot 2 \cdot 3$.
 2. 2 and 3 are irreducible (hence prime) in $\mathbb Z$.
-3. Three prime factors with multiplicity — and any other factorization regroups these same primes.
+3. Three prime factors with multiplicity and any other factorization regroups these same primes.
 
 So unique factorization means the multiset of irreducibles is an invariant of the number.
 

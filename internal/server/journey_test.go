@@ -18,7 +18,7 @@ import (
 )
 
 // Phase 1 journey tests: the complete post-diagnostic learner path over HTTP,
-// reusing the production endpoints. Tests only — no production changes. Each
+// reusing the production endpoints. Tests only, no production changes. Each
 // test covers one link of the chain in dependency order (G1..G5); a failure
 // stops the story at a real defect rather than a test bug.
 
@@ -57,7 +57,7 @@ func journeyDiagnostic(t *testing.T, mux *http.ServeMux) (studentID, sessionID s
 	return sid, dsid
 }
 
-// G1 — completing a diagnostic then POST /api/goal/plan persists placement
+// G1, completing a diagnostic then POST /api/goal/plan persists placement
 // rows without granting mastery and marks the diagnostic complete.
 func TestJourney_PlanPersistsPlacementWithoutMastery(t *testing.T) {
 	s, mux := twoConceptServer(t)
@@ -144,7 +144,7 @@ func journeyGet(t *testing.T, mux *http.ServeMux, token, path string) (int, map[
 	return rec.Code, res
 }
 
-// G2 — after plan-apply, /api/next offers the placed frontier (never the
+// G2, after plan-apply, /api/next offers the placed frontier (never the
 // diagnostic again), and readiness plus practice agree on it.
 func TestJourney_NextServesPlacedFrontier(t *testing.T) {
 	mux, _ := journeyAuthedServer(t)
@@ -201,7 +201,7 @@ func TestJourney_NextServesPlacedFrontier(t *testing.T) {
 	}
 }
 
-// G3 — refusal flips to eligibility through demonstrated mastery: a fresh
+// G3, refusal flips to eligibility through demonstrated mastery: a fresh
 // learner is refused on b, answers a to mastery over HTTP, then readiness
 // reports eligible and practice serves.
 func TestJourney_RefusalFlipsToEligibleAfterMastery(t *testing.T) {
@@ -223,7 +223,7 @@ func TestJourney_RefusalFlipsToEligibleAfterMastery(t *testing.T) {
 	}
 
 	// testGen serves one unique question per fetch (identical texts dedupe,
-	// by design — real generators vary); answer it repeatedly to the floor.
+	// by design, real generators vary); answer it repeatedly to the floor.
 	answered := 0
 	for round := 0; round < 12 && answered < 8; round++ {
 		code, prac := journeyGet(t, mux, token, "/api/lessons/a/practice?count=5")
@@ -267,7 +267,7 @@ func TestJourney_RefusalFlipsToEligibleAfterMastery(t *testing.T) {
 	}
 }
 
-// G4 — study answers move HTTP-visible progress: three correct answers take
+// G4, study answers move HTTP-visible progress: three correct answers take
 // a from UNSEEN to PRACTICING as observed through GET /api/progress.
 func TestJourney_AnswersAdvanceProgressOverHTTP(t *testing.T) {
 	mux, _ := gatedServer(t)
@@ -313,14 +313,14 @@ func TestJourney_AnswersAdvanceProgressOverHTTP(t *testing.T) {
 		t.Errorf("a.attempts = %v, want 3", attempts)
 	}
 	// Streak is 2, not 3: the streak resets to 1 on each tier advance
-	// (UNSEEN→LEARNING→PRACTICING) because it no longer gates mastery —
+	// (UNSEEN→LEARNING→PRACTICING) because it no longer gates mastery,
 	// evidence does. Pin the rule rather than assuming streak==answers.
 	if streak, _ := row["streak"].(float64); streak != 2 {
 		t.Errorf("a.streak = %v, want 2 (reset on tier advance)", streak)
 	}
 }
 
-// G5 — leaving mid-lesson and returning corrupts nothing: re-fetching
+// G5, leaving mid-lesson and returning corrupts nothing: re-fetching
 // practice creates no duplicate sessions or attempts, and a previously
 // served question still grades. Each submit records exactly one attempt.
 func TestJourney_LeaveAndReturnWithoutDuplication(t *testing.T) {

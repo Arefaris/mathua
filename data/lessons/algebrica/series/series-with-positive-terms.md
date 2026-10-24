@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/series-with-positive-terms/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/series-with-positive-terms/), CC BY-NC 4.0
 
 ## What is a series with positive terms?
 
@@ -43,7 +43,7 @@ Since both sequences \( a_k \) and \( b_k \) are made of non-negative terms, bot
 
 \[S_n \leq T_n \quad \text{for all } n \geq N \]
 
-If the series \( \sum b_k \) converges, that means \( T_n \) has a finite limit — it is bounded above. Since \( S_n \leq T_n \), the sequence of partial sums \( S_n \) is also bounded above. And since \( S_n \) is non-decreasing and bounded, it must converge. Therefore, \( \sum a_k \) also converges.
+If the series \( \sum b_k \) converges, that means \( T_n \) has a finite limit, it is bounded above. Since \( S_n \leq T_n \), the sequence of partial sums \( S_n \) is also bounded above. And since \( S_n \) is non-decreasing and bounded, it must converge. Therefore, \( \sum a_k \) also converges.
 
 If \( \sum a_k \) diverges, then \( S_n \to \infty \). But since \( S_n \leq T_n \), the only way this inequality can hold is if \( T_n \) also grows without bound. Therefore, \( \sum b_k \) also diverges.
 

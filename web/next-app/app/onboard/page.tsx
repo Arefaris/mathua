@@ -36,9 +36,10 @@ import { DiagnosticStep, ResultsStep, WelcomeStep } from './steps'
 
 type Step = 'welcome' | 'diagnostic' | 'results'
 
-// MA parity: the Diagnostic doesn't have to be completed at once — the
+// MA parity: the Diagnostic doesn't have to be completed at once, the
 // session id persists in sessionStorage so Back/refresh resumes it.
 const DIAG_KEY = 'mathua_diag_session_onboard'
+const STEP_KEY = 'mathua_onboard_step'
 
 // A guest run is a demo: the server opens a session against a student row
 // created from a typed name, and nothing can sign back into that row. Session
@@ -61,9 +62,13 @@ export default function OnboardPage() {
   const onboardInputRef = useRef<MathFocusHandle | null>(null)
   const [question, setQuestion] = useState('')
   const conceptId = useRef('')
-  // Next question staged from the submit response — revealed by goNext(),
+  // Next question staged from the submit response, revealed by goNext(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingNext = useRef<{ question: string; conceptId: string; conceptName: string; gradingType: string } | null>(null)
+  // Whether the last attempt was an admitted unknown. A retry that forgets this
+  // posts an empty graded answer, so the learner is marked wrong for a question
+  // they said they could not answer.
+  const lastAttemptDontKnow = useRef(false)
   const questionShownAt = useRef<number | null>(null)
   const [conceptName, setConceptName] = useState('')
   const [questionCount, setQuestionCount] = useState(0)
@@ -85,7 +90,7 @@ export default function OnboardPage() {
   const [finished, setFinished] = useState(false)
   const [skipCount, setSkipCount] = useState(0)
   const [retryAvailable, setRetryAvailable] = useState(false)
-  // Concept the visible feedback belongs to — the retry call must name it,
+  // Concept the visible feedback belongs to, the retry call must name it,
   // since conceptId.current already advanced to the staged next question.
   const [retryConcept, setRetryConcept] = useState('')
   const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(() => formatForGradingType())
@@ -111,8 +116,12 @@ export default function OnboardPage() {
     // the pause is still offered separately, and only for a run that has not had
     // its scope changed underneath it.
     setDomains(result)
+    let saved = ''
+    let activeStep = ''
     try {
-      setHasPaused(!!sessionStorage.getItem(DIAG_KEY))
+      saved = sessionStorage.getItem(DIAG_KEY) || ''
+      activeStep = sessionStorage.getItem(STEP_KEY) || ''
+      setHasPaused(!!saved)
     } catch {
       setHasPaused(false)
     }
@@ -120,6 +129,9 @@ export default function OnboardPage() {
       setDemo(sessionStorage.getItem(DEMO_KEY) === '1')
     } catch {
       setDemo(false)
+    }
+    if (activeStep === 'diagnostic' && saved) {
+      void resumeDiagnostic(saved)
     }
   }, [mounted])
 
@@ -130,7 +142,10 @@ export default function OnboardPage() {
   function dropPausedRun() {
     if (!hasPaused) return
     sessionId.current = ''
-    try { sessionStorage.removeItem(DIAG_KEY) } catch { /* ignore */ }
+    try {
+      sessionStorage.removeItem(DIAG_KEY)
+      sessionStorage.removeItem(STEP_KEY)
+    } catch { /* ignore */ }
     setHasPaused(false)
   }
 
@@ -174,8 +189,9 @@ export default function OnboardPage() {
     sessionId.current = res.session_id
     try {
       sessionStorage.setItem(DIAG_KEY, res.session_id)
+      sessionStorage.setItem(STEP_KEY, 'diagnostic')
       setHasPaused(true)
-    } catch { /* storage unavailable — session simply won't resume */ }
+    } catch { /* storage unavailable, session simply won't resume */ }
     setQuestion(res.question || '')
     conceptId.current = res.concept_id || ''
     questionShownAt.current = Date.now()
@@ -243,12 +259,14 @@ export default function OnboardPage() {
     }
   }
 
-  async function resumeDiagnostic() {
-    let sid = ''
-    try {
-      sid = sessionStorage.getItem(DIAG_KEY) || ''
-    } catch {
-      sid = ''
+  async function resumeDiagnostic(savedSid?: string) {
+    let sid = savedSid || ''
+    if (!sid) {
+      try {
+        sid = sessionStorage.getItem(DIAG_KEY) || ''
+      } catch {
+        sid = ''
+      }
     }
     if (!sid) return
     setLoading(true)
@@ -257,12 +275,17 @@ export default function OnboardPage() {
       if (data.done) {
         try {
           sessionStorage.removeItem(DIAG_KEY)
+          sessionStorage.removeItem(STEP_KEY)
         } catch { /* ignore */ }
         setHasPaused(false)
+        setStep('welcome')
         toast.error(t('goals.diagnostic.alreadyFinished'))
         setLoading(false)
         return
       }
+      try {
+        sessionStorage.setItem(STEP_KEY, 'diagnostic')
+      } catch { /* ignore */ }
       sessionId.current = sid
       setQuestion(data.question || '')
       conceptId.current = data.concept_id || ''
@@ -286,8 +309,10 @@ export default function OnboardPage() {
     } catch {
       try {
         sessionStorage.removeItem(DIAG_KEY)
+        sessionStorage.removeItem(STEP_KEY)
       } catch { /* ignore */ }
       setHasPaused(false)
+      setStep('welcome')
       toast.error(t('goals.diagnostic.resumeExpired'))
     } finally {
       setLoading(false)
@@ -301,6 +326,7 @@ export default function OnboardPage() {
     if (!dontKnow && !answerInput.trim()) return
     setLoading(true)
     setSubmitError(null)
+    lastAttemptDontKnow.current = dontKnow
     try {
       const answer = dontKnow ? '' : answerInput.trim()
       const elapsed = Math.max(0.5, (Date.now() - (questionShownAt.current ?? Date.now())) / 1000)
@@ -308,20 +334,39 @@ export default function OnboardPage() {
       const correct = data.correct || false
       // An admitted unknown is not a wrong answer, so it does not get the wrong answer's words.
       // This step renders the feedback and no separate verdict line, so the label goes here.
-      const feedback = dontKnow ? t('goals.verdict.noAnswer') : data.feedback || (correct ? t('goals.verdict.correct') : t('goals.verdict.notQuite'))
-      setAccuracy(prev => ({ correct: prev.correct + (correct ? 1 : 0), total: prev.total + 1 }))
-      setLastResult({ correct, feedback })
-      setRetryAvailable(data.done ? false : data.retry_available === true)
-      setRetryConcept(data.done ? '' : conceptId.current)
       if (data.progress) setProgress(data.progress)
 
       if (data.done) {
         setFinished(true)
+        // The plan request can take its whole timeout, and leaving the loading
+        // flag set makes every control look dead once the last answer is in.
+        setLoading(false)
         setTimeout(() => {
           void fetchPlan()
         }, 800)
         return
       }
+
+      // The server promises a question whenever done is false, so an absent one
+      // is a broken response. Throwing reaches the error block, which offers a
+      // retry, instead of staging '' and leaving Next looking inert.
+      if (!data.question) {
+        throw new Error(t('goals.diagnostic.noNextQuestion'))
+      }
+
+      if (dontKnow) {
+        // Cleanly advance to the next probe without holding on a dead-end feedback card
+        setAccuracy(prev => ({ correct: prev.correct, total: prev.total + 1 }))
+        applyQuestion(data.question, data.concept_id || '', data.concept_name || '', data.grading_type || '')
+        setLoading(false)
+        return
+      }
+
+      const feedback = data.feedback || (correct ? t('goals.verdict.correct') : t('goals.verdict.notQuite'))
+      setAccuracy(prev => ({ correct: prev.correct + (correct ? 1 : 0), total: prev.total + 1 }))
+      setLastResult({ correct, feedback })
+      setRetryAvailable(data.retry_available === true)
+      setRetryConcept(conceptId.current)
 
       // Manual advance: stage the prefetched next question, reveal on Next.
       // The staged question stays hidden, so answer timing starts at reveal.
@@ -333,6 +378,29 @@ export default function OnboardPage() {
       }
       setLoading(false)
     } catch (e) {
+      // A 404 means no session under this id any more, which is what happens when
+      // the final answer committed but its response was lost: the server deleted
+      // the finished session and the retry has nothing to answer. Ask for the
+      // plan before calling a completed run a failure.
+      if ((e as { status?: number } | null)?.status === 404) {
+        try {
+          const planRes = await getGoalPlan(sessionId.current)
+          if (!planRes) throw new Error('no plan to recover')
+          setPlan(planRes)
+          setFinished(true)
+          setStep('results')
+          try {
+            sessionStorage.removeItem(DIAG_KEY)
+            sessionStorage.removeItem(STEP_KEY)
+          } catch { /* ignore */ }
+          setHasPaused(false)
+          setLoading(false)
+          return
+        } catch {
+          // No plan either, so the run really is gone and the error block below
+          // offers the restart, which is the only honest option left.
+        }
+      }
       setSubmitError(toSubmitError(e, t('goals.diagnostic.submitFailed')))
       setLoading(false)
     }
@@ -346,6 +414,7 @@ export default function OnboardPage() {
       setStep('results')
       try {
         sessionStorage.removeItem(DIAG_KEY)
+        sessionStorage.removeItem(STEP_KEY)
       } catch { /* ignore */ }
       setHasPaused(false)
     } catch (e) {
@@ -459,7 +528,16 @@ export default function OnboardPage() {
         <section className="pt-8 min-w-0 overflow-hidden">
           {step !== 'welcome' && (
             <span className="flex mb-4">
-              <button type="button" onClick={() => setStep('welcome')} className="text-mathua-secondary text-sm hover:text-mathua-primary">{t('goals.onboard.back')}</button>
+              <button
+                type="button"
+                onClick={() => {
+                  try { sessionStorage.removeItem(STEP_KEY) } catch { /* ignore */ }
+                  setStep('welcome')
+                }}
+                className="text-mathua-secondary text-sm hover:text-mathua-primary"
+              >
+                {t('goals.onboard.back')}
+              </button>
             </span>
           )}
 
@@ -500,6 +578,7 @@ export default function OnboardPage() {
               onInputChange={setAnswerInput}
               onSubmit={() => { void submitAnswer(false) }}
               onDontKnow={() => { void submitAnswer(true) }}
+              onRetrySubmit={() => { void submitAnswer(lastAttemptDontKnow.current) }}
               onNext={goNext}
               done={finished}
               answerFormat={answerFormat}

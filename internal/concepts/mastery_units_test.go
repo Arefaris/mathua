@@ -108,7 +108,7 @@ func TestMasteryUnitDraft_BandWidthChangesThePartition(t *testing.T) {
 }
 
 // Unit prerequisite order is derived from the concept DAG, never stored. If it were stored, the
-// file would be a second hierarchy that could contradict the graph — which is what ADR-046
+// file would be a second hierarchy that could contradict the graph, which is what ADR-046
 // rejected. This asserts the absence of the field, which is easy to reintroduce by accident.
 func TestMasteryUnitFile_StoresNoPrerequisiteGraph(t *testing.T) {
 	raw, err := os.ReadFile(filepath.Join("..", "..", MasteryUnitsPath))
@@ -171,7 +171,7 @@ func TestBackwardBandEdges_NoneAtAnyWidth(t *testing.T) {
 
 // The reason depth is measured per concept. The subdomain condensation of an acyclic concept
 // DAG is NOT necessarily acyclic, so a subdomain depth function does not exist for every
-// subdomain — and code that assumes it does gets level 0 rather than an error, which is the
+// subdomain and code that assumes it does gets level 0 rather than an error, which is the
 // failure mode this test exists to document.
 //
 // This corpus has 9 such cycles covering 26 of 125 subdomains.

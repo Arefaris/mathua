@@ -5,7 +5,16 @@ import (
 	"math/rand"
 
 	"github.com/chuma-beep/mathua/internal/generator"
+	"github.com/chuma-beep/mathua/internal/mathutil"
 )
+
+// batchLCM returns the least common multiple of two positive integers.
+//
+// The batch conversions need the order of a product of disjoint cycles and the
+// order of a product of cyclic groups, both of which are least common
+// multiples. mathutil exports GCD only, so this is defined here rather than
+// widening that package's surface for one caller.
+func batchLCM(a, b int) int { return a / mathutil.GCD(a, b) * b }
 
 func Register(reg *generator.Registry) {
 	reg.Register("abstract.group.def", &groupDefGen{})
@@ -133,51 +142,70 @@ func (g *groupExamplesGen) Generate(ctx generator.GeneratorContext) generator.Pr
 type subgroupGen struct{}
 
 func (g *subgroupGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	if rand.Intn(3) == 0 {
-		type orderEntry struct {
-			subgroup string
-			group    string
-			order    string
-			reason   string
-		}
-		orderTable := []orderEntry{
-			{"{0,3}", "Z₆", "2", "The subgroup {0,3} has 2 elements, so its order is 2."},
-			{"{0,2,4}", "Z₆", "3", "The subgroup {0,2,4} has 3 elements, so its order is 3."},
-			{"{0}", "Z", "1", "The trivial subgroup {0} has order 1."},
-			{"{0,5}", "Z₁₀", "2", "The subgroup {0,5} has 2 elements, so its order is 2."},
-			{"{0,3,6,9}", "Z₁₂", "4", "The subgroup {0,3,6,9} has 4 elements, so its order is 4."},
-		}
-		e := orderTable[rand.Intn(len(orderTable))]
+	switch rand.Intn(5) {
+	case 0:
+		// Cyclic subgroup <d> in Z_n where n = d * k -> order is k
+		d := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		k := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		n := d * k
 		return generator.Problem{
-			Question:    fmt.Sprintf("What is the order of the subgroup %s in %s?", e.subgroup, e.group),
-			Answer:      e.order,
-			Explanation: e.reason,
+			Question: fmt.Sprintf("In the additive cyclic group \\(\\mathbb{Z}_{%d}\\), find the order of the subgroup \\(\\langle %d \\rangle\\).", n, d),
+			Answer:   fmt.Sprintf("%d", k),
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: the order of \\(\\langle d \\rangle\\) in \\(\\mathbb{Z}_n\\) is \\(\\frac{n}{\\gcd(d, n)}\\).\n"+
+				"Subgoal 2: Substitute \\(n = %d\\) and \\(d = %d\\), and \\(\\gcd(%d, %d) = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", n, d, d, n, d, n, d, k),
 		}
-	}
-
-	type entry struct {
-		set       string
-		group     string
-		operation string
-		isSub     string
-		reason    string
-	}
-	table := []entry{
-		{"even integers", "Z", "addition", "yes", "Even integers are closed under addition, contain 0, and contain inverses (-2n ∈ 2Z)."},
-		{"odd integers", "Z", "addition", "no", "Odd integers are not closed under addition (odd+odd=even), and do not contain 0."},
-		{"{0,2,4}", "Z₆", "addition mod 6", "yes", "{0,2,4} is closed under addition mod 6 (0+2=2, 2+4=0, etc.), has identity 0, and each element is its own inverse."},
-		{"{0,3}", "Z₆", "addition mod 6", "yes", "{0,3} is closed: 3+3=0, 3+0=3, 0+0=0. Contains identity 0 and inverses."},
-		{"{1,2,3,4}", "Z₅", "multiplication mod 5", "yes", "{1,2,3,4} is closed under multiplication mod 5, has identity 1, and each element has an inverse."},
-		{"positive integers", "Z", "addition", "no", "Positive integers do not contain the identity 0 and have no additive inverses."},
-		{"{0,1,2}", "Z₆", "addition mod 6", "no", "{0,1,2} is not closed: 2+2=4 ∉ {0,1,2}."},
-		{"{0,2,4,6}", "Z₈", "addition mod 8", "yes", "{0,2,4,6} is closed (even+even=even), has identity 0, and each element has an inverse (e.g., 2+6=0)."},
-		{"non-zero rationals", "Q", "multiplication", "yes", "Non-zero rationals form a subgroup of Q\\{0} under multiplication: closed, contains 1, and each a/b has inverse b/a."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is the set %s a subgroup of %s under %s? (yes/no)", e.set, e.group, e.operation),
-		Answer:      e.isSub,
-		Explanation: e.reason,
+	case 1:
+		// Number of left cosets [G:H] = |G| / |H|
+		hOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		index := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		gOrder := hOrder * index
+		return generator.Problem{
+			Question: fmt.Sprintf("A finite group \\(G\\) of order %d contains a subgroup \\(H\\) of order %d. How many distinct left cosets of \\(H\\) exist in \\(G\\)?", gOrder, hOrder),
+			Answer:   fmt.Sprintf("%d", index),
+			Explanation: fmt.Sprintf("Subgoal 1: State Lagrange's Theorem: the number of distinct left cosets is the index \\([G:H] = \\frac{|G|}{|H|}\\).\n"+
+				"Subgoal 2: Substitute \\(|G| = %d\\) and \\(|H| = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", gOrder, hOrder, gOrder, hOrder, index),
+		}
+	case 2:
+		// A product of disjoint cycles has order lcm of the cycle lengths.
+		a := mathutil.ScaleInt(ctx.Difficulty, 2, 5)
+		b := a + mathutil.ScaleInt(ctx.Difficulty, 1, 4)
+		n := a + b + mathutil.ScaleInt(ctx.Difficulty, 0, 3)
+		ans := batchLCM(a, b)
+		return generator.Problem{
+			Question: fmt.Sprintf("In the symmetric group \\(S_{%d}\\), find the order of the cyclic subgroup generated by a permutation that is a product of two disjoint cycles of lengths %d and %d.", n, a, b),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: disjoint cycles commute, so the order of their product is \\(\\operatorname{lcm}\\) of the cycle lengths.\n"+
+				"Subgoal 2: Substitute the lengths %d and %d.\n"+
+				"Subgoal 3: Evaluate: \\(\\operatorname{lcm}(%d, %d) = %d\\).", a, b, a, b, ans),
+		}
+	case 3:
+		// Number of generators of the subgroup of prime order p is phi(p) = p - 1.
+		primes := []int{2, 3, 5, 7, 11, 13}
+		p := primes[rand.Intn(len(primes))]
+		m := mathutil.ScaleInt(ctx.Difficulty, 2, 5)
+		n := p * m
+		ans := p - 1
+		return generator.Problem{
+			Question: fmt.Sprintf("In \\(\\mathbb{Z}_{%d}\\), how many distinct elements generate the unique subgroup of prime order %d?", n, p),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: A cyclic group of order \\(m\\) has \\(\\phi(m)\\) generators.\n"+
+				"Subgoal 2: For prime order \\(p = %d\\), \\(\\phi(p) = p - 1\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\phi(%d) = %d\\).", p, p, ans),
+		}
+	default:
+		// Order of an element a in Z_n is n / gcd(a, n).
+		a := mathutil.ScaleInt(ctx.Difficulty, 2, 12)
+		n := mathutil.ScaleInt(ctx.Difficulty, 4, 24)
+		ans := n / mathutil.GCD(a, n)
+		return generator.Problem{
+			Question: fmt.Sprintf("In the additive group \\(\\mathbb{Z}_{%d}\\), find the order of the element %d.", n, a),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: the order of \\(a\\) in \\(\\mathbb{Z}_n\\) is \\(\\frac{n}{\\gcd(a, n)}\\).\n"+
+				"Subgoal 2: Substitute \\(n = %d\\) and \\(a = %d\\), and \\(\\gcd(%d, %d) = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", n, a, a, n, mathutil.GCD(a, n), n, mathutil.GCD(a, n), ans),
+		}
 	}
 }
 
@@ -217,7 +245,11 @@ func (g *ringGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		}
 		w := witTable[rand.Intn(len(witTable))]
 		return generator.Problem{
-			Question:    fmt.Sprintf("Name an element of %s with no multiplicative inverse (enter it)", w.set),
+			// "Name an element with no inverse" has as many right answers as
+			// the set has non-units, and the key held one of them, so a learner
+			// who wrote 3 for Z was marked wrong (report 122). The smallest
+			// positive one is unique and asks the same thing.
+			Question:    fmt.Sprintf("What is the smallest positive integer with no multiplicative inverse in %s? (enter a number)", w.set),
 			Answer:      w.wit,
 			Explanation: w.reason,
 		}
@@ -459,41 +491,81 @@ func (g *orderGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 type idealGen struct{}
 
 func (g *idealGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		set     string
-		ring    string
-		isIdeal string
-		reason  string
-	}
-	table := []entry{
-		{"2Z (even integers)", "Z", "yes", "2Z is an ideal of Z: closed under addition and absorbs multiplication by any integer."},
-		{"3Z (multiples of 3)", "Z", "yes", "Multiples of 3 form an ideal: adding multiples stays multiple of 3, and integer multiples of multiples of 3 stay multiple of 3."},
-		{"odd integers", "Z", "no", "Odd integers are not closed under addition (odd+odd=even) and do not contain 0, so not an ideal."},
-		{"nZ (multiples of n)", "Z", "yes", "Multiples of n form an ideal of Z for any integer n."},
-		{"{0,2,4}", "Z_6", "yes", "{0,2,4} is an ideal of Z_6: closed under addition mod 6 and absorbs multiplication mod 6."},
-		{"{0,1,2}", "Z_6", "no", "{0,1,2} is not an ideal: 1+2=3 outside the set."},
-		{"the set of polynomials with zero constant term", "R[x]", "yes", "Polynomials with zero constant term form an ideal: sums and multiples by any polynomial keep zero constant term."},
-	}
-	e := table[rand.Intn(len(table))]
-	if rand.Intn(3) == 0 {
-		// production: witness computations for closure failures.
-		type witEntry struct {
-			question string
-			answer   string
-			reason   string
+	switch rand.Intn(5) {
+	case 0:
+		// |(d)| in Z_n where n = d * k is k
+		d := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		k := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		n := d * k
+		return generator.Problem{
+			Question: fmt.Sprintf("In the commutative ring \\(\\mathbb{Z}_{%d}\\), how many elements belong to the principal ideal \\((%d)\\)?", n, d),
+			Answer:   fmt.Sprintf("%d", k),
+			Explanation: fmt.Sprintf("Subgoal 1: The ideal \\((%d)\\) in \\(\\mathbb{Z}_{%d}\\) consists of the multiples of %d, so it has \\(\\frac{n}{\\gcd(d, n)}\\) elements.\n"+
+				"Subgoal 2: Here \\(%d \\mid %d\\), so \\(\\gcd(%d, %d) = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", d, n, d, d, n, d, n, d, n, d, k),
 		}
-		witTable := []witEntry{
-			{"{0,1,2} is not an ideal of Z_6. Compute 2+2 mod 6 (enter a number)", "4", "4 lies outside {0,1,2}, witnessing the failure of closure."},
-			{"Odd integers are not an ideal of Z. Compute 1+3 (enter a number)", "4", "4 is even, outside the odd integers: closure fails."},
-			{"3Z is an ideal of Z. Compute 3+3+3 (enter a number)", "9", "9 = 3·3 stays in 3Z, as closure demands."},
+	case 1:
+		// Index of (d) in Z_n when d does not divide n is gcd(d, n).
+		d := mathutil.ScaleInt(ctx.Difficulty, 3, 9)
+		n := mathutil.ScaleInt(ctx.Difficulty, 4, 20)
+		for n%d == 0 {
+			n++
 		}
-		w := witTable[rand.Intn(len(witTable))]
-		return generator.Problem{Question: w.question, Answer: w.answer, Explanation: w.reason}
-	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is %s an ideal of %s? (yes/no)", e.set, e.ring),
-		Answer:      e.isIdeal,
-		Explanation: e.reason,
+		ans := mathutil.GCD(d, n)
+		return generator.Problem{
+			Question: fmt.Sprintf("Find the number of distinct cosets (index) of the ideal \\((%d)\\) in the ring \\(\\mathbb{Z}_{%d}\\).", d, n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The index of \\(I\\) in \\(R\\) is \\(|R/I|\\), and \\(|\\mathbb{Z}_n / (d)| = \\gcd(d, n)\\).\n"+
+				"Subgoal 2: Substitute \\(d = %d\\) and \\(n = %d\\); note that %d does not divide %d, so the index is not %d.\n"+
+				"Subgoal 3: Evaluate: \\(\\gcd(%d, %d) = %d\\).", d, n, d, n, d, d, n, ans),
+		}
+	case 2:
+		// |(a)| in Z_n is n / gcd(a, n)
+		a := mathutil.ScaleInt(ctx.Difficulty, 2, 10)
+		n := mathutil.ScaleInt(ctx.Difficulty, 5, 24)
+		ans := n / mathutil.GCD(a, n)
+		return generator.Problem{
+			Question: fmt.Sprintf("How many elements belong to the principal ideal \\((%d)\\) in the ring \\(\\mathbb{Z}_{%d}\\)?", a, n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The ideal \\((%d)\\) is the set of multiples of %d modulo %d, which is the subgroup generated by \\(\\gcd(a, n)\\).\n"+
+				"Subgoal 2: Its size is \\(\\frac{n}{\\gcd(a, n)} = \\frac{%d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d elements.", a, a, n, n, mathutil.GCD(a, n), ans),
+		}
+	case 3:
+		// Sum of ideals (a) + (b) = (gcd(a, b)) in Z
+		g := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		x := mathutil.ScaleInt(ctx.Difficulty, 2, 5)
+		y := mathutil.ScaleInt(ctx.Difficulty, 3, 7)
+		for mathutil.GCD(x, y) != 1 {
+			y++
+		}
+		a := g * x
+		b := g * y
+		return generator.Problem{
+			Question: fmt.Sprintf("In the principal ideal domain \\(\\mathbb{Z}\\), find the positive generator \\(d\\) of the sum ideal \\((%d) + (%d) = (d)\\).", a, b),
+			Answer:   fmt.Sprintf("%d", g),
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for PID ideal sums: \\((a) + (b) = (\\gcd(a, b))\\).\n"+
+				"Subgoal 2: Substitute \\(a = %d\\) and \\(b = %d\\).\n"+
+				"Subgoal 3: Compute: \\(\\gcd(%d, %d) = %d\\).", a, b, a, b, g),
+		}
+	default:
+		// Intersection of ideals (a) cap (b) = (lcm(a, b)) in Z
+		g := mathutil.ScaleInt(ctx.Difficulty, 1, 4)
+		x := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+		y := mathutil.ScaleInt(ctx.Difficulty, 3, 5)
+		for mathutil.GCD(x, y) != 1 {
+			y++
+		}
+		a := g * x
+		b := g * y
+		ans := g * x * y
+		return generator.Problem{
+			Question: fmt.Sprintf("In the ring of integers \\(\\mathbb{Z}\\), find the positive generator \\(m\\) of the intersection ideal \\((%d) \\cap (%d) = (m)\\).", a, b),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\((a) \\cap (b) = (\\operatorname{lcm}(a, b))\\).\n"+
+				"Subgoal 2: Compute \\(\\operatorname{lcm}(%d, %d) = \\frac{%d \\cdot %d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d.", a, b, a, b, g, ans),
+		}
 	}
 }
 
@@ -502,24 +574,78 @@ func (g *idealGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 type quotientGen struct{}
 
 func (g *quotientGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		quotient string
-		iso      string
-		reason   string
-	}
-	table := []entry{
-		{"Z / 2Z", "Z_2", "Z mod even integers has two cosets: even and odd, isomorphic to integers mod 2."},
-		{"Z / 3Z", "Z_3", "Three cosets: 0+3Z, 1+3Z, 2+3Z, forming Z_3."},
-		{"Z / 4Z", "Z_4", "Four cosets: multiples of 4 shifted by 0,1,2,3."},
-		{"R[x] / (x)", "R", "Quotient by the ideal (x) evaluates polynomials at 0, leaving constants R."},
-		{"Z / 6Z", "Z_6", "Quotient of integers by multiples of 6 gives integers mod 6."},
-		{"2Z / 4Z", "Z_2", "Even integers mod multiples of 4 has two cosets."},
-	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What group/ring is %s isomorphic to?", e.quotient),
-		Answer:      e.iso,
-		Explanation: e.reason,
+	switch rand.Intn(5) {
+	case 0:
+		// |Z_n / (d)| = gcd(d, n), and d does not divide n so this is not d.
+		d := mathutil.ScaleInt(ctx.Difficulty, 3, 9)
+		n := mathutil.ScaleInt(ctx.Difficulty, 4, 20)
+		for n%d == 0 {
+			n++
+		}
+		ans := mathutil.GCD(d, n)
+		return generator.Problem{
+			Question: fmt.Sprintf("How many elements are in the quotient ring \\(\\mathbb{Z}_{%d} / (%d)\\)?", n, d),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: For an ideal \\((%d)\\) in \\(\\mathbb{Z}_n\\), the quotient has \\(\\gcd(d, n)\\) elements.\n"+
+				"Subgoal 2: Substitute \\(d = %d\\) and \\(n = %d\\); because %d does not divide %d the answer is not %d.\n"+
+				"Subgoal 3: Evaluate: \\(\\gcd(%d, %d) = %d\\).", d, d, n, d, n, d, d, n, ans),
+		}
+	case 1:
+		// The characteristic of a product of rings is the lcm of the characteristics.
+		m := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		n := m + 1
+		for mathutil.GCD(m, n) != 1 {
+			n++
+		}
+		ans := m * n
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the characteristic of the ring \\(\\mathbb{Z}_{%d} \\times \\mathbb{Z}_{%d}\\)?", m, n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The characteristic of a product is the least common multiple of the characteristics of its factors.\n"+
+				"Subgoal 2: The factors have characteristic %d and %d, and \\(\\gcd(%d, %d) = 1\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\operatorname{lcm}(%d, %d) = %d\\).", m, n, m, n, m, n, ans),
+		}
+	case 2:
+		// Z[x]/(x^2 + 1, p) is F_p[x]/(x^2 + 1), so it has p^2 elements.
+		primes := []int{2, 3, 5}
+		p := primes[rand.Intn(len(primes))]
+		ans := p * p
+		return generator.Problem{
+			Question: fmt.Sprintf("How many elements belong to the ring \\(\\mathbb{Z}[x] / (x^{2} + 1, %d)\\)?", p),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: Reducing modulo %d sends \\(\\mathbb{Z}[x]\\) to \\(\\mathbb{F}_{%d}[x]\\).\n"+
+				"Subgoal 2: The quotient by the monic degree-two polynomial \\(x^2 + 1\\) is a two-dimensional vector space over \\(\\mathbb{F}_{%d}\\).\n"+
+				"Subgoal 3: Evaluate: \\(%d^{2} = %d\\) elements.", p, p, p, p, ans),
+		}
+	case 3:
+		// F_p[x]/(f) with deg f = d has p^d elements.
+		primes := []int{2, 3, 5}
+		p := primes[rand.Intn(len(primes))]
+		d := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+		ans := 1
+		for i := 0; i < d; i++ {
+			ans *= p
+		}
+		return generator.Problem{
+			Question: fmt.Sprintf("Let \\(f(x)\\) be an irreducible polynomial of degree %d over \\(\\mathbb{Z}_{%d}\\). How many elements belong to \\(\\mathbb{Z}_{%d}[x] / (f(x))\\)?", d, p, p),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The quotient of \\(\\mathbb{F}_p[x]\\) by an irreducible polynomial of degree \\(d\\) is a field of order \\(p^d\\).\n"+
+				"Subgoal 2: Substitute \\(p = %d\\) and \\(d = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(%d^{%d} = %d\\).", p, d, p, d, ans),
+		}
+	default:
+		// The coset m + (d) lies in Z_n/(d) = Z_d, so its additive order is d/gcd(m, d).
+		d := mathutil.ScaleInt(ctx.Difficulty, 3, 12)
+		m := mathutil.ScaleInt(ctx.Difficulty, 1, 9)
+		n := d * mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+		ans := d / mathutil.GCD(m, d)
+		return generator.Problem{
+			Question: fmt.Sprintf("In the quotient ring \\(\\mathbb{Z}_{%d} / (%d)\\), what is the additive order of the coset \\(%d + (%d)\\)?", n, d, m, d),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The quotient is isomorphic to \\(\\mathbb{Z}_{%d}\\), where the coset corresponds to the residue %d.\n"+
+				"Subgoal 2: The additive order of a residue is \\(\\frac{d}{\\gcd(m, d)} = \\frac{%d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d.", d, m, d, mathutil.GCD(m, d), ans),
+		}
 	}
 }
 
@@ -528,46 +654,70 @@ func (g *quotientGen) Generate(ctx generator.GeneratorContext) generator.Problem
 type normalSubgroupGen struct{}
 
 func (g *normalSubgroupGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct {
-		subgroup string
-		group    string
-		normal   string
-		reason   string
-	}
-	table := []entry{
-		{"A_3 (alternating)", "S_3", "yes", "A_3 has index 2 in S_3, and all index-2 subgroups are normal."},
-		{"{e, (1 2)}", "S_3", "no", "Conjugation by (1 3) sends (1 2) to (2 3), which is not in the set, so not normal."},
-		{"nZ", "Z (addition)", "yes", "All subgroups of abelian groups are normal; Z is abelian."},
-		{"the centre Z(G)", "any group G", "yes", "The centre is always normal: gZ(G)g^{-1}=Z(G)."},
-		{"{0,3} in Z_6", "Z_6", "yes", "Z_6 is abelian, so every subgroup is normal."},
-		{"{0,2,4} in Z_6", "Z_6", "yes", "Abelian groups have all subgroups normal."},
-	}
-	// difficulty filters: higher difficulty favors non-abelian examples
-	pool := table
-	if scale > 3 {
-		pool = table[:2] // focus on S_3 tricky cases
-	}
-	e := pool[rand.Intn(len(pool))]
-	if rand.Intn(3) == 0 {
-		// production: indices and conjugates in S_3.
-		type norEntry struct {
-			question string
-			answer   string
-			reason   string
+	switch rand.Intn(5) {
+	case 0:
+		// |A_n| = n!/2. A_n varies with n, so this is not a constant answer.
+		n := 4 + rand.Intn(3)
+		fact := 1
+		for i := 2; i <= n; i++ {
+			fact *= i
 		}
-		norTable := []norEntry{
-			{"What is the index of A_3 in S_3? (enter a number)", "2", "|S_3|/|A_3| = 6/3 = 2; index-2 subgroups are always normal."},
-			{"Conjugate (1 2) by (1 3) in S_3. Type the result like (2 3)", "(2 3)", "(1 3)(1 2)(1 3) sends 2 to 3: the conjugate is (2 3), outside {e,(1 2)}."},
-			{"Z_6 is abelian, so every subgroup is normal. How many subgroups does Z_6 have? (enter a number)", "4", "One per divisor of 6: orders 1, 2, 3, 6."},
+		ans := fact / 2
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the order of the alternating group \\(A_{%d}\\)?", n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: \\(A_n\\) is the kernel of the sign homomorphism, so \\([S_n : A_n] = 2\\).\n"+
+				"Subgoal 2: \\(|S_{%d}| = %d! = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(|A_{%d}| = \\frac{%d}{2} = %d\\).", n, n, fact, n, fact, ans),
 		}
-		v := norTable[rand.Intn(len(norTable))]
-		return generator.Problem{Question: v.question, Answer: v.answer, Explanation: v.reason}
-	}
-	return generator.Problem{
-		Question:    fmt.Sprintf("Is %s normal in %s? (yes/no)", e.subgroup, e.group),
-		Answer:      e.normal,
-		Explanation: e.reason,
+	case 1:
+		// Orbit-stabiliser: the number of conjugates of H is |G| / |N_G(H)|.
+		cOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		conj := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		gOrder := cOrder * conj
+		return generator.Problem{
+			Question: fmt.Sprintf("A subgroup \\(H\\) of a group \\(G\\) of order %d has normalizer \\(N_G(H)\\) of order %d. How many distinct conjugates does \\(H\\) have?", gOrder, cOrder),
+			Answer:   fmt.Sprintf("%d", conj),
+			Explanation: fmt.Sprintf("Subgoal 1: The conjugates of \\(H\\) are the orbit of \\(H\\) under conjugation, whose stabiliser is \\(N_G(H)\\).\n"+
+				"Subgoal 2: By orbit-stabiliser, the number of conjugates is \\(\\frac{|G|}{|N_G(H)|} = \\frac{%d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d distinct conjugates.", gOrder, cOrder, conj),
+		}
+	case 2:
+		// |N| = |G| / |G/N|
+		qOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		nOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		gOrder := qOrder * nOrder
+		return generator.Problem{
+			Question: fmt.Sprintf("Let \\(N\\) be a normal subgroup of a group \\(G\\) of order %d. If the quotient group \\(G/N\\) has order %d, find the order of \\(N\\).", gOrder, qOrder),
+			Answer:   fmt.Sprintf("%d", nOrder),
+			Explanation: fmt.Sprintf("Subgoal 1: State Lagrange's relation for quotient groups: \\(|G/N| = \\frac{|G|}{|N|}\\).\n"+
+				"Subgoal 2: Substitute \\(|G| = %d\\) and \\(|G/N| = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(|N| = \\frac{%d}{%d} = %d\\).", gOrder, qOrder, gOrder, qOrder, nOrder),
+		}
+	case 3:
+		// [G : Z(G)] = |G| / |Z(G)|
+		zOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 5)
+		index := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		gOrder := zOrder * index
+		return generator.Problem{
+			Question: fmt.Sprintf("A finite group \\(G\\) of order %d has center \\(Z(G)\\) of order %d. Find the index \\([G : Z(G)]\\).", gOrder, zOrder),
+			Answer:   fmt.Sprintf("%d", index),
+			Explanation: fmt.Sprintf("Subgoal 1: The index formula gives \\([G : Z(G)] = \\frac{|G|}{|Z(G)|}\\).\n"+
+				"Subgoal 2: Substitute \\(|G| = %d\\) and \\(|Z(G)| = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", gOrder, zOrder, gOrder, zOrder, index),
+		}
+	default:
+		// The conjugacy class of g has size |G| / |C_G(g)|.
+		cOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		cls := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		gOrder := cOrder * cls
+		return generator.Problem{
+			Question: fmt.Sprintf("An element \\(g\\) of a group of order %d has centralizer of order %d. What is the size of its conjugacy class?", gOrder, cOrder),
+			Answer:   fmt.Sprintf("%d", cls),
+			Explanation: fmt.Sprintf("Subgoal 1: The conjugacy class of \\(g\\) is its orbit under conjugation, stabilised by \\(C_G(g)\\).\n"+
+				"Subgoal 2: By orbit-stabiliser, the class size is \\(\\frac{|G|}{|C_G(g)|} = \\frac{%d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d.", gOrder, cOrder, cls),
+		}
 	}
 }
 
@@ -632,31 +782,80 @@ func (g *lagrangeGen) Generate(ctx generator.GeneratorContext) generator.Problem
 type quotientGroupGen struct{}
 
 func (g *quotientGroupGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct {
-		quotient string
-		iso      string
-		reason   string
-	}
-	tableEasy := []entry{
-		{"Z / 2Z", "Z_2", "Two cosets: even vs odd."},
-		{"Z / 3Z", "Z_3", "Three cosets mod 3."},
-		{"S_3 / A_3", "Z_2", "Quotient of S_3 by A_3 has order 2, so Z_2."},
-	}
-	tableHard := []entry{
-		{"D_4 / {e, r^2}", "Z_2 x Z_2 (Klein four)", "Dihedral group of order 8 mod its centre of order 2."},
-		{"Z_12 / {0,4,8}", "Z_4", "Quotient of Z_12 by order-3 subgroup has order 4."},
-		{"Z_8 / {0,4}", "Z_4", "Order 8 mod order 2 gives order 4."},
-	}
-	pool := tableEasy
-	if scale > 3 {
-		pool = append(tableEasy, tableHard...)
-	}
-	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{
-		Question:    fmt.Sprintf("What group is %s isomorphic to?", e.quotient),
-		Answer:      e.iso,
-		Explanation: e.reason,
+	switch rand.Intn(5) {
+	case 0:
+		// |G/N| = |G| / |N|
+		nOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		qOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		gOrder := nOrder * qOrder
+		return generator.Problem{
+			Question: fmt.Sprintf("Let \\(G\\) be a group of order %d and let \\(N\\) be a normal subgroup of order %d. What is the order of the quotient group \\(G/N\\)?", gOrder, nOrder),
+			Answer:   fmt.Sprintf("%d", qOrder),
+			Explanation: fmt.Sprintf("Subgoal 1: State Lagrange's Theorem for quotient groups: \\(|G/N| = \\frac{|G|}{|N|}\\).\n"+
+				"Subgoal 2: Substitute \\(|G| = %d\\) and \\(|N| = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", gOrder, nOrder, gOrder, nOrder, qOrder),
+		}
+	case 1:
+		// |Z_n / <d>| = gcd(d, n), and d does not divide n so this is not d.
+		d := mathutil.ScaleInt(ctx.Difficulty, 3, 9)
+		n := mathutil.ScaleInt(ctx.Difficulty, 4, 20)
+		for n%d == 0 {
+			n++
+		}
+		ans := mathutil.GCD(d, n)
+		return generator.Problem{
+			Question: fmt.Sprintf("In the additive cyclic group \\(\\mathbb{Z}_{%d}\\), find the order of the quotient group \\(\\mathbb{Z}_{%d} / \\langle %d \\rangle\\).", n, n, d),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The subgroup has order \\(\\frac{n}{\\gcd(d, n)}\\), so the quotient has order \\(\\gcd(d, n)\\).\n"+
+				"Subgoal 2: Substitute \\(n = %d\\) and \\(d = %d\\); note that %d does not divide %d.\n"+
+				"Subgoal 3: Evaluate: \\(\\gcd(%d, %d) = %d\\).", n, d, d, n, d, n, ans),
+		}
+	case 2:
+		// The coset m + N has order d / gcd(m, d) in Z_n / <d>.
+		// Ensure gcd(m, d) > 1 so ans < d, preventing read-off of d from the stem.
+		gVal := mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+		k := mathutil.ScaleInt(ctx.Difficulty, 2, 5)
+		d := gVal * k
+		m := gVal * (rand.Intn(3) + 1)
+		for mathutil.GCD(m, d) != gVal {
+			m = gVal * (rand.Intn(3) + 1)
+		}
+		n := d * mathutil.ScaleInt(ctx.Difficulty, 2, 4)
+		ans := d / mathutil.GCD(m, d)
+		return generator.Problem{
+			Question: fmt.Sprintf("In the quotient group \\(\\mathbb{Z}_{%d} / \\langle %d \\rangle\\), what is the order of the coset \\(%d + \\langle %d \\rangle\\)?", n, d, m, d),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The quotient is cyclic of order %d, and the coset corresponds to the residue %d.\n"+
+				"Subgoal 2: The order of that residue is \\(\\frac{%d}{\\gcd(%d, %d)} = \\frac{%d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d.", d, m, d, m, d, mathutil.GCD(m, d), ans, ans),
+		}
+	case 3:
+		// First Isomorphism Theorem: |G / ker(phi)| = |im(phi)| = |H|
+		kOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		hOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		gOrder := kOrder * hOrder
+		return generator.Problem{
+			Question: fmt.Sprintf("Let \\(\\phi: G \\to H\\) be a surjective group homomorphism from a group of order %d. If \\(|\\ker(\\phi)| = %d\\), find the order of \\(H\\).", gOrder, kOrder),
+			Answer:   fmt.Sprintf("%d", hOrder),
+			Explanation: fmt.Sprintf("Subgoal 1: State the First Isomorphism Theorem: \\(G / \\ker(\\phi) \\cong \\operatorname{im}(\\phi) = H\\).\n"+
+				"Subgoal 2: Equate orders: \\(|H| = \\frac{|G|}{|\\ker(\\phi)|}\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{%d} = %d\\).", gOrder, kOrder, hOrder),
+		}
+	default:
+		// |A_n| = n!/2, which varies with n.
+		n := 4 + rand.Intn(3)
+		fact := 1
+		for i := 2; i <= n; i++ {
+			fact *= i
+		}
+		ans := fact / 2
+		return generator.Problem{
+			Question: fmt.Sprintf("The alternating group \\(A_{%d}\\) is a normal subgroup of \\(S_{%d}\\). What is the order of \\(A_{%d}\\)?", n, n, n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: \\(|S_{%d}| = %d! = %d\\).\n"+
+				"Subgoal 2: \\(A_{%d}\\) is the kernel of the sign homomorphism, so it has half the elements of \\(S_{%d}\\).\n"+
+				"Subgoal 3: Evaluate: \\(\\frac{%d}{2} = %d\\).", n, n, fact, n, n, fact, ans),
+		}
 	}
 }
 
@@ -1301,43 +1500,91 @@ func (g *exactSequenceGen) Generate(ctx generator.GeneratorContext) generator.Pr
 type commutatorGen struct{}
 
 func (g *commutatorGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct {
-		q string
-		a string
-		e string
-	}
-	easy := []entry{
-		{"Is commutator [x,y]=x^{-1}y^{-1}xy? (yes/no)", "yes", "Definition."},
-		{"Is commutator subgroup generated by all commutators? (yes/no)", "yes", "G'."},
-		{"Is G/G' abelianization? (yes/no)", "yes", "Quotient by commutator subgroup abelian."},
-	}
-	hard := []entry{
-		{"Is G abelian iff G'=1? (yes/no)", "yes", "Commutators trivial iff abelian."},
-		{"Is S_3' = A_3? (yes/no)", "yes", "Commutator subgroup of S_3 is A_3."},
-		{"Does abelianization of free group F_n is Z^n? (yes/no)", "yes", "F_n/[F_n,F_n] ≅ Z^n."},
-	}
-	pool := easy
-	if scale > 3 {
-		pool = append(easy, hard...)
-	}
-	if rand.Intn(3) == 0 {
-		// production: orders around the commutator subgroup (unique answers).
-		type comEntry struct {
-			question string
-			answer   string
-			reason   string
+	switch rand.Intn(6) {
+	case 0:
+		// [S_n, S_n] = A_n, so the derived subgroup has order n!/2.
+		n := 3 + rand.Intn(4) // 3 to 6
+		fact := 1
+		for i := 2; i <= n; i++ {
+			fact *= i
 		}
-		comTable := []comEntry{
-			{"S_3' = A_3. What is |A_3|? (enter a number)", "3", "Three even permutations."},
-			{"F_n/[F_n,F_n] ≅ Z^n. For F_2, what is the rank? (enter a number)", "2", "Abelianization of F_2 is Z^2."},
-			{"A_3 is abelian so A_3' = 1. What is the order of A_3'? (enter a number)", "1", "Trivial group has order 1."},
+		ans := fact / 2
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the order of the commutator subgroup \\([S_{%d}, S_{%d}]\\)?", n, n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The derived subgroup of \\(S_n\\) is \\(A_n\\) for \\(n \\ge 3\\).\n"+
+				"Subgoal 2: Substitute \\(|S_{%d}| = %d! = %d\\).\n"+
+				"Subgoal 3: Evaluate: \\(|A_{%d}| = \\frac{%d}{2} = %d\\).", n, n, fact, n, fact, ans),
 		}
-		v := comTable[rand.Intn(len(comTable))]
-		return generator.Problem{Question: v.question, Answer: v.answer, Explanation: v.reason}
+	case 1:
+		// Dihedral group commutator subgroup [D_{2k}, D_{2k}] = <r^2> has order k.
+		// Use even n = 2k with k in [3, 9] so the answer k is never printed in the stem.
+		k := mathutil.ScaleInt(ctx.Difficulty, 3, 9)
+		n := 2 * k
+		ans := k
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the order of the commutator subgroup \\([D_{%d}, D_{%d}]\\) of the dihedral group \\(D_{%d}\\)?", n, n, n),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: In the dihedral group \\(D_n\\) of symmetries of a regular \\(n\\)-gon, the commutator subgroup is generated by the square of the rotation: \\([D_n, D_n] = \\langle r^2 \\rangle\\).\n"+
+				"Subgoal 2: The rotation \\(r\\) has order %d. Since \\(n = 2(%d)\\) is even, the order of \\(r^2\\) is \\(\\frac{%d}{2} = %d\\).\n"+
+				"Subgoal 3: Evaluate: %d.", n, k, n, k, ans),
+		}
+	case 2:
+		// Order of the abelianization G / [G, G] given |G| and |[G, G]|
+		derOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
+		abOrder := mathutil.ScaleInt(ctx.Difficulty, 2, 8)
+		gOrder := derOrder * abOrder
+		return generator.Problem{
+			Question: fmt.Sprintf("A finite group \\(G\\) of order %d has commutator subgroup \\([G, G]\\) of order %d. Find the order of the abelianization \\(G / [G, G]\\).", gOrder, derOrder),
+			Answer:   fmt.Sprintf("%d", abOrder),
+			Explanation: fmt.Sprintf("Subgoal 1: The abelianization is \\(G / [G, G]\\).\n"+
+				"Subgoal 2: By Lagrange's Theorem, \\(|G / [G, G]| = \\frac{|G|}{|[G, G]|} = \\frac{%d}{%d}\\).\n"+
+				"Subgoal 3: Evaluate: %d.", gOrder, derOrder, abOrder),
+		}
+	case 3:
+		// Matrix group commutator: [GL_2(F_p), GL_2(F_p)] = SL_2(F_p) of order p(p^2 - 1)
+		primes := []int{3, 5}
+		p := primes[rand.Intn(len(primes))]
+		ans := p * (p*p - 1)
+		return generator.Problem{
+			Question: fmt.Sprintf("For the finite field \\(\\mathbb{F}_{%d}\\), what is the order of the commutator subgroup \\([\\operatorname{GL}_2(\\mathbb{F}_{%d}), \\operatorname{GL}_2(\\mathbb{F}_{%d})]\\)?", p, p, p),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The commutator subgroup of the general linear group \\(\\operatorname{GL}_2(\\mathbb{F}_p)\\) is the special linear group \\(\\operatorname{SL}_2(\\mathbb{F}_p)\\) consisting of matrices with determinant 1.\n"+
+				"Subgoal 2: The order of \\(\\operatorname{SL}_2(\\mathbb{F}_p)\\) is \\(p(p^2 - 1)\\).\n"+
+				"Subgoal 3: Evaluate for \\(p = %d\\): \\(%d(%d^2 - 1) = %d(%d) = %d\\).", p, p, p, p, p*p-1, ans),
+		}
+	case 4:
+		// Quaternion group Q_8 commutator subgroup has order 2, abelianization has order 4
+		sub := rand.Intn(2)
+		if sub == 0 {
+			return generator.Problem{
+				Question: "What is the order of the commutator subgroup \\([Q_8, Q_8]\\) of the quaternion group \\(Q_8\\)?",
+				Answer:   "2",
+				Explanation: "Subgoal 1: In the quaternion group \\(Q_8\\), the commutator of any two non-commuting elements is \\([i, j] = i j i^{-1} j^{-1} = -1\\).\n" +
+					"Subgoal 2: The commutator subgroup is the center \\(Z(Q_8) = \\{1, -1\\}\\).\n" +
+					"Subgoal 3: Evaluate: the order is 2.",
+			}
+		} else {
+			return generator.Problem{
+				Question: "What is the order of the abelianization \\(Q_8 / [Q_8, Q_8]\\) of the quaternion group \\(Q_8\\)?",
+				Answer:   "4",
+				Explanation: "Subgoal 1: The abelianization is the quotient \\(Q_8 / [Q_8, Q_8]\\).\n" +
+					"Subgoal 2: The quaternion group has order 8 and its commutator subgroup has order 2.\n" +
+					"Subgoal 3: Evaluate: \\(\\frac{8}{2} = 4\\) (isomorphic to the Klein four-group \\(V_4\\)).",
+			}
+		}
+	default:
+		// (S_n x Z_m)^ab = Z_2 x Z_m, of order 2m.
+		m := mathutil.ScaleInt(ctx.Difficulty, 2, 9)
+		ans := 2 * m
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the order of the abelianization of \\(S_3 \\times \\mathbb{Z}_{%d}\\)?", m),
+			Answer:   fmt.Sprintf("%d", ans),
+			Explanation: fmt.Sprintf("Subgoal 1: The abelianization of a product is the product of the abelianizations, and \\(S_3^{ab} \\cong \\mathbb{Z}_2\\).\n"+
+				"Subgoal 2: The abelianization is \\(\\mathbb{Z}_2 \\times \\mathbb{Z}_{%d}\\), which has \\(2 \\cdot %d\\) elements.\n"+
+				"Subgoal 3: Evaluate: %d.", m, m, ans),
+		}
 	}
-	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 // ----- symmetric group -----

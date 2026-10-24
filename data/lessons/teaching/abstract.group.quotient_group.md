@@ -1,6 +1,6 @@
 # Quotient Groups
 
-**Quotient group:** For $N$ normal in $G$, the cosets $G/N$ form a group under $(aN)(bN) = abN$. Normality is what makes this multiplication well-defined — without it, the product depends on representatives.
+**Quotient group:** For $N$ normal in $G$, the cosets $G/N$ form a group under $(aN)(bN) = abN$. Normality is what makes this multiplication well-defined, without it, the product depends on representatives.
 
 ## Worked: S_3/A_3 has order 2
 

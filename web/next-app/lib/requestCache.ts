@@ -2,7 +2,7 @@
  * Two different intents that were sharing one helper, and a stale-progress bug.
  *
  * `oncePerSession` was introduced to stop React 18 StrictMode double-invoking effects
- * from doubling network traffic, and it did that — but it deleted its map entry only on
+ * from doubling network traffic, and it did that, but it deleted its map entry only on
  * *rejection*, so a **successful** response was reused for the rest of the JavaScript
  * session. On `/graph` that meant a learner who answered questions and came back saw
  * pre-answer mastery bars, node colours and headline numbers: answering is a real server
@@ -10,8 +10,8 @@
  * `inflight`, so the intent was in-flight deduplication all along.
  *
  * `dedupeInFlight` is that intent, honestly implemented: the entry goes when the promise
- * settles either way. StrictMode's two effect invocations still share the promise —
- * React runs both before the microtask queue drains, so nothing has settled yet — and a
+ * settles either way. StrictMode's two effect invocations still share the promise, 
+ * React runs both before the microtask queue drains, so nothing has settled yet and a
  * later mount refetches.
  *
  * Which one to use is a question about the *data*, not about the caller:

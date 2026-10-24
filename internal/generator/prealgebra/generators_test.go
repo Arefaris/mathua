@@ -2,6 +2,8 @@ package prealgebra
 
 import (
 	"math/rand"
+	"regexp"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -129,6 +131,85 @@ func TestSciNotationGenBothDirections(t *testing.T) {
 	} {
 		if res := gen.Grade(tc.expected, tc.answer); res.Correct != tc.want {
 			t.Errorf("Grade(%q, %q) = %v, want %v (%q)", tc.expected, tc.answer, res.Correct, tc.want, res.Feedback)
+		}
+	}
+}
+
+func TestTwoStepInequalityNamesTheLargestInteger(t *testing.T) {
+	g := &ineqTwoStepGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		// The question asks for the largest integer, so the boundary has to sit
+		// strictly between that integer and the next one; otherwise the answer
+		// is either wrong or not the largest.
+		bound, err := strconv.ParseFloat(p.Facts["bound"], 64)
+		if err != nil {
+			t.Fatalf("bound %q is not a number: %q", p.Facts["bound"], p.Question)
+		}
+		want, err := strconv.Atoi(p.Answer)
+		if err != nil {
+			t.Fatalf("answer %q is not an integer: %q", p.Answer, p.Question)
+		}
+		// The inequality is strict, so a boundary that lands exactly on want+1
+		// still leaves want as the largest integer that satisfies it.
+		if !(float64(want) < bound && bound <= float64(want+1)) {
+			t.Fatalf("bound %.4f does not leave %d as the largest integer: %q", bound, want, p.Question)
+		}
+		if !strings.Contains(p.Question, "largest integer") {
+			t.Fatalf("question does not ask for the largest integer: %q", p.Question)
+		}
+	}
+}
+
+// The question prints "x + b = rhs" and the answer has to be the x that makes
+// it true. It used to publish the right-hand side, so x + 3 = 8 expected 8.
+func TestOneStepAdditionAnswerSolvesThePrintedEquation(t *testing.T) {
+	gen := &eqOneStepAddGen{}
+	pattern := regexp.MustCompile(`\\\(x ([+-]) (\d+) = (-?\d+)\\\)`)
+	for i := 0; i < 300; i++ {
+		p := gen.Generate(generator.GeneratorContext{Difficulty: rand.Float64()})
+		m := pattern.FindStringSubmatch(p.Question)
+		if m == nil {
+			t.Fatalf("question does not print the equation: %q", p.Question)
+		}
+		if strings.Contains(p.Question, "+ -") {
+			t.Fatalf("question prints a minus after a plus: %q", p.Question)
+		}
+		offset, _ := strconv.Atoi(m[2])
+		if m[1] == "-" {
+			offset = -offset
+		}
+		rhs, _ := strconv.Atoi(m[3])
+		want, _ := strconv.Atoi(p.Answer)
+		if want != rhs-offset {
+			t.Fatalf("answer = %d, want %d for %q", want, rhs-offset, p.Question)
+		}
+	}
+}
+
+// TestOneStepInequalityAsksForTheIntegerItGrades pins the wording against the
+// key. The stem used to say only "Solve:" while the answer was the boundary
+// integer, so "x > 3", the answer to the question as asked, was marked wrong.
+func TestOneStepInequalityAsksForTheIntegerItGrades(t *testing.T) {
+	g := &ineqOneStepGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		if !strings.Contains(p.Question, "smallest integer") {
+			t.Fatalf("question does not ask for an integer: %q", p.Question)
+		}
+		if strings.Contains(p.Question, "+ -") {
+			t.Fatalf("question prints a double sign: %q", p.Question)
+		}
+		ans, err := strconv.Atoi(p.Answer)
+		if err != nil {
+			t.Fatalf("answer %q is not an integer", p.Answer)
+		}
+		border, err := strconv.Atoi(p.Facts["border"])
+		if err != nil {
+			t.Fatalf("border %q is not an integer", p.Facts["border"])
+		}
+		if ans != border+1 {
+			t.Fatalf("answer %d is not the smallest integer above the border %d", ans, border)
 		}
 	}
 }

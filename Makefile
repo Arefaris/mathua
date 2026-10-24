@@ -13,6 +13,8 @@ build-all:
 
 test:
 	python3 scripts/check_duplicate_tests.py
+	@unformatted="$$(gofmt -l $$(git ls-files '*.go'))"; \
+	if [ -n "$$unformatted" ]; then echo "gofmt needed on:"; echo "$$unformatted"; exit 1; fi
 	go test ./...
 
 # The browser suite runs against the static export, so it needs a fresh `out/`
@@ -38,8 +40,10 @@ e2e-hermetic:
 # executions on 2026-10-23, and one run printed four FAILURE lines while the shard
 # passed. This target is how it runs on all three profiles when someone is
 # investigating a phone that will not submit.
+# The harness runs under the same network guard as the suite, so it needs the hermetic build:
+# a production URL would have every unstubbed call aborted and reported as an escape.
 e2e-diagnosis:
-	cd web/next-app && rm -rf out && npx next build
+	cd web/next-app && rm -rf out && NEXT_PUBLIC_API_URL=http://192.0.2.1:9099 npx next build
 	cd web/next-app && PW_DIAGNOSIS=1 npx playwright test e2e/answer-diagnosis.spec.ts
 
 validate:

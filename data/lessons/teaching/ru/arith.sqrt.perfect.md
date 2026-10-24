@@ -1,4 +1,4 @@
-> Content sourced from [ORCCA](https://pcc.edu/orcca) (Open Resources for Community College Algebra) — CC BY 4.0
+> Content sourced from [ORCCA](https://pcc.edu/orcca) (Open Resources for Community College Algebra), CC BY 4.0
 
 # Модуль числа и квадратный корень
 

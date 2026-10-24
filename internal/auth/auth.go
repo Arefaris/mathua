@@ -144,7 +144,7 @@ func New(repo storage.Repository) *AuthService {
 func SecretMinLength() int { return 32 }
 
 // ErrGoogleOnly marks accounts created via Google Sign-In, which have no
-// password — password login must point them at Google, not a generic error.
+// password, password login must point them at Google, not a generic error.
 var ErrGoogleOnly = errors.New("this account uses Google sign-in")
 
 // NormalizeUsername trims and lowercases: "Ada" and "ada" are one account.
@@ -163,7 +163,7 @@ var ErrUsernameTaken = errors.New("username is taken")
 
 func (a *AuthService) Signup(name, username, password string) (string, *storage.Student, error) {
 	// Defense in depth: the handler and form already require a name, but
-	// raw API/service callers bypass them — trim and enforce here so no
+	// raw API/service callers bypass them, trim and enforce here so no
 	// blank or oversized name ever reaches the leaderboard.
 	name = strings.TrimSpace(name)
 	if name == "" {
@@ -182,7 +182,7 @@ func (a *AuthService) Signup(name, username, password string) (string, *storage.
 	if err := ValidatePassword(password); err != nil {
 		return "", nil, err
 	}
-	// Usernames have no UNIQUE constraint historically — check first so
+	// Usernames have no UNIQUE constraint historically, check first so
 	// duplicates (including case variants) get a clean 409, not a DB error.
 	if existing, err := a.repo.FindByUsername(username); err != nil {
 		return "", nil, err
@@ -250,8 +250,8 @@ type OAuthProfile struct {
 //  2. provider-verified email matching a row that is verified OR has no
 //     password → link + log in (the provider attests mailbox ownership, so
 //     an unverified passwordless row is safe to join; a password row is
-//     never joined — claiming its email at signup proves nothing);
-//  3. otherwise → fresh account. Unverified-provider emails NEVER merge —
+//     never joined, claiming its email at signup proves nothing);
+//  3. otherwise → fresh account. Unverified-provider emails NEVER merge,
 //     this is what stops account takeover via claimed emails.
 func (a *AuthService) LoginOrCreateOAuth(p OAuthProfile) (string, *storage.Student, error) {
 	if p.Provider == "" || p.ProviderID == "" {
@@ -295,7 +295,7 @@ func (a *AuthService) LoginOrCreateOAuth(p OAuthProfile) (string, *storage.Stude
 	// of creating a duplicate (the unique index would reject it anyway).
 	// The caller logs in with the existing credential, then connects the
 	// provider in Settings. Unverified-provider emails are blocked the same
-	// way — an unverified claim must neither merge nor fork.
+	// way, an unverified claim must neither merge nor fork.
 	if p.Email != "" {
 		if existing, err := a.repo.FindByEmail(p.Email); err != nil {
 			return "", nil, err
@@ -307,7 +307,7 @@ func (a *AuthService) LoginOrCreateOAuth(p OAuthProfile) (string, *storage.Stude
 	if err != nil {
 		return "", nil, err
 	}
-	// OAuth accounts have no user-chosen username — assign a random handle
+	// OAuth accounts have no user-chosen username, assign a random handle
 	// so every account carries one (leaderboard fallback, future @mentions).
 	// Best-effort: a failure leaves the account exactly as before.
 	if u := a.EnsureUsername(st.ID); u != "" {
@@ -320,7 +320,7 @@ func (a *AuthService) LoginOrCreateOAuth(p OAuthProfile) (string, *storage.Stude
 	return tok, st, nil
 }
 
-// LoginOrCreateGoogle keeps the Google call sites stable — both One-Tap and
+// LoginOrCreateGoogle keeps the Google call sites stable, both One-Tap and
 // the redirect flow converge here. Google emails are provider-verified.
 func (a *AuthService) LoginOrCreateGoogle(name, email, googleID, avatarURL string) (string, *storage.Student, error) {
 	return a.LoginOrCreateOAuth(OAuthProfile{
@@ -330,7 +330,7 @@ func (a *AuthService) LoginOrCreateGoogle(name, email, googleID, avatarURL strin
 }
 
 // ConnectProvider links a provider identity to an already-logged-in student
-// (explicit user intent — safe without email verification). Fails when the
+// (explicit user intent, safe without email verification). Fails when the
 // provider account already belongs to someone else.
 func (a *AuthService) ConnectProvider(studentID string, p OAuthProfile) error {
 	if p.Provider == "" || p.ProviderID == "" {
@@ -408,7 +408,7 @@ func generateToken(studentID string) (string, error) {
 }
 
 // IssueGuestToken mints a bearer token for a guest student row. It carries
-// no guest marker — ownership is uniform: the token proves the caller owns
+// no guest marker, ownership is uniform: the token proves the caller owns
 // the student ID, registered or not. Package-level (not a method) so the
 // guest handler works even when the AuthService is unwired (dev/test);
 // the secret machinery is process-global either way.

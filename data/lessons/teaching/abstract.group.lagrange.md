@@ -9,13 +9,13 @@ Partition $Z_6$ by the subgroup $\{0, 3\}$:
 2. Three cosets, each of size 2, covering all 6 elements with no overlap.
 3. So $[Z_6 : H] = 3$ and $2 \cdot 3 = 6$: the subgroup order divides the group order.
 
-So cosets tile the group evenly — divisibility is just counting tiles.
+So cosets tile the group evenly, divisibility is just counting tiles.
 
 ## Worked: no subgroup of order 4 in a group of order 6
 
 Suppose $|G| = 6$ with $H \le G$ of order 4:
 1. Lagrange forces $|H|$ to divide 6; 4 does not divide 6.
-2. The cosets would need to tile 6 elements with pieces of size 4 — impossible without overlap.
+2. The cosets would need to tile 6 elements with pieces of size 4, impossible without overlap.
 3. So no such $H$ exists, in any group of order 6.
 
 So Lagrange rules subgroups out by arithmetic alone, before any structural analysis.

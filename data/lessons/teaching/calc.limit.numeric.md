@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman, CC BY-NC-SA 4.0
 
 ## 2.2 The Limit of a Function
 
@@ -12,7 +12,7 @@
 - 2.2.6 Using correct notation, describe an infinite limit.
 - 2.2.7 Define a vertical asymptote.
 
-The concept of a limit or limiting process, essential to the understanding of calculus, has been around for thousands of years. In fact, early mathematicians used a limiting process to obtain better and better approximations of areas of circles. Yet, the formal definition of a limit—as we know and understand it today—did not appear until the late 19th century. We therefore begin our quest to understand limits, as our mathematical ancestors did, by using an intuitive approach. At the end of this chapter, armed with a conceptual understanding of limits, we examine the formal definition of a limit.
+The concept of a limit or limiting process, essential to the understanding of calculus, has been around for thousands of years. In fact, early mathematicians used a limiting process to obtain better and better approximations of areas of circles. Yet, the formal definition of a limit, as we know and understand it today, did not appear until the late 19th century. We therefore begin our quest to understand limits, as our mathematical ancestors did, by using an intuitive approach. At the end of this chapter, armed with a conceptual understanding of limits, we examine the formal definition of a limit.
 
 We begin our exploration of limits by taking a look at the graphs of the functions
 
@@ -54,7 +54,7 @@ We can estimate limits by constructing tables of functional values and by lookin
 
 #### Evaluating a Limit Using a Table of Functional Values
 
-1.  To evaluate $\underset{x\rightarrow a}{\text{lim}}f(x),$ we begin by completing a table of functional values. We should choose two sets of *x*-values—one set of values approaching *a* and less than *a*, and another set of values approaching *a* and greater than *a*. Table 2.1 demonstrates what your tables might look like.  
+1.  To evaluate $\underset{x\rightarrow a}{\text{lim}}f(x),$ we begin by completing a table of functional values. We should choose two sets of *x*-values, one set of values approaching *a* and less than *a*, and another set of values approaching *a* and greater than *a*. Table 2.1 demonstrates what your tables might look like.  
     | *x* | $f(x)$ |  | *x* | $f(x)$ |
     |----|----|----|----|----|
     | $a - 0.1$ | $f\left( {a - 0.1} \right)$ |  | $a + 0.1$ | $f\left( {a + 0.1} \right)$ |
@@ -105,7 +105,7 @@ Evaluate $\underset{x\rightarrow 4}{\text{lim}}\frac{\sqrt{x} - 2}{x - 4}$ using
 
 #### Solution
 
-As before, we use a table—in this case, Table 2.3—to list the values of the function for the given values of *x*.
+As before, we use a table, in this case, Table 2.3, to list the values of the function for the given values of *x*.
 
 | *x* | $\frac{\sqrt{x} - 2}{x - 4}$ |  | *x* | $\frac{\sqrt{x} - 2}{x - 4}$ |
 |----|----|----|----|----|
@@ -237,7 +237,7 @@ Use a table of functional values to evaluate $\underset{x\rightarrow 2}{\text{li
 
 ### One-Sided Limits
 
-Sometimes indicating that the limit of a function fails to exist at a point does not provide us with enough information about the behavior of the function at that particular point. To see this, we now revisit the function $g(x) = {\left| {x - 2} \right|\text{/}\left( {x - 2} \right)}$ introduced at the beginning of the section (see Figure 2.12(b)). As we pick values of *x* close to 2, $g(x)$ does not approach a single value, so the limit as *x* approaches 2 does not exist—that is, $\underset{x\rightarrow 2}{\text{lim}}g(x)$ DNE. However, this statement alone does not give us a complete picture of the behavior of the function around the *x*-value 2. To provide a more accurate description, we introduce the idea of a one-sided limit. For all values to the left of 2 (or *the negative side of* 2), $g(x) = -1.$ Thus, as *x* approaches 2 from the left, $g(x)$ approaches −1. Mathematically, we say that the limit as *x* approaches 2 from the left is −1. Symbolically, we express this idea as
+Sometimes indicating that the limit of a function fails to exist at a point does not provide us with enough information about the behavior of the function at that particular point. To see this, we now revisit the function $g(x) = {\left| {x - 2} \right|\text{/}\left( {x - 2} \right)}$ introduced at the beginning of the section (see Figure 2.12(b)). As we pick values of *x* close to 2, $g(x)$ does not approach a single value, so the limit as *x* approaches 2 does not exist, that is, $\underset{x\rightarrow 2}{\text{lim}}g(x)$ DNE. However, this statement alone does not give us a complete picture of the behavior of the function around the *x*-value 2. To provide a more accurate description, we introduce the idea of a one-sided limit. For all values to the left of 2 (or *the negative side of* 2), $g(x) = -1.$ Thus, as *x* approaches 2 from the left, $g(x)$ approaches −1. Mathematically, we say that the limit as *x* approaches 2 from the left is −1. Symbolically, we express this idea as
 
 $$
 \underset{x\rightarrow 2^{-}}{\text{lim}}g(x) = -1.
@@ -559,7 +559,7 @@ where $m_{0}$ is the object’s mass at rest, *v* is its speed, and *c* is the s
 
 *Figure 2.23 This graph shows the ratio of masses as a function of the ratio of speeds in Einstein’s equation for the mass of a moving object.*
 
-We can see that as the ratio of speeds approaches 1—that is, as the speed of the object approaches the speed of light—the ratio of masses increases without bound. In other words, the function has a vertical asymptote at ${v\text{/}c} = 1.$ We can try a few values of this ratio to test this idea.
+We can see that as the ratio of speeds approaches 1, that is, as the speed of the object approaches the speed of light, the ratio of masses increases without bound. In other words, the function has a vertical asymptote at ${v\text{/}c} = 1.$ We can try a few values of this ratio to test this idea.
 
 | $\frac{v}{c}$ | $\sqrt{1 - \frac{v^{2}}{c^{2}}}$ | $\frac{m}{m_{0}}$ |
 |-----------------|------------------------------------|---------------------|

@@ -15,8 +15,10 @@ import { useT } from '../../lib/i18n'
 // scope count worded differently in each -- and only one of them got fixed. They
 // live in /onboard now, and a visit without ?quiz=1 goes there.
 //
-// DiagnosticHost still sits in this folder and still has a test suite, but nothing
-// renders it any more: /onboard runs the diagnostic inline. Deleting it means
+// The diagnostic lives in /onboard and runs inline there. An older
+// DiagnosticHost in this folder was deleted on 23 October 2026: it had a test
+// suite that kept passing while the flow learners actually used drifted, and
+// three client fixes went into it before anyone noticed nothing rendered it. Deleting it means
 // porting that coverage onto the inline implementation first, which is its own
 // change and not something to do by deleting files.
 

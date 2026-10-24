@@ -34,7 +34,7 @@ func FacebookLoginURL(appID, redirectURI, state string) string {
 }
 
 // ExchangeFacebookCode trades the callback code for a normalized profile.
-// Email may be absent (declined or unreviewed permission) — then unverified.
+// Email may be absent (declined or unreviewed permission), then unverified.
 func ExchangeFacebookCode(ctx context.Context, code, redirectURI string) (OAuthProfile, error) {
 	appID := facebookAppID()
 	secret := facebookAppSecret()

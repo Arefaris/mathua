@@ -6,15 +6,15 @@
 
 Take reward $r = 1$, discount $\gamma = 0.9$, next value $V(s') = 10$, current value $V(s) = 8$:
 1. Bootstrap the target: $1 + 0.9\cdot 10 = 10$.
-2. Subtract the current estimate: $10 - 8 = 2$ — the TD error, a one-sample advantage.
+2. Subtract the current estimate: $10 - 8 = 2$, the TD error, a one-sample advantage.
 3. The critic steps toward 10; the actor raises the taken action's probability in proportion to 2.
 
-So the TD error does double duty: critic loss and actor weight — one number, two updates.
+So the TD error does double duty: critic loss and actor weight, one number, two updates.
 
 ## Worked: advantage over raw return
 
 Take $Q = 7$ for the taken action with $V = 5$ for the state:
-1. Advantage: $7 - 5 = 2$ — the action beat its state's average by 2.
+1. Advantage: $7 - 5 = 2$, the action beat its state's average by 2.
 2. Generalized Advantage Estimation blends multi-step returns to trade bias against variance around this signal.
 3. A2C averages such updates over parallel actors synchronously, smoothing the gradient without stale (off-policy) data.
 

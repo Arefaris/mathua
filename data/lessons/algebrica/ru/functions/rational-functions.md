@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/rational-functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/rational-functions/), CC BY-NC 4.0
 
 ## Что такое рациональные функции
 

@@ -223,7 +223,7 @@ func TestNext_CompletedDiagnosticIsNotAnActiveTask(t *testing.T) {
 	if body.Primary.ID == "diagnostic" || body.Primary.Action.Href == "/onboard" {
 		t.Errorf("completed diagnostic offered as active task: %+v", body.Primary)
 	}
-	// And the learner gets an actual concept to learn — the placement fix is only
+	// And the learner gets an actual concept to learn, the placement fix is only
 	// useful if real tasks replace the diagnostic.
 	if !strings.Contains(body.Primary.Action.Href, "concept=a") {
 		t.Errorf("primary = %+v, want a real concept task", body.Primary)
@@ -313,7 +313,7 @@ func TestLessonKP_LockedTopicIsReadable(t *testing.T) {
 	s.Register(mux)
 	token, _ := guestTokenAndID(t, mux)
 
-	// The shard route answers — it is not behind the eligibility gate — even though this
+	// The shard route answers, it is not behind the eligibility gate, even though this
 	// concept is locked.
 	rec := authedGet(t, mux, "/api/lessons/b/kp", token)
 	if rec.Code != http.StatusOK {

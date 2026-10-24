@@ -9,8 +9,8 @@ interface Props {
 }
 
 // A one-line "needs attention" summary: how many concepts are weak, and the way to review them.
-// It was a boxed panel with a per-concept bar list and a per-domain expander — the heaviest block
-// on the page — and every number in it was decided by the same count this now states outright.
+// It was a boxed panel with a per-concept bar list and a per-domain expander, the heaviest block
+// on the page and every number in it was decided by the same count this now states outright.
 export default function StrugglesSection({ weaknesses }: Props) {
   const t = useT()
   const entries = weaknesses?.by_domain ?? {}

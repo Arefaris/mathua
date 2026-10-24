@@ -3,7 +3,7 @@
 // This exists so that the set of generators a learner can meet and the set a diagnostic
 // measures are the same list. `cmd/mathua/main.go` used to wire the seventeen
 // sub-packages inline, which meant nothing outside `main` could enumerate "every concept
-// that has a generator" — and that is precisely the question you need answered to find
+// that has a generator" and that is precisely the question you need answered to find
 // out whether a concept can supply enough distinct questions to keep a practice feed
 // going. A diagnostic built from its own hand-written list would drift silently from
 // production the first time a domain was added.
@@ -27,8 +27,8 @@ import (
 	"github.com/chuma-beep/mathua/internal/generator/graphtheory"
 	"github.com/chuma-beep/mathua/internal/generator/linalg"
 	"github.com/chuma-beep/mathua/internal/generator/machinelearning"
-	"github.com/chuma-beep/mathua/internal/generator/numtheory"
 	"github.com/chuma-beep/mathua/internal/generator/numerical"
+	"github.com/chuma-beep/mathua/internal/generator/numtheory"
 	"github.com/chuma-beep/mathua/internal/generator/odes"
 	"github.com/chuma-beep/mathua/internal/generator/prealgebra"
 	"github.com/chuma-beep/mathua/internal/generator/precalculus"

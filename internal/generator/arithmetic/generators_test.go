@@ -3,6 +3,8 @@ package arithmetic
 import (
 	"math/rand"
 	"regexp"
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/chuma-beep/mathua/internal/generator"
@@ -19,12 +21,40 @@ func fuzzGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestAddGen(t *testing.T)             { fuzzGen(t, &addGen{}) }
-func TestAddWordGen(t *testing.T)         { fuzzGen(t, &addWordGen{}) }
-func TestSubGen(t *testing.T)             { fuzzGen(t, &subGen{}) }
-func TestSubBorrowGen(t *testing.T)       { fuzzGen(t, &subBorrowGen{}) }
-func TestSubWordGen(t *testing.T)         { fuzzGen(t, &subWordGen{}) }
-func TestPlaceValueGen(t *testing.T)      { fuzzGen(t, &placeValueGen{}) }
+func TestAddGen(t *testing.T)        { fuzzGen(t, &addGen{}) }
+func TestAddWordGen(t *testing.T)    { fuzzGen(t, &addWordGen{}) }
+func TestSubGen(t *testing.T)        { fuzzGen(t, &subGen{}) }
+func TestSubBorrowGen(t *testing.T)  { fuzzGen(t, &subBorrowGen{}) }
+func TestSubWordGen(t *testing.T)    { fuzzGen(t, &subWordGen{}) }
+func TestPlaceValueGen(t *testing.T) { fuzzGen(t, &placeValueGen{}) }
+
+// The stem used to ask for "the value of the digit in the tens place" of 87,
+// which reads as 8 and expected 80. It now names the digit and asks for its
+// value, so the question has one reading. It also never names a digit that the
+// number does not have, which the old draw could do: "the digit 0 is in the
+// tens place of 7".
+func TestPlaceValueNamesTheDigitItAsksAbout(t *testing.T) {
+	for _, label := range []string{"tens", "hundreds", "thousands"} {
+		gen := &placeValueGen{max: 9999, label: label}
+		for i := 0; i < 200; i++ {
+			p := gen.Generate(generator.GeneratorContext{Difficulty: 0.5})
+			digit := p.Facts["digit"]
+			if digit == "0" {
+				t.Fatalf("%s: named digit 0 in %q", label, p.Question)
+			}
+			want := "the digit " + digit + " is in the " + label + " place"
+			if !strings.Contains(p.Question, want) {
+				t.Fatalf("%s: question %q does not contain %q", label, p.Question, want)
+			}
+			if p.Answer != p.Facts["value"] {
+				t.Fatalf("%s: answer %q is not the value %q", label, p.Answer, p.Facts["value"])
+			}
+			if !strings.HasSuffix(p.Question, "?") {
+				t.Fatalf("%s: question %q lost its question mark", label, p.Question)
+			}
+		}
+	}
+}
 func TestRoundGen(t *testing.T)           { fuzzGen(t, &roundGen{}) }
 func TestMultConceptGen(t *testing.T)     { fuzzGen(t, &multConceptGen{}) }
 func TestMultByGen(t *testing.T)          { fuzzGen(t, &multByGen{}) }
@@ -88,5 +118,103 @@ func TestFuzz(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// The question used to ask for "Q R" and grade it with a regex, so a learner on
+// a phone keypad could not type the letter and the report arrived with an empty
+// answer. The answer is now the remainder alone, which has to stay a single
+// integer below the divisor.
+func TestRemainderAnswerIsTheRemainder(t *testing.T) {
+	g := &divRemainderGen{}
+	for i := 0; i < 200; i++ {
+		p := g.Generate(generator.GeneratorContext{Difficulty: rand.Float64(), Seed: rand.Int63()})
+		if !strings.Contains(p.Question, "remainder") {
+			t.Fatalf("question does not ask for a remainder: %q", p.Question)
+		}
+		if !regexp.MustCompile(`^\d+$`).MatchString(p.Answer) {
+			t.Fatalf("answer %q is not a bare integer", p.Answer)
+		}
+		divisor, _ := strconv.Atoi(p.Facts["divisor"])
+		dividend, _ := strconv.Atoi(p.Facts["dividend"])
+		quotient, _ := strconv.Atoi(p.Facts["quotient"])
+		remainder, _ := strconv.Atoi(p.Answer)
+		if remainder >= divisor || remainder < 1 {
+			t.Fatalf("remainder %d out of range for divisor %d", remainder, divisor)
+		}
+		if divisor*quotient+remainder != dividend {
+			t.Fatalf("%d x %d + %d != %d", divisor, quotient, remainder, dividend)
+		}
+	}
+}
+
+// The answer must be fully simplified and must round-trip through the grader.
+// sqrt(100) used to be served as "5 sqrt(4)", and 10 was rejected.
+func TestSqrtSimplifyAnswerIsFullySimplified(t *testing.T) {
+	gen := &sqrtSimplifyGen{}
+	nRe := regexp.MustCompile(`\\sqrt\{(\d+)\}`)
+	for i := 0; i < 200; i++ {
+		p := gen.Generate(generator.GeneratorContext{Difficulty: rand.Float64()})
+		m := nRe.FindStringSubmatch(p.Question)
+		if m == nil {
+			t.Fatalf("question prints no radicand: %q", p.Question)
+		}
+		n, _ := strconv.Atoi(m[1])
+		coef, rad, ok := sqrtParts(p.Answer)
+		if !ok {
+			t.Fatalf("answer %q is not a coefficient and a radical", p.Answer)
+		}
+		if coef*coef*rad != n {
+			t.Fatalf("answer %q does not equal sqrt(%d)", p.Answer, n)
+		}
+		for f := 2; f*f <= rad; f++ {
+			if rad%(f*f) == 0 {
+				t.Fatalf("answer %q leaves a square factor %d inside the radical", p.Answer, f*f)
+			}
+		}
+		if got := gen.Grade(p.Answer, p.Answer); !got.Correct {
+			t.Fatalf("answer %q does not grade as itself", p.Answer)
+		}
+	}
+}
+
+func TestSqrtSimplifyAcceptsTheFormsALearnerTypes(t *testing.T) {
+	gen := &sqrtSimplifyGen{}
+	for _, answer := range []string{"5 sqrt(2)", "5sqrt(2)", "5\u221a2", `5\sqrt{2}`, " sqrt(2) "} {
+		expected := "5 sqrt(2)"
+		if strings.Contains(answer, "sqrt") && !strings.Contains(answer, "5") {
+			expected = "sqrt(2)"
+		}
+		if got := gen.Grade(expected, answer); !got.Correct {
+			t.Errorf("grade(%q, %q) = incorrect", expected, answer)
+		}
+	}
+	if got := gen.Grade("5 sqrt(2)", "5 sqrt(3)"); got.Correct {
+		t.Error("a different radical graded correct")
+	}
+	if got := gen.Grade("5 sqrt(2)", "10"); got.Correct {
+		t.Error("10 graded correct for 5 sqrt(2)")
+	}
+}
+
+// TestSqrtSimplifyReadsTheRadicalMathliveWrites pins the transport shape. The
+// math field writes an empty radical as sqrt(), so "3sqrt()2" reached the
+// grader and was rejected as malformed (report 233).
+func TestSqrtSimplifyReadsTheRadicalMathliveWrites(t *testing.T) {
+	cases := map[string]bool{
+		"3sqrt()2":   true,
+		"3 sqrt(2)":  true,
+		"3\\sqrt{2}": true,
+		"3\u221a2":   true,
+		"seventeen":  false,
+	}
+	for answer, want := range cases {
+		coef, rad, ok := sqrtParts(answer)
+		if ok != want {
+			t.Fatalf("sqrtParts(%q) ok = %v, want %v", answer, ok, want)
+		}
+		if want && (coef != 3 || rad != 2) {
+			t.Fatalf("sqrtParts(%q) = %d sqrt(%d), want 3 sqrt(2)", answer, coef, rad)
+		}
 	}
 }

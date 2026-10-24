@@ -31,8 +31,8 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
     const sid = info?.student_id || getGuestId() || ''
     // Destinations failing is a real, reportable state: it used to be swallowed into an
     // empty array, which rendered a <select> with no options and no message, so the page
-    // looked broken rather than unavailable. The score and plan fetches are advisory — a
-    // failure there only means we fall back to a default — so they stay non-fatal but are
+    // looked broken rather than unavailable. The score and plan fetches are advisory, a
+    // failure there only means we fall back to a default, so they stay non-fatal but are
     // no longer silently indistinguishable from "you have no plan".
     Promise.all([
       getDestinations().then(d => ({ dests: d, err: null as string | null })).catch(e => ({

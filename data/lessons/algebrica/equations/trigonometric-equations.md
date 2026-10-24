@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/trigonometric-equations/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/trigonometric-equations/), CC BY-NC 4.0
 
 Trigonometric equations are [equations](<../equations>) in which the unknown appears as the argument of trigonometric functions. There are various types of such equations, each with its corresponding solution method, as outlined below. In this first part, we will explore how to solve simple trigonometric equations of the form:
 
@@ -59,7 +59,7 @@ Since the tangent function is periodic with period \( \pi \) the general solutio
 
 where \( k \) is any integer, representing all possible solutions.
 
-When the tangent value isn’t one of the commonly used ones, we can apply the arctangent—the inverse of the tangent—to determine the principal angle. This approach allows us to compute the corresponding angle directly without relying on standard tangent values. The same principle applies to other inverse trigonometric functions, such as [arcsin](<../arcsine-and-arccosine>) e and [arccosine](<../arcsine-and-arccosine>), which enable us to find the respective angles for any given sine or cosine values.
+When the tangent value isn’t one of the commonly used ones, we can apply the arctangent, the inverse of the tangent, to determine the principal angle. This approach allows us to compute the corresponding angle directly without relying on standard tangent values. The same principle applies to other inverse trigonometric functions, such as [arcsin](<../arcsine-and-arccosine>) e and [arccosine](<../arcsine-and-arccosine>), which enable us to find the respective angles for any given sine or cosine values.
 
 
 ## Trigonometric Equations Solvable by Substitution

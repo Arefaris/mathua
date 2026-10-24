@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 5.3 Десятичные дроби и обыкновенные дроби
 
@@ -79,7 +79,7 @@
 |----|----|
 | $\text{1.333…} = 1.\overset{-}{3}$ | 3 — повторяющаяся цифра |
 | $\text{4.1666…} = 4.1\overset{-}{6}$ | 6 — повторяющаяся цифра |
-| $\text{4.161616…} = 4.\overset{\text{—}}{16}$ | 16 — повторяющаяся группа цифр |
+| $\text{4.161616…} = 4.\overset{\text{, }}{16}$ | 16 — повторяющаяся группа цифр |
 | $\text{0.271271271…} = 0.\overset{\text{---}}{271}$ | 271 — повторяющаяся группа цифр |
 
 Таблица 5.5
@@ -95,7 +95,7 @@
 Заметьте, что разности 120 и 100 повторяются, значит, цифры частного тоже повторяются; 54 будет повторяться бесконечно. Первый десятичный знак частного, 9, в повторяющуюся группу не входит. Итак,
 
 $$
-\frac{43}{22} = 1.9\overset{\text{—}}{54}
+\frac{43}{22} = 1.9\overset{\text{, }}{54}
 $$
 
 ### Попробуйте сами 5.59

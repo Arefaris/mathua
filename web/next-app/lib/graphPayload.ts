@@ -7,9 +7,9 @@ import type { Locale } from './i18n/locale'
 
 export const GRAPH_PAYLOAD_VERSION = 2
 
-// [id, label, domain, importance] — index in this array is the edge index.
+// [id, label, domain, importance], index in this array is the edge index.
 const GraphPayloadNodeSchema = z.tuple([z.string(), z.string(), z.string(), z.number()])
-// [sourceIndex, targetIndex] — prerequisite -> dependent.
+// [sourceIndex, targetIndex], prerequisite -> dependent.
 const GraphPayloadEdgeSchema = z.tuple([z.number().int(), z.number().int()])
 
 export const GraphPayloadSchema = z.object({
@@ -25,7 +25,7 @@ export type GraphPayload = z.infer<typeof GraphPayloadSchema>
 
 // The value the landing page shows for the mastery-check gate, mirroring Go's xp.QuizGateXP.
 // It is the one number build-graph.mjs cannot derive from the corpus, so it is the one that can
-// drift — and it did, for as long as the page said 150. internal/xp's
+// drift and it did, for as long as the page said 150. internal/xp's
 // TestLandingQuizGateMatchesEngine reads the generated artifact and fails when the two disagree.
 export const QUIZ_GATE_XP = 50
 

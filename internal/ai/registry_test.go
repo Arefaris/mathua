@@ -127,7 +127,7 @@ func TestSelectExcludesDevOnlyInProduction(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got := ids(rd.Select(DataPseudonymous)); !eq(got, []string{"groq"}) {
-		t.Errorf("dev pseudonymous select = %v, want [groq] — unverified retention must not take learner data", got)
+		t.Errorf("dev pseudonymous select = %v, want [groq], unverified retention must not take learner data", got)
 	}
 	if got := ids(rd.Select(DataPublic)); !eq(got, []string{"groq", "trial"}) {
 		t.Errorf("dev public select = %v, want [groq trial]", got)

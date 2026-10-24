@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/cauchy-convergence-criterion-series/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/cauchy-convergence-criterion-series/), CC BY-NC 4.0
 
 # Cauchy's Convergence Criterion
 

@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/vector-and-parametric-equations-of-a-line/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/vector-and-parametric-equations-of-a-line/), CC BY-NC 4.0
 
 ## From Cartesian to vector form
 

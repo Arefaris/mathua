@@ -7,8 +7,9 @@
     "placeholder": "Your answer...",
     "checkAnswer": "Check Answer",
     "dontKnow": "I don't know",
+    "submitting": "Submitting…",
     "next": "Next →",
-    "retrySlip": "I made a silly mistake — retry",
+    "retrySlip": "I made a silly mistake, retry",
     "learnThis": "Learn this concept →",
     "number": "Question {count}",
     "correctWord": "correct",
@@ -24,14 +25,15 @@
   },
   "diagnostic": {
     "startFailed": "Something went wrong, but we're working on it.",
-    "alreadyFinished": "That diagnostic already finished — start a fresh one below.",
-    "resumeExpired": "Could not resume — that session expired. Start a fresh diagnostic.",
+    "alreadyFinished": "That diagnostic already finished, start a fresh one below.",
+    "resumeExpired": "Could not resume, that session expired. Start a fresh diagnostic.",
     "noQuestions": "No diagnostic questions are available for the selected areas. Try selecting more domains.",
     "submitFailed": "Failed to submit answer.",
+    "noNextQuestion": "The diagnostic returned no next question. Try again.",
     "skipFailed": "Failed to skip question.",
     "retryFailed": "Failed to retry question.",
     "planFailed": "Could not generate plan.",
-    "skipped": "Skipped — no evidence recorded.",
+    "skipped": "Skipped, no evidence recorded.",
     "restart": "Restart diagnostic",
     "planErrorTitle": "Couldn't load your plan.",
     "loadPlan": "Load plan",
@@ -46,11 +48,11 @@
     "briefingEyebrow": "Before you start",
     "start": "Start quiz →",
     "loading": "LOADING QUIZ",
-    "startToast": "Quiz failed to start — try again.",
+    "startToast": "Quiz failed to start, try again.",
     "startError": "The quiz could not start. That is a request problem, not a missing topic.",
     "failedTitle": "Quiz could not start",
     "failedFallback": "The quiz could not start.",
-    "failedNote": "Nothing is wrong with the topics — the request failed.",
+    "failedNote": "Nothing is wrong with the topics, the request failed.",
     "retry": "Try again →",
     "practiceInLearn": "Practice in Learn →",
     "emptyTitle": "No questions available",
@@ -68,7 +70,7 @@
     "restart": "Restart quiz",
     "submitFailed": "Failed to submit quiz answer.",
     "skipFailed": "Failed to skip quiz question.",
-    "skipped": "Skipped — no XP awarded."
+    "skipped": "Skipped, no XP awarded."
   },
   "onboard": {
     "back": "← Back",
@@ -80,6 +82,7 @@
     },
     "moreAreas": " +{count} more",
     "confirmDuration": "The test adapts as it goes and usually takes about 30–45 minutes.",
+    "confirmFoundations": "It opens on the areas you chose. The foundations those areas build on are checked too, so a few questions may come from earlier topics.",
     "expect": "What to expect",
     "begin": "Begin diagnostic →",
     "guestEyebrow": "Guest run",
@@ -111,10 +114,10 @@
     "provisional": " (provisional)",
     "suggestedCourse": "Suggested course: {course}",
     "estimated": "Estimated completion: {list}",
-    "automaticity": "Measured for automaticity — no timeout. Slow answers count as gaps to refresh, not failures.",
+    "automaticity": "Measured for automaticity, no timeout. Slow answers count as gaps to refresh, not failures.",
     "provisionalTopics": {
-      "one": "Provisional: {count} topic assumed known — we fall back on struggle.",
-      "other": "Provisional: {count} topics assumed known — we fall back on struggle."
+      "one": "Provisional: {count} topic assumed known, we fall back on struggle.",
+      "other": "Provisional: {count} topics assumed known, we fall back on struggle."
     },
     "score": "diagnostic test score",
     "scoreDetail": "({correct}/{total} correct)",
@@ -155,7 +158,7 @@
   "plan": {
     "label": "Learning planner",
     "title": "Plan your learning",
-    "saved": "Plan saved. A pace is not a starting point — use the diagnostic below to find out which concept you belong at.",
+    "saved": "Plan saved. A pace is not a starting point, use the diagnostic below to find out which concept you belong at.",
     "next": "What to do next",
     "nextBody": "A plan sets how much you study per day. It does not say where to begin: the diagnostic measures what you already know, then starts you at the right concept.",
     "takeDiagnostic": "Take the diagnostic",
@@ -168,7 +171,7 @@
     "saveFailed": "Save failed",
     "loading": "Loading planner…",
     "destinationLabel": "What do you want to learn?",
-    "noPaths": "No learning paths are available right now. This usually means the server could not load its course catalog — check the server log for \"courses unavailable\" or \"destinations unavailable\".",
+    "noPaths": "No learning paths are available right now. This usually means the server could not load its course catalog, check the server log for \"courses unavailable\" or \"destinations unavailable\".",
     "destinationOption": "{name} ({percent}% done)",
     "direction": "Planning direction",
     "byEffort": "Plan by daily effort",
@@ -188,9 +191,9 @@
     },
     "daysUnknown": "≈ – days",
     "perDayNeeded": "≈ {value} XP/day needed",
-    "infeasible": "Above 3× your recent pace — extend the deadline or raise daily effort gradually.",
+    "infeasible": "Above 3× your recent pace, extend the deadline or raise daily effort gradually.",
     "paceMeasured": "At your recent pace ({rate} XP/day, {active}/{days} active days).",
-    "paceNone": "No history yet — assuming you hit your target every day.",
+    "paceNone": "No history yet, assuming you hit your target every day.",
     "topicsRemaining": "Topics remaining",
     "topicsOf": "{remaining} of {total}",
     "focusedTime": "Focused time remaining",
@@ -204,7 +207,7 @@
       "one": "{count} probe topic",
       "other": "{count} probe topics"
     },
-    "freshStart": "Fresh start — complete a few questions and your estimate will sharpen. No behind-schedule figure until a new baseline lands.",
+    "freshStart": "Fresh start, complete a few questions and your estimate will sharpen. No behind-schedule figure until a new baseline lands.",
     "ahead": {
       "one": "≈{count} day ahead of your saved plan",
       "other": "≈{count} days ahead of your saved plan"
@@ -220,8 +223,8 @@
     },
     "update": "Update my plan",
     "create": "Plan my learning",
-    "illustrative": "Illustrative estimate from Mathua's measured curriculum workload — actual completion depends on pace, reviews and checks. It never changes quiz eligibility or mastery rules.",
-    "noEstimate": "Your plan is saved as a destination and a daily pace. The workload estimate is not available right now — your answers still count toward it."
+    "illustrative": "Illustrative estimate from Mathua's measured curriculum workload, actual completion depends on pace, reviews and checks. It never changes quiz eligibility or mastery rules.",
+    "noEstimate": "Your plan is saved as a destination and a daily pace. The workload estimate is not available right now, your answers still count toward it."
   },
   "dailyGoal": {
     "heading": "Daily XP target · currently {current}/day",

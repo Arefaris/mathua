@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/solving-linear-systems-using-gaussian-elimination/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/solving-linear-systems-using-gaussian-elimination/), CC BY-NC 4.0
 
 ## Что такое метод Гаусса
 

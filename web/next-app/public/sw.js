@@ -1,4 +1,4 @@
-/* Mathua service worker — hand-rolled for the Next.js static export.
+/* Mathua service worker, hand-rolled for the Next.js static export.
  *
  * Strategy:
  *   - navigations (HTML): network-first, cache fallback, then /offline.html
@@ -10,7 +10,7 @@
  * VERSION is stamped at image build time (Dockerfile rewrites the line below
  * with a UTC timestamp) so every deploy ships byte-different sw.js: browsers
  * install the new worker, and activate purges all caches from older builds.
- * A static version would let clients run stale hashed JS indefinitely — old
+ * A static version would let clients run stale hashed JS indefinitely, old
  * chunks 404 on fresh images while this worker keeps serving its cached
  * copies (cache-first), pinning the client on pre-fix rendering forever.
  */
@@ -71,7 +71,7 @@ async function networkFirst(request, cacheName, fallbackUrls) {
 // /cdn-cgi/challenge-platform/scripts/precursor/main.js. The token is only valid
 // for the response it arrived with. Storing that page and replaying it later
 // makes the injected script post a dead token, and Cloudflare answers 400 to a
-// challenge the page can no longer complete — which is the `h/undefined/...`
+// challenge the page can no longer complete, which is the `h/undefined/...`
 // request in the console, repeated on every visit because the cache never
 // refreshes. Store navigation HTML only when it carries no token, and never
 // serve a cached page that does.

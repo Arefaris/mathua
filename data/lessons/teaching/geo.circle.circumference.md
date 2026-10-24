@@ -1,11 +1,11 @@
 > Hand-authored lesson for the Mathua project.
 # Circumference of a Circle
 
-The **circumference** is the perimeter of a circle — the distance around it. What makes circles special is that the distance around is always the same multiple of the distance across, for every circle, no matter its size.
+The **circumference** is the perimeter of a circle, the distance around it. What makes circles special is that the distance around is always the same multiple of the distance across, for every circle, no matter its size.
 
 ## The Number Pi
 
-Measure any circle's circumference and divide by its diameter: you get approximately $3.14159\ldots$ — the famous constant $\pi$ (pi). Since $\pi = \frac{C}{d}$ for every circle:
+Measure any circle's circumference and divide by its diameter: you get approximately $3.14159\ldots$, the famous constant $\pi$ (pi). Since $\pi = \frac{C}{d}$ for every circle:
 
 \[C = \pi d\]
 

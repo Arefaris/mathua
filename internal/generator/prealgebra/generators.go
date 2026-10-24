@@ -825,14 +825,14 @@ func (g *sciNotationGen) Grade(expected, userAnswer string) grader.Result {
 			return grader.Result{Correct: false, Score: 0, Feedback: "Type scientific notation like 3.7x10^4"}
 		}
 		if *eExp != *aExp || math.Abs(*eCoeff-*aCoeff) >= 1e-4 {
-			return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect — check the coefficient and the exponent"}
+			return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect, check the coefficient and the exponent"}
 		}
 		return grader.Result{Correct: true, Score: 1}
 	}
 	e, errE := strconv.ParseFloat(strings.TrimSpace(expected), 64)
 	a, errA := strconv.ParseFloat(strings.TrimSpace(userAnswer), 64)
 	if errE != nil || errA != nil || math.Abs(e-a) >= 1e-9 {
-		return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect — convert carefully"}
+		return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect, convert carefully"}
 	}
 	return grader.Result{Correct: true, Score: 1}
 }
@@ -984,17 +984,43 @@ func (g *distributeGen) Generate(ctx generator.GeneratorContext) generator.Probl
 
 type eqOneStepAddGen struct{}
 
+// The answer is the solution, not the right-hand side. Until 23 October 2026
+// this drew x and b, printed x + b = x - b + b, and published x as the answer,
+// so every question marked the correct solution wrong: x + 3 = 8 expected 8
+// rather than 5. Three learners reported it (217, 115, 112) and the questions
+// they quoted are the proof.
 func (g *eqOneStepAddGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	x := rand.Intn(scale*4) + 1
 	b := rand.Intn(scale*5) - scale*2
-	a := x - b
-	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(x + %d = %d\\)", b, a+b),
-		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("\\(x + %d = %d\\), subtract %d: \\(x = %d\\)", b, a+b, b, x),
-		Facts:       map[string]string{"b": strconv.Itoa(b), "rhs": strconv.Itoa(a + b), "x": strconv.Itoa(x)},
+	for b == 0 {
+		b = rand.Intn(scale*5) - scale*2
 	}
+	rhs := x + b
+	return generator.Problem{
+		Question:    fmt.Sprintf("Solve: \\(x %s = %d\\)", signedTerm(b), rhs),
+		Answer:      fmt.Sprintf("%d", x),
+		Explanation: fmt.Sprintf("\\(x %s = %d\\): %s %d from both sides, which leaves \\(x = %d\\)", signedTerm(b), rhs, undoWord(b), absInt(b), x),
+		Facts:       map[string]string{"b": strconv.Itoa(b), "rhs": strconv.Itoa(rhs), "x": strconv.Itoa(x)},
+	}
+}
+
+// signedTerm renders an additive constant the way a reader expects to see it,
+// as " + 4" or " - 4". Printing "x + -4" put a minus straight after a plus,
+// which is the other half of what the one-step reports quoted.
+func signedTerm(n int) string {
+	if n < 0 {
+		return fmt.Sprintf("- %d", -n)
+	}
+	return fmt.Sprintf("+ %d", n)
+}
+
+// undoWord names the inverse operation for a constant of that sign.
+func undoWord(n int) string {
+	if n < 0 {
+		return "add"
+	}
+	return "subtract"
 }
 
 type eqOneStepMultGen struct{}
@@ -1014,7 +1040,7 @@ func (g *eqOneStepMultGen) Generate(ctx generator.GeneratorContext) generator.Pr
 
 // fmtNum renders a float without the binary-float noise %g exposes.
 // Scientific notation divides by powers of ten, so 4.4 / 10 came out as
-// 0.44000000000000006 — a served answer and an explanation quoting a number
+// 0.44000000000000006, a served answer and an explanation quoting a number
 // the learner never wrote. Twelve significant digits is well past any value
 // these generators produce and well short of the noise.
 func fmtNum(f float64) string {
@@ -1081,11 +1107,20 @@ func (g *ineqOneStepGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	x := rand.Intn(scale*2) + 2
 	b := rand.Intn(scale*3) - scale
 	c := x + b - 1
+	// The stem used to read only "Solve:" while the key held the boundary
+	// integer, so a learner who answered "x > 3" was told they were wrong for
+	// answering the question as asked (reports 79, 93). It now asks for the
+	// smallest integer that works, which is the number the key holds, and it
+	// prints a signed term rather than "x + -3".
+	stem := fmt.Sprintf("x + %d", b)
+	if b < 0 {
+		stem = fmt.Sprintf("x - %d", -b)
+	}
 	return generator.Problem{
-		Question:    fmt.Sprintf("Solve: \\(x + %d > %d\\)", b, c),
+		Question:    fmt.Sprintf("What is the smallest integer \\(x\\) that satisfies \\(%s > %d\\)?", stem, c),
 		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("\\(x + %d > %d\\), subtract %d: \\(x > %d\\)", b, c, b, c-b),
-		Facts:       map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "x": strconv.Itoa(c - b)},
+		Explanation: fmt.Sprintf("\\(%s > %d\\) means \\(x > %d\\), so the smallest integer that works is %d.", stem, c, c-b, x),
+		Facts:       map[string]string{"b": strconv.Itoa(b), "c": strconv.Itoa(c), "border": strconv.Itoa(c - b), "x": strconv.Itoa(x)},
 	}
 }
 
@@ -1098,11 +1133,16 @@ func (g *ineqTwoStepGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	b := rand.Intn(scale*2) - scale
 	c := a*x + b + rand.Intn(a) + 1
 	q := formatIneq(a, b, c)
+	// c - b is a*x plus a remainder below a, so the boundary is strictly between
+	// x and x+1: x is the largest integer that satisfies the inequality, which
+	// is what the question now asks for. It used to ask for "x" and answer the
+	// integer while the true boundary was a fraction, so a learner who solved it
+	// properly answered "x < 10/3" and was marked wrong (report 183).
 	return generator.Problem{
-		Question:    q,
+		Question:    fmt.Sprintf("What is the largest integer \\(x\\) that satisfies %s?", q),
 		Answer:      fmt.Sprintf("%d", x),
-		Explanation: fmt.Sprintf("Solve \\(%s \\to %dx < %d \\to x < %.1f \\to x = %d\\)", q, a, c-b, float64(c-b)/float64(a), x),
-		Facts:       map[string]string{"q": q, "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "bound": fmt.Sprintf("%.1f", float64(c-b)/float64(a)), "x": strconv.Itoa(x)},
+		Explanation: fmt.Sprintf("Solve \\(%s\\): subtract %d to get the variable term alone, then divide by %d. The boundary is \\(( %d )/%d = %.2f\\), so the largest integer below it is %d.", q, b, a, c-b, a, float64(c-b)/float64(a), x),
+		Facts:       map[string]string{"q": q, "a": strconv.Itoa(a), "b": strconv.Itoa(b), "c": strconv.Itoa(c), "rhs": strconv.Itoa(c - b), "bound": fmt.Sprintf("%.2f", float64(c-b)/float64(a)), "x": strconv.Itoa(x)},
 	}
 }
 
@@ -1119,6 +1159,19 @@ func formatExpr(a, b int) string {
 		return fmt.Sprintf("%dx - %d", a, -b)
 	}
 	return fmt.Sprintf("%dx + %d", a, b)
+}
+
+// realConceptOptions names the options for the prose answers in realConceptGen.
+// A two-word answer such as "rational and irrational" cannot be typed into the
+// math field, so those entries are presented as choices.
+var realConceptOptions = map[string][]string{
+	"yes":                           {"yes", "no"},
+	"no":                            {"yes", "no"},
+	"true":                          {"true", "false"},
+	"false":                         {"true", "false"},
+	"irrational":                    {"rational", "irrational", "integer", "natural"},
+	"rational and irrational":       {"rational and irrational", "positive and negative", "integers and fractions", "prime and composite"},
+	"can be expressed as \\(a/b\\)": {"can be expressed as \\(a/b\\)", "is always a whole number", "has a terminating decimal", "cannot be written as a fraction"},
 }
 
 type realConceptGen struct{}
@@ -1140,6 +1193,14 @@ func (g *realConceptGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		{"What is the name for a non-repeating, non-terminating decimal?", "irrational", "Irrational numbers have decimal representations that neither terminate nor repeat."},
 	}
 	e := entries[rand.Intn(len(entries))]
+	// Half of these answers are words, and the math field strips the spaces out
+	// of words. Offer them, and drop the "(yes/no)" hint that no longer applies.
+	if options, ok := realConceptOptions[e.answer]; ok {
+		question := strings.NewReplacer(" (yes/no)", "", " (true/false)", "").Replace(e.question)
+		p := generator.MultipleChoice(question, e.answer, options...)
+		p.Explanation = e.exp
+		return p
+	}
 	return generator.Problem{
 		Question:    e.question,
 		Answer:      e.answer,
@@ -1168,6 +1229,20 @@ func (g *realPropertiesGen) Generate(ctx generator.GeneratorContext) generator.P
 		{"The identity property of multiplication states a × 1 = ?", "a", "Multiplying by 1 gives the original number."},
 	}
 	e := entries[rand.Intn(len(entries))]
+	// The property names are words, so they need options: a math field eats
+	// the spaces and turns "commutative" into something no grader can match.
+	switch e.answer {
+	case "commutative", "associative", "distributive":
+		others := make([]string, 0, 2)
+		for _, w := range []string{"commutative", "associative", "distributive"} {
+			if w != e.answer {
+				others = append(others, w)
+			}
+		}
+		p := generator.MultipleChoice(e.question, e.answer, others...)
+		p.Explanation = e.exp
+		return p
+	}
 	return generator.Problem{
 		Question:    e.question,
 		Answer:      e.answer,

@@ -36,7 +36,7 @@ Equivalently, $F$ is closed if it contains all its limit points: whenever $x_n \
 
 - A set can be both open and closed ("clopen"): e.g., $\emptyset$ and $X$ in any metric space; more interestingly, a set like $[0, 1]$ in $\mathbb{R}$ with the discrete metric.
 - A set can be neither open nor closed: e.g., $(0, 1]$ in $\mathbb{R}$ with the usual metric.
-- Open does not mean "not closed" — a door analogy does not apply in topology.
+- Open does not mean "not closed", a door analogy does not apply in topology.
 
 ## Interior, Closure, Boundary
 

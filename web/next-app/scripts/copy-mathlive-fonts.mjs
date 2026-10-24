@@ -1,5 +1,5 @@
 // MathLive renders with the KaTeX font family and fetches the .woff2 files from
-// `<origin>/fonts` at runtime — it does not bundle them. With `output: 'export'`
+// `<origin>/fonts` at runtime, it does not bundle them. With `output: 'export'`
 // there is no server to serve them, so they are copied into `public/fonts` at
 // build time and end up in the exported `out/` like any other static asset.
 //
@@ -30,7 +30,7 @@ async function main() {
       return
     }
   } catch {
-    // No stamp yet — fall through and copy.
+    // No stamp yet, fall through and copy.
   }
 
   await mkdir(dest, { recursive: true })
@@ -40,7 +40,7 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('mathlive fonts: copy failed —', err.message)
+  console.error('mathlive fonts: copy failed, ', err.message)
   // A missing font is a rendering regression, not a build failure, so warn loudly
   // and let the build continue rather than blocking a deploy on an asset copy.
   process.exitCode = 0

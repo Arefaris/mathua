@@ -5,7 +5,7 @@ import Footer from '../../components/Footer'
 import BottomTabs from '../../components/BottomTabs'
 
 export const metadata: Metadata = {
-  title: 'Privacy notice — Mathua',
+  title: 'Privacy notice, Mathua',
   description:
     'What the assistant sends to an AI provider, what Mathua keeps and what it never sends.',
 }

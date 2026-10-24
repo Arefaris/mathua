@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 5.2 Decimal Operations
 
@@ -127,7 +127,7 @@ Subtract: $8.12 - 11.7.$
 
 ### Multiply Decimals
 
-Multiplying decimals is very much like multiplying whole numbers—we just have to determine where to place the decimal point. The procedure for multiplying decimals will make sense if we first review multiplying fractions.
+Multiplying decimals is very much like multiplying whole numbers, we just have to determine where to place the decimal point. The procedure for multiplying decimals will make sense if we first review multiplying fractions.
 
 Do you remember how to multiply fractions? To multiply fractions, you multiply the numerators and then multiply the denominators.
 
@@ -144,7 +144,7 @@ Table 5.3
 
 There is a pattern that we can use. In A, we multiplied two numbers that each had one decimal place, and the product had two decimal places. In B, we multiplied a number with one decimal place by a number with two decimal places, and the product had three decimal places.
 
-How many decimal places would you expect for the product of $(0.01)(0.004)?$ If you said “five”, you recognized the pattern. When we multiply two numbers with decimals, we count all the decimal places in the factors—in this case two plus three—to get the number of decimal places in the product—in this case five.
+How many decimal places would you expect for the product of $(0.01)(0.004)?$ If you said “five”, you recognized the pattern. When we multiply two numbers with decimals, we count all the decimal places in the factors, in this case two plus three, to get the number of decimal places in the product, in this case five.
 
 Once we know how to determine the number of digits after the decimal point, we can multiply decimal numbers without converting them to fractions first. The number of decimal places in the product is the sum of the number of decimal places in the factors.
 
@@ -409,7 +409,7 @@ Divide: $0.28 \div 4.$
 
 Divide: $0.56 \div 7.$
 
-In everyday life, we divide whole numbers into decimals—money—to find the price of one item. For example, suppose a case of 24 water bottles cost $\text{\$3.99}.$ To find the price per water bottle, we would divide $\text{\$3.99}$ by 24, and round the answer to the nearest cent (hundredth).
+In everyday life, we divide whole numbers into decimals, money, to find the price of one item. For example, suppose a case of 24 water bottles cost $\text{\$3.99}.$ To find the price per water bottle, we would divide $\text{\$3.99}$ by 24, and round the answer to the nearest cent (hundredth).
 
 ### Example 5.20
 

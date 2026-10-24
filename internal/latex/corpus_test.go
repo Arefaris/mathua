@@ -26,7 +26,7 @@ func warningKind(w string) string {
 
 // TestCorpusGate walks the real lesson corpus and enforces two properties:
 //
-//  1. Canonicalize reaches a fixed point (C(C(x)) == C(C(C(x)))) — the first
+//  1. Canonicalize reaches a fixed point (C(C(x)) == C(C(C(x)))), the first
 //     application may legitimately keep rewriting (e.g. heading demotion runs
 //     per call), but content must stabilize.
 //  2. Validation warnings on the stabilized form match the committed baseline
@@ -179,7 +179,7 @@ func TestCorpusGate(t *testing.T) {
 			}
 		}
 	}
-	// Cleanups: in baseline but now clean — require a deliberate baseline update.
+	// Cleanups: in baseline but now clean, require a deliberate baseline update.
 	for file := range baseline {
 		if _, ok := fresh[file]; !ok {
 			t.Errorf("%s: no longer warns; remove it from the baseline (-update)", file)

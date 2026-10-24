@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/irrational-inequalities/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/irrational-inequalities/), CC BY-NC 4.0
 
 Concept
 

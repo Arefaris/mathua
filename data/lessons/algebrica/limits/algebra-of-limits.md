@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/algebra-of-limits/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/algebra-of-limits/), CC BY-NC 4.0
 
 ## Introduction
 

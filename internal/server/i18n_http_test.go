@@ -322,7 +322,7 @@ func TestGoalDiagnosticNamesTheConceptInTheRequestLocale(t *testing.T) {
 
 	start := func(header string) string {
 		t.Helper()
-		req := httptest.NewRequest("POST", "/api/goal/diagnostic", strings.NewReader(`{"name":"kid","concept_ids":["b"]}`))
+		req := httptest.NewRequest("POST", "/api/goal/diagnostic", strings.NewReader(`{"name":"kid","concept_ids":["a"]}`))
 		req.Header.Set("Content-Type", "application/json")
 		if header != "" {
 			req.Header.Set("Accept-Language", header)

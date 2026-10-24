@@ -18,16 +18,150 @@ func fuzzGen(t *testing.T, gen generator.Generator) {
 	}
 }
 
-func TestConceptGen(t *testing.T)        { fuzzGen(t, &conceptGen{}) }
-func TestSeparableGen(t *testing.T)      { fuzzGen(t, &separableGen{}) }
-func TestLinearFirstGen(t *testing.T)    { fuzzGen(t, &linearFirstGen{}) }
-func TestExactGen(t *testing.T)          { fuzzGen(t, &exactGen{}) }
-func TestHomogeneousGen(t *testing.T)    { fuzzGen(t, &homogeneousGen{}) }
-func TestNonhomogeneousGen(t *testing.T) { fuzzGen(t, &nonhomogeneousGen{}) }
-func TestLaplaceGen(t *testing.T)        { fuzzGen(t, &laplaceGen{}) }
-func TestSystemsGen(t *testing.T)        { fuzzGen(t, &systemsGen{}) }
+func TestConceptGen(t *testing.T)           { fuzzGen(t, &conceptGen{}) }
+func TestSeparableGen(t *testing.T)         { fuzzGen(t, &separableGen{}) }
+func TestLinearFirstGen(t *testing.T)       { fuzzGen(t, &linearFirstGen{}) }
+func TestExactGen(t *testing.T)             { fuzzGen(t, &exactGen{}) }
+func TestHomogeneousGen(t *testing.T)       { fuzzGen(t, &homogeneousGen{}) }
+func TestNonhomogeneousGen(t *testing.T)    { fuzzGen(t, &nonhomogeneousGen{}) }
+func TestLaplaceGen(t *testing.T)           { fuzzGen(t, &laplaceGen{}) }
+func TestSystemsGen(t *testing.T)           { fuzzGen(t, &systemsGen{}) }
+func TestConvolutionGenerator(t *testing.T) { fuzzGen(t, &convolutionGen{}) }
+func TestLinearPhaseGenerator(t *testing.T) { fuzzGen(t, &linearPhaseGen{}) }
 func TestRK4Gen(t *testing.T) {
 	gen := &rk4Gen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestStabilityGen(t *testing.T) {
+	gen := &stabilityGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestCharacteristicsGen(t *testing.T) {
+	gen := &characteristicsGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestBifurcationGen(t *testing.T) {
+	gen := &bifurcationGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestFourierGen(t *testing.T) {
+	gen := &fourierGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestWaveGen(t *testing.T) {
+	gen := &waveGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestHeatGen(t *testing.T) {
+	gen := &heatGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestGreenFunctionGen(t *testing.T) {
+	gen := &greenFunctionGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestLyapunovGen(t *testing.T) {
+	gen := &lyapunovGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestLaplaceEqGen(t *testing.T) {
+	gen := &laplaceEqGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestVolterraGen(t *testing.T) {
+	gen := &volterraGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestSturmLiouvilleGen(t *testing.T) {
+	gen := &sturmLiouvilleGen{}
+	for i := 0; i < 200; i++ {
+		d := rand.Float64()
+		p := gen.Generate(generator.GeneratorContext{Difficulty: d})
+		if p.Question == "" || p.Answer == "" || p.Explanation == "" {
+			t.Fatalf("empty field at difficulty=%.2f: q=%q a=%q e=%q", d, p.Question, p.Answer, p.Explanation)
+		}
+	}
+}
+
+func TestBoundaryValueGen(t *testing.T) {
+	gen := &boundaryValueGen{}
 	for i := 0; i < 200; i++ {
 		d := rand.Float64()
 		p := gen.Generate(generator.GeneratorContext{Difficulty: d})

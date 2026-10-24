@@ -7,7 +7,7 @@ package fsrs
 // today, and that is not an accident of incomplete code: a correct answer is
 // Good, an incorrect answer is Again. Hard would claim the learner recalled it
 // with serious difficulty and Easy would claim it was effortless, and Mathua
-// has no calibrated signal for either. A timing ratio is not that signal — a
+// has no calibrated signal for either. A timing ratio is not that signal, a
 // fast wrong answer is common, and a slow correct answer on a hard concept is
 // not evidence of Easy recall.
 type Rating int
@@ -41,8 +41,8 @@ func NativeRating(correct bool) Rating {
 // LegacySM2 is the pre-FSRS scheduling state of one learner and concept.
 //
 // It is a distinct type from Rating on purpose. A legacy compatibility
-// transition — the correct-but-streak-unmet case, which the old SM-2 code
-// treats as a failed repetition and schedules one day out — is not a review
+// transition, the correct-but-streak-unmet case, which the old SM-2 code
+// treats as a failed repetition and schedules one day out, is not a review
 // rating and must never be recorded as one. The compiler will not let a
 // LegacySM2 be passed where a Rating is expected, which is a cheaper guarantee
 // than a comment saying not to.

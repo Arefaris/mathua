@@ -19,7 +19,7 @@ import (
 )
 
 // Permission names one thing an administrator may do. They are coarse on
-// purpose — a permission per button is an enterprise IAM model, and Mathua is a
+// purpose, a permission per button is an enterprise IAM model, and Mathua is a
 // small open-source project. Each one corresponds to an area of the admin
 // surface, not to an endpoint.
 type Permission string
@@ -80,7 +80,7 @@ func Permitted(role storage.Role, p Permission) bool {
 }
 
 // Permissions lists everything a role may do, in the declaration order above. The client uses
-// it to render only the sections a caller can reach — as a convenience, never as the check.
+// it to render only the sections a caller can reach, as a convenience, never as the check.
 func Permissions(role storage.Role) []Permission {
 	order := []Permission{
 		Access, ReportsRead, ReportsModerate, UsersRead,
@@ -108,7 +108,7 @@ func CouldEscalate(current, next storage.Role) bool {
 //
 //  1. You cannot hand out a role above your own. Otherwise an admin mints an owner and is an
 //     owner by proxy.
-//  2. You cannot act on someone at least as privileged as you — unless you are an owner, who is
+//  2. You cannot act on someone at least as privileged as you, unless you are an owner, who is
 //     the only role that manages peers. Otherwise an admin demotes an owner.
 //  3. Handing out `owner` itself needs RolesGrantOwner, which only an owner holds. This is what
 //     separates "an admin can manage moderators and learners" from "an admin can crown a king".

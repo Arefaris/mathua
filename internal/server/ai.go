@@ -66,8 +66,8 @@ type aiAssistantLink struct {
 // aiAssistantPart is one run of the reply: either plain text or a link.
 //
 // The reply is sent as ordered parts rather than as text plus a list of links
-// because the list rendered the label twice — once where the model wrote the
-// marker, and again in a row of boxes underneath — so a sentence read "you can
+// because the list rendered the label twice, once where the model wrote the
+// marker, and again in a row of boxes underneath, so a sentence read "you can
 // start with our Calculus path here: Calculus" followed by a Calculus box. A
 // part sequence puts the link where the model put it and nowhere else.
 type aiAssistantPart struct {
@@ -233,7 +233,7 @@ func sanitizeAssistantHistory(in []aiChatTurn) []ai.Turn {
 	return out
 }
 
-// POST /api/ai/assistant — an optional, best-effort product assistant. It
+// POST /api/ai/assistant, an optional, best-effort product assistant. It
 // answers "what is Mathua" and "where do I start", and it is not a tutor: it
 // holds no concept context and never guides a graded question. The deterministic
 // app does not depend on it: a disabled registry, an exhausted quota or a
@@ -301,7 +301,7 @@ type aiGoalScopeResponse struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-// POST /api/ai/goal-scope — maps a learner's free-text goal to destination ids
+// POST /api/ai/goal-scope, maps a learner's free-text goal to destination ids
 // from the repository's own list. It is an enhancement, not the mechanism: when
 // AI is unavailable it returns used_ai=false with a reason, and the client keeps
 // its deterministic fuzzy match.
@@ -400,7 +400,7 @@ func goalScopeMessages(goal string, candidates []goalCandidate) []ai.Message {
 		b.WriteString(": ")
 		b.WriteString(c.Name)
 		if c.Description != "" {
-			b.WriteString(" — ")
+			b.WriteString(", ")
 			b.WriteString(c.Description)
 		}
 		b.WriteByte('\n')

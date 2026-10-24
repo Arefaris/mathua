@@ -1,6 +1,6 @@
 # Residues at simple poles
 
-The **residue** of a function at a pole is the coefficient of \((z - z_0)^{-1}\) in its Laurent series there. At a **simple pole** — one where that term is the most singular — the coefficient has a one-line formula: \(\operatorname{Res}(f, z_0) = \lim_{z\to z_0} (z - z_0)f(z)\).
+The **residue** of a function at a pole is the coefficient of \((z - z_0)^{-1}\) in its Laurent series there. At a **simple pole**, one where that term is the most singular, the coefficient has a one-line formula: \(\operatorname{Res}(f, z_0) = \lim_{z\to z_0} (z - z_0)f(z)\).
 
 ## The limit formula
 

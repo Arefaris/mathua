@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/functions/), CC BY-NC 4.0
 
 ## Что такое функция
 

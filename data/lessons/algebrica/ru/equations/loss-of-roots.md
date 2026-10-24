@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/loss-of-roots/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/loss-of-roots/), CC BY-NC 4.0
 
 ## Потеря корней
 

@@ -10,7 +10,7 @@ Writing a fraction as such a sum is the oldest way of recording fractions, and i
 
 Given a fraction written as a half plus a unit fraction, the missing denominator is found by putting the sum over a common denominator and matching the two forms. The arithmetic is two lines rather than a search.
 
-More than two terms can be needed in general, and the greedy method — subtract the largest unit fraction that fits and repeat — always terminates, though it does not always give the shortest sum.
+More than two terms can be needed in general, and the greedy method, subtract the largest unit fraction that fits and repeat, always terminates, though it does not always give the shortest sum.
 
 ## Why it is worth doing
 

@@ -371,7 +371,7 @@ func (r *Router) Grade(t GradingType, expected, answer string) Result {
     }
 }
 
-// internal/engine/engine.go — a generator may override the router:
+// internal/engine/engine.go, a generator may override the router:
 func (e *Engine) gradeAnswer(conceptID, expected, answer string) grader.Result {
     if gen, err := e.registry.Get(conceptID); err == nil {
         if gg, ok := gen.(generator.GradedGenerator); ok {

@@ -2,6 +2,7 @@
 
 import KatexContent from './KatexContent'
 import ChoiceOptions from './ChoiceOptions'
+import { stemWithoutChoices } from '../lib/choices'
 import { MathAnswerInput } from './math/MathInput'
 import type { PracticeQuestion } from '../lib/api'
 import type { AnswerFormat } from '../lib/answerFormat'
@@ -34,7 +35,7 @@ export default function LearnQuestionCard({ entry: qe, conceptId, gradingType, f
   const locked = qe.feedback !== null
   return (
     <div className={`border bg-mathua-surface p-6 ${qe.feedback?.correct ? 'border-mathua-green-faint' : qe.feedback ? 'border-mathua-red-faint' : 'border-mathua-border'}`}>
-      <KatexContent className="text-sm text-mathua-primary font-mono whitespace-pre-wrap">{qe.q.question}</KatexContent>
+      <KatexContent className="text-sm text-mathua-primary font-mono whitespace-pre-wrap">{stemWithoutChoices(qe.q.question)}</KatexContent>
       <ChoiceOptions question={qe.q.question} value={qe.answer} onPick={onAnswerChange} disabled={locked || qe.checking} />
       {!locked && (
         <form onSubmit={ev => { ev.preventDefault(); onCheck() }} className="mt-3 flex flex-col sm:flex-row gap-2">

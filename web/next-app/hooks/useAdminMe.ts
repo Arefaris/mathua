@@ -8,7 +8,7 @@ import { adminMe, type AdminMe } from '../lib/api'
 // This is the client's copy of the permission list, and it is a convenience: it decides which
 // sections render, never what the server allows. A section hidden here is still refused by the
 // server if reached another way, and a section shown here still fails with a 403 if the account
-// lacks the permission — which is what keeps the two from being the same decision.
+// lacks the permission, which is what keeps the two from being the same decision.
 export function useAdminMe() {
   const [me, setMe] = useState<AdminMe | null>(null)
   const [loading, setLoading] = useState(true)

@@ -23,7 +23,7 @@ Tick marks on a drawing indicate which sides are equal.
 
 A triangle can never contain two right angles or two obtuse angles, because the three angles always total $180^\circ$. Every triangle gets exactly one name from each table, so "isosceles right triangle" describes both a side property and an angle property.
 
-In a right triangle, the side opposite the right angle — the longest side — is called the **hypotenuse**, and the other two sides are the **legs**.
+In a right triangle, the side opposite the right angle, the longest side, is called the **hypotenuse**, and the other two sides are the **legs**.
 
 ## Example
 
@@ -45,7 +45,7 @@ Can a triangle have sides 2, 2, 2 and be a right triangle?
 
 *Solution*
 
-No. Sides 2, 2, 2 make it equilateral, so all three angles are equal. If one angle were $90^\circ$, all three would be $90^\circ$, totaling $270^\circ$ — impossible. An equilateral triangle is always acute.
+No. Sides 2, 2, 2 make it equilateral, so all three angles are equal. If one angle were $90^\circ$, all three would be $90^\circ$, totaling $270^\circ$, impossible. An equilateral triangle is always acute.
 
 ## Summary
 
