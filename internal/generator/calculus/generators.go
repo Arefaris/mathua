@@ -1593,17 +1593,57 @@ func (g *asymptotesGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type discontinuityGen struct{}
 
 func (g *discontinuityGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	// The four kinds are fixed mathematics; the function, the coefficient and the
+	// singular point are drawn, so the answer word is derived from the shape that
+	// was actually built rather than selected from a list of answers.
+	a := randRange(ctx.Difficulty, 1, 5)
+	if rand.Intn(2) == 0 {
+		a = -a
 	}
-	table := []entry{
-		{"What kind of discontinuity does \\(1/x\\) have at \\(x=0\\)?", "infinite", "\\(1/x\\) has an infinite discontinuity (vertical asymptote) at \\(x=0\\)."},
-		{"What kind of discontinuity does \\(|x|/x\\) have at \\(x=0\\)?", "jump", "The left limit is -1 and the right limit is 1, so there is a jump discontinuity."},
-		{"What kind of discontinuity does \\(\\frac{x^{2}-1}{x-1}\\) have at \\(x=1\\)?", "removable", "The function simplifies to \\(x+1\\) for \\(x\\neq 1\\), and the limit as \\(x\\to 1\\) is 2."},
-		{"What kind of discontinuity does \\(\\sin(1/x)\\) have at \\(x=0\\)?", "essential", "\\(\\sin(1/x)\\) oscillates infinitely near 0, so the limit does not exist (essential/oscillatory discontinuity)."},
+	k := randRange(ctx.Difficulty, 1, 3)
+	b := randRange(ctx.Difficulty, 1, 4)
+	switch rand.Intn(4) {
+	case 0:
+		f := fmt.Sprintf("\\frac{%d}{x-%d}", k, a)
+		if rand.Intn(2) == 0 {
+			f = fmt.Sprintf("\\frac{%d}{(x-%d)^{2}}", k, a)
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("What kind of discontinuity does \\(f(x)=%s\\) have at \\(x=%d\\)?", f, a),
+			Answer:      "infinite",
+			Explanation: fmt.Sprintf("As \\(x \\to %d\\) the denominator tends to zero while the numerator stays at %d, so \\(f\\) grows without bound. The line \\(x=%d\\) is a vertical asymptote, which makes the discontinuity infinite.", a, k, a),
+		}
+	case 1:
+		f := fmt.Sprintf("\\frac{|x-%d|}{x-%d}", a, a)
+		if rand.Intn(2) == 0 {
+			f = fmt.Sprintf("\\frac{x-%d}{|x-%d|}", a, a)
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("What kind of discontinuity does \\(f(x)=%s\\) have at \\(x=%d\\)?", f, a),
+			Answer:      "jump",
+			Explanation: fmt.Sprintf("The one-sided limits differ: from the left the ratio tends to -1 and from the right to 1. Both are finite but unequal, so the discontinuity at \\(x=%d\\) is a jump.", a),
+		}
+	case 2:
+		f := fmt.Sprintf("\\frac{x^{2}-%d}{x-%d}", a*a, a)
+		if rand.Intn(2) == 0 {
+			f = fmt.Sprintf("\\frac{(x-%d)(x+%d)}{x-%d}", a, b, a)
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("What kind of discontinuity does \\(f(x)=%s\\) have at \\(x=%d\\)?", f, a),
+			Answer:      "removable",
+			Explanation: fmt.Sprintf("The numerator shares the factor \\(x-%d\\) with the denominator, so the quotient simplifies to a polynomial for \\(x \\neq %d\\). The limit exists and equals the value that simplification gives, so the single missing point is removable.", a, a),
+		}
+	default:
+		f := fmt.Sprintf("\\sin\\left(\\frac{%d}{x-%d}\\right)", k, a)
+		if rand.Intn(2) == 0 {
+			f = fmt.Sprintf("\\cos\\left(\\frac{%d}{x-%d}\\right)", k, a)
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("What kind of discontinuity does \\(f(x)=%s\\) have at \\(x=%d\\)?", f, a),
+			Answer:      "essential",
+			Explanation: fmt.Sprintf("As \\(x \\to %d\\) the argument grows without bound, so the function oscillates through its whole range infinitely often. No limit exists and the value never settles, which makes the discontinuity essential.", a),
+		}
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type indeterminateGen struct{}
