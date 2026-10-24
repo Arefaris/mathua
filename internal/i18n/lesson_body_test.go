@@ -438,6 +438,43 @@ func mathSymbols(s string) []string {
 // pointLabelRe matches one to three Latin capitals: the label of a point or a triangle.
 var pointLabelRe = regexp.MustCompile(`^[A-Z]{1,3}$`)
 
+// latexNameRe matches a control word (\overline) or a letter-like command with its argument
+// (\mathbb{R}, \operatorname{Log}); the capitals inside those are not point labels.
+var latexNameRe = regexp.MustCompile(`\\(?:mathbb|mathcal|mathrm|mathbf|mathfrak|mathsf|operatorname)\{[^{}]*\}|\\[A-Za-z]+`)
+
+// labelLetters returns the Latin capitals the formulas use as symbols outside \text{}: the S
+// and T of \overline{ST}, the Q of y_Q. A capital label set with \text{} is accepted only when
+// each of its letters is among them, so \text{O} passes next to \overline{OS} while \text{LCM},
+// \text{IF} or the F, O, I, L of FOIL in a lesson that never writes those letters as symbols are
+// still reported, as the glossary wants them translated (НОК) or spelled out.
+func labelLetters(spans []string) map[rune]bool {
+	out := map[rune]bool{}
+	for _, s := range spans {
+		s = mathTextRe.ReplaceAllString(s, "")
+		s = latexNameRe.ReplaceAllString(s, "")
+		for _, r := range s {
+			if r >= 'A' && r <= 'Z' {
+				out[r] = true
+			}
+		}
+	}
+	return out
+}
+
+// isPointLabel reports whether body is a point or triangle label whose letters the lesson also
+// uses as symbols.
+func isPointLabel(body string, letters map[rune]bool) bool {
+	if !pointLabelRe.MatchString(body) {
+		return false
+	}
+	for _, r := range body {
+		if !letters[r] {
+			return false
+		}
+	}
+	return true
+}
+
 // mathOperatorNames are names of functions and operators that a formula may set with \text{}.
 var mathOperatorNames = map[string]bool{
 	"lcm": true, "gcd": true, "gcf": true, "sgn": true, "sign": true, "mod": true,
@@ -462,6 +499,7 @@ var mathOperatorNames = map[string]bool{
 // found 140 such groups that had passed silently.
 func englishMathText(spans []string) []string {
 	var out []string
+	letters := labelLetters(spans)
 	for _, s := range spans {
 		for _, m := range mathTextRe.FindAllString(s, -1) {
 			body := m[strings.Index(m, "{")+1 : len(m)-1]
@@ -479,8 +517,8 @@ func englishMathText(spans []string) []string {
 			// A point or segment label set with \text{} (\text{O}, \text{OST}) is notation as
 			// well: Russian and Ukrainian geometry writes points with Latin capitals too, and
 			// the label also appears outside \text{} in \overline{OS}, so it cannot be
-			// translated alone.
-			if pointLabelRe.MatchString(strings.TrimSpace(body)) {
+			// translated alone. That second appearance is what identifies a label.
+			if isPointLabel(strings.TrimSpace(body), letters) {
 				continue
 			}
 			if strings.ContainsAny(body, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
@@ -874,10 +912,17 @@ func TestBareEnvironmentsAndOperatorNames(t *testing.T) {
 	if got := englishMathText([]string{`$\text{lcm}(4,6)$`, `$\text{sgn}\,x$`}); len(got) != 0 {
 		t.Errorf("operator names reported as English: %v", got)
 	}
-	if got := englishMathText([]string{`$\text{O} = (0,0)$`, `$\triangle\text{OST}$`}); len(got) != 0 {
+	labels := []string{`$\text{O} = (0,0)$`, `$\triangle\text{OST}$`, `$\tan\theta = \overline{ST}$`, `$\overline{OS} = 1$`}
+	if got := englishMathText(labels); len(got) != 0 {
 		t.Errorf("point labels reported as English: %v", got)
 	}
-	if got := englishMathText([]string{`$5\,\text{cm}$`, `$\text{rad}$`, `$\text{like}$`}); len(got) != 3 {
+	// Capitals that the lesson never uses as symbols are words or abbreviations, not labels:
+	// \mathbb{R} and \operatorname{Log} do not make R, L, O or G labels either.
+	abbreviations := []string{`$\text{LCM} = 36$`, `$\text{IF}$`, `$(x+2)\overset{\text{L}}{\cdot}(x+3)$`, `$\mathbb{R}$`, `$\operatorname{Log} z$`}
+	if got := englishMathText(abbreviations); len(got) != 3 {
+		t.Errorf("capital abbreviations accepted as point labels: %v", got)
+	}
+	if got := englishMathText([]string{`$5\,\text{cm}$`, `$\text{rad}$`, `$\text{like}$`, `$\overline{OS}$`}); len(got) != 3 {
 		t.Errorf("lower-case English next to the point-label rule not reported: %v", got)
 	}
 }
