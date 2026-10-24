@@ -1046,3 +1046,10 @@
 | branch (of the tangent) | гілка (тангенса) | |
 | case / sub-case | випадок / підвипадок | |
 | Technique / Intermediate / The Graph (шапка статті) | Прийом / Середній / Графік | поруч із «Тема / Легко» |
+| consistent (possible) / inconsistent (impossible) system | сумісна (можлива) / несумісна (неможлива) система | determined / undetermined — визначена / невизначена |
+| non-singular matrix | невироджена матриця | |
+| row-echelon form / triangular system | ступінчастий вигляд / трикутна система | pivot — ведучий елемент (§8) |
+| n-tuple of values | n-ка значень | |
+| trivial / non-trivial solution (однорідної системи) | тривіальний / нетривіальний розв’язок | |
+| adjugate matrix, `\text{adj}(A)` | приєднана матриця, `\text{прис}(A)` | вибір перекладача: валідатор уроків вимагає перекласти кожне слово в `\text{…}`, а «adj» немає в переліку позначень функцій; рецензенту: за потреби змінити скорочення в `cramers-rule.md` |
+| `\xrightarrow{\text{to}}` | `\xrightarrow{\text{до}}` | |
