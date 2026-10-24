@@ -295,6 +295,10 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 		}
 	}
 
+	remQueue, err := e.repo.GetRemedialQueue(studentID)
+	if err != nil {
+		return scheduler.RecommendationResponse{}, fmt.Errorf("read remedial queue: %w", err)
+	}
 	e.mu.Lock()
 	if path := e.activePath[studentID]; len(path) > 0 {
 		for cid := range snapshots {
@@ -303,7 +307,6 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 			}
 		}
 	}
-	remQueue := append([]string(nil), e.remedialQueue[studentID]...)
 	for _, as := range e.sessions {
 		if as.studentID == studentID && as.halted {
 			for _, cid := range as.remedialQueue {
