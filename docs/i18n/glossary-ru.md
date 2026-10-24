@@ -911,4 +911,12 @@
 | high / low temperature | наибольшая / наименьшая температура | |
 | regular price / sale price | обычная цена / цена со скидкой | |
 | `June 1^{st}` в формуле | `\text{}\ 1^{\text{}}` и «июня» в прозе после формулы | порядковое окончание в `\text{}` по-русски не нужно, как `\text{s}` в §16 |
+| prime factorization | разложение на простые множители | как в `kp/ru` |
+| factor tree method / ladder method | метод дерева (множителей) / метод лесенки; «stacked division» — ступенчатое деление | |
+| branch (factor tree) / circle a prime | ветвь / обвести простое число | |
+| factor pair | пара множителей (в 2.5), пара делителей (в 2.4) | |
+| exponential form (разложение) | запись с помощью степеней | |
+| common multiple / least common multiple (LCM) | общее кратное / наименьшее общее кратное (НОК) | аббревиатура — в скобках при первом упоминании |
+| listing multiples / prime factors method | метод перечисления кратных / метод простых множителей | |
+| bring down the primes in each column | «снести» простые числа из каждого столбца | |
 | Links to Literacy (названия книг) | «Связь с чтением»; русское название и в скобках английское: «Сто голодных муравьёв» (One Hundred Hungry Ants) | как в `dec.ops.*` |
