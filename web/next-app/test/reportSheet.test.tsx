@@ -83,10 +83,10 @@ describe('the report sheet', () => {
     fireEvent.click(screen.getByRole('button', { name: /report a problem/i }))
     fireEvent.click(screen.getByRole('button', { name: /send report/i }))
 
-    await waitFor(() => expect(screen.getByRole('button', { name: /thanks — reported/i })).toBeInTheDocument())
-    fireEvent.click(screen.getByRole('button', { name: /thanks — reported/i }))
+    await waitFor(() => expect(screen.getByRole('button', { name: /thanks, reported/i })).toBeInTheDocument())
+    fireEvent.click(screen.getByRole('button', { name: /thanks, reported/i }))
 
-    expect(screen.queryByText(/thanks — reported/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/thanks, reported/i)).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /report a problem/i })).toBeInTheDocument()
   })
 })
