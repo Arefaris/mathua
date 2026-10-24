@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Remove figure captions that nothing refers to and whose lesson never cites a figure.
 
-An orphan caption is a paragraph that is nothing but emphasis and that sits next to no image —
+An orphan caption is a paragraph that is nothing but emphasis and that sits next to no image, 
 the shape `ingest_pretext.mjs` emits for a `<figure>` when it keeps the caption and drops the
 image. Left in place it shows a learner a description of a picture that is not there.
 
 **The delete set is much smaller than the candidate set, and the reason is the interesting
 part.** Of the 359 candidates the audit found:
 
-    220  sit in lessons whose prose cites a figure — by number ("as shown in Figure 1.2") or by
+    220  sit in lessons whose prose cites a figure, by number ("as shown in Figure 1.2") or by
          position ("the graph above illustrates"). Deleting those would leave the prose
          pointing at nothing, which is a worse defect than an orphaned caption. Kept.
      35  sit in lessons that cite no figure at all, read positively as captions, and carry
@@ -21,7 +21,7 @@ part.** Of the 359 candidates the audit found:
 The first dry run of this script deleted 210 lines and was wrong. It removed `*Figure 1.2 …*`
 from a lesson whose prose says "visualized on a number line as shown in Figure 1.2", because
 the prose check only recognised relative references like "the figure below". It also removed
-`*Solution*` — a heading — because a lesson with two worked answers has two of them and the
+`*Solution*`, a heading, because a lesson with two worked answers has two of them and the
 audit's "duplicated in this lesson" signal promoted them to `strong`. Both are why the rule
 here requires positive evidence twice over: the lesson must cite no figure, *and* the caption
 must positively read as one.
@@ -71,11 +71,11 @@ def reads_as_a_caption(text):
 
 
 def caption_is_bare_label(text):
-    """`Figure 1.3` and nothing else — the number, with no description attached."""
+    """`Figure 1.3` and nothing else, the number, with no description attached."""
     m = NUMBERED_CAPTION_RE.match(text)
     if not m:
         return False
-    return not text[m.end():].strip(" .:—")
+    return not text[m.end():].strip(" .:, ")
 
 
 def main():
@@ -121,13 +121,13 @@ def main():
                 kept += 1
                 reasons[reason] += 1
                 if args.dry_run:
-                    print(f"keep {rel}:{row['line']}  *{text[:64]}*  — {reason}")
+                    print(f"keep {rel}:{row['line']}  *{text[:64]}*, {reason}")
                 continue
 
             i = row["line"] - 1
             if lines[i].strip() != "*" + text + "*":
                 raise SystemExit(
-                    f"{rel}:{i+1} no longer matches the audited candidate {lines[i].strip()!r} — "
+                    f"{rel}:{i+1} no longer matches the audited candidate {lines[i].strip()!r}, "
                     "the audit is stale, re-run scripts/audit_lesson_media.py first")
             drop.add(i)
             # The caption is its own paragraph, so a neighbouring blank line goes with it.

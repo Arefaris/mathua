@@ -149,7 +149,7 @@ func TestEngine_MasteryProgression(t *testing.T) {
 			t.Fatalf("expected correct on attempt %d", i+1)
 		}
 	}
-	// One clean answer is LEARNING — the cheap first rung.
+	// One clean answer is LEARNING, the cheap first rung.
 	one, _ := e.CreateStudent("prog_one")
 	answerCorrectly(t, e, one.ID, 1)
 	if p := mustProgress(t, e, one.ID)["a"]; p == nil || p.Status != "LEARNING" {
@@ -160,7 +160,7 @@ func TestEngine_MasteryProgression(t *testing.T) {
 	// window, so the top rung is out of reach however good the answers are.
 	//
 	// This used to assert LEARNING, because the old rule needed the streak to *reach* the
-	// threshold before it would move at all — and then a further full threshold for each of
+	// threshold before it would move at all and then a further full threshold for each of
 	// the next two tiers.
 	progress, _ := e.GetProgress(st.ID)
 	if p, ok := progress["a"]; !ok || p.Status != "PRACTICING" {
@@ -200,8 +200,8 @@ func TestEngine_GetScores(t *testing.T) {
 }
 
 // A duplicate of one attempt may race the real submission. Every caller must
-// get the recorded result back — a retry the learner made because the first
-// response was lost is not an error — but only one grading may happen, so the
+// get the recorded result back, a retry the learner made because the first
+// response was lost is not an error, but only one grading may happen, so the
 // progress is written once and no second attempt is recorded.
 func TestEngine_SubmitAnswer_ConcurrentDuplicates(t *testing.T) {
 	e := testEngine(t)
@@ -352,7 +352,7 @@ func TestEngine_FullMasteryCycle(t *testing.T) {
 	//
 	// This loop used to ask for concept "a" nine times and fail if it got anything else,
 	// because the old rule needed 3 × required_streak correct answers per concept. Under
-	// the evidence ladder "a" is mastered in three and the scheduler moves to "b" — so the
+	// the evidence ladder "a" is mastered in three and the scheduler moves to "b", so the
 	// test now asserts the *frontier advancing*, which is the behaviour the ladder exists
 	// to produce. It is the clearest available proof of the cost change: 3 answers, not 9,
 	// and not 30.
@@ -505,7 +505,7 @@ func TestEngine_Halt_AfterTwoConsecutiveMisses(t *testing.T) {
 	if haltedAfter {
 		t.Error("expected halt cleared after remedial success")
 	}
-	// Scheduling resumes — a remains the only unlocked concept in this DAG,
+	// Scheduling resumes, a remains the only unlocked concept in this DAG,
 	// so it must be served again (b still gated on a's mastery).
 	q4, _ := e.NextQuestion(sess.ID, st.ID)
 	if q4 == nil {
@@ -1198,7 +1198,7 @@ func TestEngine_StudyPath_ExplanationOnBothVerdicts(t *testing.T) {
 		question: {Answer: "5/4", Explanation: why},
 	})
 
-	// 7/4, not 1.25 — the numeric grader would (correctly) call 1.25 equal to 5/4.
+	// 7/4, not 1.25, the numeric grader would (correctly) call 1.25 equal to 5/4.
 	miss, err := e.SubmitStudyAnswer(st.ID, "a", "7/4", 5.0, question)
 	if err != nil {
 		t.Fatalf("submit miss: %v", err)
@@ -1226,7 +1226,7 @@ func TestEngine_StudyPath_ExplanationOnBothVerdicts(t *testing.T) {
 // questions and fetches a fresh batch while the learner is still reading the
 // one in front of them, so a replace-on-write blob made every question past the
 // first ungradeable: the submit hit ErrNoStudyAnchor, the server answered 409,
-// and the client swapped in a different question — which read as Learn skipping
+// and the client swapped in a different question, which read as Learn skipping
 // questions the learner had just answered.
 func TestEngine_StudyAnchor_MergesAcrossBatches(t *testing.T) {
 	e := testEngine(t)
@@ -1266,7 +1266,7 @@ func TestEngine_StudyAnchor_MergesAcrossBatches(t *testing.T) {
 }
 
 // Incoming entries win on identical text. Deterministic generators give the
-// same text the same answer, so this is not lossy — but a re-serve carrying a
+// same text the same answer, so this is not lossy, but a re-serve carrying a
 // corrected explanation must not be shadowed by the stale copy.
 func TestEngine_StudyAnchor_IncomingWinsOnSameText(t *testing.T) {
 	e := testEngine(t)
@@ -1329,7 +1329,7 @@ func TestEngine_StudyPath_RefusesWithoutAnchor(t *testing.T) {
 	if !errors.Is(err, ErrNoStudyAnchor) {
 		t.Fatalf("expected ErrNoStudyAnchor, got %v", err)
 	}
-	// Nothing recorded — no progress row means no streak, weakness or XP moved.
+	// Nothing recorded, no progress row means no streak, weakness or XP moved.
 	if p, _ := e.GetProgress(st.ID); len(p) != 0 {
 		t.Errorf("an ungradeable answer must record nothing, got %v", p)
 	}
@@ -1369,7 +1369,7 @@ func TestEngine_Review_ExplanationOnCorrect(t *testing.T) {
 	if err != nil {
 		t.Fatalf("next question: %v", err)
 	}
-	// Question carries no Expected on purpose — it is never sent to the client.
+	// Question carries no Expected on purpose, it is never sent to the client.
 	// Read it off the active session to submit a genuinely correct answer.
 	e.mu.Lock()
 	expected := e.sessions[sess.ID].expectedAnswer
@@ -1389,7 +1389,7 @@ func TestEngine_Review_ExplanationOnCorrect(t *testing.T) {
 	}
 }
 
-// Session 5: efficacy instrumentation — first-pass / second-pass rates.
+// Session 5: efficacy instrumentation, first-pass / second-pass rates.
 func TestEngine_Efficacy(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("efficacy")
@@ -1483,7 +1483,7 @@ func TestEngine_SubmitQuizAnswer_TaskQuizXP(t *testing.T) {
 		t.Fatalf("get xp: %v", err)
 	}
 	// Single-path invariant: exactly what the response reports is what the
-	// DB received — no lesson-rate write + quiz-rate display divergence.
+	// DB received, no lesson-rate write + quiz-rate display divergence.
 	if after-before != res.XP {
 		t.Errorf("DB delta %d != response XP %d", after-before, res.XP)
 	}
@@ -1533,7 +1533,7 @@ func TestEngine_StudyAnchor_SurvivesRestart(t *testing.T) {
 func TestEngine_StudyAnchorBatch_PerQuestion(t *testing.T) {
 	e := testEngine(t)
 	// Distinct questions on the same concept must each grade against their own
-	// answer — the bug was anchoring only the first question — and each is owed
+	// answer, the bug was anchoring only the first question and each is owed
 	// its own explanation, not the set's first one.
 	e.SetStudyAnchorBatch("stu1", "a", map[string]Anchor{
 		"Q1": {Answer: "5^4", Explanation: "5^4 = 5·5·5·5 = 625."},
@@ -1553,7 +1553,7 @@ func TestEngine_StudyAnchorBatch_PerQuestion(t *testing.T) {
 // A blob written before the explanation was carried must still grade: the
 // session it belongs to is in flight, and refusing it would turn a deploy into
 // a broken learner session. Only the two shapes that can actually be in
-// server_sessions are covered — every writer marshals a map, so a bare string
+// server_sessions are covered, every writer marshals a map, so a bare string
 // was never stored and the old fallback was dead too.
 func TestDecodeStudyAnchor_LegacyShapes(t *testing.T) {
 	for name, tc := range map[string]struct{ blob, key, answer string }{
@@ -1629,7 +1629,7 @@ func TestEngine_QuizMiss_EnqueuesRemedial(t *testing.T) {
 	}
 }
 
-// Quiz gate — due at 50 XP since last completion, reset on record.
+// Quiz gate, due at 50 XP since last completion, reset on record.
 
 func TestEngine_QuizGate_DueAndReset(t *testing.T) {
 	e := testEngine(t)
@@ -1702,19 +1702,19 @@ func TestEngine_Diagnosis(t *testing.T) {
 				t.Fatalf("submit: %v", err)
 			}
 			if res.Correct != tc.wantCorrect {
-				t.Errorf("correct = %v, want %v — %s", res.Correct, tc.wantCorrect, tc.why)
+				t.Errorf("correct = %v, want %v, %s", res.Correct, tc.wantCorrect, tc.why)
 			}
 			if tc.wantDiagnosis && res.Diagnosis == "" {
-				t.Errorf("expected a diagnosis for %q, got none — %s", tc.answer, tc.why)
+				t.Errorf("expected a diagnosis for %q, got none, %s", tc.answer, tc.why)
 			}
 			if !tc.wantDiagnosis && res.Diagnosis != "" {
-				t.Errorf("unexpected diagnosis %q — %s", res.Diagnosis, tc.why)
+				t.Errorf("unexpected diagnosis %q, %s", res.Diagnosis, tc.why)
 			}
 		})
 	}
 }
 
-// Decay is never persisted — the row stays MASTERED forever and the downgrade
+// Decay is never persisted, the row stays MASTERED forever and the downgrade
 // happens on read. Before GetProgress applied it, /api/progress reported a
 // stale concept as mastered while the scheduler treated it as DECAYING and
 // scheduled it for review: two parts of the app disagreeing about one fact, and
@@ -1824,7 +1824,7 @@ func TestGetProgress_LeavesOtherStatusesAlone(t *testing.T) {
 // answerCorrectly answers concept "a" correctly n times, using the engine's own question
 // pool. It is not usable for long runs: the pool for a two-concept DAG runs out after a
 // handful of questions, which is why the exhaustive monotonicity proof lives in
-// internal/mastery — where it can drive the transition rules directly — and what is
+// internal/mastery, where it can drive the transition rules directly and what is
 // asserted here is that the endpoint derives from the server's threshold.
 func answerCorrectly(t *testing.T, e *Engine, studentID string, n int) {
 	t.Helper()
@@ -1906,7 +1906,7 @@ func TestProgressWithMasteryPct_NeverFallsOnAdvance(t *testing.T) {
 	// engine resets the streak to 1 on the tier advance; a streak-derived ratio therefore
 	// falls from 1.0 to 0.33 here. Tier-derived attainment rises instead.
 	//
-	// The exhaustive version — every answer through all three advances — is
+	// The exhaustive version, every answer through all three advances, is
 	// TestMasteryPct_NeverGoesBackwards in internal/mastery, which drives the transition
 	// rules directly and so is not limited by the question pool.
 	if got := mastery.MasteryPct(mastery.StatusLearning, 3, 3); math.Abs(got-2.0/3.0) > 1e-9 {
@@ -1922,7 +1922,7 @@ func TestProgressWithMasteryPct_NeverFallsOnAdvance(t *testing.T) {
 }
 
 // A decayed concept keeps a full bar. Decay is signalled by colour alone, and a shorter
-// bar would read as losing the competence — the one thing decay does not mean.
+// bar would read as losing the competence, the one thing decay does not mean.
 func TestProgressWithMasteryPct_DecayingIsFull(t *testing.T) {
 	e := testEngine(t)
 	st, _ := e.CreateStudent("pct_decaying")
@@ -1942,7 +1942,7 @@ func TestProgressWithMasteryPct_DecayingIsFull(t *testing.T) {
 }
 
 // The evidence model weights a correct answer by how hard the question was. That is only
-// usable if the server records the difficulty it generated at — and records *nothing*
+// usable if the server records the difficulty it generated at and records *nothing*
 // rather than a guess when it does not know.
 func TestEngine_RecordsServedQuestionDifficulty(t *testing.T) {
 	e := testEngine(t)
@@ -2006,7 +2006,7 @@ func TestEngine_NeverRecordsZeroDifficulty(t *testing.T) {
 // mastery.NeutralDifficulty is what BuildEvidence credits a correct answer with when the
 // attempt carries no difficulty, and difficultyFromWeakness is what the engine serves when
 // it has no information about the learner. If those two drift apart, an unknown-difficulty
-// attempt silently becomes worth more or less than the questions actually being served —
+// attempt silently becomes worth more or less than the questions actually being served,
 // which is precisely the bug that made the quiz surface more permissive than the study
 // surface.
 func TestNeutralDifficultyMatchesEngineDefault(t *testing.T) {
@@ -2027,7 +2027,7 @@ func TestNeutralDifficultyMatchesEngineDefault(t *testing.T) {
 // surface.
 //
 // `submitAnswerWithTask` serves both the study/Learn loop and quizzes, and it used to hand
-// the mastery authority a hardcoded `difficulty: 0` — meaning "unknown" — while
+// the mastery authority a hardcoded `difficulty: 0`, meaning "unknown", while
 // `SubmitAnswer` passed the real difficulty off the active session. Unknown difficulty was
 // then scored as `difficultyTerm = 1.0`, the top of the range, so the same answers were worth
 // more on the quiz path than on the study path. Measured at 50% accuracy: 0.65 and cleared
@@ -2040,10 +2040,10 @@ func TestStudyAndQuizProduceEquivalentMasteryEvidence(t *testing.T) {
 	diff := served
 	question := "3/4 + 1/2 = ?"
 
-	// Six answers at 50% accuracy — the exact case the asymmetry decided.
+	// Six answers at 50% accuracy, the exact case the asymmetry decided.
 	outcomes := []bool{true, false, true, false, true, true}
 
-	// Study: the anchor is the record of what was served, so the difficulty rides there —
+	// Study: the anchor is the record of what was served, so the difficulty rides there,
 	// no caller supplies it.
 	studyEngine, studyStudent := func() (*Engine, *storage.Student) {
 		e := testEngine(t)
@@ -2092,7 +2092,7 @@ func TestStudyAndQuizProduceEquivalentMasteryEvidence(t *testing.T) {
 	}
 	for i := range outcomes {
 		if studyRows[i].Difficulty == nil || quizRows[i].Difficulty == nil {
-			t.Fatalf("attempt %d: study difficulty %v, quiz difficulty %v — both must carry "+
+			t.Fatalf("attempt %d: study difficulty %v, quiz difficulty %v, both must carry "+
 				"the served difficulty", i, studyRows[i].Difficulty, quizRows[i].Difficulty)
 		}
 		if math.Abs(*studyRows[i].Difficulty-*quizRows[i].Difficulty) > 1e-9 {
@@ -2110,7 +2110,7 @@ func TestStudyAndQuizProduceEquivalentMasteryEvidence(t *testing.T) {
 	quizEv := evidenceFromRows(quizRows)
 	if math.Abs(studyEv.Score-quizEv.Score) > 1e-9 {
 		t.Errorf("study evidence scored %.4f and quiz evidence %.4f for the same answers on "+
-			"the same questions — the surface is changing what the learner demonstrated",
+			"the same questions, the surface is changing what the learner demonstrated",
 			studyEv.Score, quizEv.Score)
 	}
 	if studyEv.Attempts != quizEv.Attempts {
@@ -2182,7 +2182,7 @@ func TestUnknownDifficultyHostIsNotMoreGenerous(t *testing.T) {
 	knownEv := evidenceFromRows(knownRows)
 	unknownEv := evidenceFromRows(unknownRows)
 	if unknownEv.Score > knownEv.Score+1e-9 {
-		t.Errorf("unknown difficulty scored %.4f against %.4f for known difficulty %.2f — "+
+		t.Errorf("unknown difficulty scored %.4f against %.4f for known difficulty %.2f, "+
 			"a missing value is buying more evidence than a recorded one",
 			unknownEv.Score, knownEv.Score, *knownRows[5].Difficulty)
 	}
@@ -2206,8 +2206,8 @@ func evidenceFromRows(rows []storage.AttemptEntry) mastery.Evidence {
 // own.
 //
 // `web/next-app/lib/progression.ts` kept a second implementation of the mastery evidence
-// model — different weights, different variety population, a flat 60s time cliff instead of
-// the concept threshold — and rendered a band from it in the Learn header. That is only
+// model, different weights, different variety population, a flat 60s time cliff instead of
+// the concept threshold and rendered a band from it in the Learn header. That is only
 // removable if the number is available, so this asserts it is, and that the band comes from
 // the same place as the verdict.
 func TestAnswerResponseCarriesAuthoritativeEvidence(t *testing.T) {
@@ -2277,7 +2277,7 @@ func TestUngradedAnswerCarriesNoEvidence(t *testing.T) {
 // The practice path counted its own sub-2-second wrong answers on the active session; the
 // study/quiz path required two misses on the concept as well, so a learner who rushed twice
 // but was wrong for ordinary reasons was never penalised there. Same behaviour, two
-// different rules — now both xp.RushSeconds / xp.RushAfter.
+// different rules, now both xp.RushSeconds / xp.RushAfter.
 func TestRushPenaltyIsIdenticalAcrossHosts(t *testing.T) {
 	e := testEngine(t)
 	st, err := e.CreateStudent("rush_parity")

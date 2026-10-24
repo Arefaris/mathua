@@ -1,7 +1,7 @@
 > Hand-authored lesson for the Mathua project.
 # Volume of a Rectangular Prism
 
-A rectangular prism is a box shape: six rectangles meeting at right angles. Its **volume** — the number of unit cubes that fill it — comes from multiplying its three edge lengths:
+A rectangular prism is a box shape: six rectangles meeting at right angles. Its **volume**, the number of unit cubes that fill it, comes from multiplying its three edge lengths:
 
 \[V = l \cdot w \cdot h\]
 

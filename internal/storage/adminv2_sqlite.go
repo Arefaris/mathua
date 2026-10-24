@@ -283,7 +283,7 @@ func (s *SQLiteStore) RevokeAdminInvitation(actorID string, id int64) (AdminInvi
 
 // ConsumeAdminInvitation burns a token and grants the role it carried, in one transaction. The
 // role change and the audit event are part of the same unit as the burn, so there is no state in
-// which someone holds a staff role with no record of how they got it — and no state in which a
+// which someone holds a staff role with no record of how they got it and no state in which a
 // token is spent but the role was not granted.
 func (s *SQLiteStore) ConsumeAdminInvitation(tokenHash, studentID string) (*AdminInvitation, bool, error) {
 	tx, err := s.db.Begin()

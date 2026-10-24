@@ -11,7 +11,7 @@ import type { ConceptProgress } from './api'
 //
 // Domain order and labels come from lib/graphDomains. Six modules used to carry their own copy
 // of that list and three of them omitted `machine_learning` while DomainProgress omitted it and
-// `precalculus` too — 50 concepts that no surface showed, with nothing on screen to say so.
+// `precalculus` too, 50 concepts that no surface showed, with nothing on screen to say so.
 // test/domainAuthority.test.ts fails if a partial list appears again.
 
 export type DomainConceptStatus = 'mastered' | 'dueForReview' | 'inProgress' | 'unseen'

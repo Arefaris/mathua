@@ -51,8 +51,8 @@ interface ConceptGraphFlowProps {
 const STATUS_COLORS: Record<GraphStatus, string> = {
   mastered: '#10b981',
   // Darker amber than `learning`'s, and deliberately so. Both states are "attention"
-  // and the brief is that decay is signalled by colour alone — no second bar, no
-  // pattern, no badge, no shorter fill — so if the two ambers matched, `learning` and
+  // and the brief is that decay is signalled by colour alone, no second bar, no
+  // pattern, no badge, no shorter fill, so if the two ambers matched, `learning` and
   // `decaying` would be the same picture. A full bar in a deeper amber reads as
   // "learned, come back to this", which is what it is.
   decaying: '#b45309',
@@ -778,7 +778,7 @@ function GraphInner({
   }, [zoomIn, zoomOut, fitView, getViewport, setViewport, select])
 
   // React Flow re-emits selection changes whenever this callback's identity
-  // changes (every render, if inline) and once on mount with an empty list —
+  // changes (every render, if inline) and once on mount with an empty list, 
   // both would clear the selection and wipe a ?concept= deep link. Keep the
   // identity stable and treat this stream as select-only: deselection goes
   // through onPaneClick and the Escape handler instead.
@@ -982,7 +982,7 @@ function GraphInner({
   }, [])
 
   // Re-fit when the mounted set changes (domain focus), but not on first paint
-  // — React Flow's fitView prop already handles the initial view.
+  //, React Flow's fitView prop already handles the initial view.
   const firstFocusRef = useRef(true)
   useEffect(() => {
     if (firstFocusRef.current) {
@@ -1009,14 +1009,14 @@ function GraphInner({
   // Where this node's one button goes, and what it says.
   //
   // This used to be an "Open concept" button on the page, and the page pushed `/study?concept=`
-  // — a reference route. It is gone, and its replacement is not simply `/learn?concept=`,
+  //, a reference route. It is gone, and its replacement is not simply `/learn?concept=`,
   // because that route opens with the concept's worked example unconditionally: sending a
   // concept the learner has already demonstrated there re-teaches what they just proved they
   // can do, which is the tutorial purgatory ADR-037 removed from the scheduler's own path.
   //
   // So the destination is a function of the concept's state, which is the whole of §12's rule:
   // still being learned goes to the teaching loop, already demonstrated goes to retrieval
-  // practice. DECAYING goes the second way deliberately — it means "learned, and the check is
+  // practice. DECAYING goes the second way deliberately, it means "learned, and the check is
   // outstanding", which is a question about remembering, not about being taught again.
   const selectedLearned = countsAsMastered({ status: selectedStatus ?? undefined })
 

@@ -19,7 +19,7 @@ BASE = "https://algebrica.org"
 OUT = os.path.join(os.path.dirname(__file__), "..", "data", "lessons", "algebrica")
 os.makedirs(OUT, exist_ok=True)
 
-# Categories we already fully pulled from GitHub — skip
+# Categories we already fully pulled from GitHub, skip
 ALREADY_FULL = {
     "algebraic-structures", "complex-numbers", "linear-systems",
     "polynomials", "powers-radicals-logarithms",
@@ -161,7 +161,7 @@ def scrape_entry(entry_url, cat_dir, overwrite=False):
     md = clean_markdown(md)
 
     # Prepend attribution
-    header = f"> Content sourced from [Algebrica]({entry_url}) — CC BY-NC 4.0\n\n"
+    header = f"> Content sourced from [Algebrica]({entry_url}), CC BY-NC 4.0\n\n"
     md = header + md
 
     with open(fpath, "w") as f:

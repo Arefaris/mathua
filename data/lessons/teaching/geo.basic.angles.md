@@ -1,7 +1,7 @@
 > Hand-authored lesson for the Mathua project.
 # Types of Angles: Acute, Right, Obtuse
 
-An **angle** is formed by two rays that share a common endpoint, called the **vertex**. The two rays are the **sides** of the angle. We name angles with three letters — a point on one side, the vertex, and a point on the other side — such as $\angle ABC$, or simply by the vertex, $\angle B$.
+An **angle** is formed by two rays that share a common endpoint, called the **vertex**. The two rays are the **sides** of the angle. We name angles with three letters, a point on one side, the vertex, and a point on the other side, such as $\angle ABC$, or simply by the vertex, $\angle B$.
 
 ## Measuring the "Opening" of an Angle
 

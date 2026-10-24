@@ -14,7 +14,7 @@ const ResetPhrase = "reset my progress"
 //
 // Case-insensitive, and deliberately so. The confirmation is typed into a `type="text"`
 // field, which Safari capitalises as you type and Android keyboards routinely
-// autocorrect — "reset my progress" arrives as "Reset my progress". An exact comparison
+// autocorrect, "reset my progress" arrives as "Reset my progress". An exact comparison
 // therefore rejected people who had typed precisely what the label asked for, and the
 // error they got back said they had mistyped it.
 //
@@ -44,7 +44,7 @@ var ErrDeletePhraseMismatch = fmt.Errorf("confirmation phrase does not match")
 //
 //  1. Repository reset (single transaction; itself idempotent).
 //  2. In-memory engine state for the student (anchors, misses, remedials,
-//     active path) — otherwise stale grading state survives the wipe.
+//     active path), otherwise stale grading state survives the wipe.
 //  3. Evidence baseline delete (KV last: if the process dies between 1
 //     and 3, a retry simply repeats idempotent deletes).
 //  4. Prefs reset marker (keeps destination/deadline/pace, stamps ResetAt

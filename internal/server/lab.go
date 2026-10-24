@@ -9,7 +9,7 @@ import (
 
 // The lab is the admin's reproduction bench: search any concept, generate its
 // questions at a chosen difficulty, try an answer with the same field the
-// learner gets, and see the same verdict the engine would return — without
+// learner gets, and see the same verdict the engine would return, without
 // writing a single attempt, XP point or mastery update.
 //
 // It exists because a moderator could previously see a report but not the

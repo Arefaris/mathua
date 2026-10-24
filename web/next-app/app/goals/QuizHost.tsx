@@ -23,7 +23,7 @@ import { focusClearOfTabs } from '../../lib/focusClearOfTabs'
 
 // 'failed' exists because 'done' used to carry two meanings. Any thrown request
 // set phase to 'done', and the done screen reads "No questions available" while
-// the accuracy counters are still zero — so a network blip, a 500 or an expired
+// the accuracy counters are still zero, so a network blip, a 500 or an expired
 // token told the learner the corpus had no questions for them. The engine cannot
 // actually produce that state: a session with no picked concepts falls back to
 // the first five concepts in DAG order, so a real empty result needs an empty
@@ -65,7 +65,7 @@ export default function QuizHost() {
   const [finished, setFinished] = useState(false)
   const [skipCount, setSkipCount] = useState(0)
   const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(() => formatForGradingType())
-  // Next question staged from the submit response — revealed by goNextQuiz(),
+  // Next question staged from the submit response, revealed by goNextQuiz(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingQuizNext = useRef<{
     question: string
@@ -106,7 +106,7 @@ export default function QuizHost() {
       setFinished(false)
       setPhase('quiz')
     } catch {
-      toast.error('Quiz failed to start — try again.')
+      toast.error('Quiz failed to start, try again.')
       setStartError('The quiz could not start. That is a request problem, not a missing topic.')
       setPhase('failed')
     } finally {
@@ -114,13 +114,13 @@ export default function QuizHost() {
     }
   }
 
-  // The quiz starts from the intro screen, not on mount — timing and
+  // The quiz starts from the intro screen, not on mount, timing and
   // question reveal begin at Start, so the briefing costs nothing.
 
   // Per-question countdown for the timed closed-book quiz. Informational:
   // the engine grades over-time answers as slow, it never blocks submission.
   // Keyboard flow: the answer form unmounts while feedback shows, so the
-  // cursor is restored here — whenever a fresh question is revealed.
+  // cursor is restored here, whenever a fresh question is revealed.
   useEffect(() => {
     if (phase === 'quiz' && !quizLastResult && quizQuestion) quizInputRef.current?.focus()
   }, [phase, quizLastResult, quizQuestion])
@@ -190,7 +190,7 @@ export default function QuizHost() {
       setSkipCount(c => c + 1)
       if (data.done) {
         setFinished(true)
-        setQuizLastResult({ correct: false, feedback: 'Skipped — no XP awarded.', conceptId: quizConceptId.current, xp: 0 })
+        setQuizLastResult({ correct: false, feedback: 'Skipped, no XP awarded.', conceptId: quizConceptId.current, xp: 0 })
         setTimeout(() => {
           setPhase('done')
           setLoading(false)
@@ -269,7 +269,7 @@ export default function QuizHost() {
       <div className="max-w-2xl mx-auto text-center">
         <SectionHeader label="Quiz" title="Quiz could not start" />
         <p role="alert" className="font-mono text-sm text-mathua-secondary mt-4">
-          {startError || 'The quiz could not start.'} Nothing is wrong with the topics — the
+          {startError || 'The quiz could not start.'} Nothing is wrong with the topics, the
           request failed.
         </p>
         <div className="mt-6 flex gap-3 justify-center">

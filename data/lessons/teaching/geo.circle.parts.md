@@ -17,7 +17,7 @@ Two facts connect these:
 
 \[d = 2r \qquad r = \frac{d}{2}\]
 
-Every diameter is a chord — the longest possible one — but not every chord passes through the center.
+Every diameter is a chord, the longest possible one, but not every chord passes through the center.
 
 ## Example
 

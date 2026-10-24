@@ -165,7 +165,7 @@ func (g *subBorrowGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	tensA := rand.Intn(max(1, scale*2)) + 1
 	// onesA stays under 9 so that 10-onesA is always a positive bound. A zero
 	// or negative bound panics rand.Intn, and the old range reached 11 at
-	// difficulty 1.0 — which the Learn stepper does request, taking the handler
+	// difficulty 1.0, which the Learn stepper does request, taking the handler
 	// down with a panic instead of serving a question.
 	onesA := rand.Intn(max(1, min(8, scale*2-1))) + 1
 	onesB := onesA + rand.Intn(10-onesA) + 1
@@ -504,7 +504,7 @@ func (g *primeGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		p := primes[rand.Intn(min(len(primes), scale*3))]
 		// A yes/no verdict is a word, so it is offered rather than typed.
 		choice := generator.MultipleChoice(fmt.Sprintf("Is %d prime?", p), "yes", "no")
-		choice.Explanation = fmt.Sprintf("%d is prime — only divisible by 1 and itself.", p)
+		choice.Explanation = fmt.Sprintf("%d is prime, only divisible by 1 and itself.", p)
 		choice.Facts = map[string]string{"p": strconv.Itoa(p)}
 		return choice
 	}
@@ -716,7 +716,7 @@ var sqrtPartsRe = regexp.MustCompile(`^(-?\d*)sqrt\(?(\d+)\)?$`)
 // sqrtParts reads the forms a learner actually writes: "5 sqrt(2)",
 // "5sqrt(2)", "5√2", "5\sqrt{2}" and "sqrt(2)". The grader used to require
 // exactly "a sqrt(b)", so a learner who computed a perfect square and typed the
-// integer — 12 for sqrt(144) — was told they were wrong (reports 138 and 221).
+// integer, 12 for sqrt(144), was told they were wrong (reports 138 and 221).
 func sqrtParts(s string) (coef, rad int, ok bool) {
 	v := strings.ToLower(strings.TrimSpace(s))
 	v = strings.NewReplacer("\\", "", "{", "", "}", "", " ", "", "\u221a", "sqrt").Replace(v)
@@ -748,8 +748,8 @@ func sqrtParts(s string) (coef, rad int, ok bool) {
 // squareFreeFactors are the radicands this generator may leave inside the
 // radical. Every one is square-free, so the answer cannot be simplified
 // further. Before this the remainder was drawn at random, so sqrt(100) was
-// served with the answer "5 sqrt(4)": not simplified, and 10 — the value a
-// learner computes — was rejected as unparseable.
+// served with the answer "5 sqrt(4)": not simplified, and 10, the value a
+// learner computes, was rejected as unparseable.
 var squareFreeFactors = []int{2, 3, 5, 6, 7, 10, 11, 13}
 
 func (g *sqrtSimplifyGen) Generate(ctx generator.GeneratorContext) generator.Problem {
@@ -791,7 +791,7 @@ type negNumberLineGen struct{}
 func (g *negNumberLineGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	scale := int(1 + ctx.Difficulty*5)
 	a := rand.Intn(scale*2) - scale
-	// 0 is its own opposite — trivial and confusing; re-roll to non-zero.
+	// 0 is its own opposite, trivial and confusing; re-roll to non-zero.
 	for a == 0 {
 		a = rand.Intn(scale*2) - scale
 		if scale <= 1 {

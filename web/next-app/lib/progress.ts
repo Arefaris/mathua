@@ -1,7 +1,7 @@
 import type { ConceptProgress } from './api'
 
-// Shared mastery counting. Three copies of these two predicates existed — in
-// DomainProgress and twice in nextUp — and a fourth was about to arrive with
+// Shared mastery counting. Three copies of these two predicates existed, in
+// DomainProgress and twice in nextUp and a fourth was about to arrive with
 // the progress page's position block. They agree today; they would drift the
 // moment one was edited, and a drift here is invisible: Profile would count a
 // concept as mastered while the scheduler scheduled it for review.
@@ -22,7 +22,7 @@ type MaybeProgress = { status?: string | undefined } | undefined | null
  * The learner's-facing mastery state.
  *
  * `decaying` is deliberately a state of its own and must stay one. It means
- * *previously mastered, retrieval confidence may have weakened* — not *never
+ * *previously mastered, retrieval confidence may have weakened*, not *never
  * learned*. Decay is computed server-side at read time and never persisted, so a
  * concept only ever arrives as `DECAYING`, never as a stored status.
  */
@@ -34,7 +34,7 @@ export type MasteryState = 'mastered' | 'decaying' | 'practicing' | 'learning' |
 // Strictly "is MASTERED right now", which is narrower than "has this been
 // learned" and is the wrong question for anything about prerequisites or the
 // learning loop. The server reports a concept whose review has gone stale as
-// DECAYING, so asking this of a prerequisite quietly un-masters it — that is
+// DECAYING, so asking this of a prerequisite quietly un-masters it, that is
 // exactly how a fortnight's gap used to relock a whole downstream path. Use
 // countsAsMastered where "learned" is the question.
 export function isMastered(p: MaybeProgress): boolean {
@@ -94,7 +94,7 @@ export interface DomainCounts {
   domain: string
   total: number
   /**
-   * Concepts whose competence has been demonstrated and not yet gone stale —
+   * Concepts whose competence has been demonstrated and not yet gone stale, 
    * that is, MASTERED **or** DECAYING.
    *
    * It used to mean strictly `MASTERED`, which quietly subtracted decayed concepts and
@@ -115,7 +115,7 @@ export interface DomainCounts {
 export interface OverallCounts extends DomainCounts {
   domain: '*'
   /**
-   * Concepts whose prerequisites are all met — reachable now or soon. The
+   * Concepts whose prerequisites are all met, reachable now or soon. The
    * complement of locked, and more meaningful than a percentage of the whole
    * catalogue: a count spanning topology and abstract algebra is not a
    * denominator a learner can act on.

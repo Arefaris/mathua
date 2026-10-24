@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/geometric-sequence/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/geometric-sequence/), CC BY-NC 4.0
 
 ## What is a geometric sequence
 

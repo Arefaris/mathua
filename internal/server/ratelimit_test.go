@@ -163,7 +163,7 @@ func testLimiter(rate, burst int, interval time.Duration) (*rateLimiter, *time.T
 }
 
 // TestRateLimiter_AllowsAHumanAnsweringPace is the regression for the reported
-// freeze: 60 answers two seconds apart — a whole diagnostic plus practice — must
+// freeze: 60 answers two seconds apart, a whole diagnostic plus practice, must
 // all pass the limiter the server actually configures.
 func TestRateLimiter_AllowsAHumanAnsweringPace(t *testing.T) {
 	rl, now := testLimiter(20, 20, 3*time.Second)

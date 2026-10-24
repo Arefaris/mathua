@@ -613,7 +613,7 @@ def main():
             md = extract_section(slug)
             attribution = (
                 "> Content sourced from [ORCCA](https://pcc.edu/orcca) "
-                "(Open Resources for Community College Algebra) — CC BY 4.0\n"
+                "(Open Resources for Community College Algebra), CC BY 4.0\n"
             )
             md = attribution + md
 

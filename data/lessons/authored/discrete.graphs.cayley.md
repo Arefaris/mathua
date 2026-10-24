@@ -18,4 +18,4 @@ The correspondence is a bijection between labelled trees and sequences of length
 
 For five vertices, \(5^3 = 125\) labelled trees; for six, \(6^4 = 1296\). The numbers grow fast enough that enumerating by hand is hopeless beyond five vertices, which is the point of a closed formula.
 
-The formula also settles questions about random trees: if a tree is chosen uniformly, the Prüfer sequence is a uniform random string, so the degree of a vertex is one plus the number of times its label appears — a geometric distribution with mean approaching two for large \(n\).
+The formula also settles questions about random trees: if a tree is chosen uniformly, the Prüfer sequence is a uniform random string, so the degree of a vertex is one plus the number of times its label appears, a geometric distribution with mean approaching two for large \(n\).

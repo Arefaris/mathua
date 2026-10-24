@@ -4,7 +4,7 @@
 //
 // Why this exists: the corpus gate (test/latexCorpus.test.ts) proves KaTeX can
 // *render* the lessons. It says nothing about whether the expressions are
-// well-formed, because KaTeX is forgiving by design — it renders a malformed
+// well-formed, because KaTeX is forgiving by design, it renders a malformed
 // fraction by guessing. Something stricter is needed to find the spans that are
 // subtly wrong, and Compute Engine is the strict thing already in the tree.
 //
@@ -13,7 +13,7 @@
 // 1. The spans come from cmd/latexdump, not from a regex over the Markdown.
 //    `latexnorm.Scan` is the only thing in the tree that knows a dollar can be
 //    a delimiter or a currency amount, and it runs over the *canonicalized*
-//    body — the text the API serves. A regex here would report every "$5 and
+//    body, the text the API serves. A regex here would report every "$5 and
 //    up" in the corpus as a syntax error, which is a worse failure than no
 //    report at all: it would train everyone to ignore the output.
 //
@@ -26,7 +26,7 @@
 // 3. A parse failure is not automatically a defect in the corpus, and treating
 //    it as one is the trap here. CE is a numeric/symbolic CAS, and this corpus is
 //    largely abstract algebra, group theory and topology. It reports
-//    `U \times F` as `incompatible-type: number, function` — having parsed the
+//    `U \times F` as `incompatible-type: number, function`, having parsed the
 //    syntax perfectly and then declined to type a product of two sets. It does
 //    the same for `\mathbb{R}^2 \setminus \{0\}` and for `\xrightarrow{d}`, which
 //    it simply has no command for. Roughly 1,500 of the 46,872 spans land in
@@ -35,7 +35,7 @@
 //
 //    So the reasons are split by *what CE objected to*:
 //
-//      syntax   closing delimiters, stray operators, stray delimiters — the
+//      syntax   closing delimiters, stray operators, stray delimiters, the
 //               LaTeX is wrong. These are the report.
 //      not-numeric  CE understood it and refused to type it. Valid math, wrong
 //               tool. Counted, not reported.
@@ -45,7 +45,7 @@
 //
 // 4. Every span gets an outcome and the buckets reconcile to the corpus total.
 //    Nothing is skipped quietly, and the summary states what fraction of the
-//    corpus was actually checkable — a report that quietly covers 44% of its
+//    corpus was actually checkable, a report that quietly covers 44% of its
 //    input is not a clean bill of health.
 //
 // Output is JSON Lines, one object per line, shaped like Go's slog JSON
@@ -58,7 +58,7 @@
 //   node scripts/normalize-latex.mjs data/lessons/authored
 //
 // Exit codes: 0 clean, 1 at least one malformed span, 2 the harness itself broke
-// (Go build failed, bad JSON, unreconciled counts) — deliberately distinct from
+// (Go build failed, bad JSON, unreconciled counts), deliberately distinct from
 // 1, so a broken report is never mistaken for a clean corpus.
 
 import { ComputeEngine } from '@cortex-js/compute-engine'
@@ -113,8 +113,8 @@ export function classify(latex) {
  * Returns null when the span is clean, else `{bucket, reason}` where bucket is
  * one of `syntax` (a real defect), `not-numeric` or `ce-gap`.
  *
- * `missing` is deliberately filed under ce-gap. It is genuinely ambiguous — it
- * fires on both `2+` and on `d: \Omega^k \to \Omega^{k+1}` — and when a signal
+ * `missing` is deliberately filed under ce-gap. It is genuinely ambiguous, it
+ * fires on both `2+` and on `d: \Omega^k \to \Omega^{k+1}` and when a signal
  * cannot tell a defect from a valid span, the conservative home is the bucket
  * that does not accuse the corpus.
  */
@@ -185,7 +185,7 @@ export function findError(box) {
 
 /**
  * CE's reasons arrive as `"'unexpected-command'"` or
- * `"ErrorCode,'incompatible-type','number',…"` — quoted, and sometimes prefixed
+ * `"ErrorCode,'incompatible-type','number',…"`, quoted, and sometimes prefixed
  * with a serializer tag. Left as-is, every anchored pattern in classifyResult
  * silently fails to match and the bucket lands in `malformed`, which is how 1,563
  * valid spans first showed up as defects. Normalized once, here.
@@ -251,8 +251,8 @@ if (isMain(import.meta.url)) main()
 function main() {
 const spans = loadSpans(ROOT)
 
-// Deduplicate by content before parsing. The corpus repeats itself heavily — the
-// same few thousand expressions across 585 files — and a defect's real signal is
+// Deduplicate by content before parsing. The corpus repeats itself heavily, the
+// same few thousand expressions across 585 files and a defect's real signal is
 // which files contain it, not how many times it recurs.
 const unique = new Map()
 for (const s of spans) {
@@ -363,7 +363,7 @@ log('INFO', 'normalize-latex summary', {
 })
 
 if (spans.length > 0 && checkable === 0) {
-  log('WARN', 'nothing was checkable — the corpus and the checker have diverged')
+  log('WARN', 'nothing was checkable, the corpus and the checker have diverged')
 }
 
 process.exit(syntax.length > 0 ? 1 : 0)

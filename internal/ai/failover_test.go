@@ -179,8 +179,8 @@ func TestChainDeadlineAllowsFailoverWithinBudget(t *testing.T) {
 }
 
 // TestChainStatsCountOutcomes pins that the counters distinguish the three
-// shapes a request can have — answered by the head, answered after failover, and
-// abandoned — because those rates are the whole reason the counters exist.
+// shapes a request can have, answered by the head, answered after failover, and
+// abandoned, because those rates are the whole reason the counters exist.
 func TestChainStatsCountOutcomes(t *testing.T) {
 	t.Run("head answers", func(t *testing.T) {
 		p := stub("p", productionPolicy(DataPseudonymous))

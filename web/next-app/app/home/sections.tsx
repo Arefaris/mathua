@@ -17,7 +17,7 @@ import {
 // the ghost button used to be the primary button plus overrides and the two
 // background utilities (`bg-mathua-blue` and `bg-transparent`, `hover:bg-mathua-blue-hover`
 // and `hover:bg-white/15`) collided: same property, same specificity, so the winner was
-// whichever Tailwind emitted last — and the GitHub button hovered to blue on the image.
+// whichever Tailwind emitted last and the GitHub button hovered to blue on the image.
 // Separate constants with no overlapping property cannot collide. Both actions are
 // content-width and left-aligned on phones: as full-width bars with only the page's
 // 16px gutters they read as touching the screen edges.
@@ -28,7 +28,7 @@ const CTA_PRIMARY =
 // not for a photograph, and would disappear against the drawing.
 // Wipe-fill ghost: on hover a blue layer sweeps left to right behind the label
 // (origin-left scale-x). The fill lives on a child span, not the anchor, so the
-// anchor never carries two background utilities at once — the collision that once
+// anchor never carries two background utilities at once, the collision that once
 // turned this button blue. `overflow-hidden` clips the sweep; the label sits
 // `relative` above it.
 const CTA_GHOST_ON_ART =
@@ -39,11 +39,11 @@ export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
     // One responsive hero, not two stacked variants. Below lg it is the full-bleed
     // treatment (B): art behind the copy under a scrim. At lg and up it is the
     // side-by-side panel (A): copy left, art right, scrim gone and copy back on
-    // theme tokens. A single h1 and a single img serve both — no duplicated
+    // theme tokens. A single h1 and a single img serve both, no duplicated
     // heading, no second download.
     //
     // The section sits in the page's capped, padded column, so the picture is a
-    // banner aligned to the content rather than a window-wide bleed — every other
+    // banner aligned to the content rather than a window-wide bleed, every other
     // section shares that column, and a hero that ignored it would be the odd one
     // out. `isolate` keeps the background's stacking context local so it cannot
     // paint over the sticky header.
@@ -51,7 +51,7 @@ export function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
       {/* Art. Full-bleed backdrop below lg; the grid's right column at lg and up.
           `lg:relative` re-seats it as a grid item while the img keeps filling it
           with object-cover, and `lg:order-2` puts it right of the copy. DOM order
-          stays art-first so that on phones — where both layers are positioned —
+          stays art-first so that on phones, where both layers are positioned, 
           the copy paints above the picture.
           The picture never touches the header: `top-4` holds it off the section
           top on phones, `lg:mt-10` on desktop (`lg:top-auto lg:bottom-auto` cancel
@@ -334,7 +334,7 @@ export function RankingSection() {
 const FAQS = [
   {
     q: 'Do I need an account to start?',
-    a: 'No. Begin studying immediately — accounts are optional and only needed to sync progress across devices.',
+    a: 'No. Begin studying immediately, accounts are optional and only needed to sync progress across devices.',
   },
   {
     q: 'Why does speed matter, not just accuracy?',
@@ -346,7 +346,7 @@ const FAQS = [
   },
   {
     q: 'Is Mathua free and open-source?',
-    a: 'Yes — MIT licensed, with no paywall on the graph. Every concept and generator is in the repository.',
+    a: 'Yes, MIT licensed, with no paywall on the graph. Every concept and generator is in the repository.',
   },
 ]
 

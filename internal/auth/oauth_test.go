@@ -45,7 +45,7 @@ func TestOAuth_UnverifiedEmailNeverMerges(t *testing.T) {
 	if err := repo.SetEmail(victim.ID, "victim@example.com"); err != nil {
 		t.Fatal(err)
 	}
-	// Victim signs in with a verified provider email: must NOT merge — and
+	// Victim signs in with a verified provider email: must NOT merge and
 	// must not fork either. The unique index would reject a duplicate row,
 	// so this returns ErrEmailInUse up front: log in with the password,
 	// then connect the provider in Settings.

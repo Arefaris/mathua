@@ -8,8 +8,8 @@ import { join, relative } from 'node:path'
 // ADR-047 closed `/study` as a learner workflow because it was a *catalogue*: a browsable
 // library of whole lessons with its own search and domain index, linked from the header, the tab
 // bar, the sidebar and the footer, so a learner could read their way to a concept instead of
-// being taught it. ADR-054 restored `/study` as a **context-bound reference page** — one concept
-// named in the URL, no catalogue, awarding nothing — because a prerequisite's mastery must not
+// being taught it. ADR-054 restored `/study` as a **context-bound reference page**, one concept
+// named in the URL, no catalogue, awarding nothing, because a prerequisite's mastery must not
 // lock access to its material.
 //
 // So this file pins the two properties that keep the restoration honest, each stated as a
@@ -21,7 +21,7 @@ import { join, relative } from 'node:path'
 //   2. Reading is not evidence. No surface records exposure as progress, and whatever moves
 //      mastery does it through the answer seam.
 //
-// What is deliberately still allowed: the `/api/study/answer` seam (Learn's answer endpoint — a
+// What is deliberately still allowed: the `/api/study/answer` seam (Learn's answer endpoint, a
 // name, not a destination), the server-side comments that explain the history, and `/study`
 // links from the DAG neighbourhood (they are the reference, not a progression step).
 
@@ -46,7 +46,7 @@ const LEARNER_SURFACES = [...sources(join(APP, 'app')), ...sources(join(APP, 'co
  *
  * This is the part that keeps the guard honest. Without it, every explanatory comment added
  * later would need a carve-out, carve-outs accumulate, and the check quietly stops meaning
- * anything — which is the exact shape of the guards this repo already had to fix twice.
+ * anything, which is the exact shape of the guards this repo already had to fix twice.
  */
 function code(src: string): string {
   return src
@@ -96,7 +96,7 @@ describe('the reference surface is context-bound, not a catalogue', () => {
 describe('/learn is the one assessed surface', () => {
   it('offers no control that would record exposure as progress', () => {
     // Reading is not evidence. No "mark as learned", no "I studied this", no skip, on any of the
-    // reference surfaces — and nothing awards mastery outside `submitStudyAnswer`.
+    // reference surfaces and nothing awards mastery outside `submitStudyAnswer`.
     const stepper = code(readFileSync(join(APP, 'components', 'LearnStepper.tsx'), 'utf-8'))
     const reference = code(readFileSync(join(APP, 'components', 'ConceptReference.tsx'), 'utf-8'))
     const prereqs = code(readFileSync(join(APP, 'components', 'PrerequisitePanel.tsx'), 'utf-8'))
@@ -124,7 +124,7 @@ describe('/learn is the one assessed surface', () => {
   it('sends a concept that is already demonstrated to retrieval practice, not a re-teach', () => {
     // The graph node action branches on the concept's state. Asserting only that /learn is not
     // linked would pass with a single unconditional `/learn?concept=` link, which re-teaches a
-    // mastered concept — the tutorial purgatory ADR-037 removed from the scheduler's own path.
+    // mastered concept, the tutorial purgatory ADR-037 removed from the scheduler's own path.
     const flow = code(readFileSync(join(APP, 'components', 'ConceptGraphFlow.tsx'), 'utf-8'))
     expect(flow).toMatch(/selectedLearned \? '\/review' : `\/learn\?concept=/)
   })

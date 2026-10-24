@@ -5,7 +5,7 @@ import Footer from '../../components/Footer'
 import BottomTabs from '../../components/BottomTabs'
 
 export const metadata: Metadata = {
-  title: "Creator's Note — Mathua",
+  title: "Creator's Note, Mathua",
   description: 'Why Mathua exists, from the person building it.',
 }
 
@@ -60,8 +60,8 @@ const ipaStyle: React.CSSProperties = {
 
 // The note is the creator's own words, kept as written: sentence shape, capitalisation
 // and spelling are part of the voice, so nothing here is edited for house style. The
-// structure only marks what the author marked — headings, a quotation and one bolded
-// phrase — because those carry meaning in the original.
+// structure only marks what the author marked, headings, a quotation and one bolded
+// phrase, because those carry meaning in the original.
 type Block =
   | { text: string }
   | { parts: Array<string | { strong: string }> }

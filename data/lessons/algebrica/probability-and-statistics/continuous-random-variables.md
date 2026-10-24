@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/continuous-random-variables/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/continuous-random-variables/), CC BY-NC 4.0
 
 ## Definition of a continuous random variable
 

@@ -32,8 +32,8 @@ A definition, or one sentence explaining an idea, is fine. Naming a method is fi
 // refusals. Recency matters as much as wording, so the constraints sit
 // immediately before the visitor's turn.
 //
-// The refusal is stated three ways — do not work through, do not simplify, do
-// not state or confirm — because each one closes a different route to the same
+// The refusal is stated three ways, do not work through, do not simplify, do
+// not state or confirm, because each one closes a different route to the same
 // output: a full solution, a partial one, or a "yes, x = 1" that a grader would
 // call a correct answer.
 //
@@ -168,12 +168,12 @@ func (c AssistantContext) Catalogue() string {
 	return strings.TrimRight(b.String(), "\n")
 }
 
-// writeCatalogueEntries renders one "- id: Name — description" line per entry.
+// writeCatalogueEntries renders one "- id: Name, description" line per entry.
 func writeCatalogueEntries(b *strings.Builder, entries []Destination) {
 	for _, d := range entries {
 		fmt.Fprintf(b, "- %s: %s", d.ID, d.Name)
 		if d.Description != "" {
-			fmt.Fprintf(b, " — %s", truncateRunes(d.Description, maxDescriptionRunes))
+			fmt.Fprintf(b, ", %s", truncateRunes(d.Description, maxDescriptionRunes))
 		}
 		b.WriteByte('\n')
 	}

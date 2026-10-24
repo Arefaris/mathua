@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/binomial-distribution/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/binomial-distribution/), CC BY-NC 4.0
 
 ## Introduction to the binomial distribution
 

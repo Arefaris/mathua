@@ -22,4 +22,4 @@ So diagonalizability is the all-trivial-blocks case; anything else signals defec
 
 ## Minimal polynomial
 
-The largest block size for $\lambda$ is its exponent in the minimal polynomial. Block sizes pin the polynomial exactly — no finer invariant exists.
+The largest block size for $\lambda$ is its exponent in the minimal polynomial. Block sizes pin the polynomial exactly, no finer invariant exists.

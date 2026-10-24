@@ -12,7 +12,7 @@ This is the first place where "same size" stops meaning "same number of elements
 
 The integers are countable: list \(0, 1, -1, 2, -2, \dots\). The rational numbers are countable too, by listing the fractions by the sum of numerator and denominator, which walks the grid diagonally and reaches every fraction.
 
-The algebraic numbers — roots of polynomials with integer coefficients — are countable, because there are countably many such polynomials and each has finitely many roots. The finite binary strings are countable: list them by length, then lexicographically within each length.
+The algebraic numbers, roots of polynomials with integer coefficients, are countable, because there are countably many such polynomials and each has finitely many roots. The finite binary strings are countable: list them by length, then lexicographically within each length.
 
 ## Cantor's diagonal argument
 

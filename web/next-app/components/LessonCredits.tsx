@@ -10,7 +10,7 @@ import { concepts } from '../lib/conceptData'
  * quotes the clause whole.
  *
  * The sentence appears under the article in `/study` and under the step panel in `/learn`, because
- * both show ORCCA text — the lesson body in the first, the worked example lifted out of it in the
+ * both show ORCCA text, the lesson body in the first, the worked example lifted out of it in the
  * second. Nothing renders for a lesson whose publisher states its terms in prose instead: OpenStax
  * and Algebrica already carry their credit as the lesson body's first line, and neither asks for a
  * fixed sentence per view.

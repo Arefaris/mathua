@@ -923,7 +923,7 @@
       "finite dimensional"
     ],
     "category": "linear-discrete",
-    "definition": "A basis is a minimal spanning set: independent vectors from which every vector is uniquely combined. Its size is the dimension — an invariant of the space, not of the choice.",
+    "definition": "A basis is a minimal spanning set: independent vectors from which every vector is uniquely combined. Its size is the dimension, an invariant of the space, not of the choice.",
     "reading": "“the dimension of V”.",
     "examples": [
       {

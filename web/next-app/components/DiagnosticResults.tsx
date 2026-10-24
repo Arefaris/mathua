@@ -37,11 +37,11 @@ export default function DiagnosticResults({ plan, onStartPractice }: Props) {
             </p>
           )}
           <p className="font-mono text-[10px] text-mathua-muted mt-2">
-            Measured for automaticity — no timeout. Slow answers count as gaps to refresh, not failures.
+            Measured for automaticity, no timeout. Slow answers count as gaps to refresh, not failures.
           </p>
           {plan.conditionally_completed && plan.conditionally_completed.length > 0 && (
             <p className="font-mono text-[10px] text-mathua-muted mt-1">
-              Provisional: {plan.conditionally_completed.length} topic{plan.conditionally_completed.length === 1 ? '' : 's'} assumed known — we fall back on struggle.
+              Provisional: {plan.conditionally_completed.length} topic{plan.conditionally_completed.length === 1 ? '' : 's'} assumed known, we fall back on struggle.
             </p>
           )}
         </div>

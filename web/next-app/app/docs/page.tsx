@@ -13,7 +13,7 @@ const bodyFont = "var(--font-space-grotesk), 'Space Grotesk', serif"
 // generated docs module, so the index and the page it links to cannot disagree. Adding a doc is
 // one line here and a route beside the others.
 const DOCS = [
-  { href: '/docs/architecture', title: 'Architecture', blurb: 'The five-layer stack — UI, API, core engine, grading and storage — and the computerised adaptive diagnostic.' },
+  { href: '/docs/architecture', title: 'Architecture', blurb: 'The five-layer stack, UI, API, core engine, grading and storage and the computerised adaptive diagnostic.' },
   { href: '/docs/system-design', title: 'System design', blurb: 'Schema, scheduler, SM-2, grading, the API surface, and the trade-offs behind each.' },
   { href: '/docs/administration', title: 'Administration', blurb: 'Roles, the permission model, staff invitations, the last-owner invariant and the audit trail.' },
   { href: '/docs/math-input', title: 'Math input', blurb: 'How a typed answer reaches a verdict: MathLive, MathJSON, the plain-text shim, and the mobile keypad.' },

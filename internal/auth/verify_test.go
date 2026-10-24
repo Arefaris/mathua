@@ -116,7 +116,7 @@ func TestRequestEmailVerification_Validation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("create student: %v", err)
 	}
-	if err := svc.RequestEmailVerification(st.ID); err == nil || err.Error() != "no email on file — add one in Settings first" {
+	if err := svc.RequestEmailVerification(st.ID); err == nil || err.Error() != "no email on file, add one in Settings first" {
 		t.Fatalf("expected 'no email on file', got: %v", err)
 	}
 

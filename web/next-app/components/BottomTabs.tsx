@@ -37,7 +37,7 @@ export default function BottomTabs() {
   const [avatarPreset, setAvatarPreset] = useState<number | null>(null)
 
   // Same pattern as Header: resolve through the shared resolver on every
-  // auth change (login/logout/avatar save broadcast), lazy 401 handling —
+  // auth change (login/logout/avatar save broadcast), lazy 401 handling, 
   // no explicit revalidation, so the mocked e2e auth contract holds.
   useEffect(() => {
     if (!loggedIn || !user) {

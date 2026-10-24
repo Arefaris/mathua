@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check_docs.py — find claims in the engineering docs that the code or the corpus contradicts.
+check_docs.py, find claims in the engineering docs that the code or the corpus contradicts.
 
 Why this exists, in the shape of the bug that motivated it: README stated a 150 XP
 mastery-check gate twice while `internal/xp/policy.go` said 50. Nothing was broken, no test
@@ -604,8 +604,8 @@ def check_target_table(rep: Report) -> None:
     """Section 5.5's target table must agree with the corpus, and its columns must add up.
 
     The table is the roadmap for the thousand: one row per domain, the concepts it holds now, the
-    size the curriculum decided on, and the difference. Only `Target` is a decision — `Now` is read
-    from `data/concepts/`, as the sentence above the table says — and that is the column that drifted.
+    size the curriculum decided on, and the difference. Only `Target` is a decision, `Now` is read
+    from `data/concepts/`, as the sentence above the table says and that is the column that drifted.
     The table was drawn when the corpus held 703 concepts; `scripts/sweep_counts.py` keeps the
     sentence above it current, because its size is a pattern rule, but it has no rule for the rows,
     so ten of the seventeen sat at their 703-era values while the corpus grew to 819. The roadmap

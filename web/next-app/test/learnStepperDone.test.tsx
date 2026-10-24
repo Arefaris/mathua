@@ -110,7 +110,7 @@ describe('LearnStepper done state (PR5)', () => {
     await answerCurrent('5')
 
     // Closure card with mastery feedback…
-    expect(await screen.findByText(/Complete — 2\/2 correct/)).toBeTruthy()
+    expect(await screen.findByText(/Complete, 2\/2 correct/)).toBeTruthy()
 
     // …and a Continue naming the head re-fetched AFTER the last answer,
     // labeled with the reason so the jump reads as intentional.
@@ -124,13 +124,13 @@ describe('LearnStepper done state (PR5)', () => {
     // Practice again is always offered as the secondary action.
     expect(screen.getByRole('button', { name: 'Practice again' })).toBeTruthy()
 
-    // Alternatives stay available in done — learner disposes, no bounce.
+    // Alternatives stay available in done, learner disposes, no bounce.
     expect(screen.getByText(/Or pick something else/)).toBeTruthy()
 
     // No auto-advance: only explicit navigation.
     //
     // There is no "Reference" link here any more. It pointed at `/study`, and the reference
-    // material is now the panel at the top of this page — so the done card offers Continue,
+    // material is now the panel at the top of this page, so the done card offers Continue,
     // Practice again and Back to Profile, and nothing that leaves the loop.
     expect(screen.queryByRole('link', { name: 'Reference' })).toBeNull()
     expect(await screen.findByTestId('reference-blocks')).toBeTruthy()
@@ -148,10 +148,10 @@ describe('LearnStepper done state (PR5)', () => {
     await answerCurrent('5')
 
     // getNext absorbs its own network failure and returns its own recommendation, whose href
-    // carries no concept id — so `canContinue` is false and the card falls through to its
+    // carries no concept id, so `canContinue` is false and the card falls through to its
     // failure branch. That branch is the guarantee: a way out, and never a link that points
     // back at the concept just finished.
-    expect(await screen.findByText(/Complete — 2\/2 correct/)).toBeTruthy()
+    expect(await screen.findByText(/Complete, 2\/2 correct/)).toBeTruthy()
     const back = await screen.findByRole('link', { name: 'Back to Profile' })
     expect(back.getAttribute('href')).toBe('/profile')
     expect(screen.getByRole('button', { name: 'Practice again' })).toBeTruthy()
@@ -182,7 +182,7 @@ describe('LearnStepper done state (PR5)', () => {
     expect(headConceptId(`/learn?concept=${CID}&seed=42&difficulty=0.7&exclude=a`)).toBe(CID)
     expect(headConceptId('/learn?concept=other.id')).toBe('other.id')
     expect(headConceptId('/review')).toBeNull()
-    // hrefConceptId parses a URL, it does not know the route table — and it should not. A
+    // hrefConceptId parses a URL, it does not know the route table and it should not. A
     // stale `/study?concept=X` href from an older build is read as concept X, which is the safe
     // reading: the done-card guard then compares it to the concept just finished and declines
     // to render a link back onto itself.
@@ -214,7 +214,7 @@ describe('LearnStepper done state (PR5)', () => {
         await vi.advanceTimersByTimeAsync(500)
       }
 
-      expect(screen.getByText(/Complete — 2\/2 correct/)).toBeTruthy()
+      expect(screen.getByText(/Complete, 2\/2 correct/)).toBeTruthy()
       // Shelf fetch hangs: past the timeout the failure branch renders.
       await vi.advanceTimersByTimeAsync(9000)
       expect(screen.getByRole('button', { name: 'Practice again' })).toBeTruthy()
@@ -362,7 +362,7 @@ describe('Prerequisites section and decay', () => {
 
   it('renders the server verdict and keeps a locked prerequisite openable', async () => {
     // The reported bug: `alg.factor.trinomial` depends on two locked prerequisites, and both
-    // were rendered as unclickable "Locked" spans. The panel's own copy is not the test — the
+    // were rendered as unclickable "Locked" spans. The panel's own copy is not the test, the
     // working link is.
     vi.mocked(getLessonReadiness).mockResolvedValue({
       concept_id: CID,
@@ -387,7 +387,7 @@ describe('Prerequisites section and decay', () => {
 //
 // `takeNext` returns null when the buffer is empty and the refill yields nothing. That used
 // to hit `if (!nq) return` at three sites: no card, no message, no way forward, with the
-// last verdict as the end of the page. It was not an edge case — `geo.basic.points_lines`
+// last verdict as the end of the page. It was not an edge case, `geo.basic.points_lines`
 // has exactly four distinct question texts, so a session hit it on the fourth answer, and
 // the measurement in `internal/generator/all/bank_test.go` found 378 of 657 concepts under a
 // 12-question variety reference.
@@ -404,7 +404,7 @@ describe('LearnStepper question exhaustion', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Next →' }))
     expect(await screen.findByText('2 + 3 = ?')).toBeTruthy()
 
-    // Answer incorrectly so the 2-in-a-row rule does not advance the section — the only way
+    // Answer incorrectly so the 2-in-a-row rule does not advance the section, the only way
     // to reach the "keep going in this section" path, which is where the strand was.
     await answerCurrent('nope')
     await waitForTimeout(500)
@@ -427,7 +427,7 @@ describe('LearnStepper question exhaustion', () => {
 
     await answerCurrent('5')
     await waitForTimeout(500)
-    // Either another question arrived or the section ended — but the learner is never left
+    // Either another question arrived or the section ended, but the learner is never left
     // with no card and no message.
     // `queryAllByText` because a repeat is exactly what is being asserted here, so the same
     // question text legitimately appears more than once in the scrollback.
@@ -444,7 +444,7 @@ describe('LearnStepper question exhaustion', () => {
 //
 // The count used to reset on every knowledge-point advance while the XP summed every card
 // in the feed, so a learner three questions in with two correct saw "1/2 correct" next to
-// "+3 XP" — two scopes on one line, and the count was the one that read as wrong.
+// "+3 XP", two scopes on one line, and the count was the one that read as wrong.
 describe('LearnStepper header tally', () => {
   it('counts every answer in the concept, not just the current section', async () => {
     vi.mocked(getLessonKPs).mockResolvedValue({
@@ -464,7 +464,7 @@ describe('LearnStepper header tally', () => {
     await answerCurrent('5')
     expect(await screen.findByText('4 + 1 = ?')).toBeTruthy()
 
-    // Two in a row advances to the second KP — the point at which the old tally reset. The
+    // Two in a row advances to the second KP, the point at which the old tally reset. The
     // third served question is `1 + 6 = ?`, whose answer is 7.
     await answerCurrent('5')
     expect(await screen.findByText('1 + 6 = ?')).toBeTruthy()

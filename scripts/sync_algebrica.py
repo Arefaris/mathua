@@ -102,7 +102,7 @@ def main() -> int:
         print(f"  ... and {len(missing_d) - 40} more")
     print(f"  ({len(missing_d)} total)")
     print()
-    print("== upstream lessons with no mapping (missing lessons — ADOPT ONLY ON APPROVAL) ==")
+    print("== upstream lessons with no mapping (missing lessons, ADOPT ONLY ON APPROVAL) ==")
     missing_l = sorted(p for p in up_lessons if p not in stripped)
     for p in missing_l[:40]:
         print(f"  {p}")

@@ -1,7 +1,7 @@
 // What the answer hosts actually get.
 //
 // The contract these tests protect is the one the five hosts rely on: a host holds a
-// plain string, hands it in, and gets a plain string back — no LaTeX, no MathJSON,
+// plain string, hands it in, and gets a plain string back, no LaTeX, no MathJSON,
 // no knowledge of which control rendered. Everything MathLive-specific is asserted
 // here so a host never has to.
 
@@ -84,7 +84,7 @@ describe('MathAnswerInput control selection', () => {
     render(<MathAnswerInput value="" onChange={() => {}} gradingType="numeric" conceptId="arith.add.single" ariaLabel="Your answer" placeholder="Your answer" />)
     await mathField()
     // MathLive gives the field role="group", so aria-label is what a screen reader
-    // announces — without it the field is an unnamed group.
+    // announces, without it the field is an unnamed group.
     expect((await mathField()).getAttribute('aria-label')).toBe('Your answer')
   })
 
@@ -235,7 +235,7 @@ describe('MathAnswerInput states', () => {
       // The verdict rides on the field's own border, as `data-status`.
       //
       // It used to be a utility class on the wrapper, which drew the colour *outside*
-      // the field's opaque background — so `correct` was a green ring around a grey box.
+      // the field's opaque background, so `correct` was a green ring around a grey box.
       // A class cannot come back here either: globals.css's
       // `math-field.mathua-math-field` selector outranks any Tailwind utility, so
       // `border-mathua-green` on the element would lose to the `border-color` declared
@@ -264,7 +264,7 @@ describe('MathAnswerInput states', () => {
 
     // The wrapper is layout-only now. It used to carry `border border-mathua-border
     // bg-mathua-code px-3 py-2 focus-within:border-mathua-blue` while the field carried
-    // its own border, so focusing the answer drew two blue rectangles 24px apart — one
+    // its own border, so focusing the answer drew two blue rectangles 24px apart, one
     // token, painted twice, which reads as two states rather than one.
     const wrapper = container.querySelector('.mathua-math-input') as HTMLElement
     expect(wrapper.className).not.toMatch(/border/)

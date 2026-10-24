@@ -25,7 +25,7 @@ const (
 	// this count, but NextQuestion ends the session outright when the covering set
 	// runs out, and that path does not consult this constant. Every cover concept
 	// needs two probes and no concept is asked twice, so a scope whose closure is
-	// smaller than 13 concepts simply cannot reach 25 — and nothing pads the gap,
+	// smaller than 13 concepts simply cannot reach 25 and nothing pads the gap,
 	// because repeating settled concepts would invent evidence.
 	//
 	// It was described as "the floor" here and in docs/architecture.md until a
@@ -49,7 +49,7 @@ const (
 	evidenceIncorrectWeight = 0.3
 	conflictDiscount        = 0.5
 	// conditionalStripFactor scales back "conditionally completed"
-	// prerequisites (belief in [threshold, threshold+0.15)) on a miss —
+	// prerequisites (belief in [threshold, threshold+0.15)) on a miss,
 	// the frontier falls backwards immediately on struggle.
 	conditionalStripFactor = 0.8
 	// maxSupplementalProbes caps extra re-probes per concept.
@@ -179,7 +179,7 @@ type Snapshot struct {
 //
 // Only the newest attempt keeps its belief snapshot. RetryServe restores the
 // last miss, and nothing reads an older one, so carrying one per attempt would
-// write a full belief map for every question answered — a megabyte or more by
+// write a full belief map for every question answered, a megabyte or more by
 // the end of a run, rewritten on every answer.
 func (s *Session) Encode() ([]byte, error) {
 	s.Lock()
@@ -479,12 +479,12 @@ func (e *Engine) NextQuestion(s *Session) (*generator.Problem, string, error) {
 
 // retryEligibleForLocked reports whether a recorded miss looks like a slip
 // worth offering back. Any one of three triggers qualifies:
-//  1. established knowledge — pre-answer belief at or above the confidence
+//  1. established knowledge, pre-answer belief at or above the confidence
 //     threshold (the model is surprised);
-//  2. level drop — the staged next concept sits earlier in path order than
+//  2. level drop, the staged next concept sits earlier in path order than
 //     the missed one (the miss demoted the student; heuristic: path order is
 //     topological, foundations first, not a strict difficulty scale);
-//  3. really simple — the missed question was served at base difficulty
+//  3. really simple, the missed question was served at base difficulty
 //     (first probe, 0.3 tier).
 //
 // Admits ("I don't know") never qualify: an admit is not a slip.
@@ -563,7 +563,7 @@ func (e *Engine) RetryServe(s *Session, conceptID string) (*generator.Problem, s
 }
 
 // SettleCurrent marks the current question's concept as settled without
-// recording an answer — the skip escape hatch for questions that can't be
+// recording an answer, the skip escape hatch for questions that can't be
 // answered (bad content, repeated submit failures). No belief update, no
 // attempt, no XP: settling (rather than merely re-asking) is what moves CAT
 // past a poisoned transition, since NextQuestion is deterministic on state.
@@ -646,7 +646,7 @@ func (e *Engine) recordTimed(s *Session, conceptID string, correct bool, elapsed
 	}
 
 	// Belief update for the concept itself (MA parity: slow correct answers
-	// get diminished weight — "higher likelihood the student has not yet
+	// get diminished weight, "higher likelihood the student has not yet
 	// learned the topic well enough to build on it").
 	slowFactor := 1.0
 	if correct && elapsed >= 0 {

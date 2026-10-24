@@ -6,7 +6,7 @@
 
 Integrate $G_{xx} = \delta(x - \xi)$ from $\xi^-$ to $\xi^+$:
 1. $G$ itself stays continuous: no jump in value.
-2. The slope kinks: $|G_x(\xi^+) - G_x(\xi^-)| = 1$ — the spike bends $G$ by one unit of slope.
+2. The slope kinks: $|G_x(\xi^+) - G_x(\xi^-)| = 1$, the spike bends $G$ by one unit of slope.
 3. Away from $\xi$, $G_{xx} = 0$, so $G$ is two straight segments joined at that kink.
 
 So a delta spike bends $G$ by exactly one unit of slope and nothing else.
@@ -22,4 +22,4 @@ So $G$ spreads each point load $f(\xi)$ into the tent shape the boundaries allow
 
 ## Symmetry and spectra
 
-Self-adjoint $L$ gives reciprocity $G(x, \xi) = G(\xi, x)$, and eigenfunctions expand it as $G = \sum \phi_n(x)\phi_n(\xi)/\lambda_n$ — the inverse operator written one mode at a time.
+Self-adjoint $L$ gives reciprocity $G(x, \xi) = G(\xi, x)$, and eigenfunctions expand it as $G = \sum \phi_n(x)\phi_n(\xi)/\lambda_n$, the inverse operator written one mode at a time.

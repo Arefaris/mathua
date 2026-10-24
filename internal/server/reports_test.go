@@ -98,7 +98,7 @@ func TestCreateReport_InvalidSource(t *testing.T) {
 // A report has to store what the learner typed and the format the field
 // offered. Without those a moderator can see the question and the expected
 // answer but not the attempt, so "cannot type the answer" reports could not be
-// reproduced — which is exactly how the digits-only keypad survived.
+// reproduced, which is exactly how the digits-only keypad survived.
 func TestCreateReport_CapturesTheAnswerAndFormat(t *testing.T) {
 	s := testServer(t)
 	mux := http.NewServeMux()
@@ -215,7 +215,7 @@ func TestAdminReportGrade_ReplaysWithoutWriting(t *testing.T) {
 	}
 }
 
-// The contact box has to work for someone who cannot sign in — which is exactly
+// The contact box has to work for someone who cannot sign in, which is exactly
 // the person a question report cannot serve. A message therefore carries no
 // concept, lesson or question, and the test pins that it is still stored with its
 // text and kind, because a message the queue cannot show was never delivered.

@@ -1,4 +1,4 @@
-# AGENTS.md — Mathua
+# AGENTS.md, Mathua
 
 Hard rules for anyone or anything editing this repository. Each one states the rule, why it
 exists and how it is checked, because a rule nobody can verify is an aspiration.
@@ -7,7 +7,7 @@ exists and how it is checked, because a rule nobody can verify is an aspiration.
 
 ## 1. No emoji anywhere we author
 
-**Emoji are not permitted in any file we author** — application source, components, tests,
+**Emoji are not permitted in any file we author**, application source, components, tests,
 scripts, Go or documentation. This is not a style preference; see the reasons below.
 
 ### Why
@@ -28,15 +28,15 @@ scripts, Go or documentation. This is not a style preference; see the reasons be
 
 - **`components/icons`.** Every icon in the app comes from that one module, which wraps
   `@animateicons/react` (the animated lucide set). Import from there and never from an icon
-  library directly — the wrapper is what pins the size to 16px and the color to `currentColor`,
+  library directly, the wrapper is what pins the size to 16px and the color to `currentColor`,
   and the animated icons render a `<div>` whose default color is not `currentColor`, so an icon
   added outside the wrapper does not follow light and dark mode and does not keep the collapsed
   44px sidebar rail even.
 - **Text.** A label beats a symbol most of the time. In tables, a word ("Yes", "Not stored")
   beats a mark.
 
-Icons animate on mount and again on hover. Two are driven imperatively instead — the compass
-spins forward on menu open and reverse on close, the sun-moon on theme toggle — because hover
+Icons animate on mount and again on hover. Two are driven imperatively instead, the compass
+spins forward on menu open and reverse on close, the sun-moon on theme toggle, because hover
 rarely fires on touch screens. Those pass `isAnimated={false}` and call `startAnimation` through
 a ref, guarded on `prefers-reduced-motion`.
 
@@ -50,8 +50,8 @@ were deleted: they were a third icon system built on `motion`, and removing that
 These are deliberate and allowed: arrows (`→ ← ↑ ↓ ↔ ⇒ ⇔ ⟶ ⟹`), check and ballot marks
 (`✓ ✗ ✔ ✕ ✖`), decorative stars (`✦ ✧`), bullets (`· •`), floor/ceiling brackets
 (`⌈ ⌉ ⌊ ⌋`), mathematical symbols (`∈ ∑ ∏ √ ∞ ≈ × ÷ ≠ ≥ ≤ ° ² ′`) and punctuation
-(`… — – § †`). They are typography with Unicode codepoints Mathua chose, not pictographs, and
-some of them — `⌈`/`⌉` especially — appear inside generated mathematics where "clearing an
+(`…, – § †`). They are typography with Unicode codepoints Mathua chose, not pictographs, and
+some of them, `⌈`/`⌉` especially, appear inside generated mathematics where "clearing an
 emoji" would corrupt a set.
 
 **Circled letters are not in that list, and they were removed from the corpus on 2026-10-15.**
@@ -59,7 +59,7 @@ OpenStax wrote a two-part example as `ⓐ … ⓑ …` and the ingester copied t
 through: 2340 of them across 72 lessons, in example text and inside figure captions. At lesson size
 `ⓐ` is an `a` inside a circle, which is what `@` is, so a reader sees a stray email sign in front
 of a sentence. No theme font carries the codepoint, so the browser substitutes a face at a
-different size and baseline — the same objection as an emoji. And the corpus already spelled the
+different size and baseline, the same objection as an emoji. And the corpus already spelled the
 parts out in prose: `part (a)` appears 22 times next to a marker that still said `ⓐ`. They are now
 `(a)` … `(e)`, and rule 17 of `scripts/audit_lessons.py` fails on any enclosed-alphanumeric glyph
 in lesson text.
@@ -68,7 +68,7 @@ in lesson text.
 
 `web/next-app/test/noEmoji.test.ts` scans every authored file and fails on any emoji outside
 the list above. It also asserts that it is scanning the right files at all, and that its own
-fixtures are written as escape sequences — because a guard that reads nothing reports nothing,
+fixtures are written as escape sequences, because a guard that reads nothing reports nothing,
 and one that flags its own fixtures gets deleted rather than fixed.
 ---
 
@@ -101,7 +101,7 @@ numbers. The STE rules strip exactly that. A retraction that reads "the measurem
 instead of naming the Kahn bug that caused it is not more readable, it is less useful.
 
 `scripts/check_ste.py` enforces the first tier. It is a **derived structural subset, not
-ASD-STE100 conformance**, and must never be described as conformance — the upstream skill says of
+ASD-STE100 conformance**, and must never be described as conformance, the upstream skill says of
 itself that it "does not certify compliance with ASD-STE100". Two reasons it is a
 reimplementation rather than a vendored call:
 
@@ -109,7 +109,7 @@ reimplementation rather than a vendored call:
   and is explicitly not MIT. Copying the word list into this repo would put ASD's dictionary in
   our tree.
 - **The dictionary is the wrong tool here.** A mathematics and pedagogy codebase is mostly
-  technical names — concept, learner, mastery, scheduler, prerequisite — which STE permits
+  technical names, concept, learner, mastery, scheduler, prerequisite, which STE permits
   anyway. A vocabulary gate would either nag constantly or need an allowlist wide enough to be
   meaningless. The structural rules are the part that improves readability, and they need no
   dictionary.
@@ -118,7 +118,7 @@ Moving a document between tiers is a decision to record here, not one to make si
 
 **Recorded moves.** `docs/administration.md` was split out of `docs/architecture.md` on
 2026-10-12 and placed in the analytical tier. The administration section was 68% of
-`architecture.md` and it is design rationale — "a count read before a write loses a race" — which
+`architecture.md` and it is design rationale, "a count read before a write loses a race", which
 is the register STE strips. Keeping it in the STE file meant checking it against rules written
 for procedure. The overview that remained, the five-layer stack and the diagnostic, is
 descriptive and stays in the STE tier. `check_ste.py --mode descriptive docs/administration.md`
@@ -133,12 +133,12 @@ come from the corpus.
 
 **Why:** README stated a 150 XP mastery-check gate twice while `internal/xp/policy.go` said 50. The
 same figure was wrong on the landing page until it was fixed separately. Nothing was broken and no
-test failed, because a string in Markdown cannot break anything — which is exactly why it needs a
+test failed, because a string in Markdown cannot break anything, which is exactly why it needs a
 check. The same class of bug put "1-3 knowledge points" in CONTRIBUTING against "3 KPs per concept"
 in README, with all 1250 shards holding exactly 3 and nothing enforcing either.
 
-**How:** `scripts/check_docs.py` reads each fact from its owner — the Go constant, the corpus, the
-shards — and fails on any doc that disagrees. **It must never hardcode a fact it can read**, because
+**How:** `scripts/check_docs.py` reads each fact from its owner, the Go constant, the corpus, the
+shards and fails on any doc that disagrees. **It must never hardcode a fact it can read**, because
 a checker that pins its own copy of the number goes stale in exactly the way it was written to
 prevent.
 
@@ -158,7 +158,7 @@ sessions", not "tokens, passwords, and sessions". The same applies to "or".
 This is a voice decision, not a grammar one. Both forms are correct English; mixing them is what
 reads as unedited. Mathua's copy is short, mostly one sentence at a time, and a list that ends in
 ", and" pulls the eye to the conjunction as though it were a new clause. The owner asked for one
-consistent form, and consistency is the whole benefit — a rule applied to half the sentences
+consistent form, and consistency is the whole benefit, a rule applied to half the sentences
 delivers none of it.
 
 It is deliberately narrow: a comma before "and" that joins two independent clauses is correct and
@@ -167,8 +167,8 @@ separator of a list of three or more changes.
 
 ### How it is checked
 
-`scripts/check_oxford_comma.py` scans authored prose — `AGENTS.md`, `CONTEXT.md`, `CONTRIBUTING.md`,
-`README.md`, `docs/`, `web/next-app/app`, `web/next-app/components` and `web/next-app/lib` — and
+`scripts/check_oxford_comma.py` scans authored prose, `AGENTS.md`, `CONTEXT.md`, `CONTRIBUTING.md`,
+`README.md`, `docs/`, `web/next-app/app`, `web/next-app/components` and `web/next-app/lib` and
 reports a candidate whenever a line contains ", and" or ", or" after an earlier comma.
 
 It reports; it does not block. The heuristic cannot tell a serial comma from a clause comma, so a

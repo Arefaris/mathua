@@ -4,7 +4,7 @@
 // grading_type and domain decide which control it gets and which keycaps it shows,
 // and getting that wrong is invisible until a learner is staring at an integral key
 // on a single-digit addition problem. The second is that structural keys insert
-// structures — a fraction key that inserted the character `/` would look identical in
+// structures, a fraction key that inserted the character `/` would look identical in
 // a screenshot and behave completely differently.
 
 import { describe, it, expect } from 'vitest'
@@ -50,7 +50,7 @@ function insertedLatex(mode: MathKeyboardMode): string[] {
 describe('editor vs text', () => {
   // Every grading type gets the math editor. This was the five expression-valued types
   // only, on the reasoning that MathLive earns its place where the grader parses an
-  // expression — which left 223 of 657 concepts (209 multiple_choice, 11 tuple,
+  // expression, which left 223 of 657 concepts (209 multiple_choice, 11 tuple,
   // 2 comparison, 1 ordering) typing mathematics into a plain input with no fraction
   // key, no exponent and no parentheses.
   //

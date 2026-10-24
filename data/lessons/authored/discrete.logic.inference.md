@@ -16,6 +16,6 @@ Disjunctive syllogism, \(p \lor q\) with \(\lnot p\) concluding \(q\), is the th
 
 ## Reading an argument
 
-To classify an argument, write it in the standard form and match it against the forms you know. Premises "if the machine is on then the light is green" and "the light is green", with conclusion "the machine is on", match affirming the consequent: it is invalid, and one counterexample assignment — machine off, light green — satisfies both premises and falsifies the conclusion.
+To classify an argument, write it in the standard form and match it against the forms you know. Premises "if the machine is on then the light is green" and "the light is green", with conclusion "the machine is on", match affirming the consequent: it is invalid, and one counterexample assignment, machine off, light green, satisfies both premises and falsifies the conclusion.
 
 The same two premises with the conclusion "if the light is not green then the machine is off" is the contrapositive of the first premise, and that argument is valid because it restates the premise.

@@ -44,7 +44,7 @@ recomputes them, so an explanation cannot contradict the answer it explains.
 
 ## Placeholders
 
-`[[name]]` — double square brackets. Single braces are LaTeX and the corpus is
+`[[name]]`, double square brackets. Single braces are LaTeX and the corpus is
 full of them, so they cannot be the delimiter.
 
 Available in every schema:
@@ -58,7 +58,7 @@ generator's `Problem{...}` literal for the names it sets.
 
 ## One generator can ask two questions
 
-Some generators draw between a *recognition* question and a *production* one —
+Some generators draw between a *recognition* question and a *production* one, 
 classify this angle, or find its complement. One schema covers both, with each
 question's steps marked `"optional": true` so the step that does not apply is
 skipped instead of dragging the whole schema down. Leave the flag off a step

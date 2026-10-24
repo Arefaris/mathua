@@ -933,7 +933,7 @@ func TestIdentitiesEndpoints(t *testing.T) {
 // request context, and the only other route to an anchor was a student_id the
 // client does not send on that call. The anchor was therefore never written
 // for anyone, and every study answer was graded against the client's own
-// expected answer — the exact cheat the anchor was added to prevent.
+// expected answer, the exact cheat the anchor was added to prevent.
 func TestPractice_WritesTheStudyAnchor(t *testing.T) {
 	_, mux, _ := guestServer(t)
 	token, studentID := quizGuest(t, mux)
@@ -1086,7 +1086,7 @@ func TestStudyAnswer_UnknownQuestionIs409(t *testing.T) {
 // the learner is still reading the first, so the practice endpoint is called
 // twice for one concept before the first question is submitted. Replacing the
 // anchor blob on the second call erased the first, and the submit came back 409
-// — which the client reports as "that question had expired" and answers by
+// , which the client reports as "that question had expired" and answers by
 // swapping in a different question.
 //
 // The fix is in SetStudyAnchorBatch (merge, don't replace); this pins the HTTP
@@ -1421,7 +1421,7 @@ func quizGuest(t *testing.T, mux *http.ServeMux) (token, studentID string) {
 // records the gate baseline and offers retake.
 
 // A quiz measures knowledge. It does not teach, so no verdict carries the
-// served solution — the boundary is semantic and does not depend on `done:true`.
+// served solution, the boundary is semantic and does not depend on `done:true`.
 //
 // This test used to assert the opposite, and the reasoning was internally
 // consistent: "the session already holds the served instance's solution; it
@@ -1550,7 +1550,7 @@ func TestQuizMiss_RemedialAndGateDue(t *testing.T) {
 	}
 }
 
-// Batch 2: goal diagnostic end-to-end — start, answer to completion, report
+// Batch 2: goal diagnostic end-to-end, start, answer to completion, report
 // carries placement, frontier, gaps, and completion estimates. (The legacy
 // client-graded /api/diagnostic* endpoint was removed; it trusted a client
 // `correct` flag and was unused by the frontend.)
@@ -1706,7 +1706,7 @@ func TestAccountDelete(t *testing.T) {
 // GET /api/lessons resolved the caller's identity only from a student_id query
 // param. authedFetch attaches the guest token, but the Study page sends no such
 // param for a guest, so the one progression signal Study is still allowed to
-// render — the per-concept status words and badges inside LessonDetail — was
+// render, the per-concept status words and badges inside LessonDetail, was
 // invisible to every signed-out learner who had in fact been practising.
 func TestLessons_ResolvesIdentityFromToken(t *testing.T) {
 	d, _ := concepts.Build([]concepts.Concept{
@@ -1756,7 +1756,7 @@ func TestLessons_ResolvesIdentityFromToken(t *testing.T) {
 		t.Fatalf("study answer: %d %s", rec.Code, rec.Body.String())
 	}
 
-	// Token only, no student_id param — exactly what the Study page sends.
+	// Token only, no student_id param, exactly what the Study page sends.
 	rec = httptest.NewRecorder()
 	list := httptest.NewRequest("GET", "/api/lessons", nil)
 	list.Header.Set("Authorization", "Bearer "+token)
@@ -1770,7 +1770,7 @@ func TestLessons_ResolvesIdentityFromToken(t *testing.T) {
 	}
 
 	// An anonymous caller still gets the public catalog with no progress at
-	// all — the catalog is not private, only the status is.
+	// all, the catalog is not private, only the status is.
 	rec = httptest.NewRecorder()
 	anon := httptest.NewRequest("GET", "/api/lessons", nil)
 	mux.ServeHTTP(rec, anon)
@@ -1803,7 +1803,7 @@ func catalogStatus(t *testing.T, body string) string {
 		} `json:"lessons"`
 	}
 	if err := json.Unmarshal([]byte(body), &catalog); err != nil {
-		t.Fatalf("decode lessons: %v — body: %s", err, body)
+		t.Fatalf("decode lessons: %v, body: %s", err, body)
 	}
 	for _, lessons := range catalog.Lessons {
 		for _, l := range lessons {
@@ -1843,7 +1843,7 @@ func miniLessons(t *testing.T, byConcept map[string]string) *lessons.Loader {
 	return ll
 }
 
-// fixedBankGen produces a small, fixed set of question texts — the shape that ended a Learn
+// fixedBankGen produces a small, fixed set of question texts, the shape that ended a Learn
 // session dead.
 //
 // `geo.basic.points_lines` really does this: four definition-recall variants, nothing else.
@@ -1939,7 +1939,7 @@ func TestPracticeNeverReturnsEmptyOnceEveryVariantHasBeenSeen(t *testing.T) {
 		t.Fatalf("decode: %v", err)
 	}
 	if len(set.Questions) == 0 {
-		t.Fatal("practice returned no questions after every variant was excluded — the Learn " +
+		t.Fatal("practice returned no questions after every variant was excluded, the Learn " +
 			"feed treats an empty list as success and stops appending, stranding the learner")
 	}
 	// And they must still be answerable: a repeat with no anchor is a 409 waiting to happen.

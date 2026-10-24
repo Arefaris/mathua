@@ -16,6 +16,6 @@ For a grammar such as \(S \to a \mid aS\), the base case is the string \(a\) and
 
 ## Choosing the principle
 
-Use structural induction when the object is defined by rules rather than by a number, and use strong induction when the object is a natural number but the step needs several earlier values. The two are the same idea — well-founded recursion — applied to different orders.
+Use structural induction when the object is defined by rules rather than by a number, and use strong induction when the object is a natural number but the step needs several earlier values. The two are the same idea, well-founded recursion, applied to different orders.
 
 What does not work is ordinary induction on "the number of vertices" when the step removes an arbitrary vertex: the remainder need not be the same kind of object, and the hypothesis does not apply. The cases have to follow the definition.

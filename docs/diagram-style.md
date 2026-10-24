@@ -43,11 +43,11 @@ neutral:
 - A **PNG goes through `next/image`**, so its type is baked into the file.
 - `web/next-app/app/globals.css:716` forces the type of every inlined figure to a monospace
   face: `.lesson-diagram text { font-family: var(--font-jetbrains-mono), ... }`. That is why the
-  vendored files carry **no `font-family`** — they are drawn to inherit the host font, and the
+  vendored files carry **no `font-family`**, they are drawn to inherit the host font and the
   host font is JetBrains Mono. A figure that hard-codes `font-family="serif"` is overridden.
 - `.lesson-diagram` paints the figure panel with `background: var(--surface)`.
-- Every inlined figure is bounded to **180px tall** — `LessonDiagram`'s `maxHeight` default, handed
-  to the panel as the `--lesson-diagram-max-height` custom property — and the SVG scales down to
+- Every inlined figure is bounded to **180px tall**, `LessonDiagram`'s `maxHeight` default, handed
+  to the panel as the `--lesson-diagram-max-height` custom property and the SVG scales down to
   fit it. The bound used to sit on the panel next to `overflow: hidden`, which **clipped** a taller
   figure instead of shrinking it. Because 123 of the 127 mapped SVGs are taller than 180px and the
   arithmetic set is 360x200, nearly every diagram lost its bottom edge at any width that did not
@@ -93,7 +93,7 @@ A new figure matches by following these, read off the vendored set and the local
   lesson figure reaches the page as a plain `<img>` with no filter, so a tone that is not baked into
   the asset does not exist, and an OpenStax drawing arrives in saturated teal and orange beside line
   art. The conversion is grey, the tone stretched to the full range, then a lookup onto the four
-  greys above plus white — which is a dialect color too: it is the fill of 40 vendored shapes and
+  greys above plus white, which is a dialect color too: it is the fill of 40 vendored shapes and
   the `<rect>` every local figure carries, so the paper stays white rather than becoming a grey card.
   `docs/figure-reclaim.md` section 2 records why, and section 7 the recipe and its measurements.
 
@@ -139,7 +139,7 @@ does not name, and it requires Mathua-authored mappings outside the vendored dir
 **The mislabel that was fixed.** `scripts/gen-diagrams.py` writes into the vendored directory and
 24 of its outputs were recorded as `source: "algebrica"` with `upstream: null` and Algebrica's
 `CC BY-NC 4.0` license, while those same 24 paths were exactly the `UNLINKED_GRANDFATHERED` set in
-the audit — an allowlist that existed only to stop the upstream rule firing on our own work. On
+the audit, an allowlist that existed only to stop the upstream rule firing on our own work. On
 2026-10-15 the 24 were relabeled `source: local` and `Mathua (own work)`, and
 `UNLINKED_GRANDFATHERED` was emptied. Do not add entries back: a vendored Algebrica SVG must link
 its upstream, and Mathua-authored diagrams are not Algebrica's to license.
@@ -178,12 +178,12 @@ the local set is measured, for the reason section 7 gives.
   and so stay dark-on-dark on the dark panel. Repainting the panel or migrating the vendored set
   are the larger options that remain open.
 - **Forty-one of the fifty-seven vendored SVGs clip their own commentary.** Most of the Algebrica
-  figures carry a `<text>` paragraph — the author's description of the figure, in annotation grey at
-  the top of the canvas — and in 41 of them that paragraph is wider than the `viewBox`:
+  figures carry a `<text>` paragraph, the author's description of the figure, in annotation grey at
+  the top of the canvas and in 41 of them that paragraph is wider than the `viewBox`:
   `heaviside-function-1.svg` runs 111.6px past a 313-wide canvas, so the sentence is cut mid-word
   ("...jumps from 0 to 1 at the origin. The filled" and then nothing). The cause is the face, not the
   file: section 3's rule forces every inlined figure's text to JetBrains Mono at 0.6 em, while the
   files were drawn for a narrower face and their canvases were sized to the drawing rather than to
-  the prose. Two options and neither is taken here — widen each canvas, which shrinks the drawing
+  the prose. Two options and neither is taken here, widen each canvas, which shrinks the drawing
   under the 180px bound, or drop the commentary, which is the author's voice and not ours to remove.
   The local set is measured and guarded (section 6); this one needs the decision first.

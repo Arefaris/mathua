@@ -5,7 +5,7 @@ When lines cross, the angles they form come in equal pairs. When lines never cro
 
 ## Vertical Angles
 
-When two lines intersect, four angles are formed. Angles opposite each other at the intersection — sharing only the vertex — are called **vertical angles**.
+When two lines intersect, four angles are formed. Angles opposite each other at the intersection, sharing only the vertex, are called **vertical angles**.
 
 **Vertical angles are always congruent (equal in measure).**
 

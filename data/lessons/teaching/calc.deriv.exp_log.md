@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman, CC BY-NC-SA 4.0
 
 ## 3.9 Derivatives of Exponential and Logarithmic Functions
 
@@ -14,7 +14,7 @@ So far, we have learned how to differentiate a variety of functions, including t
 
 Just as when we found the derivatives of other functions, we can find the derivatives of exponential and logarithmic functions using formulas. As we develop these formulas, we need to make certain basic assumptions. The proofs that these assumptions hold are beyond the scope of this course.
 
-First of all, we begin with the assumption that the function $B(x) = b^{x},b > 0,$ is defined for every real number and is continuous. In previous courses, the values of exponential functions for all rational numbers were defined—beginning with the definition of $b^{n},$ where $n$ is a positive integer—as the product of $b$ multiplied by itself $n$ times. Later, we defined $b^{0} = 1,b^{\text{-}n} = \frac{1}{b^{n}},$ for a positive integer $n,$ and $b^{s\text{/}t} = (\sqrt[t]{b})^{s}$ for positive integers $s$ and $t.$ These definitions leave open the question of the value of $b^{r}$ where $r$ is an arbitrary real number. By assuming the *continuity* of $B(x) = b^{x},b > 0,$ we may interpret $b^{r}$ as $\underset{x\rightarrow r}{\text{lim}}b^{x}$ where the values of $x$ as we take the limit are rational. For example, we may view $4^{\pi}$ as the number satisfying
+First of all, we begin with the assumption that the function $B(x) = b^{x},b > 0,$ is defined for every real number and is continuous. In previous courses, the values of exponential functions for all rational numbers were defined, beginning with the definition of $b^{n},$ where $n$ is a positive integer, as the product of $b$ multiplied by itself $n$ times. Later, we defined $b^{0} = 1,b^{\text{-}n} = \frac{1}{b^{n}},$ for a positive integer $n,$ and $b^{s\text{/}t} = (\sqrt[t]{b})^{s}$ for positive integers $s$ and $t.$ These definitions leave open the question of the value of $b^{r}$ where $r$ is an arbitrary real number. By assuming the *continuity* of $B(x) = b^{x},b > 0,$ we may interpret $b^{r}$ as $\underset{x\rightarrow r}{\text{lim}}b^{x}$ where the values of $x$ as we take the limit are rational. For example, we may view $4^{\pi}$ as the number satisfying
 
 $$
 \begin{array}{l}

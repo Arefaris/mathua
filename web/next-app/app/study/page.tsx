@@ -19,13 +19,13 @@ import { hrefConceptId } from '../../lib/nextUp'
 
 // The reference and exploration surface.
 //
-// ADR-047 closed `/study` as a learner workflow because it was a *catalogue* — a browsable
+// ADR-047 closed `/study` as a learner workflow because it was a *catalogue*, a browsable
 // library of whole lessons with its own search and domain index, linked from every header, tab
 // bar and sidebar. That let a learner read their way to a concept instead of being taught it.
 //
 // ADR-054 restores it, scoped: this page renders the reference for **one** concept named in the
-// URL, in a reading column with its direct DAG neighbourhood beside it. It is not a catalogue —
-// no domain index, no lesson list, no search — and it awards nothing. Discovery stays structured
+// URL, in a reading column with its direct DAG neighbourhood beside it. It is not a catalogue, 
+// no domain index, no lesson list, no search and it awards nothing. Discovery stays structured
 // in `/domains`; practice stays gated in `/learn`. The only onward navigation is the concept's
 // own prerequisites and dependents, plus a separate *Practise this concept* control.
 //
@@ -58,7 +58,7 @@ function stateLabel(state: string | undefined): string {
   }
 }
 
-/** A dependent's state from the learner's own history — the only source the client has for it. */
+/** A dependent's state from the learner's own history, the only source the client has for it. */
 function dependentStateWord(p: ConceptProgress | undefined): string {
   switch (masteryState(p)) {
     case 'mastered':

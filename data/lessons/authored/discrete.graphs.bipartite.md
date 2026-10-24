@@ -16,6 +16,6 @@ For a small graph the maximum is found by trying assignments: left vertices \(a,
 
 ## Hall's condition
 
-**Hall's theorem** says a matching saturating the left part exists exactly when every set \(S\) of left vertices has at least \(\lvert S \rvert\) neighbours. The condition is necessary because those neighbours must supply the partners, and it is sufficient — which is the hard direction and the content of the theorem.
+**Hall's theorem** says a matching saturating the left part exists exactly when every set \(S\) of left vertices has at least \(\lvert S \rvert\) neighbours. The condition is necessary because those neighbours must supply the partners, and it is sufficient, which is the hard direction and the content of the theorem.
 
 Hall's condition is also a way to *prove* a maximum is not larger than it is: exhibit a set \(S\) whose neighbourhood is smaller than \(S\), and no matching can saturate \(S\). That is the certificate a learner can check without searching.

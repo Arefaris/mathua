@@ -66,7 +66,7 @@ func UpdateLearningSpeed(prev float64, correct bool, timeRatio float64, streak i
 	if timeRatio <= 0.7 && streak >= 2 {
 		prev += 0.05
 	} else if timeRatio <= 1.0 {
-		// normal — small drift up
+		// normal, small drift up
 		prev += 0.02
 	} else {
 		prev -= 0.05

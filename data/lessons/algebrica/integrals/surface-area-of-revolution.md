@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/surface-area-of-revolution/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/surface-area-of-revolution/), CC BY-NC 4.0
 
 ## The lateral area of a frustum of a cone
 

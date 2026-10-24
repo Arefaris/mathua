@@ -5,7 +5,7 @@ const baseURL = `http://localhost:${PORT}`
 
 // The diagnosis suite is a measurement harness, not a regression test: a scenario that throws is
 // printed and swallowed, so the test reports green either way. It cost 273.6s of the 648.5s the
-// e2e suite spent executing on 2026-10-23 — 205.5s of that on shard 2 — across 27 of 258
+// e2e suite spent executing on 2026-10-23, 205.5s of that on shard 2, across 27 of 258
 // executions, and one of those runs printed four FAILURE lines without failing CI. It stays in
 // the repository for local investigation and runs only when PW_DIAGNOSIS=1.
 const diagnosisOptIn = !!process.env.PW_DIAGNOSIS
@@ -19,7 +19,7 @@ export default defineConfig({
   workers: process.env.PW_WORKERS ? Number(process.env.PW_WORKERS) : process.env.CI ? 2 : undefined,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   // Generous per-test budget. These specs boot MathLive and KaTeX and stub a dozen endpoints, so
-  // the page needs real CPU time before it settles — and CI runs two workers across three
+  // the page needs real CPU time before it settles and CI runs two workers across three
   // projects, so a spec can be competing with another browser for most of its wall clock. At
   // 30s this suite failed intermittently on `toBeEnabled` / `toBeVisible` waits that had not
   // been given enough room, which reads as a product fault and is not one. A test that needs

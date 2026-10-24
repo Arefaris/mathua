@@ -14,7 +14,7 @@ import { listAdminAudit, getErrorMessage, type AdminAuditEvent } from '../../../
 //
 // Read-only, and not by convention: the server registers GET for this path and answers 405 to
 // everything else, and the table has no update or delete method on either store. So there is no
-// "fix a typo in an event" affordance here, which is the correct absence — an operator who
+// "fix a typo in an event" affordance here, which is the correct absence, an operator who
 // notices a wrong row must not be able to correct it, because the value of the trail is that it
 // records what the system actually did.
 //
@@ -132,7 +132,7 @@ function Snapshot({ label, json }: { label: string; json: string }) {
         {label}
       </p>
       <pre className="p-2 font-mono text-[10px] text-mathua-secondary whitespace-pre-wrap break-all overflow-x-hidden">
-        {body || '—'}
+        {body || ', '}
       </pre>
     </div>
   )

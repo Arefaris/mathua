@@ -448,7 +448,7 @@ func TestNextSmart_InterleavingWindow_ExcludesSameSubdomain(t *testing.T) {
 	snap := map[string]*ConceptSnapshot{
 		"a": {Status: mastery.StatusMastered, LastReviewed: now, RequiredStreak: 3},
 	}
-	// prev "a" (subdomain "") — no subdomain filtering kicks in for empty,
+	// prev "a" (subdomain ""), no subdomain filtering kicks in for empty,
 	// but b/c/d all unlocked: expect diverse candidates with distinct subdomains.
 	cands := s.NextSmart(snap, []string{"a"}, 0, 0, nil)
 	if len(cands) == 0 {

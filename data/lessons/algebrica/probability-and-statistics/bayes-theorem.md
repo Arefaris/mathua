@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/bayes-theorem/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/bayes-theorem/), CC BY-NC 4.0
 
 ## What it is and what Bayes’ Theorem is used for
 

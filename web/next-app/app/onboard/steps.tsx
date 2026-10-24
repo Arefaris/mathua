@@ -230,7 +230,7 @@ export function WelcomeStep({
           A learner can start any topic whose prerequisites are met without ever
           taking the diagnostic: /learn?concept=… is gated server-side, not by
           this flag, and /domains is already browsable. Nothing here records a
-          result, seeds placement, or grants credit — it only makes an existing
+          result, seeds placement, or grants credit, it only makes an existing
           path findable from the screen a learner is actually looking at. */}
       <div className="text-center px-4 mt-6">
         <Link
@@ -406,7 +406,7 @@ export function DiagnosticStep({
                 disabled={loading}
                 className="mt-2 font-mono text-[11px] text-mathua-muted hover:text-mathua-blue underline underline-offset-2 disabled:opacity-50"
               >
-                I made a silly mistake — retry
+                I made a silly mistake, retry
               </button>
             )}
           </div>

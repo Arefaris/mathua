@@ -1005,7 +1005,7 @@
       "divergent integral"
     ],
     "category": "calculus",
-    "definition": "An integral over an unbounded interval or of an unbounded function, defined as a limit of proper integrals. It converges when the limit exists finitely — infinite reach does not imply infinite area.",
+    "definition": "An integral over an unbounded interval or of an unbounded function, defined as a limit of proper integrals. It converges when the limit exists finitely, infinite reach does not imply infinite area.",
     "reading": "“the improper integral from 1 to infinity”.",
     "examples": [
       {
@@ -1233,7 +1233,7 @@
     "relatedCategories": [
       "advanced"
     ],
-    "definition": "Constant solutions where the rate vanishes (y′ = 0). An equilibrium is stable when nearby solutions approach it and unstable when they move away — read off from the sign of the rate around it.",
+    "definition": "Constant solutions where the rate vanishes (y′ = 0). An equilibrium is stable when nearby solutions approach it and unstable when they move away, read off from the sign of the rate around it.",
     "reading": "“stable equilibrium”.",
     "examples": [
       {

@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 6.2 Solve General Applications of Percent
 
@@ -14,7 +14,7 @@ By the end of this section, you will be able to:
 
 We will solve percent equations by using the methods we used to solve equations with fractions or decimals. In the past, you may have solved percent problems by setting them up as proportions. That was the best method available when you did not have the tools of algebra. Now as a prealgebra student, you can translate word sentences into algebraic equations, and then solve the equations.
 
-We'll look at a common application of percent—tips to a server at a restaurant—to see how to set up a basic percent application.
+We'll look at a common application of percent, tips to a server at a restaurant, to see how to set up a basic percent application.
 
 When Aolani and her friends ate dinner at a restaurant, the bill came to $\text{\$80}.$ They wanted to leave a $\text{20\%}$ tip. What amount would the tip be?
 
@@ -172,7 +172,7 @@ We will update the strategy we used in our earlier applications to include equat
 5.  Step 5. Check the answer in the problem and make sure it makes sense.
 6.  Step 6. Write a complete sentence that answers the question.
 
-Now that we have the strategy to refer to, and have practiced solving basic percent equations, we are ready to solve percent applications. Be sure to ask yourself if your final answer makes sense—since many of the applications we'll solve involve everyday situations, you can rely on your own experience.
+Now that we have the strategy to refer to, and have practiced solving basic percent equations, we are ready to solve percent applications. Be sure to ask yourself if your final answer makes sense, since many of the applications we'll solve involve everyday situations, you can rely on your own experience.
 
 ### Example 6.20
 

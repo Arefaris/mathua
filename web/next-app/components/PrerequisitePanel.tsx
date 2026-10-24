@@ -8,7 +8,7 @@ import { studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/lear
  * The prerequisite list, shared by the learning loop and the curriculum browser.
  *
  * Its one non-negotiable property: **every prerequisite is openable.** A prerequisite's state
- * describes mastery, and mastery is not a navigation lock — the material behind a locked or
+ * describes mastery, and mastery is not a navigation lock, the material behind a locked or
  * upcoming prerequisite is reference, and reading it is not evidence, so there is no reason to
  * strand a learner on a dead "Locked" label. Before ADR-047's correction this list returned no
  * link for `locked`/`upcoming`, which is exactly the dead end that made a prerequisite
@@ -16,7 +16,7 @@ import { studyConceptPath, withReturnStack, type ReturnEntry } from '../lib/lear
  *
  * Every row opens the prerequisite's reference page. Establishing mastery happens on the study
  * page's separate *Practise this concept* control, which goes through the normal `/learn` flow
- * and the backend's own eligibility gate — never through this component. Reading a prerequisite
+ * and the backend's own eligibility gate, never through this component. Reading a prerequisite
  * must not unlock the target, and it must not be mistaken for practice.
  */
 

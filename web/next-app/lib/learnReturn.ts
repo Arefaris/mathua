@@ -3,7 +3,7 @@ import { hrefConceptId } from './nextUp'
 /**
  * The return stack behind prerequisite navigation.
  *
- * A learner follows a chain — target -> prerequisite -> prerequisite's prerequisite — and must
+ * A learner follows a chain, target -> prerequisite -> prerequisite's prerequisite and must
  * be able to walk back up it without losing where they came from. That path is real URL state,
  * not component state, because a navigation unmounts the component that held it: the stack
  * travels in repeated `?return=` parameters, most-recent first.

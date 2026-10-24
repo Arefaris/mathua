@@ -44,7 +44,7 @@ a \cdot b \in \mathbb{R}
 
 In plain terms: when you add or multiply two real numbers, you always get a real number back. The result never escapes the set. This may sound like a trivial observation but closure is far from automatic when working with other collections of numbers. The integers, for instance, are closed under addition and multiplication, but division lets you out: \(1 \div 2\) is not an integer. Go one step further and subtract within the natural numbers: \(3 - 5\) has no answer there. Closure is therefore not a birthright of every number set, but something that has to be earned, checked operation by operation, set by set.
 
-> In the axiomatic treatment of the real numbers, closure is typically listed as the first field axiom. Without it, writing \(a + b\) would be meaningless — there would be no guarantee that the sum of two real numbers is itself a real number, and the entire arithmetic of \(\mathbb{R}\) would rest on uncertain ground.
+> In the axiomatic treatment of the real numbers, closure is typically listed as the first field axiom. Without it, writing \(a + b\) would be meaningless, there would be no guarantee that the sum of two real numbers is itself a real number, and the entire arithmetic of \(\mathbb{R}\) would rest on uncertain ground.
 
 ## Commutative property
 

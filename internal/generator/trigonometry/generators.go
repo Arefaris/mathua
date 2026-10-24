@@ -48,7 +48,7 @@ func Register(reg *generator.Registry) {
 type radiansGen struct{}
 
 // trig.basics.radians is a multiple-choice concept, but this generator served a
-// bare question whose answer was "\\(\\pi/2\\)" — delimiters included, and no
+// bare question whose answer was "\\(\\pi/2\\)", delimiters included, and no
 // options to tap. A learner typed pi/2, which is right, and the choice grader
 // compared it with the delimited string and marked it wrong (report 119). The
 // options are plain text so they render in a button, and the answer is the

@@ -72,7 +72,7 @@ func exercise(t *testing.T, repo Repository, tag string) snapshot {
 	}
 
 	base := time.Now().UTC().Add(-time.Hour)
-	// First attempt has no difficulty — the pre-migration shape, and the case a store
+	// First attempt has no difficulty, the pre-migration shape, and the case a store
 	// could quietly coerce to 0. Second is generated at 0.8.
 	_, _ = repo.RecordAttempt(AttemptEntry{SessionID: sess.ID, StudentID: stu.ID, ConceptID: "c1",
 		Answer: "4 and 1/10", Expected: "4 1/10", Correct: false, ElapsedSeconds: 5, Timestamp: base})

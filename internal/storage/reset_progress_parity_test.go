@@ -10,7 +10,7 @@ import (
 // TestResetProgress_RoundTrip_Parity runs the reset contract against SQLite
 // always and Postgres when TEST_POSTGRES_DSN is set. ADR-012 makes Postgres a
 // first-class store, but ResetProgress previously had SQLite-only coverage, so
-// its Postgres statement list — including the server_sessions LIKE predicate —
+// its Postgres statement list, including the server_sessions LIKE predicate,
 // was never executed by any test.
 func TestResetProgress_RoundTrip_Parity(t *testing.T) {
 	stores := map[string]Repository{"sq": newTestStore(t)}

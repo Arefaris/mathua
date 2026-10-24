@@ -785,7 +785,7 @@
       "synthetic division"
     ],
     "category": "algebra",
-    "definition": "Dividing a polynomial P by (x − a) leaves remainder P(a). In particular, (x − a) is a factor exactly when P(a) = 0 — evaluation tests divisibility with no division.",
+    "definition": "Dividing a polynomial P by (x − a) leaves remainder P(a). In particular, (x − a) is a factor exactly when P(a) = 0, evaluation tests divisibility with no division.",
     "reading": "“P of a equals zero”.",
     "examples": [
       {

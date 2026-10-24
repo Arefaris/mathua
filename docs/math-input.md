@@ -43,7 +43,7 @@ It stores a string and submits a string. `MathInputValue` is internal to the wra
 type MathInputValue = { latex: string; plainAnswer: string; mathJson?: unknown }
 ```
 
-`mathJson` is reserved and always `undefined` today — see §3.
+`mathJson` is reserved and always `undefined` today, see §3.
 
 ### Which concepts get the editor
 
@@ -77,20 +77,20 @@ regenerate with `node scripts/record-mathlive-corpus.mjs`):
 
 | Learner types | MathLive emits | Grader verdict |
 |---|---|---|
-| `\frac{1}{2}` | `(1)/(2)` | **rejected** — `numericGrader` parses only `1/2` |
+| `\frac{1}{2}` | `(1)/(2)` | **rejected**, `numericGrader` parses only `1/2` |
 | `\frac{2}{4}` | `(2)/(4)` | rejected |
-| `4\frac{1}{10}` | `4(1)/(10)` | rejected — reads as `41/10`, not `4 1/10` |
-| `7 \div 2` | `7 -: 2` | **false miss** — SymPy reads `-:` as subtraction |
-| `\sin(x)+\cos(x)` | `sin (x)+cos (x)` | unreliable — SymPy's implicit-multiplication pass needs `sin(` |
+| `4\frac{1}{10}` | `4(1)/(10)` | rejected, reads as `41/10`, not `4 1/10` |
+| `7 \div 2` | `7 -: 2` | **false miss**, SymPy reads `-:` as subtraction |
+| `\sin(x)+\cos(x)` | `sin (x)+cos (x)` | unreliable, SymPy's implicit-multiplication pass needs `sin(` |
 
 The fifth row is the one that already bit: the `SymbolPalette` inserted the
-`×` glyph, which `grading/sympy_service.py` rejects outright. Not a new class of bug —
+`×` glyph, which `grading/sympy_service.py` rejects outright. Not a new class of bug, 
 an existing one.
 
 `toPlainAnswer()` removes four artifacts, in this order, and nothing else:
 
 1. `-:` → `/` (division)
-2. `4(1)/(10)` → `4 1/10` (mixed number — **must** precede rule 3)
+2. `4(1)/(10)` → `4 1/10` (mixed number, **must** precede rule 3)
 3. `(1)/(2)` → `1/2`
 4. drop a space between a name and its `(…` or `^…`
 
@@ -115,7 +115,7 @@ bundle:
 - `convertLatexToMathJson()` is no longer exported. The only surviving MathJSON code in the 1.4 MB bundle is a private `mathJsonToLatex` used for the clipboard.
 
 MathJSON is now Compute Engine's exclusive domain (`@cortex-js/compute-engine`, also
-MIT), and it **is** a dependency now — for the self-check, not for MathLive. So if a
+MIT), and it **is** a dependency now, for the self-check, not for MathLive. So if a
 MathJSON wire format is ever added, the path is **MathLive → LaTeX → `ce.parse()` →
 `.json`**, not MathLive → MathJSON.
 
@@ -124,8 +124,8 @@ it resolves the engine through `globalThis[Symbol.for("io.cortexjs.compute-engin
 which CE sets as a side effect of being imported, and logs an error when it is absent.
 `test/equivalence.test.ts` asserts that global exists.
 
-MathLive still *consumes* MathJSON in two places — clipboard paste with
-`format: "math-json"`, and as its default `serializeToLatex` — and it does **not**
+MathLive still *consumes* MathJSON in two places, clipboard paste with
+`format: "math-json"` and as its default `serializeToLatex`, and it does **not**
 bundle the library that does it. It looks the engine up on a global symbol:
 
 ```js
@@ -134,7 +134,7 @@ globalThis[Symbol.for("io.cortexjs.compute-engine")].ComputeEngine
 
 and, finding nothing, logs *"The CortexJS Compute Engine library is not available"*
 and returns an empty string. So if `@cortex-js/compute-engine` is ever added, simply
-importing it is enough — MathLive picks it up through that global with no wiring. That
+importing it is enough, MathLive picks it up through that global with no wiring. That
 is the cheapest possible first step, and it fixes MathLive's MathJSON paste path
 rather than changing any of ours.
 
@@ -144,7 +144,7 @@ rather than changing any of ours.
 installed, and this table is `JSON.stringify(ce.parse(latex).json)` run against it. That
 matters, because the library's *documented* canonical form does not match what it
 emits: the docs say `Sqrt` becomes `["Power", x, "Half"]` and `["Power", x, 2]`
-becomes `["Square", x]`. In 0.147.0 neither happens — `Sqrt` and `Root` survive intact
+becomes `["Square", x]`. In 0.147.0 neither happens, `Sqrt` and `Root` survive intact
 and `x^2` stays a `Power`. A Go grader written against the documentation would fail on
 almost every input.
 
@@ -166,13 +166,13 @@ almost every input.
 | `3.14` | `3.14` | high precision needs the `{"num": "…"}` object form |
 
 So the subset a Go grader would need is `Add`, `Multiply`, `Power`, `Divide`, `Negate`,
-`Rational`, `Sqrt`, `Root`, `Sin`/`Cos`/… , `Pi` and bare symbols — and it must
+`Rational`, `Sqrt`, `Root`, `Sin`/`Cos`/…, `Pi` and bare symbols and it must
 tolerate that **`Subtract` never arrives**, `Divide` only survives with a symbolic
 denominator, and constant subexpressions arrive already evaluated.
 
 ### The feedback contract
 
-`equivalence()` is three-valued, and the naming is deliberate — a string union rather
+`equivalence()` is three-valued, and the naming is deliberate, a string union rather
 than `true | false | undefined`, because `'unknown'` is an *absence* and `undefined`
 would be indistinguishable from a function that failed to return.
 
@@ -188,12 +188,12 @@ The actual results, so the states are not aspirational:
 |---|---|
 | `x²+2x+1` vs `(x+1)²` | `equivalent` |
 | `2^10` vs `1024` | `different` |
-| `\sqrt{x²}` vs `x` | `unknown` — correctly refuses; it is `|x|` |
+| `\sqrt{x²}` vs `x` | `unknown`, correctly refuses; it is `|x|` |
 | `\sqrt{x²}` vs `\lvert x\rvert` | `equivalent` |
 | `2x+3` vs `x²+2x+1` | **`unknown`**, not `different` |
 
 That last row is the one that matters. CE will not call two plainly unequal symbolic
-expressions *different* — it declines rather than guess — which is why `'unknown'` is a
+expressions *different*, it declines rather than guess, which is why `'unknown'` is a
 first-class outcome and not an error path.
 
 **No state renders a verdict.** Not `'equivalent'`, not `'different'` and above all not
@@ -202,8 +202,8 @@ yet". `test/selfCheck.test.tsx` asserts that for all three states, using a real 
 that reaches each one.
 
 This is not a missing feature, and the reason is the answer oracle. The client does not
-hold the expected answer — grading is server-side and answers are anchored there
-(ADR-005) — so there is nothing to compare against without shipping the answer to the
+hold the expected answer, grading is server-side and answers are anchored there
+(ADR-005), so there is nothing to compare against without shipping the answer to the
 browser. `simplificationHint` is what the UI uses instead: it reports what the
 learner's own expression simplifies to and cannot produce a verdict even in principle,
 because it never sees a second expression.
@@ -215,18 +215,18 @@ Measured, because the answer decides whether an equivalence feature can exist at
 
 | Comparison | `isEqual` | `isIdenticallyEqual` | `simplify` fallback |
 |---|---|---|---|
-| `2x+3` vs `2*x+3` | `true` | `true` | — |
-| `(x+1)^2` vs `x^2+2x+1` | **`undefined`** | `true` | — |
-| `sin^2(x)+cos^2(x)` vs `1` | **`undefined`** | **`undefined`** | `1` — resolves it |
+| `2x+3` vs `2*x+3` | `true` | `true` |, |
+| `(x+1)^2` vs `x^2+2x+1` | **`undefined`** | `true` |, |
+| `sin^2(x)+cos^2(x)` vs `1` | **`undefined`** | **`undefined`** | `1`, resolves it |
 | `\sqrt{x^2}` vs `x` | `undefined` | **`undefined`** (correctly refuses) | stays unequal |
-| `\sqrt{x^2}` vs `\|x\|` | `undefined` | `true` | — |
+| `\sqrt{x^2}` vs `\|x\|` | `undefined` | `true` |, |
 | `2x+3` vs `2x+4` | `undefined` | **`undefined`** | stays unequal |
-| `2^10` vs `1024` | `true` | `false` | — |
+| `2^10` vs `1024` | `true` | `false` |, |
 
 Three things follow.
 
 **`isEqual` is unusable for grading.** It returns `undefined` for the symbolic
-identities that matter — expanded versus factored, and every trig identity. It answers
+identities that matter, expanded versus factored and every trig identity. It answers
 "do these have the same *value*", and two expressions with a free variable do not.
 
 **`isIdenticallyEqual` is the only one that can refuse**, which is exactly what is
@@ -235,19 +235,19 @@ it knows the right answer when asked about `|x|`. It also declines to call `2x+3
 `2x+4` *different*, so a hint built on it would have to say "I don't know" for plainly
 wrong input.
 
-**`simplify` is the tie-breaker**, and it is what makes trig identities work — and it is
+**`simplify` is the tie-breaker** and it is what makes trig identities work, and it is
 also what produces `|x|` from `sqrt(x^2)`, which is the single best argument for using a
 CAS here: the naive reading of `sqrt(x^2)` is `x`, and that is wrong for every negative
 x.
 
-Which is why the shipped feature is a **self-check** — "that simplifies to X" about the
-learner's own expression — and not a comparison against an answer. The client does not
+Which is why the shipped feature is a **self-check**, "that simplifies to X" about the
+learner's own expression and not a comparison against an answer. The client does not
 have the expected answer, by design; see §4.
 
 ### Is it worth building?
 
-Not yet, on the evidence. `getValue('plain-text')` — MathLive's own public API, no
-Compute Engine — already round-trips fractions, exponents, roots, mixed numbers,
+Not yet, on the evidence. `getValue('plain-text')`, MathLive's own public API, no
+Compute Engine, already round-trips fractions, exponents, roots, mixed numbers,
 implicit multiplication, subtraction, powers, ratios, remainder formats and symbolic
 variables through the existing graders, proven in `mathlive_compat_test.go`. The
 corpus test currently covers 12 of 34 recorded cases through the pure-Go path; the
@@ -272,7 +272,7 @@ an answer oracle and undo ADR-005. No code path lets the hint affect a submitted
 and `test/selfCheck.test.tsx` asserts that: the hint appears in the DOM while the value
 the host receives is untouched.
 
-The cost is the part worth arguing about. Compute Engine is **788 kB gzipped** — nearly
+The cost is the part worth arguing about. Compute Engine is **788 kB gzipped**, nearly
 four times MathLive. It is never in any route's initial JS, and never fetched unless a
 learner pauses mid-answer with arithmetic on screen. Measured:
 
@@ -292,12 +292,12 @@ If that trade is wrong, `SelfCheck.tsx` is the only file to delete: nothing else
 Two different fallbacks, often confused:
 
 **The grading fallback.** `grader.Result.Unavailable` marks "the grader could not
-run" — a missing or broken SymPy runtime, a timeout, a busy semaphore. ADR-006 is
+run", a missing or broken SymPy runtime, a timeout, a busy semaphore. ADR-006 is
 explicit: this is never a student miss. No attempt, no streak reset, no weakness bump,
 no XP, and the client is told to retry rather than penalise.
 
-**The editor fallback.** If MathLive's chunk fails to load — blocked asset, old
-browser, flaky connection — `MathInput` falls back to the plain `<input>`. An error
+**The editor fallback.** If MathLive's chunk fails to load, blocked asset, old
+browser, flaky connection, `MathInput` falls back to the plain `<input>`. An error
 boundary catches it, because a chunk that fails to *load* never mounts and no ref
 check would ever fire. This is not a lesser editor: the plain input grades correctly
 for every concept in the corpus, which is exactly what a learner with a blocked asset
@@ -317,7 +317,7 @@ const ZERO_WIDE: Keycap = { latex: '[0]', width: 2 }
 ```
 
     Assumed: a keycap whose `latex` names a bracketed command performs that command.
-    Actual 0.111.0: `latex` is *inserted*. `executeKeycapCommand` resolves in order —
+    Actual 0.111.0: `latex` is *inserted*. `executeKeycapCommand` resolves in order, 
     `command`, then `insert`, then `key`, then `latex` (run as an insert) and only
     then `typedText(label)`. Separately, `normalizeKeycap` merges MathLive's own
     `KEYCAP_SHORTCUTS` definition only when the keycap is a bare string, or carries a
@@ -329,14 +329,14 @@ const ZERO_WIDE: Keycap = { latex: '[0]', width: 2 }
     Fix: name the shortcut in `label`, which is what MathLive's own layouts do
     (`{ label: "[backspace]", width: 1 }`). `test/keyboards.test.ts` now fails on any
     bracketed token in a keycap's `latex`, which is the whole bug class.
-    Source: `node_modules/mathlive/mathlive.mjs` — `executeKeycapCommand`,
+    Source: `node_modules/mathlive/mathlive.mjs`, `executeKeycapCommand`,
     `normalizeKeycap`, `renderKeycap`, `KEYCAP_SHORTCUTS`.
 
 A second trap sat behind it, and it is why the bug survived: **`renderKeycap` only
 adds the `MLK__keycap` class when the keycap's class does not already contain
 `separator`, `action`, `shift`, `fnbutton` or `bigfnbutton`.** So backspace, the caret
 arrows, the dismiss key and every separator render *without* it. Every selector in the
-suite used `.MLK__keycap`, including the 44px touch-target audit — so that audit
+suite used `.MLK__keycap`, including the 44px touch-target audit, so that audit
 measured only the keys that were already working and reported a clean pass over a
 keypad whose delete key typed its own name. `e2e/helpers/answer.ts` now exposes
 `keycaps()` (the row's visible direct children) and `glyphKeycap()`, and the audit
@@ -364,7 +364,7 @@ And once the editor is up, nothing else is slow: input reaches React state in 2-
 the first tap on Check reaches the API and returns in 12-14ms, on desktop and both
 mobile profiles.
 
-The loading state is now `PlainAnswerInput` — the same working plain input used when
+The loading state is now `PlainAnswerInput`, the same working plain input used when
 the chunk fails outright. So the learner can answer during the window rather than
 repeating themselves, and whatever they type is adopted when MathLive arrives.
 
@@ -372,7 +372,7 @@ Two things to be careful about if you re-measure this:
 
 - **CDP network throttling does not reach the MathLive chunk here.** It reported
   `transferSize: 0` and completed in 39ms under a 4 Mbps profile while the main chunks
-  correctly took 1100-1400ms — it is served from Chromium's memory cache. A first pass
+  correctly took 1100-1400ms, it is served from Chromium's memory cache. A first pass
   took that as "the network does not matter". `Network.setCacheDisabled` did not change
   it either.
 - **Delay the chunk instead, and prove the delay applied.** `delayMathLiveChunk()`
@@ -388,7 +388,7 @@ mid-range phone is unknown. Both are larger.
 Mathua used to hide the virtual keypad from a capture-phase `pointerdown` listener on
 `document`: any tap outside the field, and the keypad went away. It had to go.
 
-MathLive raises the keyboard from exactly one place — a document `focusin` listener
+MathLive raises the keyboard from exactly one place, a document `focusin` listener
 that calls `show()` after 300ms, gated on `policy === 'auto' && hasEditableContent`.
 There is no re-show path. So hiding the panel while the field *still holds focus*
 strands it: no focus transition means no `focusin`, so tapping the field again does
@@ -404,7 +404,7 @@ becomes read-only because its answer is being checked. The second is not an outs
 focus has already gone to the Check button, and leaving the panel up put it over the
 feedback and the Next button on a phone, so the page looked frozen after an answer.
 
-`MathLiveField`'s `pointerdown` handler is the recovery path — it calls `show()`, and
+`MathLiveField`'s `pointerdown` handler is the recovery path, it calls `show()`, and
 because `show()` only dispatches a message, calling it when the panel is already
 visible is harmless.
 
@@ -415,15 +415,15 @@ not harmless. Every `show()` or `hide()` makes MathLive dispatch
 `virtual-keyboard-toggle`, and the focused field answers it by blurring and refocusing
 its keyboard sink. The refocus re-entered the focus handler, which called `show()` again,
 and each blur armed MathLive's 300ms `focusout` timer, which hid the panel. Once a field
-already had focus when the learner tapped it — every question after the first, because
-each answer host autofocuses the field when it reveals one — the panel hid and reappeared
+already had focus when the learner tapped it, every question after the first, because
+each answer host autofocuses the field when it reveals one, the panel hid and reappeared
 about every 300ms for as long as the learner typed. On a Pixel 7 profile it was
 continuous; a learner reported the diagnostic going unresponsive after a few questions.
 
 Focus now only installs the layout. On a touch device MathLive's own `focusin` listener
 still raises the panel, once, and `pointerdown` remains the explicit tap. A field whose
-focus arrives before it mounts — the plain input standing in while the chunk loads had it
-— takes focus on mount, so the caret is not lost to `<body>` when the editor arrives.
+focus arrives before it mounts, the plain input standing in while the chunk loads had it
+,  takes focus on mount, so the caret is not lost to `<body>` when the editor arrives.
 
 ### Not yet fixed
 
@@ -431,13 +431,13 @@ focus arrives before it mounts — the plain input standing in while the chunk l
 directly from the page: `visible` stayed `true` and the panel stayed in the DOM, under
 both `auto` and `manual`. That is why the strand could not be reproduced in Playwright
 and why `e2e/mobile-math.spec.ts` asserts the *call* Mathua makes rather than the
-resulting visibility — spying on `mathVirtualKeyboard.hide` fails on the old listener
+resulting visibility, spying on `mathVirtualKeyboard.hide` fails on the old listener
 and passes now. The recovery behavior itself still wants a real-device check.
 
 ### Every question gets the editor
 
 The editor was once scoped to the five expression-valued `grading_type`s. That left 241
-of 666 concepts — 212 `multiple_choice`, 26 `tuple`, 1 `ordering`, 2 `comparison` —
+of 666 concepts, 212 `multiple_choice`, 26 `tuple`, 1 `ordering`, 2 `comparison`, 
 typing mathematics into a plain `<input>`, because the answer hosts render a text field
 even when the question also offers tappable options.
 
@@ -480,7 +480,7 @@ And a structural one, which was the expensive part: **MathLive's toolbar navigat
 *layouts*, not *layers*.** It emits `data-layer="${layout.layers[0].id}"` for each entry
 in `kb.layouts`, so a layout with three `layers` renders only the first and the other two
 are unreachable. A keycap carrying a `layer` property only gains a `layer-switch` *class*
-and does nothing when pressed. Layers 2+ had been unreachable from the start — the old
+and does nothing when pressed. Layers 2+ had been unreachable from the start, the old
 operators and scientific-notation layer had no way in, which is the same class of bug as
 the keycap that typed its own name (ADR-029).
 
@@ -524,8 +524,8 @@ does not cover the editor. What it cannot do is shrink the *page*, so
 Stylesheets adapt to that instead of a hardcoded pixel height, which would be wrong on
 every device. `app/globals.css` pads `<body>` by the keypad's height while it is open, so
 the end of a page can be scrolled above the panel; at 320×568 the Check button is
-otherwise under it with no way to reach it. Safe-area is handled where it already was — `ChromeToggle`,
-`ConceptGraphFlow`, `/history` — and deliberately *not* added to the answer area, because
+otherwise under it with no way to reach it. Safe-area is handled where it already was, `ChromeToggle`,
+`ConceptGraphFlow`, `/history` and deliberately *not* added to the answer area, because
 MathLive's panel already sits above the home indicator and double-padding it would push
 the field away from the keypad.
 
@@ -578,8 +578,8 @@ Lazily fetched, never in the above:
 
 | chunk | gzip | what |
 |---|---|---|
-| `c48e1edc…` | 787 kB | Compute Engine — first simplification only |
-| `428ea25f…` | 215 kB | MathLive — on any expression-valued question |
+| `c48e1edc…` | 787 kB | Compute Engine, first simplification only |
+| `428ea25f…` | 215 kB | MathLive, on any expression-valued question |
 
 The MathLive chunk is 794 kB decoded, which is why the loading window is ~310ms even
 with the bytes already cached: it is parse and evaluate, not download.
@@ -589,7 +589,7 @@ with the bytes already cached: it is parse and evaluate, not download.
 Everything here cost time to find and is worth writing down.
 
 **`math-mode-space` is ignored; set the property.** This is the spacebar. MathLive's own
-`alphabetic` layout — reachable from the keypad toolbar on every question — ships
+`alphabetic` layout, reachable from the keypad toolbar on every question, ships
 
 ```js
 { label: " ", width: 1.5 }
@@ -605,7 +605,7 @@ if (mathfield.options.mathModeSpace) { insert(mathModeSpace) }
 else                               { moveAfterParent() }
 ```
 
-`mathModeSpace` defaults to `""`. **So the spacebar moved the caret and inserted nothing** —
+`mathModeSpace` defaults to `""`. **So the spacebar moved the caret and inserted nothing**, 
 an upstream defect, not a Mathua regression. Three generator answer formats need a real
 space: `Q R` (remainder), `a sqrt(b)` and `P=[[...]] D=[[...]]`.
 
@@ -617,11 +617,11 @@ Set it as a **property**, not the documented attribute. Measured on 0.111.0 with
 the attribute is present in the DOM and `placeholder` and `class` are both honoured from
 it, but `mathModeSpace` stays `""` and the spacebar stays inert. `el.mathModeSpace = '\,'`
 and `el.setOptions({ mathModeSpace: '\,' })` both work. An attribute that is silently
-ignored is worse than none — it reads as configuration and is not.
+ignored is worse than none, it reads as configuration and is not.
 
 Two more traps on the way, both the ADR-029 class again. A keycap of `{ label: ' ' }`
 *does* work (it maps to `[Space]`) but renders as a blank face, which is half of why the
-key read as broken. The obvious fix — a visible `label: '␣'` — **types the glyph `␣` into
+key read as broken. The obvious fix, a visible `label: '␣'`, **types the glyph `␣` into
 the field**, because with no payload beside the label it falls through to
 `typedText('␣')`. The payload has to be stated alongside: `{ label: '␣', latex: '\,' }`.
 
@@ -634,18 +634,18 @@ which `units × 45` stops fitting:
 | panel | 5u | 6u | 7u | 8u | 9u | 10u |
 |---|---|---|---|---|---|---|
 | 400px (412px phone) | 45 | 45 | 45 | 45 | **42** | 37 |
-| 308px (320px phone) | 45 | 45 | **41** | **36** | — | — |
+| 308px (320px phone) | 45 | 45 | **41** | **36** |, |, |
 
 Eight units is the design target and is what `test/keyboards.test.ts` asserts for all five
 modes. **At 320px the ceiling is six units, and thirteen rows across four modes are already
-over it** — so the 44px floor holds at 412px and does not hold at 320px. The e2e
+over it**, so the 44px floor holds at 412px and does not hold at 320px. The e2e
 touch-target audit passes at 320px only because it measures whichever layout the default
 question selects, `ARITHMETIC`, the one mode whose rows all fit. Closing that means
 splitting the eight-keycap rows across modes, which is a redesign rather than a fix.
 
 **`geometrychange` carries no `detail`.** The 0.111.0 docs say
-`evt.detail.boundingRect`. The library dispatches `new Event('geometrychange')` — a
-plain `Event`, no detail at all — from a `ResizeObserver` and from `stateChanged()`. A
+`evt.detail.boundingRect`. The library dispatches `new Event('geometrychange')`, a
+plain `Event`, no detail at all, from a `ResizeObserver` and from `stateChanged()`. A
 handler written to the documented shape reads `undefined`, computes a height of zero, and
 reports the keypad as closed for the rest of the session: the exact failure the listener
 exists to prevent. Read `kb.boundingRect` instead.
@@ -656,9 +656,9 @@ so it has to be the class. The default is `'./sounds'`, and sounds are fetched p
 keystroke.
 
 **The keycap `latex` is an insert, not a command.** See "The keycap `latex`/`label` trap"
-above — backspace and the zero key typed their own source text in all five layouts.
+above, backspace and the zero key typed their own source text in all five layouts.
 
-**`getValue('plain-text')` returns `""` in jsdom**, always — so the component suite
+**`getValue('plain-text')` returns `""` in jsdom**, always, so the component suite
 stubs the library out (`test/stubs/mathlive.ts`, aliased in `vitest.config.mts`) and
 the real behavior is verified in Playwright. MathLive's `node` export condition also
 resolves to the SSR build under vitest, which never registers `<math-field>` at all.
@@ -673,7 +673,7 @@ so `<math-field className="…">` writes the attribute `classname`, which no CSS
 matches. It must be `class`.
 
 **A bare-string Vite alias is a prefix match.** Aliasing `mathlive` also rewrote
-`mathlive/static.css`, and the lazy import rejected. Use an exact RegExp — and put the
+`mathlive/static.css` and the lazy import rejected. Use an exact RegExp, and put the
 alias under `test.alias`, because vitest externalises `node_modules` deps *before*
 `resolve.alias` applies.
 
@@ -688,24 +688,24 @@ renders in a fallback face.
 **Keycap `width` accepts only `0.5 | 1 | 1.5 | 2 | 5`.** Anything else is a type error
 at best and silently ignored at worst.
 
-**Keycap width is derived from `10cqw`** — 10% of the keypad panel — which lands
+**Keycap width is derived from `10cqw`**, 10% of the keypad panel, which lands
 around 37px on a 412px phone. `--keycap-width` overrides it. Height alone was never
 the binding constraint for the 44px touch-target floor; this was.
 
 **Typing the `√` glyph produces `\surd`, not `\sqrt{9}`.** `\surd` is an ordinary
 symbol with the radicand outside it. This is why the keypad's `√` key inserts
-`\sqrt{#0}` — and why the `SymbolPalette`'s `√` could never have worked.
+`\sqrt{#0}` and why the `SymbolPalette`'s `√` could never have worked.
 
 **`preventDefault()` on Enter is unnecessary.** MathLive treats Enter as "commit the
 expression". Leave it alone.
 
-**A backspace immediately after a typed fraction does nothing** in 0.111.0 — the caret
+**A backspace immediately after a typed fraction does nothing** in 0.111.0, the caret
 sits after the fraction's trailing placeholder rather than adjacent to a removable atom.
 A second backspace removes it. Asserted as observed, not as expected.
 
 **Playwright's atomic `locator.click()` does not focus MathLive**; `mouse.down()` and
 `mouse.up()` separated by a delay does. And typing needs ~40 ms per key, or MathLive's
-asynchronous parser drops characters — a harness artefact, not a product bug.
+asynchronous parser drops characters, a harness artefact, not a product bug.
 
 ---
 
@@ -723,8 +723,8 @@ Unmapped domains fall back to `algebra`, the most general of the five: falling b
 `arithmetic` would hide the letters a linear-algebra or number-theory question needs,
 which is the worse failure.
 
-Structural keys insert structures. The fraction key inserts `\frac{#@}{#0}` — with a
-navigable placeholder — not `/`. A keycap that inserted the character would look
+Structural keys insert structures. The fraction key inserts `\frac{#@}{#0}`, with a
+navigable placeholder, not `/`. A keycap that inserted the character would look
 identical in a screenshot and behave nothing like a fraction. `test/keyboards.test.ts`
 asserts this for every mode, and `e2e/math-input.spec.ts` asserts it against the real
 library.
@@ -742,7 +742,7 @@ Four things about it are not obvious, and each was learned the hard way:
 
 **The spans come from `cmd/latexdump -spans`, not from a regex.** `latexnorm.Scan` is
 the only thing in the tree that knows a dollar can be a delimiter or a currency amount,
-and it runs over the canonicalized body — the text the API actually serves. A regex
+and it runs over the canonicalized body, the text the API actually serves. A regex
 would report every "$5 and up" in the corpus as a syntax error.
 
 **`ce.parse` does not throw.** It is total: a LaTeX syntax error comes back as a tree
@@ -752,8 +752,8 @@ confident lie. Failure is read off the returned box.
 
 **A parse failure is not automatically a defect.** CE is a numeric/symbolic CAS; this
 corpus is largely abstract algebra, group theory and topology. CE reports `U \times F`
-as `incompatible-type: number, function` — having parsed the syntax perfectly and then
-declined to type a product of two sets — and does the same for `\mathbb{R}^2 \setminus
+as `incompatible-type: number, function`, having parsed the syntax perfectly and then
+declined to type a product of two sets and does the same for `\mathbb{R}^2 \setminus
 \{0\}`. Filing those as "unparseable" buries the real defects under ~1,600 spans of
 noise and gets the report switched off. Reasons are bucketed by what CE objected to:
 `syntax` (a real defect: unclosed delimiter, stray operator, stray token),
@@ -765,7 +765,7 @@ which cannot be told from valid-but-unsupported without a human).
 caught the first two versions of this script reporting "20,549 of 46,872" while
 happily reporting success. It also states `checked_pct`, because a report that quietly
 covers 44% of its input is not a clean bill of health. `make validate` does not include
-it and CI runs it with `continue-on-error: true` — the corpus has pre-existing defects,
+it and CI runs it with `continue-on-error: true`, the corpus has pre-existing defects,
 so a hard gate would block main on content rather than on a regression.
 
 Current state of the corpus, after `cmd/latexfix` repaired what was mechanical:
@@ -784,13 +784,13 @@ Current state of the corpus, after `cmd/latexfix` repaired what was mechanical:
 
 - **Unicode apostrophes in derivatives** (162 → 1). `f’(x)` is a typo. `‘a \text{is
   less than}\ b’` is a *quotation mark*, and rewriting it to `'` makes LaTeX render
-  primes — a silent change to what the lesson teaches. The rule only fires on an
+  primes, a silent change to what the lesson teaches. The rule only fires on an
   attached apostrophe, and never on an opening curly quote.
 - **Scrape artifacts**: `42✓` correctness ticks (68) and HTML entities leaked into
   math (`&gt;`, `&#39;`) (32).
 - **Doubled delimiters** (14,936 `\(`, plus the display-math `\[`). The Algebrica
   scrape wrote `\(`, which `latexnorm` reads as an escaped backslash followed by a
-  paren — so every Algebrica formula sat in a *prose* region and no region-based
+  paren, so every Algebrica formula sat in a *prose* region and no region-based
   tool could see it. The canonicalizer is what turned it into `$ … $`, which is why
   the checker found defects the fixer could not reach. Un-escaping is provably
   free: `canonicalize` emits byte-identical output for `\(x\)` and `\(x\)`, and
@@ -799,12 +799,12 @@ Current state of the corpus, after `cmd/latexfix` repaired what was mechanical:
 Two findings worth keeping:
 
 - **`\[` needs a discriminator.** A row break in an `align` environment is
-  `\[2pt]` — two backslashes then a bracket holding a length, closed by a *single*
+  `\[2pt]`, two backslashes then a bracket holding a length, closed by a *single*
   `]`. So `\]` is unambiguously a display closer, while `\[` is a display opener
   only when not followed by a length. The corpus agrees: 4,496 `\]` against ~4,500
   non-row-break `\[`, and 1,157 genuine row breaks left alone.
 - **Removing a `✓` can create a defect.** `$42✓$` → `$42$` is a *bare numeral set as
-  math*, which the canonicalizer escapes to `\$42\$` — the learner sees literal
+  math*, which the canonicalizer escapes to `\$42\$`, the learner sees literal
   dollar signs (ADR-016). So a repaired span that becomes a bare numeral loses its
   delimiters too: `$42✓$` → `42`. The old form was itself broken; the learner was
   seeing `\$1✓\$`.

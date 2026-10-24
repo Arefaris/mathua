@@ -3,7 +3,7 @@ package grader
 import "testing"
 
 // A diagnosis is only worth showing when it is certainly true. Silence is the
-// right answer to "what went wrong?" far more often than any guess — a learner
+// right answer to "what went wrong?" far more often than any guess, a learner
 // told the wrong reason for a mistake learns the wrong lesson, which is the
 // opposite of what an explanation is for.
 func TestDiagnose_Numeric(t *testing.T) {
@@ -16,7 +16,7 @@ func TestDiagnose_Numeric(t *testing.T) {
 	}{
 		"sign flipped": {
 			GradingNumeric, "-7", "7",
-			"You have the right number with the sign flipped — the answer is 7.",
+			"You have the right number with the sign flipped, the answer is 7.",
 			"the magnitude is right and only the sign is wrong",
 		},
 		"off by one": {
@@ -26,7 +26,7 @@ func TestDiagnose_Numeric(t *testing.T) {
 		},
 		"rounded too early": {
 			GradingNumeric, "3.14", "3.1",
-			"That is the answer rounded to fewer decimal places than it needs — 3.14 keeps them.",
+			"That is the answer rounded to fewer decimal places than it needs, 3.14 keeps them.",
 			"the answer is the right value with precision lost",
 		},
 		"unrelated numbers": {
@@ -53,7 +53,7 @@ func TestDiagnose_Numeric(t *testing.T) {
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
 			if got := Diagnose(tc.gradingType, tc.expected, tc.answer); got != tc.want {
-				t.Errorf("Diagnose = %q, want %q — %s", got, tc.want, tc.why)
+				t.Errorf("Diagnose = %q, want %q, %s", got, tc.want, tc.why)
 			}
 		})
 	}
@@ -63,8 +63,8 @@ func TestDiagnose_ComparisonReversed(t *testing.T) {
 	cases := map[string]struct {
 		expected, answer, want string
 	}{
-		"reversed":       {">", "<", "The comparison goes the other way round — it should be >, not <."},
-		"other way":      {"<", ">", "The comparison goes the other way round — it should be <, not >."},
+		"reversed":       {">", "<", "The comparison goes the other way round, it should be >, not <."},
+		"other way":      {"<", ">", "The comparison goes the other way round, it should be <, not >."},
 		"not equal":      {"=", "<", ""},
 		"correct":        {">", ">", ""},
 		"nonsense input": {">", "banana", ""},
@@ -80,7 +80,7 @@ func TestDiagnose_ComparisonReversed(t *testing.T) {
 
 func TestDiagnose_NamesTheOneWrongValue(t *testing.T) {
 	// Knowing which one is off is the difference between a fixable mistake and
-	// a shrug — but only when exactly one is wrong. Two wrong values mean the
+	// a shrug, but only when exactly one is wrong. Two wrong values mean the
 	// method, not a slip, and saying "both" names nothing.
 	cases := []struct {
 		name        string

@@ -20,7 +20,7 @@ A computed example fixes the mechanics. For \(\mathbf{F}(x,y)=(x^{2},\,xy)\),
 
 so the field spreads at the right of the \(y\)-axis and contracts at the left, and along the axis itself the two effects cancel exactly.
 
-The operator has a meaning that the formula only summarises. Take a small square around a point, let the field carry its edges for a moment, and measure how much area the square gains: the rate of gain per unit area is the divergence. That is why the divergence of a velocity field is the rate at which a fluid expands, and why it appears multiplied by the density in the continuity equation — the divergence is the differential form of a conservation law, with the flux integral of the next section as its integral form.
+The operator has a meaning that the formula only summarises. Take a small square around a point, let the field carry its edges for a moment, and measure how much area the square gains: the rate of gain per unit area is the divergence. That is why the divergence of a velocity field is the rate at which a fluid expands, and why it appears multiplied by the density in the continuity equation, the divergence is the differential form of a conservation law, with the flux integral of the next section as its integral form.
 
 ## Sources and sinks
 
@@ -30,13 +30,13 @@ A field can have zero curl and non-zero divergence, or the reverse, so the two o
 
 The radial field has a counterpart with the same divergence and a different shape. \(\mathbf{F}(x,y)=(2x,\,0)\) also has divergence 2, but it stretches only horizontally, and its picture looks nothing like the radial one. Divergence does not see the difference, because it measures the *net* expansion of a small patch rather than the motion along any particular direction: a patch stretched horizontally and compressed vertically has zero divergence despite moving in both, which is why a shear flow is incompressible.
 
-Zero divergence has its own name: a field with \(\operatorname{div}\mathbf{F}=0\) is divergence-free, or solenoidal, and its flow is incompressible. The rotation field \(\mathbf{F}(x,y)=(-y,\,x)\) is the standard example. Its divergence is \(-1+1=0\) everywhere, so it neither sources nor sinks, while the field is plainly moving at every point except the origin — incompressible is not the same as stationary.
+Zero divergence has its own name: a field with \(\operatorname{div}\mathbf{F}=0\) is divergence-free, or solenoidal, and its flow is incompressible. The rotation field \(\mathbf{F}(x,y)=(-y,\,x)\) is the standard example. Its divergence is \(-1+1=0\) everywhere, so it neither sources nor sinks, while the field is plainly moving at every point except the origin, incompressible is not the same as stationary.
 
 The identity that ties the two operators together is
 
 \[\nabla\cdot(\nabla\times\mathbf{G}) = 0\]
 
-for any twice-differentiable field \(\mathbf{G}\). The divergence of a curl vanishes because each term in it is a difference of two mixed second partials of the same component, and mixed partials commute. The converse statement — that a divergence-free field on a simply connected region is a curl — is the harder half, and it is the one that needs the region's topology.
+for any twice-differentiable field \(\mathbf{G}\). The divergence of a curl vanishes because each term in it is a difference of two mixed second partials of the same component, and mixed partials commute. The converse statement, that a divergence-free field on a simply connected region is a curl, is the harder half, and it is the one that needs the region's topology.
 
 ## Divergence versus curl
 
@@ -46,7 +46,7 @@ The two are the symmetric and antisymmetric parts of the same derivative matrix,
 
 \[J = \begin{pmatrix}P_{x}&P_{y}\\Q_{x}&Q_{y}\end{pmatrix},\]
 
-whose trace \(P_{x}+Q_{y}\) is the divergence and whose off-diagonal antisymmetric part \(Q_{x}-P_{y}\) is the scalar curl. The remaining symmetric off-diagonal part, \(P_{y}+Q_{x}\), is a shear that neither operator reports — the reason two different fields can agree in both divergence and curl.
+whose trace \(P_{x}+Q_{y}\) is the divergence and whose off-diagonal antisymmetric part \(Q_{x}-P_{y}\) is the scalar curl. The remaining symmetric off-diagonal part, \(P_{y}+Q_{x}\), is a shear that neither operator reports, the reason two different fields can agree in both divergence and curl.
 
 Helmholtz's theorem is the statement that this much data determines the field: on a suitable region a field is fixed by its divergence, its curl and its behaviour at the boundary. Electrostatics and magnetostatics are that theorem applied twice. \(\operatorname{div}\mathbf{E}=\rho/\varepsilon_{0}\) makes the charge the source of the electric field, \(\nabla\times\mathbf{E}=0\) says the electrostatic field is irrotational, and the magnetic field reverses the pattern: it is divergence-free, and its curl is the current.
 

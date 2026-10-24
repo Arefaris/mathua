@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 4.1 Visualize Fractions
 
@@ -335,7 +335,7 @@ $$
 \frac{5}{5} + \frac{4}{5} = \frac{9}{5}
 $$
 
-Where did the nine come from? There are nine fifths—one whole (five fifths) plus four fifths. Let us use this idea to see how to convert a mixed number to an improper fraction.
+Where did the nine come from? There are nine fifths, one whole (five fifths) plus four fifths. Let us use this idea to see how to convert a mixed number to an improper fraction.
 
 ### Example 4.11
 

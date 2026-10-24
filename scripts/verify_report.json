@@ -38679,7 +38679,7 @@
   "line": 97,
   "verdict": "SKIP",
   "reason": "unknown macro: \\overset",
-  "latex": "\\frac{43}{22} = 1.9\\overset{\\text{—}}{54}"
+  "latex": "\\frac{43}{22} = 1.9\\overset{\\text{, }}{54}"
  },
  {
   "file": "data/lessons/teaching/dec.convert.from_frac.md",
@@ -38714,7 +38714,7 @@
   "line": 97,
   "verdict": "SKIP",
   "reason": "unknown macro: \\overset",
-  "latex": "\\frac{43}{22} = 1.9\\overset{\\text{—}}{54}"
+  "latex": "\\frac{43}{22} = 1.9\\overset{\\text{, }}{54}"
  },
  {
   "file": "data/lessons/teaching/dec.convert.to_frac.md",
@@ -40051,7 +40051,7 @@
   "line": 97,
   "verdict": "SKIP",
   "reason": "unknown macro: \\overset",
-  "latex": "\\frac{43}{22} = 1.9\\overset{\\text{—}}{54}"
+  "latex": "\\frac{43}{22} = 1.9\\overset{\\text{, }}{54}"
  },
  {
   "file": "data/lessons/teaching/frac.ops.to_decimal.md",

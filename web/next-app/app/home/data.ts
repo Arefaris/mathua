@@ -3,7 +3,7 @@ import { DOMAIN_LABELS, DOMAIN_ORDER } from '../../lib/graphDomains'
 // A type-only import, so it costs the landing bundle nothing: graphPayload.ts is otherwise
 // pulled in by the idle-loaded graph chunk and the build script, and zod with it.
 // This file redeclared the interface locally, which meant the landing page's view of the
-// artifact was a second schema — adding quizGateXP to the real one type-checked here as a
+// artifact was a second schema, adding quizGateXP to the real one type-checked here as a
 // missing property rather than as a change to the page, which is a quieter way to drift.
 import type { GraphMeta } from '../../lib/graphPayload'
 

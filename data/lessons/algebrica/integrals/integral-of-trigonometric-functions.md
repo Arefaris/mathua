@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/integral-of-trigonometric-functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/integral-of-trigonometric-functions/), CC BY-NC 4.0
 
 ## Introduction
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lens #4 — math layout: multi-line display blocks must break lines explicitly.
+Lens #4, math layout: multi-line display blocks must break lines explicitly.
 
 A bare newline inside TeX math is whitespace, not a row break. Display blocks
 (\\[...\\] / $$...$$) that stack relation steps on separate source lines
@@ -13,19 +13,19 @@ time (horizontal overflow wall on mobile, `=` visually lost). This lens flags:
                  non-last lines end with) a bare `=` relation, but no `\\\\`
                  and no aligned/array env                     (error)
   fused-display  `$$` match spanning prose/single-`$` fragments or blank
-                 lines — a mispaired match owned by the frontend
+                 lines, a mispaired match owned by the frontend
                  fused-inline defense, never rewritten here    (info)
   bad-plus       `\\+` inside math (canonical form is `+`; Go mathNorm
                  currently papers over it at serve time)       (error)
-  detached-sub   `]\\_` — escaped underscore after a bracket detaches the
+  detached-sub   `]\\_`, escaped underscore after a bracket detaches the
                  subscript from `\\right]` (valid KaTeX, wrong output) (error)
   eqref-math     `the equation \\(1\\)` style \\tag pointers written as math
                  instead of text `(1)`                        (error)
-                 ("identity \\(1\\)" is the identity ELEMENT — math, ignored)
+                 ("identity \\(1\\)" is the identity ELEMENT, math, ignored)
   dollar-number  bare numerals as inline math `\\(1\\)`: the Go fixed-point
                  loop re-escapes the rescan (`$1$` -> `\\$1\\$`), so users see
                  literal `$1$`. Upright text numerals are also typographically
-                 correct — never set bare numbers as math      (error)
+                 correct, never set bare numbers as math      (error)
 
 Usage:
   python3 scripts/lint_math_layout.py            # report, exit 1 on errors
@@ -49,7 +49,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "scripts" / "math_layout_report.json"
 
-# `\\[0.5em]` is row-break SPACING, not a display opener — excluded so the
+# `\\[0.5em]` is row-break SPACING, not a display opener, excluded so the
 # match cannot start mid-array and swallow prose to the next real `\\]`.
 DISPLAY_RE = re.compile(r"\\\\\[(?!\s*\d)([\s\S]*?)\\\\\]|(?<!\\)\$\$([\s\S]*?)\$\$")
 INLINE_PAREN_RE = re.compile(r"\\\\\(([\s\S]*?)\\\\\)")
@@ -65,14 +65,14 @@ SINGLE_DOLLAR_RE = re.compile(r"(?<!\\)\$(?!\$)")
 DETACHED_SUB_RE = re.compile(r"\]\\_")
 BAD_PLUS_RE = re.compile(r"(?<!\\)\\\+")
 # Only equation/formula/integral references are \\tag pointers; "identity (1)"
-# is the identity ELEMENT written (correctly) as math — never rewrite those.
+# is the identity ELEMENT written (correctly) as math, never rewrite those.
 EQREF_RE = re.compile(
     r"(equation|formula|integral)[ \t]+\\\\\((\d{1,2})\\\\\)",
     re.IGNORECASE,
 )
 # Bare numerals set as inline math. Excludes coordinates `\(1, 2\)` (space),
 # signed `\(-5\)` (marker: stays math, renders fine) and anything with
-# operators — only pure digit/dot/comma runs. Whitespace is same-line only
+# operators, only pure digit/dot/comma runs. Whitespace is same-line only
 # (`[ \t]`): `\s` would match across lines and glue separate math spans
 # together (e.g. `...$\n3. $...` merged two list items).
 DOLLAR_NUMBER_RE = re.compile(r"(?<!\\)\\{1,2}\([ \t]*(\d[\d.,]*)[ \t]*\\{1,2}\)")
@@ -107,7 +107,7 @@ def _count_joins(content: list[str]) -> tuple[int, bool]:
     """Count relation joins across content lines.
 
     A single join (LHS newline REL newline RHS) renders as one correct
-    display line — only 2+ joins mean stacked steps that collapse without
+    display line, only 2+ joins mean stacked steps that collapse without
     `\\\\`. Returns (joins, has_lone_line).
     """
     joins = 0

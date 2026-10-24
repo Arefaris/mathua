@@ -109,7 +109,7 @@ describe('PlanEditor', () => {
 
   // The regression that made the planner unusable. The save button lived inside the
   // `{e && ...}` estimate block, so any estimate failure removed the only way to save a
-  // plan from the page — and the estimate fails whenever destinations fail, which used to
+  // plan from the page and the estimate fails whenever destinations fail, which used to
   // be swallowed into an empty array.
   it('can still save when the estimate fails', async () => {
     vi.mocked(getEstimate).mockRejectedValue(new Error('planner unavailable'))

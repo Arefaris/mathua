@@ -4,7 +4,7 @@
 // `MathfieldElement.getValue('plain-text')` recorded from mathlive 0.111.0 running
 // in Chromium (see test/fixtures/mathlive-plain-text.json). If a future MathLive
 // changes its plain-text serialization, this table fails and names the shape that
-// moved — which is the point, because that shape is what the server grades.
+// moved, which is the point, because that shape is what the server grades.
 
 import { describe, it, expect } from 'vitest'
 import {
@@ -74,7 +74,7 @@ describe('toPlainAnswer', () => {
   })
 
   it('does not reorder or reinterpret: every rule is a local substitution', () => {
-    // Same input, applied rule by rule — the order is load-bearing (mixed numbers
+    // Same input, applied rule by rule, the order is load-bearing (mixed numbers
     // before fraction parens), so assert the chain, not just the end state.
     const start = '4(1)/(10)'
     expect(fixDivision(start)).toBe(start)

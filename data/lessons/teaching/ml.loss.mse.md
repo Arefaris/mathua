@@ -9,14 +9,14 @@ Take predictions $[0, 1]$ against targets $[1, 1]$:
 2. Add them: $1 + 0 = 1$.
 3. Divide by $n=2$: MSE $= 0.5$.
 
-So doubling one error from 1 to 2 would quadruple its contribution from 1 to 4 — large misses dominate the loss.
+So doubling one error from 1 to 2 would quadruple its contribution from 1 to 4, large misses dominate the loss.
 
 ## Worked: one gradient step
 
 Minimize $(1/2)(y-t)^2$ with prediction $y=2$, target $t=3$, learning rate 0.1:
 1. Differentiate: $d/dy\, (1/2)(y-t)^2 = y - t$, so the gradient is $2 - 3 = -1$.
 2. Step against the gradient: $y \leftarrow 2 - 0.1\cdot(-1) = 2.1$.
-3. Recheck the loss: $(2.1-3)^2 = 0.81$, down from 1 — the negative gradient pointed at the target.
+3. Recheck the loss: $(2.1-3)^2 = 0.81$, down from 1, the negative gradient pointed at the target.
 
 So the gradient $y - t$ always points from target back to prediction, and descending it pulls predictions toward targets.
 

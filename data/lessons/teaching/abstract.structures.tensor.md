@@ -7,7 +7,7 @@
 Compute via $\mathbb Z/m \otimes \mathbb Z/n \cong \mathbb Z/\gcd(m,n)$:
 1. $\gcd(6, 4) = 2$.
 2. So the tensor is $\mathbb Z/2$: order 2.
-3. Torsion against torsion collapses to their common divisor — the tensor detects shared torsion only.
+3. Torsion against torsion collapses to their common divisor, the tensor detects shared torsion only.
 
 So tensoring finite cyclics measures overlap, not size: coprime inputs tensor to zero.
 
@@ -18,7 +18,7 @@ Kill torsion with divisibility:
 2. Sliding the factor 5 across uses divisibility of $\mathbb Q$ against torsion of $\mathbb Z/5$.
 3. Every generator vanishes: the tensor is 0.
 
-So divisible-against-torsion always dies — the tensor sees only compatible structure.
+So divisible-against-torsion always dies, the tensor sees only compatible structure.
 
 ## Base change
 

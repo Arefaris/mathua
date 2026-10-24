@@ -231,7 +231,7 @@ func TestOpenAIChatTruncatedCompletionIsTransientError(t *testing.T) {
 // configured, and omitted entirely when it is not, because Mathua only sends it
 // to providers whose acceptance of it has been verified.
 // TestOpenAIProviderFailureKeepsPromptsOutOfErrors pins the log-hygiene rule.
-// A provider's rejection frequently echoes what was sent — Groq returns the
+// A provider's rejection frequently echoes what was sent, Groq returns the
 // model's unparsed generation under `failed_generation`, and for an assistant whose
 // generation can restate the learner's own words. Only the provider's own
 // `error.message` may survive into an error, and therefore into a log line.

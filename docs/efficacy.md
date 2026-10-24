@@ -8,7 +8,7 @@ honest limits of what they can and cannot claim.
 
 Every answer writes one `attempts` row (`internal/storage/store.go`
 `AttemptEntry`): student, concept, correctness, elapsed seconds, timestamp.
-Nothing is sampled or aggregated at write time — the metrics below are all
+Nothing is sampled or aggregated at write time, the metrics below are all
 computed from the raw log.
 
 ## Point-in-time metrics

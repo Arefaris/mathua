@@ -75,7 +75,7 @@ func appleClientSecret() (string, error) {
 }
 
 // AppleLoginURL starts Sign in with Apple (the user's name arrives only on
-// first authorization, via a form_post `user` field — the callback accepts POST).
+// first authorization, via a form_post `user` field, the callback accepts POST).
 func AppleLoginURL(clientID, redirectURI, state string) string {
 	q := url.Values{}
 	q.Set("client_id", clientID)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lens #1 — hypothesis completeness.
+Lens #1, hypothesis completeness.
 
 Flags theorem statements where a conclusion requires hypotheses not mentioned
 in the same block. Phase 1 covers the "monotone → finite limit" class; the
@@ -24,7 +24,7 @@ PATTERNS = [
     ),
     (
         re.compile(r"continuous on.*\[a,\s*b\].*?differentiable on.*\(a,\s*b\)", re.I | re.S),
-        None,  # no required extra — just smoke test that both appear together (Rolle/MVT shape)
+        None,  # no required extra, just smoke test that both appear together (Rolle/MVT shape)
         None,
     ),
 ]
@@ -32,7 +32,7 @@ PATTERNS = [
 def lint_file(path: Path):
     text = path.read_text(encoding="utf-8")
     issues = []
-    # Split into paragraphs (blank-line separated) — theorem statements live in one paragraph
+    # Split into paragraphs (blank-line separated), theorem statements live in one paragraph
     paras = re.split(r"\n\s*\n", text)
     for para in paras:
         # Lens 1a: monotone without bounded before finite limit claim

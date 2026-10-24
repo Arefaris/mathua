@@ -91,7 +91,7 @@ func TestImportReport_DoesNotConstrainLocallyFiledReports(t *testing.T) {
 }
 
 // TestImportReport_KeepsTheOriginIDReadable is about the number a person quotes.
-// The local row id is not the production id — SQLite burns ids on rolled-back
+// The local row id is not the production id, SQLite burns ids on rolled-back
 // inserts, so a local #94 and the production #94 can be different reports. The
 // origin column must therefore survive the import and be findable both in a list
 // and by direct lookup, which is what makes "look at production #94" work here.

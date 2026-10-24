@@ -189,7 +189,7 @@ func TestOneStepAdditionAnswerSolvesThePrintedEquation(t *testing.T) {
 
 // TestOneStepInequalityAsksForTheIntegerItGrades pins the wording against the
 // key. The stem used to say only "Solve:" while the answer was the boundary
-// integer, so "x > 3" — the answer to the question as asked — was marked wrong.
+// integer, so "x > 3", the answer to the question as asked, was marked wrong.
 func TestOneStepInequalityAsksForTheIntegerItGrades(t *testing.T) {
 	g := &ineqOneStepGen{}
 	for i := 0; i < 200; i++ {

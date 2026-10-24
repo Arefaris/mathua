@@ -13,7 +13,7 @@ import (
 //
 // This was wrong by 1.4-1.65x. `learningCost` prices each attempt at the bare effort base
 // while `xp.Award` multiplied that base by a speed factor (0.5-1.25) and a streak factor
-// (1-1.5), so the planner over-predicted remaining XP for anyone already mid-streak — the
+// (1-1.5), so the planner over-predicted remaining XP for anyone already mid-streak, the
 // plan said "913 XP" and the work cost less. Both multipliers are gone, so the two now agree;
 // this test is what keeps them agreeing.
 func TestEstimateXPMatchesTheAwardPath(t *testing.T) {
@@ -32,8 +32,8 @@ func TestEstimateXPMatchesTheAwardPath(t *testing.T) {
 			}
 			cost := learningCost(c, prog, AttemptStats{})
 
-			// What the learner actually banks for the same number of answers — the
-			// remaining ones to reach this concept's threshold — answered inside the
+			// What the learner actually banks for the same number of answers, the
+			// remaining ones to reach this concept's threshold, answered inside the
 			// concept's own time threshold, which is the "worked normally" case.
 			remaining := 10 - streak
 			if remaining < 2 {
@@ -59,7 +59,7 @@ func TestSlowCorrectAnswerStillPaysTheBase(t *testing.T) {
 	nominal := xp.Award(true, th, th, 0, xp.TaskLesson)
 	slow := xp.Award(true, 10*th, th, 0, xp.TaskLesson)
 	if slow != nominal {
-		t.Errorf("a correct answer 10x over the threshold paid %d XP, nominal paid %d — slow "+
+		t.Errorf("a correct answer 10x over the threshold paid %d XP, nominal paid %d, slow "+
 			"correct work is full credit", slow, nominal)
 	}
 }
@@ -70,7 +70,7 @@ func TestXPIsEffortDerivedNotFlatPerQuestion(t *testing.T) {
 	quick := xp.EffortBase(10, 0.5)
 	slow := xp.EffortBase(150, 0.5)
 	if slow <= quick {
-		t.Errorf("a 150s concept prices at %d XP and a 10s one at %d — the effort base is flat "+
+		t.Errorf("a 150s concept prices at %d XP and a 10s one at %d, the effort base is flat "+
 			"per question, which is the thing this model exists to avoid", slow, quick)
 	}
 	if quick < 1 || slow > 5 {

@@ -206,8 +206,8 @@ function transform(node) {
   // The caption alone is what produced 359 paragraphs of orphaned italic text in the
   // committed corpus: a figure's image was stripped, its caption was kept, and nothing
   // recorded that an asset had gone missing. The caption is still the right thing to
-  // render — emitting `![…](…)` for a file we cannot fetch would put a broken image in
-  // every lesson — but the gap has to be *stored* rather than discarded, so it can be
+  // render, emitting `![…](…)` for a file we cannot fetch would put a broken image in
+  // every lesson, but the gap has to be *stored* rather than discarded, so it can be
   // enumerated and reviewed instead of being invisible.
   if (tag === 'figure' || tag === 'aside') {
     const cap = (node.children ?? []).find((c) => localName(c) === 'caption')
@@ -308,7 +308,7 @@ async function fetchSection(slug) {
 //
 // Compared as a normalized set rather than by equality against one string. The previous
 // test was `t !== 'alternative video lesson'`, which is singular-only, and the corpus
-// contains "Alternative Video Lessons" in four committed lessons — so a line the rule was
+// contains "Alternative Video Lessons" in four committed lessons, so a line the rule was
 // written to remove survived in the content.
 const NON_CONTENT_CAPTIONS = new Set([
   'alternative video lesson',
@@ -408,7 +408,7 @@ function sectionMarkdown(tree) {
 
 const ATTRIBUTION =
   '> Content sourced from [ORCCA](https://pcc.edu/orcca) ' +
-  '(Open Resources for Community College Algebra) — CC BY 4.0\n'
+  '(Open Resources for Community College Algebra), CC BY 4.0\n'
 
 async function main() {
   const mapping = JSON.parse(fs.readFileSync(MAPPING_PATH, 'utf8'))

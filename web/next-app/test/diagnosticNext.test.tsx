@@ -89,7 +89,7 @@ vi.mock('../lib/api', async (importOriginal) => {
   skipGoalQuestion: vi.fn(async () => ({
     done: false,
     correct: false,
-    feedback: 'Skipped — no evidence recorded.',
+    feedback: 'Skipped, no evidence recorded.',
     concept_id: 'c3',
     concept_name: 'Q3 concept',
     question: 'Q3 text',
@@ -99,7 +99,7 @@ vi.mock('../lib/api', async (importOriginal) => {
   skipQuizQuestion: vi.fn(async () => ({
     done: false,
     correct: false,
-    feedback: 'Skipped — no XP awarded.',
+    feedback: 'Skipped, no XP awarded.',
     xp: 0,
     concept_id: 'c3',
     concept_name: 'Q3 quiz',
@@ -168,7 +168,7 @@ describe('WelcomeStep briefing', () => {
     expect(screen.getByText('Before you begin')).toBeInTheDocument()
     expect(screen.getByText('What to expect')).toBeInTheDocument()
     expect(screen.getByText('25–45 questions · about 30–45 minutes')).toBeInTheDocument()
-    expect(screen.getByText('Answer from what you know — no searching')).toBeInTheDocument()
+    expect(screen.getByText('Answer from what you know, no searching')).toBeInTheDocument()
     expect(screen.getByText('Speed counts')).toBeInTheDocument()
     expect(screen.getByText('Pause anytime')).toBeInTheDocument()
     expect(screen.queryByText(/frontier/i)).toBeNull()
@@ -307,7 +307,7 @@ describe('DiagnosticStep Next button', () => {  it('shows no Next button before 
         onRetryQuestion={onRetryQuestion}
       />,
     )
-    const retry = screen.getByRole('button', { name: 'I made a silly mistake — retry' })
+    const retry = screen.getByRole('button', { name: 'I made a silly mistake, retry' })
     expect(retry).toBeInTheDocument()
     fireEvent.click(retry)
     expect(onRetryQuestion).toHaveBeenCalledTimes(1)
@@ -321,7 +321,7 @@ describe('DiagnosticStep Next button', () => {  it('shows no Next button before 
         onRetryQuestion={onRetryQuestion}
       />,
     )
-    expect(screen.queryByRole('button', { name: 'I made a silly mistake — retry' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'I made a silly mistake, retry' })).toBeNull()
 
     // Ineligible misses never offer retry.
     rerender(
@@ -332,7 +332,7 @@ describe('DiagnosticStep Next button', () => {  it('shows no Next button before 
         onRetryQuestion={onRetryQuestion}
       />,
     )
-    expect(screen.queryByRole('button', { name: 'I made a silly mistake — retry' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'I made a silly mistake, retry' })).toBeNull()
   })
 })
 
@@ -544,11 +544,11 @@ describe('onboard diagnostic flow', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Check Answer' }))
 
     await screen.findByText('Nope')
-    const retry = screen.getByRole('button', { name: 'I made a silly mistake — retry' })
+    const retry = screen.getByRole('button', { name: 'I made a silly mistake, retry' })
     fireEvent.click(retry)
     await screen.findByText('Q1 text')
     expect(vi.mocked(retryGoalQuestion)).toHaveBeenCalledWith('s1', 'c1')
-    expect(screen.queryByRole('button', { name: 'I made a silly mistake — retry' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'I made a silly mistake, retry' })).toBeNull()
     expect(await findAnswerField()).toBe(document.activeElement)
   })
 })
@@ -556,7 +556,7 @@ describe('onboard diagnostic flow', () => {
 describe('QuizHost manual advance', () => {
   it('holds feedback until Next reveals the staged question and focuses input', async () => {
     render(<QuizHost />)
-    // Intro briefing gates the start — timing begins at Start, not mount.
+    // Intro briefing gates the start, timing begins at Start, not mount.
     expect(screen.getByText('Before you start')).toBeInTheDocument()
     expect(screen.getByText('Up to 5 questions · timed · closed book')).toBeInTheDocument()
     expect(screen.queryByText('Quiz Q1 text')).toBeNull()
@@ -575,8 +575,8 @@ describe('QuizHost manual advance', () => {
     expect(await findAnswerField()).toBe(document.activeElement)
   })
 
-  // A test verifies knowledge and does not teach. These two used to assert the opposite — that
-  // the served solution was shown on both verdicts — which meant a learner could read the answer
+  // A test verifies knowledge and does not teach. These two used to assert the opposite, that
+  // the served solution was shown on both verdicts, which meant a learner could read the answer
   // to a question they had just been measured on, and the questions after it measured whether
   // they had read rather than what they knew.
   it('shows no solution on a wrong quiz answer, and routes the miss to Learn', async () => {
@@ -632,8 +632,8 @@ describe('QuizHost manual advance', () => {
     expect(screen.queryByRole('link', { name: /Learn this concept/ })).toBeNull()
   })
 
-  // Belt as well as braces. The server is the boundary — it is what strips the solution, and
-  // the Go tests measure that — but the client holds its own copy of the contract, so a server
+  // Belt as well as braces. The server is the boundary, it is what strips the solution, and
+  // the Go tests measure that, but the client holds its own copy of the contract, so a server
   // that regressed to sending `explanation` and `diagnosis` would still not put the answer on
   // screen. The response is cast past the type on purpose: the type no longer has these fields,
   // and the point is that the rendering does not depend on the type being honest.

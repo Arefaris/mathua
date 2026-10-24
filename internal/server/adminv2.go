@@ -31,7 +31,7 @@ func hasPermission(r *http.Request, perm admin.Permission) bool {
 	return admin.Permitted(actorFrom(r).Role, perm)
 }
 
-// GET /api/admin/me — who the caller is to this surface, and what they may do. The frontend uses
+// GET /api/admin/me, who the caller is to this surface, and what they may do. The frontend uses
 // it to show only reachable sections; the sections still enforce themselves server-side.
 func (s *Server) handleAdminMe(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -62,7 +62,7 @@ var moderationStatuses = map[string]bool{
 	"open": true, "reviewing": true, "resolved": true, "dismissed": true,
 }
 
-// GET /api/admin/reports?status=&limit=&offset= — the moderation queue.
+// GET /api/admin/reports?status=&limit=&offset=, the moderation queue.
 func (s *Server) handleAdminReports(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, "method not allowed", 405)
@@ -173,7 +173,7 @@ func (s *Server) handleAdminReport(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// POST /api/admin/reports/{id}/grade — replay a report's answer through the
+// POST /api/admin/reports/{id}/grade, replay a report's answer through the
 // same grader the learner's submission used, and write nothing.
 //
 // The queue could show the question and the expected answer, but not whether an
@@ -214,7 +214,7 @@ func (s *Server) handleAdminReportGrade(w http.ResponseWriter, r *http.Request, 
 	s.writeGradeResult(w, report.ConceptID, report.Expected, answer)
 }
 
-// POST /api/admin/reports/bulk — one decision across a concept's unsettled
+// POST /api/admin/reports/bulk, one decision across a concept's unsettled
 // reports.
 //
 // A fix is usually one bug, not one report: the answer-format defect produced
@@ -295,7 +295,7 @@ func (s *Server) handleAdminReportsBulk(w http.ResponseWriter, r *http.Request) 
 
 // ── Admins and contributors ───────────────────────────────────────────────
 
-// GET /api/admin/admins — who currently holds a staff role, most privileged first.
+// GET /api/admin/admins, who currently holds a staff role, most privileged first.
 func (s *Server) handleAdminAdmins(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, "method not allowed", 405)
@@ -310,7 +310,7 @@ func (s *Server) handleAdminAdmins(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"admins": staff})
 }
 
-// GET /api/admin/invitations — list; POST /api/admin/invitations — create.
+// GET /api/admin/invitations, list; POST /api/admin/invitations, create.
 //
 // Creation mints the raw token once and returns it in the response; the database holds only the
 // hash, so the invitation is shown to the inviter and cannot be recovered afterwards. That is
@@ -423,12 +423,12 @@ func (s *Server) handleAdminInvitationRevoke(w http.ResponseWriter, r *http.Requ
 	writeJSON(w, map[string]interface{}{"invitation": inv})
 }
 
-// POST /api/admin/invitations/accept {token} — any authenticated account may accept the
+// POST /api/admin/invitations/accept {token}, any authenticated account may accept the
 // invitation addressed to it.
 //
 // This is the one route under /api/admin that is not staff-gated: it is how a learner becomes
 // staff. It requires an authenticated account whose email matches the invitation's, so knowing
-// the token is not by itself enough — the invitation is bound to an address, and only the
+// the token is not by itself enough, the invitation is bound to an address, and only the
 // account holding that address can turn it into a role.
 func (s *Server) handleAdminInvitationAccept(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -458,7 +458,7 @@ func (s *Server) handleAdminInvitationAccept(w http.ResponseWriter, r *http.Requ
 		writeError(w, "failed to read invitation", 500)
 		return
 	}
-	// Every failure of the invitation itself — unknown, expired, revoked, already used — reads
+	// Every failure of the invitation itself, unknown, expired, revoked, already used, reads
 	// the same to the caller. A prober learns "that token is not usable", never which near-miss
 	// they are closest to.
 	if inv == nil || inv.AcceptedAt != "" || inv.RevokedAt != "" || expired(inv.ExpiresAt) {
@@ -500,7 +500,7 @@ func expired(expiresAt string) bool {
 
 // ── Content inspection ────────────────────────────────────────────────────
 
-// GET /api/admin/content?q=&limit=&offset= — read-only inspection of the corpus.
+// GET /api/admin/content?q=&limit=&offset=, read-only inspection of the corpus.
 //
 // Inspection, not editing. The content is code-adjacent corpus data (concepts, generated
 // questions) with no safe write path, and the task's guidance is explicit: provide inspection
@@ -807,7 +807,7 @@ func (s *Server) handleAdminLeagues(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// GET /api/admin/audit?entity_type=&entity_id=&limit=&offset= — the trail, newest first.
+// GET /api/admin/audit?entity_type=&entity_id=&limit=&offset=, the trail, newest first.
 //
 // Read-only. There is no PUT, PATCH or DELETE for this table on any store, and no route to
 // create one, which is what makes "the audit log must not be editable" a property of the system

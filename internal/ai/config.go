@@ -46,8 +46,8 @@ type Settings struct {
 	// Production marks a deployment serving real learner traffic.
 	Production bool
 	// DisabledReason is non-empty when AI was configured but refused to start,
-	// and Registry is then nil. It carries a configuration error — most often an
-	// unconfirmed zero-retention claim — rather than a runtime failure: the
+	// and Registry is then nil. It carries a configuration error, most often an
+	// unconfirmed zero-retention claim, rather than a runtime failure: the
 	// deterministic app boots either way, because AI is an enhancement and a
 	// mistake in it must not stop a learner from studying.
 	DisabledReason string

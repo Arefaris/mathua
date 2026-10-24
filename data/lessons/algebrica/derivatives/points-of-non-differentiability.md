@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/points-of-non-differentiability/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/points-of-non-differentiability/), CC BY-NC 4.0
 
 ## What are non differentiable points
 

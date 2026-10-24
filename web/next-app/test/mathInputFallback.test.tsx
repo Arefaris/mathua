@@ -1,7 +1,7 @@
 // The fallback path: what happens when MathLive itself cannot load.
 //
 // Its own file because the only way to reach the boundary is to make the module
-// fail, and a module mock is file-scoped — mocking it here would stop every other
+// fail, and a module mock is file-scoped, mocking it here would stop every other
 // MathInput test from ever rendering the real editor.
 //
 // The scenario is not hypothetical. MathLive is ~800 kB and arrives as a lazily

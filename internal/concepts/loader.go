@@ -268,7 +268,7 @@ func build(raw []Concept) *DAG {
 		}
 	}
 
-	// Topological sort via Kahn's algorithm — includes prerequisites + encompasses as edges
+	// Topological sort via Kahn's algorithm, includes prerequisites + encompasses as edges
 	inDegree := make(map[string]int, len(raw))
 	for _, c := range raw {
 		inDegree[c.ID] = len(c.Prerequisites) + len(c.Encompasses)
@@ -429,7 +429,7 @@ func validate(raw []Concept) error {
 		}
 	}
 
-	// Detect cycles via topological sort (Kahn's) — includes prerequisites + encompasses
+	// Detect cycles via topological sort (Kahn's), includes prerequisites + encompasses
 	cmap := make(map[string]*Concept, len(raw))
 	depMap := make(map[string][]string)
 	inDegree := make(map[string]int, len(raw))

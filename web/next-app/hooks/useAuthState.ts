@@ -31,7 +31,7 @@ export function useAuthState() {
   //
   // `fetchMe` repairs the stored session and broadcasts `auth-changed`, so this resolves through
   // the same listener the sign-in path uses rather than being a parallel source of truth. It runs
-  // only when a role is missing — a learner is fetched once and then left alone, because
+  // only when a role is missing, a learner is fetched once and then left alone, because
   // "the server said not staff" is worth caching and "we could not ask" is not.
   useEffect(() => {
     if (typeof window === 'undefined' || !isLoggedIn()) return

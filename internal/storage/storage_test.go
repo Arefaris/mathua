@@ -978,7 +978,7 @@ func TestResetProgress_RoundTrip(t *testing.T) {
 // meaningful if it can also say "we do not know": pre-migration attempts, hand-written
 // quiz questions and anything not generated at a known difficulty have no difficulty.
 // Storing 0 for those would claim they were trivially easy, which is a fact nobody
-// measured — and it would be indistinguishable from a real measurement once written.
+// measured and it would be indistinguishable from a real measurement once written.
 //
 // The Postgres half of this is TestParity_SQLiteVsPostgres; this runs without a database
 // server so CI covers it too.
@@ -1030,7 +1030,7 @@ func TestAttemptDifficulty_DistinguishesUnknownFromTrivial(t *testing.T) {
 }
 
 // The active session has to carry the served difficulty, or a restart between serving a
-// question and answering it would write the attempt with no difficulty at all — which is
+// question and answering it would write the attempt with no difficulty at all, which is
 // the honest-but-lossy outcome, and happens for a reason that is entirely avoidable.
 func TestActiveSession_DifficultySurvivesTheRoundTrip(t *testing.T) {
 	store := newTestStore(t)

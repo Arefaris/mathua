@@ -11,7 +11,7 @@ interface LessonDiagramProps {
 }
 
 // SVG allowlist: shapes, text and containers only. Scripts, event-handler
-// attributes, foreignObject and external references never survive —
+// attributes, foreignObject and external references never survive, 
 // vendored third-party SVGs go through this before touching the DOM.
 const SVG_PROFILE: Parameters<typeof DOMPurify.sanitize>[1] = {
   USE_PROFILES: { svg: true },

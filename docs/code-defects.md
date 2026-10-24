@@ -95,14 +95,14 @@ integers only and then compares both sides in SymPy. Because expected and answer
 string, the comparison agrees with itself. A learner who types the accurate angle, `53.13°`, either
 fails the regex or is compared against the rounded value and is marked wrong.
 
-**Why it was not fixed here.** The fix would change the answer format of an existing concept — a
-generator and its grader — and that is outside the `complex_numbers` batch that found it. Choosing
+**Why it was not fixed here.** The fix would change the answer format of an existing concept, a
+generator and its grader and that is outside the `complex_numbers` batch that found it. Choosing
 between exact integer arguments (only multiples of 30° and 45° have exact sines and cosines), a
 `±`-style tolerance in the answer, or dropping polar answers in favour of exponential form is a
 decision about the concept, not a repair.
 
-**Suggested fix.** Restrict `polarGen` to angles whose sine and cosine are exact — 30°, 45°, 60°,
-90°, 120°, 135°, 150°, 180° and the reflex ones — and pick radii so the rectangular form stays
+**Suggested fix.** Restrict `polarGen` to angles whose sine and cosine are exact, 30°, 45°, 60°,
+90°, 120°, 135°, 150°, 180° and the reflex ones and pick radii so the rectangular form stays
 integral. `TestComplexAcceptsEquivalentForms` already covers the polar path with a whole-degree case,
 so a change there would be caught by the grader test.
 

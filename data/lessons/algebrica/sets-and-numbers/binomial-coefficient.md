@@ -121,7 +121,7 @@ The reasoning is direct: any selection of \( r \) elements from the  combined gr
 \binom{2n}{n} = \sum_{k=0}^{n} \binom{n}{k}^2
 \]
 
-This tells us that the central binomial coefficient — the middle entry of row  \( 2n \) in Pascal's triangle — counts the number of ways to select \( n \) elements from a group of \( 2n \), which can always be decomposed as choosing \( k \) from one half and \( n - k \) from the other.
+This tells us that the central binomial coefficient, the middle entry of row  \( 2n \) in Pascal's triangle, counts the number of ways to select \( n \) elements from a group of \( 2n \), which can always be decomposed as choosing \( k \) from one half and \( n - k \) from the other.
 
 
 The upper summation identity relates a binomial coefficient to a sum of coefficients from earlier rows:
@@ -130,7 +130,7 @@ The upper summation identity relates a binomial coefficient to a sum of coeffici
 \sum_{i=0}^{r} \binom{n+i}{i} = \binom{n+r+1}{r}
 \]
 
-The name comes from the shape this identity traces in Pascal's triangle:  a diagonal run of entries whose sum equals a single entry one step to the right and one step down — resembling the blade and handle of a hockey stick. This identity is especially useful when computing cumulative counts that build row by row.
+The name comes from the shape this identity traces in Pascal's triangle:  a diagonal run of entries whose sum equals a single entry one step to the right and one step down, resembling the blade and handle of a hockey stick. This identity is especially useful when computing cumulative counts that build row by row.
 
 ## Generalized binomial coefficient
 
@@ -233,7 +233,7 @@ The binomial coefficient has a natural recursive structure: to count the ways to
 
 \[ \binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k} \]
 
-The reasoning is combinatorial. Fix one element from the set — call it \( x \). Every subset of size \( k \) either contains \( x \) or it does not. If it does, the remaining \( k-1 \) elements must be chosen from the other \( n-1 \), giving \( \binom{n-1}{k-1} \). If it does not, all \( k \) elements come from the remaining \( n-1 \), giving \( \binom{n-1}{k} \). The two cases are mutually exclusive and together cover all possibilities. For example:
+The reasoning is combinatorial. Fix one element from the set, call it \( x \). Every subset of size \( k \) either contains \( x \) or it does not. If it does, the remaining \( k-1 \) elements must be chosen from the other \( n-1 \), giving \( \binom{n-1}{k-1} \). If it does not, all \( k \) elements come from the remaining \( n-1 \), giving \( \binom{n-1}{k} \). The two cases are mutually exclusive and together cover all possibilities. For example:
 
 \[ \binom{3}{2} = \binom{2}{1} + \binom{2}{2} = 2 + 1 = 3 \]
 

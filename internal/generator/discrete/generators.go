@@ -54,12 +54,12 @@ func (g *propositionsGen) Generate(ctx generator.GeneratorContext) generator.Pro
 	table := []entry{
 		{"2 + 2 = 4", "yes", "It is a declarative statement with a definite truth value (true)."},
 		{"The sky is blue.", "yes", "It is a declarative statement with a definite truth value (true)."},
-		{"x is large.", "no", "It is ambiguous — 'large' is not well-defined without context."},
+		{"x is large.", "no", "It is ambiguous, 'large' is not well-defined without context."},
 		{"5 is an even number.", "yes", "It is a declarative statement with a definite truth value (false)."},
 		{"What time is it?", "no", "It is a question, not a declarative statement."},
 		{"Please sit down.", "no", "It is a command, not a declarative statement."},
 		{"1 + 1 = 3", "yes", "It is a declarative statement with a definite truth value (false)."},
-		{"This sentence is false.", "no", "It is a paradox — it cannot have a consistent truth value."},
+		{"This sentence is false.", "no", "It is a paradox, it cannot have a consistent truth value."},
 	}
 	// Production question: count propositions in a random triple, so the
 	// pool has typed numeric answers (0-3) alongside yes/no recognition.

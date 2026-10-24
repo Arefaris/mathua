@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 2.4 Find Multiples and Factors
 
@@ -469,7 +469,7 @@ Table 2.13
 
 What patterns do you see in Table 2.13? Did you notice that the number of groups times the number of dancers per group is always $24?$ This makes sense, since there are always 24 dancers.
 
-You may notice another pattern if you look carefully at the first two columns. These two columns contain the exact same set of numbers—but in reverse order. They are mirrors of one another, and in fact, both columns list all of the factors of 24, which are:
+You may notice another pattern if you look carefully at the first two columns. These two columns contain the exact same set of numbers, but in reverse order. They are mirrors of one another, and in fact, both columns list all of the factors of 24, which are:
 
 $$
 1,2,3,4,6,8,12,24

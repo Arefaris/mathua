@@ -93,7 +93,7 @@ func (e *Engine) IsComplete(s *Session) bool {
 	return s.Index >= len(s.Order)
 }
 
-// HasAttempts reports whether any answer was recorded this session —
+// HasAttempts reports whether any answer was recorded this session,
 // used to avoid resetting the 150 XP gate baseline on an all-skipped quiz.
 func (e *Engine) HasAttempts(s *Session) bool {
 	s.Lock()
@@ -102,7 +102,7 @@ func (e *Engine) HasAttempts(s *Session) bool {
 }
 
 // SkipQuestion advances past the current question without recording an
-// attempt — the skip escape hatch for questions that can't be answered.
+// attempt, the skip escape hatch for questions that can't be answered.
 // No grade, no XP, no remedial: the concept simply goes untested this quiz.
 func (e *Engine) SkipQuestion(s *Session) {
 	s.Lock()

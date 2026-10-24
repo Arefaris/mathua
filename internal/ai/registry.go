@@ -9,7 +9,7 @@ import (
 //
 // It is built once at boot and never mutated, so a provider being reachable
 // cannot change eligibility: only its declared Policy can, and only through
-// Select. That is the difference between a registry and a hardcoded list — the
+// Select. That is the difference between a registry and a hardcoded list, the
 // AI caller never names a provider, and adding or removing one is a
 // configuration change, not a code change to the caller.
 type Registry struct {

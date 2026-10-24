@@ -49,7 +49,7 @@ const DOCS = [
   {
     slug: 'architecture',
     source: 'docs/architecture.md',
-    description: 'The five-layer stack — UI, API, core engine, grading and storage — and the computerised adaptive diagnostic.',
+    description: 'The five-layer stack, UI, API, core engine, grading and storage and the computerised adaptive diagnostic.',
   },
   {
     slug: 'administration',

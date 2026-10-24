@@ -4,9 +4,9 @@ package abstract
 //
 // The domain was recognition-shaped: forty-three of its forty-five concepts
 // asked a learner to pick a statement. These ten have an exact answer that the
-// generator can compute — an order in a cyclic group, an index, a count of
+// generator can compute, an order in a cyclic group, an index, a count of
 // generators, a group order, a field order, an orbit size, a kernel size, a
-// count of automorphisms and a greatest common divisor — so the concept keeps
+// count of automorphisms and a greatest common divisor, so the concept keeps
 // its mathematical content and loses only the list of options.
 //
 // Every generator publishes the numbers its answer follows from, so the test

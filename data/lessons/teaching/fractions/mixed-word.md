@@ -1,10 +1,10 @@
-> Content adapted from [OpenStax Prealgebra §4.3 and §4.6](https://openstax.org/books/prealgebra/pages/4-3-multiply-and-divide-mixed-numbers-and-complex-fractions) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content adapted from [OpenStax Prealgebra §4.3 and §4.6](https://openstax.org/books/prealgebra/pages/4-3-multiply-and-divide-mixed-numbers-and-complex-fractions) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 # Mixed Numbers in Word Problems
 
 Mixed-number word problems ask about whole-plus-fraction quantities: "how
 much fabric for 3 curtains needing \(2\frac{1}{2}\) yards each?" The reading
-is always the same — a mixed number is a whole plus a fraction — so the real
+is always the same, a mixed number is a whole plus a fraction, so the real
 work is converting: improper fractions multiply and divide, mixed numbers
 add and subtract, and the final answer usually goes back to mixed form.
 
@@ -36,4 +36,4 @@ Paint covers \(10\frac{1}{2}\) square meters per liter and you have
 \(2\frac{1}{4}\) liters: \(10\frac{1}{2} = \frac{21}{2}\) and
 \(2\frac{1}{4} = \frac{9}{4}\), so \(\frac{21}{2} \cdot \frac{9}{4} =
 \frac{189}{8} = 23\frac{5}{8}\) square meters. Check: roughly \(10 \times 2 =
-20\), and \(23\frac{5}{8}\) is close — the multiplication checks out.
+20\), and \(23\frac{5}{8}\) is close, the multiplication checks out.

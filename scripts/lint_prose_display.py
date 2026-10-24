@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lens #2 — prose vs display agreement.
+Lens #2, prose vs display agreement.
 
 Finds places where prose names functions (f, g, h) and the next display
 uses a different set. Catches the squeeze f↔g swap class.

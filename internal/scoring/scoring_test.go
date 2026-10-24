@@ -125,7 +125,7 @@ func TestWeekStart(t *testing.T) {
 	}
 }
 
-// The gate was a client-side literal in three places — the copy, the progress bar, and an
+// The gate was a client-side literal in three places, the copy, the progress bar, and an
 // `xp_total >= 50` fallback for a flag the server does send. The server carries it now, and
 // this asserts the path the page actually reads. A zero-valued Scores would pass a field
 // comparison, because QuizGateXP defaults to 0 rather than the gate, so the test drives Compute.
@@ -153,7 +153,7 @@ func TestScoresCarryTheQuizGate(t *testing.T) {
 		t.Fatal(err)
 	}
 	// Optional in the client schema, so absence has to be visible as absence rather than
-	// silently defaulted — that leniency is what let the page keep its own copy for so long.
+	// silently defaulted, that leniency is what let the page keep its own copy for so long.
 	v, ok := round["quiz_gate_xp"]
 	if !ok {
 		t.Fatal("quiz_gate_xp missing from the Scores payload")

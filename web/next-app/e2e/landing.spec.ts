@@ -9,7 +9,7 @@ test('landing page renders a diagram-free hero', async ({ page }) => {
   // The hero is art-backed but still diagram-free: the picture is the login
   // illustration, and neither the figure caption nor its interactive domain
   // controls should render here.
-  await expect(hero.getByText('Fig. A — Concept Graph')).toHaveCount(0)
+  await expect(hero.getByText('Fig. A, Concept Graph')).toHaveCount(0)
   await expect(hero.getByRole('button', { name: 'Astrolabe', exact: true })).toHaveCount(0)
   await expect(hero.locator('.graph-label--domain')).toHaveCount(0)
   await expect(hero.locator('img[src="/hero/manreader.jpeg"]')).toHaveCount(1)

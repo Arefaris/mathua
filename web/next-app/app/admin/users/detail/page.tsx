@@ -101,9 +101,9 @@ function AccountDetail() {
                 <dl className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-[11px] text-mathua-secondary">
                   <div><dt className="text-mathua-muted">Account id</dt><dd className="break-all" title={data.user.id}>{data.user.id}</dd></div>
                   <div><dt className="text-mathua-muted">Role</dt><dd className={data.user.role === 'student' ? 'text-mathua-muted' : 'text-mathua-blue'}>{roleLabel(data.user.role)}</dd></div>
-                  <div><dt className="text-mathua-muted">Email</dt><dd className="break-all">{data.user.email || '—'}</dd></div>
-                  <div><dt className="text-mathua-muted">Username</dt><dd>{data.user.username ? `@${data.user.username}` : '—'}</dd></div>
-                  <div><dt className="text-mathua-muted">Created</dt><dd>{data.user.created_at || '—'}</dd></div>
+                  <div><dt className="text-mathua-muted">Email</dt><dd className="break-all">{data.user.email || ', '}</dd></div>
+                  <div><dt className="text-mathua-muted">Username</dt><dd>{data.user.username ? `@${data.user.username}` : ', '}</dd></div>
+                  <div><dt className="text-mathua-muted">Created</dt><dd>{data.user.created_at || ', '}</dd></div>
                   <div>
                     <dt className="text-mathua-muted">Sign-in</dt>
                     <dd>{data.user.has_password ? 'Password' : 'OAuth provider, no password'}</dd>
@@ -127,8 +127,8 @@ function AccountDetail() {
                     <Count label="Concepts mastered" value={activity.concepts_mastered} />
                     <Count label="Attempts" value={activity.attempts} />
                     <Count label="Reports filed" value={activity.reports_filed} />
-                    <Count label="Last active day" value={activity.last_active_day || '—'} />
-                    <Count label="Last attempt" value={activity.last_attempt_at ? activity.last_attempt_at.slice(0, 10) : '—'} />
+                    <Count label="Last active day" value={activity.last_active_day || ', '} />
+                    <Count label="Last attempt" value={activity.last_attempt_at ? activity.last_attempt_at.slice(0, 10) : ', '} />
                   </dl>
                   <p className="mt-2 font-mono text-[10px] text-mathua-muted">
                     Diagnostic {activity.diagnostic_completed_at ? `completed ${activity.diagnostic_completed_at.slice(0, 10)}` : 'not completed'}.

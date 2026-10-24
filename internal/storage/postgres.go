@@ -380,7 +380,7 @@ func NewPostgresStore(dsn string) (*PostgresStore, error) {
 	if err != nil {
 		return nil, fmt.Errorf("open postgres: %w", err)
 	}
-	// Fix 7: bounded pool — previously unlimited (database/sql default).
+	// Fix 7: bounded pool, previously unlimited (database/sql default).
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
@@ -525,7 +525,7 @@ func pgAuthMigrate(db *sql.DB) error {
 			}
 		}
 	}
-	// One-time data backfills, version-guarded (Fix 7) — see sqlite twin.
+	// One-time data backfills, version-guarded (Fix 7), see sqlite twin.
 	dataMigrations := map[int][]string{
 		1: {"UPDATE students SET daily_xp_goal = 30 WHERE daily_xp_goal = 150"},
 		2: {`UPDATE students SET username = lower(username)
@@ -537,7 +537,7 @@ func pgAuthMigrate(db *sql.DB) error {
 		// (30→10, 150→50, 100→33); goals already at/below 10 are untouched.
 		3: {"UPDATE students SET daily_xp_goal = GREATEST(1, ROUND(daily_xp_goal / 3.0)) WHERE daily_xp_goal > 10"},
 		// v4 daily goal range: bounded 10..100, default 30. Mirrors the SQLite migration
-		// exactly — ADR-012 requires the two stores agree on an observable result.
+		// exactly, ADR-012 requires the two stores agree on an observable result.
 		4: {`UPDATE students SET daily_xp_goal = 30 WHERE daily_xp_goal = 10`,
 			`UPDATE students SET daily_xp_goal = 100 WHERE daily_xp_goal > 100`,
 			`UPDATE students SET daily_xp_goal = 10 WHERE daily_xp_goal < 10`},
@@ -562,7 +562,7 @@ func pgAuthMigrate(db *sql.DB) error {
 }
 
 // ensureEmailUniqueIndexPostgres enforces one-email-one-account at the DB
-// layer for every writer at once — the app-level 409 checks are
+// layer for every writer at once, the app-level 409 checks are
 // check-then-insert and race. Expression index on lower(email) matches
 // FindByEmail's lookup semantics; the partial predicate keeps legacy ”
 // rows legal. While real duplicates exist the index is skipped with a log
@@ -1453,7 +1453,7 @@ func (s *PostgresStore) PruneAIUsage(beforeDay string) (int64, error) {
 }
 
 func (s *PostgresStore) SweepServerSessions() error {
-	// expires_at is RFC3339 UTC — compare in Go (see sqlite twin).
+	// expires_at is RFC3339 UTC, compare in Go (see sqlite twin).
 	rows, err := s.db.Query("SELECT kind, key, expires_at FROM server_sessions WHERE expires_at != ''")
 	if err != nil {
 		return fmt.Errorf("sweep server sessions: %w", err)

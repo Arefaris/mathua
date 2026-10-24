@@ -430,7 +430,7 @@ type multiStepIneqGen struct{}
 // has the solution x > x when c - b is exactly a times the boundary. The earlier
 // version added a random remainder to c, so the true boundary was a fraction
 // (7x + 4 > 31 gives x > 27/7) while the answer was a whole number, and a learner
-// who typed 27/7 — or 3 6/7 — was marked wrong for being right. The remainder is
+// who typed 27/7 or 3 6/7, was marked wrong for being right. The remainder is
 // gone and the arithmetic is exact.
 func (g *multiStepIneqGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	x := rand.Intn(8) + 2
@@ -867,7 +867,7 @@ func (g *funcLinearGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	}
 	c := rand.Intn(5) + 1
 	vertical := generator.MultipleChoice(fmt.Sprintf("Is \\(x = %d\\) a function?", c), "no", "yes")
-	vertical.Explanation = fmt.Sprintf("x = %d is a vertical line — it fails the vertical line test.", c)
+	vertical.Explanation = fmt.Sprintf("x = %d is a vertical line, it fails the vertical line test.", c)
 	vertical.Facts = map[string]string{"c": strconv.Itoa(c), "is_vertical": "yes"}
 	return vertical
 }
@@ -1281,10 +1281,10 @@ func (g *extraneousRootsGen) Generate(ctx generator.GeneratorContext) generator.
 		exp      string
 	}
 	entries := []entry{
-		{"Can squaring both sides of an equation introduce extraneous roots? (yes/no)", "yes", "Squaring is not reversible: if a=b then a²=b², but b²=a² does not imply a=b (e.g. a=2, b=-2). So squaring can introduce extraneous roots — always check candidates in the original equation."},
+		{"Can squaring both sides of an equation introduce extraneous roots? (yes/no)", "yes", "Squaring is not reversible: if a=b then a²=b², but b²=a² does not imply a=b (e.g. a=2, b=-2). So squaring can introduce extraneous roots, always check candidates in the original equation."},
 		{"Solve \\(\\sqrt{x} = -2\\). How many solutions? (enter a number)", "0", "The principal square root is always \\(\\geq 0\\), so \\(\\sqrt{x} = -2\\) has no solution."},
 		{"The candidates when solving \\(\\sqrt{x+3} = x-3\\) are \\(x = 1\\) and \\(x = 6\\). Which one satisfies the original equation? (enter a number)", "6", "Check: \\(\\sqrt{1+3} = 2\\) but \\(1-3 = -2\\), so \\(x=1\\) is extraneous; \\(\\sqrt{6+3} = 3\\) and \\(6-3 = 3\\), so \\(x=6\\) works. Extraneous roots satisfy the squared equation but not the original."},
-		{"If you multiply both sides of an equation by \\((x - 2)\\), should you check whether \\(x = 2\\) is extraneous? (yes/no)", "yes", "If you multiply by something that equals 0 for some x, you may introduce extraneous solutions — always substitute candidates back into the original equation."},
+		{"If you multiply both sides of an equation by \\((x - 2)\\), should you check whether \\(x = 2\\) is extraneous? (yes/no)", "yes", "If you multiply by something that equals 0 for some x, you may introduce extraneous solutions, always substitute candidates back into the original equation."},
 	}
 	e := entries[rand.Intn(len(entries))]
 	return generator.Problem{

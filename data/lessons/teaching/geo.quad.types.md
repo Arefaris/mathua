@@ -42,7 +42,7 @@ A quadrilateral has one pair of parallel sides of lengths 9 and 5. Can it be a p
 
 *Solution*
 
-No. A parallelogram needs *both* pairs of opposite sides parallel — which forces opposite sides to be equal in length. Since $9 \neq 5$, this shape is a trapezoid.
+No. A parallelogram needs *both* pairs of opposite sides parallel, which forces opposite sides to be equal in length. Since $9 \neq 5$, this shape is a trapezoid.
 
 ## Summary
 

@@ -54,7 +54,7 @@ describe('LessonDiagram', () => {
   it('injects an accessible title when the SVG carries none', async () => {
     // The 68 vendored algebrica diagrams whose <title> said "Group 42" and similar had those
     // titles stripped so this branch would run: `sanitizeSvg` returns early when a <title>
-    // exists, so a placeholder title is not merely wrong, it *suppresses* the real one — and
+    // exists, so a placeholder title is not merely wrong, it *suppresses* the real one and
     // the placeholder is what a browser then shows on hover over the figure.
     //
     // Without this test, stripping 68 titles would have removed every accessible name in the

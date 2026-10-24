@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/root-test-for-series-convergence/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/root-test-for-series-convergence/), CC BY-NC 4.0
 
 ## What is the root test
 

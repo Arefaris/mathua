@@ -43,7 +43,7 @@ describe('DangerZone', () => {
     // The reported symptom: on iOS the button never enables.
     //
     // Both inputs are `type="text"` with no `autoCapitalize`, so Safari capitalises the
-    // first letter as you type — "reset my progress" becomes "Reset my progress". Both
+    // first letter as you type, "reset my progress" becomes "Reset my progress". Both
     // the client comparison and the server's were case-sensitive, so the button stayed
     // disabled forever and the server would have rejected the capitalised phrase with
     // "confirmation phrase does not match". Chromium does not auto-capitalise, which is
@@ -56,7 +56,7 @@ describe('DangerZone', () => {
     expect(input.getAttribute('autocapitalize')).toBe('none')
     expect(input.getAttribute('spellcheck')).toBe('false')
 
-    // And if it does anyway — a keyboard that capitalises, a paste from a note — the
+    // And if it does anyway, a keyboard that capitalises, a paste from a note, the
     // button must still arm. The phrase confirms intent; it is not a secret.
     fireEvent.change(input, { target: { value: 'Reset My Progress' } })
     expect(submit).not.toBeDisabled()
@@ -153,6 +153,6 @@ describe('DeleteAccount', () => {
 
   it('states total scope: nothing is kept', () => {
     render(<DeleteAccount />)
-    expect(screen.getByText(/Nothing — deletion is total/i)).toBeTruthy()
+    expect(screen.getByText(/Nothing, deletion is total/i)).toBeTruthy()
   })
 })

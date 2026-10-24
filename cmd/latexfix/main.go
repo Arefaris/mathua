@@ -8,19 +8,19 @@
 //     mostly English prose, where a typographic apostrophe or an en dash is
 //     *correct*. A blind find-and-replace would fix the math and corrupt the prose.
 //
-//  2. A region's Content EXCLUDES its delimiters — input[Start:End] is
+//  2. A region's Content EXCLUDES its delimiters, input[Start:End] is
 //     Opener + Content + Closer. Writing Content back over Start:End strips the
 //     `$…$` off every span it touches, which turns rendered math into literal text
 //     in 33 files and reads as content loss. The delimiters go back on.
 //
-//  3. Nothing inside \text{…} is touched. `\overset{\text{—}}{16}` means "16
+//  3. Nothing inside \text{…} is touched. `\overset{\text{, }}{16}` means "16
 //     repeats"; the em dash is a notation glyph, and rewriting it to `-` changes
 //     what the lesson says. Prose inside math is prose, even when the surrounding
 //     dollars make it look like an expression.
 //
 //  4. The Algebrica scrape is double-escaped: the source holds the literal
 //     characters \( and \), which latexnorm reads as an escaped backslash followed
-//     by a paren — so an inline formula sits in *prose* as far as any region-based
+//     by a paren, so an inline formula sits in *prose* as far as any region-based
 //     tool is concerned, and the canonicalizer is what turns it into `$ … $`.
 //     That put 14,936 formulas out of reach of the rules above. Un-escaping fixes
 //     the honesty of the file and lets the math be found at all.
@@ -70,7 +70,7 @@ var fixes = []fix{
 	// Attached-only, and this is the whole subtlety. `f’(x)` wants ASCII. But
 	// `{a < b ‘a\ \text{is less than}\ b’}` uses the same characters as quotation
 	// marks around an English phrase, and rewriting those to `'` makes LaTeX render
-	// primes on a and b — a silent change to what the lesson says. An apostrophe is
+	// primes on a and b, a silent change to what the lesson says. An apostrophe is
 	// attached to the thing it qualifies; a quotation mark is not. There is no rule
 	// for `‘`: an opening curly quote in math is always a quotation mark, never an
 	// apostrophe, and the right repair is a \text{} group that needs a human.
@@ -100,7 +100,7 @@ func textGroup(content string) [][2]int {
 	// recording because it is not obvious: a multi-byte UTF-8 sequence is made only of bytes
 	// ≥ 0x80, and every opener here begins with a backslash at 0x5C, so a fragment starting
 	// mid-rune can never begin with `\text{`. The scan was safe because of a property of
-	// UTF-8, not because of anything in this code — and it would stop being safe the moment
+	// UTF-8, not because of anything in this code and it would stop being safe the moment
 	// an opener were matched on a byte that can appear inside a rune.
 	//
 	// Decoding the rune makes that guarantee local and explicit instead of resting on the
@@ -137,7 +137,7 @@ func textGroup(content string) [][2]int {
 	return out
 }
 
-// attachedBefore reports whether the byte at pos continues a symbol — a letter,
+// attachedBefore reports whether the byte at pos continues a symbol, a letter,
 // digit, closing brace or closing paren. That is what makes `f’` an apostrophe
 // while ` b’` is a closing quotation mark.
 func attachedBefore(s string, pos int) bool {
@@ -217,7 +217,7 @@ func unescapeDelimiters(src string) (string, int) {
 	//
 	// To be accurate about what this changes: the byte-at-a-time version was **not** losing
 	// anything. `strings.Builder.WriteByte` appends the raw byte and the loop visited every
-	// byte exactly once, so it reconstructed the input byte-for-byte — verified for em
+	// byte exactly once, so it reconstructed the input byte-for-byte, verified for em
 	// dashes, curly quotes, Greek letters and ellipses. The lint is a robustness finding, not
 	// a correctness one, and this rewrite should not be described as a bug fix.
 	//
@@ -271,8 +271,8 @@ type change struct {
 }
 
 // repair applies both passes: un-escape the doubled delimiters, then fix the math
-// regions the un-escaping made visible. It always returns a usable string — the
-// caller writes when out != src — so a file that needs only un-escaping is still
+// regions the un-escaping made visible. It always returns a usable string, the
+// caller writes when out != src, so a file that needs only un-escaping is still
 // written even though no region changed.
 func repair(src string) (string, []change) {
 	out, unescaped := unescapeDelimiters(src)

@@ -11,8 +11,8 @@ import (
 //
 // It exists because of a measured defect. `/learn` renders a knowledge point's worked
 // example, which is the lesson body's section named by the shard's `section` field. When that
-// field is empty the server substituted the *whole lesson body*, so 69 of 1,971 steps — 43
-// concepts, 33,784 words — served the entire reference article to a learner who had asked for
+// field is empty the server substituted the *whole lesson body*, so 69 of 1,971 steps, 43
+// concepts, 33,784 words, served the entire reference article to a learner who had asked for
 // one question. `discrete.logic.propositions` served its 2,724-word article three times over,
 // 8,172 words in total, against a concept whose mastery threshold is twelve seconds.
 //
@@ -70,7 +70,7 @@ const (
 // no written explanation" rather than as an error. It is not a failure: a minimal slice is a
 // valid, honest answer.
 func (l *Loader) TeachingSlice(conceptID string, kp KP) (string, bool) {
-	// 1. A section that resolves is already the right size — it was authored as a section.
+	// 1. A section that resolves is already the right size, it was authored as a section.
 	if body, ok := l.KPSectionBody(conceptID, kp.Section); ok {
 		return body, true
 	}
@@ -90,7 +90,7 @@ func renderMinimalSlice(label string, lesson *Lesson) string {
 		fmt.Fprintf(&b, "**%s**\n\n", label)
 	}
 	b.WriteString("There isn't a written explanation for this step yet. ")
-	b.WriteString("Work the questions below — every answer explains the reasoning — ")
+	b.WriteString("Work the questions below, every answer explains the reasoning, ")
 	b.WriteString("and open **Reference** if you want the full lesson text.")
 	return b.String()
 }
@@ -113,7 +113,7 @@ func renderSlice(label string, s Slice) string {
 				continue
 			}
 			if says := strings.TrimSpace(ex.Says); says != "" {
-				fmt.Fprintf(&b, "- %s — %s\n", item, says)
+				fmt.Fprintf(&b, "- %s, %s\n", item, says)
 			} else {
 				fmt.Fprintf(&b, "- %s\n", item)
 			}

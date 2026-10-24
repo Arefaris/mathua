@@ -38,7 +38,7 @@ describe('createInflightCache', () => {
     expect([a, b]).toEqual(['x', 'x'])
   })
 
-  it('refetches after the request settles — the bug this exists to fix', async () => {
+  it('refetches after the request settles, the bug this exists to fix', async () => {
     const dedupe = createInflightCache()
     const run = vi.fn().mockResolvedValue('x')
 

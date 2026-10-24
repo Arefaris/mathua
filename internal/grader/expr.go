@@ -10,7 +10,7 @@ import (
 //
 // A learner solving x + 4 = 3 in their head often types the working rather than
 // the result. The numeric grader called that unreadable, so a correct answer was
-// reported as a formatting failure — one of the live reports from 23 October
+// reported as a formatting failure, one of the live reports from 23 October
 // 2026 read "answered 3-4, marked wrong".
 //
 // Only plain arithmetic is accepted: numbers, + - * / ^, parentheses and
@@ -113,7 +113,7 @@ func (p *exprParser) term() (float64, bool) {
 	}
 }
 
-// unary := ('+' | '-') power | power — one leading sign, so "--42" stays
+// unary := ('+' | '-') power | power, one leading sign, so "--42" stays
 // unreadable rather than quietly meaning +42
 func (p *exprParser) unary() (float64, bool) {
 	p.space()

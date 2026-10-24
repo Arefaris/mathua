@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/root-mean-square/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/root-mean-square/), CC BY-NC 4.0
 
 ## What is the quadratic mean?
 

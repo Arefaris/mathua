@@ -1,4 +1,4 @@
-> Content sourced from [Linear Algebra](https://hefferon.net/linearalgebra/) by Jim Hefferon — CC BY-SA 2.5
+> Content sourced from [Linear Algebra](https://hefferon.net/linearalgebra/) by Jim Hefferon, CC BY-SA 2.5
 
 # Solving Linear Systems
 
@@ -313,7 +313,7 @@ The solution set is empty.
 Chapter One. Linear Systems
 
 ## 1.14 Example The prior system has more equations than unknowns but that
-is not what causes the inconsistency — Example 1.12 has more equations than
+is not what causes the inconsistency, Example 1.12 has more equations than
 unknowns and yet is consistent. Nor is having more equations than unknowns
 necessary for inconsistency, as we see with this inconsistent system that has the
 same number of equations as unknowns.
@@ -383,7 +383,7 @@ with the conclusion that the system has no solutions. If we reach echelon form
 without a contradictory equation, and each variable is a leading variable in its
 row, then the system has a unique solution and we ﬁnd it by back substitution.
 Finally, if we reach echelon form without a contradictory equation, and there is
-not a unique solution — that is, at least one variable is not a leading variable —
+not a unique solution, that is, at least one variable is not a leading variable, 
 then the system has many solutions.
 The next subsection explores the third case. We will see that such a system
 must have inﬁnitely many solutions and we will describe the solution set.
@@ -525,8 +525,8 @@ x1
 solution. (As always, to say ‘true’ you must prove it, while to say ‘false’ you must
 produce a counterexample.)
 
-## 1.26 Must any Chemistry problem like the one that starts this subsection — a balance
-the reaction problem — have inﬁnitely many solutions?
+## 1.26 Must any Chemistry problem like the one that starts this subsection, a balance
+the reaction problem, have inﬁnitely many solutions?
 ✓1.27 Find the coeﬃcients a, b, and c so that the graph of f(x) = ax2 + bx + c passes
 through the points (1, 2), (−1, 6), and (2, 3).
 
@@ -724,7 +724,7 @@ z + 3w = 2
 0 = 0
 x and z are the leading variables, not x and y. The free variables are y and w
 and so we can describe the solution set as {(y, y, 2 −3w, w) | y, w ∈R}. For
-instance, (1, 1, 2, 0) satisﬁes the system — take y = 1 and w = 0. The four-tuple
+instance, (1, 1, 2, 0) satisﬁes the system, take y = 1 and w = 0. The four-tuple
 (1, 0, 5, 4) is not a solution since its ﬁrst coordinate does not equal its second.
 A variable that we use to describe a family of solutions is a parameter. We
 say that the solution set in the prior example is parametrized with y and w.
@@ -902,8 +902,8 @@ this is a column vector with a third component of 7.
 
 
 
-A zero vector is denoted ⃗0. There are many diﬀerent zero vectors — the one-tall
-zero vector, the two-tall zero vector, etc. — but nonetheless we will often say
+A zero vector is denoted ⃗0. There are many diﬀerent zero vectors, the one-tall
+zero vector, the two-tall zero vector, etc., but nonetheless we will often say
 “the” zero vector, expecting that the size will be clear from the context.
 
 ## 2.9 Deﬁnition The linear equation a1x1 +a2x2 + · · · +anxn = d with unknowns
@@ -1264,7 +1264,7 @@ is a particular solution of the system.
 Before the exercises, we will consider what we have accomplished and what
 we will do in the remainder of the chapter. So far we have done the mechanics
 of Gauss’s Method. We have not stopped to consider any of the questions that
-arise, except for proving Theorem 1.5 — which justiﬁes the method by showing
+arise, except for proving Theorem 1.5, which justiﬁes the method by showing
 that it gives the right answers.
 For example, can we always describe solution sets as above, with a particular
 solution vector added to an unrestricted linear combination of some other vectors?

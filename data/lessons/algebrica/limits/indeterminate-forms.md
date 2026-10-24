@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/indeterminate-forms/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/indeterminate-forms/), CC BY-NC 4.0
 
 ## What are indeterminate forms?
 
@@ -108,7 +108,7 @@ Taking the limit as \(x \to \infty\):
 
 ## Rationale for using the conjugate
 
-In the analysis of the form \(\infty - \infty\), the conjugate is employed — an expression identical to the original except that the sign between its terms is reversed. The rationale for this approach is examined below. Consider the limit:
+In the analysis of the form \(\infty - \infty\), the conjugate is employed, an expression identical to the original except that the sign between its terms is reversed. The rationale for this approach is examined below. Consider the limit:
 
 \[\lim_{x \to \infty} \left(\sqrt{x^2 + 2x + 3} - x\right) \]
 

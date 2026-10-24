@@ -40,7 +40,7 @@ The perimeter is 35 m.
 
 ## Units
 
-Perimeter is a length, so it is measured in plain units: cm, m, inches — never square units.
+Perimeter is a length, so it is measured in plain units: cm, m, inches, never square units.
 
 ## Summary
 

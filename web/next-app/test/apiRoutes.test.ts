@@ -61,7 +61,7 @@ describe('every API route has a caller', () => {
       ['/api/efficacy/trend', 'fetched by the efficacy page'],
       // OAuth providers: the login page offers Google only, but the server
       // registers drivers for all five. Registered and tested server-side,
-      // unreachable from the product — a deliberate-looking gap, not an
+      // unreachable from the product, a deliberate-looking gap, not an
       // oversight, so it is recorded rather than deleted here.
       ['/api/auth/google/connect', 'server registers 5 providers; the login page offers Google only'],
       ['/api/auth/github/login', 'server registers 5 providers; the login page offers Google only'],
@@ -138,7 +138,7 @@ describe('docs describe routes that exist', () => {
 
 // D2Diagram.tsx and lib/conceptDisplay.ts were fully written, one had a test,
 // and neither had a single importer. A test that only its own module's test
-// imports is not coverage — it is a file that cannot fail in production.
+// imports is not coverage, it is a file that cannot fail in production.
 describe('no orphaned modules', () => {
   const roots = ['app', 'components', 'lib', 'hooks']
   const all: string[] = roots.flatMap(r => tsSources(join(APP, r)))
@@ -174,7 +174,7 @@ describe('no orphaned modules', () => {
       orphans,
       `modules no other file references:\n  ${orphans.join('\n  ')}\n` +
         'Delete them, or wire them up. A module only its own test imports is\n' +
-        'not covered — it cannot fail in production.',
+        'not covered, it cannot fail in production.',
     ).toEqual([])
   })
 })

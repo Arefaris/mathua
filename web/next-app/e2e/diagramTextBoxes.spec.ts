@@ -7,7 +7,7 @@ import { resolve } from 'node:path'
  *
  * An inline `<svg>` clips to its viewport, and every figure here is drawn to the pixel in its own
  * coordinate system: a label whose ink crosses `viewBox` loses its right-hand end on the page. Twelve
- * of the seventy local figures did, and each looked like a mistake rather than a crop — the place
+ * of the seventy local figures did, and each looked like a mistake rather than a crop, the place
  * value row read `1,247 = 1 thousand + 2 hundreds + 4 ten`, the resultant vector's `u+v` label sat at
  * x=410 in a 400-wide canvas, and a linear graph carried its `-4` tick 24px below a 300-tall one.
  *
@@ -19,7 +19,7 @@ import { resolve } from 'node:path'
  *
  * Only `source: local` assets are measured. The vendored set is Algebrica's, drawn on Algebrica's
  * canvases for a narrower face, and `docs/diagram-style.md` section 7 records the 43 of those whose
- * in-figure commentary is wider than the drawing — a separate decision, not ours to reflow here.
+ * in-figure commentary is wider than the drawing, a separate decision, not ours to reflow here.
  */
 
 const ROOT = resolve(__dirname, '../../..')

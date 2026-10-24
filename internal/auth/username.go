@@ -34,7 +34,7 @@ func randIndex(n int) int {
 }
 
 // GenerateUsername returns an adjective_nounNN handle (9–19 chars) that
-// always satisfies ValidateUsername. Uniqueness is NOT guaranteed — callers
+// always satisfies ValidateUsername. Uniqueness is NOT guaranteed, callers
 // must check FindByUsername and retry (see AssignUsername).
 func GenerateUsername() string {
 	adj := usernameAdjectives[randIndex(len(usernameAdjectives))]
@@ -42,7 +42,7 @@ func GenerateUsername() string {
 	num := 10 + randIndex(90)
 	name := adj + "_" + noun + fmt.Sprintf("%d", num)
 	if err := ValidateUsername(name); err != nil {
-		// Vocabulary bug — never ship a violating handle; fall back small.
+		// Vocabulary bug, never ship a violating handle; fall back small.
 		return "learner" + fmt.Sprintf("%d", 100+randIndex(900))
 	}
 	return name
@@ -51,7 +51,7 @@ func GenerateUsername() string {
 // AssignUsername gives an OAuth-created (usernameless) student a unique
 // random handle. Check-first with bounded retries; the collision window is
 // tiny and usernames carry no UNIQUE constraint, so worst case is a rare
-// duplicate — never a failed signup. Returns "" (and logs) when the repo
+// duplicate, never a failed signup. Returns "" (and logs) when the repo
 // errs, leaving the account usable exactly as before.
 func (a *AuthService) AssignUsername(studentID string) string {
 	for i := 0; i < 25; i++ {
@@ -75,7 +75,7 @@ func (a *AuthService) AssignUsername(studentID string) string {
 }
 
 // EnsureUsername assigns a random handle only when the student has none
-// (NULL or blank) — password accounts keep their chosen names.
+// (NULL or blank), password accounts keep their chosen names.
 func (a *AuthService) EnsureUsername(studentID string) string {
 	st, err := a.repo.GetStudent(studentID)
 	if err != nil || st == nil {
@@ -88,7 +88,7 @@ func (a *AuthService) EnsureUsername(studentID string) string {
 }
 
 // BackfillUsernames assigns random handles to every student missing one
-// (pre-random-username OAuth accounts). Idempotent — safe to run at boot.
+// (pre-random-username OAuth accounts). Idempotent, safe to run at boot.
 func (a *AuthService) BackfillUsernames() (int, error) {
 	ids, err := a.repo.ListStudentsMissingUsernames()
 	if err != nil {

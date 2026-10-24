@@ -14,7 +14,7 @@ export const DIAGNOSTIC_BRIEFING: BriefingItem[] = [
     detail: 'The test adapts to you. Clear answers mean fewer questions.',
   },
   {
-    title: 'Answer from what you know — no searching',
+    title: 'Answer from what you know, no searching',
     detail: 'Honest answers put you at the right starting point. Looked-up answers put you in the wrong place.',
   },
   {
@@ -52,7 +52,7 @@ export const REVIEW_BRIEFING: BriefingItem[] = [
     detail: 'Questions come from concepts whose memory is fading.',
   },
   {
-    title: 'Answer from what you remember — no searching',
+    title: 'Answer from what you remember, no searching',
     detail: 'Honest answers recalibrate your next review date.',
   },
   {

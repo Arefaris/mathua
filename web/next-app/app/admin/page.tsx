@@ -13,7 +13,7 @@ import { useAdminMe } from '../../hooks/useAdminMe'
 
 // The admin landing page answers one question: what needs attention right now.
 //
-// So the top of it is the moderation queue — outstanding reports — because that is the only
+// So the top of it is the moderation queue, outstanding reports, because that is the only
 // figure here that is a task rather than a fact. The rest are counts an operator can act on and
 // the recent trail, which is the answer to "what changed while I was away". Everything is read
 // live on each visit; nothing is precomputed, because a number that must be refreshed is a number

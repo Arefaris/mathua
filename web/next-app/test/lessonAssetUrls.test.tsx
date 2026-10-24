@@ -6,7 +6,7 @@ import KatexContent, { resolveLessonImageUrl } from '../components/KatexContent'
  * `/study` is the reference view: the whole lesson, figures in place.
  *
  * The lesson body is canonical and `/learn` selects figures out of it (see LessonAssets).
- * That split only holds if rendering the body still renders every figure in document order —
+ * That split only holds if rendering the body still renders every figure in document order, 
  * so these assert the reference surface directly rather than inferring it from `/learn`.
  */
 describe('reference lesson figures', () => {

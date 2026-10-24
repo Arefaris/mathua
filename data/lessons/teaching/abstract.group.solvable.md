@@ -1,6 +1,6 @@
 # Solvable Groups
 
-**Solvable group:** $G$ is solvable if it has a subnormal series down to 1 with abelian quotients — equivalently, the derived series $G \rhd G' \rhd G'' \rhd \cdots$ reaches 1. Solvability is what makes polynomials solvable by radicals.
+**Solvable group:** $G$ is solvable if it has a subnormal series down to 1 with abelian quotients, equivalently, the derived series $G \rhd G' \rhd G'' \rhd \cdots$ reaches 1. Solvability is what makes polynomials solvable by radicals.
 
 ## Worked: S_3 is solvable in two steps
 
@@ -16,7 +16,7 @@ So solvability is witnessed by an explicit short series, not an abstract propert
 Suppose $S_5$ had an abelian-quotient series:
 1. The only nontrivial proper normal subgroup of $S_5$ is $A_5$ (simplicity).
 2. Any series must pass through $A_5$, whose own only quotients are itself (non-abelian) and 1.
-3. No abelian quotient can appear: $S_5$ is not solvable — and this is why quintics resist radicals.
+3. No abelian quotient can appear: $S_5$ is not solvable and this is why quintics resist radicals.
 
 So simplicity blocks solvability: with nowhere abelian to step, the series cannot exist.
 

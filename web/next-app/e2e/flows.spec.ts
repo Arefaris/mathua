@@ -28,7 +28,7 @@ const KP = {
 //
 // This used to be a two-page test: open `/study?lesson=…`, read the worked examples, then click
 // "Start learning →" into `/learn` to be asked a question. That pairing was the bug, not the
-// test — a learner could read a concept instead of being taught it, and the app made the
+// test, a learner could read a concept instead of being taught it, and the app made the
 // reading feel like progress. Both halves now live on one page, so the test does too.
 async function stubLearn(page: import('@playwright/test').Page) {
   await page.route('**/api/lessons**', route => {
@@ -60,7 +60,7 @@ test('learn teaches, answers and awards XP on one page', async ({ page }) => {
   await page.goto('/learn?concept=arith.add.single')
   // Scoped to the intro's own KP label. The reference panel repeats the same knowledge-point
   // labels inside a collapsed `<details>`, and Playwright treats a `<summary>` in a closed
-  // `<details>` as hidden — so a page-wide `.first()` resolves to the panel's copy and fails for a
+  // `<details>` as hidden, so a page-wide `.first()` resolves to the panel's copy and fails for a
   // reason unrelated to what this test is about.
   const kpLabel = page.locator('p.font-mono.uppercase', { hasText: 'Use addition notation' })
   await expect(kpLabel.first()).toBeVisible({ timeout: 30_000 })
@@ -84,15 +84,15 @@ test('the reference material is on the learn page, and holds no way out of it', 
 
   // The worked example the library used to render as a whole article is here, behind a
   // disclosure, without leaving the page that asks the question.
-  const panel = page.getByText('Reference — the full lesson')
+  const panel = page.getByText('Reference, the full lesson')
   await expect(panel).toBeVisible({ timeout: 30_000 })
   await panel.click()
   await expect(page.getByText('Add 3+4').first()).toBeVisible()
 
   // The behavioural property, asserted in a real browser rather than by reading source: nothing
-  // inside the panel navigates. A link out of here — to another concept, to a library, anywhere
-  // — is the second learning path this closure exists to prevent.
-  const linksInPanel = await page.locator('details:has-text("Reference — the full lesson") a').all()
+  // inside the panel navigates. A link out of here, to another concept, to a library, anywhere
+  //, is the second learning path this closure exists to prevent.
+  const linksInPanel = await page.locator('details:has-text("Reference, the full lesson") a').all()
   expect(linksInPanel).toHaveLength(0)
 
   // And it says so itself: reading is not progress.
@@ -101,7 +101,7 @@ test('the reference material is on the learn page, and holds no way out of it', 
 
 test('/study renders a concept reference without losing the way into practice', async ({ page }) => {
   // ADR-054: `/study` is the reference and exploration surface. It renders the material for the
-  // concept in the URL — reachable even when that concept is locked — and offers a *separate*
+  // concept in the URL, reachable even when that concept is locked and offers a *separate*
   // control into the normal learning loop. It is not the old catalogue, and it awards nothing.
   await stubLearn(page)
   await page.goto('/study?concept=arith.add.single')
@@ -239,7 +239,7 @@ test('quiz reuse host at /goals?quiz=1 starts actionable quiz (guest unlimited r
   )
   await page.route('**/api/weaknesses**', route => route.fulfill({ json: { by_domain: {} } }))
   // time_limit_seconds is deliberately present. The quiz used to render a live countdown from
-  // it — "30s", ticking down, then "Time up (counts as slow)" — and the field is still sent by
+  // it, "30s", ticking down, then "Time up (counts as slow)" and the field is still sent by
   // the server because TimeLimitFor/accommodatedThreshold scale it for grading. Supplying it here
   // is what makes this test able to catch the countdown coming back: with the field absent the
   // old UI rendered nothing either, so the assertion below would pass either way.
@@ -262,7 +262,7 @@ test('quiz reuse host at /goals?quiz=1 starts actionable quiz (guest unlimited r
   // Time is measured, not shown. A countdown and a "Time up" warning made the clock the task:
   // it rewarded speed over reasoning and put a learner who thinks for 30 seconds into a visibly
   // failing state. elapsed_seconds still goes to the server, so slow classification, XP and
-  // analytics are unaffected — the learner is simply not told about any of it while answering.
+  // analytics are unaffected, the learner is simply not told about any of it while answering.
   const quizChrome = await page.locator('body').innerText()
   expect(quizChrome).not.toMatch(/Time up/)
   expect(quizChrome).not.toMatch(/\b\d+s\b/)

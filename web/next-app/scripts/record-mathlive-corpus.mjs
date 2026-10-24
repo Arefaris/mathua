@@ -6,7 +6,7 @@
 // that recording is produced, so the file can always be re-derived rather than
 // hand-edited into agreement with itself.
 //
-// It runs the real library in Chromium. It cannot run in jsdom — MathLive measures
+// It runs the real library in Chromium. It cannot run in jsdom, MathLive measures
 // text for real, and its `node` export condition resolves to the SSR build that
 // never registers `<math-field>`, which is why plain-text comes back empty there.
 //

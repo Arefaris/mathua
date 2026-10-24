@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/harmonic-series/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/harmonic-series/), CC BY-NC 4.0
 
 ## What is a harmonic series
 

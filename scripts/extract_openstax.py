@@ -300,7 +300,7 @@ def main():
             attribution = (
                 "> Content sourced from [OpenStax Prealgebra]"
                 "(https://openstax.org/books/prealgebra/pages/1-introduction) "
-                "by Marecek & Anthony-Smith — CC BY-NC-SA 4.0\n"
+                "by Marecek & Anthony-Smith, CC BY-NC-SA 4.0\n"
             )
             md = attribution + md
 

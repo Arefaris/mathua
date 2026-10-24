@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/limits/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/limits/), CC BY-NC 4.0
 
 ## Understanding limits in calculus
 

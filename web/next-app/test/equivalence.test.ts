@@ -3,7 +3,7 @@
 // These are not unit tests of a mock: Compute Engine is installed and imported
 // directly, because every assertion here is about its actual behaviour, including
 // the parts that are inconvenient. The four edge cases this file exists for were each
-// measured first and the measurement is what got asserted — see the note on each.
+// measured first and the measurement is what got asserted, see the note on each.
 
 import { describe, it, expect, beforeAll } from 'vitest'
 import { ComputeEngine } from '@cortex-js/compute-engine'
@@ -18,7 +18,7 @@ beforeAll(async () => {
   engine = e
 })
 
-describe('equivalence — the four edge cases', () => {
+describe('equivalence, the four edge cases', () => {
   it('implicit multiplication: 2x+3 is 2*x+3', () => {
     expect(equivalence(engine, '2x+3', '2*x+3')).toBe('equivalent')
     expect(equivalence(engine, '3(4+5)', '3*9')).toBe('equivalent')
@@ -26,7 +26,7 @@ describe('equivalence — the four edge cases', () => {
   })
 
   it('differently factored: (x+1)² is x²+2x+1', () => {
-    // `isEqual` alone returns `undefined` here — it compares values and cannot
+    // `isEqual` alone returns `undefined` here, it compares values and cannot
     // establish a symbolic identity. That is why the primitive uses
     // `isIdenticallyEqual` and falls back to canonical forms.
     expect(equivalence(engine, '(x+1)^2', 'x^2+2x+1')).toBe('equivalent')
@@ -86,7 +86,7 @@ describe('simplificationHint', () => {
 
   it('gives |x| for sqrt(x²), not x', () => {
     // The reason this uses a CAS at all. A regex would happily return `x`, which is
-    // wrong for every negative x — and this is the exact mistake a learner makes.
+    // wrong for every negative x and this is the exact mistake a learner makes.
     expect(simplificationHint(engine, '\\sqrt{x^2}')?.latex).toBe('|x|')
   })
 

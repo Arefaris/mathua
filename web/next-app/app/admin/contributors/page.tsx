@@ -157,7 +157,7 @@ function InviteForm({ assignable, onCreated }: { assignable: Role[]; onCreated: 
       {token && (
         <div className="mt-4 border border-mathua-green bg-mathua-code p-3">
           <p className="font-mono text-[11px] text-mathua-green">
-            Invitation for {token.email}. This link is shown once and never stored — send it to them now.
+            Invitation for {token.email}. This link is shown once and never stored, send it to them now.
           </p>
           <code className="mt-2 block break-all font-mono text-[11px] text-mathua-primary">/admin/invitations?token={token.token}</code>
         </div>

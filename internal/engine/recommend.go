@@ -130,7 +130,7 @@ func (e *Engine) SatisfyImplicitReviews(studentID string) error {
 
 // conceptSnapshots assembles the scheduler's view of a learner.
 //
-// This was written out three times — NextQuestion, NextReviewQuestion and the recommender —
+// This was written out three times, NextQuestion, NextReviewQuestion and the recommender,
 // which is how they came to disagree. The recommender in particular could not reuse either: it
 // needs the whole DAG including unseen concepts, and it needs to run outside a session.
 //
@@ -279,7 +279,7 @@ func (e *Engine) RecommendNext(studentID string, exclude []string) (scheduler.Re
 	quizDue, _ := e.QuizDue(studentID)
 
 	// How far along the learner is, in the two terms the recommender needs. Mastered is
-	// effective MASTERED — decay applied, so a stale concept has left the count rather than
+	// effective MASTERED, decay applied, so a stale concept has left the count rather than
 	// inflating it, and *not* "anything not unseen", which counted a concept the learner had
 	// merely started. Only the new-learner gate consumes this today and AttemptedDays already
 	// guarded it, so the miscount was unobservable; it is fixed because the field is named
@@ -370,11 +370,11 @@ func daysSinceReview(t *time.Time) float64 {
 // and handleDueReviews agree on that), so a recommendation pointing at /review would
 // contradict the pause the learner just set.
 //
-// It used to point at `/study` instead, with "Lessons are still open" — true when it was
+// It used to point at `/study` instead, with "Lessons are still open", true when it was
 // written, and a dead end once the library closed: a learner who opened the app on a break was
 // sent to a page that could only explain things they had already decided not to practise today.
 // `/settings` is where the pause and its end both live, so it is the one destination that can
-// actually answer "I am not doing reviews — now what".
+// actually answer "I am not doing reviews, now what".
 func (e *Engine) RecommendPaused(studentID string) scheduler.RecommendationResponse {
 	return scheduler.RecommendationResponse{
 		Primary: &scheduler.Recommendation{
@@ -383,7 +383,7 @@ func (e *Engine) RecommendPaused(studentID string) scheduler.RecommendationRespo
 			Reason: scheduler.ReasonNew,
 			Action: scheduler.Action{Type: scheduler.KindLearn, Href: "/settings"},
 			Badge:  "Paused",
-			Detail: "Reviews are on hold until you resume — due reviews are hidden while paused",
+			Detail: "Reviews are on hold until you resume, due reviews are hidden while paused",
 			CTA:    "Change or resume →",
 		},
 		Alternatives: []scheduler.Recommendation{},

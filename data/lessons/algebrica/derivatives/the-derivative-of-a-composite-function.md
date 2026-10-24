@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/the-derivative-of-a-composite-function/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/the-derivative-of-a-composite-function/), CC BY-NC 4.0
 
 ## The chain rule
 

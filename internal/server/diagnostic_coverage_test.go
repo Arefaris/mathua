@@ -68,13 +68,13 @@ func TestDiagnostic_AllConceptsGenerate(t *testing.T) {
 // meaning-phrasing ("What does X mean?", "describe…", "explain…") is
 // ungradeable under typed input: valid descriptions are unbounded
 // paraphrases. Such items must be rephrased to the graded granularity or
-// retired from test rotation — never shipped as-is.
+// retired from test rotation, never shipped as-is.
 //
 // NOTE: symbolic-graded meaning items (statistics/calculus "what does…"
 // probes) are a separate, larger backlog: production has no python3/sympy
 // (runtime is debian-slim), so gradeSymPy always returns incorrect there.
 // They need a grading strategy (bundle sympy, custom graders, or regrade),
-// not just rephrasing — tracked outside this lint.
+// not just rephrasing, tracked outside this lint.
 var meaningPhrasing = []string{"what does", "describe", "explain"}
 
 func TestDiagnostic_NoMeaningPhrasingWithExactGrading(t *testing.T) {
@@ -136,7 +136,7 @@ func postJSON(t *testing.T, mux *http.ServeMux, path, body string) (int, map[str
 }
 
 // Skipping settles the pending concept with no evidence and moves CAT to a
-// different question — the escape hatch for poisoned transitions.
+// different question, the escape hatch for poisoned transitions.
 func TestGoalDiagnosticSkip(t *testing.T) {
 	_, mux := twoConceptServer(t)
 
@@ -170,7 +170,7 @@ func TestGoalDiagnosticSkip(t *testing.T) {
 		t.Errorf("expected grading_type passthrough, got %v", skipped)
 	}
 
-	// Answering after a skip still works — progression intact.
+	// Answering after a skip still works, progression intact.
 	code, ans := postJSON(t, mux, "/api/goal/diagnostic/answer",
 		`{"session_id":"`+sid+`","concept_id":"`+nextCID+`","answer":"4","elapsed":5.0}`)
 	if code != 200 {
@@ -486,7 +486,7 @@ func TestGoalDiagnosticAnswer_MultipleChoiceLetterResolution(t *testing.T) {
 }
 
 // Admitted unknowns record clean negative evidence: incorrect, flagged,
-// progressed — and exempt from the too-quick floor (an instant admit is
+// progressed and exempt from the too-quick floor (an instant admit is
 // honesty, not spam).
 func TestGoalDiagnosticDontKnow(t *testing.T) {
 	s, mux := twoConceptServer(t)

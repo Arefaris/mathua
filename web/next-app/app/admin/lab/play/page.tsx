@@ -15,7 +15,7 @@ import LearnStepper from '../../../../components/LearnStepper'
 // This is the same component /learn?concept=... renders, not a mock-up of it, so
 // an operator can see what a learner sees: the knowledge points, the served
 // question, the field it gets and the feedback block. It is a real learning
-// session — answering here writes evidence — which is why the header says so.
+// session, answering here writes evidence, which is why the header says so.
 //
 // A concept whose prerequisites are unmet still shows the lock the learner would
 // see. That is not a limitation of the preview; it is the behaviour under test.

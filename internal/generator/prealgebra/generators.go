@@ -825,14 +825,14 @@ func (g *sciNotationGen) Grade(expected, userAnswer string) grader.Result {
 			return grader.Result{Correct: false, Score: 0, Feedback: "Type scientific notation like 3.7x10^4"}
 		}
 		if *eExp != *aExp || math.Abs(*eCoeff-*aCoeff) >= 1e-4 {
-			return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect — check the coefficient and the exponent"}
+			return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect, check the coefficient and the exponent"}
 		}
 		return grader.Result{Correct: true, Score: 1}
 	}
 	e, errE := strconv.ParseFloat(strings.TrimSpace(expected), 64)
 	a, errA := strconv.ParseFloat(strings.TrimSpace(userAnswer), 64)
 	if errE != nil || errA != nil || math.Abs(e-a) >= 1e-9 {
-		return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect — convert carefully"}
+		return grader.Result{Correct: false, Score: 0, Feedback: "Incorrect, convert carefully"}
 	}
 	return grader.Result{Correct: true, Score: 1}
 }
@@ -1040,7 +1040,7 @@ func (g *eqOneStepMultGen) Generate(ctx generator.GeneratorContext) generator.Pr
 
 // fmtNum renders a float without the binary-float noise %g exposes.
 // Scientific notation divides by powers of ten, so 4.4 / 10 came out as
-// 0.44000000000000006 — a served answer and an explanation quoting a number
+// 0.44000000000000006, a served answer and an explanation quoting a number
 // the learner never wrote. Twelve significant digits is well past any value
 // these generators produce and well short of the noise.
 func fmtNum(f float64) string {

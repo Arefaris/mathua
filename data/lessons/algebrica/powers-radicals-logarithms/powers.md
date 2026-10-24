@@ -24,12 +24,12 @@ The table below illustrates selected values of \(a^n\). Each row corresponds to 
 |:-----:|:--------------:|:--------------:|:--------------:|:--------------:|:--------------:|:---:|
 | \(-2\) | \( \dfrac{1}{4} \) | \( -\dfrac{1}{2} \) | 1 | \( -2 \) | 4 | ... |
 | \(-1\) | 1 | \( -1 \) | 1 | \( -1 \) | 1 | ... |
-| 0  | — | — | — | 0 | 0 | ... |
+| 0  |, |, |, | 0 | 0 | ... |
 | 1  | 1 | 1 | 1 | 1 | 1 | ... |
 | 2  | \( \dfrac{1}{4} \) | \( \dfrac{1}{2} \) | 1 | 2 | 4 | ... |
 | ...     | ... | ... | ... | ... | ... | ... |
 
-> The symbol — indicates that the expression is undefined: negative exponents of zero involve division by zero, and \(0^0\) is an indeterminate form.
+> The symbol, indicates that the expression is undefined: negative exponents of zero involve division by zero, and \(0^0\) is an indeterminate form.
 
 If the base \( a \) is negative, the sign of \( a^n \) alternates according to the parity of \( n \). For instance, \( (-1)^n = 1 \) when \( n \) is even, and \( (-1)^n = -1 \) when \( n \) is odd. This alternating behaviour is particularly significant in the analysis of sequences and limits. Additionally, negative bases with fractional exponents must be treated carefully, since expressions such as \( (-1)^{1/2} \) are not defined in \( \mathbb{R} \).
 

@@ -46,7 +46,7 @@ test('goals diagnostic: select domain → answer → results', async ({ page }) 
   await page.getByRole('button', { name: /Start diagnostic test/ }).click()
 
   await expect(page.getByText('Before you begin')).toBeVisible({ timeout: 20_000 })
-  await expect(page.getByText('Answer from what you know — no searching')).toBeVisible()
+  await expect(page.getByText('Answer from what you know, no searching')).toBeVisible()
   await page.getByRole('button', { name: 'Begin diagnostic →' }).click()
 
   await expect(page.getByText('2 + 3 = ?')).toBeVisible({ timeout: 20_000 })

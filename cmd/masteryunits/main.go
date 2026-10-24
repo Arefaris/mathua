@@ -10,7 +10,7 @@
 //	go run ./cmd/masteryunits -band 2
 //
 // There is no band-width constant in the package by design. The width is a draft parameter, it
-// is recorded in the JSON, and the validator reads it from there — so changing it is a
+// is recorded in the JSON, and the validator reads it from there, so changing it is a
 // regeneration rather than a code change, and a width nobody has chosen cannot hide in a
 // constant that reads like policy.
 package main
@@ -141,7 +141,7 @@ func writeReport(path string, dag *concepts.DAG, mu *concepts.MasteryUnits, find
 	w("below is *derived from the concept DAG*; it is not stored in the JSON.")
 	w("")
 	w("Rule: `%s`", mu.Rule)
-	w("Band width: **%d** — a draft parameter. The open question is how often a learner should be", mu.BandWidth)
+	w("Band width: **%d**, a draft parameter. The open question is how often a learner should be", mu.BandWidth)
 	w("assessed; `%d` is a candidate, not a decision. Regenerate with `-band 2` or `-band 4`.", mu.BandWidth)
 	w("")
 	w("## Size distribution")
@@ -219,7 +219,7 @@ func writeReport(path string, dag *concepts.DAG, mu *concepts.MasteryUnits, find
 			len(concepts.BackwardBandEdges(trial, dag)))
 	}
 	w("")
-	w("**No width is clean.** Small widths fragment — at %d there are %d singleton units, which is a", 3,
+	w("**No width is clean.** Small widths fragment, at %d there are %d singleton units, which is a", 3,
 		countWhere(sizes, func(v int) bool { return v == 1 }))
 	w("quiz per concept and is exactly what §12 rules out. Large widths stop fragmenting but produce")
 	w("units too large to assess: at 45 the partition is just the 17 domains themselves, whose")
@@ -238,12 +238,12 @@ func writeReport(path string, dag *concepts.DAG, mu *concepts.MasteryUnits, find
 	w("prerequisite of one in subdomain B whose other members depend on A.")
 	w("")
 	if len(unresolved) > 0 {
-		w("**%d of 125 subdomains cannot be levelled** — they sit inside a cycle, or downstream", len(unresolved))
+		w("**%d of 125 subdomains cannot be levelled**, they sit inside a cycle, or downstream", len(unresolved))
 		w("of one, so no depth function exists for them at all. (Tarjan puts 26 inside cycles and")
 		w("the remaining 34 behind them; Kahn cannot order either group, because ordering a node")
 		w("requires its predecessors to be ordered first.) An implementation that ignores this")
 		w("gets level 0 for all of them, which is a confidently wrong answer rather than a missing")
-		w("one — which is what the first Go version of this generator did.")
+		w("one, which is what the first Go version of this generator did.")
 		w("")
 		w("Unresolvable subdomains:")
 		w("")

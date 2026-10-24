@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 4.3 Multiply and Divide Mixed Numbers and Complex Fractions
 
@@ -320,7 +320,7 @@ Which of the following fractions are equivalent to $- \frac{2}{7}?$
 
 $\frac{-2}{-7},\frac{-2}{7},\frac{2}{7},\frac{2}{-7}$
 
-Fraction bars act as grouping symbols. The expressions above and below the fraction bar should be treated as if they were in parentheses. For example, $\frac{4 + 8}{5 - 3}$ means $(4 + 8) \div (5 - 3).$ The order of operations tells us to simplify the numerator and the denominator first—as if there were parentheses—before we divide.
+Fraction bars act as grouping symbols. The expressions above and below the fraction bar should be treated as if they were in parentheses. For example, $\frac{4 + 8}{5 - 3}$ means $(4 + 8) \div (5 - 3).$ The order of operations tells us to simplify the numerator and the denominator first, as if there were parentheses, before we divide.
 
 We’ll add fraction bars to our set of grouping symbols from Use the Language of Algebra to have a more complete set here.
 

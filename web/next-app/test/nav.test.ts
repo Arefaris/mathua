@@ -6,7 +6,7 @@ import { desktopLinks, overflowLinks, TAB_HREFS, LEARN_LINKS, ADMIN_LINKS } from
 // second way to approach the same mathematics.
 //
 // The one that used to fail here is the reference library. `/study` was a peer of Learn in
-// every navigation surface, which made reading look like an alternative to being taught — and
+// every navigation surface, which made reading look like an alternative to being taught and
 // reading is not evidence, so a learner who found it had found a way around the only thing that
 // counts. It is closed; its material lives inside `/learn` as a reference panel.
 describe('navigation order', () => {
@@ -111,7 +111,7 @@ describe('the Admin entry reaches mobile', () => {
 
 // The mathematical glossary is a standalone reference: it grades nothing, tracks nothing
 // and gates nothing, so it sits with the orientation surfaces (header + compass overflow)
-// rather than beside Learn — and it is not a bottom tab, so the tab bar stays at five.
+// rather than beside Learn and it is not a bottom tab, so the tab bar stays at five.
 describe('the glossary is an orientation surface', () => {
   it('appears in the desktop header for guests and learners', () => {
     expect(desktopLinks(false).map(l => l.href)).toContain('/glossary')

@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 6.5 Solve Proportions and their Applications
 
@@ -249,7 +249,7 @@ Solve the proportion: $\frac{-7}{y} = \frac{105}{135}.$
 
 ### Solve Applications Using Proportions
 
-The strategy for solving applications that we have used earlier in this chapter, also works for proportions, since proportions are equations. When we set up the proportion, we must make sure the units are correct—the units in the numerators match and the units in the denominators match.
+The strategy for solving applications that we have used earlier in this chapter, also works for proportions, since proportions are equations. When we set up the proportion, we must make sure the units are correct, the units in the numerators match and the units in the denominators match.
 
 ### Example 6.45
 
@@ -263,7 +263,7 @@ When pediatricians prescribe acetaminophen to children, they prescribe 5 millili
 | Choose a variable to represent it. | Let $a =$ ml of acetaminophen. |
 | Write a sentence that gives the information to find it. | If 5 ml is prescribed for every 25 pounds, how much will be prescribed for 80 pounds? |
 | Translate into a proportion. |  |
-| Substitute given values—be careful of the units. |  |
+| Substitute given values, be careful of the units. |  |
 | Multiply both sides by 80. |  |
 | Multiply and show common factors. |  |
 | Simplify. |  |

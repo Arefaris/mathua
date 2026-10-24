@@ -1,6 +1,6 @@
 # Contributing to Mathua
 
-Mathua is community-built. Someone added every concept, every generator and every line of the concept graph. They wanted to help others learn math better. The most useful thing you can contribute is a new concept — and it takes exactly three pieces.
+Mathua is community-built. Someone added every concept, every generator and every line of the concept graph. They wanted to help others learn math better. The most useful thing you can contribute is a new concept and it takes exactly three pieces.
 
 ## Quick start
 
@@ -41,16 +41,16 @@ CI runs both engines. A method that behaves differently on Postgres fails the `S
 
 The concept graph lives in per-domain files under `data/concepts/`. Generators live in `internal/generator/`. Here are the kinds of contributions that move the needle:
 
-- New concepts — the single most impactful thing you can add. A pinned SymPy service checks equivalence for `polynomial`, `expression`, `symbolic` and `complex` grading. The service is `grading/sympy_service.py`, and its version is in `grading/requirements.txt`. The production image ships it. There is no pure-Go equivalence fallback. Run `go test ./...` and the grader tests with SymPy installed.
-- New generators — make existing or new concepts produce better problems.
+- New concepts, the single most impactful thing you can add. A pinned SymPy service checks equivalence for `polynomial`, `expression`, `symbolic` and `complex` grading. The service is `grading/sympy_service.py`, and its version is in `grading/requirements.txt`. The production image ships it. There is no pure-Go equivalence fallback. Run `go test ./...` and the grader tests with SymPy installed.
+- New generators, make existing or new concepts produce better problems.
 - Bug fixes in the scheduling engine or graders.
 - Documentation and diagram improvements.
 
-## Adding a concept — the 3-step summary
+## Adding a concept, the 3-step summary
 
 ### 1. Define a new concept
 
-Concepts live in per-domain files under `data/concepts/`. Each file is a JSON array — add your new concept as a new entry in the array for the matching domain:
+Concepts live in per-domain files under `data/concepts/`. Each file is a JSON array, add your new concept as a new entry in the array for the matching domain:
 
 ```json
 [
@@ -73,7 +73,7 @@ Concepts live in per-domain files under `data/concepts/`. Each file is a JSON ar
 
 Valid `grading_type` values: `numeric`, `polynomial`, `expression`, `multiple_choice`, `comparison`, `ordering`, `tuple`, `complex`, `symbolic` (9 total, `internal/concepts/loader.go:297`).
 
-> The prerequisites list is the most important field. What must a student absolutely know before attempting this? If in doubt, add the prerequisite — the graph validator will catch cycles.
+> The prerequisites list is the most important field. What must a student absolutely know before attempting this? If in doubt, add the prerequisite, the graph validator will catch cycles.
 
 ### 2. Teach Mathua to ask questions
 
@@ -101,7 +101,7 @@ func (g *AddSingleGen) Generate(ctx generator.GeneratorContext) generator.Proble
 ```
 
 - Use `ctx.Difficulty` (0.0 trivial → 1.0 challenging) to scale operand sizes.
-- Always return an `Explanation` — shown when a student asks to see the solution.
+- Always return an `Explanation`, shown when a student asks to see the solution.
 - Use the global `math/rand`, seeded per request (`Registry.GenerateContext` in `internal/generator/registry.go`). Do not hardcode problems. `ctx.Seed` is deterministic: `hashSeed(student|cid|attemptID)` (`internal/engine/engine.go`). Do not use `UnixNano`.
 
 ### 3. Prove it works
@@ -121,7 +121,7 @@ func TestAddSingleGen(t *testing.T) {
 }
 ```
 
-Run your tests before opening a PR (1000 local, 100 lightweight in CI `ci.yml:27` for speed — `make fuzz` is 1000):
+Run your tests before opening a PR (1000 local, 100 lightweight in CI `ci.yml:27` for speed, `make fuzz` is 1000):
 
 ```bash
 go test ./... -count 1
@@ -201,7 +201,7 @@ make e2e-diagnosis
 
 ### 4. (Optional) Write a lesson
 
-Mathua includes a built-in lesson system. Each concept can have an associated lesson — a markdown file that teaches the material. Lessons live under `data/lessons/` and are registered in `data/lessons/lessons.json`, which maps concept IDs to file paths:
+Mathua includes a built-in lesson system. Each concept can have an associated lesson, a markdown file that teaches the material. Lessons live under `data/lessons/` and are registered in `data/lessons/lessons.json`, which maps concept IDs to file paths:
 
 ```json
   { "concept_id": "calc.deriv.power_rule", "source": "advanced/polynomials/polynomials.md" }
@@ -211,7 +211,7 @@ Multiple concepts can share a single lesson file. Lesson content is written in M
 
 ### 5. (Recommended) Add knowledge-point shards
 
-Every lesson is broken into exactly 3 **knowledge points** (KPs), each a subgoal-labeled worked example — the Math Academy scaffolding pattern. A KP shard for a concept is a JSON file at `data/lessons/kp/<concept_id>.json`:
+Every lesson is broken into exactly 3 **knowledge points** (KPs), each a subgoal-labeled worked example, the Math Academy scaffolding pattern. A KP shard for a concept is a JSON file at `data/lessons/kp/<concept_id>.json`:
 
 ```json
 [
@@ -230,14 +230,14 @@ Every lesson is broken into exactly 3 **knowledge points** (KPs), each a subgoal
 - `section` names a heading **inside the lesson body** that serves as the worked example. It must match a heading exactly. Do not leave it empty. Since ADR-045, an empty `section` gives the learner a short placeholder that points at Study. It does not show the lesson body.
 - `subgoals` are short labels shown before practice (subgoal-labeling effect). Keep 3 per KP.
 - Every concept has exactly **3 KPs**. All 1250 shards in the corpus do, and `scripts/check_docs.py` fails if a shard has a different count.
-- `scripts/gen_kp_shards.py` generates shard files from an inline spec and validates every section reference against the corpus — add your spec entries there and run `python3 scripts/gen_kp_shards.py <domain-prefix>`.
+- `scripts/gen_kp_shards.py` generates shard files from an inline spec and validates every section reference against the corpus, add your spec entries there and run `python3 scripts/gen_kp_shards.py <domain-prefix>`.
 
 ## The graph validator
 
 A validator runs on every pull request. It checks invariants before any merge can happen:
 
-1. **No cycles** — including `prerequisites` + `encompasses` edges (`internal/concepts/loader.go` Kahn’s)
-2. **No orphans** — every `prerequisites`/`encompasses`/`key_prerequisites` must exist (`internal/concepts/loader.go`)
+1. **No cycles**, including `prerequisites` + `encompasses` edges (`internal/concepts/loader.go` Kahn’s)
+2. **No orphans**, every `prerequisites`/`encompasses`/`key_prerequisites` must exist (`internal/concepts/loader.go`)
 3. **No dup IDs, no empty label/domain, valid `mastery_threshold`** (`internal/concepts/loader.go`)
 4. **No singleton `interference_group`** (`internal/concepts/loader.go`), valid `grading_type` enum (9 values `internal/concepts/loader.go`), `variants` `0.1–1.0` difficulty
 
@@ -261,7 +261,7 @@ A second audit guards the lesson corpus (`python3 scripts/audit_lessons.py:191`)
 4. (Optional) Write a lesson and register it in `data/lessons/lessons.json`.
 5. (Recommended) Add KP shards under `data/lessons/kp/`.
 6. Run `go test ./...`, `go run scripts/validate_graph.go` and `python3 scripts/audit_lessons.py` locally.
-7. Content waves change the corpus size — run `python3 scripts/counts.py --write` to refresh the counts in the docs (CI runs `--check` and fails on drift).
+7. Content waves change the corpus size, run `python3 scripts/counts.py --write` to refresh the counts in the docs (CI runs `--check` and fails on drift).
 7. Open a PR. The CI pipeline runs the validator and all tests automatically.
 8. A maintainer reviews the concept ordering, thresholds and generator quality.
 

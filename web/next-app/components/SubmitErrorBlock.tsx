@@ -61,7 +61,7 @@ export default function SubmitErrorBlock({
     >
       <p className="font-mono text-xs text-mathua-red">
         {sessionGone
-          ? 'Session expired — the server restarted and forgot this run.'
+          ? 'Session expired, the server restarted and forgot this run.'
           : failureHeadline(failure)}
       </p>
       <p className="mt-1 font-mono text-[11px] text-mathua-muted break-words [overflow-wrap:anywhere]">
@@ -97,7 +97,7 @@ export default function SubmitErrorBlock({
       </div>
       {!sessionGone && skipsExhausted && (
         <p className="mt-2 font-mono text-[10px] text-mathua-muted">
-          No skips left — restart for a fresh run.
+          No skips left, restart for a fresh run.
         </p>
       )}
     </div>

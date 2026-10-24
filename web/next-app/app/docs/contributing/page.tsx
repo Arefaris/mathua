@@ -122,7 +122,7 @@ export default function ContributingPage() {
   return (
     <div className="max-w-container mx-auto px-4 sm:px-6 pb-[calc(80px+env(safe-area-inset-bottom))] lg:pb-0 overflow-x-hidden min-w-0">
       {/* Back link, matching /docs and /docs/efficacy. These two siblings had none, so the
-          docs index linked into pages with no way out — the same dead end /profile had on
+          docs index linked into pages with no way out, the same dead end /profile had on
           mobile, found by the guard in test/navCoverage.test.ts rather than by a learner. */}
       <Link
         href="/docs"
@@ -499,7 +499,7 @@ func (g *AddSingleGen) Generate(ctx generator.GeneratorContext) generator.Proble
           'API calls go through lib/api.ts. Auth headers come from lib/auth.ts (JWT in localStorage).',
           'Use the motion-safe animation classes for transitions (fadeIn, ascii-reveal). Avoid heavy animation libraries.',
           'Profile pages, heatmaps and stats components consume data from GET /api/activity, /api/scores and /api/weaknesses.',
-          'UI primitives live in components/ui/ (Radix/shadcn: sidebar, sheet, button, switch, tooltip — used by AppSidebar on Profile), plus React Flow for diagrams and sonner for toasts. Icons come from `components/icons`, which wraps `@animateicons/react` (the animated lucide set) so size and theme colour are set in one place. Reuse these — do not add new UI kits or import an icon library directly.',
+          'UI primitives live in components/ui/ (Radix/shadcn: sidebar, sheet, button, switch, tooltip, used by AppSidebar on Profile), plus React Flow for diagrams and sonner for toasts. Icons come from `components/icons`, which wraps `@animateicons/react` (the animated lucide set) so size and theme colour are set in one place. Reuse these, do not add new UI kits or import an icon library directly.',
         ].map((rule) => (
           <div key={rule} style={{ ...bodyStyle, marginBottom: '0.4rem' }}>
             <span style={{ color: 'var(--border-strong)', marginRight: '0.25rem', fontFamily: monoFont }}>·</span>

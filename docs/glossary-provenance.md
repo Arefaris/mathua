@@ -1,7 +1,7 @@
 # Glossary provenance and audit log
 
 This is the evidence behind the glossary's source attributions. [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) states
-each license obligation; this file records the work that established it — which page was opened,
+each license obligation; this file records the work that established it, which page was opened,
 what was verified there, and what was corrected as a result. Keep it: an obligation whose audit
 trail is gone cannot be defended or re-verified.
 
@@ -68,7 +68,7 @@ open source this run), trace-class/Hilbert–Schmidt operators
 - Opened the LibreTexts Fowler function-spaces page: confirms the
   mathematician's definition (inner-product spaces of normalizable
   functions where convergent sequences have limits). Page license is
-  NOT declared, so the entry records exactly that — consultation only,
+  NOT declared, so the entry records exactly that, consultation only,
   no reuse claim.
 - Completeness framing cross-checked against UBC metric-completeness
   excerpts and a CalPoly Hilbert-space thesis (search excerpts, recorded
@@ -84,7 +84,7 @@ per-area inventories, entry mapping, and honest statuses (20
 verified_complete relative to their documented inventories; 1
 gaps_remaining). Existing 229 audited automatically (no dup names, no
 same-category dup symbols, all readings present and prefix-free,
-definitions substantive, categories valid) — shared-symbol pairs are all
+definitions substantive, categories valid), shared-symbol pairs are all
 legitimate cross-category distinctions. 51 new entries in 4 batches, every
 example hand-recomputed, every exact claim checked against an opened source
 or a documented derivation.
@@ -117,7 +117,7 @@ or a documented derivation.
 - sigma-algebra, hilbert-space: no openly-licensed reference verifiable in
   this run; graduate texts not openly fetchable. Ledger gaps_remaining.
 - Big-Theta/Omega note: DADS Ω definition is stronger (for-all-large-n)
-  than some textbooks' infinitely-often version — recorded in the entry.
+  than some textbooks' infinitely-often version, recorded in the entry.
 
 ## Coverage batch 2 (26 new entries, 203 → 229)
 
@@ -216,7 +216,7 @@ Playwright spec; the ledger distinguishes the two.
   p-hat 0.6, y-hat 14, p = 0.03 decision) recomputed by hand: all correct.
 
 ### Findings and changes
-- `normal-distribution`: added a convention note — probability theory
+- `normal-distribution`: added a convention note, probability theory
   writes N(mu, sigma-squared) with the variance, while OpenStax and some
   texts write N(mu, sigma) with the standard deviation. The entry previously
   presented one convention as universal.
@@ -292,17 +292,17 @@ Playwright spec; the ledger distinguishes the two.
   correction (was "partial regression coefficient").
 
 ### Findings and changes
-- `beta`: claimed lowercase beta denotes "the beta function" — wrong, that is
+- `beta`: claimed lowercase beta denotes "the beta function", wrong, that is
   capital B. Reworded to regression coefficients / beta-distribution shape.
   Related link `beta-function` replaced with `regression-note`.
-- `eta`: "partial regression coefficient" unverified — replaced with
+- `eta`: "partial regression coefficient" unverified, replaced with
   correlation ratio (eta), verified above.
-- `lambda`: "uppercase Lambda is used in logic and set theory" unverified —
+- `lambda`: "uppercase Lambda is used in logic and set theory" unverified, 
   replaced with von Mangoldt function (number theory), verified above.
-- `tau`: presented the tau proposal as standard usage — qualified as a
+- `tau`: presented the tau proposal as standard usage, qualified as a
   proposal; mainstream uses pi. Example explanation qualified.
-- `upsilon`: overstated mathematical use — corrected to rarely used.
-- `alpha`: "root of an equation" is unusual — replaced with regression
+- `upsilon`: overstated mathematical use, corrected to rarely used.
+- `alpha`: "root of an equation" is unusual, replaced with regression
   intercept / significance level.
 - `power`: x^{-1} = 1/x now states nonzero x.
 - `nth-root`: x^{1/n} now states the domain qualification.

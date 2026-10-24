@@ -6,7 +6,7 @@ import { join } from 'node:path'
 // tabs is a navigation dead end: the learner arrives there and cannot reach anything else.
 //
 // This exists because /profile lost both. Commit fb5bde0a replaced its Header and BottomTabs
-// with a shadcn sidebar shell, and the shell is desktop-only — shadcn renders it as an overlay
+// with a shadcn sidebar shell, and the shell is desktop-only, shadcn renders it as an overlay
 // Sheet below lg, and the rail only collapses behind a trigger that had to be summoned. So on a
 // phone, tapping Profile in the tab bar of any other page arrived at a page with no way back,
 // which is what was reported. Three of that page's six return branches rendered no chrome at
@@ -29,7 +29,7 @@ const REDIRECT_STUBS = new Set(['concept', 'session', 'study'])
 
 /**
  * The invariant is "a learner can get off this page", not "this page renders one of two
- * components". A long-form docs surface can satisfy it with a single back link — /docs and
+ * components". A long-form docs surface can satisfy it with a single back link, /docs and
  * /docs/efficacy both do, and both are deliberately narrower than the app shell, so demanding a
  * tab bar of them would be imposing the wrong shape. Three ways out count: app chrome, a
  * redirect, or a back link. `←` is the project's documented back-link glyph (AGENTS.md allows
@@ -107,8 +107,8 @@ describe('theme switching is reachable where it is needed', () => {
   })
 
   it('keeps a theme control in the Header', () => {
-    // Header is not the only place a theme control lives any more — the profile sidebar has one
-    // too — but Header is rendered by most routes, so if it loses the control, most of the app
+    // Header is not the only place a theme control lives any more, the profile sidebar has one
+    // too, but Header is rendered by most routes, so if it loses the control, most of the app
     // silently loses light/dark with it. That is the same class of regression as the navigation
     // hole above: valid code, no error, a capability gone.
     const header = readFileSync(join(process.cwd(), 'components/Header.tsx'), 'utf8')

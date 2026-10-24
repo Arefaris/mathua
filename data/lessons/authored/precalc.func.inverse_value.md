@@ -44,6 +44,6 @@ Domain and range trade places across the pair, so the swap is worth stating sepa
 
 \[\operatorname{dom}(f^{-1}) = \operatorname{range}(f), \qquad \operatorname{range}(f^{-1}) = \operatorname{dom}(f).\]
 
-For \(f(x)=x^2\) with domain \([0,\infty)\), the range is \([0,\infty)\) and \(f^{-1}(y)=\sqrt{y}\) has the same interval as its domain — the symmetry is a coincidence of this example, not a rule. For \(f(x)=e^{x}\), the domain is \(\mathbb{R}\) and the range is \((0,\infty)\), so the inverse \(\ln y\) has domain \((0,\infty)\) and range \(\mathbb{R}\).
+For \(f(x)=x^2\) with domain \([0,\infty)\), the range is \([0,\infty)\) and \(f^{-1}(y)=\sqrt{y}\) has the same interval as its domain, the symmetry is a coincidence of this example, not a rule. For \(f(x)=e^{x}\), the domain is \(\mathbb{R}\) and the range is \((0,\infty)\), so the inverse \(\ln y\) has domain \((0,\infty)\) and range \(\mathbb{R}\).
 
-One sufficient condition is worth carrying: a strictly increasing function is one-to-one, so it has an inverse on its range, and the same holds for strictly decreasing. That covers every example above without drawing a line. It does not cover every invertible function — \(f(x)=1/x\) is decreasing on each side of zero separately — so the horizontal line test remains the general statement.
+One sufficient condition is worth carrying: a strictly increasing function is one-to-one, so it has an inverse on its range, and the same holds for strictly decreasing. That covers every example above without drawing a line. It does not cover every invertible function, \(f(x)=1/x\) is decreasing on each side of zero separately, so the horizontal line test remains the general statement.

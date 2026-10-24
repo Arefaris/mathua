@@ -15,8 +15,8 @@ import (
 // This type is the answer to a question that used to be answered twice and disagreed: "what
 // should this learner do next?". Until now the client recomputed the whole decision in
 // `lib/nextUp.ts` from five API calls plus a bundled copy of the corpus, while
-// `internal/scheduler` — which holds the eligibility rules, the decay rule and the priority
-// weights — was unreachable from `/learn` and `/profile`. The two had already drifted: the
+// `internal/scheduler`, which holds the eligibility rules, the decay rule and the priority
+// weights, was unreachable from `/learn` and `/profile`. The two had already drifted: the
 // client still halved review XP, a rule ADR-020 removed from the server, and it ranked by
 // weakness-then-concept-id while the server ranked by a weighted score. So the engine answers
 // once, here, and both surfaces render it.
@@ -40,7 +40,7 @@ const (
 )
 
 // Reason is why the task was chosen, in language a learner can act on. None of these name the
-// graph, the frontier or the scheduler: "frontier concept — learn it next" told a learner
+// graph, the frontier or the scheduler: "frontier concept, learn it next" told a learner
 // nothing they could do, where "new · ready to learn" tells them what pressing the button
 // will start.
 type Reason string
@@ -123,10 +123,10 @@ type RecommendInput struct {
 	// DiagnosticCompleted is the server's own record that placement has happened. A
 	// learner who has completed the diagnostic is never offered it again, even if the
 	// diagnostic's seeded rows leave them with zero mastered concepts and no attempted
-	// day — which is exactly what placement does, because it seeds reachability rather
+	// day, which is exactly what placement does, because it seeds reachability rather
 	// than mastery. Without this, a finished diagnostic reappeared as the active task.
 	DiagnosticCompleted bool
-	// ExcludeConceptIds drops concepts already shown — the finished concept must not be offered
+	// ExcludeConceptIds drops concepts already shown, the finished concept must not be offered
 	// back as the next thing to learn.
 	ExcludeConceptIds []string
 
@@ -164,7 +164,7 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 	resp := RecommendationResponse{Alternatives: []Recommendation{}, GeneratedAt: now}
 
 	// A learner with nothing behind them cannot be recommended a concept, because no concept
-	// has been shown to be learnable for them. The diagnostic is the honest answer — but only
+	// has been shown to be learnable for them. The diagnostic is the honest answer, but only
 	// once. A completed diagnostic is placement, not an active task, so the gate excludes it.
 	if !in.DiagnosticCompleted && in.ConceptsMastered == 0 && in.AttemptedDays == 0 {
 		resp.Primary = &Recommendation{
@@ -246,7 +246,7 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 	}
 
 	// The XP gate is a task, not a banner. It becomes the head when it is the most valuable
-	// thing available, and an alternative otherwise — the point of surfacing it here is that a
+	// thing available, and an alternative otherwise, the point of surfacing it here is that a
 	// learner is told why taking it helps.
 	if in.QuizDue {
 		mc := Recommendation{
@@ -255,7 +255,7 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 			Reason:   ReasonMasteryReady,
 			Action:   Action{Type: KindMasteryCheck, Href: "/goals?quiz=1"},
 			Badge:    "Mastery check",
-			Detail:   fmt.Sprintf("You have earned %d XP since your last one — take it to lock in what you have learned", xp.QuizGateXP),
+			Detail:   fmt.Sprintf("You have earned %d XP since your last one, take it to lock in what you have learned", xp.QuizGateXP),
 			CTA:      "Take the check →",
 			Priority: 100,
 		}
@@ -275,11 +275,11 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 	if resp.Primary == nil {
 		// Nothing is eligible: nothing new is reachable, nothing is due for review, nothing
 		// needs practice. That is a real state, and it used to be reported by pointing at
-		// `/study` — "everything available is already learned, the reference library is open".
+		// `/study`, "everything available is already learned, the reference library is open".
 		//
 		// The library is closed. It was also the wrong answer while it existed: a learner with
 		// nothing due was told to go and read, which is the one thing that cannot help them.
-		// Orientation is the honest next surface — it makes no claim about progress, it cannot
+		// Orientation is the honest next surface, it makes no claim about progress, it cannot
 		// 401, and it shows what builds on what they already hold.
 		resp.Primary = &Recommendation{
 			ID:     "graph",
@@ -287,7 +287,7 @@ func (s *Scheduler) Recommend(in RecommendInput) RecommendationResponse {
 			Reason: ReasonNew,
 			Action: Action{Type: KindLearn, Href: "/graph"},
 			Badge:  "All learned",
-			Detail: "Nothing is due right now — the graph shows what builds on what you have",
+			Detail: "Nothing is due right now, the graph shows what builds on what you have",
 			CTA:    "See the graph →",
 		}
 	}
@@ -446,12 +446,12 @@ func (s *Scheduler) render(c *concepts.Concept, kind Kind, reason Reason, priori
 			r.CTA = "Review prerequisite →"
 		} else {
 			r.Badge = "Practice"
-			r.Detail = "Worth another go — this one has not stuck yet"
+			r.Detail = "Worth another go, this one has not stuck yet"
 			r.CTA = "Keep practicing →"
 		}
 	default:
 		r.Badge = "New"
-		r.Detail = "Ready to learn — everything it needs, you have done"
+		r.Detail = "Ready to learn, everything it needs, you have done"
 		r.CTA = "Start →"
 	}
 	return r

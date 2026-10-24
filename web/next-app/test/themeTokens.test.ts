@@ -6,14 +6,14 @@ import path from 'node:path'
 // in this Tailwind build (verified against the emitted bundle: zero
 // color-mix, zero mathua-*/N rules), so `border-mathua-blue/50` renders
 // currentColor instead of blue. Theme fills and translucent borders therefore
-// use explicit `color-mix` tokens — `mathua-blue-faint`, `mathua-green-faint`,
-// `mathua-red-faint` — and accents use solid tokens.
+// use explicit `color-mix` tokens, `mathua-blue-faint`, `mathua-green-faint`,
+// `mathua-red-faint` and accents use solid tokens.
 //
 // Re-verified rather than trusted: emitting the Tailwind output for
 // `border-mathua-green/40`, `border-mathua-green`, `border-green-500/40` and
 // `border-mathua-green-faint` produced rules for the second and third only. The
 // `/40` on a token class emits *nothing at all*, so it is not a wrong colour, it
-// is no declaration — which is why replacing `border-green-500/40` with
+// is no declaration, which is why replacing `border-green-500/40` with
 // `border-mathua-green/40` would have looked like it worked.
 const DEAD_TOKEN_RE =
   /(?:border|bg|text|ring|divide|from|via|to|outline|decoration)-mathua-[a-z-]*\/\d+/g

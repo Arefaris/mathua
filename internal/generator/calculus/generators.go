@@ -1289,7 +1289,7 @@ func (g *nonDiffGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 		{"Is f(x)=x^(1/3) differentiable at x=0?", "no", "f'(x)=1/(3x^(2/3)) → ∞ as x→0, so the derivative does not exist (vertical tangent)."},
 		{"Is f(x)=√|x| differentiable at x=0?", "no", "√|x| has a cusp at x=0: the derivative approaches ±∞ from each side."},
 		{"Name one way a function can fail to be differentiable.", "corner/cusp/vertical tangent/discontinuity", "Functions can fail to be differentiable at corners (|x|), cusps (√|x|), vertical tangents (x^(1/3)), or points of discontinuity."},
-		{"If a function is differentiable at x=c, is it necessarily continuous at x=c?", "yes", "Differentiability implies continuity. But the converse is not true — continuity does not imply differentiability."},
+		{"If a function is differentiable at x=c, is it necessarily continuous at x=c?", "yes", "Differentiability implies continuity. But the converse is not true, continuity does not imply differentiability."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1532,12 +1532,12 @@ func (g *indeterminateGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		q, a, e string
 	}
 	table := []entry{
-		{"Is \\(0/0\\) an indeterminate form?", "yes", "\\(0/0\\) is indeterminate — the limit could be any real number depending on the functions."},
-		{"Is \\(\\infty/\\infty\\) an indeterminate form?", "yes", "\\(\\infty/\\infty\\) is indeterminate — the ratio of functions both approaching infinity could converge to anything."},
-		{"Is \\(0 \\cdot \\infty\\) an indeterminate form?", "yes", "\\(0 \\cdot \\infty\\) is indeterminate — it can be rewritten as \\(0/0\\) or \\(\\infty/\\infty\\)."},
-		{"Is \\(\\infty - \\infty\\) an indeterminate form?", "yes", "\\(\\infty - \\infty\\) is indeterminate — the difference of two quantities approaching infinity could be anything."},
+		{"Is \\(0/0\\) an indeterminate form?", "yes", "\\(0/0\\) is indeterminate, the limit could be any real number depending on the functions."},
+		{"Is \\(\\infty/\\infty\\) an indeterminate form?", "yes", "\\(\\infty/\\infty\\) is indeterminate, the ratio of functions both approaching infinity could converge to anything."},
+		{"Is \\(0 \\cdot \\infty\\) an indeterminate form?", "yes", "\\(0 \\cdot \\infty\\) is indeterminate, it can be rewritten as \\(0/0\\) or \\(\\infty/\\infty\\)."},
+		{"Is \\(\\infty - \\infty\\) an indeterminate form?", "yes", "\\(\\infty - \\infty\\) is indeterminate, the difference of two quantities approaching infinity could be anything."},
 		{"Is \\(0^{\\infty}\\) an indeterminate form?", "no", "\\(0^{\\infty} = 0\\). If the base approaches 0 and the exponent approaches \\(\\infty\\), the result is 0 (not indeterminate)."},
-		{"Is \\(1^{\\infty}\\) an indeterminate form?", "yes", "\\(1^{\\infty}\\) is indeterminate — it often arises with exponential limits and can approach \\(e\\), 1, or other values."},
+		{"Is \\(1^{\\infty}\\) an indeterminate form?", "yes", "\\(1^{\\infty}\\) is indeterminate, it often arises with exponential limits and can approach \\(e\\), 1, or other values."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1571,7 +1571,7 @@ func (g *bigOGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		{"Is x²=O(x³) as x→∞?", "yes", "x² ≤ 1·x³ for x≥1, so x²=O(x³)."},
 		{"Is x³=O(x²) as x→∞?", "no", "x³/x² = x → ∞, so no constant M can bound x³ by x² for all large x."},
 		{"Is sin(x)=O(1) as x→∞?", "yes", "|sin(x)| ≤ 1, so sin(x)=O(1). In fact, any bounded function is O(1)."},
-		{"What is the big-O notation primarily used for?", "describing asymptotic growth rates", "Big-O notation describes the limiting behavior of functions — which function dominates as the argument grows."},
+		{"What is the big-O notation primarily used for?", "describing asymptotic growth rates", "Big-O notation describes the limiting behavior of functions, which function dominates as the argument grows."},
 	}
 	e := table[rand.Intn(len(table))]
 	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
@@ -1711,7 +1711,7 @@ func (g *cauchySeqGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	}
 	table := []entry{
 		{"Does Cauchy mean terms get arbitrarily close as n increases? (yes/no)", "yes", "A sequence is Cauchy where for any ε>0, there exists N such that |aₘ-aₙ|<ε for all m,n>N; terms get arbitrarily close as n increases."},
-		{"In ℝ, do all Cauchy sequences converge?", "yes", "ℝ is complete — every Cauchy sequence in ℝ converges to a real number."},
+		{"In ℝ, do all Cauchy sequences converge?", "yes", "ℝ is complete, every Cauchy sequence in ℝ converges to a real number."},
 		{"In ℚ, do all Cauchy sequences converge?", "no", "ℚ is not complete. E.g., a sequence of rationals converging to √2 is Cauchy in ℚ but does not converge in ℚ."},
 		{"Is every convergent sequence Cauchy?", "yes", "Every convergent sequence is Cauchy. In ℝ, the converse also holds: Cauchy ⟺ convergent."},
 	}
@@ -1807,7 +1807,7 @@ func (g *harmonicSeriesGen) Generate(ctx generator.GeneratorContext) generator.P
 		q, a, e string
 	}
 	table := []entry{
-		{"Does the harmonic series \\(\\sum 1/n\\) converge or diverge?", "diverges", "The harmonic series \\(\\sum 1/n\\) diverges (slowly — like \\(\\ln(n)\\)), even though its terms \\(\\to 0\\)."},
+		{"Does the harmonic series \\(\\sum 1/n\\) converge or diverge?", "diverges", "The harmonic series \\(\\sum 1/n\\) diverges (slowly, like \\(\\ln(n)\\)), even though its terms \\(\\to 0\\)."},
 		{"For the p-series \\(\\sum 1/n^{p}\\): does p=2 converge? (yes/no)", "yes", "\\(\\sum 1/n^{p}\\) converges if \\(p>1\\), diverges if \\(p\\leq 1\\). The harmonic series \\((p=1)\\) is the boundary case."},
 		{"The nth partial sum H_n grows like ln(n). Does H_n stay bounded? (yes/no)", "no", "The harmonic numbers \\(H_{n} = \\sum_{k=1}^{n} 1/k \\approx \\ln(n) + \\gamma\\) grow without bound, where \\(\\gamma\\) is the Euler-Mascheroni constant."},
 		{"Does \\(\\sum 1/n^{2}\\) converge? (yes/no)", "yes", "\\(\\sum 1/n^{2}\\) converges \\((p=2>1)\\). Its sum is \\(\\pi^{2}/6 \\approx 1.645\\) (Basel problem)."},

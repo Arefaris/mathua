@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/logarithmic-function/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/logarithmic-function/), CC BY-NC 4.0
 
 ## Introduction
 
@@ -75,7 +75,7 @@ Imagine we want to find an item in a sorted list of \( N \) elements. If we chec
 
 \[\mathcal{O}(n) \]
 
-However, linear search is inefficient for large lists. Can we do better? Yes — by using an algorithm that reduces the search space at each step. This leads us to **binary search** , which has logarithmic complexity:
+However, linear search is inefficient for large lists. Can we do better? Yes, by using an algorithm that reduces the search space at each step. This leads us to **binary search**, which has logarithmic complexity:
 
 \[\mathcal{O}(\log n) \]
 
@@ -96,6 +96,6 @@ If a list contains 1,000,000 elements, binary search can find any element in at 
 
 \[\log_2(1,000,000) \approx 19.9 \]
 
-So, fewer than 20 steps are needed—an enormous efficiency gain compared to linear search, which may require up to 1,000,000 steps.
+So, fewer than 20 steps are needed, an enormous efficiency gain compared to linear search, which may require up to 1,000,000 steps.
 
-##### The elements must be sorted according to an ordering criterion. Binary search only works on sequences that are ordered—typically in ascending order. Without a defined ordering, the algorithm cannot determine which half of the list to discard at each step.
+##### The elements must be sorted according to an ordering criterion. Binary search only works on sequences that are ordered, typically in ascending order. Without a defined ordering, the algorithm cannot determine which half of the list to discard at each step.

@@ -138,7 +138,7 @@ func TestModeratorScopeIsReportsAndContentOnly(t *testing.T) {
 // escalation the role model exists to stop.
 func TestAdminCannotEscalate(t *testing.T) {
 	e := newAdminEnv(t)
-	// "third" is made an admin — a real manager, but not an owner.
+	// "third" is made an admin, a real manager, but not an owner.
 	if err := e.store.SetStudentRole(e.thirdID, storage.RoleAdmin); err != nil {
 		t.Fatalf("promote third: %v", err)
 	}
@@ -186,7 +186,7 @@ func TestInvitationCreateAndAcceptGrantsRole(t *testing.T) {
 	if role, _ := e.store.GetStudentRole(e.studentID); role != storage.RoleModerator {
 		t.Errorf("role after accept = %q, want moderator", role)
 	}
-	// The learner's existing token now carries the role — read per request.
+	// The learner's existing token now carries the role, read per request.
 	if rec := e.do(t, "GET", "/api/admin/reports", e.studentTok, ""); rec.Code != 200 {
 		t.Errorf("promoted account still denied reports: %d", rec.Code)
 	}

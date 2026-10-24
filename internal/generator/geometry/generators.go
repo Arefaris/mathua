@@ -46,7 +46,7 @@ func (g *pointsLinesGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	items := []string{"point", "line", "ray", "line segment"}
 	// Predicates, not noun phrases, because the stem supplies the noun. The
 	// earlier stem was `What is: %s?` with `has two endpoints`, which asked
-	// "What is: has two endpoints?" — a sentence with its subject missing, on a
+	// "What is: has two endpoints?", a sentence with its subject missing, on a
 	// screen where the learner had one field and no way to say "the question,
 	// not me, is broken".
 	descs := []string{

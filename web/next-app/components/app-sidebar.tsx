@@ -47,7 +47,7 @@ import Avatar from './Avatar'
 import { useTheme } from '../hooks/useTheme'
 import { signOut } from '../lib/auth'
 
-// Navigate group: destinations only. Never Diagnostic / Quiz / Review —
+// Navigate group: destinations only. Never Diagnostic / Quiz / Review, 
 // those have dedicated cards in main content (no CTA duplication). Review is
 // reachable from the header row and the mobile compass instead, which is where
 // the full destination list lives; putting it here as well would be exactly the
@@ -72,7 +72,7 @@ const NAV_ITEMS: SidebarNavItem[] = [
 ]
 
 // Resources group: docs, glossary, contributing, creator's note, how it works.
-  // Informational pages only — never Diagnostic / Quiz / Review (no CTA
+  // Informational pages only, never Diagnostic / Quiz / Review (no CTA
   // duplication). The glossary is a standalone reference with no progress,
   // XP or gating, so it sits here rather than beside Learn.
   const RESOURCE_ITEMS: SidebarNavItem[] = [
@@ -95,7 +95,7 @@ export interface AppSidebarProps {
   /**
    * Whether to offer the Admin entry.
    *
-   * A convenience and nothing more — the server reads the role on every administrative request,
+   * A convenience and nothing more, the server reads the role on every administrative request,
    * so a learner who types /admin/users reaches the page and is refused by the API with a 403.
    * Omitting this only removes the invitation; it removes no access. It is here because the
    * alternative is an administrator having to know a URL.
@@ -145,8 +145,8 @@ export function AppSidebar({
       <SidebarHeader>
         <div className="flex items-center gap-1">
           {/* Collapsed rail: the brand mark doubles as the expand toggle, so it has to *look*
-              like a control. Expanded, `λ Mathua` is a link to the hub — the conventional
-              meaning of a logo — and a separate chevron collapses it. Collapsed, that same λ
+              like a control. Expanded, `λ Mathua` is a link to the hub, the conventional
+              meaning of a logo and a separate chevron collapses it. Collapsed, that same λ
               becomes a button, which means the identical glyph is a destination in one state and
               an action in the other. `aria-label` and `title` were the only things saying so, and
               both need a hover, so the role was communicated to nobody until they tapped it.
@@ -195,7 +195,7 @@ export function AppSidebar({
               {/* Admin last, and only for an administrator. Last because it is a different
                   surface rather than another destination in this one; conditional because
                   offering it to everyone would be an invitation most of them cannot accept.
-                  The server refuses either way — see AppSidebarProps.isAdmin. */}
+                  The server refuses either way, see AppSidebarProps.isAdmin. */}
               {(isAdmin ? [...NAV_ITEMS, ADMIN_ITEM] : NAV_ITEMS).map((item) => {
                 const active = pathname === item.href || pathname.startsWith(item.href + '/')
                 const Icon = item.icon

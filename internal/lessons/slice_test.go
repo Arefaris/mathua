@@ -24,7 +24,7 @@ func TestRenderSlice(t *testing.T) {
 	if !strings.Contains(rendered, "The derivative of a constant is zero.") {
 		t.Errorf("expected rule in output, got:\n%s", rendered)
 	}
-	if !strings.Contains(rendered, "- $d/dx(5) = 0$ — constant") {
+	if !strings.Contains(rendered, "- $d/dx(5) = 0$, constant") {
 		t.Errorf("expected example with explanation, got:\n%s", rendered)
 	}
 	if !strings.Contains(rendered, "- $d/dx(\\pi) = 0$\n") {

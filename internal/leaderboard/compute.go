@@ -13,7 +13,7 @@ import (
 
 // Public views. "weekly" is the current competition, measured in XP earned
 // inside this week's UTC window; "all_time" is lifetime XP. They are separate
-// queries on purpose — the old board ranked lifetime mastery by this week's
+// queries on purpose, the old board ranked lifetime mastery by this week's
 // count, so the two questions had one wrong answer between them.
 const (
 	ViewWeekly  = "weekly"

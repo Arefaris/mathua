@@ -581,7 +581,7 @@ export async function login(username: string, password: string): Promise<AuthRes
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ username, password }),
 	})
-	if (res.status === 429) throw new Error('Too many attempts — try again shortly')
+	if (res.status === 429) throw new Error('Too many attempts, try again shortly')
 	if (!res.ok) throw new Error('Invalid credentials')
 	return validateResponse(AuthResSchema, await res.json(), 'login') as AuthRes
 }
@@ -728,7 +728,7 @@ export async function skipGoalQuestion(sessionId: string): Promise<GoalDiagAnswe
 
 // Void the superseded question's miss and restore it ("silly mistake"
 // retry). The concept_id names the question being retried and must match
-// the voidable attempt — a stale client that already moved on gets a 400
+// the voidable attempt, a stale client that already moved on gets a 400
 // instead of voiding the wrong answer.
 export async function retryGoalQuestion(sessionId: string, conceptId: string): Promise<GoalDiagAnswerRes> {
 	const res = await authedFetch(`${API_BASE}/api/goal/diagnostic/retry`, {
@@ -863,7 +863,7 @@ export async function resetAccount(phrase: string): Promise<void> {
 // The server's own account payload. `role` was missing here and zod strips unknown keys, so the
 // field was being silently discarded on the way in: `/api/auth/me` sent it, `getMe()` dropped
 // it, and the Admin navigation entry could never appear. A schema is a filter, so a field the
-// type does not name is a field the application does not have — which is the second half of
+// type does not name is a field the application does not have, which is the second half of
 // ADR-043's duplicate-schema lesson, arriving from the other direction.
 const MeSchema = z.object({
 	student_id: z.string(),
@@ -1199,7 +1199,7 @@ export async function getLessonPractice(conceptId: string, count = 5, opts?: { s
 //
 // `/learn` needs it twice on one page: LearnStepper renders the worked example for the current
 // section, and the reference panel renders every block for the same concept. Two callers, one
-// payload, and the shard is authored content that does not change while the tab is open — so
+// payload, and the shard is authored content that does not change while the tab is open, so
 // this is the in-flight cache rather than the session cache, because a later visit should
 // re-read it (a shard can be corrected, and a stale copy of a teaching section is a wrong
 // lesson rather than a stale progress bar).
@@ -1229,8 +1229,8 @@ export type RecommendationReason = 'new' | 'review_due' | 'needs_practice' | 'pr
  * One worthwhile task, decided by the engine.
  *
  * The wording is the server's, and that is the point: `/profile` and `/learn` used to format
- * one head two ways — "Currently working towards X / Answer it" beside "Next up / Continue: X",
- * sometimes with different labels for the same concept — because each derived its own copy.
+ * one head two ways, "Currently working towards X / Answer it" beside "Next up / Continue: X",
+ * sometimes with different labels for the same concept, because each derived its own copy.
  */
 export interface Recommendation {
   id: string
@@ -1250,7 +1250,7 @@ export interface Recommendation {
 /**
  * The engine's answer: one dominant task plus the alternatives the learner may pick.
  *
- * "The engine chooses; the learner disposes" — so `alternatives` is part of the contract rather
+ * "The engine chooses; the learner disposes", so `alternatives` is part of the contract rather
  * than an afterthought, and a learner who disagrees with the head can act on it.
  */
 export interface RecommendationRes {
@@ -1260,7 +1260,7 @@ export interface RecommendationRes {
 }
 
 /**
- * GET /api/next — the single answer to "what should I do now?".
+ * GET /api/next, the single answer to "what should I do now?".
  *
  * A successful response with no head degrades to the same orientation card the
  * server uses, so an older build or a proxy that drops the field cannot turn
@@ -1268,7 +1268,7 @@ export interface RecommendationRes {
  *
  * A *failed* request does not. It used to return that card too, and the comment
  * here used to defend it as graceful degradation. It is not: with the API
- * blocked, the learn page told the learner "All learned — nothing is due right
+ * blocked, the learn page told the learner "All learned, nothing is due right
  * now" while their queue was untouched and simply unreachable. A learning app
  * that reports an outage as an empty queue is lying about the one fact it
  * exists to state, and the honest failure state cannot be reached at all
@@ -1285,7 +1285,7 @@ export async function getNext(exclude?: string[]): Promise<RecommendationRes> {
       priority: 0,
       action: { type: 'learn', href: '/graph' },
       badge: 'All learned',
-      detail: 'Nothing is due right now — the graph shows what builds on what you have',
+      detail: 'Nothing is due right now, the graph shows what builds on what you have',
       cta: 'See the graph →',
     },
     alternatives: [],
@@ -1359,7 +1359,7 @@ export interface StudyAnswerRes {
 	evidence_score?: number
 	/**
 	 * `evidence_score` in plain language, from `mastery.EvidenceBand`. Presentational only,
-	 * and deliberately claiming nothing about retention — the evidence model has no spacing
+	 * and deliberately claiming nothing about retention, the evidence model has no spacing
 	 * term, so it cannot support such a claim.
 	 *
 	 * Empty before the evidence floor is met, which is what stops a single correct answer
@@ -1490,7 +1490,7 @@ export interface QuizAnswerRes {
    * Authoritative mastery evidence score, 0..1.
    *
    * Absent on an ungraded answer (nothing was recorded, so there is no new evidence).
-   * This is a progress reading, not a mastery verdict — `new_status` is the verdict, and
+   * This is a progress reading, not a mastery verdict, `new_status` is the verdict, and
    * the score alone never means anything without the evidence floor the ladder also
    * requires.
    */
@@ -1586,12 +1586,12 @@ export async function validateToken(): Promise<{ valid: boolean; student_id: str
 		const me = await res.json()
 		return { valid: true, student_id: typeof me?.student_id === 'string' ? me.student_id : '' }
 	} catch {
-		// Unparseable body is NOT a valid session — never report valid:true.
+		// Unparseable body is NOT a valid session, never report valid:true.
 		return { valid: false, student_id: '' }
 	}
 }
 
-// Content reports — users complain about questions, explanations,
+// Content reports, users complain about questions, explanations,
 // lesson bodies, worked examples, or diagrams.
 export type ReportKind = 'question' | 'explanation' | 'lesson_body' | 'worked_example' | 'diagram' | 'message'
 export type ReportReason = 'wrong_answer' | 'bad_explanation' | 'unclear' | 'formatting' | 'other'
@@ -1650,7 +1650,7 @@ export async function submitReport(input: SubmitReportInput): Promise<SubmitRepo
 //
 // A different mechanism from the triage session above, on purpose. Triage is gated by a shared
 // password from the deployment environment and confers no account identity; these calls carry
-// the learner's own token and are authorized by the role on that account. The server decides —
+// the learner's own token and are authorized by the role on that account. The server decides, 
 // a 403 here means the backend said no, and hiding the pages in the UI is a convenience on top
 // of that, never the control.
 //
@@ -1857,7 +1857,7 @@ export async function searchAdminUsers(q: string): Promise<AdminUsersRes> {
  *
  * `role` is a closed union here as well as on the server. Both ends reject anything else, and
  * the reason they both bother is that coercing would let the response say one thing and the row
- * say another — which is exactly the sort of quiet disagreement the rest of this client has been
+ * say another, which is exactly the sort of quiet disagreement the rest of this client has been
  * bitten by.
  */
 export async function setUserRole(userId: string, role: Role): Promise<{ user: AdminUser; changed: boolean }> {
@@ -2001,7 +2001,7 @@ export interface BulkModerationRes {
 
 // One decision across a concept's unsettled reports: a fix is usually one bug,
 // not one report. The server still writes one transaction, stamp and audit row
-// per report — this call only saves the operator from retyping the same reason.
+// per report, this call only saves the operator from retyping the same reason.
 export async function bulkModerateReports(
 	selector: { ids?: number[]; concept_id?: string },
 	status: ModerationStatus,
@@ -2135,7 +2135,7 @@ export async function askAssistant(body: { message: string; history?: AssistantT
 export interface GoalScopeRes {
 	/** Destination ids the model chose, validated against the server's own list. */
 	destinations: string[]
-	/** False when AI is off, failed, or chose nothing — use the deterministic match. */
+	/** False when AI is off, failed, or chose nothing, use the deterministic match. */
 	used_ai: boolean
 	/**
 	 * Why AI did not contribute, set only when used_ai is false. The server

@@ -1,6 +1,6 @@
 # Finite Fields
 
-**Finite field:** A field with finitely many elements. Finite fields exist exactly for prime-power orders $p^n$, one (up to isomorphism) per prime power — written $\mathbb F_{p^n}$ or $GF(p^n)$.
+**Finite field:** A field with finitely many elements. Finite fields exist exactly for prime-power orders $p^n$, one (up to isomorphism) per prime power, written $\mathbb F_{p^n}$ or $GF(p^n)$.
 
 ## Worked: F_4 exists, order-6 fields do not
 
@@ -16,7 +16,7 @@ So the classification starts as a filter: check the order first.
 Count the multiplicative group:
 1. $\mathbb F_4$ has 4 elements; removing 0 leaves 3.
 2. The nonzero elements form a cyclic group: some element cubes to 1 first.
-3. So $|\mathbb F_4^\times| = 3$ — and in general $|\mathbb F_{p^n}^\times| = p^n - 1$, always cyclic.
+3. So $|\mathbb F_4^\times| = 3$ and in general $|\mathbb F_{p^n}^\times| = p^n - 1$, always cyclic.
 
 So finite-field unit groups are as simple as possible: cyclic, order one less.
 

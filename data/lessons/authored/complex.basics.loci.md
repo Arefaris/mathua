@@ -6,7 +6,7 @@ A condition on \(z\) selects a set of points, and the usual conditions are writt
 
 The equation \(|z - z_0| = r\) says that the distance from \(z\) to \(z_0\) is \(r\). The set is the circle centred at \(z_0\) with radius \(r\), and it is a circle rather than a disc because the equality excludes both the interior and the exterior.
 
-For \(|z - (2+3i)| = 4\) the centre is \(2 + 3i\) and the radius is four. The point \(2 + 3i\) is not a solution — its distance to itself is zero.
+For \(|z - (2+3i)| = 4\) the centre is \(2 + 3i\) and the radius is four. The point \(2 + 3i\) is not a solution, its distance to itself is zero.
 
 ## Equal distances to two points
 

@@ -26,7 +26,7 @@ import (
 //
 // The role is read from the database on **every** request rather than trusted from the token.
 // A role baked into a token keeps granting access until the token expires, so demoting someone
-// would leave them able to act for the life of their session — the failure this boundary exists
+// would leave them able to act for the life of their session, the failure this boundary exists
 // to prevent. The cost is one indexed lookup, which is cheaper than the mistake.
 func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 	return s.requirePermission(admin.Access, next)
@@ -113,7 +113,7 @@ func adminOffset(q string) int {
 	return n
 }
 
-// GET /api/admin/overview — counts, and nothing else.
+// GET /api/admin/overview, counts, and nothing else.
 //
 // Every figure here is read live from the system on request. Nothing is precomputed into a
 // dashboard table, because a number that has to be refreshed is a number that will be stale in
@@ -192,7 +192,7 @@ func (s *Server) handleAdminOverview(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// GET /api/admin/users?q=&limit=&offset= — search and list accounts.
+// GET /api/admin/users?q=&limit=&offset=, search and list accounts.
 func (s *Server) handleAdminUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, "method not allowed", 405)
@@ -207,7 +207,7 @@ func (s *Server) handleAdminUsers(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"users": users})
 }
 
-// PATCH /api/admin/users/{id} {"role":"admin"|"student"} — the only mutation V1 has.
+// PATCH /api/admin/users/{id} {"role":"admin"|"student"}, the only mutation V1 has.
 //
 // The body contributes exactly one field. `role` is read and validated; every other key in the
 // payload is ignored rather than applied, so a request carrying `{"role":"admin","xp_total":0,
@@ -275,7 +275,7 @@ func (s *Server) handleAdminUser(w http.ResponseWriter, r *http.Request) {
 
 	// One call. The repository applies the mutation and writes the audit event in a single
 	// transaction, so there is no window in which the role has changed and the record has not
-	// — and no code path in which this handler could forget to record.
+	// and no code path in which this handler could forget to record.
 	res, err := s.repo.SetRoleAudited(a.ID, id, role)
 	switch {
 	case errors.Is(err, storage.ErrLastOwner):
