@@ -7,7 +7,7 @@ type GeneratorContext struct {
 	Seed       int64
 	// KPOrdinal is the 1-indexed knowledge point ordinal (1, 2 or 3).
 	// Zero indicates unguided or continuous difficulty scaling.
-	KPOrdinal  int
+	KPOrdinal int
 }
 
 type Problem struct {
