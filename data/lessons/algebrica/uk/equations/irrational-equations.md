@@ -274,9 +274,9 @@
 
 ## Вибрані джерела
 
-  * **OpenStax**. [Рівняння з радикалами](https://assets.openstax.org/oscms-prodcms/media/documents/Algebra-and-Trigonometry-2e-WEB.pdf)
+  * **OpenStax**. [Radical Equations](https://assets.openstax.org/oscms-prodcms/media/documents/Algebra-and-Trigonometry-2e-WEB.pdf) (Рівняння з радикалами)
 
-  * **Міський університет Нью-Йорка**. [Алгебра і тригонометрія для коледжу](https://openlab.citytech.cuny.edu/shavermat1275cofall2019/files/2019/08/1566849743-AlgebraTrigBook.pdf)
+  * **Міський університет Нью-Йорка**. [College Algebra and Trigonometry](https://openlab.citytech.cuny.edu/shavermat1275cofall2019/files/2019/08/1566849743-AlgebraTrigBook.pdf) (Алгебра і тригонометрія для коледжу)
 
-  * **Університет Британської Колумбії**. [Розділ «Диференціювання та рівняння з радикалами»](https://www.math.ubc.ca/~feldman/m101/clp/clp_notes_100.pdf)
+  * **Університет Британської Колумбії**. [Differentiation and Radical Equations Section](https://www.math.ubc.ca/~feldman/m101/clp/clp_notes_100.pdf) (Розділ «Диференціювання та рівняння з радикалами»)
 
