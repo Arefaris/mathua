@@ -527,16 +527,64 @@ func (g *integralPowerRuleGen) Generate(ctx generator.GeneratorContext) generato
 
 type integralSubstitutionGen struct{}
 
+// sinPow renders the power of sine used in a substitution stem. A first power
+// is the bare function, because \sin(x)^{1} reads as machine output.
+func sinPow(p int) string {
+	if p == 1 {
+		return "\\sin(x)"
+	}
+	return fmt.Sprintf("\\sin^{%d}(x)", p)
+}
+
+// coefTerm joins a coefficient to a rendered term, dropping the coefficient when
+// it is one so the stem does not read as 1 t^{2}.
+func coefTerm(c int, term string) string {
+	if c == 1 {
+		return term
+	}
+	return fmt.Sprintf("%d %s", c, term)
+}
+
 func (g *integralSubstitutionGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*5)
-	n := rand.Intn(max(2, scale)) + 2
-	coef := n
-	exp := n - 1
-	answer := fmt.Sprintf("e^(x^%d)+C", n)
-	return generator.Problem{
-		Question:    fmt.Sprintf("Find \\(\\int %d x^{%d} e^{x^{%d}} \\, dx\\).", coef, exp, n),
-		Answer:      answer,
-		Explanation: fmt.Sprintf("Let u=x^%d, du=%dx^%d dx. Integral becomes ∫e^u du = e^u+C = e^(x^%d)+C.", n, n, exp, n),
+	// One shape is not enough here: a single substitution family varies only in the
+	// exponents, which is why this generator produced five stems. Each case below is
+	// a different substitution with its answer derived from the parameters, not chosen.
+	p := randRange(ctx.Difficulty, 1, 4)
+	switch rand.Intn(5) {
+	case 0:
+		k := randRange(ctx.Difficulty, 1, 4)
+		c := k * (p + 1)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(\\int %d %s e^{%s} \\, dx\\).", c, texPow("x", p), texPow("x", p+1)),
+			Answer:      fmt.Sprintf("%se^(x^%d)+C", coefStr(k), p+1),
+			Explanation: fmt.Sprintf("Let u=x^%d, so du=%d x^%d dx. The integral becomes %d times the integral of e^u du, which is %de^u+C, i.e. %se^(x^%d)+C.", p+1, p+1, p, k, k, coefStr(k), p+1),
+		}
+	case 1:
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(\\int %s \\sin(%s) \\, dx\\).", texPow("x", p), texPow("x", p+1)),
+			Answer:      fmt.Sprintf("-cos(x^%d)/%d+C", p+1, p+1),
+			Explanation: fmt.Sprintf("Let u=x^%d, so du=%d x^%d dx. The integral is the integral of sin(u) du over %d, which is -cos(u)/%d+C.", p+1, p+1, p, p+1, p+1),
+		}
+	case 2:
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(\\int \\cos(x) %s \\, dx\\).", sinPow(p)),
+			Answer:      fmt.Sprintf("sin^%d(x)/%d+C", p+1, p+1),
+			Explanation: fmt.Sprintf("Let u=sin(x), so du=cos(x) dx. The integral becomes the integral of u^%d du, which is u^%d/%d+C.", p, p+1, p+1),
+		}
+	case 3:
+		b := randRange(ctx.Difficulty, 1, 4)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(\\int (x+%d)^{%d} \\, dx\\).", b, p+1),
+			Answer:      fmt.Sprintf("(x+%d)^%d/%d+C", b, p+2, p+2),
+			Explanation: fmt.Sprintf("Let u=x+%d, so du=dx. The integral becomes the integral of u^%d du, which is u^%d/%d+C.", b, p+1, p+2, p+2),
+		}
+	default:
+		c := randRange(ctx.Difficulty, 1, 6)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(\\int \\frac{x}{x^{2}+%d} \\, dx\\).", c),
+			Answer:      fmt.Sprintf("(1/2)ln(x^2+%d)+C", c),
+			Explanation: fmt.Sprintf("Let u=x^2+%d, so du=2x dx and x dx = du/2. The integral becomes half the integral of du/u, which is (1/2)ln(x^2+%d)+C.", c, c),
+		}
 	}
 }
 
@@ -565,13 +613,49 @@ func (g *integralDefiniteGen) Generate(ctx generator.GeneratorContext) generator
 type integralFTCGen struct{}
 
 func (g *integralFTCGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*5)
-	n := rand.Intn(max(2, scale)) + 1
-	answer := fmt.Sprintf("x^%d", n)
-	return generator.Problem{
-		Question:    fmt.Sprintf("If \\(F(x)=\\int_{0}^{x} t^{%d} \\, dt\\), what is \\(F'(x)\\)?", n),
-		Answer:      answer,
-		Explanation: fmt.Sprintf("By the Fundamental Theorem of Calculus, F'(x)=x^%d.", n),
+	// The original case only varied the exponent of one integrand. The cases below
+	// ask about the derivative of an accumulation function whose upper limit, lower
+	// limit and integrand differ, so the answer has to be derived through the rule.
+	p := randRange(ctx.Difficulty, 1, 5)
+	switch rand.Intn(4) {
+	case 0:
+		c := randRange(ctx.Difficulty, 2, 5)
+		b := randRange(ctx.Difficulty, 1, 6)
+		return generator.Problem{
+			Question:    fmt.Sprintf("If \\(F(x)=\\int_{%d}^{x} (%d %s + %d)\\, dt\\), what is \\(F'(x)\\)?", c, c, texPow("t", p), b),
+			Answer:      fmt.Sprintf("%s+%d", coefStr(c)+varPow("x", p), b),
+			Explanation: fmt.Sprintf("By the Fundamental Theorem of Calculus the lower limit is a constant, so it contributes nothing to the derivative. Differentiating the integrand at t=x gives %s+%d.", coefStr(c)+varPow("x", p), b),
+		}
+	case 1:
+		q := randRange(ctx.Difficulty, 2, 3)
+		// F(x) = integral from 0 to x^q of t^p dt, so F'(x) = q x^(q-1) * (x^q)^p.
+		exp := q*p + q - 1
+		coef := q
+		return generator.Problem{
+			Question:    fmt.Sprintf("If \\(F(x)=\\int_{0}^{%s} %s \\, dt\\), what is \\(F'(x)\\)?", texPow("x", q), texPow("t", p)),
+			Answer:      coefStr(coef) + varPow("x", exp),
+			Explanation: fmt.Sprintf("Let u=x^%d, so du=%d x^%d dx. Then F(u)=u^%d/%d and F'(x)=(x^%d)^%d times %d x^%d, i.e. %s.", q, q, q-1, p+1, p+1, q, p, q, q-1, coefStr(coef)+varPow("x", exp)),
+		}
+	case 2:
+		c := randRange(ctx.Difficulty, 1, 6)
+		return generator.Problem{
+			Question:    fmt.Sprintf("If \\(F(x)=\\int_{1}^{x} \\frac{%d}{t} \\, dt\\), what is \\(F'(x)\\)?", c),
+			Answer:      fmt.Sprintf("%d/x", c),
+			Explanation: fmt.Sprintf("The integrand evaluated at t=x is %d/x, and the lower limit is constant, so F'(x)=%d/x.", c, c),
+		}
+	default:
+		q := 1 + rand.Intn(3)
+		for q == p {
+			q = 1 + rand.Intn(3)
+		}
+		c := randRange(ctx.Difficulty, 1, 4)
+		// F(x) = integral of t^p + c t^q, differentiated term by term.
+		answer := fmt.Sprintf("%s+%s", powTerm(p, p-1), powTerm(c*q, q-1))
+		return generator.Problem{
+			Question:    fmt.Sprintf("If \\(F(x)=\\int_{0}^{x} (%s + %s)\\, dt\\), what is \\(F'(x)\\)?", texPow("t", p), coefTerm(c, texPow("t", q))),
+			Answer:      answer,
+			Explanation: fmt.Sprintf("Differentiating the integrand at t=x term by term gives %s+%s.", powTerm(p, p-1), powTerm(c*q, q-1)),
+		}
 	}
 }
 
@@ -649,26 +733,63 @@ func (g *integralAreaBetweenGen) Generate(ctx generator.GeneratorContext) genera
 type integralVolumeGen struct{}
 
 func (g *integralVolumeGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct {
-		q, a, e string
+	// The disc method is one formula, so the variety has to come from the curve, the
+	// limits and the axis of revolution rather than from picking a row. Each case
+	// derives V = pi * integral of radius squared from the parameters it drew.
+	reduce := func(num, den int) string {
+		d := mathutil.GCD(num, den)
+		num, den = num/d, den/d
+		if den == 1 {
+			return fmt.Sprintf("%dpi", num)
+		}
+		return fmt.Sprintf("%dpi/%d", num, den)
 	}
-	tableEasy := []entry{
-		{"Find the volume when \\(y=\\sqrt{x}\\) from \\(x=0\\) to 4 is revolved around the \\(x\\)-axis.", "8pi", "V = π∫(√x)²dx = π∫x dx = π[x²/2]₀⁴ = π(16/2-0) = 8π."},
-		{"Find the volume when \\(y=x\\) from \\(x=0\\) to 1 is revolved around the \\(x\\)-axis.", "pi/3", "V = π∫x²dx = π[x³/3]₀¹ = pi/3."},
-		{"Find the volume when \\(y=x\\) from \\(x=0\\) to 2 is revolved around the \\(x\\)-axis.", "8pi/3", "V = π∫x²dx = π[x³/3]₀² = 8pi/3."},
-		{"Find the volume when \\(y=2\\) from \\(x=0\\) to 3 is revolved around the \\(x\\)-axis.", "12pi", "V = π∫4dx = π[4x]₀³ = 12pi (a cylinder of radius 2)."},
+	switch rand.Intn(4) {
+	case 0:
+		p := randRange(ctx.Difficulty, 1, 3)
+		c := randRange(ctx.Difficulty, 1, 3)
+		b := randRange(ctx.Difficulty, 1, 5)
+		num := c * c * intPow(b, 2*p+1)
+		den := 2*p + 1
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find the volume when \\(y=%s\\) from \\(x=0\\) to %d is revolved around the \\(x\\)-axis.", coefStr(c)+varPow("x", p), b),
+			Answer:      reduce(num, den),
+			Explanation: fmt.Sprintf("The disc method gives V = pi times the integral of (%s)^2 from 0 to %d, i.e. %d pi x^(%d) integrated, which is %d pi b^(%d)/(%d) with b = %d.", coefStr(c)+varPow("x", p), b, c*c, 2*p, c*c, 2*p+1, 2*p+1, b),
+		}
+	case 1:
+		r := randRange(ctx.Difficulty, 1, 5)
+		l := randRange(ctx.Difficulty, 1, 6)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find the volume when \\(y=%d\\) from \\(x=0\\) to %d is revolved around the \\(x\\)-axis.", r, l),
+			Answer:      fmt.Sprintf("%dpi", r*r*l),
+			Explanation: fmt.Sprintf("A constant radius revolving about the x-axis sweeps a cylinder of radius %d and length %d, so V = pi r^2 L = %dpi.", r, l, r*r*l),
+		}
+	case 2:
+		c := randRange(ctx.Difficulty, 1, 4)
+		b := randRange(ctx.Difficulty, 1, 6)
+		num := c * c * b * b
+		curve := "\\sqrt{x}"
+		if c != 1 {
+			curve = fmt.Sprintf("%d\\sqrt{x}", c)
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find the volume when \\(y=%s\\) from \\(x=0\\) to %d is revolved around the \\(x\\)-axis.", curve, b),
+			Answer:      reduce(num, 2),
+			Explanation: fmt.Sprintf("Squaring the radius gives %dx, so V = pi times %d times b^2/2 with b = %d, i.e. %d pi/2 reduced.", c*c, c*c, b, num),
+		}
+	default:
+		p := randRange(ctx.Difficulty, 1, 2)
+		c := randRange(ctx.Difficulty, 1, 2)
+		a := randRange(ctx.Difficulty, 1, 2)
+		b := a + randRange(ctx.Difficulty, 1, 4)
+		num := c * c * (intPow(b, 2*p+1) - intPow(a, 2*p+1))
+		den := 2*p + 1
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find the volume when \\(y=%s\\) from \\(x=%d\\) to %d is revolved around the \\(x\\)-axis.", coefStr(c)+varPow("x", p), a, b),
+			Answer:      reduce(num, den),
+			Explanation: fmt.Sprintf("V = pi times the integral of (%s)^2 from %d to %d, which is %d pi (b^(%d) - a^(%d))/(%d) with a = %d and b = %d.", coefStr(c)+varPow("x", p), a, b, c*c, 2*p+1, 2*p+1, 2*p+1, a, b),
+		}
 	}
-	tableHard := []entry{
-		{"Find the volume when \\(y=x^{2}\\) from \\(x=0\\) to 2 is revolved around the \\(x\\)-axis.", "32pi/5", "V = π∫x⁴dx = π[x⁵/5]₀² = 32pi/5."},
-		{"Find the volume when \\(y=\\sqrt{x}\\) from \\(x=0\\) to 1 is revolved around the \\(x\\)-axis.", "pi/2", "V = π∫x dx = π[x²/2]₀¹ = pi/2."},
-	}
-	pool := tableEasy
-	if scale > 3 {
-		pool = append(tableEasy, tableHard...)
-	}
-	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivImplicitGen struct{}
