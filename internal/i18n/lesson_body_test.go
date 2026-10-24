@@ -427,6 +427,8 @@ var mathOperatorNames = map[string]bool{
 	"det": true, "rank": true, "tr": true, "dim": true, "ker": true, "span": true, "proj": true,
 	"Re": true, "Im": true, "arg": true, "deg": true, "diag": true, "var": true, "Var": true,
 	"Cov": true, "cov": true, "E": true, "P": true,
+	// The temperature scales: °C and °F are written with Latin letters in Russian and Ukrainian too.
+	"C": true, "F": true,
 }
 
 // englishMathText returns the \text{…} pieces of the translated formulas that still hold Latin
