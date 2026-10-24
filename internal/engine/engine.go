@@ -29,6 +29,14 @@ import (
 	xppolicy "github.com/chuma-beep/mathua/internal/xp"
 )
 
+type activeScaffoldSession struct {
+	ParentConceptID    string
+	ParentQuestionText string
+	ParentDifficulty   float64
+	Steps              []generator.ScaffoldStep
+	CurrentStepIndex   int
+}
+
 type activeSession struct {
 	// Owner of the in-flight question. Sessions are keyed by client-supplied
 	// sessionID, so without this a wipe cannot evict one learner's stale
@@ -75,6 +83,8 @@ type activeSession struct {
 	questionDifficulty float64
 	rushCount          int
 	kpOrdinal          int
+	activeScaffold     *activeScaffoldSession
+	pendingScaffold    []generator.ScaffoldStep
 }
 
 func (as *activeSession) currentKPOrdinal() int {
@@ -143,6 +153,9 @@ type Question struct {
 	GradingType    string                   `json:"grading_type,omitempty"`
 	KPOrdinal      int                      `json:"kp_ordinal,omitempty"`
 	KnowledgePoint *concepts.KnowledgePoint `json:"knowledge_point,omitempty"`
+	ScaffoldActive bool                     `json:"scaffold_active,omitempty"`
+	ScaffoldStep   int                      `json:"scaffold_step,omitempty"`
+	ScaffoldTotal  int                      `json:"scaffold_total,omitempty"`
 }
 
 type AnswerResult struct {
@@ -158,6 +171,9 @@ type AnswerResult struct {
 	Remedial       []string       `json:"remedial,omitempty"`
 	KPOrdinal      int            `json:"kp_ordinal,omitempty"`
 	KPAdvanced     bool           `json:"kp_advanced,omitempty"`
+	ScaffoldActive bool           `json:"scaffold_active,omitempty"`
+	ScaffoldStep   int            `json:"scaffold_step,omitempty"`
+	ScaffoldTotal  int            `json:"scaffold_total,omitempty"`
 	// Ungraded marks a grader infrastructure fault: the answer was NOT
 	// evaluated and nothing was recorded. Clients should retry, not penalize.
 	Ungraded bool `json:"ungraded,omitempty"`
@@ -654,6 +670,50 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		e.sessions[sessionID] = as
 	}
 
+	// Active scaffold step-down mode: serve the current intermediate subgoal.
+	if as.activeScaffold != nil && as.activeScaffold.CurrentStepIndex < len(as.activeScaffold.Steps) {
+		step := as.activeScaffold.Steps[as.activeScaffold.CurrentStepIndex]
+		as.answered = false
+		as.attemptID = newAttemptID()
+		as.conceptID = as.activeScaffold.ParentConceptID
+		c := e.dag.Concept(as.conceptID)
+		cLabel := as.conceptID
+		if c != nil {
+			cLabel = c.Label
+		}
+		as.conceptName = cLabel
+		as.questionText = fmt.Sprintf("[Subgoal %d of %d] %s", step.Ordinal, len(as.activeScaffold.Steps), step.Prompt)
+		as.expectedAnswer = step.Answer
+		as.explanation = step.Explanation
+		as.isReview = false
+		as.questionDifficulty = as.activeScaffold.ParentDifficulty
+		as.studentID = studentID
+		as.writeGen = e.resetGen[studentID]
+		as.timeThreshold = 60.0
+		if c != nil {
+			as.timeThreshold = e.accommodatedThreshold(studentID, c.MasteryThreshold.AvgTimeSeconds)
+		}
+		e.sessions[sessionID] = as
+		e.persistActiveSession(sessionID, studentID, as, as.questionText)
+		var lesson *lessons.Lesson
+		if e.ll != nil {
+			lesson = e.ll.Lesson(as.conceptID)
+		}
+		return &Question{
+			ConceptID:      as.conceptID,
+			ConceptName:    cLabel,
+			Question:       as.questionText,
+			GradingType:    e.gradingTypeFor(as.conceptID),
+			IsReview:       false,
+			AttemptID:      as.attemptID,
+			Lesson:         lesson,
+			Diagram:        diagramForConcept(as.conceptID),
+			ScaffoldActive: true,
+			ScaffoldStep:   step.Ordinal,
+			ScaffoldTotal:  len(as.activeScaffold.Steps),
+		}, nil
+	}
+
 	// PR 1.5 halt: after 2 consecutive misses, serve the remedial queue first
 	// (KeyPrerequisites then the concept at an easier variant) before resuming.
 	if as.halted && len(as.remedialQueue) > 0 {
@@ -701,6 +761,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 		as.questionDifficulty = diff
 		as.studentID = studentID
 		as.writeGen = e.resetGen[studentID]
+		as.pendingScaffold = prob.ScaffoldSteps
 		e.sessions[sessionID] = as
 		e.persistActiveSession(sessionID, studentID, as, as.questionText)
 		var lesson *lessons.Lesson
@@ -782,6 +843,7 @@ func (e *Engine) NextQuestion(sessionID, studentID string) (*Question, error) {
 	as.attemptID = attemptID
 	as.questionText = prob.Question
 	as.questionDifficulty = difficulty
+	as.pendingScaffold = prob.ScaffoldSteps
 	as.recentConcepts = append(as.recentConcepts, next.Concept.ID)
 	if len(as.recentConcepts) > 3 {
 		as.recentConcepts = as.recentConcepts[len(as.recentConcepts)-3:]
@@ -1241,6 +1303,17 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	// reset landing during grading must refuse the write below instead of
 	// resurrecting wiped rows.
 	gen := as.writeGen
+	isScaffold := as.activeScaffold != nil
+	var scaffoldCurrentStep generator.ScaffoldStep
+	var scaffoldStepIdx, scaffoldTotalSteps int
+	if isScaffold {
+		scaffoldStepIdx = as.activeScaffold.CurrentStepIndex
+		scaffoldTotalSteps = len(as.activeScaffold.Steps)
+		if scaffoldStepIdx < scaffoldTotalSteps {
+			scaffoldCurrentStep = as.activeScaffold.Steps[scaffoldStepIdx]
+		}
+	}
+	pendingScaffold := as.pendingScaffold
 	sessionFields := struct {
 		conceptID          string
 		expectedAnswer     string
@@ -1378,24 +1451,23 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 				if len(c.Variants) > 0 {
 					as.remedialDifficulty = c.Variants[0].Difficulty
 				}
+				var targets []string
 				if kp := c.KnowledgePointByOrdinal(sessionFields.kpOrdinal); kp != nil {
 					for _, req := range kp.KeyPrerequisites {
 						if e.dag.Concept(req) != nil {
-							as.remedialQueue = append(as.remedialQueue, req)
-							remedial = append(remedial, req)
+							targets = append(targets, req)
 						}
 					}
 				}
-				if len(c.KeyPrerequisites) > 0 {
-					var validKPs []string
-					for _, kp := range c.KeyPrerequisites {
-						if e.dag.Concept(kp) != nil {
-							as.remedialQueue = append(as.remedialQueue, kp)
-							remedial = append(remedial, kp)
-							validKPs = append(validKPs, kp)
-						}
+				if len(targets) == 0 {
+					targets = e.resolveRemedialPrerequisites(studentID, sessionFields.conceptID)
+				}
+				if len(targets) > 0 {
+					for _, t := range targets {
+						as.remedialQueue = append(as.remedialQueue, t)
+						remedial = append(remedial, t)
 					}
-					_ = e.repo.EnqueueRemedial(studentID, validKPs...)
+					_ = e.repo.EnqueueRemedial(studentID, targets...)
 				}
 			}
 			as.remedialQueue = append(as.remedialQueue, sessionFields.conceptID)
@@ -1461,6 +1533,73 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	as.conceptID = ""
 	as.questionText = ""
 	as.kpOrdinal = 0
+
+	var resScaffoldActive bool
+	var resScaffoldStep, resScaffoldTotal int
+	if isScaffold {
+		if gr.Correct {
+			as.activeScaffold.CurrentStepIndex++
+			scaffoldCompleted := as.activeScaffold.CurrentStepIndex >= len(as.activeScaffold.Steps)
+			if scaffoldCompleted {
+				as.activeScaffold = nil
+				as.pendingScaffold = nil
+			} else {
+				resScaffoldActive = true
+				resScaffoldStep = as.activeScaffold.CurrentStepIndex + 1
+				resScaffoldTotal = len(as.activeScaffold.Steps)
+			}
+		} else {
+			// Subgoal missed: Prerequisite Attribution Invariant
+			if scaffoldCurrentStep.PrereqConcept != "" {
+				prereqID := scaffoldCurrentStep.PrereqConcept
+				_, _ = e.repo.RecordAttempt(storage.AttemptEntry{
+					SessionID:      sessionID,
+					StudentID:      studentID,
+					ConceptID:      prereqID,
+					Answer:         answer,
+					Expected:       scaffoldCurrentStep.Answer,
+					Correct:        false,
+					ElapsedSeconds: elapsedSeconds,
+					Timestamp:      nowUTC(),
+					Question:       sessionFields.questionText,
+					Source:         "scaffold_prereq",
+					Explanation:    scaffoldCurrentStep.Explanation,
+				})
+				if prereqProg, err := e.repo.GetProgress(studentID, prereqID); err == nil && prereqProg != nil {
+					prereqProg.Streak = 0
+					if prereqProg.Status == string(mastery.StatusMastered) {
+						prereqProg.Status = string(mastery.StatusPracticing)
+					}
+					_ = e.repo.UpsertProgress(prereqProg)
+				}
+				_ = e.repo.EnqueueRemedial(studentID, prereqID)
+				as.remedialQueue = append(as.remedialQueue, prereqID)
+				as.halted = true
+				halted = true
+				remedial = append(remedial, prereqID)
+			}
+			resScaffoldActive = true
+			resScaffoldStep = scaffoldStepIdx + 1
+			resScaffoldTotal = scaffoldTotalSteps
+		}
+	} else {
+		if gr.Correct {
+			as.pendingScaffold = nil
+		} else if len(pendingScaffold) > 0 {
+			as.activeScaffold = &activeScaffoldSession{
+				ParentConceptID:    sessionFields.conceptID,
+				ParentQuestionText: sessionFields.questionText,
+				ParentDifficulty:   sessionFields.questionDifficulty,
+				Steps:              pendingScaffold,
+				CurrentStepIndex:   0,
+			}
+			as.pendingScaffold = nil
+			resScaffoldActive = true
+			resScaffoldStep = 1
+			resScaffoldTotal = len(as.activeScaffold.Steps)
+		}
+	}
+
 	e.persistActiveSession(sessionID, studentID, as, "")
 	e.mu.Unlock()
 
@@ -1489,6 +1628,9 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		Remedial:       remedial,
 		KPOrdinal:      resKPOrdinal,
 		KPAdvanced:     resKPAdvanced,
+		ScaffoldActive: resScaffoldActive,
+		ScaffoldStep:   resScaffoldStep,
+		ScaffoldTotal:  resScaffoldTotal,
 	}, nil
 }
 
@@ -1694,15 +1836,12 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 			halted = true
 			xp = 0
 			c := e.dag.Concept(conceptID)
-			if c != nil && len(c.KeyPrerequisites) > 0 {
-				var validKPs []string
-				for _, kp := range c.KeyPrerequisites {
-					if e.dag.Concept(kp) != nil {
-						validKPs = append(validKPs, kp)
-						remedial = append(remedial, kp)
-					}
+			if c != nil {
+				targets := e.resolveRemedialPrerequisites(studentID, conceptID)
+				if len(targets) > 0 {
+					_ = e.repo.EnqueueRemedial(studentID, targets...)
+					remedial = append(remedial, targets...)
 				}
-				_ = e.repo.EnqueueRemedial(studentID, validKPs...)
 				remedial = append(remedial, conceptID)
 			}
 		}
@@ -1931,6 +2070,74 @@ func (e *Engine) EnqueueRemedial(studentID string, conceptIDs ...string) {
 	_ = e.repo.EnqueueRemedial(studentID, valid...)
 }
 
+// resolveRemedialPrerequisites identifies target concepts to enqueue when a student halts.
+// It prioritizes explicit KeyPrerequisites declared on the concept. When none exist in the DAG,
+// it falls back to the concept's prerequisites in the DAG (e.dag.PrereqsOf), selecting the weakest
+// prerequisite (unseen or in-progress first, then lowest streak).
+func (e *Engine) resolveRemedialPrerequisites(studentID string, conceptID string) []string {
+	if e.dag == nil {
+		return nil
+	}
+	c := e.dag.Concept(conceptID)
+	if c == nil {
+		return nil
+	}
+
+	var keyPrereqs []string
+	for _, kp := range c.KeyPrerequisites {
+		if e.dag.Concept(kp) != nil {
+			keyPrereqs = append(keyPrereqs, kp)
+		}
+	}
+	if len(keyPrereqs) > 0 {
+		return keyPrereqs
+	}
+
+	prereqs := e.dag.PrereqsOf(conceptID)
+	if len(prereqs) == 0 {
+		return nil
+	}
+
+	progressMap, err := e.repo.GetAllProgress(studentID)
+	if err != nil {
+		return []string{prereqs[0].ID}
+	}
+
+	var weakestID string
+	bestRank := 999
+	bestStreak := 999999
+
+	for _, p := range prereqs {
+		prog := progressMap[p.ID]
+		var rank int
+		var streak int
+		if prog == nil || prog.Status == string(mastery.StatusUnseen) || prog.Status == "" {
+			rank = 0
+			streak = 0
+		} else if prog.Status == string(mastery.StatusLearning) || prog.Status == string(mastery.StatusPracticing) {
+			rank = 1
+			streak = prog.Streak
+		} else if prog.Status == "DECAYING" {
+			rank = 2
+			streak = prog.Streak
+		} else {
+			rank = 3
+			streak = prog.Streak
+		}
+
+		if rank < bestRank || (rank == bestRank && streak < bestStreak) {
+			bestRank = rank
+			bestStreak = streak
+			weakestID = p.ID
+		}
+	}
+
+	if weakestID != "" {
+		return []string{weakestID}
+	}
+	return nil
+}
+
 // computeXP retains bool-based API for backward compatibility (isReview=true→review 5, false→lesson 10).
 func computeXP(correct bool, elapsed, timeThreshold float64, streak int, isReview bool) int {
 	taskType := TaskLesson
@@ -1965,10 +2172,15 @@ func (e *Engine) GetProgress(studentID string) (map[string]*storage.ConceptProgr
 		// No review timestamp means we cannot claim it is fresh, so treat it as
 		// fully decayed rather than pretending it was reviewed just now.
 		days := 999.0
-		if p.LastReviewed != nil {
+		if p.FSRSLastReview != nil && !p.FSRSLastReview.IsZero() {
+			days = now.Sub(*p.FSRSLastReview).Hours() / 24
+		} else if p.LastReviewed != nil {
 			days = now.Sub(*p.LastReviewed).Hours() / 24
 		}
-		p.Status = string(mastery.EffectiveStatus(mastery.StatusMastered, days, mastery.DecayDays))
+		if days < 0 {
+			days = 0
+		}
+		p.Status = string(mastery.EffectiveStatusFSRS(mastery.StatusMastered, days, p.FSRSStability, mastery.DecayDays))
 	}
 	return progress, nil
 }

@@ -41,6 +41,7 @@ export default function QuizHost() {
   const [startError, setStartError] = useState('')
 
   const quizSessionId = useRef('')
+  const quizAttemptId = useRef('')
   const quizInputRef = useRef<MathFocusHandle | null>(null)
   const quizShownAt = useRef<number | null>(null)
   const quizConceptId = useRef('')
@@ -373,12 +374,13 @@ export default function QuizHost() {
               </div>
               <div className="mt-2 flex justify-end">
                 <ReportButton
-                  key={quizQuestion}
+                  key={`quiz-${quizCount}-${quizAttemptId.current || quizQuestion}`}
                   conceptId={quizConceptId.current}
                   kind="question"
                   question={quizQuestion}
                   source="quiz"
                   sessionId={quizSessionId.current}
+                  attemptId={quizAttemptId.current}
                   answerGiven={quizAnswerInput}
                   gradingType={quizGradingType.current || undefined}
                   answerHint={answerFormat.hint}
