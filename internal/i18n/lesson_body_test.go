@@ -448,6 +448,8 @@ var mathOperatorNames = map[string]bool{
 	"det": true, "rank": true, "tr": true, "dim": true, "ker": true, "span": true, "proj": true,
 	"Re": true, "Im": true, "arg": true, "deg": true, "diag": true, "var": true, "Var": true,
 	"Cov": true, "cov": true, "E": true, "P": true,
+	// The adjugate matrix, adj(A): Ukrainian textbooks write it with Latin letters too.
+	"adj": true,
 	// The temperature scales: °C and °F are written with Latin letters in Russian and Ukrainian too.
 	"C": true, "F": true,
 }
