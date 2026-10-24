@@ -1113,7 +1113,7 @@
  "stat.dist.uniform": "Рівномірний розподіл",
  "stat.dist.normal": "Нормальний (гаусів) розподіл",
  "stat.dist.z_table": "Стандартний нормальний розподіл і таблиця Z",
- "stat.dist.exponential": "Показниковий розподіл",
+ "stat.dist.exponential": "Експоненційний розподіл",
  "stat.dist.gamma": "Гамма-розподіл",
  "stat.dist.beta": "Бета-розподіл",
  "stat.dist.chi_square": "Розподіл хі-квадрат",
