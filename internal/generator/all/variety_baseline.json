@@ -342,7 +342,7 @@
   "calc.limit.big_o": 9,
   "calc.limit.concept": 58,
   "calc.limit.continuity": 15,
-  "calc.limit.discontinuity": 4,
+  "calc.limit.discontinuity": 44,
   "calc.limit.epsilon_delta": 13,
   "calc.limit.exp_limit": 25,
   "calc.limit.indeterminate": 11,
