@@ -5,12 +5,12 @@ import path from 'node:path'
 // One authority for the domain list: lib/graphDomains.ts.
 //
 // Six modules used to carry their own copy. `DomainProgress` listed 15 domains and omitted
-// precalculus and machine_learning, so 50 concepts appeared nowhere in the product — with no
+// precalculus and machine_learning, so 50 concepts appeared nowhere in the product, with no
 // empty row and no error to say so. Three more modules omitted machine_learning. The dashboard's
 // per-domain table was the worst of them because it was the one place a learner would look for
 // "which subjects have I not touched".
 //
-// The guard is coverage, not prohibition. A module is allowed to declare its own domain list —
+// The guard is coverage, not prohibition. A module is allowed to declare its own domain list, 
 // an onboarding picker or a goals view may legitimately order domains differently, and
 // countByDomain's own comment says presentation order is a view concern. What is not allowed is a
 // list that silently omits a domain, because that is indistinguishable from a domain that does
@@ -27,7 +27,7 @@ const CANONICAL = path.join(ROOT, 'lib', 'graphDomains.ts')
 //
 // lib/glossary/categories.ts: the glossary's nine reference categories
 // (greek, arithmetic, algebra, ...) are deliberately NOT the 17-domain
-// curriculum — the glossary is a standalone reference and must not mirror,
+// curriculum, the glossary is a standalone reference and must not mirror,
 // enumerate or track curriculum domains (no concept mapping in v1). Three of
 // its ids ('arithmetic', 'algebra', 'calculus') coincide with curriculum
 // domain ids, which trips the array-of-quoted-ids detector. Exempting the
@@ -71,7 +71,7 @@ function authoredFiles(): { rel: string; text: string }[] {
  *
  * The discriminator is the declaration's own name or shape, not how many domains it mentions.
  * A count is not enough: `components/math/layouts.ts` names five domains in its geometry and
- * algebra layout tables, and those are subject-matter references — they exist to type equations,
+ * algebra layout tables, and those are subject-matter references, they exist to type equations,
  * not to enumerate the curriculum. Flagging them would bury the real offence under noise.
  *
  * So: a declaration counts when its name says "domain", or when it is an array literal of quoted
@@ -127,7 +127,7 @@ describe('domain list authority', () => {
 
   it('does not confuse a subject-matter reference with an enumeration', () => {
     // Geometry and algebra layout tables name five domains each. They exist to type equations,
-    // not to enumerate the curriculum, and their names say nothing about domains — which is
+    // not to enumerate the curriculum, and their names say nothing about domains, which is
     // exactly the distinction the detector uses. Without it this test file flags six files and
     // the real offence is invisible.
     const layouts = fs.readFileSync(path.join(ROOT, 'components', 'math', 'layouts.ts'), 'utf8')

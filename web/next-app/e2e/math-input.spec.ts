@@ -17,7 +17,7 @@ import {
 
 // The real MathLive, in a real browser.
 //
-// The vitest suite stubs the library out — it cannot mount in jsdom — and asserts
+// The vitest suite stubs the library out, it cannot mount in jsdom and asserts
 // Mathua's behaviour: which control is chosen, what is submitted, what the learner
 // sees. Everything here is the other half: whether the editor actually builds
 // mathematical *structures*, and whether a learner's editing gestures work. Those are
@@ -204,7 +204,7 @@ test.describe('structures, not strings', () => {
   test('typing the √ glyph is not a radical', async ({ page }) => {
     // Recorded, not assumed. MathLive maps the √ character to `\\surd`, which is
     // an ordinary symbol, so typing "√9" gives "\\surd9" and not "\\sqrt{9}". This is
-    // exactly why the keypad offers a structural √ key rather than the character —
+    // exactly why the keypad offers a structural √ key rather than the character, 
     // and why the retired SymbolPalette's √ glyph was never going to produce one.
     await openLearn(page)
     await fresh(page, '√9')
@@ -350,7 +350,7 @@ test.describe('submission is unchanged', () => {
     await page.getByRole('button', { name: 'Check', exact: true }).first().click()
     await expect(page.getByText('+1 XP').first()).toBeVisible({ timeout: 20_000 })
     // The whole reason components/math/plainAnswer.ts exists. Unnormalized this is
-    // `(1)/(2)`, which numericGrader cannot parse — a false miss on a correct answer.
+    // `(1)/(2)`, which numericGrader cannot parse, a false miss on a correct answer.
     expect(submitted()).toBe('1/2')
   })
 
@@ -421,7 +421,7 @@ test.describe('visual integration', () => {
     // Focusing used to light two blue rectangles: the wrapper div and the <math-field>
     // each declared a border and each turned blue, because `mathua-blue` *is*
     // `var(--accent-blue)`. Same token twice, which reads as two states rather than
-    // one. Counting elements is the only assertion that catches it — a screenshot diff
+    // one. Counting elements is the only assertion that catches it, a screenshot diff
     // would call it a design choice, and checking one element's colour cannot see the
     // other.
     const boxes = await page.evaluate(() => {

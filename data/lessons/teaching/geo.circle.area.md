@@ -1,7 +1,7 @@
 > Hand-authored lesson for the Mathua project.
 # Area of a Circle
 
-The area enclosed by a circle depends on just one measurement — the radius:
+The area enclosed by a circle depends on just one measurement, the radius:
 
 \[A = \pi r^2\]
 

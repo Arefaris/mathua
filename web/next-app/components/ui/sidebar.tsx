@@ -96,7 +96,7 @@ const SidebarProvider = React.forwardRef<
         try {
           localStorage.setItem(SIDEBAR_COOKIE_NAME, openState ? 'expanded' : 'collapsed')
         } catch {
-          /* private mode — persistence skipped */
+          /* private mode, persistence skipped */
         }
       },
       [setOpenProp, open]

@@ -327,7 +327,7 @@ export function SymbolicGradingSection() {
         <code style={mutedCodeStyle}>(x+2)(x+3)</code>,{' '}
         <code style={mutedCodeStyle}>2x&#178; + 3x - 5</code>{' '}
         where numeric comparison is no longer sufficient. Mathua uses a mixed Go/Python
-        grading system: the router dispatches nine grading types — six pure-Go graders — and
+        grading system: the router dispatches nine grading types, six pure-Go graders and
         mathematical equivalence for algebra, calculus, differential equations and
         trigonometry is handled by a Python subprocess running{' '}
         <code style={inlineCodeStyle}>sympy</code>, bundled into the production image.
@@ -364,7 +364,7 @@ func (r *Router) Grade(t GradingType, expected, answer string) Result {
     }
 }
 
-// internal/engine/engine.go — a generator may override the router:
+// internal/engine/engine.go, a generator may override the router:
 func (e *Engine) gradeAnswer(conceptID, expected, answer string) grader.Result {
     if gen, err := e.registry.Get(conceptID); err == nil {
         if gg, ok := gen.(generator.GradedGenerator); ok {
@@ -408,7 +408,7 @@ for line in sys.stdin:
 export function MeasuringLearningSection() {
   const rows: [string, string][] = [
     ['First-pass rate', 'Share of concepts answered correctly on the very first attempt.'],
-    ['Second-pass rate', 'Share correct within the first two attempts — the recovery metric. A gap between first- and second-pass means material is learnable with feedback but not yet automatic.'],
+    ['Second-pass rate', 'Share correct within the first two attempts, the recovery metric. A gap between first- and second-pass means material is learnable with feedback but not yet automatic.'],
     ['Average attempts per concept', 'Mean attempts across concepts; falls as fluency builds.'],
     ['Retention', 'Students active in two or more distinct weeks ÷ all students who ever attempted. A coarse cohort signal, not a week-over-week curve.'],
     ['First-pass trend', 'Last week minus first week. Positive means accuracy improved across the observed window; noisy at small N.'],
@@ -419,7 +419,7 @@ export function MeasuringLearningSection() {
       <p style={bodyStyle}>
         Every answer in Mathua writes one row to an attempt log: student, concept,
         correctness, elapsed seconds, timestamp. Nothing is sampled or aggregated
-        at write time — every metric below is computed from that raw log, per
+        at write time, every metric below is computed from that raw log, per
         student or product-wide.
       </p>
 
@@ -476,12 +476,12 @@ export function MeasuringLearningSection() {
       <p style={bodyStyle}>
         These are usage metrics, not an efficacy claim: no control group, no
         randomisation. Compare within a student over weeks, not across learners
-        at different frontiers — and always read a weekly rate alongside its
+        at different frontiers and always read a weekly rate alongside its
         active-student count, since a week with three attempts can show 0% or
         100% by accident.
       </p>
       <p style={{ fontFamily: monoFont, fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.7 }}>
-        The figure above refreshes weekly from the live product-wide log — read
+        The figure above refreshes weekly from the live product-wide log, read
         it with its sample size, which rides in the caption. Early numbers move
         a lot; that is normal, not a verdict. Your live per-student numbers are
         on your{' '}

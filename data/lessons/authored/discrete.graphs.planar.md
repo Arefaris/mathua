@@ -16,6 +16,6 @@ The bound is sharp: the tetrahedron has \(V = 4\) and \(6 = 3 \cdot 4 - 6\) edge
 
 ## When planarity fails
 
-\(K_5\) has five vertices and ten edges, but \(3 \cdot 5 - 6 = 9\), so it is not planar. \(K_{3,3}\) has six vertices and nine edges, which is under the bound, so the edge count does not settle it — it fails instead because every face would need at least four edges, giving \(2E \ge 4F\) and hence \(E \le 2V - 4 = 8 < 9\).
+\(K_5\) has five vertices and ten edges, but \(3 \cdot 5 - 6 = 9\), so it is not planar. \(K_{3,3}\) has six vertices and nine edges, which is under the bound, so the edge count does not settle it, it fails instead because every face would need at least four edges, giving \(2E \ge 4F\) and hence \(E \le 2V - 4 = 8 < 9\).
 
 **Kuratowski's theorem** completes the picture: a graph is planar exactly when it contains no subdivision of \(K_5\) or \(K_{3,3}\). The two forbidden graphs are the whole obstruction, and the edge bounds are the cheap tests that catch most cases first.

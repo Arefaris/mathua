@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/convergent-and-divergent-sequences/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/convergent-and-divergent-sequences/), CC BY-NC 4.0
 
 ## Behavior of a sequence
 

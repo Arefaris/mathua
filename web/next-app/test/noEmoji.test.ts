@@ -5,8 +5,8 @@ import path from 'node:path'
 // No emoji, anywhere we author. AGENTS.md states the rule; this states the evidence.
 //
 // The rule exists because of what an emoji costs rather than because they are ugly. Four were
-// live in the app when this was written — U+23F3 on the reviews-due line, U+23F8 on the pause
-// banner, U+23F5 on the graph flow toggle, and one already guarded by a test — and each had a
+// live in the app when this was written, U+23F3 on the reviews-due line, U+23F8 on the pause
+// banner, U+23F5 on the graph flow toggle and one already guarded by a test, and each had a
 // concrete defect behind it:
 //
 //   - U+23F5 sat inside a button with `fontSize: 10` and rendered at an unpredictable baseline
@@ -19,7 +19,7 @@ import path from 'node:path'
 //
 // The exclusions below are deliberate and narrow. Arrows, check marks, ballot marks and box
 // drawing are typography that Mathua uses deliberately, not emoji: `→` in a button, `✓` for a
-// correct answer, `·` as a bullet. `⌈`/`⌉` are floor and ceiling brackets in set notation —
+// correct answer, `·` as a bullet. `⌈`/`⌉` are floor and ceiling brackets in set notation, 
 // `internal/generator/discrete/generators.go` uses them in generated math, and mistaking them for
 // emoji would corrupt mathematics.
 
@@ -99,7 +99,7 @@ const ALLOWED: Record<string, string> = {
   '²': 'superscript two, mathematics',
   '′': 'prime, mathematics',
   '…': 'ellipsis, used in truncated prose and generated content',
-  '—': 'em dash, used as punctuation throughout the docs',
+  ', ': 'em dash, used as punctuation throughout the docs',
   '–': 'en dash, used in numeric ranges such as 5–15',
   '§': 'section sign, used in ADR references',
   '†': 'dagger, footnote marker',
@@ -108,7 +108,7 @@ const ALLOWED: Record<string, string> = {
 /**
  * Whether the guard would flag a character. This is the whole rule, and the tests assert on it
  * rather than on the regex: a character can be safe either because the regex does not match it
- * (arrows — U+2190..U+21FF is not in an emoji range) or because it is explicitly excluded
+ * (arrows, U+2190..U+21FF is not in an emoji range) or because it is explicitly excluded
  * (check marks, which share a block with emoji). Asserting `matches(EMOJI)` would demand the
  * wrong one of those and would push a future edit to widen the regex for no reason.
  */
@@ -201,7 +201,7 @@ describe('no emoji in authored code', () => {
   })
 
   // A guard that cannot fail is not a guard. These are the characters it must catch, asserted
-  // against the classifier rather than trusted — the same reason the maths exclusions exist:
+  // against the classifier rather than trusted, the same reason the maths exclusions exist:
   // a regex that silently stops matching is worse than no regex.
   it('flags a real emoji', () => {
     // Written as escapes, not literals: a fixture emoji in this file would be flagged by the

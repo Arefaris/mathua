@@ -16,8 +16,8 @@ import { concepts } from '../lib/conceptData'
 // This used to be `/study`: a browsable library of whole lessons, with its own search, its own
 // domain index, and a link to it in every header, tab bar, sidebar and footer. ADR-047 closed
 // that route and moved the material here, inside `/learn`, collapsed and link-free. ADR-054
-// restored `/study` as a *context-bound* reference page — reachable for a prerequisite or a
-// chosen topic, but not a catalogue, and not a route that awards anything — and this component
+// restored `/study` as a *context-bound* reference page, reachable for a prerequisite or a
+// chosen topic, but not a catalogue and not a route that awards anything, and this component
 // is what both surfaces render.
 //
 // What is deliberately NOT here: a way to browse. There is no domain list, no lesson list, no
@@ -25,7 +25,7 @@ import { concepts } from '../lib/conceptData'
 // page around this component draws (prerequisites and dependents), and it is reference-only.
 //
 // Reading is also not evidence. There is no "mark as read", no completion, no "I studied this"
-// — nothing below moves a mastery status, and the note at the foot says so explicitly, because a
+//, nothing below moves a mastery status, and the note at the foot says so explicitly, because a
 // panel of authoritative-looking prose sitting next to the questions is exactly where a learner
 // would expect one.
 
@@ -50,7 +50,7 @@ interface Props {
 const PLACEHOLDER_SLICE = /There isn't a written explanation/
 
 // Only reached for a concept whose shard carries no knowledge points at all. It costs one lesson
-// index fetch, so it stays off the common path — and every concept in the corpus has a shard, so
+// index fetch, so it stays off the common path and every concept in the corpus has a shard, so
 // in practice this rarely runs. It is here so a concept authored without one still gets the
 // article rather than an empty panel.
 async function fetchLessonTitle(conceptId: string): Promise<string | null> {
@@ -204,7 +204,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
       {body && (
         <div className={blocks.length > 0 ? 'mt-4' : ''}>
           <h3 className="font-mono text-[11px] text-mathua-muted mb-2 uppercase tracking-wider">
-            Full lesson{lessonTitle ? ` — ${lessonTitle}` : ''}
+            Full lesson{lessonTitle ? `, ${lessonTitle}` : ''}
           </h3>
           <div className="border border-mathua-border bg-mathua-code p-3 text-sm overflow-hidden">
             <KatexContent>{body}</KatexContent>
@@ -223,7 +223,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
       )}
 
       <p className="mt-4 border-t border-mathua-border pt-3 font-mono text-[10px] text-mathua-muted">
-        Reference explains. It does not count as progress — only the questions below move this
+        Reference explains. It does not count as progress, only the questions below move this
         concept.
       </p>
     </div>
@@ -238,7 +238,7 @@ export default function ConceptReference({ conceptId, variant = 'panel', emptyAc
   return (
     <details className="mb-4 border border-mathua-border bg-mathua-surface">
       <summary className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted px-4 py-3 cursor-pointer hover:text-mathua-blue">
-        Reference — the full lesson
+        Reference, the full lesson
       </summary>
       {content}
     </details>

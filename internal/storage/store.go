@@ -138,7 +138,7 @@ type AttemptEntry struct {
 	Source      string `json:"source"`
 	Explanation string `json:"explanation"`
 	// Difficulty the generator served this question at (0.3-1.0). Nil means unknown:
-	// a pre-migration row, or a question that was not generated. Never fabricate it —
+	// a pre-migration row, or a question that was not generated. Never fabricate it,
 	// "not recorded" and "recorded as trivial" are different facts, and an evidence model
 	// that cannot tell them apart is worse than one that knows less.
 	Difficulty *float64 `json:"difficulty,omitempty"`
@@ -340,7 +340,7 @@ type RoleChange struct {
 	// case that produces no audit event.
 	Changed bool
 	// Action names the audit event this change wrote, or "" when it wrote none. Carried on the
-	// result so a caller can confirm which event to expect without re-reading the log — and so
+	// result so a caller can confirm which event to expect without re-reading the log and so
 	// the CLI can print it rather than reconstructing the name from the requested role.
 	Action string
 	Before AdminUser
@@ -350,7 +350,7 @@ type RoleChange struct {
 // ErrLastAdmin is returned when a demotion would leave the system with no administrator.
 //
 // It is a sentinel rather than a bool so a caller cannot confuse "refused" with "no such
-// user" — the two are reported differently, and the first one is a rule while the second is
+// user", the two are reported differently, and the first one is a rule while the second is
 // a lookup miss.
 var ErrLastAdmin = errors.New("cannot demote the last administrator")
 
@@ -358,7 +358,7 @@ var ErrLastAdmin = errors.New("cannot demote the last administrator")
 //
 // The invariant moved up the hierarchy in Admin V2. V1 guarded the last `admin`; the role that
 // can hand out every other role is now `owner`, so that is the one the system may never run out
-// of. An admin or moderator count of zero is recoverable — an owner can always create one — but
+// of. An admin or moderator count of zero is recoverable, an owner can always create one, but
 // an owner count of zero is not, because nothing but an owner can mint the first one back.
 var ErrLastOwner = errors.New("cannot remove the last owner")
 
@@ -376,7 +376,7 @@ var ErrReportUnchanged = errors.New("report is already in that status")
 // only thing that grants it is an explicit write by an administrator or the operator.
 //
 // Four values, ordered least to most privileged: student, moderator, admin, owner. The ordering
-// matters — every guard that stops someone acting above their authority is a comparison of
+// matters, every guard that stops someone acting above their authority is a comparison of
 // ranks, and having one definition of "above" is what keeps the guards from disagreeing.
 type Role string
 
@@ -457,7 +457,7 @@ func ParseRole(s string) (Role, bool) {
 // AdminUser is the non-sensitive account projection administration reads.
 //
 // Deliberately not `Student`. That struct carries PasswordHash, ShareToken and the learner's
-// XP and streak, and an admin listing is not a place any of those should be reachable — not
+// XP and streak, and an admin listing is not a place any of those should be reachable, not
 // because an admin has no business seeing them, but because a projection that cannot express a
 // field cannot leak it by a later edit. Everything here is something an administrator would
 // be shown anyway, and nothing here is derived from learning state.
@@ -511,7 +511,7 @@ const (
 type Repository interface {
 	CreateStudent(name string) (*Student, error)
 	// ClaimGuestStudent adopts a client-generated guest ID into a real
-	// students row (progress/attempt rows keyed by that ID predate the row —
+	// students row (progress/attempt rows keyed by that ID predate the row,
 	// there are no FKs). Idempotent: existing rows are returned as-is.
 	ClaimGuestStudent(id, name string) (*Student, error)
 	GetStudent(id string) (*Student, error)
@@ -534,7 +534,7 @@ type Repository interface {
 	GetProgress(studentID, conceptID string) (*ConceptProgress, error)
 	GetAllProgress(studentID string) (map[string]*ConceptProgress, error)
 	UpsertProgress(p *ConceptProgress) error
-	// UpsertProgressBatch persists many rows in one transaction — the
+	// UpsertProgressBatch persists many rows in one transaction, the
 	// N+1 antidote for PropagateWeakness and ApplyGoalResults.
 	UpsertProgressBatch(ps []*ConceptProgress) error
 	// SeedFSRSFromSM2 backfills FSRS state from existing SM-2 intervals for unseeded rows.
@@ -559,7 +559,7 @@ type Repository interface {
 	// When any ceiling is reached the whole transaction rolls back, so a refused
 	// request spends no provider call and no budget. The check is on the
 	// post-increment value inside the transaction, never on a count read before
-	// it, so two concurrent requests can never both take the last free slot —
+	// it, so two concurrent requests can never both take the last free slot,
 	// which is the whole reason this is one call and not a read followed by a
 	// write. The limits are (identity, application-wide): the identity is the
 	// server's choice, a student id when authenticated and an IP for a guest,
@@ -569,8 +569,8 @@ type Repository interface {
 	// string) and reports how many rows went. Counters are keyed by day, and a
 	// day that has passed can never be reserved again, so the rows are dead
 	// weight: without this, one row per identity per day accumulates forever.
-	// The current day is never a valid argument — callers pass a cutoff weeks
-	// back — because pruning it would refill every learner's budget.
+	// The current day is never a valid argument, callers pass a cutoff weeks
+	// back, because pruning it would refill every learner's budget.
 	PruneAIUsage(beforeDay string) (int64, error)
 	// AIUsage reads one counter without incrementing. Diagnostics only; it must
 	// never decide a reservation.
@@ -604,7 +604,7 @@ type Repository interface {
 	// concept, newest last.
 	//
 	// This exists because the evidence model needs a bounded window per concept on every
-	// graded answer, and GetAttemptsForStudent returns the learner's entire history —
+	// graded answer, and GetAttemptsForStudent returns the learner's entire history,
 	// 15,774 rows for someone who has worked through the corpus. Reading that per answer
 	// would be a different kind of mistake from the one it fixes.
 	//
@@ -712,7 +712,7 @@ type Repository interface {
 	// Diagnostic sessions outlive the process that started them.
 	//
 	// They used to live only in the server's memory, so every deploy erased the
-	// run behind every open tab and the learner got "Session expired — the
+	// run behind every open tab and the learner got "Session expired, the
 	// server restarted and forgot this run" on their next answer. Eight deploys
 	// in a day made that a routine event rather than an edge case. The encoded
 	// snapshot is opaque here: the diagnostic package owns its format, and a
@@ -745,7 +745,7 @@ type Repository interface {
 	//
 	// It is a separate call rather than a field on Student on purpose. Every existing read of
 	// Student selects a fixed column list in two stores, so adding a column there meant editing
-	// roughly twenty query strings to keep them in sync — and a missed one is a scan error at
+	// roughly twenty query strings to keep them in sync and a missed one is a scan error at
 	// runtime, in whichever endpoint nobody was testing. Worse, a Role field that is zero on
 	// most Student values reads as `student` when it has not been loaded at all, which is the
 	// worst possible default for a privilege field: forgetting to populate it looks exactly
@@ -764,7 +764,7 @@ type Repository interface {
 	// and then writing the audit row leaves a window in which a change exists with no event; an
 	// administrator whose own promotion failed to be recorded has an action nobody can account
 	// for. Here the insert is part of the same unit of work, so either both land or neither
-	// does — a failing audit insert rolls the role back rather than orphaning it.
+	// does, a failing audit insert rolls the role back rather than orphaning it.
 	//
 	// Returns ErrLastAdmin if the demotion would leave no administrator, ErrRoleUnchanged if the
 	// account already holds the requested role (and writes nothing), sql.ErrNoRows if there is
@@ -864,7 +864,7 @@ type Repository interface {
 
 	// FindAdminInvitationByTokenHash reads a pending-or-settled invitation by its token hash,
 	// or nil. It is read-only and is used to check the invited address before burning the token
-	// — the burn itself is ConsumeAdminInvitation, which is the atomic step.
+	//, the burn itself is ConsumeAdminInvitation, which is the atomic step.
 	FindAdminInvitationByTokenHash(tokenHash string) (*AdminInvitation, error)
 
 	// ConsumeAdminInvitation burns a raw-token hash and returns the invitation it belonged to.

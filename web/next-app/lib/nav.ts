@@ -11,7 +11,7 @@ export type HeaderLink = NavLink
 // Order carries meaning: Learn leads, and the orientation surfaces follow it.
 //
 // Learn is the only surface that asks a question, grades an answer and explains it. It used to
-// lead into Study — a full reference library — because reading was treated as a way to learn.
+// lead into Study, a full reference library, because reading was treated as a way to learn.
 // It is not: only demonstrated answers move a concept, so a learner who could read their way
 // through the corpus had found a path around the only thing that counts. Reference material
 // stayed; the route to it from navigation did not. It now lives inside `/learn`, scoped to the
@@ -20,13 +20,13 @@ export type HeaderLink = NavLink
 // Bottom tabs are the primary mobile nav and stay at five. The mobile compass menu shows ONLY
 // overflow links not already in the tabs, so no destination appears twice on one screen.
 
-// LEARN_LINKS is the doing group, and it is shown to everyone — a guest can
+// LEARN_LINKS is the doing group, and it is shown to everyone, a guest can
 // answer questions, they just cannot have them remembered.
 export const LEARN_LINKS: NavLink[] = [{ label: 'Learn', href: '/learn' }]
 
 // REVIEW_LINKS is a Learn sub-mode: it grades, awards XP and reschedules
 // memory, so it belongs beside Learn rather than looking like its own product.
-// Auth-only, because /api/reviews/* sits behind authMiddleware — offering it to
+// Auth-only, because /api/reviews/* sits behind authMiddleware, offering it to
 // a guest would be a link to a 401.
 export const REVIEW_LINKS: NavLink[] = [{ label: 'Review', href: '/review' }]
 
@@ -34,7 +34,7 @@ export const REVIEW_LINKS: NavLink[] = [{ label: 'Review', href: '/review' }]
 // learner stands in it. None of these grade an answer.
 export const DISPLAY_LINKS: NavLink[] = [
   { label: 'Graph', href: '/graph' },
-  // Not a bottom tab on every surface — the tab bar stays at five — so /domains reaches mobile
+  // Not a bottom tab on every surface, the tab bar stays at five, so /domains reaches mobile
   // through the tab bar and the compass overflow, derived from this list minus TAB_HREFS.
   { label: 'Domains', href: '/domains' },
   { label: 'Leaderboard', href: '/leaderboard' },
@@ -60,11 +60,11 @@ export const LOGGED_OUT_LINKS: NavLink[] = [{ label: 'Login', href: '/login' }]
 // It belongs in the mobile overflow specifically: the desktop rail on `/profile` has carried the
 // Admin entry since Admin V2, but on a phone `/profile` is reachable from the tab bar only, so an
 // administrator who used their phone had no route to administration at all except typing a URL.
-// Offering it grants nothing — every `/api/admin` route re-reads the role server-side
-// (ADR-048, ADR-049) — so this is the invitation the server was always the authority for.
+// Offering it grants nothing, every `/api/admin` route re-reads the role server-side
+// (ADR-048, ADR-049), so this is the invitation the server was always the authority for.
 export const ADMIN_LINKS: NavLink[] = [{ label: 'Admin', href: '/admin' }]
 
-// Hrefs covered by the bottom tabs — never repeated in the compass menu.
+// Hrefs covered by the bottom tabs, never repeated in the compass menu.
 // Review is deliberately absent: the tab bar stays at five, and Review reaches
 // the header row and the compass overflow instead.
 export const TAB_HREFS: ReadonlySet<string> = new Set([
@@ -88,7 +88,7 @@ export function desktopLinks(loggedIn: boolean): NavLink[] {
 // Mobile compass overflow: destinations missing from the bottom tabs.
 //
 // `isStaff` appends the Admin entry. It defaults to false, so a caller that has not asked the
-// question — a guest, a learner, or a component with no auth state — gets exactly the learner
+// question, a guest, a learner, or a component with no auth state, gets exactly the learner
 // menu it got before, and only an account the server has already identified as staff sees it.
 export function overflowLinks(loggedIn: boolean, isStaff = false): NavLink[] {
   const base = desktopLinks(loggedIn).filter(l => !TAB_HREFS.has(l.href))

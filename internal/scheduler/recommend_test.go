@@ -33,7 +33,7 @@ func TestRecommend_NewLearnerIsOfferedTheDiagnosticButStillHasAgency(t *testing.
 		t.Fatalf("primary = %+v, want the diagnostic for a learner with no history", got.Primary)
 	}
 	if len(got.Alternatives) == 0 {
-		t.Error("a new learner got the diagnostic and nothing else — no agency")
+		t.Error("a new learner got the diagnostic and nothing else, no agency")
 	}
 }
 
@@ -64,7 +64,7 @@ func TestRecommend_MasteredAndBlockedConceptsAreNeverOffered(t *testing.T) {
 		}
 	}
 	if got.Primary.ConceptID != "b" && got.Primary.ConceptID != "c" {
-		t.Errorf("primary = %q, want b or c — the unlocked, unattempted concepts", got.Primary.ConceptID)
+		t.Errorf("primary = %q, want b or c, the unlocked, unattempted concepts", got.Primary.ConceptID)
 	}
 }
 
@@ -411,7 +411,7 @@ func TestRecommend_NoLearnerFacingTerminology(t *testing.T) {
 	}
 }
 
-// A learner with nothing eligible — nothing reachable, nothing due, nothing weak — is a real
+// A learner with nothing eligible, nothing reachable, nothing due, nothing weak, is a real
 // state, and it must still get a head: the client cannot render a null primary.
 //
 // It used to be answered with `/study`, and the fallback is worth keeping as a test because of

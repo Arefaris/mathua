@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/mean-or-expected-value-of-a-random-variable/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/mean-or-expected-value-of-a-random-variable/), CC BY-NC 4.0
 
 ## What is the expected value of a random variable?
 

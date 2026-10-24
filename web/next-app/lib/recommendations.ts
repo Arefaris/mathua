@@ -4,8 +4,8 @@ import type { Shelf, ShelfItem } from './nextUp'
 /**
  * The engine's recommendation, in the shape the surfaces already render.
  *
- * This is a presentation adapter and nothing else. The decision — which concept, in what order,
- * why, and with what wording — is made once, in `internal/scheduler`, and arrives over
+ * This is a presentation adapter and nothing else. The decision, which concept, in what order,
+ * why, and with what wording, is made once, in `internal/scheduler`, and arrives over
  * `/api/next`. It used to be made here, in the browser, from five API calls plus a bundled copy
  * of the corpus, while the scheduler sat unreachable between `/learn` and `/profile`.
  *
@@ -51,7 +51,7 @@ export function recommendationResToShelf(res: RecommendationRes): Shelf {
         kind: 'new' as const,
         badge: 'All learned',
         title: 'Concept graph',
-        detail: 'Nothing is due right now — the graph shows what builds on what you have',
+        detail: 'Nothing is due right now, the graph shows what builds on what you have',
         href: '/graph',
         cta: 'See the graph →',
         xp: 0,
@@ -69,7 +69,7 @@ export function recommendationResToShelf(res: RecommendationRes): Shelf {
  * Fetch the engine's answer and adapt it.
  *
  * `exclude` drops concepts the caller has just finished, so a concept is never offered back as
- * the next thing to do — which is why the server takes the parameter rather than the client
+ * the next thing to do, which is why the server takes the parameter rather than the client
  * filtering afterwards.
  */
 export async function fetchShelf(exclude?: string[]): Promise<Shelf> {

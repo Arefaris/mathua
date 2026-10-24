@@ -81,7 +81,7 @@ export default function SettingsPage() {
     try {
       const savedShare = localStorage.getItem('mathua_share_url')
       if (savedShare) setShareUrl(savedShare)
-    } catch { /* private mode — share link just won't persist */ }
+    } catch { /* private mode, share link just won't persist */ }
   }, [])
 
   const handleCheckedChange = async (checked: boolean) => {
@@ -96,7 +96,7 @@ export default function SettingsPage() {
       // Keep optimistic state so the toggle still works when the API is
       // unreachable (e.g. static preview). Persist will apply on next save.
       console.error('updateSettings failed')
-      setSaveError('Couldn\u2019t save — check your connection and try again.')
+      setSaveError('Couldn\u2019t save, check your connection and try again.')
       setTimeout(() => setSaveError(''), 3000)
     }
   }
@@ -151,7 +151,7 @@ export default function SettingsPage() {
   }
 
   // Profile helpers: every save strips the legacy avatar_preset key (quiet
-  // migration to the DiceBear model — presets are no longer offered).
+  // migration to the DiceBear model, presets are no longer offered).
   const stripPreset = (s: UserSettings): UserSettings => {
     const next = { ...s }
     delete next.avatar_preset
@@ -163,7 +163,7 @@ export default function SettingsPage() {
   // One effective seed everywhere: a staged surprise re-seeds the whole
   // grid (new character, different outfits); otherwise the saved pick's
   // seed; otherwise the stable per-user seed. After Save, pending clears
-  // and the grid falls back to the just-saved seed — no visual jump.
+  // and the grid falls back to the just-saved seed, no visual jump.
   const gridSeed = pendingDice?.seed ?? settings.avatar_dicebear?.seed ?? gallerySeed
 
   const handleSaveName = async () => {
@@ -184,13 +184,13 @@ export default function SettingsPage() {
       // Surface friendly server messages (e.g. "email already in use");
       // fall back to the generic notice for network failures.
       const serverMessage = (e as { serverMessage?: string })?.serverMessage
-      setNameMsg(serverMessage || 'Couldn’t save — check your connection and try again.')
+      setNameMsg(serverMessage || 'Couldn’t save, check your connection and try again.')
     } finally {
       setNameBusy(false)
     }
   }
 
-  // Gallery picks and Surprise only stage a preview — Save image persists.
+  // Gallery picks and Surprise only stage a preview, Save image persists.
   const handlePickStyle = (style: DicebearPick['style']) => {
     const seed = pendingDice?.seed ?? settings.avatar_dicebear?.seed ?? gallerySeed
     setPendingDice({ style, seed })
@@ -221,12 +221,12 @@ export default function SettingsPage() {
       setPhotoVersion(null)
       setPendingDice(null)
       setImageMsg('Image saved.')
-      // Broadcast so the Header picture refreshes in-tab (same object —
+      // Broadcast so the Header picture refreshes in-tab (same object, 
       // setUserInfo always dispatches auth-changed).
       const savedInfo = getUserInfo()
       if (savedInfo) setUserInfo({ ...savedInfo })
     } catch {
-      setImageMsg('Couldn’t save — check your connection and try again.')
+      setImageMsg('Couldn’t save, check your connection and try again.')
     } finally {
       setImageBusy(false)
     }
@@ -250,7 +250,7 @@ export default function SettingsPage() {
       const uploadedInfo = getUserInfo()
       if (uploadedInfo) setUserInfo({ ...uploadedInfo })
     } catch {
-      setPhotoMsg('Upload failed — use PNG, JPEG, GIF or WebP up to 512KB.')
+      setPhotoMsg('Upload failed, use PNG, JPEG, GIF or WebP up to 512KB.')
     } finally {
       setPhotoBusy(false)
     }
@@ -283,7 +283,7 @@ export default function SettingsPage() {
       setCpNew('')
       setCpMsg('Password changed.')
     } catch (e: unknown) {
-      setCpMsg(e instanceof Error ? e.message : 'Change failed — try again.')
+      setCpMsg(e instanceof Error ? e.message : 'Change failed, try again.')
     } finally {
       setCpBusy(false)
     }
@@ -301,11 +301,11 @@ export default function SettingsPage() {
     setVerifyMsg('')
     try {
       await requestEmailVerification()
-      setVerifyMsg('Verification link sent — check your inbox.')
+      setVerifyMsg('Verification link sent, check your inbox.')
       const info = getUserInfo()
       if (info) setUserInfo({ ...info })
     } catch (e: unknown) {
-      setVerifyMsg(e instanceof Error ? e.message : 'Request failed — try again.')
+      setVerifyMsg(e instanceof Error ? e.message : 'Request failed, try again.')
     } finally {
       setVerifyBusy(false)
     }
@@ -318,7 +318,7 @@ export default function SettingsPage() {
       const linkToken = await createLinkToken()
       startOAuthLogin(provider, { intent: 'link', linkToken })
     } catch {
-      setIdMsg('Couldn’t start connecting — try again.')
+      setIdMsg('Couldn’t start connecting, try again.')
       setIdBusy(false)
     }
   }
@@ -330,7 +330,7 @@ export default function SettingsPage() {
       await deleteIdentity(provider)
       refreshIdentities()
     } catch (e: unknown) {
-      setIdMsg(e instanceof Error ? e.message : 'Disconnect failed — try again.')
+      setIdMsg(e instanceof Error ? e.message : 'Disconnect failed, try again.')
     } finally {
       setIdBusy(false)
     }
@@ -517,8 +517,8 @@ export default function SettingsPage() {
                     <p className="font-mono text-[11px] uppercase text-mathua-muted">Current picture</p>
                     <p className="text-mathua-muted text-xs mt-1 break-words">
                       {pendingDice
-                        ? 'New preview — not saved yet.'
-                        : settings.avatar_custom ? 'Your uploaded photo.' : currentDice ? 'Your DiceBear character.' : 'Automatic — pick a character or upload a photo.'}
+                        ? 'New preview, not saved yet.'
+                        : settings.avatar_custom ? 'Your uploaded photo.' : currentDice ? 'Your DiceBear character.' : 'Automatic, pick a character or upload a photo.'}
                     </p>
                   </div>
                 </div>

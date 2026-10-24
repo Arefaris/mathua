@@ -101,7 +101,7 @@ function loginReducer(state: LoginState, action: LoginAction): LoginState {
   }
 }
 
-// Mirrors internal/auth password policy — keep both in sync:
+// Mirrors internal/auth password policy, keep both in sync:
 // min 8 chars (Go: len bytes), max 72 bytes (bcrypt limit), a Unicode digit,
 // and a special = neither Unicode letter nor digit (Go: unicode.IsLetter).
 function passwordIssues(pw: string): string[] {
@@ -114,7 +114,7 @@ function passwordIssues(pw: string): string[] {
 }
 
 // Mirrors internal/auth ValidateUsername on the normalized (lowercased,
-// trimmed) form — keep both in sync.
+// trimmed) form, keep both in sync.
 function usernameIssues(username: string): string | null {
   const u = username.trim().toLowerCase()
   if (u.length < 3 || [...u].length > 20) return 'Username must be 3-20 characters'
@@ -122,7 +122,7 @@ function usernameIssues(username: string): string | null {
   return null
 }
 
-// Mirrors internal/auth ValidateEmail on the trimmed form — keep both in
+// Mirrors internal/auth ValidateEmail on the trimmed form, keep both in
 // sync. Empty is handled by validateFields (required on signup).
 function emailIssues(email: string): string | null {
   const e = email.trim()
@@ -224,7 +224,7 @@ function LoginInner() {
       const pretty = label.charAt(0).toUpperCase() + label.slice(1)
       if (err === 'google_denied') setGoogleError('Google sign-in was cancelled')
       else if (err.endsWith('_denied')) setGoogleError(`${pretty} sign-in was cancelled`)
-      else setGoogleError(`${pretty} sign-in failed — try again`)
+      else setGoogleError(`${pretty} sign-in failed, try again`)
     }
     if (token && id) {
       establishSession(token, { student_id: id, name: name || 'Google user', username: '', concepts_mastered: 0, current_streak: 0, level: 'Novice', diagnostic_completed: false })
@@ -276,7 +276,7 @@ function LoginInner() {
       }
       if (existing) { init(); return }
       const s = document.createElement('script'); s.src = src; s.async = true; s.defer = true; s.onload = init; document.head.appendChild(s)
-    }).catch(() => { if (!cancelled) setGoogleError('Could not reach the server — check your connection and reload') })
+    }).catch(() => { if (!cancelled) setGoogleError('Could not reach the server, check your connection and reload') })
     return () => { cancelled = true }
   }, [push, ret])
 
@@ -306,7 +306,7 @@ function LoginInner() {
       await requestPasswordReset(forgotId.trim())
       setForgotMsg('If an account with a recovery email exists, a reset link is on its way.')
     } catch (e: unknown) {
-      setForgotMsg(e instanceof Error ? e.message : 'Request failed — try again.')
+      setForgotMsg(e instanceof Error ? e.message : 'Request failed, try again.')
     } finally {
       setForgotBusy(false)
     }
@@ -326,7 +326,7 @@ function LoginInner() {
       await establishSession(res.token, { student_id: res.student_id, name: res.name, username: '', concepts_mastered: 0, current_streak: 0, level: 'Novice', diagnostic_completed: res.diagnostic_completed })
       push(ret)
     } catch (e: unknown) {
-      setResetMsg(e instanceof Error ? e.message : 'Reset failed — the link may have expired.')
+      setResetMsg(e instanceof Error ? e.message : 'Reset failed, the link may have expired.')
     } finally {
       setResetBusy(false)
     }

@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/polar-coordinates/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/polar-coordinates/), CC BY-NC 4.0
 
 ## Radial–angular description of a point
 

@@ -217,8 +217,8 @@ func normalise(s string) string {
 // as the expected one. For an expected value printed with a decimal point it is
 // half a unit in the last printed place: "12.61" accepts 12.610001, because
 // that is the same answer rounded differently, and rejects 12.62, which is a
-// different number at that precision. Expected values without a decimal point —
-// integers, fractions, mixed numbers and scientific notation — keep the flat
+// different number at that precision. Expected values without a decimal point,
+// integers, fractions, mixed numbers and scientific notation, keep the flat
 // tolerance, because widening those would accept a different value of the same
 // shape. The relative term keeps large magnitudes comparable without making the
 // window unlimited.
@@ -247,7 +247,7 @@ func parseNumeric(s string) (float64, bool, bool) {
 	// students naturally type it, and matches the worked explanation.)
 	s = andRe.ReplaceAllString(s, "$1 $2")
 
-	// Mixed number: "1 1/2" — check before stripping whitespace. A negative
+	// Mixed number: "1 1/2", check before stripping whitespace. A negative
 	// whole number subtracts its fraction ("-1 1/2" = -(1 + 1/2) = -1.5), not
 	// adds it ("-1 1/2" must not parse as -1 + 0.5).
 	if m := mixedRe.FindStringSubmatch(s); m != nil {

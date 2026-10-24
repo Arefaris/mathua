@@ -11,7 +11,7 @@ import (
 )
 
 // aiStores returns the SQLite store always, and Postgres too when
-// TEST_POSTGRES_DSN is set — the same pattern the reset parity test uses, so the
+// TEST_POSTGRES_DSN is set, the same pattern the reset parity test uses, so the
 // two dialects' SQL is executed by the same assertions.
 func aiStores(t *testing.T) map[string]Repository {
 	t.Helper()
@@ -131,7 +131,7 @@ func TestAIUsageDeniedRequestConsumesNothing(t *testing.T) {
 // TestAIUsageConcurrentReservations proves the transaction is atomic under a
 // real connection pool: more concurrent callers than the ceiling can admit, and
 // exactly the ceiling succeed. SQLite in ":memory:" gives each pooled connection
-// its own empty database, so this uses a file — the same reason
+// its own empty database, so this uses a file, the same reason
 // TestConcurrentDemotionsCannotReachZeroAdmins does. Postgres is included when
 // TEST_POSTGRES_DSN is set, because the row locks and the rollback the reserve
 // leans on are the database's, not Go's.
@@ -178,14 +178,14 @@ func TestAIUsageConcurrentReservations(t *testing.T) {
 			t.Fatalf("[%s] concurrent reserve: %v", tag, err)
 		}
 		if allowed != cap {
-			t.Errorf("[%s] allowed = %d, want %d — the ceiling was not enforced exactly", tag, allowed, cap)
+			t.Errorf("[%s] allowed = %d, want %d, the ceiling was not enforced exactly", tag, allowed, cap)
 		}
 		got, err := store.AIUsage(context.Background(), key, "2026-10-16")
 		if err != nil {
 			t.Fatal(err)
 		}
 		if got != cap {
-			t.Errorf("[%s] counter = %d, want %d — a refused request left its increment behind", tag, got, cap)
+			t.Errorf("[%s] counter = %d, want %d, a refused request left its increment behind", tag, got, cap)
 		}
 	}
 }

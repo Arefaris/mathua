@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/the-weierstrass-substitution/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/the-weierstrass-substitution/), CC BY-NC 4.0
 
 ## The class of integrals we want to handle
 

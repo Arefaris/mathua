@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/euler-number-limit-sequence/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/euler-number-limit-sequence/), CC BY-NC 4.0
 
 ## How a sequence reveals $e$
 

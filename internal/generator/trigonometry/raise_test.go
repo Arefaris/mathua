@@ -6,10 +6,10 @@ package trigonometry
 // shipped corpus, so this file carries its own: it reads the corpus for each
 // concept's grading type, samples the registry directly, and parses the
 // multiple-choice options out of the rendered question. The nine numeric
-// generators are recomputed from the facts they publish — the period, the
+// generators are recomputed from the facts they publish, the period, the
 // angular speed, the bearing, the triple-angle value, the power-reduction
 // value, the linear-equation root, the inverse-hyperbolic value, the polar
-// abscissa and the scalar projection — so the tests never read the published
+// abscissa and the scalar projection, so the tests never read the published
 // answer.
 
 import (

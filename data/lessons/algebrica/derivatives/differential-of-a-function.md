@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/differential-of-a-function/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/differential-of-a-function/), CC BY-NC 4.0
 
 # Differential of a Function
 

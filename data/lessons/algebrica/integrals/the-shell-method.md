@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/the-shell-method/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/the-shell-method/), CC BY-NC 4.0
 
 ## There is always a way
 

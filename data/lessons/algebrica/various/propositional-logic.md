@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/propositional-logic/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/propositional-logic/), CC BY-NC 4.0
 
 ## Propositional language
 

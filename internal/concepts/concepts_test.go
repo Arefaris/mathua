@@ -161,19 +161,19 @@ func TestDAG_Lookups_Nonexistent(t *testing.T) {
 func TestDAG_Available(t *testing.T) {
 	d := buildTestDAG(t)
 
-	// Nothing mastered — only concepts with no prereqs should be available.
+	// Nothing mastered, only concepts with no prereqs should be available.
 	avail := d.Available(map[string]bool{})
 	if len(avail) != 1 || avail[0].ID != "arith.add.single" {
 		t.Errorf("expected only arith.add.single available, got %v", avail)
 	}
 
-	// Root mastered — its dependents become available.
+	// Root mastered, its dependents become available.
 	avail = d.Available(map[string]bool{"arith.add.single": true})
 	if len(avail) != 2 {
 		t.Errorf("expected 2 available after root mastered, got %d", len(avail))
 	}
 
-	// Everything mastered — nothing available.
+	// Everything mastered, nothing available.
 	all := map[string]bool{
 		"arith.add.single":    true,
 		"arith.sub.single":    true,

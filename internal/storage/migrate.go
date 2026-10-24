@@ -46,7 +46,7 @@ CREATE INDEX IF NOT EXISTS idx_xp_events_student_week ON xp_events(student_id, c
 -- Weekly league membership. A row is a learner's seat in one league for one
 -- week, written by the transition and never rewritten while the week is open:
 -- the seat is what makes "my league" stable even as XP moves the standings.
--- league_weeks is the idempotency marker — the transition inserts it first in
+-- league_weeks is the idempotency marker, the transition inserts it first in
 -- the same transaction, so a retry after a crash sees it and stops instead of
 -- promoting the same cohort twice.
 CREATE TABLE IF NOT EXISTS league_members (
@@ -303,7 +303,7 @@ CREATE INDEX IF NOT EXISTS idx_admin_invitations_email ON admin_invitations(emai
 --
 -- One row per privileged mutation. actor_id is deliberately not a foreign key: a trail that
 -- is deleted along with the account it records is not a trail. before_json/after_json hold the
--- non-sensitive AdminUser projection only — a password hash cannot reach them because the
+-- non-sensitive AdminUser projection only, a password hash cannot reach them because the
 -- projection cannot express one.
 CREATE TABLE IF NOT EXISTS admin_audit (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -355,7 +355,7 @@ CREATE INDEX IF NOT EXISTS idx_ai_usage_day ON ai_usage(day);
 
 -- Fix 7: version tracking for one-time data backfills. DDL stays
 -- idempotent (IF NOT EXISTS); data fixes below run exactly once.
--- NOTE: no UNIQUE constraints are added here on purpose — legacy username
+-- NOTE: no UNIQUE constraints are added here on purpose, legacy username
 -- colliding groups (same lower form twice) still exist and are renamed
 -- manually; a UNIQUE would fail migration on real databases.
 -- FIRe-inspired implicit credit, shadow only. These tables record what an

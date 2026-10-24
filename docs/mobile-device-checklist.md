@@ -43,7 +43,7 @@ If something fails that this file does not cover, that is a gap in this file. Ad
 
 ---
 
-## Device 1 — iPhone, current supported iOS Safari
+## Device 1, iPhone, current supported iOS Safari
 
 Recommended: any iPhone still receiving security updates. Record the exact model.
 
@@ -58,7 +58,7 @@ Recommended: any iPhone still receiving security updates. Record the exact model
 | 1.7 | Is the question still visible with the keypad up? | yes | |
 | 1.8 | Is the Check Answer button reachable with the keypad up? | yes | |
 | 1.9 | Tap Check Answer with the keypad up | lands on the first tap | |
-| 1.10 | Page zoom on focus | **no zoom** — a 16px threshold Safari enforces | |
+| 1.10 | Page zoom on focus | **no zoom**, a 16px threshold Safari enforces | |
 | 1.11 | Long-press in the answer field | context menu behaves; selection is not destroyed | |
 | 1.12 | Dismiss the keypad (its own keycap) | it closes, and tapping the field brings it back | |
 | 1.13 | Tap a non-focusable area (the question text), then tap the field | the keypad comes back on the next tap | |
@@ -77,7 +77,7 @@ Recommended: any iPhone still receiving security updates. Record the exact model
 | 1.23 | DevTools → Network, filter `.wav` | **no requests** | |
 | 1.24 | DevTools → Elements, `:root` | `data-mathua-keyboard="open"` and a non-zero `--mathua-keyboard-height` while the keypad is up | |
 
-## Device 2 — mid-range Android, current supported Chrome
+## Device 2, mid-range Android, current supported Chrome
 
 "Mid-range" matters more than "current": the questions are about CPU, and a flagship
 hides parse cost. A device from roughly the last 3–4 years.
@@ -115,7 +115,7 @@ These are unresolved and belong in front of a device, not a test:
    covers the button is unresolved. Check **1.9** and **2.8**, and **2.14**.
 3. **Is 787 kB of Compute Engine acceptable on mobile data?** It is skipped on
    `saveData` and on 2g, but *not* on 3g or 4g. If the answer is no, deleting
-   `components/math/SelfCheck.tsx` reverts that feature outright — nothing else in
+   `components/math/SelfCheck.tsx` reverts that feature outright, nothing else in
    `components/math/` imports it.
 4. **The real cold-start window.** Every number in `docs/math-input.md` is a floor. **1.2**
    and **2.1** replace them with measurements.

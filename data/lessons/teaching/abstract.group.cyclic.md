@@ -15,11 +15,11 @@ So exhibiting one element whose powers exhaust the group proves cyclicity.
 
 Test each non-identity element of the Klein four-group:
 1. Every non-identity element has order 2: $a^2 = b^2 = (ab)^2 = e$.
-2. Powers of any element give at most $\{e, a\}$ — never all four.
+2. Powers of any element give at most $\{e, a\}$, never all four.
 3. No element generates $V_4$, so it is not cyclic.
 
 So the obstruction is uniform low order: nothing reaches far enough to cover the group.
 
 ## Orders in cyclic groups
 
-In a cyclic group of order $n$, the element $g^k$ has order $n / \gcd(n,k)$. Hence $Z_{12}$ has $\phi(12) = 4$ generators, and every subgroup is cyclic — subgroups inherit the one-generator structure.
+In a cyclic group of order $n$, the element $g^k$ has order $n / \gcd(n,k)$. Hence $Z_{12}$ has $\phi(12) = 4$ generators, and every subgroup is cyclic, subgroups inherit the one-generator structure.

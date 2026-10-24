@@ -76,12 +76,12 @@ export default function Header({ links }: HeaderProps) {
     // Dead-token cleanup is lazy: any strict API call below that answers
     // 401 clears the token via authedFetch (lib/auth.ts), which flips this
     // UI to logged-out through the auth-changed event. No explicit
-    // revalidation here — the e2e auth spec renders the header with a
+    // revalidation here, the e2e auth spec renders the header with a
     // stored token while all /api/** routes are mocked, and must keep
     // showing the authenticated links.
     getSettings().then(s => {
-      // Runs on every [loggedIn, user] change — including the auth-changed
-      // broadcast that Settings fires after avatar saves — so the header
+      // Runs on every [loggedIn, user] change, including the auth-changed
+      // broadcast that Settings fires after avatar saves, so the header
       // picture tracks the shared resolver with no extra event type.
       const resolved = resolveAvatar(user, s)
       setAvatarPreset(resolved.preset ?? null)
@@ -98,7 +98,7 @@ export default function Header({ links }: HeaderProps) {
       if (!menuRef.current?.contains(t) && !menuPanelRef.current?.contains(t)) setOpen(false)
       // The panel must be named here as well as the trigger. It hangs off <header> rather
       // than off the trigger's wrapper, so a mousedown on one of its own links is not inside
-      // navMenuRef — and closing on it unmounted the link before the click could activate it,
+      // navMenuRef and closing on it unmounted the link before the click could activate it,
       // which is why every destination in the mobile menu was dead: the items were in the DOM
       // and nothing could reach them.
       if (navMenuRef.current && !navMenuRef.current.contains(t) && !navPanelRef.current?.contains(t)) setNavOpen(false)
@@ -125,7 +125,7 @@ export default function Header({ links }: HeaderProps) {
   // /profile has always carried it; a phone had no route to administration at all,
   // because `/profile` is one tap from the tab bar and nothing on any other page
   // offered it. The role comes from `/api/auth/me` via the session, and offering it
-  // grants nothing — the admin routes re-check it server-side.
+  // grants nothing, the admin routes re-check it server-side.
   const compassLinks = links || overflowLinks(loggedIn, isStaffRole(user?.role))
 
   return (
@@ -150,8 +150,8 @@ export default function Header({ links }: HeaderProps) {
             The bar's rule is the header's own edge: it should reach both sides of the window the
             way the footer's does. It used to sit on this row, which also carried `max-w-container`,
             so on a screen wider than 1100px the rule stopped short and the bar read as a floating
-            strip with the page showing either side of it. The footer already had it right —
-            `border-t` on the full-width `<footer>`, unconstrained inner content — so the header is
+            strip with the page showing either side of it. The footer already had it right, 
+            `border-t` on the full-width `<footer>`, unconstrained inner content, so the header is
             now the same shape.
 
             The inner row stays constrained rather than going full width, because the links need to
@@ -169,7 +169,7 @@ export default function Header({ links }: HeaderProps) {
                 λ Mathua
               </Link>
               {/* The sign says where the app is, not what the learner is. It is small, next to
-                  the wordmark on every page, and it will come down when it stops being true —
+                  the wordmark on every page, and it will come down when it stops being true, 
                   rather than being a decoration nobody can date. */}
               <span
                 className="border border-mathua-border px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-mathua-muted leading-none"
@@ -219,7 +219,7 @@ export default function Header({ links }: HeaderProps) {
               </button>
             )}
             {/* Mobile nav: bare compass mark. Overflow only
-                (see lib/nav.ts) — destinations missing from the bottom tabs. */}
+                (see lib/nav.ts), destinations missing from the bottom tabs. */}
             <div className="md:hidden" ref={navMenuRef}>
                 <button
                   type="button"

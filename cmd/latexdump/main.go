@@ -1,5 +1,5 @@
 // latexdump walks data/lessons and prints every lesson body after LaTeX
-// canonicalization — exactly what the API serves — as JSON. Used by the
+// canonicalization, exactly what the API serves, as JSON. Used by the
 // frontend corpus gate (web/next-app/test/latexCorpus.test.ts) so KaTeX is
 // tested against production content rather than raw scrape dialects.
 //

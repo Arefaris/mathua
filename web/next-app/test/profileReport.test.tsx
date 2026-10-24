@@ -69,7 +69,7 @@ describe('/profile shows the report', () => {
 
   // Per-domain progress moved to /domains. It sat here as a 15-row table of subject
   // percentages competing with the recommendation on a page whose job is "what next", and its
-  // hardcoded domain list omitted precalculus and machine_learning — 50 concepts invisible.
+  // hardcoded domain list omitted precalculus and machine_learning, 50 concepts invisible.
   it('does not carry the per-domain table, which is its own page now', async () => {
     render(<ProfilePage />)
     await screen.findByRole('region', { name: 'Activity' })

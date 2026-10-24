@@ -6,7 +6,7 @@ import BottomTabs from '../../components/BottomTabs'
 import ContactBox from '../../components/ContactBox'
 
 export const metadata: Metadata = {
-  title: 'Contact — Mathua',
+  title: 'Contact, Mathua',
   description:
     'How to report a problem with a question, a bug in the site, or your account, and who reads it.',
 }
@@ -95,8 +95,8 @@ export default function ContactPage() {
           </a>{' '}
           is the fastest way to reach other learners and the administrator. Ask about a lesson,
           say what you are working on, or explain a problem that is easier to talk through than
-          to type into a form. Keep anything private — an account problem, a password, a message
-          meant for one person — to the box above, not the public server.
+          to type into a form. Keep anything private, an account problem, a password, a message
+          meant for one person, to the box above, not the public server.
         </p>
 
         <h2 style={h2Style}>A question is wrong</h2>

@@ -4,13 +4,13 @@
 // copy of the evidence model. This file is the guard on that.
 //
 // The boundary used to need defending rather than asserting. `lib/progression.ts` carried a
-// second implementation of the mastery evidence score — recency-weighted accuracy ×
-// difficulty × variety × time — with its own weights, its own thresholds and its own band
+// second implementation of the mastery evidence score, recency-weighted accuracy ×
+// difficulty × variety × time, with its own weights, its own thresholds and its own band
 // vocabulary. It was wired into `LearnStepper` as though it decided something:
 //
 //   const advance = est.decision === 'advance' || next >= REQUIRED_IN_A_ROW
 //
-// where `decision === 'advance'` *required* the last two attempts correct — the same fact
+// where `decision === 'advance'` *required* the last two attempts correct, the same fact
 // as `next >= REQUIRED_IN_A_ROW`. The first operand could never be the deciding half, which
 // an exhaustive sweep over all 510 histories of length 1-8 confirmed (111 advance
 // decisions, zero deciding alone). So the model had no authority and could not be reconciled
@@ -37,7 +37,7 @@ const progression = read('lib/progression.ts')
  * The source with its comments removed.
  *
  * Several assertions below are about the *shape of the code*, and several of the comments
- * in these files deliberately quote the code they replaced — a comment that names the old
+ * in these files deliberately quote the code they replaced, a comment that names the old
  * disjunction would otherwise make "the old disjunction is gone" fail against its own
  * explanation. Assertions that are genuinely about prose keep using `read`.
  */
@@ -92,7 +92,7 @@ describe('the lesson advance rule is the whole gate', () => {
   })
 
   it('REQUIRED_IN_A_ROW is still the lesson rule, not a mastery gate', () => {
-    // It is 2-in-a-row from improve.md:39 — worked example then a couple of problems. It
+    // It is 2-in-a-row from improve.md:39, worked example then a couple of problems. It
     // moves between knowledge points inside a lesson. Mastery is the server's decision and
     // this constant does not participate in it, which is why the two can coexist without
     // either contradicting the other.
@@ -121,7 +121,7 @@ describe('the recommendation is decided by the engine, not the client', () => {
     const src = code('lib/nextUp.ts')
     // The client used to build candidates, weight them and choose the head here. Two copies of
     // the eligibility rules and of the XP award is how they came to disagree with
-    // internal/scheduler — the client's still halved reviews after ADR-020 removed that from
+    // internal/scheduler, the client's still halved reviews after ADR-020 removed that from
     // the server. The decision is engine-side now, tested in internal/scheduler and by
     // TestNext_* in internal/server.
     for (const banned of [
@@ -140,7 +140,7 @@ describe('the recommendation is decided by the engine, not the client', () => {
 
   it('no surface ranks for itself', () => {
     // /learn, /profile and the Learn done card all read the same shelf. If one of them starts
-    // sorting or filtering by score again, the two surfaces can disagree about what "next" is —
+    // sorting or filtering by score again, the two surfaces can disagree about what "next" is, 
     // which is the duplication defect this replaced.
     for (const f of ['app/learn/page.tsx', 'app/profile/page.tsx', 'components/LearnStepper.tsx']) {
       const src = code(f)

@@ -9,7 +9,7 @@ import (
 
 // The diagnostic is placement, not an active task. A completed diagnostic must
 // never be offered again, even when placement leaves the learner with no mastered
-// concept and no attempted day — which is exactly what placement does, because it
+// concept and no attempted day, which is exactly what placement does, because it
 // seeds reachability rather than mastery.
 func TestRecommend_CompletedDiagnosticIsNeverOfferedAgain(t *testing.T) {
 	s := New(miniDAG(t))

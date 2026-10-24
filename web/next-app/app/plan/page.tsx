@@ -41,7 +41,7 @@ function PlanContent() {
 
       {justSaved && (
         <p role="status" className="mt-5 border border-mathua-border bg-mathua-surface px-3 py-2.5 font-mono text-xs text-mathua-secondary">
-          Plan saved. A pace is not a starting point — use the diagnostic below to find out
+          Plan saved. A pace is not a starting point, use the diagnostic below to find out
           which concept you belong at.
         </p>
       )}

@@ -7,7 +7,7 @@ Populates the mathua question bank with practice questions for each concept.
 ### Generate questions using built-in generators
 
 ```bash
-# From project root — seeds 8 questions per concept into mathua.db
+# From project root, seeds 8 questions per concept into mathua.db
 go run scripts/seed-questions/main.go -db mathua.db -n 8
 ```
 
@@ -33,12 +33,12 @@ go run scripts/seed-questions/main.go -db mathua.db -import questions.json
 ```
 
 Fields:
-- `concept_id` (required) — must match a mathua concept ID (e.g. `alg.quad.formula`)
-- `question` (required) — the problem statement (supports LaTeX)
-- `answer` (required) — the final answer
-- `explanation` (optional) — step-by-step solution
-- `source` (optional) — name of the source dataset
-- `difficulty` (optional, default 0.5) — 0.0 to 1.0
+- `concept_id` (required), must match a mathua concept ID (e.g. `alg.quad.formula`)
+- `question` (required), the problem statement (supports LaTeX)
+- `answer` (required), the final answer
+- `explanation` (optional), step-by-step solution
+- `source` (optional), name of the source dataset
+- `difficulty` (optional, default 0.5), 0.0 to 1.0
 
 ## Suggested External Datasets
 

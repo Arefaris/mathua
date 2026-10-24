@@ -148,7 +148,7 @@ func TestBooleanAnswersAlwaysServeOptions(t *testing.T) {
 // A multiple-choice concept whose answer is written with a symbol a phone
 // keyboard cannot produce needs options for the same reason a word answer does:
 // there is nothing to type that the choice grader will match. Report 28 was
-// exactly this — tan(60) answered with a radical and no options to tap.
+// exactly this, tan(60) answered with a radical and no options to tap.
 //
 // latexOnlyOptions is the backlog this guard found: multiple-choice concepts
 // that answer in LaTeX with no option list, so a learner has nothing to tap.

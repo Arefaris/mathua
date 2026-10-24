@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/confidence-intervals/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/confidence-intervals/), CC BY-NC 4.0
 
 ## Point estimation
 
@@ -20,7 +20,7 @@ Since a point estimate will almost never coincide exactly with the true value of
 \[\hat{\theta}_{L} < \theta < \hat{\theta}_{U} \] where \( \hat{\theta}_{L} \) and \( \hat{\theta}_{U} \) represent the lower and upper limits derived from the data. In this way, the estimate acknowledges the uncertainty inherent in sampling and provides a realistic range of plausible values for the population parameter, such as the mean \( \mu \). The interval can also be interpreted as providing bounds on the estimation error: the deviation \( \delta = \hat{\theta} - \theta \) is confined between the lower and upper limits, ensuring that the error cannot exceed the specified range.
 
 
-To make this idea more precise, it helps to remember that the interval itself is built from the sample. This means that its endpoints, \( \hat{\theta}_{L} \) and \( \hat{\theta}_{U} \), change from one sample to another—just as any statistic does. As a result, the interval is not fixed but every time we draw a new sample, we would obtain a slightly different pair of bounds.
+To make this idea more precise, it helps to remember that the interval itself is built from the sample. This means that its endpoints, \( \hat{\theta}_{L} \) and \( \hat{\theta}_{U} \), change from one sample to another, just as any statistic does. As a result, the interval is not fixed but every time we draw a new sample, we would obtain a slightly different pair of bounds.
 
 What we can consider is the probability that the interval constructed from the sample will contain the true parameter \( \theta \). This probability is called the confidence level, and it is written as: \[P\\!\left( \hat{\theta}_{L} < \theta < \hat{\theta}_{U} \right) = 1 - \alpha \] In simpler terms, if we were to repeat the sampling process many times, roughly a fraction \( 1 - \alpha \) of the intervals we compute would succeed in capturing the actual value of the parameter. In summary:
 

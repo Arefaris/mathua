@@ -18,7 +18,7 @@ For $0 \to A \to B \to C \to 0$ with $|A| = 2$, $|C| = 3$:
 2. $C \cong B/\mathrm{im}(A)$: each coset has $|A| = 2$ elements, with $|C| = 3$ cosets.
 3. So $|B| = 2 \cdot 3 = 6$: the middle order is forced by the ends.
 
-So short exact sequences turn $B$ into $|A|$ copies of $C$ — counting does the rest.
+So short exact sequences turn $B$ into $|A|$ copies of $C$, counting does the rest.
 
 ## Splitting
 

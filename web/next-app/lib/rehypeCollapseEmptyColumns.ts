@@ -11,7 +11,7 @@
 // tree (never regexes), so it is robust and unit-testable.
 //
 // Rules:
-// 1. Drop a column only if every cell in it — header included — is empty or
+// 1. Drop a column only if every cell in it, header included, is empty or
 //    whitespace (a lone <br> counts as empty). Table 1.1's corner cell
 //    survives because its column holds other content.
 // 2. Drop rows that are entirely empty (header rows included), keeping at
@@ -20,7 +20,7 @@
 // 3. A table that is all-empty is removed entirely.
 // 4. Width/style/colgroup are stripped from survivors so the remaining
 //    column is not pinned at 50%.
-// 5. A surviving single column with no <th> was clearly a layout table —
+// 5. A surviving single column with no <th> was clearly a layout table, 
 //    unwrap it to one <p> per cell (inline-only cells) so captions keep
 //    their line breaks instead of running together. With a <th>, keep table.
 // 6. Remove paragraphs that are visually empty (whitespace/<br> only).
@@ -219,7 +219,7 @@ function removeEmptyParagraphs(node: HastNode, inSkip: boolean): void {
 
 // Collapse runs of whitespace-only text nodes containing a newline to a
 // single "\n" (drop leading/trailing runs). Single newlines are today's
-// baseline inter-block spacing and are preserved exactly — only the
+// baseline inter-block spacing and are preserved exactly, only the
 // pathological 14–148-newline runs hoisted by rehype-raw are repaired.
 function isWsRunNode(node: HastNode): boolean {
   return (

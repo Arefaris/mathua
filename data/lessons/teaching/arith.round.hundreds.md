@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 1.1 Introduction to Whole Numbers
 
@@ -381,8 +381,8 @@ The digit in the ones place is 2. Because 2 is less than 5, we keep the digit in
 1.  Step 1. Locate the given place value. All digits to the left of that place value do not change.
 2.  Step 2. Underline the digit to the right of the given place value.
 3.  Step 3. Determine if this digit is greater than or equal to 5.
-    - Yes—add 1 to the digit in the given place value.
-    - No—do not change the digit in the given place value.
+    - Yes, add 1 to the digit in the given place value.
+    - No, do not change the digit in the given place value.
 4.  Step 4. Replace all digits to the right of the given place value with zeros.
 
 ### Example 1.8

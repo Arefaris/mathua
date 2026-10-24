@@ -104,7 +104,7 @@ func TestNextStaticFSServesChildlessRoutes(t *testing.T) {
 	}
 }
 
-// Child routes were already working and must keep working — they take the direct-file branch.
+// Child routes were already working and must keep working, they take the direct-file branch.
 func TestNextStaticFSServesChildRoutes(t *testing.T) {
 	root := adminExport(t)
 	for path, want := range map[string]string{

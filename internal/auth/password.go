@@ -10,7 +10,7 @@ import (
 // MinPasswordLength is the signup password policy floor.
 const MinPasswordLength = 8
 
-// MaxPasswordBytes caps passwords at bcrypt's 72-byte limit — longer inputs
+// MaxPasswordBytes caps passwords at bcrypt's 72-byte limit, longer inputs
 // fail loudly here instead of erroring (or silently truncating) in bcrypt.
 const MaxPasswordBytes = 72
 
@@ -49,7 +49,7 @@ func ValidateUsername(u string) error {
 
 // ValidatePassword enforces the signup password policy: at least 8
 // characters, including at least one number and one special
-// (non-alphanumeric) character. Login is not affected — it only ever
+// (non-alphanumeric) character. Login is not affected, it only ever
 // checks credentials against the stored hash.
 func ValidatePassword(pw string) error {
 	if len(pw) < MinPasswordLength {

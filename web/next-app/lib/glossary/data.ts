@@ -10,7 +10,7 @@ import probability from '../../data/glossary/probability.json'
 import advanced from '../../data/glossary/advanced.json'
 
 // Static bundle: every entry ships with the app. No network, no service,
-// no concept mapping — the glossary never touches learner state.
+// no concept mapping, the glossary never touches learner state.
 export const GLOSSARY_ENTRIES: GlossaryEntry[] = [
   ...(greek as GlossaryEntry[]),
   ...(arithmetic as GlossaryEntry[]),

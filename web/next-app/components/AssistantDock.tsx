@@ -9,8 +9,8 @@ import { ArrowUp, Close, MessagesSquare } from './icons'
 
 // KaTeX is a large dependency and the dock is mounted in the root layout, so it
 // would otherwise be pulled into every route's bundle. Loading it through a
-// dynamic import means a reply with no mathematics — an orientation answer, which
-// is most of them — never downloads it.
+// dynamic import means a reply with no mathematics, an orientation answer, which
+// is most of them, never downloads it.
 const AssistantMath = dynamic(() => import('./AssistantMath'), { ssr: false })
 
 // AssistantText renders one prose segment of a reply. Mathematics inside it is
@@ -63,7 +63,7 @@ const SUGGESTIONS = ['What is Mathua?', 'Where should I start?']
 
 // AREAS is what the panel offers when the assistant cannot answer. These are
 // routes the app owns regardless of AI, so the dock is useful in a deployment
-// with no provider — which is every fresh checkout until a key is set.
+// with no provider, which is every fresh checkout until a key is set.
 const AREAS = [
 	{ label: 'Start learning', href: '/learn' },
 	{ label: 'Take the diagnostic', href: '/diagnose' },
@@ -132,8 +132,8 @@ export default function AssistantDock() {
 		}
 	}, [])
 
-	// Read the acceptance once, on mount. Storage can be unavailable — a private window,
-	// blocked cookies — and the safe failure is to show the notice again, not to assume it
+	// Read the acceptance once, on mount. Storage can be unavailable, a private window,
+	// blocked cookies and the safe failure is to show the notice again, not to assume it
 	// was given.
 	useEffect(() => {
 		let stored = ''
@@ -291,7 +291,7 @@ export default function AssistantDock() {
 						{turns.length === 0 && (
 							<div className="space-y-2">
 								<p className="text-[13px] leading-relaxed text-mathua-muted">
-									Ask what Mathua is, or where to begin. Answers are short, and you can follow the links.
+									Ask what Mathua is or where to begin. Answers are short, and you can follow the links.
 								</p>
 								<div className="flex flex-wrap gap-2">
 									{SUGGESTIONS.map(s => (

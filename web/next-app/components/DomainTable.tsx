@@ -16,7 +16,7 @@ interface Props {
 // The row itself, shared by /domains and /share.
 //
 // This was `DomainProgress` on /profile. It hardcoded a 15-entry domain list, so precalculus and
-// machine_learning never rendered — 50 concepts invisible — and every row printed a locked count,
+// machine_learning never rendered, 50 concepts invisible and every row printed a locked count,
 // the figure Phase 3 removed from PositionBlock as the one number a learner can neither act on nor
 // change today. Both are fixed upstream in lib/domainRows; nothing here chooses a domain list.
 export default function DomainTable({ rows, onToggle, expanded, links = true }: Props) {

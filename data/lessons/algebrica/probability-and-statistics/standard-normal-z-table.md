@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/standard-normal-z-table/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/standard-normal-z-table/), CC BY-NC 4.0
 
 ## From the normal to the standard normal distribution
 

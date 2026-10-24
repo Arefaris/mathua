@@ -76,8 +76,8 @@ describe('decaying', () => {
 
   it('does not relock anything downstream', () => {
     // The failure this replaces: DECAYING was missing from the recognised statuses, so
-    // the concept was neither `started` nor `mastered`. It rendered as `unseen` — with
-    // no progress bar, as if never attempted — and its absence from the `mastered` set
+    // the concept was neither `started` nor `mastered`. It rendered as `unseen`, with
+    // no progress bar, as if never attempted and its absence from the `mastered` set
     // locked its successor. `mul` and `div` are visible again on the graph and in the
     // scheduler at the same time, and disagreeing here is what made that happen.
     const s = deriveStatuses(withPrereq(), {

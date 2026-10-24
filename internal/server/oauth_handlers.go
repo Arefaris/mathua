@@ -195,7 +195,7 @@ func (s *Server) handleOAuthCallback(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, u, http.StatusFound)
 }
 
-// POST /api/auth/link-token (authed) — binds a connect dance to this student.
+// POST /api/auth/link-token (authed), binds a connect dance to this student.
 func (s *Server) handleLinkToken(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -214,7 +214,7 @@ func (s *Server) handleLinkToken(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"link_token": tok})
 }
 
-// GET /api/auth/identities (authed) — connected providers for Settings UI.
+// GET /api/auth/identities (authed), connected providers for Settings UI.
 func (s *Server) handleIdentities(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -267,7 +267,7 @@ func (s *Server) handleIdentityDelete(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"ok": true})
 }
 
-// POST /api/auth/email/request (authed) — send verification link.
+// POST /api/auth/email/request (authed), send verification link.
 func (s *Server) handleEmailRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -285,7 +285,7 @@ func (s *Server) handleEmailRequest(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"ok": true})
 }
 
-// POST /api/auth/email/verify {token} — burn token, mark verified.
+// POST /api/auth/email/verify {token}, burn token, mark verified.
 func (s *Server) handleEmailVerify(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, 405)
@@ -309,7 +309,7 @@ func (s *Server) handleEmailVerify(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]interface{}{"ok": true})
 }
 
-// POST /api/auth/google/connect {id_token} (authed) — link the Google
+// POST /api/auth/google/connect {id_token} (authed), link the Google
 // account behind a One-Tap credential to the current student. Redirect
 // flows connect via intent=link + link_token instead.
 func (s *Server) handleGoogleConnect(w http.ResponseWriter, r *http.Request) {

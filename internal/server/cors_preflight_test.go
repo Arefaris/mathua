@@ -10,7 +10,7 @@ import (
 // TestCORS_PreflightAllowsTheRequestedHeaders pins the failure that would have
 // taken the whole cross-origin API down: the browser only honours a preflight
 // when every header the request carries is listed in Access-Control-Allow-
-// Headers, and a missing one fails silently — the fetch never leaves the page.
+// Headers, and a missing one fails silently, the fetch never leaves the page.
 // X-Request-ID is now attached to every client request, so the preflight must
 // allow it.
 func TestCORS_PreflightAllowsTheRequestedHeaders(t *testing.T) {

@@ -43,7 +43,7 @@ export default function ReviewHost() {
   const [finished, setFinished] = useState(false)
   const [empty, setEmpty] = useState(false)
   const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(() => formatForGradingType())
-  // Next question staged from the submit response — revealed by goNext(),
+  // Next question staged from the submit response, revealed by goNext(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingReviewNext = useRef<{
     question: string
@@ -82,14 +82,14 @@ export default function ReviewHost() {
       setFinished(false)
       setPhase('run')
     } catch {
-      toast.error('Review failed to start — try again.')
+      toast.error('Review failed to start, try again.')
       setPhase('intro')
     } finally {
       setLoading(false)
     }
   }
 
-  // The review starts from the intro screen, not on mount — timing and
+  // The review starts from the intro screen, not on mount, timing and
   // question reveal begin at Start, so the briefing costs nothing.
   useEffect(() => {
     if (phase === 'run' && !reviewLastResult && reviewQuestion) reviewInputRef.current?.focus()
@@ -105,7 +105,7 @@ export default function ReviewHost() {
       const data = await submitReviewAnswer(reviewSessionId.current, answer, elapsed, reviewAttemptId.current)
       // Grader unavailable: never counts as a miss; ask the student to retry.
       if (data.result?.ungraded) {
-        setSubmitError({ message: 'Grading is temporarily unavailable — please try again.' })
+        setSubmitError({ message: 'Grading is temporarily unavailable, please try again.' })
         setLoading(false)
         return
       }

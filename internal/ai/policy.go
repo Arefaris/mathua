@@ -3,7 +3,7 @@
 // Nothing here is on the learning critical path: grading, scheduling, mastery
 // and the onboarding fallback are deterministic and stay so. This package only
 // decides which inference backends may be called, with what data, and in what
-// order — so a provider being reachable can never by itself make it eligible.
+// order, so a provider being reachable can never by itself make it eligible.
 package ai
 
 // DataClass is how sensitive a request's payload is, ordered least to most
@@ -73,9 +73,9 @@ func (r Retention) String() string {
 //
 // Every field defaults to the deny value, so a provider nobody has documented
 // is ineligible until someone writes the policy down. The type deliberately has
-// no single "safe"/"trial" string: that collapses independent facts — who may
+// no single "safe"/"trial" string: that collapses independent facts, who may
 // see data, whether the terms allow production, whether prompts may train a
-// model — into one value that can only ever be wrong in one direction.
+// model, into one value that can only ever be wrong in one direction.
 type Policy struct {
 	// MaxClass is the most sensitive DataClass this provider may receive.
 	MaxClass DataClass
@@ -87,8 +87,8 @@ type Policy struct {
 	DevOnly bool
 	// Retention is the provider's prompt-retention behaviour.
 	Retention Retention
-	// Source records where the policy was established — a URL and the date it
-	// was verified — or is empty when unverified. A provider that permits more
+	// Source records where the policy was established, a URL and the date it
+	// was verified or is empty when unverified. A provider that permits more
 	// than public data with no Source is a configuration error the registry
 	// rejects, so an undocumented policy cannot reach a learner.
 	Source string

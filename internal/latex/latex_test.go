@@ -110,7 +110,7 @@ func TestValidateEscapedDollarInDisplay(t *testing.T) {
 
 func TestValidateRowBreakThenRealDelimiter(t *testing.T) {
 	// Even backslash run: '\\' row break followed by a REAL unpaired delimiter.
-	// Must still warn — guards against a naive ReplaceAll("\\$", ...) fix.
+	// Must still warn, guards against a naive ReplaceAll("\\$"...) fix.
 	w := Validate("row one \\\\ $x tail", ORCCA)
 	if len(w) == 0 {
 		t.Error("real '$' after \\\\ row break must still be counted")
@@ -273,7 +273,7 @@ func TestCanonicalizeCurrencyPairs(t *testing.T) {
 }
 
 func TestCanonicalizeFactorialAndListsAreMath(t *testing.T) {
-	// Factorials are math, never currency — even though 7! matches the
+	// Factorials are math, never currency, even though 7! matches the
 	// trailing-punctuation shape of an excited price.
 	for _, in := range []string{
 		`Consider the ratio between \\(7!\\) and \\(4!\\).`,

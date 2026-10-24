@@ -18,7 +18,7 @@ A quick check: take \(p = 5\) and \(a=2\). Then \(2^4 = 16 = 3\cdot 5 + 1\), so 
 
 ## Proof Sketch
 
-The standard proof multiplies the nonzero residue classes \(1, 2, \dots, p-1\) by \(a\). Modulo \(p\), this just permutes them (no two products collide, and none lands on zero because \(p\nmid a\)). Multiplying the two descriptions of the same product gives \(a^{p-1}\cdot(p-1)! \equiv (p-1)!\), and cancelling \((p-1)!\) — legitimate since it is coprime to \(p\) — leaves the theorem.
+The standard proof multiplies the nonzero residue classes \(1, 2, \dots, p-1\) by \(a\). Modulo \(p\), this just permutes them (no two products collide, and none lands on zero because \(p\nmid a\)). Multiplying the two descriptions of the same product gives \(a^{p-1}\cdot(p-1)! \equiv (p-1)!\), and cancelling \((p-1)!\), legitimate since it is coprime to \(p\), leaves the theorem.
 
 ## Applications
 

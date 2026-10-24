@@ -768,7 +768,7 @@
       "plus minus interval"
     ],
     "category": "probability",
-    "definition": "A range plausibly containing the parameter: estimate ± margin. A 95% interval comes from a procedure capturing the truth in 95% of samples — not a 95% chance this particular interval holds it.",
+    "definition": "A range plausibly containing the parameter: estimate ± margin. A 95% interval comes from a procedure capturing the truth in 95% of samples, not a 95% chance this particular interval holds it.",
     "reading": "“x bar plus or minus the margin”.",
     "examples": [
       {
@@ -807,7 +807,7 @@
       "averages are normal"
     ],
     "category": "probability",
-    "definition": "Averages of many independent, identically distributed observations are approximately normal — whatever the original distribution. This is why normal models and z-procedures work so widely.",
+    "definition": "Averages of many independent, identically distributed observations are approximately normal, whatever the original distribution. This is why normal models and z-procedures work so widely.",
     "reading": "“the central limit theorem”.",
     "examples": [
       {
@@ -843,7 +843,7 @@
       "gambler fallacy antidote"
     ],
     "category": "probability",
-    "definition": "Sample averages converge to the expected value as samples grow: X̄ₙ → μ. It justifies learning probabilities from frequencies — but gives no timetable, so short runs still surprise.",
+    "definition": "Sample averages converge to the expected value as samples grow: X̄ₙ → μ. It justifies learning probabilities from frequencies, but gives no timetable, so short runs still surprise.",
     "reading": "“the law of large numbers”.",
     "examples": [
       {

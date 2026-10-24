@@ -10,7 +10,7 @@ import (
 // These used to be written against `streak >= required AND avg time <= threshold`, and
 // they asserted the old rule faithfully: five consecutive correct answers to leave UNSEEN,
 // and the same five again for each tier after it. They are rewritten here against the
-// evidence ladder because the rule they pinned is the one being replaced — the ladder is
+// evidence ladder because the rule they pinned is the one being replaced, the ladder is
 // now three different questions, and a test that still demanded a full threshold-length
 // streak would be asserting the bug.
 
@@ -18,7 +18,7 @@ func evidenceOf(correct bool, instance string, difficulty, elapsed float64) Atte
 	return Attempt{Correct: correct, Instance: instance, Difficulty: diff(difficulty), Elapsed: elapsed}
 }
 
-// cleanWindow builds `n` correct attempts on distinct instances at `difficulty` — what a
+// cleanWindow builds `n` correct attempts on distinct instances at `difficulty`, what a
 // learner who is reliably getting it right produces. Used where a test needs evidence that
 // clears the mastery floor rather than evidence of a specific shape.
 func cleanWindow(n int, difficulty float64) Evidence {
@@ -30,7 +30,7 @@ func cleanWindow(n int, difficulty float64) Evidence {
 }
 
 // unknownDifficultyWindow is cleanWindow with no difficulty recorded at all, which is a
-// different fact from a recorded 0 — see attempts.difficulty being nullable, and
+// different fact from a recorded 0, see attempts.difficulty being nullable, and
 // difficultyOrNil refusing to write zero.
 func unknownDifficultyWindow(n int) Evidence {
 	var as []Attempt
@@ -105,7 +105,7 @@ func TestNext_LearningToPracticing(t *testing.T) {
 //
 // Getting the same question right twice *is* reliability, so it reaches PRACTICING. It is
 // weaker evidence than the same two answers on two different questions, and the score says
-// so — but it must not be a veto. An earlier version gated mastery on `Instances >= 2`, and
+// so, but it must not be a veto. An earlier version gated mastery on `Instances >= 2`, and
 // the engine tests immediately hit the failure that caused: a generator that returns the
 // same question text every attempt drives Instances to 1 forever and the concept can never
 // be mastered at all.
@@ -134,7 +134,7 @@ func TestNext_VarietyIsRewardedNotRequired(t *testing.T) {
 	if got := m.Next(StatusLearning, TransitionCtx{Evidence: same}); got != StatusPracticing {
 		t.Errorf("same-instance consistency gave %q, want PRACTICING", got)
 	}
-	// From UNSEEN, three correct on one instance is enough to walk the whole ladder — this
+	// From UNSEEN, three correct on one instance is enough to walk the whole ladder, this
 	// is the regression guard for the unreachable-mastery failure.
 	if got := m.Next(StatusUnseen, TransitionCtx{Evidence: same}); got != StatusLearning {
 		t.Errorf("UNSEEN with three correct gave %q, want LEARNING", got)
@@ -155,7 +155,7 @@ func TestNext_PracticingToMastered(t *testing.T) {
 }
 
 // One rung per transition. Strong evidence on a LEARNING concept advances it one step, not
-// straight to MASTERED — otherwise a learner with a burst of history skips the middle.
+// straight to MASTERED, otherwise a learner with a burst of history skips the middle.
 func TestNext_AdvancesOneRungOnly(t *testing.T) {
 	m := &Machine{}
 	if got := m.Next(StatusLearning, TransitionCtx{Evidence: demonstrated()}); got != StatusPracticing {
@@ -166,7 +166,7 @@ func TestNext_AdvancesOneRungOnly(t *testing.T) {
 	}
 }
 
-// Mastery is an exit. A later miss lowers the evidence score but must not un-learn it —
+// Mastery is an exit. A later miss lowers the evidence score but must not un-learn it,
 // ADR-037 made the exit unconditional, and decay is a read-time question about retention.
 func TestNext_MasteredIsSticky(t *testing.T) {
 	m := &Machine{}
@@ -201,7 +201,7 @@ func TestNext_StreakAloneDoesNotAdvance(t *testing.T) {
 	}
 }
 
-// Streak is evidence, not authority — these two replace the old "excess streak still
+// Streak is evidence, not authority, these two replace the old "excess streak still
 // advances" and "streak == required advances", which asserted the rule being replaced.
 func TestNext_ExcessStreakDoesNotSubstituteForEvidence(t *testing.T) {
 	m := &Machine{}
@@ -221,7 +221,7 @@ func TestNext_ExcessStreakDoesNotSubstituteForEvidence(t *testing.T) {
 
 func TestNext_ExactStreakBoundaryIsIrrelevantNow(t *testing.T) {
 	m := &Machine{}
-	// Exactly at both thresholds, with no evidence recorded — the old rule advanced here.
+	// Exactly at both thresholds, with no evidence recorded, the old rule advanced here.
 	ctx := TransitionCtx{
 		Streak:            5,
 		RequiredStreak:    5,
@@ -324,7 +324,7 @@ func TestMasteryPct_NeverGoesBackwards(t *testing.T) {
 	advances := 0
 	answered := 0
 
-	// Difficulty climbs as the learner does better and every answer is a new instance —
+	// Difficulty climbs as the learner does better and every answer is a new instance,
 	// the shape the generator produces and the evidence model is built to read.
 	difficulties := []float64{0.35, 0.45, 0.55, 0.7, 0.8, 0.9}
 
@@ -430,7 +430,7 @@ func at(vals ...float64) []*float64 {
 }
 
 // The evidence score must agree with the browser model it replaces, or the label in /learn
-// and the decision that gates progression will drift apart again — which is the state
+// and the decision that gates progression will drift apart again, which is the state
 // ADR-037 spent a week untangling.
 func TestBuildEvidence_MatchesBrowserModelShape(t *testing.T) {
 	// 3 correct at difficulty 0.7, on 3 distinct instances, fast.
@@ -463,7 +463,7 @@ func TestBuildEvidence_OneCorrectAnswerCannotMaster(t *testing.T) {
 		t.Errorf("one attempt established mastery: %+v", ev)
 	}
 	// The same question three times is recorded as one instance and is *scored* lower for
-	// it — but it is not blocked, because a generator that never varies its question text
+	// it, but it is not blocked, because a generator that never varies its question text
 	// would otherwise make the concept permanently unmasterable.
 	same := BuildEvidence([]Attempt{
 		{Correct: true, Elapsed: 2, Difficulty: diff(0.5), Instance: "a"},
@@ -474,8 +474,8 @@ func TestBuildEvidence_OneCorrectAnswerCannotMaster(t *testing.T) {
 		t.Fatalf("three attempts on one instance counted as %d instances", same.Instances)
 	}
 	// Difficulty 0.5 rather than 1.0: at the top of the range the score saturates at the
-	// clamp before variety can add anything, which is fine — there is nothing left to
-	// discriminate — but it would hide the effect being asserted here.
+	// clamp before variety can add anything, which is fine, there is nothing left to
+	// discriminate, but it would hide the effect being asserted here.
 	varied := BuildEvidence([]Attempt{
 		{Correct: true, Elapsed: 2, Difficulty: diff(0.5), Instance: "a"},
 		{Correct: true, Elapsed: 2, Difficulty: diff(0.5), Instance: "b"},
@@ -519,13 +519,13 @@ func TestBuildEvidence_DifficultyAndTimeChangeTheScore(t *testing.T) {
 //
 // The first version of this test asserted the opposite: it required the score to come out at
 // 1.0, which is what "drop the difficulty term" produces. Dropping a *multiplier* means
-// multiplying by 1.0 — the top of the range — so a missing value was being credited as
+// multiplying by 1.0, the top of the range, so a missing value was being credited as
 // "the hardest question we could have asked". The name said "dropped, not zeroed" and both
 // halves of that were wrong: it was not dropped, and the effect was maximal.
 //
 // A concept whose attempts predate the column still has evidence. It just does not have
-// evidence of how hard the questions were, and it is credited at NeutralDifficulty — the
-// difficulty the engine serves when it knows nothing — rather than at either extreme.
+// evidence of how hard the questions were, and it is credited at NeutralDifficulty, the
+// difficulty the engine serves when it knows nothing, rather than at either extreme.
 func TestBuildEvidence_UnknownDifficultyIsNeitherZeroNorPerfect(t *testing.T) {
 	unknown := unknownDifficultyWindow(MasteryEvidenceFloor)
 	if unknown.AvgDifficulty != 0 {
@@ -544,7 +544,7 @@ func TestBuildEvidence_UnknownDifficultyIsNeitherZeroNorPerfect(t *testing.T) {
 	// default scored it as.
 	hardest := cleanWindow(MasteryEvidenceFloor, 1.0)
 	if !(unknown.Score < hardest.Score) {
-		t.Errorf("unknown difficulty scored %v, not below the hardest question's %v — a "+
+		t.Errorf("unknown difficulty scored %v, not below the hardest question's %v, a "+
 			"missing value is being treated as maximal evidence", unknown.Score, hardest.Score)
 	}
 
@@ -570,7 +570,7 @@ func TestBuildEvidence_OnlyTheRecentWindowCounts(t *testing.T) {
 		t.Errorf("Attempts = %d, want the window of %d", ev.Attempts, EvidenceWindow)
 	}
 	// The window reaches back two of the 20 misses, and still clears. A month of failure
-	// must not prevent mastery once the recent evidence is clean — the question is whether
+	// must not prevent mastery once the recent evidence is clean, the question is whether
 	// the learner can do it *now*, and a streak counter that never decays is the reason this
 	// window exists.
 	if !EnoughForMastery(ev) {
@@ -645,7 +645,7 @@ func TestLadder_EachRungAsksADifferentQuestion(t *testing.T) {
 	}
 
 	// 4. A full window of correct answers across distinct instances at real difficulty:
-	// demonstrated. Four is no longer enough — the floor is MasteryEvidenceFloor — which is
+	// demonstrated. Four is no longer enough, the floor is MasteryEvidenceFloor, which is
 	// the calibration change, not a new kind of evidence.
 	four := cleanWindow(MasteryEvidenceFloor, 0.8)
 	if HighestRung(four) != RungDemonstrated {
@@ -701,7 +701,7 @@ func TestLadder_RungsAreMonotone(t *testing.T) {
 }
 
 // Difficulty must not be able to *lower* the rung. It weights the score upward, so this is
-// the same monotonicity read through the other signal — and it is the one that would break
+// the same monotonicity read through the other signal and it is the one that would break
 // if the difficulty term were ever subtracted rather than multiplied in.
 func TestLadder_HarderEvidenceNeverHurts(t *testing.T) {
 	easy := HighestRung(cleanWindow(MasteryEvidenceFloor, 0.3))

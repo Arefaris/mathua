@@ -18,4 +18,4 @@ A half-plane such as \(\{z : \operatorname{Re} z > 0\}\) is open, and its bounda
 
 Ask two questions: does the set contain its boundary, and does its complement? A set that contains no boundary point is open, one that contains all of them is closed, and one that contains some is neither.
 
-"Both open and closed" is possible, but only for the empty set and the whole plane in this setting — not for a disk or a half-plane, which is why the option is a distractor rather than a classification.
+"Both open and closed" is possible, but only for the empty set and the whole plane in this setting, not for a disk or a half-plane, which is why the option is a distractor rather than a classification.

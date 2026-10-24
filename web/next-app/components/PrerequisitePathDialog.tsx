@@ -11,7 +11,7 @@ import { prereqHref, prereqStateWord } from './PrerequisitePanel'
  *
  * Opened from the curriculum browser's "View prerequisite path" row action. It
  * renders the selected target's own title plus that target's actual readiness
- * response — never a hardcoded list — with every prerequisite linking to its
+ * response, never a hardcoded list, with every prerequisite linking to its
  * reference page. Reading here awards nothing; practice stays gated in /learn.
  */
 

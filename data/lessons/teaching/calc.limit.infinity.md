@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman, CC BY-NC-SA 4.0
 
 ## 4.6 Limits at Infinity and Asymptotes
 
@@ -678,7 +678,7 @@ The second derivative is zero at $x = 0.$ Therefore, to determine the concavity 
 | $\left( {\text{-}\infty,0} \right)$ | $x = -1$ | $-$ | $f$ is concave down. |
 | $\left( {0,\infty} \right)$ | $x = 1$ | $+$ | $f$ is concave up. |
 
-We note that the information in the preceding table confirms the fact, found in step 5, that $f$ has a local maximum at $x = -1$ and a local minimum at $x = 1.$ In addition, the information found in step 5—namely, $f$ has a local maximum at $x = -1$ and a local minimum at $x = 1,$ and $f'(x) = 0$ at those points—combined with the fact that $f^{''}$ changes sign only at $x = 0$ confirms the results found in step 6 on the concavity of $f.$
+We note that the information in the preceding table confirms the fact, found in step 5, that $f$ has a local maximum at $x = -1$ and a local minimum at $x = 1.$ In addition, the information found in step 5, namely, $f$ has a local maximum at $x = -1$ and a local minimum at $x = 1,$ and $f'(x) = 0$ at those points, combined with the fact that $f^{''}$ changes sign only at $x = 0$ confirms the results found in step 6 on the concavity of $f.$
 
 Combining this information, we arrive at the graph of $f(x) = \left( {x - 1} \right)^{2}\left( {x + 2} \right)$ shown in the following graph.
 

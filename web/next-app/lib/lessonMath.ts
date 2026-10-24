@@ -6,7 +6,7 @@
 // plus authoring shortcuts and blackboard letters KaTeX does not define.
 // \highlight preserves math mode: its arguments are sometimes math
 // (\highlight{\leq}) which \text{} would reject.
-// Single source of truth: data/katex-macros.json — imported here and mirrored
+// Single source of truth: data/katex-macros.json, imported here and mirrored
 // in Go ingestion expectations. Keep in sync.
 import macrosJson from '../data/katex-macros.json'
 export const lessonMacros: Record<string, string> = macrosJson as Record<string, string>
@@ -24,7 +24,7 @@ function escapeHtmlMath(s: string): string {
   // Only backslash+letter survives (`\frac`), which is why most math looked
   // fine while spacing/punctuation silently corrupted. Encode everything
   // markdown-significant (including newlines, so a span is always a single
-  // htmlText token) — rehype-raw decodes entities back before KaTeX sees
+  // htmlText token), rehype-raw decodes entities back before KaTeX sees
   // them, so KaTeX input is byte-identical to the TeX here.
   return s
     .replace(/&/g, '&amp;')
@@ -53,13 +53,13 @@ export function prepareLessonMath(input: string): string {
   content = content.replace(/\\\$/g, ESC_DOLLAR)
 
   // --- Inline math ---
-  // Algebrica style: \\(...\\) — unescape \\ back to \ inside
+  // Algebrica style: \\(...\\), unescape \\ back to \ inside
   content = content.replace(/\\\\\(([\s\S]*?)\\\\\)/g, (_, inner) => {
     const clean = inner.replace(/\\\\/g, '\\')
     if (clean.includes('\n')) return '\n$$\n' + clean.trim() + '\n$$\n'
     return '$' + clean + '$'
   })
-  // Wikipedia style: \(...\) — backslashes inside are already single
+  // Wikipedia style: \(...\), backslashes inside are already single
   content = content.replace(/\\\(([\s\S]*?)\\\)/g, (_, inner) => {
     if (inner.includes('\n')) return '\n$$\n' + inner.trim() + '\n$$\n'
     return '$' + inner + '$'
@@ -68,7 +68,7 @@ export function prepareLessonMath(input: string): string {
   // --- Display math ---
   // Single-line display blocks become inline $\displaystyle ...$ (e.g. inside
   // table cells). KaTeX forbids {align} and \tag in inline mode, so rewrite
-  // align → aligned (inline-legal) and drop \tag — otherwise these blocks
+  // align → aligned (inline-legal) and drop \tag, otherwise these blocks
   // hard-fail at render time.
   const inlineSafe = (s: string) =>
     s
@@ -99,7 +99,7 @@ export function prepareLessonMath(input: string): string {
   // and cascading mispaired spans across the file.
   content = content.replace(/^[ \t]*\$(?!\$)\n([\s\S]*?)\n[ \t]*\$(?!\$)[ \t]*$/gm, '$$\n$1\n$$')
 
-  // Scrape artifacts: math commands wrongly wrapped in \text{} — e.g.
+  // Scrape artifacts: math commands wrongly wrapped in \text{}, e.g.
   // \text{\pm}, \text{\sin}, \text{-} inside $...$ (KaTeX rejects \text{\pm}).
   const unwrapTextCommand = (s: string) =>
     s.replace(/\\text\{\\([a-zA-Z]+)\}/g, '\\$1').replace(/\\text\{([/\\-])\}/g, '$1')
@@ -124,7 +124,7 @@ export function prepareLessonMath(input: string): string {
   // $\frac{2}{3}$$\text{gallon}/$ here swallowed 100+ lines into one span).
   // Split only genuine junctions: close-side is math content (never an HTML
   // tag bracket, so <td>$$...$$</td> displays survive) and open-side starts
-  // new math (backslash, word char, or paren — never '<', '.', ',', ...).
+  // new math (backslash, word char, or paren, never '<', '.', ','...).
   // NOTE: '$$' in the replacement pattern is a literal '$', so the
   // replacement emits close-$ + space + open-$ (dollars preserved, separated).
   content = content.replace(/([^\s$><])\$\$([\\\w(])/g, '$1$ $$$2')
@@ -188,7 +188,7 @@ export function prepareLessonMath(input: string): string {
     .join('')
 
   // Restore escaped literal dollars. In prose `\$` is correct markdown for
-  // a literal `$` — but inside math spans a literal backslash would be eaten
+  // a literal `$`, but inside math spans a literal backslash would be eaten
   // by markdown escape processing (`\$` corrupts to a bare `$`, which KaTeX
   // rejects), so spans get the entity-encoded form rehype-raw decodes back.
   content = content

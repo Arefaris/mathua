@@ -16,10 +16,10 @@ So the boundary pins quantize $\lambda$: only squares $1, 4, 9, \dots$ resonate.
 Check $\int_0^{\pi} \sin x \sin 2x \, dx$:
 1. Product to sum: $\sin x \sin 2x = (\cos x - \cos 3x)/2$.
 2. Integrate: $[\sin x/1 - \sin 3x/3]_0^{\pi} / 2 = 0$.
-3. So distinct modes are orthogonal — the $w = 1$ inner product kills cross terms.
+3. So distinct modes are orthogonal, the $w = 1$ inner product kills cross terms.
 
 So eigenfunction expansion works exactly like a Fourier series: project, then sum.
 
 ## Self-adjoint spectrum
 
-Self-adjointness makes every eigenvalue real and eigenfunctions for distinct eigenvalues orthogonal. On a finite interval with separated conditions the spectrum is an infinite discrete ladder $\lambda_1 < \lambda_2 < \cdots$, complete enough to expand any reasonable function — Legendre's equation ($p = 1 - x^2$) is the classic member.
+Self-adjointness makes every eigenvalue real and eigenfunctions for distinct eigenvalues orthogonal. On a finite interval with separated conditions the spectrum is an infinite discrete ladder $\lambda_1 < \lambda_2 < \cdots$, complete enough to expand any reasonable function, Legendre's equation ($p = 1 - x^2$) is the classic member.

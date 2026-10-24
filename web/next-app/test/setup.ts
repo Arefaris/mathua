@@ -30,7 +30,7 @@ if (typeof globalThis.localStorage === 'undefined') {
   Object.defineProperty(globalThis, 'sessionStorage', { value: new MemoryStorage(), configurable: true })
 }
 
-// jsdom has no matchMedia — stub for components using media queries (sidebar, etc.)
+// jsdom has no matchMedia, stub for components using media queries (sidebar, etc.)
 if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
   Object.defineProperty(window, 'matchMedia', {
     value: (query: string) => ({
@@ -47,7 +47,7 @@ if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
   })
 }
 
-// jsdom has no IntersectionObserver — the landing's reveal-on-scroll sections and
+// jsdom has no IntersectionObserver, the landing's reveal-on-scroll sections and
 // the CountUp component both need one. A no-op that reports intersecting keeps
 // the content rendered rather than invisible, which is what a test wants.
 if (typeof globalThis.IntersectionObserver === 'undefined') {

@@ -15,14 +15,14 @@ import { useAdminMe } from '../../../hooks/useAdminMe'
 // Account administration, and the only place an administrator is made or un-made.
 //
 // The whole surface is: find an account, see its role, change the role. What is absent is the
-// point. There is no editor for XP, mastery, attempts or concept progress — those are the
+// point. There is no editor for XP, mastery, attempts or concept progress, those are the
 // learning system's records, not account attributes, and an administrator with a text box in
 // front of them will eventually use it to mark a concept learned. One operation is offered,
 // and it is the one an administrator is trusted to perform.
 //
 // Promotion goes through `PATCH /api/admin/users/{id}`, which is behind `requireAdmin` and
 // delegates to one transactional primitive: read the before state, write the role, read the
-// after state, append the audit event, commit. Nothing on this page decides anything — it asks.
+// after state, append the audit event, commit. Nothing on this page decides anything, it asks.
 //
 // Both directions are behind a confirmation. See ConfirmDialog for why: an audited,
 // immediately-effective privilege change should not be one click away in a list of rows, and the
@@ -49,7 +49,7 @@ export default function AdminUsersPage() {
   // Two failures, because they are two different facts and one slot lost one of them. Refreshing
   // the list after a refused role change used to clear the shared error, so the message
   // explaining *why* the change did not happen was erased by the retry that confirmed nothing
-  // changed — and it vanished faster than a reader could see it.
+  // changed and it vanished faster than a reader could see it.
   const [listError, setListError] = useState('')
   const [actionError, setActionError] = useState('')
   const [notice, setNotice] = useState('')
@@ -75,7 +75,7 @@ export default function AdminUsersPage() {
     try {
       const res = await setUserRole(pending.user.id, pending.next)
       // Re-read from the server rather than patching local state optimistically. The server may
-      // have refused — the last administrator is the case that matters — and this way the row
+      // have refused, the last administrator is the case that matters and this way the row
       // always shows what is actually stored.
       load(query)
       setNotice(
@@ -87,7 +87,7 @@ export default function AdminUsersPage() {
     } catch (e) {
       // The dialog closes and the error is shown inline. Staying open would hide the message
       // behind the modal and leave the row's state unverified. The list is re-read because the
-      // server may have applied part of the request — but that refresh writes to listError, not
+      // server may have applied part of the request, but that refresh writes to listError, not
       // here, so the refusal survives it.
       setActionError(getErrorMessage(e))
       setPending(null)
@@ -147,7 +147,7 @@ export default function AdminUsersPage() {
 
           {/* Guarded on the error as well as the null. The other admin pages do this and this one
               did not, which meant a learner who navigated here saw an error box from the 403 and
-              "Loading accounts…" underneath it — a page claiming to be busy while it had already
+              "Loading accounts…" underneath it, a page claiming to be busy while it had already
               given up, and would keep claiming indefinitely. */}
           {users === null && !listError && !actionError && (
             <p className="font-mono text-xs text-mathua-muted">Loading accounts…</p>
@@ -182,7 +182,7 @@ export default function AdminUsersPage() {
                             {labelFor(u)}
                           </Link>
                           {/* The id is how an administrator names a person over chat, and the
-                              provider flag answers "why can't they sign in with a password" —
+                              provider flag answers "why can't they sign in with a password", 
                               both are facts about the account, not credentials. */}
                           <div className="text-mathua-muted truncate" title={u.id}>{u.id}</div>
                           {u.username && <div className="text-mathua-muted truncate">@{u.username}</div>}
@@ -193,7 +193,7 @@ export default function AdminUsersPage() {
                             <div className="text-mathua-muted">Signed in with a provider, not a password</div>
                           )}
                         </td>
-                        <td className="px-3 py-2 min-w-0 text-mathua-secondary break-all">{u.email || '—'}</td>
+                        <td className="px-3 py-2 min-w-0 text-mathua-secondary break-all">{u.email || ', '}</td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           <span className={u.role === 'student' ? 'text-mathua-muted' : 'text-mathua-blue'}>
                             {u.role}{self ? ' (you)' : ''}
@@ -222,7 +222,7 @@ export default function AdminUsersPage() {
                               ))}
                             </select>
                           ) : (
-                            <span className="font-mono text-[11px] text-mathua-muted">—</span>
+                            <span className="font-mono text-[11px] text-mathua-muted">, </span>
                           )}
                         </td>
                       </tr>
@@ -234,7 +234,7 @@ export default function AdminUsersPage() {
           )}
 
           <p className="mt-4 font-mono text-[11px] text-mathua-muted">
-            Learning state — XP, mastery, attempts, concept progress — is not editable here. It is
+            Learning state, XP, mastery, attempts, concept progress, is not editable here. It is
             the learning system&apos;s record, and every change is visible at /admin/audit.
           </p>
 
@@ -259,7 +259,7 @@ export default function AdminUsersPage() {
           <>
             <p>
               {labelFor(pending.user)} will become {roleLabel(pending.next)}. The change takes
-              effect on their next request — their existing session is re-read, so no re-login is
+              effect on their next request, their existing session is re-read, so no re-login is
               needed.
             </p>
             <p className="text-mathua-muted">Recorded in the audit log.</p>

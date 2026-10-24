@@ -53,12 +53,12 @@ async function openLearn(page: Page) {
 // MathLive's `inlineShortcuts` default map rewrites bare text as it is typed: `pi` becomes
 // π, `theta` becomes θ, `alpha` becomes α, `sqrt` becomes √. That is convenient on a maths
 // keypad and wrong on a physical keyboard, where the reported bug was "typing a point has it
-// completing math symbols" — a learner who types the word `pi` gets a glyph they did not
+// completing math symbols", a learner who types the word `pi` gets a glyph they did not
 // type, in a field whose only job is to record what they typed. The submitted string then
 // differs from the keystrokes.
 //
 // This has to be a browser test. jsdom cannot run MathLive (it needs CSSOM and a real layout
-// engine), so the repo's other maths tests assert the pure helpers and the recorded corpus —
+// engine), so the repo's other maths tests assert the pure helpers and the recorded corpus, 
 // which is exactly the gap that let this ship: `inlineShortcuts` was never set, and nothing
 // could see it.
 
@@ -76,7 +76,7 @@ test.describe('typed words are not rewritten into symbols', () => {
   ]
 
   for (const c of cases) {
-    test(`"${c.typed}" stays literal — ${c.why}`, async ({ page }) => {
+    test(`"${c.typed}" stays literal, ${c.why}`, async ({ page }) => {
       await focusAnswerField(page)
       await page.keyboard.type(c.typed, { delay: 40 })
       const latex = await answerLatex(page)
@@ -89,7 +89,7 @@ test.describe('typed words are not rewritten into symbols', () => {
 
   // The word forms that appear in the corpus's multiple-choice answers. `yes` is the single
   // most common expected answer in the corpus and `no` is second, and the multiple-choice
-  // grader is an exact case-insensitive comparison — so a rewritten `yes` is a false miss,
+  // grader is an exact case-insensitive comparison, so a rewritten `yes` is a false miss,
   // not a cosmetic difference.
   test('multiple-choice words survive verbatim', async ({ page }) => {
     for (const word of ['yes', 'no', 'odd', 'even', 'addition']) {

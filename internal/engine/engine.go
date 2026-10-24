@@ -37,7 +37,7 @@ type activeSession struct {
 	// Wipe generation at serve time. SubmitAnswer refuses the write when the
 	// counter has moved since, so an answer graded across a reset cannot
 	// resurrect wiped rows. Stamped wherever a question is (re)served, never
-	// at submit time — snapshotting at submit would bless a stale question.
+	// at submit time, snapshotting at submit would bless a stale question.
 	writeGen       uint64
 	conceptID      string
 	conceptName    string
@@ -85,7 +85,7 @@ func (as *activeSession) currentKPOrdinal() int {
 }
 
 // ErrNoActiveQuestion is returned when a session has no unanswered question
-// ready for grading — e.g. a duplicate/stale submission racing the current one.
+// ready for grading, e.g. a duplicate/stale submission racing the current one.
 var ErrNoActiveQuestion = fmt.Errorf("no active question")
 
 // ErrUnknownConcept is returned when an answer references a concept_id absent
@@ -95,7 +95,7 @@ var ErrUnknownConcept = fmt.Errorf("unknown concept")
 
 // ErrNoStudyAnchor means the server has no record of the question being
 // answered, so it cannot grade it. Distinct from a wrong answer: nothing is
-// recorded — no attempt, no streak, no weakness, no XP — and the caller should
+// recorded, no attempt, no streak, no weakness, no XP and the caller should
 // re-serve the question. The anchor TTL is 24h, so the realistic trigger is a
 // tab left open overnight.
 var ErrNoStudyAnchor = fmt.Errorf("no server-side anchor for this question")
@@ -112,7 +112,7 @@ const (
 	// Ceiling on how many served-but-unanswered questions one student/concept
 	// keeps anchored. Generators draw from a finite parameter space (nine
 	// values per operand for arith.add.single, for one), so the set of live
-	// question texts is small — but a long session with difficulty stepping and
+	// question texts is small, but a long session with difficulty stepping and
 	// variant changes could otherwise grow the blob without limit. At the cap the
 	// batch just served is kept in full and older entries are dropped, which
 	// degrades those questions to the 409 re-serve path rather than to a wrong
@@ -170,7 +170,7 @@ type AnswerResult struct {
 	// It is sent so a client can render the learner's progress from the same number the
 	// ladder decides on. `web/next-app/lib/progression.ts` used to compute its own score
 	// from its own attempt history, which made a second definition of "how well are they
-	// doing" that could not be reconciled with this one — it weighted difficulty per
+	// doing" that could not be reconciled with this one, it weighted difficulty per
 	// attempt against this file's mean-of-correct-attempts, counted a wider population for
 	// the variety term, and applied a flat 60s time cliff instead of the concept's own
 	// threshold. Removing that copy is only possible because the number is here.
@@ -209,7 +209,7 @@ type Engine struct {
 	studyRush map[string]int
 	// PR 1.5: stable per-student session id for study/quiz attempt FK.
 	studySessions map[string]string
-	// H1b: server-side anchors for the study seam — the answer each served
+	// H1b: server-side anchors for the study seam, the answer each served
 	// question must be graded against plus the explanation owed for it.
 	studyAnchor map[string]string
 	// Batch 1: immediate remedial queue from quiz misses (studentID → conceptIDs).
@@ -308,7 +308,7 @@ func (e *Engine) getKPStateLocked(studentID, conceptID string) *mastery.KPStateM
 // Anchor is the server-side record of one served question: the answer it must
 // be graded against, and the explanation the learner is owed for it. Both come
 // from the same generator call over the same values, so storing them together
-// is what lets a later submit address the exact instance the learner saw — the
+// is what lets a later submit address the exact instance the learner saw, the
 // only place in the system that knows which instance a question text refers to.
 type Anchor struct {
 	Answer      string `json:"answer"`
@@ -339,7 +339,7 @@ func (e *Engine) SetStudyAnchor(studentID, conceptID, expected string) {
 //
 // The blob MERGES rather than replaces, and that is load-bearing. The Learn
 // client keeps a buffer of served-but-unanswered questions across several
-// fetches, and serves a new batch whenever the buffer runs low — which happens
+// fetches, and serves a new batch whenever the buffer runs low, which happens
 // while the learner is still reading the question in front of them. Replacing
 // meant each new batch erased the previous one, so the next submit looked up a
 // question the server had genuinely forgotten, got ErrNoStudyAnchor, and came
@@ -382,7 +382,7 @@ func (e *Engine) SetStudyAnchorBatch(studentID, conceptID string, byQuestion map
 	if len(merged) > studyAnchorMaxEntries {
 		// Keep the batch just served in full: every question the learner is
 		// looking at right now is in it. Older entries are evicted in map order
-		// (deliberately not sorted — any order is fine and this stays O(1) per
+		// (deliberately not sorted, any order is fine and this stays O(1) per
 		// eviction). An evicted question degrades to the existing 409 recovery,
 		// which is the correct response for an anchor that is genuinely gone.
 		for question := range merged {
@@ -448,7 +448,7 @@ func (e *Engine) studyAnchorFor(studentID, conceptID, question string) (Anchor, 
 // the explanation was carried: {"q": "answer"}. A session opened before a
 // deploy therefore still grades; it simply has no explanation to return, and
 // the caller falls back. The final bare-string return is a defensive
-// last resort — every writer marshals a map, so no stored blob has that shape.
+// last resort, every writer marshals a map, so no stored blob has that shape.
 func decodeStudyAnchor(blob string) map[string]Anchor {
 	var byQuestion map[string]Anchor
 	if err := json.Unmarshal([]byte(blob), &byQuestion); err == nil {
@@ -1030,7 +1030,7 @@ var conceptDiagrams = map[string]string{
 	"precalc.polar.coordinates":       "/diagrams/algebrica/polar-coordinates-1-1.png",
 	"precalc.polar.graph":             "/diagrams/algebrica/polar-coordinates-2-1.png",
 	"ode.basics.concept":              "/diagrams/algebrica/differential-equations-1-1.png",
-	// Batch C1: pool remap — verified against rendered image content,
+	// Batch C1: pool remap, verified against rendered image content,
 	// one asset per concept; wrong mappings dropped, not replaced.
 	"calc.limit.epsilon_delta":   "/diagrams/algebrica/limits-1.svg",
 	"calc.limit.infinite":        "/diagrams/algebrica/limits-2.svg",
@@ -1272,7 +1272,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 
 	gr := e.gradeAnswer(sessionFields.conceptID, sessionFields.expectedAnswer, resolveChoiceAnswer(sessionFields.questionText, answer))
 	if gr.Unavailable {
-		// Grader infrastructure fault — never a student miss. Re-arm the
+		// Grader infrastructure fault, never a student miss. Re-arm the
 		// pending question so the client can retry, and record nothing.
 		e.mu.Lock()
 		if cur := e.sessions[sessionID]; cur == as {
@@ -1357,7 +1357,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	}
 	xp := computeXPForTask(gr.Correct, elapsedSeconds, sessionFields.timeThreshold, progress.Streak, taskType)
 
-	// PR 1.5: consecutive-miss tracking — halt after 2 (XP=0) + remedial queue.
+	// PR 1.5: consecutive-miss tracking, halt after 2 (XP=0) + remedial queue.
 	halted := false
 	var remedial []string
 	if !gr.Correct {
@@ -1430,7 +1430,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		}
 	}
 
-	// PR 1.5: negative XP for rapid unreflective guessing — elapsed <2s incorrect twice consecutively.
+	// PR 1.5: negative XP for rapid unreflective guessing, elapsed <2s incorrect twice consecutively.
 	if !gr.Correct && elapsedSeconds < xppolicy.RushSeconds {
 		as.rushCount++
 		if as.rushCount >= xppolicy.RushAfter {
@@ -1502,8 +1502,8 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 // could use to grade its own homework, and no code path that grades a study
 // answer against client input.
 //
-// A question with no anchor — the anchor's TTL expired, or the tab sat open
-// longer than it — returns ErrNoStudyAnchor so the caller can re-serve rather
+// A question with no anchor, the anchor's TTL expired, or the tab sat open
+// longer than it, returns ErrNoStudyAnchor so the caller can re-serve rather
 // than accept an ungradeable attempt.
 // It takes no difficulty argument, and does not need one: the difficulty comes from the
 // study anchor, which is the durable record of the question that was actually served. That
@@ -1518,21 +1518,21 @@ func (e *Engine) SubmitStudyAnswer(studentID, conceptID, answer string, elapsedS
 }
 
 // SubmitQuizAnswer is the single-path quiz grader: TaskQuiz base XP (20),
-// progress update, and exactly one AddXP — DB and response agree by
+// progress update, and exactly one AddXP, DB and response agree by
 // construction. Unlike SubmitStudyAnswer it never consults the study anchor:
 // the quiz expected answer comes from the quiz session.
 //
 // difficulty is the difficulty the quiz question was generated at, from
 // `quiz.Session.LastProblem.Difficulty`. It is a parameter rather than something re-derived
 // here because re-deriving it from the learner's *current* weakness would credit the
-// attempt with a difficulty nobody actually served — and because the whole point of this
+// attempt with a difficulty nobody actually served and because the whole point of this
 // argument is that the quiz path produces the same evidence as the study path.
 func (e *Engine) SubmitQuizAnswer(studentID, conceptID, answer, expected string, elapsedSeconds float64, questionText string, difficulty *float64) (*AnswerResult, error) {
 	return e.submitAnswerWithTask(studentID, conceptID, answer, expected, elapsedSeconds, TaskQuiz, false, false, questionText, difficulty)
 }
 
 // SubmitQuizDontKnow records an admitted unknown ("I don't know" button) as
-// a quiz miss: weakness up, streak reset, remedial queued — but no XP and no
+// a quiz miss: weakness up, streak reset, remedial queued, but no XP and no
 // rushing penalty (an instant admit is honesty, not rushing).
 func (e *Engine) SubmitQuizDontKnow(studentID, conceptID, expected string, elapsedSeconds float64, questionText string, difficulty *float64) (*AnswerResult, error) {
 	return e.submitAnswerWithTask(studentID, conceptID, "", expected, elapsedSeconds, TaskQuiz, false, true, questionText, difficulty)
@@ -1592,7 +1592,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 	if timeThreshold == 0 {
 		timeThreshold = 10.0
 	}
-	// Grade using concept's grading type via registry/router — skipped for
+	// Grade using concept's grading type via registry/router, skipped for
 	// admitted unknowns, which are forced misses (no XP, no rushing penalty).
 	gen := e.writeGeneration(studentID)
 	// A tapped option arrives as its letter, because the browser cannot send the
@@ -1604,7 +1604,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 		gr = grader.Result{Correct: false}
 	}
 	if gr.Unavailable {
-		// Grader infrastructure fault — never a student miss; record nothing.
+		// Grader infrastructure fault, never a student miss; record nothing.
 		return &AnswerResult{Ungraded: true, Feedback: gr.Feedback}, nil
 	}
 	if !e.writeGenerationOK(studentID, gen) {
@@ -1708,7 +1708,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 		}
 		// Same rule as the practice path: a wrong answer answered implausibly fast, twice.
 		// It used to require two misses on the concept as well, so a learner who rushed once
-		// and was wrong twice for ordinary reasons was never penalised here — the same
+		// and was wrong twice for ordinary reasons was never penalised here, the same
 		// behaviour was penalised on one route and not the other.
 		if !dontKnow && elapsedSeconds < xppolicy.RushSeconds {
 			e.studyRush[missKey]++
@@ -1716,7 +1716,7 @@ func (e *Engine) submitAnswerWithTask(studentID, conceptID, answer, expected str
 				xp = xppolicy.RushPenalty
 			}
 		}
-		// Immediate remedial enqueue on quiz miss — missed concept
+		// Immediate remedial enqueue on quiz miss, missed concept
 		// plus its key prerequisites surface first in Study after the quiz.
 		if taskType == TaskQuiz {
 			e.enqueueQuizRemedialLocked(studentID, conceptID)
@@ -1942,8 +1942,8 @@ func computeXP(correct bool, elapsed, timeThreshold float64, streak int, isRevie
 
 // GetProgress returns the learner's progress with decay applied at read time.
 //
-// The database stores MASTERED forever — decay is deliberately not persisted
-// (mastery.EffectiveStatus) — so the raw row claims a concept is mastered long
+// The database stores MASTERED forever, decay is deliberately not persisted
+// (mastery.EffectiveStatus), so the raw row claims a concept is mastered long
 // after its review went stale. That made Profile count it as mastered while the
 // scheduler simultaneously treated it as DECAYING and scheduled it for review:
 // two parts of the app disagreeing about the same fact, with nothing to show
@@ -2165,7 +2165,7 @@ func (e *Engine) RetryDiagnosticQuestion(s *diagnostic.Session, conceptID string
 }
 
 // DecodeDiagnosticSession restores a run encoded by Session.Encode. The server
-// calls it when a session id it does not hold in memory arrives — the ordinary
+// calls it when a session id it does not hold in memory arrives, the ordinary
 // case after a deploy, and the reason that deploy no longer ends a run.
 func (e *Engine) DecodeDiagnosticSession(data []byte) (*diagnostic.Session, error) {
 	return e.diag.Decode(data)
@@ -2515,7 +2515,7 @@ func (e *Engine) PropagateWeakness(studentID string) {
 	if len(targetWeakness) == 0 {
 		return
 	}
-	// One batched write from the single fetched snapshot — no per-node round trips.
+	// One batched write from the single fetched snapshot, no per-node round trips.
 	batch := make([]*storage.ConceptProgress, 0, len(targetWeakness))
 	for cid, w := range targetWeakness {
 		prog := progress[cid]
@@ -2767,11 +2767,11 @@ func attemptDifficulty(as *activeSession) *float64 {
 //
 // It fetches the concept's most recent attempts and appends the one being graded, which
 // has not been written yet. Reading a bounded window rather than the learner's history is
-// the point: GetAttemptsForStudent returns everything — 15,774 rows for someone who has
-// worked through the corpus — and this runs on every graded answer.
+// the point: GetAttemptsForStudent returns everything, 15,774 rows for someone who has
+// worked through the corpus and this runs on every graded answer.
 //
 // A failed read is not fatal. With no window the ladder simply does not advance, and the
-// learner's next answer will see a full one. The alternative — advancing on no evidence —
+// learner's next answer will see a full one. The alternative, advancing on no evidence,
 // would be mastery without a record of what it was based on.
 func (e *Engine) buildEvidenceWindow(studentID, conceptID string, current mastery.Attempt) mastery.Evidence {
 	opts := mastery.EvidenceOptions{}
@@ -2815,7 +2815,7 @@ type gradedAttempt struct {
 	// difficulty the question that produced this attempt was generated at, or nil when it
 	// is genuinely unknown. A pointer, not a float64 with 0 meaning unknown: 0 is not a
 	// difficulty the engine ever serves, so overloading it would let a forgotten value and
-	// a deliberate "unknown" be indistinguishable at the call site — which is exactly the
+	// a deliberate "unknown" be indistinguishable at the call site, which is exactly the
 	// bug that let the quiz path record unknown difficulty for every attempt.
 	difficulty *float64
 	kpOrdinal  int
@@ -2823,8 +2823,8 @@ type gradedAttempt struct {
 
 // applyGradedAttempt is the single mastery authority.
 //
-// It used to exist twice — once in SubmitAnswer for study and review, once in
-// submitAnswerWithTask for quizzes and the diagnostic — with identical logic and different
+// It used to exist twice, once in SubmitAnswer for study and review, once in
+// submitAnswerWithTask for quizzes and the diagnostic, with identical logic and different
 // variable names. Two copies of the state machine is how a quiz answer ends up graded
 // differently from a study answer, which is the class of divergence ADR-037 spent a week
 // removing. There is one now, and both hosts call it.
@@ -2872,8 +2872,8 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 
 	// Mastery transition, on evidence rather than on the streak.
 	//
-	// The window includes the attempt being graded. It has not been written yet —
-	// RecordAttempt runs at the end of this function — so without appending it here the
+	// The window includes the attempt being graded. It has not been written yet,
+	// RecordAttempt runs at the end of this function, so without appending it here the
 	// very first answer on a concept would be judged on an empty window and a learner
 	// could not leave UNSEEN until they had answered twice before being credited with
 	// anything.
@@ -2919,14 +2919,14 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	progress.Status = string(newStatus)
 	advanced := newStatus != mastery.Status(oldStatus)
 
-	// Reset the streak on a tier advance. It no longer gates anything — the ladder above
-	// does — but it is still the honest running count of consecutive correct answers, it
+	// Reset the streak on a tier advance. It no longer gates anything, the ladder above
+	// does, but it is still the honest running count of consecutive correct answers, it
 	// still feeds SM-2 quality, and the shelf still reads it to tell "resume" from "new".
 	if advanced && o.correct {
 		progress.Streak = 1
 	}
 
-	// SM-2 update — PR 1.2 student model: scale interval by per-topic learningSpeed
+	// SM-2 update, PR 1.2 student model: scale interval by per-topic learningSpeed
 	quality := mastery.SM2Quality(
 		o.correct && progress.Streak >= o.requiredStreak,
 		progress.AvgResponseTime/o.timeThreshold,
@@ -3007,7 +3007,7 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	// The review clock moves on every graded answer, not only on an advance.
 	//
 	// Stability is computed from the elapsed time since the previous review, so the clock
-	// has to be the previous review — and it then has to move, or the next computation
+	// has to be the previous review and it then has to move, or the next computation
 	// measures from the same stale instant again. Leaving it behind inflated stability on
 	// every repeat: the learner answered, the elapsed time did not grow, and the estimate
 	// grew anyway. A miss and a correct answer that does not yet advance a tier both move
@@ -3041,7 +3041,7 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	// "a tier was just advanced" back when that was what advancement meant. It is not any
 	// more: the ladder advances on evidence, so a concept can reach MASTERED with a streak
 	// of 1. That left `LastReviewed` nil, and `GetProgress` treats a nil `LastReviewed` as
-	// fully decayed — so a concept could be MASTERED and simultaneously read as DECAYING,
+	// fully decayed, so a concept could be MASTERED and simultaneously read as DECAYING,
 	// depending on which rule fired first. Seen in the engine tests as the ladder passing
 	// through DECAYING on its way up.
 	//
@@ -3065,8 +3065,8 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 
 	// A miss is a lapse, and a lapse has to be scheduled as one.
 	//
-	// Stability collapses above — from hundreds of days to about a week for a concept the
-	// learner had mastered — but the block just above moves FSRSLastReview and
+	// Stability collapses above, from hundreds of days to about a week for a concept the
+	// learner had mastered, but the block just above moves FSRSLastReview and
 	// NextReviewDue only when a tier advanced. So a missed review reset the stability while
 	// both the review timestamp and the due date kept the values from the last successful
 	// review: retrievability then computed from a stale clock, which read zero forever and
@@ -3075,8 +3075,8 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	//
 	// The due date is now, not now plus the FSRS interval, because a concept the learner has
 	// just failed belongs in front of them rather than in a week. Remediation still routes
-	// through the existing rules — two consecutive misses enqueue the concept and its key
-	// prerequisites — so this changes when the review is offered, not what a miss is worth.
+	// through the existing rules, two consecutive misses enqueue the concept and its key
+	// prerequisites, so this changes when the review is offered, not what a miss is worth.
 	if !o.correct {
 		missedAt := nowUTC()
 		progress.FSRSLastReview = &missedAt
@@ -3118,7 +3118,7 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 // The ledger started mid-week, so without this the weekly board would count only
 // the hours since the deploy and would hide the effort of everyone who worked
 // earlier in the week. A correct attempt's award depends only on the concept's
-// time threshold — the performance multiplier cannot change an integer award —
+// time threshold, the performance multiplier cannot change an integer award,
 // so a replay is faithful to what the award path would have paid.
 //
 // The lifetime and daily counters already include these awards, so the replay

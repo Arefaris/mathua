@@ -1,4 +1,4 @@
-> Content sourced from [Discrete Mathematics: An Open Introduction, 3e](https://discrete.openmathbooks.org/dmoi3/sec_addtops-numbth.html) by Oscar Levin — CC BY-SA 4.0
+> Content sourced from [Discrete Mathematics: An Open Introduction, 3e](https://discrete.openmathbooks.org/dmoi3/sec_addtops-numbth.html) by Oscar Levin, CC BY-SA 4.0
 ##  Section 5.2 Introduction to Number Theory
 
 We have used the natural numbers to solve problems. This was the right set of numbers to work with in discrete mathematics because we always dealt with a whole number of things. The natural numbers have been a tool. Let’s take a moment now to inspect that tool. What mathematical discoveries can we make _about_ the natural numbers themselves?

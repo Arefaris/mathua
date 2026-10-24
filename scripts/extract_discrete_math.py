@@ -128,7 +128,7 @@ def main():
             md = extract_section(soup, main, section_name)
             attribution = (
                 f"> Content sourced from [Discrete Mathematics: An Open Introduction, 3rd ed]({BASE_URL}/{url_slug}.html)"
-                " by Oscar Levin — CC BY-SA 4.0\n\n"
+                " by Oscar Levin, CC BY-SA 4.0\n\n"
             )
             md = attribution + md
 

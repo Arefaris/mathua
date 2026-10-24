@@ -19,7 +19,7 @@ var learnerDomains = map[string]bool{
 // generatorExplained are the concepts deliberately left on their generator's
 // own explanation. Every entry is table-driven: the question is a fixed
 // string, the answer is a fixed string, and the explanation is already a
-// complete sentence — "the sine function oscillates between -1 and 1; the
+// complete sentence, "the sine function oscillates between -1 and 1; the
 // maximum is 1". There is no arithmetic to interpolate and no instance to
 // address, so a schema would relocate text and buy nothing.
 //
@@ -28,7 +28,7 @@ var learnerDomains = map[string]bool{
 // with a reason, instead of passing because nobody looked. A concept that
 // *does* compute from parameters belongs in data/lessons/solutions, not here.
 var generatorExplained = map[string]string{
-	// trigonometry — table-driven, complete-sentence explanations
+	// trigonometry, table-driven, complete-sentence explanations
 	"trig.adv.arctan":                 "table-driven: fixed question, fixed answer",
 	"trig.adv.inverse":                "table-driven: fixed question, fixed answer",
 	"trig.eq.basic":                   "table-driven: fixed question, fixed answer",
@@ -54,11 +54,11 @@ var generatorExplained = map[string]string{
 	"trig.ident.sum_to_product":       "table-driven: fixed question, fixed answer",
 	"trig.ineq.advanced":              "table-driven: fixed question, fixed answer",
 	"trig.ineq.basic":                 "table-driven: fixed question, fixed answer",
-	// prealgebra — table-driven
+	// prealgebra, table-driven
 	"prealg.real.concept":    "table-driven: fixed question, fixed answer",
 	"prealg.real.properties": "table-driven: fixed question, fixed answer",
 	"prealg.types":           "table-driven: fixed question, fixed answer",
-	// algebra — table-driven
+	// algebra, table-driven
 	"alg.func.dirichlet":       "table-driven: fixed question, fixed answer",
 	"alg.func.even_odd":        "table-driven: fixed question, fixed answer",
 	"alg.func.inverse_domain":  "table-driven: fixed question, fixed answer",
@@ -108,7 +108,7 @@ func TestLearnerDomainsHaveSchemas(t *testing.T) {
 			t.Errorf("generatorExplained lists %q, which is not in a learner domain", id)
 		}
 		if have[id] {
-			t.Errorf("generatorExplained lists %q, but it now has a schema — drop the exemption", id)
+			t.Errorf("generatorExplained lists %q, but it now has a schema, drop the exemption", id)
 		}
 	}
 	if len(missing) > 0 {

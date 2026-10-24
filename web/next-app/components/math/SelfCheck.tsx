@@ -3,13 +3,13 @@
 // The optional hint under the answer field.
 //
 // Deliberately narrow. It shows the learner what *their own* expression simplifies to.
-// It never compares against the expected answer, because the client does not have it —
+// It never compares against the expected answer, because the client does not have it, 
 // the server holds that, and shipping it here to power a hint would quietly turn the
 // hint into an answer oracle and undo ADR-005. There is therefore no way for this
 // component to influence a verdict, and `onChange` below feeds nothing but the field's
 // own display.
 //
-// Compute Engine is 788 kB gzipped — nearly four times MathLive. It is never part of any
+// Compute Engine is 788 kB gzipped, nearly four times MathLive. It is never part of any
 // route's initial JS; it is fetched the first time a learner pauses mid-answer with
 // arithmetic on screen, and never fetched at all otherwise.
 //

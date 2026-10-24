@@ -48,7 +48,7 @@ def latex2sympy(seg: str):
     ``var = get_differential_var(...)`` inside ``convert_atom`` (which
     declares ``global var``), replacing the dict with a bare ``Symbol``.
     Every later call in the process then dies at ``... in var`` with
-    ``TypeError: argument of type 'Symbol' is not a container`` — one early
+    ``TypeError: argument of type 'Symbol' is not a container``, one early
     complex-numbers block poisoned ~1800 later blocks in the sweep.
 
     Reset the globals before each call so every segment parses independently.
@@ -164,7 +164,7 @@ FUNC_DEF_RE = re.compile(
 )
 
 # A collected body that is just another bare call (`R(x) = P(x)`) states a
-# conditional relation, not a construction — expanding it is unsound.
+# conditional relation, not a construction, expanding it is unsound.
 BARE_CALL_RE = re.compile(r"^\\?[a-zA-Z]+\([^()]*\)$")
 
 
@@ -176,7 +176,7 @@ def collect_definitions(text: str) -> dict:
     parameter, and not be prose punctuation or a bare alias call. (Without
     these guards, conditionals like `R(x) = 0` or identities like
     `P(x) = Q(x)D(x) + R(x)` poison every later `R(...)`/`P(...)` in the
-    file.) Callers scope to the nearest PRECEDING definition — examples
+    file.) Callers scope to the nearest PRECEDING definition, examples
     redefine `f` freely down a file.
     """
     defs: dict[str, list] = {}
@@ -202,7 +202,7 @@ def collect_definitions(text: str) -> dict:
             continue
         # The body must be built from its parameter, not from other
         # unknowns: `P(x) = Q(x)D(x) + R(x)` is the division identity, not a
-        # construction of P — expanding it rewrites P into unbound symbols.
+        # construction of P, expanding it rewrites P into unbound symbols.
         try:
             if any(isinstance(a.func, UndefinedFunction)
                    for a in parsed_body.atoms(sp.Function)):
@@ -242,7 +242,7 @@ def norm_latex(tex: str) -> str:
     # `\limits` only controls operator layout (`\sum\limits_{...}`); drop it.
     t = re.sub(r"\\limits(?![a-zA-Z])", "", t)
     # Inverse-trig notation (`\tan^{-1}`) is composition-inverse (arctan),
-    # NOT reciprocal — latex2sympy would read `(tan)^(-1)` = cot, wrong math.
+    # NOT reciprocal, latex2sympy would read `(tan)^(-1)` = cot, wrong math.
     t = re.sub(r"\\(sin|cos|tan)\^\{-1\}", r"\\arc\1", t)
     t = re.sub(r"\\(sin|cos|tan)\^-1(?![0-9])", r"\\arc\1", t)
     # Font/accent wrappers carry no algebraic meaning here: \mathbf{v} -> v.
@@ -259,7 +259,7 @@ def norm_latex(tex: str) -> str:
     t = re.sub(r"^\s*\d+\.\s*\\quad\s*", "", t)
     t = re.sub(r"^\s*\d+\.\s+", "", t)
     # Spacing/formatting commands are semantically empty here (spacing ones become a space).
-    # NOTE: `\left`/`\right` must only match as whole commands — a plain
+    # NOTE: `\left`/`\right` must only match as whole commands, a plain
     # substring replace would corrupt `\rightarrow` into `arrow`.
     for cmd in (r"\left", r"\right", r"\displaystyle", r"\mathrm"):
         t = re.sub(re.escape(cmd) + r"(?![a-zA-Z])", "", t)
@@ -288,7 +288,7 @@ def norm_latex(tex: str) -> str:
     t = re.sub(r"(\d)\s*\(", r"\1*(", t)
     t = re.sub(r"\)\s*(\d)", r")*\1", t)
 
-    # Euler's `e` never takes a subscript — `e_1`, `e_{n}` in lessons are
+    # Euler's `e` never takes a subscript, `e_1`, `e_{n}` in lessons are
     # ordinary indexed variables (Vieta's formulas), but latex2sympy reads
     # them as Euler-E and drops the index. Rename to a safe symbol first.
     # (Bare `e` and `e^{...}` are untouched and still map to E downstream.)
@@ -352,7 +352,7 @@ class Block:
 
 
 # A display that opens with an enumeration label (`\text{2.}`, `9\.`) is a
-# numbered exercise — a problem statement to solve, not a claim. (Checked on
+# numbered exercise, a problem statement to solve, not a claim. (Checked on
 # the raw block: norm_latex strips these labels before verification.)
 NUMBERED_RE = re.compile(r"^\s*(?:\\text\{\s*)?\d+\s*(?:\\\.)?\.\s*")
 
@@ -404,7 +404,7 @@ IMPLIES_SEPS = ["\\Rightarrow", "\\Longrightarrow", "\\rightarrow",
 # Trailing side-condition clauses: hypotheses, not claims
 # (`y = \log_a{f(x)} \quad \text{with} \quad a > 0`). The `{with}` form
 # survives strip_text (short group); cut the head claim free and verify it
-# alone — definitions then hit the definitional guard, identities verify.
+# alone, definitions then hit the definitional guard, identities verify.
 SIDE_COND_RE = re.compile(
     r"\{(?:with|for|if|where|when|such that|provided|given)\}|"
     r"\\text\{(?:with|for|if|where|when)\}")
@@ -415,7 +415,7 @@ TRAILING_COND_RE = re.compile(
     re.S)
 
 # Ellipsis schemas (`z^n - 1 = (z-z_0)\cdots`) quantify over an unlisted
-# range — sampling the visible symbols cannot verify them.
+# range, sampling the visible symbols cannot verify them.
 ELLIPSIS_RE = re.compile(r"\\(cdots|ldots|vdots|ddots)")
 
 # Evaluation-bar notation (`\left[ F \right]_1^t`) needs the FTC to check;
@@ -533,7 +533,7 @@ def _split_raw_claims(tex: str) -> list[str] | None:
     chain (no separator) stays one piece and is walked pairwise downstream.
 
     The corpus mixes single- and doubled-command prefixes, so doubled
-    prefixes are collapsed first — exactly like norm_latex does — otherwise
+    prefixes are collapsed first, exactly like norm_latex does, otherwise
     the row-break pattern would fire inside a doubled gap command itself.
     Spacing commands (`\\,`, `\\;`, `\\:`, `\\!`) are blanked first for the
     same reason: `\\,` is a thin space, never a row break (this once split
@@ -553,7 +553,7 @@ def _split_independent(body: str) -> list[str] | None:
     """Split `A {and} B`-style leftovers (post-norm) into independent claims.
 
     Returns None when the body is a single claim. A bare `a = b = c` chain
-    (no separator) is NOT split here — the `=`-chain walker below verifies it
+    (no separator) is NOT split here, the `=`-chain walker below verifies it
     pairwise.
     """
     parts = [p.strip() for p in AND_OR_RE.split(body)]
@@ -587,7 +587,7 @@ def _verify_aligned(blk: Block, tex: str) -> None:
         if outside:
             pieces.append(outside)
         for row in re.split(r"\\\\+(?:\[[^\]]*\])?", m.group(2)):
-            # NOTE: `&` alignment points are KEPT here — the claim chunker
+            # NOTE: `&` alignment points are KEPT here, the claim chunker
             # below needs them to separate side-by-side equations. Only
             # \nonumber (a pure decoration) is dropped.
             row = row.replace("\\nonumber", "").strip()
@@ -612,7 +612,7 @@ def _verify_aligned(blk: Block, tex: str) -> None:
     failed = False
     for piece in pieces:
         # Multi-column table rows (`A &= B & C &= D`): `&&` is a hard column
-        # break; single `&` cells are greedily rejoined into claims — a new
+        # break; single `&` cells are greedily rejoined into claims, a new
         # claim starts when the accumulation already holds `=` and the next
         # cell is not a continuation (`= C`, `> 2k`). This keeps `&=` chains
         # intact while separating side-by-side equations.
@@ -638,7 +638,7 @@ def _verify_aligned(blk: Block, tex: str) -> None:
                 if not _claim_signal(body):
                     # Pure expression fragment. A fragment continuing with an
                     # operator (`- (3)(4)(2) - ...` picking up the previous
-                    # right-hand side) EXTENDS the column's chain — the next
+                    # right-hand side) EXTENDS the column's chain, the next
                     # `=` row is verified against the whole accumulated
                     # right-hand side (Sarrus expansions split across rows).
                     # Anything else is not a claim: skip without touching it.
@@ -686,7 +686,7 @@ def verify_block(blk: Block) -> None:
         blk.verdict, blk.reason = "SKIP", "equation to solve"
         return
     # Matrix algebra (`A·I = I·A = A`): single-uppercase symbols around
-    # `\cdot` are matrices, but the parser reads `I` as the imaginary unit —
+    # `\cdot` are matrices, but the parser reads `I` as the imaginary unit, 
     # sampling them as scalars can only misfire (or false-verify).
     if re.search(r"matr|vector", blk.file, re.I) and re.search(
             r"[A-Z]\s*\\cdot|\\cdot\s*[A-Z]", blk.tex):
@@ -694,7 +694,7 @@ def verify_block(blk: Block) -> None:
         return
     # Conjugates (`\overline{z}`, `\bar{z}`) and vectors (`\vec{i}`) lose
     # their meaning when norm strips the accent (`z·\bar{z}` would verify as
-    # `z·z`, true at real samples but a different claim — a false OK). The
+    # `z·z`, true at real samples but a different claim, a false OK). The
     # sampler has no conjugate/vector model: honest SKIP up front.
     # (Multi-letter `\overline{OA}` segment lengths are harmless either way,
     # but they ride along; their chains still SKIP as disjoint unknowns.)
@@ -783,7 +783,7 @@ def _undetermined_symbols(lhs, rhs) -> bool:
     templates, `z_k` in indexed families): a bare letter confined to exactly
     one side is an unknown to solve for, not a shared variable of an
     identity. A true universal identity cannot have a one-sided free variable
-    (independent sampling would falsify it) — except the constants `i` and
+    (independent sampling would falsify it), except the constants `i` and
     `e`, excluded. Definitions (`S_n = ...`, `y = ...`) are caught by the
     definitional guard first, so this fires only on non-Symbol left sides."""
     try:
@@ -802,7 +802,7 @@ def _undetermined_symbols(lhs, rhs) -> bool:
 
 
 def _domain_sensitive(lhs, rhs) -> bool:
-    """True for logarithms, real radicals and fractional powers — claims
+    """True for logarithms, real radicals and fractional powers, claims
     stated over positive reals, where negative samples prove nothing."""
     for e in (lhs, rhs):
         try:
@@ -830,7 +830,7 @@ def _pair_guard(lhs, rhs) -> str | None:
         return "disjoint variables"
     if isinstance(lhs, (sp.Pow, sp.Mul)) and (lf - rf):
         # ...unless symbolically identical (`a^0 = 1`): exact verification
-        # dominates the heuristic — sample-checking would confirm it too.
+        # dominates the heuristic, sample-checking would confirm it too.
         try:
             if sp.simplify(lhs - rhs) == 0:
                 return None
@@ -845,7 +845,7 @@ def _pair_guard(lhs, rhs) -> str | None:
 
 
 def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
-    # Ellipsis schemas quantify over an unlisted range — the visible symbols
+    # Ellipsis schemas quantify over an unlisted range, the visible symbols
     # do not determine the claim.
     if ELLIPSIS_RE.search(body):
         blk.verdict, blk.reason = "SKIP", "ellipsis schema"
@@ -900,7 +900,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         if mtrail:
             body = mtrail.group("head")
     # Differential/integral relations (`dx = du/2`, `\int ... dt = ...`) are
-    # not algebraic identities to check with sample points — the bare
+    # not algebraic identities to check with sample points, the bare
     # differential (`dx`, `dt`, `ds`, ...) is an operator, not a variable.
     if re.search(r"\bdx\b|\bdu\b|\bdy\b|\bd[a-z]\b", body):
         blk.verdict, blk.reason = "SKIP", "differential relation"
@@ -915,10 +915,10 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         return
     # Tuples and multi-argument forms (`(1,0,0)`, bare `x = 1, y = 2`) are
     # not scalar claims. Paren-depth counts too, so known multi-arg calls
-    # (`\max(a,b)`) are exempt — but a bare tuple's commas sit at paren
+    # (`\max(a,b)`) are exempt, but a bare tuple's commas sit at paren
     # depth ≥ 1 as well, so those still fall through to the parser, which
     # reports them as non-scalar (same honest bucket as before).
-    # Post-parse, survivors would trip "non-scalar parse" anyway — no OK
+    # Post-parse, survivors would trip "non-scalar parse" anyway, no OK
     # has a brace/paren-top-level comma, so this only refines SKIP reasons.
     depth_brace = depth_paren = 0
     has_top_comma = False
@@ -945,10 +945,10 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         return
     # Textual unresolved-call check: a `Head(...)` / `Head_sub(...)` form
     # whose head is neither a known function nor a file-defined name is
-    # function-like and unresolvable here — catching it pre-parse also
+    # function-like and unresolvable here, catching it pre-parse also
     # avoids parser-internal AttributeErrors on inputs like `C_s(V_x, V_y)`
     # that the grammar chokes on. Deliberately NARROW: bare single letters
-    # (`E(X)` for expectation, kept-as-call `f(x)`) are exempt — they flow
+    # (`E(X)` for expectation, kept-as-call `f(x)`) are exempt, they flow
     # to the post-parse triage, which already handles them (Euler-coincidence
     # OKs for linear expectation identities must not regress). Only forms
     # that can never verify are caught early: subscripted heads, file-defined
@@ -1067,7 +1067,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
     if any(r[0] == "expr" and not isinstance(r[1], sp.Basic) for r in results):
         blk.verdict, blk.reason = "SKIP", "non-scalar parse"
         return
-    # Triage helpers for definitional/undeclared claims (all honest SKIPs —
+    # Triage helpers for definitional/undeclared claims (all honest SKIPs, 
     # sampling independent points cannot verify these, only misfire on them).
     def _has_undef(expr) -> bool:
         try:
@@ -1079,7 +1079,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         blk.verdict, blk.reason = "SKIP", "unresolved function"
         return
     # Backstop: a free symbol still carrying a backslash (e.g. \varphi) is a
-    # command latex2sympy does not model — anything built on it is uncheckable.
+    # command latex2sympy does not model, anything built on it is uncheckable.
     try:
         allfree: set = set()
         for e in expr_results:
@@ -1120,7 +1120,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         def _real_pow(expr):
             # Rewrite (-a)**(1/odd) -> -(a**(1/odd)) for odd integer denominator.
             # Plain integer exponents (q == 1, e.g. (-2)**2 = 4) are NOT roots
-            # and must be left alone — rewriting them negates even powers.
+            # and must be left alone, rewriting them negates even powers.
             return expr.replace(
                 lambda e: isinstance(e, sp.Pow) and e.base.is_number and e.base.is_negative and e.exp.is_Rational and not e.exp.is_Integer and e.exp.q % 2 == 1,
                 lambda e: -((-e.base) ** e.exp)
@@ -1180,7 +1180,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
                     continue
                 # A sample outside the expression's domain (pole, log of a
                 # negative, even root of a negative) is an invalid
-                # counterexample, not a falsification — discard the point.
+                # counterexample, not a falsification, discard the point.
                 try:
                     if d.has(sp.nan, sp.zoo) or d.is_infinite:
                         continue
@@ -1204,7 +1204,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
             return msg if msg is not None else "SKIP: no valid sample"
         # Domain-sensitive shape (logarithms, real radicals, fractional
         # powers are stated over positive reals): a standard-points mismatch
-        # may be an out-of-domain artifact. Retry where the claim lives — a
+        # may be an out-of-domain artifact. Retry where the claim lives, a
         # positive-points mismatch is a genuine falsification.
         tried = 0
         msg2 = _run_points(POSITIVE_POINTS)
@@ -1228,7 +1228,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         if any("\\" in str(s) for s in free):
             return "SKIP: unparsed command"
         # Unbound applied functions (`c(x)`, `f`, `g` in epsilon-delta
-        # schemas) cannot be decided by sampling — but that is a lack of
+        # schemas) cannot be decided by sampling, but that is a lack of
         # model, not a falsification.
         for e in exprs_:
             try:
@@ -1303,7 +1303,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
         # Sampling can confirm a universal inequality (holds at every
         # decidable point) but can never falsify one: a violation at every
         # sampled point is equally a solution set/condition whose satisfying
-        # region the samples missed (`x > 3`). Report either way as SKIP —
+        # region the samples missed (`x > 3`). Report either way as SKIP, 
         # a missed OK on a condition is honest; a FAIL would cry wolf.
         # (Genuinely false universals are caught by hand-triage of the
         # conditional-inequality bucket, which stays small.)
@@ -1327,7 +1327,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
     def _record(msg: str, chain_results) -> None:
         # A ground claim that fails next to contradiction language is a
         # lesson's intentional reductio (e.g. deriving 3 > 4 to show no
-        # solution) — skip it; anything else stays a FAIL.
+        # solution), skip it; anything else stays a FAIL.
         if msg.startswith("SKIP: "):
             blk.verdict, blk.reason = "SKIP", msg[6:180]
             return
@@ -1361,7 +1361,7 @@ def _verify_piece(blk: Block, body: str, had_long_text: bool) -> None:
             if ka == "expr" and kb == "expr":
                 # Per-pair honest-SKIP guards (definitions, disjoint or
                 # template unknowns): independent sampling cannot verify a
-                # pair that shares nothing checkable — e.g. `z^n = ...`
+                # pair that shares nothing checkable, e.g. `z^n = ...`
                 # under the definition `z := re^{iθ}`, or `OA = OP·cosθ`
                 # with geometrically linked unknowns.
                 guard = _pair_guard(pa[0], pb[0])

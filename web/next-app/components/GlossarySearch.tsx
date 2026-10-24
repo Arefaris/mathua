@@ -30,7 +30,7 @@ interface GlossarySearchProps {
 //
 // Two input modes share one active query: text for names, aliases and
 // definition words; math (MathLive) for notation typed as notation. Only one
-// is active at a time — MathLive splits prose into spaced letters rather
+// is active at a time, MathLive splits prose into spaced letters rather
 // than words, so combining the two would silently corrupt word queries.
 export default function GlossarySearch({
   query,
@@ -84,7 +84,7 @@ export default function GlossarySearch({
                 spellCheck={false}
                 value={query}
                 onChange={e => onQueryChange(e.target.value)}
-                placeholder="Search a symbol, name or meaning — e.g. ∀, integral, lambda"
+                placeholder="Search a symbol, name or meaning, e.g. ∀, integral, lambda"
                 className="w-full border border-mathua-border bg-mathua-surface px-4 py-2 font-mono text-sm text-mathua-primary placeholder:text-mathua-muted focus:border-mathua-blue focus:outline-none min-h-[44px]"
               />
             </>

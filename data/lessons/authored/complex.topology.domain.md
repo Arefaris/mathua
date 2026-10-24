@@ -18,4 +18,4 @@ The punctured plane \(\mathbb{C} \setminus \{0\}\) is connected despite the miss
 
 A domain needs the two properties together: an open set in which any two points can be joined by a path that stays inside. The punctured plane, an open disk, the upper half-plane and an annulus \(\{z : 1 < |z| < 2\}\) all qualify.
 
-The closed disk fails openness, and the union of two disjoint open disks fails connectedness — the two failure modes are different, and an explanation that separates them is the one that teaches the definition.
+The closed disk fails openness, and the union of two disjoint open disks fails connectedness, the two failure modes are different, and an explanation that separates them is the one that teaches the definition.

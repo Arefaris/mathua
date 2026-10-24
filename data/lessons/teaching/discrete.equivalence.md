@@ -6,7 +6,7 @@
 
 Compare the two sides row by row over $p,q$:
 1. $\lnot(p\land q)$ is false in exactly one row: $p$ true and $q$ true.
-2. $\lnot p\lor\lnot q$ is false exactly when both disjuncts fail, i.e. $p$ true and $q$ true — the same row.
+2. $\lnot p\lor\lnot q$ is false exactly when both disjuncts fail, i.e. $p$ true and $q$ true, the same row.
 3. True in the other three rows each, so both columns match everywhere.
 
 So negating a conjunction flips it to a disjunction of negations, and dually for disjunctions.
@@ -15,7 +15,7 @@ So negating a conjunction flips it to a disjunction of negations, and dually for
 
 Check where each side is false:
 1. $p\to q$ is false in exactly one row: $p$ true, $q$ false.
-2. $\lnot p\lor q$ fails exactly when $\lnot p$ and $q$ both fail: $p$ true, $q$ false — the same row.
+2. $\lnot p\lor q$ fails exactly when $\lnot p$ and $q$ both fail: $p$ true, $q$ false, the same row.
 3. $\lnot p\lor q$ is a disjunction of literals, hence already a CNF clause.
 
 So $p\to q\equiv\lnot p\lor q$ is the CNF of the implication.

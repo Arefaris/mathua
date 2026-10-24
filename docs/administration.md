@@ -1,4 +1,4 @@
-# Administration — roles, permissions and the audit trail
+# Administration, roles, permissions and the audit trail
 
 Mathua has one authentication system and one role boundary. This document is the design
 rationale for that boundary: why the role lives in the database and not in the token, why the
@@ -7,7 +7,7 @@ removed. It is analytical prose, not a procedure.
 
 For the system overview, see [`architecture.md`](architecture.md).
 
-## Administration — roles, not a second login
+## Administration, roles, not a second login
 
 One authentication system serves everyone. A learner signs in at `/login`. An administrator
 signs in at the same place with the same form. There is no admin login page and no admin

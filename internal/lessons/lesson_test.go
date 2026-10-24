@@ -212,7 +212,7 @@ func TestLoad_KPs_FallbackToLessonTitle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load: %v", err)
 	}
-	// No kp/ dir at all — fallback shard carries the lesson title.
+	// No kp/ dir at all, fallback shard carries the lesson title.
 	kps := loader.KPs("c")
 	if len(kps) != 1 {
 		t.Fatalf("expected fallback shard, got %d", len(kps))

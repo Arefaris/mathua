@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/derivative-of-composite-power-functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/derivative-of-composite-power-functions/), CC BY-NC 4.0
 
 ## Composite Power Functions and Derivatives
 

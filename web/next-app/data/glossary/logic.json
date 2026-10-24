@@ -1227,7 +1227,7 @@
       "up to renaming"
     ],
     "category": "logic-sets",
-    "definition": "Signals a symmetry argument: the proof fixes one of several interchangeable cases (e.g. a ≤ b) because the others follow identically. It claims no generality is lost — which must actually be true.",
+    "definition": "Signals a symmetry argument: the proof fixes one of several interchangeable cases (e.g. a ≤ b) because the others follow identically. It claims no generality is lost, which must actually be true.",
     "reading": "“without loss of generality”.",
     "examples": [
       {
@@ -1270,7 +1270,7 @@
     "examples": [
       {
         "tex": "\\sqrt{2} \\notin \\mathbb{Q}",
-        "explanation": "Assuming √2 = p/q in lowest terms forces both even — contradicting lowest terms."
+        "explanation": "Assuming √2 = p/q in lowest terms forces both even, contradicting lowest terms."
       }
     ],
     "relatedSymbols": [

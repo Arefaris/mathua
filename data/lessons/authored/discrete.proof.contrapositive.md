@@ -1,10 +1,10 @@
 # Proof by contrapositive
 
-The **contrapositive** of \(p \to q\) is \(\lnot q \to \lnot p\). The two are logically equivalent — they have the same truth table — so proving one proves the other. A proof by contrapositive assumes \(\lnot q\) and derives \(\lnot p\), and it is the right choice when the negated conclusion is easier to work with than the hypothesis.
+The **contrapositive** of \(p \to q\) is \(\lnot q \to \lnot p\). The two are logically equivalent, they have the same truth table, so proving one proves the other. A proof by contrapositive assumes \(\lnot q\) and derives \(\lnot p\), and it is the right choice when the negated conclusion is easier to work with than the hypothesis.
 
 ## The contrapositive
 
-For the statement "if \(n\) is even then \(n^2\) is even", the contrapositive is "if \(n^2\) is odd then \(n\) is odd". Neither is easier there. For "if \(n^2\) is even then \(n\) is even" the direct proof has nothing to grab — an even square says nothing directly about \(n\) — while the contrapositive assumes \(n\) odd, writes \(n = 2k+1\), and computes \(n^2 = 4k^2+4k+1\), which is odd. That is the standard use: the contrapositive turns a claim about a square back into a claim about its root.
+For the statement "if \(n\) is even then \(n^2\) is even", the contrapositive is "if \(n^2\) is odd then \(n\) is odd". Neither is easier there. For "if \(n^2\) is even then \(n\) is even" the direct proof has nothing to grab, an even square says nothing directly about \(n\), while the contrapositive assumes \(n\) odd, writes \(n = 2k+1\), and computes \(n^2 = 4k^2+4k+1\), which is odd. That is the standard use: the contrapositive turns a claim about a square back into a claim about its root.
 
 ## Converse and inverse
 

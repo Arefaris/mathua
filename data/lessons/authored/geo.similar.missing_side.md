@@ -18,4 +18,4 @@ The answer should be checked for plausibility: if the factor is greater than 1 t
 
 ## Choosing the corresponding sides
 
-Sides correspond when they lie between the same two angles, which the angle markings or the order of the vertices in the names identifies. Writing the similarity statement with the vertices in corresponding order — \(ABC\) similar to \(DEF\) — makes the pairing unambiguous, which is why that order is part of the notation rather than decoration.
+Sides correspond when they lie between the same two angles, which the angle markings or the order of the vertices in the names identifies. Writing the similarity statement with the vertices in corresponding order, \(ABC\) similar to \(DEF\), makes the pairing unambiguous, which is why that order is part of the notation rather than decoration.

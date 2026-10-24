@@ -234,7 +234,7 @@ describe('KatexContent table cleanup (integration)', () => {
       const { container } = render(<KatexContent>{md}</KatexContent>)
       const tables = container.querySelectorAll('table')
       expect(tables).toHaveLength(1)
-      // Header + 2 body rows, 2 columns each — nothing dropped.
+      // Header + 2 body rows, 2 columns each, nothing dropped.
       expect(tables[0].querySelectorAll('tr')).toHaveLength(3)
       for (const tr of tables[0].querySelectorAll('tr')) {
         expect(tr.querySelectorAll('th, td')).toHaveLength(2)
@@ -304,7 +304,7 @@ function extractSection(body: string, heading: string): string {
 
 // Prod gap guard for /learn?concept=arith.add.single: LearnStepper renders
 // each KP worked_example under `whitespace-pre-wrap` (LearnStepper.tsx:325),
-// which renders surviving whitespace-only text nodes as blank lines —
+// which renders surviving whitespace-only text nodes as blank lines, 
 // invisible to emptyColumnCount. Covers every KP section in the shard
 // (KP 0 "Use Addition Notation" plus the gap-bearing "Model Addition of
 // Whole Numbers"), asserting both table cleanliness and no blank-line runs.

@@ -14,7 +14,7 @@ const RESET_PHRASE = 'reset my progress'
  * keyboards frequently autocorrect: "reset my progress" arrives as "Reset my progress".
  * Both the comparison here and the server's were exact, so the button stayed disabled
  * forever on a phone and the server would have answered the capitalised phrase with
- * "confirmation phrase does not match" — telling someone who had typed exactly what
+ * "confirmation phrase does not match", telling someone who had typed exactly what
  * the label asked for that they had mistyped it. Chromium does not auto-capitalise,
  * which is why the suite was green throughout.
  *
@@ -101,7 +101,7 @@ export default function DangerZone() {
           <ul className="font-mono text-[11px] text-mathua-secondary space-y-0.5">
             <li>Concept mastery, streaks, review schedule</li>
             <li>Attempts log and sessions</li>
-            <li>XP — profile and leaderboard</li>
+            <li>XP, profile and leaderboard</li>
             <li>Diagnostic flag and plan evidence</li>
           </ul>
         </div>

@@ -10,7 +10,7 @@ import { join } from 'node:path'
  * The ranking tests that used to live here are gone because the ranking is gone: the decision
  * is made in internal/scheduler and arrives over /api/next, tested in Go
  * (`internal/scheduler/recommend_test.go`) and at the boundary (`TestNext_*` in
- * internal/server). What remains here is reporting on the learner's own history — which
+ * internal/server). What remains here is reporting on the learner's own history, which
  * successors a concept just unlocked, and what an href points at.
  *
  * The one behaviour worth noting is the decay rule, which had to be kept in step with the
@@ -64,7 +64,7 @@ describe('upcomingLocked', () => {
  * `storage.ConceptProgress` has no such column, `ProgressView` embeds that struct, and no route
  * adds one, so the branch cannot fire against a real response.
  *
- * So the rule was tested but unreachable — the same failure shape as a probe run where the thing
+ * So the rule was tested but unreachable, the same failure shape as a probe run where the thing
  * does not exist. This test states it instead, so the next person to touch it learns the field
  * does not exist rather than re-deriving it. If a PR1 payload does land `completed`, delete this
  * and reinstate the rule's tests, because then it will finally be doing something.

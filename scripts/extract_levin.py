@@ -1,6 +1,6 @@
 """
 Extract lesson content from Discrete Mathematics: An Open Introduction
-(Oscar Levin, discrete.openmathbooks.org) — CC BY-SA 4.0.
+(Oscar Levin, discrete.openmathbooks.org), CC BY-SA 4.0.
 """
 import requests
 import html2text
@@ -12,7 +12,7 @@ OUTPUT_DIR = Path("data/lessons/teaching")
 
 ATTRIBUTION = (
     "> Content sourced from [Discrete Mathematics: An Open Introduction, 3e]"
-    "({page_url}) by Oscar Levin — CC BY-SA 4.0\n"
+    "({page_url}) by Oscar Levin, CC BY-SA 4.0\n"
 )
 
 

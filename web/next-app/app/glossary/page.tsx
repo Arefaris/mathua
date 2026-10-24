@@ -23,8 +23,8 @@ import { mathSearchEntries } from '../../lib/glossary/mathQuery'
 
 /**
  * The mathematical glossary: a standalone reference for symbols, notation
- * and terminology. It reads the static bundle only — no API, no auth, no
- * XP, no progress — so looking anything up cannot affect learning state.
+ * and terminology. It reads the static bundle only, no API, no auth, no
+ * XP, no progress, so looking anything up cannot affect learning state.
  *
  * Results render one page at a time (20 entries); the page lives in ?page=
  * so it is shareable and survives back/forward navigation.

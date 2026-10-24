@@ -22,7 +22,7 @@ The rules are configured in `web/next-app/.oxlintrc.json`, all as `"warn"`
   115 assertions across the app and is a stylistic discipline, not a defect
   signal; revisit as an opt-in later.
 - `anti-slop/no-module-mocking`: **off in test files** (`test/**`,
-  `**/*.test.*`, `e2e/**`) — `vi.mock` is our deliberate test seam.
+  `**/*.test.*`, `e2e/**`), `vi.mock` is our deliberate test seam.
 - `anti-slop/no-runtime-typeof`: **off**. Browser platform guards
   (`typeof window === 'undefined'`) and React `ReactNode` narrowing are
   idiomatic and not "representation without a contract"; the rule assumes a

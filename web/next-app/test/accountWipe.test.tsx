@@ -76,7 +76,7 @@ describe('DeleteAccount: the learner-visible outcome', () => {
 })
 // The transport must read the {error} envelope. Throwing res.text() surfaced a
 // literal `{"error":"…"}` in the danger zone, which reads as a broken app
-// rather than an explanation — and it hid the distinction between a wrong
+// rather than an explanation and it hid the distinction between a wrong
 // phrase (400) and a real server fault (500).
 describe('danger-zone transport reports a readable sentence', () => {
   const realFetch = globalThis.fetch
@@ -93,8 +93,8 @@ describe('danger-zone transport reports a readable sentence', () => {
   }
 
   it('uses the server error text, not the raw JSON body', async () => {
-    const msg = await callReset(JSON.stringify({ error: 'reset failed and nothing was changed — please try again' }), 500)
-    expect(msg).toBe('Reset failed: reset failed and nothing was changed — please try again')
+    const msg = await callReset(JSON.stringify({ error: 'reset failed and nothing was changed, please try again' }), 500)
+    expect(msg).toBe('Reset failed: reset failed and nothing was changed, please try again')
     expect(msg).not.toContain('{"error"')
   })
 

@@ -54,11 +54,11 @@ describe('the report sheet', () => {
     fireEvent.click(screen.getByRole('button', { name: /report a problem/i }))
     fireEvent.click(screen.getByRole('button', { name: /send report/i }))
 
-    await waitFor(() => expect(screen.getByText(/thanks — reported/i)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/thanks, reported/i)).toBeInTheDocument())
 
     rerender(<ReportButton kind="question" conceptId="a" question="q2" />)
     rerender(<ReportButton kind="question" conceptId="a" question="q2" />)
-    expect(screen.queryByText(/thanks — reported/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/thanks, reported/i)).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /report a problem/i })).toBeInTheDocument()
   })
 
@@ -69,7 +69,7 @@ describe('the report sheet', () => {
       fireEvent.click(screen.getByRole('button', { name: /report a problem/i }))
       fireEvent.click(screen.getByRole('button', { name: /send report/i }))
 
-      await waitFor(() => expect(screen.getByText(/thanks — reported/i)).toBeInTheDocument())
+      await waitFor(() => expect(screen.getByText(/thanks, reported/i)).toBeInTheDocument())
 
       await vi.advanceTimersByTimeAsync(4100)
       expect(screen.getByRole('button', { name: /report a problem/i })).toBeInTheDocument()

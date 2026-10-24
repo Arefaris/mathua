@@ -48,7 +48,7 @@ test('profile sidebar renders nav without duplicating main CTAs', async ({ page 
   await expect(sidebar.getByText('On this page', { exact: true })).toHaveCount(0)
   // Due-review count surfaces as a badge, not a second CTA
   await expect(sidebar.locator('[data-sidebar="menu-badge"]')).toHaveText('3')
-  // Main column keeps its own cards — but the diagnostic CTA is gone for a
+  // Main column keeps its own cards, but the diagnostic CTA is gone for a
   // user who already completed it (one-time prompt, retake via direct URL).
   await expect(page.getByText(/diagnostic test →/i)).toHaveCount(0)
 })
@@ -114,7 +114,7 @@ test('profile sidebar collapses to icons via trigger', async ({ page }) => {
     const link = sidebar.locator(`a[href="${href}"]`).first()
     await expect(link.locator('svg').first()).toBeVisible()
   }
-  // Collapsed rail shows icons only — label spans are display:none in icon mode
+  // Collapsed rail shows icons only, label spans are display:none in icon mode
   for (const label of ['Mathua', 'Learn', 'Graph', 'Domains', 'Leaderboard', 'Settings', 'Sign out']) {
     await expect(sidebar.locator(`span:text-is("${label}")`).first()).toBeHidden()
   }

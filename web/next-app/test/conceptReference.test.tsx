@@ -169,7 +169,7 @@ describe('reference is not a progression surface', () => {
 
   it('states that reading is not evidence, and names no completion control', async () => {
     // §10: no "I studied this", no "mark as learned", no skip. Asserting the absence is the
-    // point — the panel is prose next to the questions, which is where such a control would
+    // point, the panel is prose next to the questions, which is where such a control would
     // be expected if one ever arrived.
     render(<ConceptReference conceptId="c1" />)
     await screen.findByText(/KP two/)
@@ -225,7 +225,7 @@ describe('reference page variant', () => {
 
 describe('lesson text fallback', () => {
   it('serves the article only for a concept with no knowledge points at all', async () => {
-    // Every concept in the corpus has a shard, so this is the rare path — and it is the last
+    // Every concept in the corpus has a shard, so this is the rare path and it is the last
     // place the full article is rendered anywhere in the product.
     kpOverride.value = { c1: { kps: [] } }
     getLessonsMock.mockResolvedValue({ lessons: { arith: [{ title: 'Adding up', concepts: ['c1'] }] } })

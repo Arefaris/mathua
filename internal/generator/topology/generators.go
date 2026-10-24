@@ -128,7 +128,7 @@ func (g *continuousGen) Generate(ctx generator.GeneratorContext) generator.Probl
 		{"Is \\(f(x)=\\tan(x)\\) continuous on \\(\\mathbb{R}\\)? (yes/no)", "no", "tan(x) is discontinuous at x=π/2 + nπ where the function approaches ±∞."},
 	}
 	hard := []entry{
-		{"Is \\(f(x)=\\sin(x)\\) continuous on \\(\\mathbb{R}\\)? (yes/no)", "yes", "sin(x) is continuous on R — a trigonometric function with no breaks."},
+		{"Is \\(f(x)=\\sin(x)\\) continuous on \\(\\mathbb{R}\\)? (yes/no)", "yes", "sin(x) is continuous on R, a trigonometric function with no breaks."},
 		{"Is \\(f(x)=e^{x}\\) continuous on \\(\\mathbb{R}\\)? (yes/no)", "yes", "f(x)=e^x is continuous on R as an exponential function."},
 		{"Is \\(f(x)=\\sqrt{x}\\) continuous on \\([0,\\infty)\\)? (yes/no)", "yes", "f(x)=√x is continuous on its domain [0,∞)."},
 		{"Is \\(f(x)=1/(x^{2}-1)\\) continuous on \\(\\mathbb{R}\\)? (yes/no)", "no", "f(x)=1/(x^2-1) is discontinuous at x=±1 where the denominator is zero."},

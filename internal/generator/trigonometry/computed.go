@@ -279,7 +279,7 @@ func (g *amplitudeGen) Generate(ctx generator.GeneratorContext) generator.Proble
 }
 
 // -------------------------------------------------------------------------------------------------
-// The second wave: eight more computed concepts, each needing a formula rather than a look-up — two
+// The second wave: eight more computed concepts, each needing a formula rather than a look-up, two
 // angles combined, an angle halved, a quadratic in a ratio, the triangles the law of sines leaves
 // open, an area from two sides and an included angle, a vector's length and dot product, and a
 // sinusoid's horizontal shift.

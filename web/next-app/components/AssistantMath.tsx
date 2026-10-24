@@ -8,8 +8,8 @@ import 'katex/dist/katex.min.css'
 //
 // This uses `dangerouslySetInnerHTML` on purpose, and the reason is narrow:
 // KaTeX does not take HTML, it takes TeX and produces its own output tree. With
-// `trust: false` the commands that would emit an attribute or a URL — \href,
-// \url, \htmlClass, \includegraphics — are refused and rendered as literal text,
+// `trust: false` the commands that would emit an attribute or a URL, \href,
+// \url, \htmlClass, \includegraphics, are refused and rendered as literal text,
 // so no string the model wrote can reach an anchor or an event handler. That is
 // the same configuration rehype-katex uses for lesson content, which is why this
 // does not import the Markdown pipeline: full Markdown would turn

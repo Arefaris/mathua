@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lens #3 — notation consistency.
+Lens #3, notation consistency.
 
 Flags files that mix log/ln, degree symbols, etc. within the same lesson.
 
@@ -20,7 +20,7 @@ def lint_file(path: Path):
     has_log = bool(re.search(r"\\log\b", text))
     has_ln = bool(re.search(r"\\ln\b", text))
     if has_log and has_ln:
-        # Allow files that explicitly say "logarithmic function" in prose but use ln in math — check math only
+        # Allow files that explicitly say "logarithmic function" in prose but use ln in math, check math only
         math_blocks = re.findall(r"\\\\\[.*?\\\\\]|\$\$.*?\\$\\$|\$[^$\n]+\$", text, re.S)
         math_text = " ".join(math_blocks)
         if re.search(r"\\log\b", math_text) and re.search(r"\\ln\b", math_text):

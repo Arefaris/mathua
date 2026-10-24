@@ -22,7 +22,7 @@ vi.mock('../lib/auth', async (importOriginal) => {
 })
 
 // The hero's "Get started" is the most prominent action on the marketing page.
-// It used to send a signed-out visitor to /profile — an empty dashboard with a
+// It used to send a signed-out visitor to /profile, an empty dashboard with a
 // zeroed heatmap and no question anywhere on it, which is a poor first
 // experience and the opposite of Learn being the primary destination.
 describe('landing hero', () => {
@@ -47,7 +47,7 @@ describe('landing hero', () => {
     ;(await screen.findByRole('button', { name: 'Get started' })).click()
     await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/learn'))
     // The anchor that grades the first answer is keyed by student, and the
-    // practice endpoint only resolves one from a bearer token — so the guest
+    // practice endpoint only resolves one from a bearer token, so the guest
     // id and token have to exist before /learn fetches anything.
     expect(ensureGuestId).toHaveBeenCalled()
     expect(ensureGuestToken).toHaveBeenCalled()
@@ -68,7 +68,7 @@ describe('landing hero', () => {
     // element. Same property, same specificity: Tailwind's emitted order decided the
     // winner, and the GitHub action hovered to blue over the artwork. The ghost now
     // carries its own transparent pair below lg and themed `lg:` overrides for the
-    // desktop panel — compared as exact class tokens, because the legitimate
+    // desktop panel, compared as exact class tokens, because the legitimate
     // `lg:hover:bg-mathua-blue-faint` contains `bg-mathua-blue` as a substring.
     const primaryTokens = primary.className.split(/\s+/)
     const ghostTokens = ghost.className.split(/\s+/)
@@ -85,7 +85,7 @@ describe('landing hero', () => {
     const learn = header.querySelector('a[href="/learn"]')
     expect(learn).not.toBeNull()
     // The landing hardcodes its own header rather than inheriting lib/nav.ts, so it is the one
-    // place the product's own navigation decision could quietly disappear — in either
+    // place the product's own navigation decision could quietly disappear, in either
     // direction. Learn leads, and the closed reference library is not offered at all.
     const hrefs = [...header.querySelectorAll('a')].map((a) => a.getAttribute('href'))
     // The brand mark is the first anchor, so the ordering claim is about the nav entries:

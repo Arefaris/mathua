@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman, CC BY-NC-SA 4.0
 
 ## 5.4 Integration Formulas and the Net Change Theorem
 
@@ -249,7 +249,7 @@ Under these conditions, how far from his starting point is Andrew after 1 hour?
 
 ### Integrating Even and Odd Functions
 
-We saw in Functions and Graphs that an even function is a function in which $f\left( {\text{-}x} \right) = f(x)$ for all *x* in the domain—that is, the graph of the curve is unchanged when *x* is replaced with −*x*. The graphs of even functions are symmetric about the *y*-axis. An odd function is one in which $f\left( {\text{-}x} \right) = \text{-}f(x)$ for all *x* in the domain, and the graph of the function is symmetric about the origin.
+We saw in Functions and Graphs that an even function is a function in which $f\left( {\text{-}x} \right) = f(x)$ for all *x* in the domain, that is, the graph of the curve is unchanged when *x* is replaced with −*x*. The graphs of even functions are symmetric about the *y*-axis. An odd function is one in which $f\left( {\text{-}x} \right) = \text{-}f(x)$ for all *x* in the domain, and the graph of the function is symmetric about the origin.
 
 Integrals of even functions, when the limits of integration are from −*a* to *a*, involve two equal areas, because they are symmetric about the *y*-axis. Integrals of odd functions, when the limits of integration are similarly $\left\lbrack {\text{-}a,a} \right\rbrack,$ evaluate to zero because the areas above and below the *x*-axis are equal.
 

@@ -12,7 +12,7 @@ import (
 // demonstrated mastery, because three separate rules read it: the fallback that
 // demotes a placed concept when a dependent is missed, the prerequisite gate, and
 // the mastery check. Before this repair the row was written MASTERED, the machine's
-// hysteresis kept it there, and the first correct answer cleared the flag — so one
+// hysteresis kept it there, and the first correct answer cleared the flag, so one
 // answer turned a diagnostic guess into permanent mastery.
 func TestPlacementStaysProvisionalUntilEvidenceCertifies(t *testing.T) {
 	e := testEngine(t)

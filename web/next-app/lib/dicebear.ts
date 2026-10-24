@@ -1,12 +1,12 @@
 // Curated DiceBear avatar styles (https://www.dicebear.com, HTTP API v10.x).
-// Styles carry individual licenses (CC0/CC-BY mix) — credited in README/footer.
+// Styles carry individual licenses (CC0/CC-BY mix), credited in README/footer.
 // URLs are seed-stable: the same style+seed always renders the same picture
 // and caches in the browser indefinitely. SVG is used (higher rate limit).
 
 export const DICEBEAR_VERSION = '10.x'
 const DICEBEAR_BASE = `https://api.dicebear.com/${DICEBEAR_VERSION}`
 
-// Peculiar, friendly picks — robots, pixel art, doodles, adventurers.
+// Peculiar, friendly picks, robots, pixel art, doodles, adventurers.
 export const DICEBEAR_STYLES = [
   'bottts',
   'pixel-art',
@@ -103,7 +103,7 @@ export interface EnsureDeps {
 const defaultDeps: EnsureDeps = { getUserInfo, getSettings, updateSettings }
 
 // ensureDicebearAvatar assigns a surprise DiceBear combo to photo-less users
-// (no custom upload, no Google photo, no existing pick — including a legacy
+// (no custom upload, no Google photo, no existing pick, including a legacy
 // preset, which is grandfathered, never overwritten). Call after auth
 // completes (Profile mount covers all flows). Returns the new pick or null.
 export async function ensureDicebearAvatar(

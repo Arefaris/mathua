@@ -4,8 +4,8 @@ Status: **investigation and design. No threshold was changed.**
 
 This answers two questions raised after ADR-037:
 
-- **P1 — is mastery too expensive, and is the cost intentional?**
-- **P2 — what would it take to make mastery mean *demonstrated competence* rather
+- **P1, is mastery too expensive and is the cost intentional?**
+- **P2, what would it take to make mastery mean *demonstrated competence* rather
   than *thirty correct answers in a row*?**
 
 Everything below is measured against the corpus and the code, not estimated.
@@ -21,13 +21,13 @@ from the beginning: at a per-answer accuracy of 0.90 the chance of ever completi
 30-answer run on the first attempt is **4.2%**.
 
 The cost is **not intentional and not documented**. The commit that introduced the
-reset is titled *"fix mastery state machine — reset streak on level-up"* with no body,
+reset is titled *"fix mastery state machine, reset streak on level-up"* with no body,
 `docs/system-design.md` states `required_streak` is *"typically 3"* when the corpus says
 10 for 70% of concepts, and that document's own condition column records all three tier
 transitions as **"Same"**.
 
-The model the brief describes — independent demonstrations, varied problem instances,
-increasing difficulty, consistent quality — **already exists in this repository**, at
+The model the brief describes, independent demonstrations, varied problem instances,
+increasing difficulty, consistent quality, **already exists in this repository**, at
 `web/next-app/lib/progression.ts:masteryEstimate`, and its comment says *"Streak is one
 input, not the decision."* It is client-side, it only produces a label, and the server
 gates progression on the streak counter instead. **Three of its four inputs are already
@@ -39,7 +39,7 @@ identical repetitions of the same test.
 
 ---
 
-## P1 — What mastery costs today
+## P1, What mastery costs today
 
 ### Answers required
 
@@ -57,7 +57,7 @@ Mastering the whole corpus this way is **16,044 consecutive correct answers**.
 
 ### Time floor
 
-Using each concept's `avg_time_seconds` — a floor, since practised answers are faster and
+Using each concept's `avg_time_seconds`, a floor, since practised answers are faster and
 the threshold is a cap:
 
 - **131 hours** of pure answer time for the corpus
@@ -75,8 +75,8 @@ Each incorrect answer sets `Streak = 0` (`internal/engine/engine.go`), so a run 
 | 9 | 63.0% | 38.7% | 23.2% |
 | **30** | **21.5%** | **4.2%** | **0.8%** |
 
-A learner who is right 90% of the time — strong, and the app's own `weakness_score`
-treats 0.9 as weak — has a 96% chance of *not* completing a 30-answer run on the first
+A learner who is right 90% of the time, strong and the app's own `weakness_score`
+treats 0.9 as weak, has a 96% chance of *not* completing a 30-answer run on the first
 sitting, and every miss costs the whole run. That is the mechanism by which mastery can
 become its own purgatory: the learner re-proving something they have demonstrated,
 frequently, for a long time.
@@ -85,7 +85,7 @@ frequently, for a long time.
 
 Three pieces of evidence:
 
-1. **The commit has no body.** `725fad9` — *"fix mastery state machine — reset streak on
+1. **The commit has no body.** `725fad9`, *"fix mastery state machine, reset streak on
    level-up, add interactive CLI loop (all tests pass)"*. The reset reads as a fix to a
    tier-advance problem, not as a decision to triple the cost of mastery.
 2. **The documentation contradicts the corpus.** `docs/system-design.md` says
@@ -110,23 +110,23 @@ PRACTICING   --interval elapsed-> MASTERED
 
 **The design intended three different kinds of evidence, the third of them a spacing
 interval.** The implementation collapsed all three into `streak >= required AND
-avg time <= threshold`. So spaced attainment is not a new wish — it is the third rung of
+avg time <= threshold`. So spaced attainment is not a new wish, it is the third rung of
 the ladder as drawn, and it is the one rung whose evidence the data model cannot record.
 
 There is no ADR, no design note and no test asserting the 3× cost.
 
 ---
 
-## P1 — The evidence model already exists
+## P1, The evidence model already exists
 
 `web/next-app/lib/progression.ts:masteryEstimate`, over the last 6 attempts:
 
 | Signal | How it is computed | Persisted server-side? |
 |---|---|---|
-| Consistency | recent-weighted accuracy, weights 0.5 → 1.0 | yes — `attempts.correct` |
-| Different problem instances | `new Set(attempts.map(a => a.variation)).size`, bonus up to 0.15 | yes — `attempts.question` — `variation` *is* the question text (`LearnStepper.tsx:256`) |
+| Consistency | recent-weighted accuracy, weights 0.5 → 1.0 | yes, `attempts.correct` |
+| Different problem instances | `new Set(attempts.map(a => a.variation)).size`, bonus up to 0.15 | yes, `attempts.question`, `variation` *is* the question text (`LearnStepper.tsx:256`) |
 | Difficulty | correct answers weighted `0.6 + 0.4 × difficulty` | **not stored** |
-| Time | median elapsed over correct answers, ×0.8 above 60s | yes — `attempts.elapsed_seconds` |
+| Time | median elapsed over correct answers, ×0.8 above 60s | yes, `attempts.elapsed_seconds` |
 
 It also produces a decision, not just a score: `advance` needs `score ≥ 0.6` **and** ≥3
 attempts **and** 2-in-a-row at the end; `intervene` at 3 recent misses.
@@ -139,7 +139,7 @@ of the same fact, one of them far better informed, and they do not talk.
 
 ---
 
-## P2 — Design: mastery as demonstrated competence
+## P2, Design: mastery as demonstrated competence
 
 ### What the evidence should be
 
@@ -151,10 +151,10 @@ score = (weightedAccuracy × difficultyWeight + varietyBonus) × timeFactor
 
 with, for a first implementation:
 
-- **weightedAccuracy** — recent-weighted correct rate, so a late miss still counts
-- **difficultyWeight** — mean difficulty of the *correct* attempts, not a flat 1.0
-- **varietyBonus** — distinct question instances among those attempts
-- **timeFactor** — median elapsed against the concept's `avg_time_seconds`
+- **weightedAccuracy**, recent-weighted correct rate, so a late miss still counts
+- **difficultyWeight**, mean difficulty of the *correct* attempts, not a flat 1.0
+- **varietyBonus**, distinct question instances among those attempts
+- **timeFactor**, median elapsed against the concept's `avg_time_seconds`
 
 Mastery at `PRACTICING → MASTERED` when the score clears a threshold **and** the evidence
 spans more than one attempt and more than one question instance.
@@ -168,7 +168,7 @@ The tier ladder stops being three identical repetitions:
 | PRACTICING → MASTERED | score + variety + difficulty | full streak |
 
 That is what makes the cost comparable to today while stopping it being the *same test
-three times*: the early tiers get cheaper and easier (which is right — a learner should
+three times*: the early tiers get cheaper and easier (which is right, a learner should
 not need 10 correct to be told they are learning), and the final tier carries the most
 evidence.
 
@@ -177,8 +177,8 @@ evidence.
 The brief's distinction is the right one and the current model conflates them:
 
 ```
-ACQUIRE   — "can you solve this now?"      → gates leaving /learn
-RETENTION — "can you retrieve it later?"   → schedules review
+ACQUIRE , "can you solve this now?"      → gates leaving /learn
+RETENTION, "can you retrieve it later?"   → schedules review
 ```
 
 Mastery should be an **acquisition** verdict. Retention is already modelled by SM-2 and
@@ -188,14 +188,14 @@ is that nothing *within* acquisition rewards a gap.
 
 ### Spacing, honestly
 
-The ladder as drawn (`student-model-dark.svg`) already ends in **"interval elapsed"** — a
+The ladder as drawn (`student-model-dark.svg`) already ends in **"interval elapsed"**, a
 spacing interval before `MASTERED`. That is the shape to restore, and the part the data
 model cannot currently express:
 
 - `concept_progress` has fourteen columns; none records when the current tier was attained.
 - `mastered_at` is written once, for the final tier.
 - `last_reviewed` refreshes on any answer meeting the threshold and is already the decay
-  clock — it cannot be overloaded.
+  clock, it cannot be overloaded.
 
 Making the three tiers require a minimum gap therefore needs a new column. It is a real
 migration, not a threshold, and per this brief it should not be added speculatively.
@@ -208,16 +208,16 @@ gone, the remaining gap is far less costly than it looks today.
 
 ### Migration, if it is ever needed
 
-- **SQLite** — `ALTER TABLE concept_progress ADD COLUMN tier_attained_at TEXT` in
+- **SQLite**, `ALTER TABLE concept_progress ADD COLUMN tier_attained_at TEXT` in
   `internal/storage/migrate.go`, alongside the existing column additions.
-- **Postgres** — the same statement in the Postgres migration path.
-- **Parity** — ADR-012 requires an identical scenario against both stores; the existing
+- **Postgres**, the same statement in the Postgres migration path.
+- **Parity**, ADR-012 requires an identical scenario against both stores; the existing
   `parity_test.go` covers the progress table, so a new column needs a case there or it is
   untested on one engine.
-- **Backfill** — `NULL` means "unknown", and unknown must not read as satisfied *or* as
+- **Backfill**, `NULL` means "unknown" and unknown must not read as satisfied *or* as
   unsatisfied. Existing `MASTERED` rows keep their status; the gate applies only to new
   advances, so no learner regresses.
-- **Rollout** — behind the score model, not a flag. Two models of mastery at once is what
+- **Rollout**, behind the score model, not a flag. Two models of mastery at once is what
   ADR-037 spent a week untangling.
 
 ---
@@ -254,7 +254,7 @@ gone, the remaining gap is far less costly than it looks today.
 
 The ladder is in `internal/mastery/evidence.go` and `Machine.Next` now reads evidence
 rather than the streak. Measured end to end through `Engine.submitAnswerWithTask`, on the
-two-concept fixture whose generator returns the *same* question text every attempt — the
+two-concept fixture whose generator returns the *same* question text every attempt, the
 worst possible case for the variety term:
 
 ```
@@ -274,7 +274,7 @@ as hard, not in how much evidence proves competence.
 
 - `UNSEEN → LEARNING` takes **one** correct answer. Demanding ten first was the complaint.
 - `PRACTICING → MASTERED` needs a score over `MasteryThreshold` across **at least six
-  attempts** — a full evidence window.
+  attempts**, a full evidence window.
 
 Six is a floor on *evidence*, not a demand for six consecutive correct answers. It was set to
 6 after measurement rather than assumed: `internal/mastery/measure_test.go` walks six
@@ -282,12 +282,12 @@ learner profiles (perfect, slowest, one-miss-in-eight, 80% correct, slow-but-rig
 starts-rough) against all eight real `avg_time_seconds` values in the corpus, and every one
 of them masters in exactly 6. Median, p25, p75, min and max are all 6.
 
-### Does the score actually bind? Yes — and the first measurement said otherwise
+### Does the score actually bind? Yes and the first measurement said otherwise
 
 **The first version of this measurement was wrong, and its error is worth more than its
 result.** It swept accuracy from 40% to 100% and reported every level masterable, concluding
-that `MasteryThreshold` was decorative. The profile was `i%20 >= 12` — twelve wrong, then
-eight right — and a six-attempt window kept landing entirely inside the clean run. The
+that `MasteryThreshold` was decorative. The profile was `i%20 >= 12`, twelve wrong, then
+eight right and a six-attempt window kept landing entirely inside the clean run. The
 finding was an artefact of the probe, not a property of the model. Learners do not answer in
 blocks of twenty, and a periodic test pattern will always manufacture a conclusion about
 whatever it is probing if the window is short enough to fit inside one period.
@@ -300,7 +300,7 @@ placed so every window sees the nominal rate), the threshold binds cleanly:
 | 100%, 80%, 60% | MASTERED in exactly 6 answers |
 | 50%, 40%, 20%, 0% | never masters, at any length |
 
-So `MasteryThreshold` stays at 0.6. It was right, and the measurement was wrong — which is
+So `MasteryThreshold` stays at 0.6. It was right, and the measurement was wrong, which is
 the opposite of the usual situation, and the reason the sweep is now
 `TestMeasureAccuracyBandThatStillMasters` with a pattern whose property is even distribution
 rather than an accident.
@@ -324,10 +324,10 @@ Note what does *not* appear: difficulty and speed are not in the cost. A learner
 every time masters in 6 answers whether the questions were the easiest or the hardest in the
 corpus, and a slow-but-accurate learner masters in 6 exactly like a fast one. The difficulty
 and time terms change the *score*, not the number of answers needed to clear a bar that these
-profiles clear comfortably. They discriminate at the margin, which is where they matter — see
+profiles clear comfortably. They discriminate at the margin, which is where they matter, see
 variety below.
 
-### Variety is a weight, not a veto — and the difference is measurable
+### Variety is a weight, not a veto and the difference is measurable
 
 ADR-038 recorded that variety "scores but cannot veto", which was imprecise in a way worth
 pinning down. The 0.15 bonus is large enough to flip the decision at the margin:
@@ -341,7 +341,7 @@ pinning down. The 0.15 bonus is large enough to flip the decision at the margin:
 So variety genuinely changes the outcome for a marginal learner, and that is correct: three
 right answers out of five spread across three different problems is evidence of transfer, and
 three right answers out of five on the *same* problem three times is evidence about one
-problem. What must not happen is the failure the old `Instances >= 2` hard gate caused —
+problem. What must not happen is the failure the old `Instances >= 2` hard gate caused, 
 competence becoming *unreachable*. A learner who is right 80% of the time masters even on a
 generator whose question text never varies. That is the asserted property
 (`TestVarietyRaisesTheBarWithoutBlockingMastery`), rather than the looser claim that variety
@@ -350,24 +350,24 @@ generator whose question text never varies. That is the asserted property
 ### Two things this change had to fix that were not in the brief
 
 **A gate on a derived signal made mastery unreachable.** The first version of
-`EnoughForMastery` also required `Instances >= 2` — distinct problem instances, the stand-in
+`EnoughForMastery` also required `Instances >= 2`, distinct problem instances, the stand-in
 for "does this transfer?". Wiring it into the engine immediately produced a concept that
 could never be mastered, because a generator whose question text does not vary between
 attempts holds `Instances` at 1 forever. There is no such generator in production
 (`GenerateContext` errors rather than falling back), but the failure mode is the point: a
-gate on a signal you do not fully control can lock a state. Variety now *scores* — and it is
+gate on a signal you do not fully control can lock a state. Variety now *scores* and it is
 worth being precise that "scores" still lets it change a marginal outcome, as measured above.
 What it cannot do is make mastery unreachable.
 
 **The decay clock was gated on the rule being replaced.** `LastReviewed` was set only when
-`streak >= required_streak && avg time <= threshold` — a proxy for "a tier was just
+`streak >= required_streak && avg time <= threshold`, a proxy for "a tier was just
 advanced" back when that was what advancement meant. Under the ladder a concept can reach
 MASTERED with a streak of 1, leaving `LastReviewed` nil, and `GetProgress` treats a nil
 `LastReviewed` as fully decayed. The engine tests showed the ladder passing **through
 DECAYING on its way up**: a concept simultaneously stored as MASTERED and read as DECAYING.
 The decay clock now starts on tier attainment, which is what it was always a proxy for.
 
-Also found while wiring this up: the transition logic existed **twice** —
+Also found while wiring this up: the transition logic existed **twice**, 
 `SubmitAnswer` (study, review) and `submitAnswerWithTask` (quiz, diagnostic) each had their
 own copy. Both now read evidence, or a quiz answer would have graded differently from a
 study answer, which is the class of divergence ADR-037 exists to prevent.
@@ -395,7 +395,7 @@ described the opposite of what the code did. At 50% accuracy:
 | unknown | 0.65 | yes |
 | 0.6 | 0.57 | no |
 
-Same learner, same answers, different verdict — decided by which screen they used.
+Same learner, same answers, different verdict, decided by which screen they used.
 
 **Why unknown difficulty was common.** Difficulty went *into* `GeneratorContext` and stopped
 there. `generator.Problem` did not carry it back out, so every surface that generated a
@@ -404,11 +404,11 @@ question and later graded it had to thread the value back by hand:
 | host | difficulty source | before |
 |---|---|---|
 | `SubmitAnswer` (`/api/answer`) | `activeSession.questionDifficulty` | real |
-| `submitAnswerWithTask` — **Learn loop** (`/api/study/answer`) | none | `0` → unknown |
-| `submitAnswerWithTask` — quizzes (`/api/quiz/answer`) | none | `0` → unknown |
+| `submitAnswerWithTask`, **Learn loop** (`/api/study/answer`) | none | `0` → unknown |
+| `submitAnswerWithTask`, quizzes (`/api/quiz/answer`) | none | `0` → unknown |
 | diagnostic (`/api/goal/diagnostic/answer`) | none | not recorded at all |
 
-The main teaching loop was the host with no difficulty, not the quiz — the opposite of where
+The main teaching loop was the host with no difficulty, not the quiz, the opposite of where
 this was reported from. The diagnostic wrote its attempt row directly in `server.go`, bypassing
 the shared authority entirely, and those rows still feed `GetRecentAttemptsForConcept`, so they
 landed in the evidence window as unknown-difficulty attempts.
@@ -421,11 +421,11 @@ landed in the evidence window as unknown-difficulty attempts.
 2. `engine.Anchor` carries it too, because the anchor is already the durable record of what
    was served and is authoritative over the expected answer for the same reason. The study
    serve fills it from the Problem (generator path) or from `questions.difficulty`
-   (curated path — `NOT NULL DEFAULT 0.5`, so real).
+   (curated path, `NOT NULL DEFAULT 0.5`, so real).
 3. Quiz passes `sess.LastProblem.Difficulty`; the diagnostic stamps the row it writes.
 4. `gradedAttempt.difficulty` became `*float64`, so "unknown" is a value a caller must choose
    rather than a `0` that gets reinterpreted downstream. That overloading is what hid the bug.
-5. Unknown is credited at `mastery.NeutralDifficulty = 0.55`, which is not chosen here — it
+5. Unknown is credited at `mastery.NeutralDifficulty = 0.55`, which is not chosen here, it
    is what `difficultyFromWeakness` serves when it knows nothing about the learner (weakness
    defaults to 0.5, so `0.3 + 0.5 × 0.5`). `TestNeutralDifficultyMatchesEngineDefault` in the
    engine package fails if the scoring side and the serving side ever drift apart.
@@ -436,7 +436,7 @@ would get, which is a different claim from the one the learner answered. `applyG
 receives the value and does not reinterpret it.
 
 **Known remaining divergence, stated rather than hidden:** `web/next-app/lib/progression.ts`
-is a second copy of this model and does not match it — it weights difficulty per attempt
+is a second copy of this model and does not match it, it weights difficulty per attempt
 rather than by the mean of correct attempts, uses a fixed 60s time threshold rather than the
 concept's own, and has no unknown-difficulty case because its `difficulty` field is a required
 number. So this change creates no new browser/server divergence, but the pre-existing one

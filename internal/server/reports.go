@@ -11,7 +11,7 @@ import (
 
 // Report endpoints: users (authed or guest) complain about questions,
 // explanations, lesson bodies, worked examples, or diagrams. Listing and resolving are
-// administration now and live under /api/admin/reports behind the role boundary — see adminv2.go.
+// administration now and live under /api/admin/reports behind the role boundary, see adminv2.go.
 // This file only creates reports.
 
 var (
@@ -86,7 +86,7 @@ func truncate(s string, n int) string {
 	return s[:n]
 }
 
-// POST /api/reports — open to guests. Body mirrors submitStudyAnswer:
+// POST /api/reports, open to guests. Body mirrors submitStudyAnswer:
 // authed student_id wins, else body reporter_id (guest id) is stored as-is.
 func (s *Server) handleCreateReport(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

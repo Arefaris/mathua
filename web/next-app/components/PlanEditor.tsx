@@ -29,8 +29,8 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
     const sid = info?.student_id || getGuestId() || ''
     // Destinations failing is a real, reportable state: it used to be swallowed into an
     // empty array, which rendered a <select> with no options and no message, so the page
-    // looked broken rather than unavailable. The score and plan fetches are advisory — a
-    // failure there only means we fall back to a default — so they stay non-fatal but are
+    // looked broken rather than unavailable. The score and plan fetches are advisory, a
+    // failure there only means we fall back to a default, so they stay non-fatal but are
     // no longer silently indistinguishable from "you have no plan".
     Promise.all([
       getDestinations().then(d => ({ dests: d, err: null as string | null })).catch(e => ({
@@ -116,7 +116,7 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
       {dests.length === 0 ? (
         <p role="status" className="mt-1 border border-mathua-border bg-mathua-surface px-3 py-2.5 font-mono text-xs text-mathua-secondary">
           No learning paths are available right now. This usually means the server could not
-          load its course catalog — check the server log for &quot;courses unavailable&quot; or
+          load its course catalog, check the server log for &quot;courses unavailable&quot; or
           &quot;destinations unavailable&quot;.
         </p>
       ) : (
@@ -176,13 +176,13 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
           ) : (
             <div className="mt-3">
               <p className="font-serif text-2xl text-mathua-primary">≈ {Math.ceil(e.required_per_day)} XP/day needed</p>
-              {!e.feasible && <p className="mt-1 font-mono text-xs text-red-400">Above 3× your recent pace — extend the deadline or raise daily effort gradually.</p>}
+              {!e.feasible && <p className="mt-1 font-mono text-xs text-red-400">Above 3× your recent pace, extend the deadline or raise daily effort gradually.</p>}
             </div>
           )}
           <p className="mt-1 font-mono text-[11px] text-mathua-muted">
             {est?.pace.source === 'measured'
               ? `At your recent pace (${est.pace.rate.toFixed(0)} XP/day, ${est.pace.active_days}/${est.pace.trailing_days} active days).`
-              : 'No history yet — assuming you hit your target every day.'}
+              : 'No history yet, assuming you hit your target every day.'}
           </p>
           {!compact && (
             <dl className="mt-4 space-y-1 font-mono text-xs text-mathua-secondary">
@@ -196,7 +196,7 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
           )}
           {est?.fresh_start ? (
             <p className="mt-3 font-mono text-xs text-mathua-secondary">
-              Fresh start — complete a few questions and your estimate will sharpen. No behind-schedule figure until a new baseline lands.
+              Fresh start, complete a few questions and your estimate will sharpen. No behind-schedule figure until a new baseline lands.
             </p>
           ) : (
             !compact && est?.plan_delta_days !== undefined && est.plan_delta_days !== null && (
@@ -225,11 +225,11 @@ export default function PlanEditor({ compact = false, initialDestination, onSave
       </div>
 
       {e ? (
-        <p className="mt-3 font-mono text-[11px] text-mathua-muted">Illustrative estimate from Mathua&apos;s measured curriculum workload — actual completion depends on pace, reviews and checks. It never changes quiz eligibility or mastery rules.</p>
+        <p className="mt-3 font-mono text-[11px] text-mathua-muted">Illustrative estimate from Mathua&apos;s measured curriculum workload, actual completion depends on pace, reviews and checks. It never changes quiz eligibility or mastery rules.</p>
       ) : (
         <p className="mt-3 font-mono text-[11px] text-mathua-muted">
           Your plan is saved as a destination and a daily pace. The workload estimate is not
-          available right now — your answers still count toward it.
+          available right now, your answers still count toward it.
         </p>
       )}
     </div>

@@ -17,7 +17,7 @@ package concepts
 //
 // The partitioning rule under evaluation is `unit = (domain, floor(depth / bandWidth))`. The
 // depth function is per-*concept* (ConceptDepths), chosen over per-subdomain after measuring
-// that the subdomain condensation has cycles — see SubdomainDepths, and D3 in
+// that the subdomain condensation has cycles, see SubdomainDepths, and D3 in
 // docs/mastery-assessments.md.
 
 import (
@@ -132,8 +132,8 @@ func SubdomainDepths(dag *DAG) (depths map[string]int, order []string, unresolve
 // existing topological order: a concept is one deeper than its deepest prerequisite.
 //
 // This is included because it is the *other* candidate depth function and the difference
-// between the two explains every backward band edge. Concept depth is a proper ranking — by
-// construction every prerequisite is strictly shallower — so banding on it produces zero
+// between the two explains every backward band edge. Concept depth is a proper ranking, by
+// construction every prerequisite is strictly shallower, so banding on it produces zero
 // backward edges by construction, which is exactly why the 22 that subdomain banding produces
 // are a measurement artefact rather than a property of the corpus.
 func ConceptDepths(dag *DAG) map[string]int {
@@ -167,14 +167,14 @@ func Subdomains(dag *DAG) []string {
 // BuildMasteryUnitDraft partitions the corpus by (domain, floor(conceptDepth / bandWidth)).
 //
 // The depth function is **concept** depth, not subdomain depth, and that changed during D3.
-// Banding on subdomain depth is not merely lossy here — it is *undefined* for 26 of the 125
+// Banding on subdomain depth is not merely lossy here, it is *undefined* for 26 of the 125
 // subdomains, because the subdomain condensation contains cycles. Concept depth is a proper
 // topological ranking on an acyclic graph, so it resolves every concept in the corpus and produces zero
 // backward band edges by construction.
 //
 // The band width is a parameter with no default in this package on purpose: a caller that
-// forgets it should not silently get 3. Everything else about a unit — id, title, depth range,
-// subdomains, membership — is derived, so the file is reproducible from the corpus alone.
+// forgets it should not silently get 3. Everything else about a unit, id, title, depth range,
+// subdomains, membership, is derived, so the file is reproducible from the corpus alone.
 func BuildMasteryUnitDraft(dag *DAG, bandWidth int) (*MasteryUnits, error) {
 	if bandWidth < 1 {
 		return nil, fmt.Errorf("band width must be >= 1, got %d", bandWidth)
@@ -240,7 +240,7 @@ func BuildMasteryUnitDraft(dag *DAG, bandWidth int) (*MasteryUnits, error) {
 		GeneratedBy: "go run ./cmd/masteryunits",
 		Rule:        "unit = (domain, floor(conceptDepth / bandWidth)); conceptDepth = the concept's level in the concept DAG's own topological order",
 		BandWidth:   bandWidth,
-		Note: "DRAFT — ADR-046 D3. Band width is the open decision (how often a learner is " +
+		Note: "DRAFT, ADR-046 D3. Band width is the open decision (how often a learner is " +
 			"assessed), not product policy. Unit prerequisite order is DERIVED from the concept " +
 			"DAG and deliberately not stored: authoring it would be a second hierarchy. " +
 			"Do not hand-edit concept_ids; regenerate with `go run ./cmd/masteryunits -band N`.",
@@ -503,7 +503,7 @@ func ValidateMasteryUnits(dag *DAG, mu *MasteryUnits) []Finding {
 	if back := BackwardBandEdges(mu, dag); len(back) > 0 {
 		add(SeverityAnomaly, "backward_band_edges",
 			"%d prerequisite edge(s) cross the unit ordering backwards, so unit order is not a "+
-				"topological order of the graph. Surfaced, not corrected — see docs/mastery-assessments.md D3.",
+				"topological order of the graph. Surfaced, not corrected, see docs/mastery-assessments.md D3.",
 			len(back))
 	}
 

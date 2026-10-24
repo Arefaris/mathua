@@ -22,4 +22,4 @@ So the differential operator $d^2/dt^2 + 4$ acts as the number $4 - \omega^2$ on
 
 ## Convolution and inversion
 
-Fourier also turns convolution into a product, $F(f*g) = F(f)F(g)$, which is how Green's functions enter: the impulse response $\hat{y} = 1/(1 - \omega^2)$ for $y'' + y = \delta$ inverts to ringing $\sin t$ switched on at zero. Transform, divide, invert — that is the whole method.
+Fourier also turns convolution into a product, $F(f*g) = F(f)F(g)$, which is how Green's functions enter: the impulse response $\hat{y} = 1/(1 - \omega^2)$ for $y'' + y = \delta$ inverts to ringing $\sin t$ switched on at zero. Transform, divide, invert, that is the whole method.

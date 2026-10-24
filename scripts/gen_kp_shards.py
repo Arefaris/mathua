@@ -2,7 +2,7 @@
 """Generate KP shard files for a domain from an inline spec.
 
 Usage: python3 scripts/gen_kp_shards.py <domain>
-Each KP: {label, section, subgoals[3]} — the section must resolve to a real
+Each KP: {label, section, subgoals[3]}, the section must resolve to a real
 heading in the concept's lesson source (teaching/* wins per loader).
 """
 import json

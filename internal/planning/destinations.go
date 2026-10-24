@@ -8,7 +8,7 @@ import (
 )
 
 // Destination is a learner-chosen learning goal: a named bundle of courses.
-// The graph stays source of truth — a destination resolves to target
+// The graph stays source of truth, a destination resolves to target
 // concepts, whose transitive prerequisite closure is the actual curriculum.
 // Shared foundations across member courses are counted once.
 type Destination struct {

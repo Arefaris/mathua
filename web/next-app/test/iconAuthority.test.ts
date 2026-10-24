@@ -10,7 +10,7 @@ import path from 'node:path'
 // one, and the animated wrapper has a footgun worth guarding: it renders a `<div>` sized by a
 // `size` prop, and its `color` default is not `currentColor`. An icon added without going through
 // the wrapper therefore does not follow light and dark mode and does not keep the 44px collapsed
-// sidebar rail even — both invisible in review, both visible on screen.
+// sidebar rail even, both invisible in review, both visible on screen.
 
 import { APP_ROOT } from './helpers/roots'
 

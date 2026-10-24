@@ -17,7 +17,7 @@ const solutionsDir = "../../data/lessons/solutions"
 // schema safe to ship: every placeholder in every authored schema must have a
 // value behind it, on a problem the generator actually produces.
 //
-// A schema and a generator that disagree is a silent content bug — the
+// A schema and a generator that disagree is a silent content bug, the
 // assembler falls back to Problem.Explanation and the authored prose silently
 // stops being used, so nothing else would ever notice. This test is what
 // notices.
@@ -113,7 +113,7 @@ func TestSchemasNeverLeakPlaceholders(t *testing.T) {
 // range that reached 11, and the next line called rand.Intn(10-onesA), which
 // panics on a non-positive bound. Only difficulty exactly 1.0 could reach it,
 // and the Learn stepper does request 1.0 once a learner is answering
-// correctly, so this was a reachable panic in an HTTP handler — a dropped
+// correctly, so this was a reachable panic in an HTTP handler, a dropped
 // request rather than a wrong answer.
 //
 // A generator panicking takes the request down with it, and only one of the

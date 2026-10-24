@@ -390,8 +390,8 @@ func TestAIUsageCutoffIsWellBehind(t *testing.T) {
 	}
 }
 
-// TestAIGoalScopeDenialIsCounted pins that a quota refusal — the one AI outcome
-// no provider ever sees — is counted rather than only logged.
+// TestAIGoalScopeDenialIsCounted pins that a quota refusal, the one AI outcome
+// no provider ever sees, is counted rather than only logged.
 func TestAIGoalScopeDenialIsCounted(t *testing.T) {
 	stub := &ai.Stub{IDValue: "groq", Pol: prodPolicy(), Reply: "ok"}
 	s, mux, _ := aiTestServer(t, 1, stub)

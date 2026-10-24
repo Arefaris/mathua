@@ -10,9 +10,9 @@ it. The measurement belongs to `scripts/audit_lesson_media.py`, which writes
 
 141 paragraphs across 42 lessons read as a caption whose image was dropped: 49 `certain`, 33 `strong`
 and 59 `likely`. Every one sits
-in `data/lessons/teaching/`. The `certain` tier — the one that opened with an
+in `data/lessons/teaching/`. The `certain` tier, the one that opened with an
 auto-numbered `Figure 3.2` label, which the PreTeXt conversion emits for a figure and keeps when it
-drops the image, so that it needed no judgement — holds 49 rows again, every one of them restored by
+drops the image, so that it needed no judgement, holds 49 rows again, every one of them restored by
 the Precalculus 2e re-ingest of 2026-10-17, and section 3 records that against the batches that had
 emptied it. The rest is counted by weaker evidence: `strong` describes a picture or
 is duplicated in its lesson, and `likely` is the teaching corpus, where a standalone italic paragraph
@@ -43,7 +43,7 @@ said a re-fetched figure keeps the OpenStax look and does not need to match Alge
 wrong for the reason the style doc already gives about redrawn figures: a lesson page shows several
 figures from the same source, and one figure that does not match its neighbours is worse than no
 figure at all. A full-color raster beside greyscale line art is exactly that outlier, so every
-fetched asset is converted at fetch time — grey, its tone stretched to the full ink-to-paper range,
+fetched asset is converted at fetch time, grey, its tone stretched to the full ink-to-paper range,
 then mapped onto the greys that section 4 of `docs/diagram-style.md` fixes. The drawing survives; the
 saturated color was the only part of it that never belonged on the page.
 
@@ -58,7 +58,7 @@ It holds 49 rows again, and they returned in one movement rather than one batch.
 captions along with their text: 25 in §6.1 Graphs of the Sine and Cosine Functions and 24 in §5.1
 Angles. They are all 49 of section 1's `certain` rows; the 33 `strong` and 71 `likely` rows beside
 them are the ones no batch has touched. The retired hand-rolled converter had dropped these lessons'
-captions, so the committed pair never carried them and the tier could be — and was — driven to zero
+captions, so the committed pair never carried them and the tier could be and was, driven to zero
 without the loss showing.
 
 These 49 are work rather than a judgement, because a caption the lesson's prose cites by number is
@@ -67,7 +67,7 @@ was reclaimed rather than left standing. Both lessons cite figures by number thr
 `scripts/prune_orphan_captions.py` keeps a caption in a lesson that cites a figure, so pruning them
 is closed off as well. What they needed first was the disposition step section 4 describes: open the
 upstream section and read the figure's `alt` text, because the caption is the wrong text to classify
-from — that is the correction the first fetch batch forced. That step is done. Section 6 lists all
+from, that is the correction the first fetch batch forced. That step is done. Section 6 lists all
 forty-nine, and forty-seven of them are redraws.
 
 ## 4. Dispositions
@@ -93,8 +93,8 @@ again to 53 and 44, of which section 7 has since landed one hundred and two.
 read.** The reliable text is the upstream `alt` attribute, which describes the picture rather than
 the argument the picture supports: Figure 1.7's caption is a sentence about rounding, while its
 alt is *An image of a number line from 70 to 80 with increments of one*. That is how Figure 1.6 was
-placed here as a `schematic, redraw` even though its caption is a bare `Figure 1.6` — Prealgebra
-1.1 gives it an alt of *A chart titled 'Place value' with fifteen columns and 4 rows* — and it is
+placed here as a `schematic, redraw` even though its caption is a bare `Figure 1.6`, Prealgebra
+1.1 gives it an alt of *A chart titled 'Place value' with fifteen columns and 4 rows* and it is
 how the seventeen `unidentified` rows were classified on 2026-10-16.
 
 **The seventeen were read twice, and the first reading was not enough.** The disposition is a
@@ -108,7 +108,7 @@ a drawing or a photograph. So each of the seventeen images was downloaded and lo
 disposition below is the reading of the picture with the alt as its check.
 
 **Where the line falls: ten redraw, seven fetch.** A figure is a schematic when its content is a
-number line, a graph, a geometric block, tile, circle or region, or a table of words and numbers —
+number line, a graph, a geometric block, tile, circle or region, or a table of words and numbers, 
 a redraw of that is faithful and is Mathua's own work. It is an illustration when the subject is a
 photograph (three stacks of dollar bills, 24 pennies, 28 cookies in three of the figures, two
 pizzas) or when it is a table whose cells are formulas and small plots (6.34), which an SVG cannot
@@ -120,7 +120,7 @@ photograph of currency with no credit line, so it is `illustration, fetch` and n
 image rather than for every photograph.
 
 **What lands with them.** All seventeen keep `(none)` in the Caption column, because upstream's
-`figcaption` holds only the label for these figures — the alt is the only description there is. It
+`figcaption` holds only the label for these figures, the alt is the only description there is. It
 is also what a landed figure will carry: the rule that a lesson figure's alt is its caption's
 words, never a paraphrase, has nothing to copy here, and the same document's alt is still the
 author's words.
@@ -130,8 +130,8 @@ measurement rather than in the corpus. `section_a_candidates` skipped any standa
 paragraph whose neighbour started with `-`, `*`, `|` or `>`, which is right for a line inside a
 list and wrong for a caption that simply sits above one: Figure 1.5 is above the place-value table,
 Figure 1.6 above the bulleted list of digit values, Figures 4.50 and 4.51 are two captions in a
-row. Exempting auto-numbered labels from that test added 24 rows and these ten figures — 1.5, 1.6,
-3.20, 4.40, 4.50, 4.51, 4.52, 4.58, 4.59 and 5.3 — every one of which rates `certain` and none of
+row. Exempting auto-numbered labels from that test added 24 rows and these ten figures, 1.5, 1.6,
+3.20, 4.40, 4.50, 4.51, 4.52, 4.58, 4.59 and 5.3, every one of which rates `certain` and none of
 which is a list item. The tier is 220 rows now rather than 196, which is a fix and not a
 regression: the same corpus, counted without the exclusion.
 
@@ -140,7 +140,7 @@ regression: the same corpus, counted without the exclusion.
 The caption text was ingested with `figcaption.get_text(' ', strip=True)`. OpenStax writes a
 mathematical expression as `<math><semantics><mrow>…</mrow><annotation-xml>…</annotation-xml>
 </semantics></math>`: the expression is present **twice**, and the flattening joins every token
-with a space. So a caption arrived as `… the number 138 . 138 .` — the expression, then the
+with a space. So a caption arrived as `… the number 138 . 138 .`, the expression, then the
 expression again. The fault is in `scripts/ingest/ingest_openstax.py` and not in the document.
 A figure restored under a caption like that still reads as broken, so repairing the caption was
 part of the work rather than a separate cleanup.
@@ -161,8 +161,8 @@ dollar amounts were doubled in the same way.
 
 Two things the repair had to know:
 
-- **A bare caption is not damage.** `Figure 1.3`, `1.4` and `1.6` have no caption upstream either —
-  their `figcaption` holds only the label — so they are reclaim targets rather than repair targets,
+- **A bare caption is not damage.** `Figure 1.3`, `1.4` and `1.6` have no caption upstream either, 
+  their `figcaption` holds only the label, so they are reclaim targets rather than repair targets,
   and section 4 records what each of them turned out to be.
 - **One caption needed a hand.** `Figure 2.18` carries a piecewise function as an inline MathML
   table. Pandoc renders it with literal newlines, and the line-scoped dollar balancing then escapes
@@ -176,8 +176,8 @@ re-ingesting with the old figure handler fails the audit. Rule 16 covers caption
 corpus-wide doubled-token test is not usable: it reports 1009 legitimately repeated pairs, mostly
 `& &` inside math and paired table cells.
 
-**One measurement it moved.** The repaired captions that gained inner `*x*` emphasis — OpenStax
-marks a variable with `<em>` — stopped matching `audit_lesson_media.py`'s standalone-emphasis test,
+**One measurement it moved.** The repaired captions that gained inner `*x*` emphasis, OpenStax
+marks a variable with `<em>`, stopped matching `audit_lesson_media.py`'s standalone-emphasis test,
 which removed eight imageless captions from this plan. The test now allows a balanced inner span
 and still rejects a thematic break (`* * *`); the report stood at 324 rows and 220 in the
 certain tier on 2026-10-15, after two reclaims in section 7 had removed eighteen rows and the label
@@ -186,7 +186,7 @@ removed, and section 1 states what is left.
 
 **One glyph normalisation, in the same text.** OpenStax marks the parts of a two-part example with
 circled letters (`ⓐ` … `ⓔ`), and the ingester copied the codepoint through. At lesson size `ⓐ` is an
-`a` inside a circle — which is what `@` is — so a caption reads as if an email sign preceded it, and
+`a` inside a circle, which is what `@` is, so a caption reads as if an email sign preceded it, and
 no theme font carries the codepoint, so the browser substitutes a face at a different size and
 baseline. The corpus already spelled the parts out in prose (`part (a)`, 22 times, next to a marker
 that said `ⓐ`), so all 2340 markers across 72 lessons, several of them inside captions, were written
@@ -209,7 +209,7 @@ section carrying amplitude, period and phase shift; it had been mapped to §5.4 
 Trigonometry, whose lesson has none of the three, and `docs/content-expansion.md` is where the
 mapping target is recorded. Back matter was stripped at the first apparatus heading, as rule 12
 requires, and the circled part markers became `(a)` … `(e)` through the same normalisation the
-paragraph above records — this time written into the ingester, so every future run gets it.
+paragraph above records, this time written into the ingester, so every future run gets it.
 
 **The re-ingest found two faults in the ingester, and both are fixed.** A MathML table cell that
 pandoc renders as display math ends its row early: the cell continues on later lines as a fenced
@@ -225,8 +225,8 @@ restored their figure captions as well, which is the 49 `certain` rows section 3
 ## 6. The figures
 
 **The table holds forty-nine rows, and they are the ones the 2026-10-17 re-ingest restored.** It has
-one row per figure with a disposition — the `schematic, redraw`, `illustration, fetch`,
-`unidentified` and `photo, third-party credit` captions section 4 defines — and every row that stood
+one row per figure with a disposition, the `schematic, redraw`, `illustration, fetch`,
+`unidentified` and `photo, third-party credit` captions section 4 defines and every row that stood
 in it before had landed, so each of those now lives in section 7's record of its batch instead.
 `Lessons` is how many concept lessons carry the caption, because one figure is restored once and
 every lesson that cites it gains the image; the caption is the text as repaired in section 5,
@@ -236,11 +236,11 @@ The forty-nine are the `certain` rows section 3 records: the captions the Precal
 restored, twenty-five in §6.1 Graphs of the Sine and Cosine Functions and twenty-four in §5.1 Angles.
 Each disposition was assigned from upstream rather than from the caption, which is the correction
 section 4 records: both sections were opened and every figure's `alt` attribute read in full, and the
-five whose alt named a photograph or an illustration rather than a graph — the rainbow, the lifted
-circle, the spring, the sprinkler and the water wheel — were downloaded and looked at. Section 1's
+five whose alt named a photograph or an illustration rather than a graph, the rainbow, the lifted
+circle, the spring, the sprinkler and the water wheel, were downloaded and looked at. Section 1's
 other rows are not listed here because no disposition was ever assigned to them either: a `strong` or
-`likely` candidate is judged one instance at a time — matched to an asset that already exists, or
-removed — and that measurement belongs to `scripts/audit_lesson_media.py`.
+`likely` candidate is judged one instance at a time, matched to an asset that already exists, or
+removed and that measurement belongs to `scripts/audit_lesson_media.py`.
 
 **The Figure column repeats itself because the book does.** Precalculus 2e's web pages number figures
 per section, so both §6.1 and §5.1 open at `Figure 1`, and the caption text the corpus carries uses
@@ -309,7 +309,7 @@ row.** Three of the calls are worth recording, because a later reader will meet 
   its caption, and this one is not determined by anything but the picture.
 * **§6.1 Figure 25, the spring, is `schematic, redraw`** for the reason the water wheel is not: the
   render is shaded and pictorial, but what it carries is one measured length, `y`, and the exercise
-  states the setup in prose — a weight on a spring hung from a board. A coil between two boards with a
+  states the setup in prose, a weight on a spring hung from a board. A coil between two boards with a
   dimension arrow is the entire content.
 * **§6.1 Figure 1 is the only `photo, third-party credit`**, and its caption already carries
   `(credit: "wonderferret"/ Flickr)`. Where that credit renders is not settled: the decision of
@@ -334,8 +334,8 @@ needs no `data/diagrams/meta.json` entry (section 5 of the style doc explains wh
 **Figures 1.7, 1.8 and 1.9** (the same 70..80 number line under three marks: 76 nearer 80, 72
 nearer 70, 75 exactly midway) landed on 2026-10-15 as one batch, in those six lessons. They are
 `number-line-round-76.svg`, `-72.svg` and `-75.svg`, beside Figure 1.2's
-`number-line-counting.svg` and on its canvas to the pixel — 460x130, the same ink, the same
-tick style — because the four sit within a few paragraphs of each other and a figure that does
+`number-line-counting.svg` and on its canvas to the pixel, 460x130, the same ink, the same
+tick style, because the four sit within a few paragraphs of each other and a figure that does
 not match its neighbours is worse than no figure. Each draws the distance to both neighbouring
 tens to scale, so the shorter span is the argument for which way the number rounds; the ink weight
 on that span's arrow agrees with it, and at 75 both spans are the same length and both are inked.
@@ -344,7 +344,7 @@ The alt text is the caption minus its `Figure 1.7 ` label, which is the rule
 
 Those three captions held eighteen rows, and the regenerated audit dropped all of them: 318
 candidates to 300, and 214 in the certain tier to 196. They were the first batch drawn from a
-disposition that had been assigned by reading a caption, and the reading was wrong — section 4
+disposition that had been assigned by reading a caption, and the reading was wrong, section 4
 records the correction.
 
 **Figures 1.4, 1.5 and 1.6** (the base-10 vocabulary, then 138 modeled with it, then 5,278,194 in a
@@ -374,7 +374,7 @@ candidates to 306, and 220 in the certain tier to 202. The ceiling for orphan ca
 the six `arith.mult.*` lessons, as `rectangle-area.svg`. It is upstream's layout kept whole: `2 ft`
 against the left edge, `3 ft` under the bottom edge, and `2 · 3 = 6 ft²` to the right, which is where
 upstream puts it. Upstream's words are set at the family's 13px label size and the blocks are sized
-to fill the canvas, so the blocks are larger than upstream's against the same words — a re-drawn
+to fill the canvas, so the blocks are larger than upstream's against the same words, a re-drawn
 figure cannot carry upstream's text-to-shape ratio without breaking the size the other arithmetic
 figures use, and the dial is turned towards the drawing. The cell size is one number, so the
 rectangle is six unit squares and the two labeled edges are the drawing's own edges rather than a
@@ -398,27 +398,27 @@ two figures sit a few paragraphs apart, so they are drawn to the same rules and 
 size; 4.5 is in the four `frac.ops.*` and `frac.*.whole` lessons.
 
 These are the first figures in the plan whose labels *are* mathematics. Upstream writes every label
-as a stacked fraction — numerator, rule, denominator — and a figure that teaches fractions while
+as a stacked fraction, numerator, rule, denominator and a figure that teaches fractions while
 writing `1/3` on one line is showing the answer instead of the notation the lesson is teaching, so
 each label here is three primitives, two `<text>` and a `<line>`, on a shared vertical rhythm. There
 is no KaTeX inside an SVG file and no `foreignObject` survives the sanitizer, so the fraction is
 drawn rather than typeset.
 
 One deliberate departure, and it is worth naming because it is visible. Upstream colors the five
-tiles differently — blue, grey, yellow, grey, peach — and the house palette has one fill,
+tiles differently, blue, grey, yellow, grey, peach and the house palette has one fill,
 `#e6e6e6`, with ink at `#333333`. A tile is distinguished by how many pieces it is cut into, which
 is what the figure is about; color would carry no information the division count does not, so all
 five tiles are the same fill. The division count is also what makes the tiles one figure rather than
 five: they share a length, so the pieces of the sixths row are visibly half the width of the thirds.
 
 The canvases are sized to their content, which for these three does not mean one width. The circle
-is `240x180` — a lone circle in a `460`-wide canvas would be mostly empty panel — and the two bar
+is `240x180`, a lone circle in a `460`-wide canvas would be mostly empty panel and the two bar
 figures are `420x180`, the tiles and the rectangles being `360` wide with the same margin the number
 lines leave. All three carry the opaque white background rect, so they read on the dark panel.
 
 Their alt text is upstream's `data-alt` verbatim, all three being bare-label captions, and it was
-read out of the scrape rather than retyped. That scrape is double-encoded — decoded as latin-1 while
-holding UTF-8, so a curly quote arrives as three characters — and the wiring inverts exactly that
+read out of the scrape rather than retyped. That scrape is double-encoded, decoded as latin-1 while
+holding UTF-8, so a curly quote arrives as three characters and the wiring inverts exactly that
 error rather than transcribing around it, which is also why Figure 4.3's alt is one 530-character
 sentence that no hand copy would have survived intact.
 
@@ -432,7 +432,7 @@ decimals, and the decimals of Table 6.2 as percents) landed on 2026-10-16 in the
 lessons that cite them, as `percent-to-decimal.svg` and `decimal-to-percent.svg`.
 
 This is the first place in the plan where the upstream is inconsistent with itself rather than
-merely silent. The section page references **one image hash for both figures** — the same table — and
+merely silent. The section page references **one image hash for both figures**, the same table and
 that table is the `Percent | Decimal` one with `006.%` through `012.5%`. Figure 6.5's alt names the
 columns in the other order and lists five decimals where that image's decimal column has four
 values, so the alt and the image cannot both be describing Figure 6.5. The lesson prose decides it:
@@ -454,7 +454,7 @@ chart uses. The white background rect is there as in every local figure, so the 
 dark panel.
 
 Their alt text is upstream's `data-alt` verbatim, read out of the scrape with its encoding inverted.
-Those six captions held six rows, and the regenerated audit dropped all of them: 282 to 276, and 172
+Those six captions held six rows and the regenerated audit dropped all of them: 282 to 276, and 172
 in the certain tier. The ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to
 276.
 
@@ -561,7 +561,7 @@ between a drawing and its own description and resolve it toward the description,
 description was a figure that could be drawn. Here it cannot: no hole belongs at `(-2, 1)`. The
 drawing follows the mathematics and the alt is the author's other sentence about it.
 
-That one caption held one row, and the regenerated audit dropped it: 264 to 263, and 159 in the
+That one caption held one row and the regenerated audit dropped it: 264 to 263, and 159 in the
 certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
 the ceiling for orphan captions in `internal/lessons/assets_test.go` follows the certain tier, to
 263.
@@ -589,7 +589,7 @@ on a macro it does not know, so no caption reaches a lesson as a backslash. For 
 independent rendering that agrees with the author's is the check that this is a rendering and not a
 paraphrase. 2.13's alt reads "The graph of f(x) = (sin x)/x confirms the estimate from Table 2.2."
 
-Those two captions held two rows, and the regenerated audit dropped both: 263 to 261, and 157 in the
+Those two captions held two rows and the regenerated audit dropped both: 263 to 261, and 157 in the
 certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
 the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 261.
 
@@ -645,7 +645,7 @@ spends its points where the curve is already smooth and starves the band. It is 
 `1/x` from 2 to 500 instead: every oscillation gets the same number of samples, the band closes into
 the solid block upstream's has, and `x` down to 0.002 is as far in as a 280px frame shows anything
 but a block. The count is 1,500 points per branch rather than 4,000 because the figure is inlined
-into the lesson page — 4,000 was 124KB of path data and 1,500 is 47KB for the same picture. 2.18
+into the lesson page, 4,000 was 124KB of path data and 1,500 is 47KB for the same picture. 2.18
 draws its two pieces as two paths and marks both endpoints, which is the whole content of its
 caption: the formula with the break is not at the left piece's end and is at the right piece's start.
 2.19's branches leave the frame at `y = ±3.6` instead of being clipped into a chord, the same trick
@@ -663,7 +663,7 @@ endpoint would be." The rule that follows is that a caption is a source for an a
 sentence about the figure; when the caption *is* the figure's formula, the `data-alt` is the sentence
 and the caption is not.
 
-Those three captions held three rows, and the regenerated audit drops all three: 259 to 256, and 152
+Those three captions held three rows and the regenerated audit drops all three: 259 to 256, and 152
 in the certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at
 101, and the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 256.
 
@@ -693,7 +693,7 @@ Both have captions that are prose, so both alts are the caption minus its label:
 shows f(x)." and 2.23's is the sentence about Einstein's equation, kept with the author's
 typographic apostrophe.
 
-Those two captions held two rows, and the regenerated audit drops both: 256 to 254, and 150 in the
+Those two captions held two rows and the regenerated audit drops both: 256 to 254, and 150 in the
 certain tier. The lesson keeps other orphan captions, so the report's lesson count stays at 101, and
 the ceiling for orphan captions in `internal/lessons/assets_test.go` follows, to 254. With 2.23
 landed, every redrawable figure in Calculus 2.2 is drawn: 2.12 through 2.19 and 2.21, with 2.20 and
@@ -828,7 +828,7 @@ as `calculus/power-even.svg`, `calculus/power-odd.svg` and `calculus/polynomial-
 trigonometric.** Section 4 of the style doc gives the rule's scope as "where a function is compared
 across a family" and names the three colors after the functions that first needed them. This batch
 needs them for a measured reason: at the frame's top edge 4.50's `x^4` and `x^6` curves exit 12px
-apart, and they are closer at every row below it, so no set of positional labels can identify them —
+apart, and they are closer at every row below it, so no set of positional labels can identify them, 
 and their left-to-right order flips at `x = +-1`, so a stacked set cannot either. 3.33 manages four
 exponential curves without color because its labels sit in the right margin, each at the height
 where its own curve leaves the frame; these curves all leave through the top. Upstream encodes the
@@ -836,7 +836,7 @@ same three curves by color, and the vendored set colors text as well as strokes 
 writes `#2980b9` labels), so here the label and its curve carry the same accent.
 
 **4.52 takes no accent, and that is the same rule read the other way.** Its two curves coincide at
-both ends — that is the caption's statement — so they are told apart by the ladder
+both ends, that is the caption's statement, so they are told apart by the ladder
 `exponential-family.svg` uses: `#333333` at width 2 for `f(x) = 5x^3 - 3x^2 + 4`, and `#636363` at
 1.5 for `g(x) = 5x^3`, the term it behaves like. A reader who cannot see the color still has two
 labels, and each label says which function it belongs to.
@@ -1240,8 +1240,8 @@ are fetched rather than drawn: their disposition is `illustration, fetch`, so up
 is the look-alike, and the credit line is already the lesson's header.
 
 **Fetched figures live under `diagrams/`, beside the drawn ones.** That is where the tree already
-keeps a lesson figure — the reclaimed OpenStax SVGs are in `diagrams/calculus/` and
-`diagrams/arithmetic/` — and it is what puts them under the e2e spec's `img[src*="/diagrams/"]`
+keeps a lesson figure, the reclaimed OpenStax SVGs are in `diagrams/calculus/` and
+`diagrams/arithmetic/` and it is what puts them under the e2e spec's `img[src*="/diagrams/"]`
 selector and its 404 watch. A separate `public/figures/` directory would have rendered fine and been
 measured by nothing. The diagram audit's metadata rules iterate only the assets the engine's
 `conceptDiagrams` map names, so a fetched lesson figure needs no `meta.json` entry.
@@ -1293,7 +1293,7 @@ as they land.
 **The conversion is applied at fetch time, because the renderer applies nothing.** A lesson figure
 reaches the page as a plain `<img>` with no filter (`KatexContent.tsx:208`), so a tone that is not
 baked into the asset does not exist. Each fetched asset is flattened to `sRGB`, dropped to grey,
-stretched with `-auto-level`, and mapped through a 256x1 lookup table of the dialect's five levels —
+stretched with `-auto-level`, and mapped through a 256x1 lookup table of the dialect's five levels, 
 `#333333`, `#636363`, `#BABABA`, `#E6E6E6` and white, which is a dialect color too.
 
 **The stretch is not decoration.** Five of the nineteen fetched assets bottom out at a mid grey: the
@@ -1312,7 +1312,7 @@ follows converts them; that is also where the format the CDN actually serves is 
 as `.png` and sixteen of the nineteen were not PNGs at all: byte-identical to OpenStax's raw archive
 resource, which is a CMYK JPEG with an Adobe APP14 marker, named `.png`. The image CDN serves that
 original while its `f=png` transform is cold and answers `content-type: image/jpeg`, and the guard in
-the fetch script tested the header's prefix, `image/`, which `image/jpeg` satisfies — so the lie was
+the fetch script tested the header's prefix, `image/`, which `image/jpeg` satisfies, so the lie was
 stored. The guard now tests the PNG signature, the download retries six times, and it raises rather
 than storing a fallback. All nineteen re-downloaded through `f=png` as lossless palette PNGs: 1896 KB
 of CMYK became 387 KB of PNG, and the sixteen that were JPEGs went 1819 KB to 311 KB.
@@ -1326,8 +1326,8 @@ that meets it needs a deliberate local CMYK-to-sRGB conversion with a note sayin
 **A review montage is not evidence about a CMYK file.** ImageMagick's `montage` renders an Adobe CMYK
 JPEG as black with red rules while a plain `magick in.png out.png` converts it correctly, and it
 renders 16-bit grayscale PNGs as blank white. Montages are therefore built from 8-bit sRGB copies,
-and Chromium — which drew the CMYK originals correctly, and is why the first batch looked right in
-the app the whole time — stays the authority on what a figure looks like.
+and Chromium, which drew the CMYK originals correctly and is why the first batch looked right in
+the app the whole time, stays the authority on what a figure looks like.
 
 **Twenty-five Calculus Volume 1 illustrations** (2.20; 3.18, 3.19, 3.20, 3.21; 3.30, 3.31, 3.32;
 3.34, 3.35; 4.2, 4.5, 4.6; 4.41, 4.43, 4.44, 4.46, 4.47, 4.48, 4.49, 4.55, 4.57, 4.60, 4.61; and
@@ -1337,7 +1337,7 @@ records, and leaves only the five photo captions.
 
 **Two captions carry emphasis, so the caption paragraph is matched by its whole line.** Figure 2.20
 ends "has infinite limits at *a*" and Figure 3.19 reads "horizontal tangent lines at *x* = 2/3 and
-*x* = 4", so the Prealgebra rule — a run of characters containing no asterisk — matches neither. The
+*x* = 4", so the Prealgebra rule, a run of characters containing no asterisk, matches neither. The
 emphasis markers stay in the alt, which is what the four redrawn figures whose captions carry them
 already do.
 
@@ -1351,8 +1351,8 @@ bar, which `\left` and `\right` already skip. What the caption did need is `\var
 than one asset's.** `fetch_png`'s six retries were written for the Prealgebra repair, where an asset
 warmed after a request or two. Asking for Figure 2.20 six times spends the whole wait on it while the
 other twenty-four transforms have not been requested at all, so the batch fetcher asks for every
-asset first and then re-asks every asset still cold each round. That converges — 21 cold after round
-one, 16 by round six, 3 by round ten — but it took two runs of the script to land all twenty-five,
+asset first and then re-asks every asset still cold each round. That converges, 21 cold after round
+one, 16 by round six, 3 by round ten, but it took two runs of the script to land all twenty-five,
 and the transform was still cold for all twenty-five at the first request.
 
 **A batch is fetched before any lesson is written.** The fetcher runs after every alt has been read
@@ -1374,7 +1374,7 @@ landed on 2026-10-16 in three lessons, as `web/next-app/public/diagrams/calculus
 duotoned like every other fetched asset.
 
 **A caption that is only a credit is not a description, so the alt is upstream's.** None of the
-three says anything about its picture — `Figure 2.22 (credit: NASA)` — and the fourth one, 6.4, is
+three says anything about its picture, `Figure 2.22 (credit: NASA)` and the fourth one, 6.4, is
 the same. So the alt rule has three branches rather than two, and this is the third: a bare label, a
 sentence, and a credit. Upstream's own `data-alt` is then the only description that exists ("A
 picture of a futuristic spaceship speeding through deep space"), and `plain` is not run on it,
@@ -1393,17 +1393,17 @@ because Figure 2.22 is the only fetched photograph in the corpus so far.
 
 **Two Prealgebra photographs** (6.4, `credit: Riles32807`; 6.8, `credit: Charleston's TheDigitel`)
 landed on 2026-10-16 in five lessons, as `web/next-app/public/diagrams/prealgebra/<number>.png`,
-duotoned like every other fetched asset. Figure 6.8's caption is the tier's second shape — it
+duotoned like every other fetched asset. Figure 6.8's caption is the tier's second shape, it
 describes its picture ("Applications of discounts are common in everyday life") and carries a credit
-after it — so its alt is the caption's own words, where 6.4's is upstream's `data-alt`, because its
+after it, so its alt is the caption's own words, where 6.4's is upstream's `data-alt`, because its
 caption is a credit and nothing else.
 
 **That empties the `certain` tier, and with it sections 3 and 6.** The audit's report named no
 certain tier at all through that day: the 104 rows that remained were 33 `strong` and 71 `likely`, and
 nothing else. The table in section 6 was empty that day, because a disposition was only ever
 assigned to a certain caption, and section 3 recorded a tier that was gone rather than a count of
-work left. What remained was a different kind of task — a `strong` or `likely` candidate is matched
-to an asset that already exists or removed — and it is measured rather than planned here.
+work left. What remained was a different kind of task, a `strong` or `likely` candidate is matched
+to an asset that already exists or removed and it is measured rather than planned here.
 
 The two captions held 5 rows across five lessons: the report went from 109 to 104, the certain tier
 from 5 to 0, and the audit's shipped and referenced counts from 690 to 692 and 384 to 386. All five
@@ -1421,7 +1421,7 @@ with the 49 rows section 3 records, and the comment now carries them as its firs
 only two lessons the retired hand-rolled converter produced, and it dropped their figure captions
 along with their images; re-ingesting both from the curated source restores both halves, so the
 captions came back with the text. The regenerated audit moved 104 rows to 153 and 0 in the certain
-tier to 49 — 25 from §6.1 and 24 from §5.1 — and the ceiling in `internal/lessons/assets_test.go`
+tier to 49, 25 from §6.1 and 24 from §5.1 and the ceiling in `internal/lessons/assets_test.go`
 follows, to 153. That is the one movement of that ceiling which is up rather than down, and its
 reason is a content decision rather than an ingestion accident: the record in section 5 says why the
 sections were replaced rather than repaired, and section 3 says why their captions are work and not a

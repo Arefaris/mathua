@@ -99,7 +99,7 @@ def main():
         md = extract_section(pages, info["pages"][0], info["pages"][1], info["title"])
         attribution = (
             "> Content sourced from [Applied Calculus](https://www.opentextbookstore.com/appcalc/) "
-            "by Calaway, Hoffman & Lippman — CC BY 3.0\n\n"
+            "by Calaway, Hoffman & Lippman, CC BY 3.0\n\n"
         )
         md = attribution + md.strip()
 

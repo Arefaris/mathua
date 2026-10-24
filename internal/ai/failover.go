@@ -15,7 +15,7 @@ var ErrNoProvider = errors.New("ai: no eligible provider for this data class")
 //
 // It exists because the per-provider timeout alone does not: with a 12-second
 // attempt cap and two providers the worst case is 24 seconds of failover, and
-// the server's WriteTimeout is 30 seconds — so a request that used the whole
+// the server's WriteTimeout is 30 seconds, so a request that used the whole
 // budget would have its response cut off mid-write, which the learner sees as a
 // dropped connection rather than an unavailable feature. The chain therefore
 // caps itself under that, and a request that runs out reports a timeout instead

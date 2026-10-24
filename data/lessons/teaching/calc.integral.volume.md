@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Calculus Volume 1](https://openstax.org/books/calculus-volume-1/pages/1-introduction) by Gilbert Strang & Edwin "Jed" Herman, CC BY-NC-SA 4.0
 
 ## 6.3 Volumes of Revolution: Cylindrical Shells
 
@@ -29,7 +29,7 @@ To calculate the volume of this shell, consider Figure 6.27.
 
 *Figure 6.27 Calculating the volume of the shell.*
 
-The shell is a cylinder, so its volume is the cross-sectional area multiplied by the height of the cylinder. The cross-sections are annuli (ring-shaped regions—essentially, circles with a hole in the center), with outer radius $x_{i}$ and inner radius $x_{i - 1}.$ Thus, the cross-sectional area is $\pi x_{i}^{2} - \pi x_{i - 1}^{2}.$ The height of the cylinder is $f(x_{i}^{*}).$ Then the volume of the shell is
+The shell is a cylinder, so its volume is the cross-sectional area multiplied by the height of the cylinder. The cross-sections are annuli (ring-shaped regions, essentially, circles with a hole in the center), with outer radius $x_{i}$ and inner radius $x_{i - 1}.$ Thus, the cross-sectional area is $\pi x_{i}^{2} - \pi x_{i - 1}^{2}.$ The height of the cylinder is $f(x_{i}^{*}).$ Then the volume of the shell is
 
 $$
 \begin{array}{cl}

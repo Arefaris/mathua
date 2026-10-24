@@ -203,7 +203,7 @@ func TestDestinationUnion(t *testing.T) {
 //
 // They did not. `defaultDecayDays` here was 30 while `scheduler.effectiveState`
 // and the engine used 14, so a plan priced reviews on a cadence the app would not
-// honour — and reviews are priced on the same path the deadline is computed from
+// honour and reviews are priced on the same path the deadline is computed from
 // (ADR-019). The constant is now shared; this pins the agreement at the boundary
 // so a future divergence is a failing test rather than a silently optimistic date.
 func TestEstimate_AgreesWithSchedulerOnDecay(t *testing.T) {
@@ -225,7 +225,7 @@ func TestEstimate_AgreesWithSchedulerOnDecay(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			reviewed := time.Now().UTC().Add(-time.Duration(tc.daysSince*24) * time.Hour)
 			// NextReviewDue is deliberately in the future so the SM-2 schedule is not
-			// what makes it due — this is purely the decay window under test.
+			// what makes it due, this is purely the decay window under test.
 			progress := map[string]*storage.ConceptProgress{
 				"a": {Status: "MASTERED", LastReviewed: &reviewed, NextReviewDue: ptrTime(time.Now().UTC().AddDate(0, 0, 90))},
 			}

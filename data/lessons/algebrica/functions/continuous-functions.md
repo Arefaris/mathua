@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/continuous-functions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/continuous-functions/), CC BY-NC 4.0
 
 ## Continuous function at a point
 

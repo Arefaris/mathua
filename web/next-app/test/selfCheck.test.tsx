@@ -32,7 +32,7 @@ async function type(page: { value: string }, text: string) {
  * The feedback contract, stated as an assertion rather than a comment.
  *
  * `equivalence()` is three-valued: 'equivalent', 'different', 'unknown'. The rule that
- * matters is the third one — nothing may render a verdict for 'unknown', or indeed for
+ * matters is the third one, nothing may render a verdict for 'unknown', or indeed for
  * any of the three, because the client never holds the expected answer to compare
  * against (ADR-005). These tests exercise all three states and assert the same thing
  * each time: no correctness language reaches the DOM.
@@ -50,7 +50,7 @@ describe('the feedback contract', () => {
   // Note what is *not* in that table: `2x+3` vs `x²+2x+1` is 'unknown', not
   // 'different'. CE will not call two plainly unequal symbolic expressions different,
   // which is the whole reason 'unknown' has to be a first-class outcome rather than an
-  // error path. And the LaTeX needs its backslashes — `sqrt(x^2)` parses as a product
+  // error path. And the LaTeX needs its backslashes, `sqrt(x^2)` parses as a product
   // of symbols, which is a different question entirely.
   const CASES: { state: 'equivalent' | 'different' | 'unknown'; latex: string; against: string }[] = [
     { state: 'equivalent', latex: 'x^2+2x+1', against: '(x+1)^2' },

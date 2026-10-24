@@ -14,7 +14,7 @@ function monthKey(year: number, month: number): string {
 
 export default function MonthlyCards({ data }: Props) {
   // Horizontal month strip, oldest → newest: only months with activity plus
-  // the current month as an anchor — never a wall of empty accordions. Every
+  // the current month as an anchor, never a wall of empty accordions. Every
   // visible month shows its grid (no expand/collapse); the strip opens
   // scrolled to the newest end.
   const months = useMemo(() => {

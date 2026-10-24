@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/arc-length-of-a-curve/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/arc-length-of-a-curve/), CC BY-NC 4.0
 
 ## From straight segments to curved arcs
 

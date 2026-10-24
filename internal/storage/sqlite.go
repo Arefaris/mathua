@@ -65,13 +65,13 @@ func NewSQLiteStore(path string) (*SQLiteStore, error) {
 	// allows one writer plus concurrent readers; concurrent writers
 	// serialize inside SQLite and ride the 5s busy_timeout above. A pool
 	// of 8 lets reads interleave with the write queue instead of
-	// queueing behind it — loadtest-verified against MaxOpenConns(1).
+	// queueing behind it, loadtest-verified against MaxOpenConns(1).
 	//
 	// This pool and the ":memory:" DSN do not mix, and the failure is silent until something
 	// runs two things at once. Each connection to ":memory:" opens its OWN database, so a second
 	// concurrent statement gets an empty one: "no such table: students", and any count taken
 	// through it reads as zero. Sequentially the pool reuses its one idle connection and every
-	// test passes, which is what makes it hard to find — a concurrent test on a :memory: store
+	// test passes, which is what makes it hard to find, a concurrent test on a :memory: store
 	// reports whatever the empty database contains rather than what the code did.
 	//
 	// Production uses a file, and so does any test that needs real concurrency; see
@@ -177,7 +177,7 @@ func authMigrate(db *sql.DB) error {
 	}
 	// One-time data backfills (drift fixes), version-guarded:
 	// v1 daily goal 150 → 30 (MA 20-40); v2 username lowercasing except
-	// colliding groups (same lower form twice — manual rename, never merge).
+	// colliding groups (same lower form twice, manual rename, never merge).
 	// Fix 7: both run exactly once via schema_migrations, not every boot.
 	dataMigrations := map[int][]string{
 		1: {"UPDATE students SET daily_xp_goal = 30 WHERE daily_xp_goal = 150"},
@@ -241,7 +241,7 @@ func isDuplicateColumn(err error) bool {
 
 // ensureEmailUniqueIndexSQLite enforces one-email-one-account at the DB layer
 // for every writer at once (signup, OAuth create/merge, profile update,
-// verification) — the app-level 409 checks are check-then-insert and race.
+// verification), the app-level 409 checks are check-then-insert and race.
 // Expression index on lower(email) matches FindByEmail's lookup semantics;
 // the partial predicate keeps legacy ” rows legal. While real duplicates
 // exist the index is skipped with a log (boot proceeds) and retried next
@@ -1110,7 +1110,7 @@ func (s *SQLiteStore) DeleteServerSession(kind, key string) error {
 // transaction, committing only when every counter is within its ceiling.
 //
 // Returning "denied" rolls the transaction back instead of leaving the
-// increments in place, so a refused request costs nothing — and because the
+// increments in place, so a refused request costs nothing and because the
 // comparison is against the post-increment value inside the same transaction,
 // two concurrent callers cannot both take the last free slot.
 func (s *SQLiteStore) ReserveAIUsage(ctx context.Context, day string, limits []ai.AIUsageLimit) (bool, error) {
@@ -1156,7 +1156,7 @@ func (s *SQLiteStore) AIUsage(ctx context.Context, usageKey, day string) (int, e
 }
 
 func (s *SQLiteStore) SweepServerSessions() error {
-	// expires_at is RFC3339 UTC written by callers — compare in Go, not SQL,
+	// expires_at is RFC3339 UTC written by callers, compare in Go, not SQL,
 	// so both dialects share one correct clock. Table stays tiny.
 	rows, err := s.db.Query("SELECT kind, key, expires_at FROM server_sessions WHERE expires_at != ''")
 	if err != nil {
@@ -2059,7 +2059,7 @@ func (s *SQLiteStore) SetStudentRole(studentID string, role Role) error {
 //
 // The condition lives inside the UPDATE. A read of COUNT(*) followed by an UPDATE is a race:
 // two administrators demoting each other at the same moment both observe two, and the system
-// reaches zero — the failure this exists to prevent, reached by the very feature meant to
+// reaches zero, the failure this exists to prevent, reached by the very feature meant to
 // prevent it. One statement means the second demotion matches no rows.
 //
 // The same statement covers the no-op cases for free. An admin who is not the last admin, but

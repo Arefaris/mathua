@@ -8,7 +8,7 @@ import { resolve } from 'node:path'
  * Nothing above this catches a blank image. The Go extractor proves a reference is
  * well-formed, `TestEveryAssetResolvesToAShippedDiagram` proves the file is on disk, and
  * `TestPlacedFiguresAreInTheSectionTheirPlacementNamed` proves each figure sits in the section
- * it was placed in — all three are satisfied by a diagram a browser declines to draw. An HTTP
+ * it was placed in, all three are satisfied by a diagram a browser declines to draw. An HTTP
  * 200 carrying an SVG with no viewBox, a zero-height `<img>`, a figure the renderer drops: each
  * passes every other gate and shows a learner an empty box where the instruction should be.
  *
@@ -28,7 +28,7 @@ import { resolve } from 'node:path'
  * It used to drive `/study`, which rendered every lesson body in full. ADR-047 closed that
  * route and ADR-054 restored it as a context-bound reference page; either way this spec drives
  * `/learn`, whose reference panel is the renderer that resolves a figure reference out of
- * markdown — which is why the spec moved rather than being deleted. See `stubLesson` for the
+ * markdown, which is why the spec moved rather than being deleted. See `stubLesson` for the
  * configuration it measures now.
  */
 
@@ -61,7 +61,7 @@ const CASES = [
   { concept: 'frac.basics.parts', file: 'teaching/frac.basics.parts.md', expectFigures: 3 },
   // Four: the percent pair is a table rather than a drawing, so this case
   // proves a reclaimed figure that is ruled cells and text renders, which the lines, blocks and
-  // bars above cannot show, and Figure 6.2 — a grid of 100 students — landed in the same body
+  // bars above cannot show, and Figure 6.2, a grid of 100 students, landed in the same body
   // with the second fetch batch, then Figure 6.4, a photograph of a hand holding ten cards, with
   // the photo batch. 6.2 is also the batch where upstream shipped one image for both
   // figures, so what is measured here is the figure the lesson needs and not the one upstream
@@ -75,8 +75,8 @@ const CASES = [
   // `Circumference` is thirteen `<text>` elements carrying a `transform`, so this asserts a
   // figure reaches the page at all when its labels are placed by rotation and not by `x`/`y`.
   { concept: 'frac.ops.to_decimal', file: 'teaching/frac.ops.to_decimal.md', expectFigures: 1 },
-  // Twelve, and the only case with a graph: Figures 2.12 to 2.23 carry y axes, tick labels —
-  // including two axes named for the quantity, `v/c` and `m/m0` — and twelve markers between
+  // Twelve, and the only case with a graph: Figures 2.12 to 2.23 carry y axes, tick labels, 
+  // including two axes named for the quantity, `v/c` and `m/m0` and twelve markers between
   // them, eleven of those drawn as `fill="white"` circles and one as a filled dot, so this
   // asserts that a figure whose points are holes rather than values keeps its markers through
   // the sanitizer. It also carries the heaviest figure here, Figure 2.17, whose band is 1,500
@@ -91,7 +91,7 @@ const CASES = [
   // so this asserts that a figure the sanitizer keeps is one whose shape is a sampled arc rather
   // than a line or a rect. The count is the lesson's, and it has moved nine times: two, then
   // three, then five, then six, then seven, then eight, then nine, then eleven, then twelve, when
-  // Figure 6.34 — upstream's own comparison table of the three methods — landed with the Calculus
+  // Figure 6.34, upstream's own comparison table of the three methods, landed with the Calculus
   // fetch batch.
   { concept: 'calc.integral.volume', file: 'teaching/calc.integral.volume.md', expectFigures: 12 },
 ]
@@ -107,7 +107,7 @@ function bodyFor(file: string): string {
  *
  * The knowledge-point shard is stubbed empty on purpose. The figures this spec measures are
  * referenced inline in the *article*, and the article is what the reference panel falls back to
- * for a concept with no shards — so an empty shard is the one configuration that renders it.
+ * for a concept with no shards, so an empty shard is the one configuration that renders it.
  *
  * That is not the common path and the spec says so. A concept with shards is taught through
  * them: `/learn` asks the server which figures belong to which step and shows those, so the
@@ -140,7 +140,7 @@ async function stubLesson(page: import('@playwright/test').Page, concept: string
  * Open `/learn` for a concept and expand the reference panel that carries the article.
  *
  * The panel is a disclosure on a page that already has a learning feed above it, so its figures
- * start well outside the viewport — and `KatexContent` renders them with `loading="lazy"`, so
+ * start well outside the viewport and `KatexContent` renders them with `loading="lazy"`, so
  * they are not fetched, and therefore have no intrinsic size, until they are near. That is right
  * for a closed panel and a problem for a measurement: a figure that has not loaded reports 0x0,
  * which is the same reading as a broken one. So each figure is scrolled into view and awaited
@@ -148,7 +148,7 @@ async function stubLesson(page: import('@playwright/test').Page, concept: string
  */
 async function openReference(page: import('@playwright/test').Page, concept: string) {
   await page.goto(`/learn?concept=${encodeURIComponent(concept)}`)
-  const summary = page.getByText('Reference — the full lesson')
+  const summary = page.getByText('Reference, the full lesson')
   await expect(summary).toBeVisible({ timeout: 30_000 })
   await summary.click()
 }
@@ -206,7 +206,7 @@ test.describe('lesson figures render', () => {
     await openReference(page, FIGURELESS.concept)
     await expect(page.locator('body')).toContainText(/\w/, { timeout: 30_000 })
     // The page really does render lesson prose, so zero here means "no figures", not "no
-    // lesson" — which is the distinction that would otherwise make the test above vacuous.
+    // lesson", which is the distinction that would otherwise make the test above vacuous.
     await expect(page.locator(FIGURE)).toHaveCount(0)
   })
 

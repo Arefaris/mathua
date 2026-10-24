@@ -8,7 +8,7 @@ package all
 // corpus-wide ratchet: every registered generator is sampled at three
 // difficulties and both fields are canonicalised exactly as the server does.
 // A single regenerated instance that writes a numeral inside math fails the
-// build, which is the point — the audit found 59 such generators and the
+// build, which is the point, the audit found 59 such generators and the
 // fix must not quietly come back.
 
 import (

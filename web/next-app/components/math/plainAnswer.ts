@@ -7,7 +7,7 @@
 // can grade, and each is a real false miss if left alone:
 //
 //	1. `\div` serializes to the ASCIIMath token `-:`. `7 \div 2` becomes
-//	   `7 -: 2`, which SymPy reads as subtraction — silently grading 5 as wrong.
+//	   `7 -: 2`, which SymPy reads as subtraction, silently grading 5 as wrong.
 //	2. `\frac` on a whole number serializes as `4(1)/(10)`, so the mixed number
 //	   `4 1/10` is indistinguishable from `41/10`. The numeric grader wants the
 //	   space.

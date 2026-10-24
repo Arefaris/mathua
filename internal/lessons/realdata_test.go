@@ -56,7 +56,7 @@ func TestRealDataCanonicalized(t *testing.T) {
 
 // Guard: every KP shard section must resolve to a real slice of the
 // concept's canonical lesson body. Unresolved sections silently fall back
-// to the FULL body (duplicated study content) — e.g. raw `\\(...)`
+// to the FULL body (duplicated study content), e.g. raw `\\(...)`
 // sections vs canonical `$...$` headings (calc.integral.weierstrass_sub).
 func TestRealDataKPSectionsResolve(t *testing.T) {
 	lib, err := Load("../../data/lessons")
@@ -90,7 +90,7 @@ func TestRealDataKPSectionsResolve(t *testing.T) {
 	}
 }
 
-// Guard: lesson ownership is 1:1 — every concept resolves to exactly one
+// Guard: lesson ownership is 1:1, every concept resolves to exactly one
 // distinct lesson, and it is the server pick (Loader.Lesson). The Study
 // client resolves ?concept= first-wins over the domain-grouped lessons; as
 // long as this holds, first-wins IS the server pick and chips always land
@@ -129,7 +129,7 @@ func TestRealDataSingleLessonPerConcept(t *testing.T) {
 	}
 }
 
-// Guard: every served lesson title must be plain renderable text — the
+// Guard: every served lesson title must be plain renderable text, the
 // title slots (study list/detail, concept page) never run math or markdown.
 // Catches paragraph-titles (deep-note H6 picked by a naive first-heading
 // scan), raw delimiters, and pasted markdown links.
@@ -166,7 +166,7 @@ func TestRealDataTitlesSane(t *testing.T) {
 //
 // This is the invariant whose absence let a real defect ship. When a shard's `section` was
 // empty the server substituted the whole lesson body, so 69 of 1,971 steps across 43 concepts
-// served the entire reference article — 33,784 words, and discrete.logic.propositions served
+// served the entire reference article, 33,784 words, and discrete.logic.propositions served
 // its 2,724-word article three times over, against a concept whose mastery threshold is twelve
 // seconds. Nothing caught it, for two compounding reasons:
 //
@@ -198,7 +198,7 @@ func TestWorkedExampleIsBoundedAndNeverTheWholeBody(t *testing.T) {
 		}
 		if f.Words > MaxSliceWords {
 			// Reported, not failed. A section over budget is normally a section that genuinely
-			// needs the room — `abstract.group.dihedral`'s "Two generators and three relations"
+			// needs the room, `abstract.group.dihedral`'s "Two generators and three relations"
 			// is 534 words and cannot be truncated without breaking the argument. The budget
 			// gates what is *authored* (see TestAuthoredSlicesMeetTheirBoundaries); for content
 			// that already exists it is a number worth knowing rather than a rule to enforce,
@@ -250,7 +250,7 @@ func TestAuthoredSlicesMeetTheirBoundaries(t *testing.T) {
 			continue
 		}
 		if f.Words < MinSliceWords {
-			t.Errorf("%s %q: slice is %d words, below MinSliceWords=%d — it teaches nothing",
+			t.Errorf("%s %q: slice is %d words, below MinSliceWords=%d, it teaches nothing",
 				f.ConceptID, f.KPLabel, f.Words, MinSliceWords)
 		}
 		if f.Words > MaxSliceWords {

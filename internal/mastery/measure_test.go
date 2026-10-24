@@ -7,18 +7,18 @@ import (
 	"testing"
 )
 
-// What mastery costs, and what the threshold actually does — measured rather than assumed.
+// What mastery costs, and what the threshold actually does, measured rather than assumed.
 //
 // Two measurement lessons are baked in here, both of them learned the hard way in this
 // file's own first version:
 //
-//  1. A probe's *period* is not the model. The first accuracy sweep used `i%20 >= 12` —
-//     twelve wrong then eight right — and reported that every accuracy level from 40% up
+//  1. A probe's *period* is not the model. The first accuracy sweep used `i%20 >= 12`,
+//     twelve wrong then eight right and reported that every accuracy level from 40% up
 //     reached mastery. It hadn't; a six-attempt window simply eventually landed entirely
 //     inside the clean run. Learners do not answer in blocks. Every pattern below is evenly
 //     distributed instead (see `correctAt`), so each window sees the nominal accuracy.
 //  2. Measure the cost; do not assume it. `MasteryEvidenceFloor` was raised from 3 to 6 on
-//     the strength of this file, and the honest distribution turned out to be exactly 6 —
+//     the strength of this file, and the honest distribution turned out to be exactly 6,
 //     which is a *finding*, not a confirmation.
 //
 // The distribution is reported, not asserted. The cost of mastery is a calibration decision
@@ -30,7 +30,7 @@ import (
 //
 // `(i*k) % n < k` places exactly k correct answers in each period of n, evenly spaced. A
 // learner who is right 60% of the time is wrong 40% of the time *throughout*, not in
-// bursts — and the difference between those two claims is the entire measurement.
+// bursts and the difference between those two claims is the entire measurement.
 func correctAt(i, n, k int) bool {
 	if k <= 0 {
 		return false
@@ -196,7 +196,7 @@ func TestMeasureMasteryCost(t *testing.T) {
 // TestMeasureAccuracyBandThatStillMasters finds where MasteryThreshold actually bites.
 //
 // With the floor and the window both at 6, the floor is reached before the score has much to
-// say — but the score is not inert. This sweeps evenly-distributed accuracy and reports the
+// say, but the score is not inert. This sweeps evenly-distributed accuracy and reports the
 // band, then asserts the two properties that make the threshold meaningful rather than
 // decorative: the ladder is reachable, and it is not a rubber stamp.
 func TestMeasureAccuracyBandThatStillMasters(t *testing.T) {
@@ -227,10 +227,10 @@ func TestMeasureAccuracyBandThatStillMasters(t *testing.T) {
 	t.Logf("never masters at: %v%% correct", blocked)
 
 	if len(masterable) == 0 {
-		t.Fatal("no accuracy level masters — the ladder is unreachable")
+		t.Fatal("no accuracy level masters, the ladder is unreachable")
 	}
 	if len(blocked) == 0 {
-		t.Error("every accuracy level masters — MasteryThreshold is decorative")
+		t.Error("every accuracy level masters, MasteryThreshold is decorative")
 	}
 	// Mastery is the exit from the teaching loop, so the bar has to mean something: better
 	// than a coin flip, and no lower.
@@ -264,7 +264,7 @@ func TestNoConceptIsPermanentlyUnmasterable(t *testing.T) {
 // This is the failure ADR-038 nearly shipped, when `EnoughForMastery` also required
 // `Instances >= 2` as a hard gate: a generator that does not vary its question text holds
 // Instances at 1 forever, so the concept can never be mastered however much the learner
-// demonstrates it. The property under test is reachability, not equality — see
+// demonstrates it. The property under test is reachability, not equality, see
 // TestVarietyRaisesTheBarWithoutBlockingMastery for the margin, which is deliberate.
 func TestIdenticalInstancesStillMaster(t *testing.T) {
 	for _, p := range profiles {
@@ -291,7 +291,7 @@ func reliablyCorrect(p profile) bool {
 	return true
 }
 
-// Variety is a weight, not a veto — and this pins down exactly where the line is, because
+// Variety is a weight, not a veto and this pins down exactly where the line is, because
 // "cannot veto" is a claim that is easy to make and easy to get wrong.
 //
 // Measured across the real corpus time thresholds:
@@ -304,8 +304,8 @@ func reliablyCorrect(p profile) bool {
 // So the 0.15 variety bonus is large enough to flip the decision at 60%. That is correct and
 // should not be "fixed": three right answers out of five spread across three different
 // problems is real evidence of transfer, and three right answers out of five on the *same*
-// problem three times is evidence about one problem. The property that matters — and the one
-// ADR-038's `Instances >= 2` gate broke — is that no amount of demonstrated competence
+// problem three times is evidence about one problem. The property that matters and the one
+// ADR-038's `Instances >= 2` gate broke, is that no amount of demonstrated competence
 // becomes *unreachable*. A learner at 80% masters on a generator that never varies.
 func TestVarietyRaisesTheBarWithoutBlockingMastery(t *testing.T) {
 	base := func(k int) profile {
@@ -328,7 +328,7 @@ func TestVarietyRaisesTheBarWithoutBlockingMastery(t *testing.T) {
 
 	if !mastersSomewhere(base(4), true) {
 		t.Error("a learner who is right 80% of the time cannot master on a generator " +
-			"that never varies — " +
+			"that never varies, " +
 			"variety has become a veto")
 	}
 	if !mastersSomewhere(base(5), true) {
@@ -336,12 +336,12 @@ func TestVarietyRaisesTheBarWithoutBlockingMastery(t *testing.T) {
 	}
 	if mastersSomewhere(base(3), true) {
 		t.Log("note: a learner who is right 60% of the time now masters on identical " +
-			"instances too — the " +
+			"instances too, the " +
 			"variety bonus margin has moved")
 	}
 }
 
-// Mastery must be reachable without an uninterrupted run of correct answers — the whole
+// Mastery must be reachable without an uninterrupted run of correct answers, the whole
 // point of moving off a streak counter. Starts 40 answers in, then misses every fourth.
 func TestMasteryReachableWithoutAnUnbrokenStreak(t *testing.T) {
 	p := profile{
@@ -351,7 +351,7 @@ func TestMasteryReachableWithoutAnUnbrokenStreak(t *testing.T) {
 	for _, ct := range corpusTimeThresholds {
 		if got := run(p, ct.seconds, 80, 40); got < 0 {
 			t.Errorf("an established learner who now misses one in five failed to master "+
-				"against a %gs threshold — something still keys on an unbroken streak", ct.seconds)
+				"against a %gs threshold, something still keys on an unbroken streak", ct.seconds)
 		}
 	}
 }
@@ -381,7 +381,7 @@ func TestStreakThresholdDoesNotAffectCost(t *testing.T) {
 // Unknown difficulty must not be *better* than known difficulty.
 //
 // This is the regression test for the asymmetry between hosts. Unknown difficulty used to be
-// scored as difficultyTerm = 1.0 — the top of the range — so a missing value read as "the
+// scored as difficultyTerm = 1.0, the top of the range, so a missing value read as "the
 // hardest question we could have asked". At 50% accuracy that was the difference between
 // scoring 0.65 and clearing the bar, and 0.57 and failing it: the same learner, the same
 // answers, mastering on one surface and not on another.
@@ -443,11 +443,11 @@ func TestMasteryIsNeverLostToBadEvidence(t *testing.T) {
 
 // The evidence model contains no spacing term, and that is deliberate: it scores attainment
 // from attempts and knows nothing about elapsed time since the last one. Spaced retention is
-// the deferred `tier_attained_at` work, and evidence is where it will *not* go — a learner
+// the deferred `tier_attained_at` work, and evidence is where it will *not* go, a learner
 // who mastered a concept a year ago and has not touched it since has demonstrated exactly
 // what they demonstrated then.
 func TestEvidenceHasNoSpacingTerm(t *testing.T) {
-	// BuildEvidence takes only attempts and the concept's thresholds — there is no clock and
+	// BuildEvidence takes only attempts and the concept's thresholds, there is no clock and
 	// no "when was this last reviewed" input, so no term can depend on elapsed time. That is
 	// what keeps the deferred spaced work additive rather than a rewrite of this function.
 	//
@@ -460,7 +460,7 @@ func TestEvidenceHasNoSpacingTerm(t *testing.T) {
 		t.Errorf("identical evidence scored differently: %.4f vs %.4f", old1.Score, old2.Score)
 	}
 	if fresh := cleanWindow(EvidenceWindow, midDifficulty); fresh.Score != old1.Score {
-		t.Errorf("evidence scored %.4f once and %.4f another time — something is not a pure "+
+		t.Errorf("evidence scored %.4f once and %.4f another time, something is not a pure "+
 			"function of the attempts", old1.Score, fresh.Score)
 	}
 }
@@ -470,12 +470,12 @@ func TestEvidenceHasNoSpacingTerm(t *testing.T) {
 // The band is presentational, but it must not lie about what the evidence supports.
 //
 // The client version of this label offered "well retained" off a score with no spacing
-// term at all — a retention claim drawn from evidence that knows nothing about retention.
+// term at all, a retention claim drawn from evidence that knows nothing about retention.
 // And with no floor it read "strong" after a *single* correct answer, because a lone answer
 // carries the most recency weight there is. Both defects arrived through the label rather
 // than the state, so the label needs its own tests.
 func TestEvidenceBandClaimsNothingBeyondTheEvidence(t *testing.T) {
-	// One correct answer scores 0.84 — above every score threshold — and must still read as
+	// One correct answer scores 0.84, above every score threshold and must still read as
 	// early, because a single attempt is not evidence.
 	single := BuildEvidence([]Attempt{{
 		Correct: true, Elapsed: 4, Instance: "a",
@@ -485,7 +485,7 @@ func TestEvidenceBandClaimsNothingBeyondTheEvidence(t *testing.T) {
 			"score thresholds so the floor is what stops it", single.Score)
 	}
 	if got := EvidenceBand(single); got != "early" {
-		t.Errorf("one correct answer reads %q, want %q — the band must be floored by evidence "+
+		t.Errorf("one correct answer reads %q, want %q, the band must be floored by evidence "+
 			"the way mastery is", got, "early")
 	}
 
@@ -504,7 +504,7 @@ func TestEvidenceBandClaimsNothingBeyondTheEvidence(t *testing.T) {
 }
 
 // The band is a function of the evidence and nothing else, so it cannot drift from the
-// ladder's own inputs — and it must move when the evidence moves.
+// ladder's own inputs and it must move when the evidence moves.
 func TestEvidenceBandTracksTheEvidence(t *testing.T) {
 	strong := BuildEvidence(cleanAttempts(6, true), EvidenceOptions{TimeThreshold: 20})
 	weak := BuildEvidence(cleanAttempts(6, false), EvidenceOptions{TimeThreshold: 20})

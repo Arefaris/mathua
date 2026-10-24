@@ -33,7 +33,7 @@ type TransitionCtx struct {
 //
 // All three used to be gated on the single condition
 // `streak >= required AND avg time <= threshold`, which made the ladder one test repeated
-// until the streak was long enough — 30 consecutive correct answers for the 459 concepts
+// until the streak was long enough, 30 consecutive correct answers for the 459 concepts
 // whose threshold is 10, and no new information at any rung. See
 // docs/mastery-semantics.md.
 //
@@ -126,14 +126,14 @@ func SM2Quality(streakMet bool, timeRatio float64) int {
 //
 // It used to be computed as `streak / required_streak`, which is wrong for this purpose
 // because the engine resets the streak to 1 on every tier advance (Engine.submitAnswerWithTask).
-// A concept therefore sat at 100% and then dropped to ~10%, three times on the way up —
+// A concept therefore sat at 100% and then dropped to ~10%, three times on the way up,
 // the learner watched their progress fall while doing everything right. Any streak-derived
 // ratio inherits that sawtooth.
 //
 // Attainment is measured from the tier, not the counter: each of the three transitions is
 // worth a third, and progress within the current tier fills the rest. That is monotonic
 // across an advance, because the tier's baseline jump is larger than the within-tier reset
-// it replaces — LEARNING at 9/10 of its streak reads 63%, and the same instant as
+// it replaces, LEARNING at 9/10 of its streak reads 63%, and the same instant as
 // PRACTICING at 1/10 reads 70%.
 //
 // Uses only columns that already exist (status, streak, threshold), so it needs no

@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures'
 
 // The reported failure: "View prerequisite path" on a locked curriculum row did
-// nothing useful — the panel rendered below a 128-concept list, outside the
+// nothing useful, the panel rendered below a 128-concept list, outside the
 // viewport. The dialog must open immediately, stay visible for any row, link
 // every prerequisite to its reference page with the target preserved, and
 // return to the original target.

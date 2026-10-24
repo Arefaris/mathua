@@ -6,7 +6,7 @@ import PlanPage from '../app/plan/page'
 // The planner used to end at "← Back to profile", which was its only exit and a
 // dead end for the visitors the assistant sends here: a guest has no profile.
 // These tests pin the exit that replaced it, because a missing next step is
-// invisible to every other kind of check — the page still renders and still
+// invisible to every other kind of check, the page still renders and still
 // saves a plan.
 
 vi.mock('next/link', () => ({

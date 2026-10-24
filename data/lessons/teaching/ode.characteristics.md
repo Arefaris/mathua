@@ -9,7 +9,7 @@ Solve $u_t + 2 u_x = 0$ with $u(x, 0) = x^2$:
 2. With $c = 0$, $du/dt = 0$ along characteristics: $u$ is constant on each line $x - 2t = \text{const}$.
 3. Trace back to $t = 0$: $u(x, t) = (x - 2t)^2$. At the point $(5, 1)$ this gives $u = 9$.
 
-So the initial parabola slides right at speed 2 unchanged — transport just shifts data along characteristics.
+So the initial parabola slides right at speed 2 unchanged, transport just shifts data along characteristics.
 
 ## Worked: reading char ODEs
 
@@ -22,4 +22,4 @@ So $dx/a = dy/b$ finds the curves, and constancy of $u$ along them writes the so
 
 ## When characteristics cross
 
-If characteristics intersect, they carry two different data values to one point and the solution turns multi-valued — a shock forms. Quasi-linear equations, where $u$ feeds back into $a$ and $b$, bend their own characteristics and are the usual shock producers.
+If characteristics intersect, they carry two different data values to one point and the solution turns multi-valued, a shock forms. Quasi-linear equations, where $u$ feeds back into $a$ and $b$, bend their own characteristics and are the usual shock producers.

@@ -1,6 +1,6 @@
 # Normal Subgroups
 
-**Normal subgroup:** $N \le G$ is normal if $gNg^{-1} = N$ for every $g$: conjugation never leaves the set. Normality is exactly what quotients require — only normal subgroups admit a well-defined coset multiplication.
+**Normal subgroup:** $N \le G$ is normal if $gNg^{-1} = N$ for every $g$: conjugation never leaves the set. Normality is exactly what quotients require, only normal subgroups admit a well-defined coset multiplication.
 
 ## Worked: A_3 is normal in S_3
 
@@ -16,7 +16,7 @@ So normality can follow from a counting argument rather than checking every conj
 Conjugate $(1\,2)$ by $(1\,3)$:
 1. Track 2 through $(1\,3)(1\,2)(1\,3)$, right to left: $(1\,3)$ fixes 2, $(1\,2)$ sends $2 \to 1$, $(1\,3)$ sends $1 \to 3$. So $2 \to 3$; similarly $3 \to 2$. The conjugate is $(2\,3)$.
 2. $(2\,3)$ is not in $\{e, (1\,2)\}$: conjugation escaped the set.
-3. So the subgroup is not normal — and indeed $S_3/\{e,(1\,2)\}$ has no group structure.
+3. So the subgroup is not normal and indeed $S_3/\{e,(1\,2)\}$ has no group structure.
 
 So one escaped conjugate kills normality, and with it any hope of quotienting.
 

@@ -95,7 +95,7 @@ interface Props {
   /**
    * Incremented by the wrapper each time focus is requested. A counter rather than
    * a boolean because the host asks for focus when a question is revealed, which on
-   * the first question is *before* this chunk has resolved — a boolean that was
+   * the first question is *before* this chunk has resolved, a boolean that was
    * already true would not re-run the effect once the element finally exists.
    */
   focusRequest?: number
@@ -183,7 +183,7 @@ export default function MathLiveField({
     onLatexRef.current?.(latex)
   }, [])
 
-  // Push an externally-owned value in — ChoiceOptions filling the field, or a
+  // Push an externally-owned value in, ChoiceOptions filling the field, or a
   // reused card. Only when it genuinely differs from what we last emitted.
   useEffect(() => {
     const el = ref.current
@@ -249,7 +249,7 @@ export default function MathLiveField({
   // Set on the instance rather than on `MathfieldElement.inlineShortcuts` because the
   // static default would apply to every field in the document, including any future host
   // that wants a shortcut, and because MathLive merges the per-instance value over the
-  // static one — an empty instance map is a replacement, not an addition.
+  // static one, an empty instance map is a replacement, not an addition.
   // Through a ref keyed on the shortcut *names*, not the object: a host passing an inline
   // `{ sqrt: '\\sqrt' }` literal would otherwise hand us a new identity every render and
   // re-run this effect every render. Two hosts passing equal maps must not thrash.
@@ -408,7 +408,7 @@ export default function MathLiveField({
   // always does.
   //
   // This is also the recovery path. MathLive raises the keyboard from exactly one
-  // place — a document `focusin` listener — so if anything hides the panel while the
+  // place, a document `focusin` listener, so if anything hides the panel while the
   // field still holds focus, tapping the field again is the only thing that can bring
   // it back, and that is this handler. MathLive's own `focusout` handler hides the
   // panel when focus genuinely leaves, which is the behaviour we want; nothing else
@@ -437,8 +437,8 @@ export default function MathLiveField({
     // The rect is read from `kb.boundingRect`, *not* from the event.
     //
     // 0.111.0's own type documentation says `evt.detail.boundingRect`, and that is
-    // wrong: the library dispatches `new Event('geometrychange')` — a plain Event with
-    // no `detail` at all — from a ResizeObserver and from `stateChanged()`. A handler
+    // wrong: the library dispatches `new Event('geometrychange')`, a plain Event with
+    // no `detail` at all, from a ResizeObserver and from `stateChanged()`. A handler
     // written to the documented shape reads `undefined`, computes a height of zero, and
     // reports the keypad as closed forever, which is precisely the failure this exists to
     // prevent. The measured symptom of getting it wrong is in git history.
@@ -466,8 +466,8 @@ export default function MathLiveField({
   // capture-phase `pointerdown` listener on `document` that hid it on any tap
   // outside the field, and it had to go: hiding without requiring focus to leave
   // left the field focused with no keyboard and no way back, because MathLive only
-  // shows on a *focus transition*. Tapping a non-focusable area — the question
-  // text, the page background — did exactly that, and the learner had to tap the
+  // shows on a *focus transition*. Tapping a non-focusable area, the question
+  // text, the page background, did exactly that, and the learner had to tap the
   // field several times before it came back. MathLive's own `focusout` handler
   // covers the case that should actually dismiss.
   useEffect(() => {

@@ -7,11 +7,11 @@ import { API_BASE, type MeInfo } from '../lib/api'
  *
  * The session object is what the whole app reads to know who it is talking to, and the role in
  * it is what decides whether the Admin entry is offered at all. It used to be assembled by hand
- * at four separate sign-in paths, and none of them mentioned `role` — so a signed-in
+ * at four separate sign-in paths, and none of them mentioned `role`, so a signed-in
  * administrator's Admin link never appeared, while `/api/auth/me` had been reporting the role
  * correctly the whole time. Nothing failed: the login worked, the server agreed the account was
  * an administrator, and every administrative request the admin then made by URL worked too. Only
- * the invitation was missing, which is the worst kind of bug — the system looks like it does not
+ * the invitation was missing, which is the worst kind of bug, the system looks like it does not
  * have the feature.
  *
  * These tests are about the session the client keeps. They say nothing about access, which is
@@ -27,7 +27,7 @@ const PARTIAL = {
  * The stub's own signature, so `mock.calls` is typed as the argument tuple it is.
  *
  * `vi.fn()` with no type parameter records calls as `any[]`, and reading one back needs a
- * double assertion — which is both how the type evidence gets discarded and how this file ended
+ * double assertion, which is both how the type evidence gets discarded and how this file ended
  * up asserting against a shape `fetch` never has. Typing the mock means the assertions below read
  * `call[0]` and `call[1].headers` and need no cast at all.
  */
@@ -35,7 +35,7 @@ const PARTIAL = {
  * What the stub resolves to: enough of a Response for the helper, and nothing more.
  *
  * The body is typed as the real `/api/auth/me` contract rather than as `unknown`, because that
- * contract is what these tests are about — including its two absences, which is why every field
+ * contract is what these tests are about, including its two absences, which is why every field
  * is optional here. A loose type would let a test pass against a body the endpoint could never
  * send.
  */
@@ -149,7 +149,7 @@ describe('establishSession', () => {
     const seen = vi.fn()
     window.addEventListener('auth-changed', seen)
     await establishSession('tok', { ...PARTIAL })
-    // Once for the token, once for the user — the hook subscribes to this event, and a session
+    // Once for the token, once for the user, the hook subscribes to this event, and a session
     // that set storage without announcing it would leave the header showing a signed-out state.
     expect(seen).toHaveBeenCalled()
     window.removeEventListener('auth-changed', seen)

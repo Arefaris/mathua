@@ -11,8 +11,8 @@
 // `.value` fires `input` exactly as a keystroke does, so the React onChange path
 // under test is the same one the browser runs.
 //
-// What the real library does inside the field — fractions as structures, caret
-// navigation, the virtual keypad — is verified in e2e/math-input.spec.ts, which
+// What the real library does inside the field, fractions as structures, caret
+// navigation, the virtual keypad, is verified in e2e/math-input.spec.ts, which
 // runs Chromium. Nothing here is a substitute for that.
 
 import { act, fireEvent, waitFor } from '@testing-library/react'
@@ -49,7 +49,7 @@ export function answerField(): HTMLElement {
  * it is behind a Suspense boundary while the MathLive chunk resolves. That boundary
  * now renders a *working plain input* rather than an inert div (see
  * `PlainAnswerInput`), so "an answer field exists" is no longer the same claim as "the
- * editor has loaded" — the loading state is an input too.
+ * editor has loaded", the loading state is an input too.
  *
  * `kind: 'math'` therefore waits for the editor specifically. Without it a test that
  * meant to exercise MathLive would silently assert against the loading input, which is
@@ -82,7 +82,7 @@ export function isMathField(el: Field): boolean {
 export function typeAnswer(el: Field, value: string): void {
   // `act` on both paths. Assigning `.value` is a plain assignment rather than a
   // dispatched event, so React would not flush the resulting state update before
-  // the next interaction — the click on Check would read a stale answer.
+  // the next interaction, the click on Check would read a stale answer.
   act(() => {
     if (isMathField(el)) {
       ;(el as unknown as { value: string }).value = value

@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 5.1 Decimals
 
@@ -198,11 +198,11 @@ Write as a decimal: five and eight hundred ninety-four thousandths.
 
 #### Write a decimal number from its name.
 
-1.  Step 1. Look for the word “and”—it locates the decimal point.
+1.  Step 1. Look for the word “and”, it locates the decimal point.
 2.  Step 2. Mark the number of decimal places needed to the right of the decimal point by noting the place value indicated by the last word.
     - Place a decimal point under the word “and.” Translate the words before “and” into the whole number and place it to the left of the decimal point.
     - If there is no “and,” write a “0” with a decimal point to its right.
-3.  Step 3. Translate the words after “and” into the number to the right of the decimal point. Write the number in the spaces—putting the final digit in the last place.
+3.  Step 3. Translate the words after “and” into the number to the right of the decimal point. Write the number in the spaces, putting the final digit in the last place.
 4.  Step 4. Fill in zeros for place holders as needed.
 
 The second bullet in Step 2 is needed for decimals that have no whole number part, like ‘nine thousandths’. We recognize them by the words that indicate the place value after the decimal – such as ‘tenths’ or ‘hundredths.’ Since there is no whole number, there is no ‘and.’ We start by placing a zero to the left of the decimal and continue by filling in the numbers to the right, as we did above.
@@ -297,8 +297,8 @@ Notice that when the number to the left of the decimal is zero, we get a proper 
       - Write the whole number.
 2.  Step 2. Determine the place value of the final digit.
 3.  Step 3. Write the fraction.
-    - numerator—the ‘numbers’ to the right of the decimal point
-    - denominator—the place value corresponding to the final digit
+    - numerator, the ‘numbers’ to the right of the decimal point
+    - denominator, the place value corresponding to the final digit
 4.  Step 4. Simplify the fraction, if possible.
 
 ### Example 5.4
@@ -510,7 +510,7 @@ How does 0.31 compare to $0.308?$ This doesn’t translate into money to make th
 
 Because $310 > 308,$ we know that $\frac{310}{1000} > \frac{308}{1000}.$ Therefore, $0.31 > 0.308.$
 
-Notice what we did in converting 0.31 to a fraction—we started with the fraction $\frac{31}{100}$ and ended with the equivalent fraction $\frac{310}{1000}.$ Converting $\frac{310}{1000}$ back to a decimal gives 0.310. So 0.31 is equivalent to 0.310. Writing zeros at the end of a decimal does not change its value.
+Notice what we did in converting 0.31 to a fraction, we started with the fraction $\frac{31}{100}$ and ended with the equivalent fraction $\frac{310}{1000}.$ Converting $\frac{310}{1000}$ back to a decimal gives 0.310. So 0.31 is equivalent to 0.310. Writing zeros at the end of a decimal does not change its value.
 
 $$
 \frac{31}{100} = \frac{310}{1000}\text{and}\ 0.31 = 0.310

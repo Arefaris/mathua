@@ -273,7 +273,7 @@ func TestSignupIgnoresRoleFieldCaseVariants(t *testing.T) {
 		// the same length, and reusing one address makes the test fail on a duplicate-account
 		// 409 while appearing to be about roles.
 		// Username rules are real and enforced here (3-20 characters), so the name carries the
-		// index padded rather than a bare digit — otherwise a case would fail on the username
+		// index padded rather than a bare digit, otherwise a case would fail on the username
 		// policy and the test would appear to be about something else.
 		body := fmt.Sprintf(`{"name":"M","username":"mallory%d","password":"Engine!n1","email":"mallory%d@example.com","role":%s}`,
 			i, i, spelling)
@@ -325,7 +325,7 @@ func TestAdminCanDemoteAnotherAdminWhenSafe(t *testing.T) {
 	if role != storage.RoleStudent {
 		t.Errorf("role = %q, want student", role)
 	}
-	// Their token stops working immediately — no waiting for expiry.
+	// Their token stops working immediately, no waiting for expiry.
 	if got := e.do(t, "GET", "/api/admin/users", e.studentTok, ""); got.Code != 403 {
 		t.Errorf("demoted user's token still authorized: %d", got.Code)
 	}
@@ -350,7 +350,7 @@ func TestLastOwnerCannotDemoteSelf(t *testing.T) {
 }
 
 // The other direction: an administrator cannot demote an owner, because the owner outranks
-// them. That is authorization (403), not the invariant — the invariant is what an owner hits
+// them. That is authorization (403), not the invariant, the invariant is what an owner hits
 // when they would empty the top of the hierarchy, covered by TestLastOwnerCannotDemoteSelf.
 func TestAdminCannotDemoteOwner(t *testing.T) {
 	e := newAdminEnv(t)
@@ -394,7 +394,7 @@ func TestLastAdminDemotionTakesEffectImmediately(t *testing.T) {
 // The concurrent case lives in the storage package
 // (TestConcurrentDemotionsCannotReachZeroAdmins), against a file-backed store. Running it here
 // on the ":memory:" store these tests use would report whatever an empty per-connection
-// database contains rather than what the code did — see the note in NewSQLiteStore.
+// database contains rather than what the code did, see the note in NewSQLiteStore.
 
 // ── Mass assignment and IDOR ───────────────────────────────────────────────
 

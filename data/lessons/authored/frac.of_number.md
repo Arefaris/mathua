@@ -16,4 +16,4 @@ When the denominator does not divide the number, the answer stays a fraction, an
 
 Reading the calculation as sharing is what makes it concrete: split the whole into as many equal parts as the denominator, then take as many of them as the numerator. That picture is also the reason the word "of" means multiply, since the two descriptions give the same number.
 
-The two readings — multiply, or share and take — are the arithmetic and the model, and a learner who has both can check one against the other.
+The two readings, multiply, or share and take, are the arithmetic and the model, and a learner who has both can check one against the other.

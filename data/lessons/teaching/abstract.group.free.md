@@ -16,7 +16,7 @@ So freeness on one generator adds nothing beyond integer arithmetic.
 Compare $aba^{-1}b^{-1}$ against the identity:
 1. No cancellation is possible: the word is already reduced and nonempty.
 2. In particular $ab \neq ba$: the generators do not commute.
-3. So $F_2$ is non-abelian — two free generators already escape commutativity.
+3. So $F_2$ is non-abelian, two free generators already escape commutativity.
 
 So relations are the only source of commutativity; with none imposed, even two generators stay wild.
 

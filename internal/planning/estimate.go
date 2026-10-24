@@ -80,7 +80,7 @@ type WorkloadEstimate struct {
 }
 
 // taskBaseFor maps a concept to its XP task base via the shared effort
-// calibration (neutral difficulty — the estimator prices typical work,
+// calibration (neutral difficulty, the estimator prices typical work,
 // and the award path applies the same function, so estimates track reality).
 func taskBaseFor(c *concepts.Concept) float64 {
 	return float64(xp.EffortBase(thresholdSec(c), 0.5))
@@ -156,7 +156,7 @@ func EstimateWorkload(path *Path, progress map[string]*storage.ConceptProgress, 
 	}
 
 	// Assessment line: one gate-interval quiz per 50 XP of learning effort.
-	// Quizzes grant XP, so they are time cost only — never XP debt.
+	// Quizzes grant XP, so they are time cost only, never XP debt.
 	if est.XPRemaining > 0 {
 		est.QuizzesAhead = int(math.Ceil(est.XPRemaining / quizGateXP))
 	}
@@ -300,7 +300,7 @@ func activeDays(deadlineDays, restPerWeek int) int {
 
 // SampleClosure deterministically samples up to n representative concept IDs
 // across the path's domains (round-robin over sorted domains and IDs).
-// This is the stratified "initial knowledge estimate" probe list — never
+// This is the stratified "initial knowledge estimate" probe list, never
 // presented as mastery.
 func SampleClosure(path *Path, n int) []string {
 	if path == nil || n <= 0 {

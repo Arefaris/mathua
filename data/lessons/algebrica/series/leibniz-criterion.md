@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/leibniz-criterion/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/leibniz-criterion/), CC BY-NC 4.0
 
 ## What is Leibniz’s criterion used for
 

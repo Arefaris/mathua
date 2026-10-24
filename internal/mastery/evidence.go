@@ -12,7 +12,7 @@ import (
 // the browser, moved to where the decision is actually made. That function's comment says
 // "Streak is one input, not the decision", and this file is the version the server can
 // act on. Keeping one model matters more than which model: the previous arrangement had
-// two — a streak ratio gating progression and an evidence score rendering a label — and
+// two, a streak ratio gating progression and an evidence score rendering a label and
 // they could not both be right.
 //
 // Four signals, none of them new:
@@ -28,7 +28,7 @@ import (
 type Attempt struct {
 	Correct bool
 	Elapsed float64
-	// Difficulty the question was generated at, 0.3-1.0. Nil means unknown — see
+	// Difficulty the question was generated at, 0.3-1.0. Nil means unknown, see
 	// attempts.difficulty, which is nullable precisely so this is expressible.
 	Difficulty *float64
 	// Instance distinguishes problem instances. Two attempts with the same text are the
@@ -133,7 +133,7 @@ func BuildEvidence(attempts []Attempt, opts EvidenceOptions) Evidence {
 	// 1.0 it is worth 1.0.
 	//
 	// Unknown difficulty is credited at NeutralDifficulty, *not* dropped. Dropping the
-	// term means multiplying by 1.0, which is the top of the range — so a missing value was
+	// term means multiplying by 1.0, which is the top of the range, so a missing value was
 	// being read as "the learner got this right on the hardest question we could have
 	// asked", and the comment claiming unknown attempts were "neither rewarded nor punished"
 	// was describing the opposite of what the code did. It was not cosmetic: at 50%
@@ -175,15 +175,15 @@ func BuildEvidence(attempts []Attempt, opts EvidenceOptions) Evidence {
 // MasteryEvidenceFloor answers, while 50%, 40%, 20% and 0% never reach it at any length.
 // The threshold separates those two groups cleanly, so it is not decorative.
 //
-// An earlier version of that measurement reported the opposite — that every accuracy level
-// from 40% up mastered — because the test profile was periodic in blocks of 20 (twelve
+// An earlier version of that measurement reported the opposite, that every accuracy level
+// from 40% up mastered, because the test profile was periodic in blocks of 20 (twelve
 // wrong, then eight right), so a six-attempt window eventually landed entirely inside the
 // clean run. A learner does not answer in blocks. The lesson is recorded because the
 // failure mode recurs: a periodic probe measures the probe's period, not the model.
 const MasteryThreshold = 0.6
 
 // NeutralDifficulty is the difficulty credited to a correct answer whose attempt carries
-// none — an attempt predating `attempts.difficulty`, or a curated question with no
+// none, an attempt predating `attempts.difficulty`, or a curated question with no
 // recorded value.
 //
 // It is not chosen here. It is the difficulty the engine serves when it has no information
@@ -213,15 +213,15 @@ func clampDifficulty(d float64) float64 {
 // FirstEvidence is the bar for LEARNING: one correct answer.
 //
 // One answer is enough to say "this learner has begun", and it is deliberately the cheapest
-// rung. The old ladder demanded a full `required_streak` — 10 consecutive correct answers for
-// 459 of the 657 concepts — before it would say a learner was learning, so a first session
+// rung. The old ladder demanded a full `required_streak`, 10 consecutive correct answers for
+// 459 of the 657 concepts, before it would say a learner was learning, so a first session
 // was blind repetition with no signal that any of it was landing.
 func FirstEvidence(ev Evidence) bool {
 	return ev.Correct >= 1
 }
 
 // EnoughForPracticing is the bar for PRACTICING: consistency across a couple of attempts.
-// Weaker than mastery on purpose — this rung asks "is this dependable", which does not need
+// Weaker than mastery on purpose, this rung asks "is this dependable", which does not need
 // the breadth that the top rung asks for.
 func EnoughForPracticing(ev Evidence) bool {
 	return ev.Score >= MasteryThreshold && ev.Attempts >= 2
@@ -234,7 +234,7 @@ func EnoughForPracticing(ev Evidence) bool {
 // correct answers are not the requirement; six attempts whose combined score clears the
 // threshold are, and the score already weights difficulty, variety of problem instance and
 // time. A lone correct answer is weighted 1.0 and would clear the threshold on its own, so
-// something has to stop one lucky question from being a state change — and the number that
+// something has to stop one lucky question from being a state change and the number that
 // stops it is this, not the shape of the attempts.
 //
 // Six rather than three because ADR-038 measured the ladder reaching mastery in three correct
@@ -253,7 +253,7 @@ const MasteryEvidenceFloor = 6
 // Instances at 1 forever, so the concept cannot be mastered however much the learner
 // demonstrates it. A gate on a derived signal can make a state unreachable, and an
 // unreachable mastery is a far worse failure than a slightly generous one. Variety still
-// contributes up to 0.15 through varietyBonus — worth real evidence, but never a veto.
+// contributes up to 0.15 through varietyBonus, worth real evidence, but never a veto.
 func EnoughForMastery(ev Evidence) bool {
 	return ev.Score >= MasteryThreshold && ev.Attempts >= MasteryEvidenceFloor
 }
@@ -263,7 +263,7 @@ func EnoughForMastery(ev Evidence) bool {
 //
 // It lives here rather than in a client because the thresholds would otherwise be a second
 // interpretation of the same number, free to drift from `MasteryThreshold` and
-// `MasteryEvidenceFloor` below — which is how `web/next-app/lib/progression.ts` came to keep
+// `MasteryEvidenceFloor` below, which is how `web/next-app/lib/progression.ts` came to keep
 // its own score and its own bands while looking like it was reporting mastery.
 //
 // Two deliberate properties:
@@ -272,7 +272,7 @@ func EnoughForMastery(ev Evidence) bool {
 //     retained" off this score, which has no spacing term at all: a retention claim drawn
 //     from evidence that knows nothing about retention.
 //   - The evidence floor gates the band as well as mastery. Without it a single correct
-//     answer scored 0.84 — a lone answer carries the most recency weight there is — and
+//     answer scored 0.84, a lone answer carries the most recency weight there is and
 //     read as "strong", which is the same defect `MasteryEvidenceFloor` exists to prevent,
 //     arriving through the label instead of the state.
 func EvidenceBand(ev Evidence) string {

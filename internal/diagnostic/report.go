@@ -13,7 +13,7 @@ type DiagnosticReport struct {
 	FrontierIdx       int    `json:"frontier_idx"`
 	FrontierLabel     string `json:"frontier_label"`
 	// FrontierConditional marks a provisional frontier: the frontier concept
-	// was barely passed (MA "conditionally completed") — tasks assume it
+	// was barely passed (MA "conditionally completed"), tasks assume it
 	// known but must fall back along its prerequisites on struggle.
 	FrontierConditional bool                `json:"frontier_conditional"`
 	GapsByDomain        map[string][]string `json:"gaps_by_domain"`
@@ -63,7 +63,7 @@ func (e *Engine) Report(s *Session) *DiagnosticReport {
 			rep.GapsByDomain[c.Domain] = append(rep.GapsByDomain[c.Domain], c.Label)
 		}
 		// MA "conditionally completed": probed, barely above the known
-		// cutoff — assumed known, but first in line for fall-back.
+		// cutoff, assumed known, but first in line for fall-back.
 		if s.confidence[c.ID] > 0 && b >= beliefThreshold && b < beliefThreshold+0.15 {
 			conditional[c.ID] = true
 			rep.ConditionallyCompleted = append(rep.ConditionallyCompleted, c.Label)

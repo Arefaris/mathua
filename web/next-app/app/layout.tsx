@@ -15,7 +15,7 @@ import './globals.css'
 
 // Self-hosted variable fonts (vendored from Google Fonts 2026-09-28:
 // JetBrains Mono v24 + Space Grotesk v22, latin subsets). next/font/google
-// fetches at build time and fails the build without network — vendoring
+// fetches at build time and fails the build without network, vendoring
 // keeps Vercel/Docker builds hermetic.
 const jetbrainsMono = localFont({
   src: [
@@ -29,7 +29,7 @@ const jetbrainsMono = localFont({
   variable: '--font-jetbrains-mono',
 })
 
-// Space Grotesk ships no italic face — only normal weights are requested.
+// Space Grotesk ships no italic face, only normal weights are requested.
 const spaceGrotesk = localFont({
   src: [{ path: './fonts/space-grotesk-latin.woff2', weight: '400 500 700', style: 'normal' }],
   display: 'swap',
@@ -86,7 +86,7 @@ export default function RootLayout({
             that render as tofu until KaTeX_Main arrives. katex.min.css uses
             font-display:block with no preload, so slow networks show broken
             math. Preload the Main faces up front. Filenames are content hashes
-            from the katex package — refresh these hrefs when katex upgrades
+            from the katex package, refresh these hrefs when katex upgrades
             (a stale href 404s and degrades gracefully to status quo). */}
         <link rel="preload" href="/_next/static/media/KaTeX_Main-Regular.0462f03b.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/_next/static/media/KaTeX_Main-Bold.c3fb5ac2.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />

@@ -3,7 +3,7 @@
 
 `go test ./internal/generator/ -run LearnerDomains` is the gate: it fails on a
 concept in the six learner domains that has neither a schema nor a reasoned
-exemption. This script is the human-facing version — it prints the coverage so
+exemption. This script is the human-facing version, it prints the coverage so
 `make validate` shows where the content wave has got to, and cross-checks that
 the directory and the Go gate agree about what is authored.
 

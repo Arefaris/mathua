@@ -197,8 +197,8 @@ function ReportCard({ report, canModerate, onChanged }: { report: QuestionReport
               </dd>
             </div>
             <div><dt className="text-mathua-muted">When</dt><dd>{report.created_at}</dd></div>
-            <div><dt className="text-mathua-muted">Source</dt><dd>{report.source || '—'}</dd></div>
-            <div><dt className="text-mathua-muted">Lesson</dt><dd>{report.lesson_id || '—'}</dd></div>
+            <div><dt className="text-mathua-muted">Source</dt><dd>{report.source || ', '}</dd></div>
+            <div><dt className="text-mathua-muted">Lesson</dt><dd>{report.lesson_id || ', '}</dd></div>
           </dl>
 
           {report.question && (
@@ -224,7 +224,7 @@ function ReportCard({ report, canModerate, onChanged }: { report: QuestionReport
           {report.status === 'resolved' || report.status === 'dismissed' ? (
             <p className="mt-3 font-mono text-[11px] text-mathua-muted">
               {report.status} by {report.resolved_by || '(unknown)'} · {report.resolved_at}
-              {report.resolution ? ` — ${report.resolution}` : ''}
+              {report.resolution ? `, ${report.resolution}` : ''}
             </p>
           ) : null}
 
@@ -268,7 +268,7 @@ function ReportCard({ report, canModerate, onChanged }: { report: QuestionReport
 
 // Closing a concept's reports after the fix ships. The action names the concept
 // rather than the ids on screen, so a report that arrived while the operator was
-// reading is closed too — it is the same bug. The server still writes one
+// reading is closed too, it is the same bug. The server still writes one
 // decision record per report, and never revisits one that already has a verdict.
 function BulkClose({ conceptId, count, onDone }: { conceptId: string; count: number; onDone: () => void }) {
   const [armed, setArmed] = useState<ModerationStatus | null>(null)

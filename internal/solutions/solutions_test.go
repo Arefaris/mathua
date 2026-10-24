@@ -99,8 +99,8 @@ func TestAssemble_SkipsRatherThanGuessing(t *testing.T) {
 	}
 }
 
-// One generator often asks two different questions — find the complement of an
-// angle, or classify it — and a single schema covers both. Each question's
+// One generator often asks two different questions, find the complement of an
+// angle, or classify it and a single schema covers both. Each question's
 // steps must apply only to the question it came from, without the other
 // question's steps leaking in or the schema being dropped.
 func TestRender_SkipsStepsWhoseFactIsAbsent(t *testing.T) {
@@ -205,7 +205,7 @@ func TestRender_LeavesMatrixNotationAlone(t *testing.T) {
 		t.Errorf("matrix notation in the answer was eaten:\n%s", got)
 	}
 	// A capitalised name is not a fact name either, so it survives verbatim.
-	// The leak test is what catches that typo, not the assembler — reporting it
+	// The leak test is what catches that typo, not the assembler, reporting it
 	// here would mean reporting every matrix span as missing.
 	got, missing = Render(&Schema{Answer: "[[Num]]"}, map[string]string{"Num": "7"})
 	if len(missing) > 0 {

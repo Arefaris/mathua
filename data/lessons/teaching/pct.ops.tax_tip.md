@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 6.3 Solve Sales Tax, Commission, and Discount Applications
 
@@ -30,7 +30,7 @@ Remember that whatever the application, once we write the sentence with the give
 
 Do you pay a tax when you shop in your city or state? In many parts of the United States, sales tax is added to the purchase price of an item. See Figure 6.7. The sales tax is determined by computing a percent of the purchase price.
 
-To find the sales tax multiply the purchase price by the sales tax rate. Remember to convert the sales tax rate from a percent to a decimal number. Once the sales tax is calculated, it is added to the purchase price. The result is the total cost—this is what the customer pays.
+To find the sales tax multiply the purchase price by the sales tax rate. Remember to convert the sales tax rate from a percent to a decimal number. Once the sales tax is calculated, it is added to the purchase price. The result is the total cost, this is what the customer pays.
 
 ![The sales tax is calculated as a percent of the purchase price.](/diagrams/prealgebra/6.7.png)
 

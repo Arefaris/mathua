@@ -9,7 +9,7 @@ import (
 )
 
 // Admin V2 storage (Postgres). Mirrors adminv2_sqlite.go statement for statement so the two
-// stores cannot disagree about a rule — a guard only one store enforces is a guard a Postgres
+// stores cannot disagree about a rule, a guard only one store enforces is a guard a Postgres
 // deployment does not have. The scan helpers are shared from the SQLite file on purpose.
 
 func (s *PostgresStore) CountStaff() (int, error) {

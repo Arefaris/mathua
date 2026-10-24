@@ -12,7 +12,7 @@ The implication is one-directional: \(\exists y\, \forall x\, P(x,y)\) implies \
 
 Negation flips each quantifier and negates the inner statement: \(\lnot \forall x\, P(x)\) is \(\exists x\, \lnot P(x)\), and \(\lnot \exists x\, P(x)\) is \(\forall x\, \lnot P(x)\). For nested quantifiers the rule applies left to right, and the relation itself is negated only at the end.
 
-So the negation of \(\forall x\, \exists y\, (x < y)\) is \(\exists x\, \forall y\, (x \ge y)\): some \(x\) is at least as large as every \(y\). Note that the negation of an inequality is not always a reversal — \(\ge\) is the negation of \(<\), and \(>\) is not.
+So the negation of \(\forall x\, \exists y\, (x < y)\) is \(\exists x\, \forall y\, (x \ge y)\): some \(x\) is at least as large as every \(y\). Note that the negation of an inequality is not always a reversal, \(\ge\) is the negation of \(<\), and \(>\) is not.
 
 ## What the order costs
 

@@ -69,9 +69,9 @@ test('bottom tabs present and scroll-aware on mobile', async ({ page }) => {
 
   await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto' })
 
-  // Scroll down mid-page (not the bottom — bottom force-shows) → hidden while scrolling
+  // Scroll down mid-page (not the bottom, bottom force-shows) → hidden while scrolling
   await page.evaluate(() => window.scrollTo(0, Math.min(800, document.documentElement.scrollHeight - window.innerHeight - 300)))
-  // poll for hidden — rAF + idleMs 300 needs >150ms
+  // poll for hidden, rAF + idleMs 300 needs >150ms
   await expect.poll(async () => tabs.evaluate(el => getComputedStyle(el).transform), { timeout: 5000 }).not.toContain('matrix(1, 0, 0, 1, 0, 0)')
 
   // Stopping scroll re-shows after the 300ms idle window
@@ -169,7 +169,7 @@ test('chrome control appears wherever there is chrome, and only there', async ({
   await expect(page.getByTestId('chrome-tap-strip')).toHaveCount(1)
 
   // /profile used to assert the opposite: no control, because it had neither a header nor a tab
-  // bar on mobile. That was not a design decision — it was the bug. The page's shell replaced
+  // bar on mobile. That was not a design decision, it was the bug. The page's shell replaced
   // Header and BottomTabs with a desktop-only sidebar, so arriving at /profile from any other
   // page's tab bar left a learner with no way back. The tab bar is back, so there is chrome here,
   // and the control has something to hide.
@@ -182,7 +182,7 @@ test('chrome control appears wherever there is chrome, and only there', async ({
 // anywhere along the bottom of the screen, because that is the gesture you
 // reach for mid-scroll.
 // The reported bug, stated as an assertion: /profile is reachable from every other page's tab
-// bar, so arriving there must not end navigation. It did — the page's shell replaced Header and
+// bar, so arriving there must not end navigation. It did, the page's shell replaced Header and
 // BottomTabs with a sidebar that shadcn renders as an overlay sheet below lg, which left one small
 // ghost trigger and no tabs. The structural guard for this is in test/navCoverage.test.ts; this is
 // the same thing checked on a real phone viewport, through the real tab bar.
@@ -193,13 +193,13 @@ test('/profile keeps the tab bar, so it is not a dead end on mobile', async ({ p
   }
 
   // Exactly one sidebar opener. The shell supplies it, but two branches also carried their own
-  // copy from before the shell existed, and both rendered — so the page opened with two λ buttons
+  // copy from before the shell existed, and both rendered, so the page opened with two λ buttons
   // stacked at the top. A guard that only checks the tab bar would pass straight through that.
   const opener = page.getByRole('button', { name: 'Toggle sidebar' })
   await expect(opener).toHaveCount(1)
 
   // And it looks like a control rather than the wordmark. shadcn's SidebarTrigger defaults to a
-  // bare λ, which is the app logo sitting at the top-left behaving like a link — the same problem
+  // bare λ, which is the app logo sitting at the top-left behaving like a link, the same problem
   // 114a3e25 fixed on the collapsed desktop rail, reached again through the mobile opener. The
   // chevron is what makes it an affordance; assert it is present so it cannot quietly go back.
   await expect(opener.locator('svg')).toHaveCount(1)
@@ -290,7 +290,7 @@ test('mobile info panel wraps without overflowing', async ({ page }) => {
   await page.goto(`/graph?concept=${encodeURIComponent(target.id)}`)
   // The node action is now a link whose label follows the concept's state, not a fixed
   // "Open concept". With no progress stubbed the concept reads as unseen, so it is the Learn
-  // half — and it is a link, because clicking a concept on the graph takes the learner to the
+  // half and it is a link, because clicking a concept on the graph takes the learner to the
   // place that teaches it rather than to an article they can read instead.
   const action = page.getByRole('link', { name: 'Learn this →' })
   await expect(action).toBeVisible({ timeout: 30_000 })
@@ -436,7 +436,7 @@ test('double-clicking Check Answer fires exactly one POST', async ({ page }) => 
   // `enterAnswer`, not `typeAnswer`: this spec runs on both mobile projects, where the
   // profile is coarse-pointer and the virtual keypad opens on focus and swallows
   // synthetic keystrokes. Typing here made the test fail deterministically at 320px
-  // while passing at 412px — not a product fault and not machine load, just an input
+  // while passing at 412px, not a product fault and not machine load, just an input
   // method that is invalid on a profile with no physical keyboard. What is under test
   // here is double-submit prevention, so the way the answer gets in is incidental and
   // should follow the profile. See `typeAnswer`'s note.

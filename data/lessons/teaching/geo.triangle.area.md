@@ -5,7 +5,7 @@ The **area** of a triangle is the number of unit squares needed to cover it. Any
 
 \[A = \frac{1}{2}bh\]
 
-where $b$ is the **base** — the length of one side, usually drawn at the bottom — and $h$ is the **height**, the perpendicular distance from the base to the opposite vertex.
+where $b$ is the **base**, the length of one side, usually drawn at the bottom and $h$ is the **height**, the perpendicular distance from the base to the opposite vertex.
 
 ## Why Half?
 

@@ -1,7 +1,7 @@
 > Hand-authored lesson for the Mathua project.
 # Area of Rectangles and Parallelograms
 
-Both the rectangle and the parallelogram measure area as "base times height" — a fact that comes from counting unit squares.
+Both the rectangle and the parallelogram measure area as "base times height", a fact that comes from counting unit squares.
 
 ## Rectangle
 
@@ -13,11 +13,11 @@ For a square (where $l = w = s$), this becomes $A = s^2$.
 
 ## Parallelogram
 
-A parallelogram has a base $b$ and a height $h$ — the perpendicular distance between the base and its opposite side. Slice off the triangular piece at one end and slide it to the other: the parallelogram becomes a rectangle with the same base and height.
+A parallelogram has a base $b$ and a height $h$, the perpendicular distance between the base and its opposite side. Slice off the triangular piece at one end and slide it to the other: the parallelogram becomes a rectangle with the same base and height.
 
 \[A = b \cdot h\]
 
-The height must be measured perpendicular to the base — not along the slanted side.
+The height must be measured perpendicular to the base, not along the slanted side.
 
 ## Example
 

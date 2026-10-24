@@ -85,16 +85,16 @@ export function failureHeadline(f: Failure): string {
     case 'auth':
       return 'Your session ended. Sign in again and the answer can be sent.'
     case 'throttled':
-      return 'Saving is catching up — your answer is kept and will be sent again.'
+      return 'Saving is catching up, your answer is kept and will be sent again.'
     case 'not_found':
       return 'The server forgot this run. Restart it to continue.'
     case 'gateway':
-      return 'The server is restarting. Retry in a moment — your answer is kept.'
+      return 'The server is restarting. Retry in a moment, your answer is kept.'
     case 'server':
       return 'The server hit an error while grading. Retrying the same answer will not change it.'
     case 'parse':
       return 'The server answered in a form this page could not read. Reload to continue.'
     default:
-      return "Couldn't submit your answer — it's still in the box."
+      return "Couldn't submit your answer, it's still in the box."
   }
 }

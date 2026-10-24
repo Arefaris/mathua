@@ -67,12 +67,12 @@ func (a *AuthService) RequestPasswordReset(identifier string) (bool, error) {
 		return false, nil
 	}
 	if !smtpConfigured() {
-		log.Println("auth: password reset requested but no mail provider is configured — skipping send")
+		log.Println("auth: password reset requested but no mail provider is configured, skipping send")
 		return false, nil
 	}
 	base := frontendBase()
 	if base == "" {
-		log.Println("auth: password reset requested but FRONTEND_URL unset — skipping send")
+		log.Println("auth: password reset requested but FRONTEND_URL unset, skipping send")
 		return false, nil
 	}
 	token, err := newResetToken()
@@ -130,7 +130,7 @@ func (a *AuthService) CompletePasswordReset(token, newPassword string) (string, 
 var ErrPasswordMismatch = errors.New("current password is incorrect")
 
 // CheckPassword verifies a password account's current password without
-// changing anything. Passwordless accounts (OAuth-only) get an error — the
+// changing anything. Passwordless accounts (OAuth-only) get an error, the
 // caller skips the password step for them instead.
 func (a *AuthService) CheckPassword(studentID, password string) error {
 	st, err := a.repo.GetStudent(studentID)
@@ -147,14 +147,14 @@ func (a *AuthService) CheckPassword(studentID, password string) error {
 }
 
 // ChangePassword verifies the current password before setting the new one
-// (logged-in flow — no email involved).
+// (logged-in flow, no email involved).
 func (a *AuthService) ChangePassword(studentID, currentPassword, newPassword string) error {
 	st, err := a.repo.GetStudent(studentID)
 	if err != nil || st == nil {
 		return fmt.Errorf("load student: %w", err)
 	}
 	if st.PasswordHash == "" {
-		return errors.New("no password set — use password reset instead")
+		return errors.New("no password set, use password reset instead")
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(st.PasswordHash), []byte(currentPassword)); err != nil {
 		return errors.New("current password is incorrect")

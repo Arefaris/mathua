@@ -35,7 +35,7 @@ import { DiagnosticStep, ResultsStep, WelcomeStep } from './steps'
 
 type Step = 'welcome' | 'diagnostic' | 'results'
 
-// MA parity: the Diagnostic doesn't have to be completed at once — the
+// MA parity: the Diagnostic doesn't have to be completed at once, the
 // session id persists in sessionStorage so Back/refresh resumes it.
 const DIAG_KEY = 'mathua_diag_session_onboard'
 const STEP_KEY = 'mathua_onboard_step'
@@ -60,7 +60,7 @@ export default function OnboardPage() {
   const onboardInputRef = useRef<MathFocusHandle | null>(null)
   const [question, setQuestion] = useState('')
   const conceptId = useRef('')
-  // Next question staged from the submit response — revealed by goNext(),
+  // Next question staged from the submit response, revealed by goNext(),
   // never fetched. Cleared on advance, so double-press is a no-op.
   const pendingNext = useRef<{ question: string; conceptId: string; conceptName: string; gradingType: string } | null>(null)
   // Whether the last attempt was an admitted unknown. A retry that forgets this
@@ -88,7 +88,7 @@ export default function OnboardPage() {
   const [finished, setFinished] = useState(false)
   const [skipCount, setSkipCount] = useState(0)
   const [retryAvailable, setRetryAvailable] = useState(false)
-  // Concept the visible feedback belongs to — the retry call must name it,
+  // Concept the visible feedback belongs to, the retry call must name it,
   // since conceptId.current already advanced to the staged next question.
   const [retryConcept, setRetryConcept] = useState('')
   const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(() => formatForGradingType())
@@ -189,7 +189,7 @@ export default function OnboardPage() {
       sessionStorage.setItem(DIAG_KEY, res.session_id)
       sessionStorage.setItem(STEP_KEY, 'diagnostic')
       setHasPaused(true)
-    } catch { /* storage unavailable — session simply won't resume */ }
+    } catch { /* storage unavailable, session simply won't resume */ }
     setQuestion(res.question || '')
     conceptId.current = res.concept_id || ''
     questionShownAt.current = Date.now()
@@ -277,7 +277,7 @@ export default function OnboardPage() {
         } catch { /* ignore */ }
         setHasPaused(false)
         setStep('welcome')
-        toast.error('That diagnostic already finished — start a fresh one below.')
+        toast.error('That diagnostic already finished, start a fresh one below.')
         setLoading(false)
         return
       }
@@ -311,7 +311,7 @@ export default function OnboardPage() {
       } catch { /* ignore */ }
       setHasPaused(false)
       setStep('welcome')
-      toast.error('Could not resume — that session expired. Start a fresh diagnostic.')
+      toast.error('Could not resume, that session expired. Start a fresh diagnostic.')
     } finally {
       setLoading(false)
     }
@@ -468,7 +468,7 @@ export default function OnboardPage() {
       setSkipCount(c => c + 1)
       if (data.done) {
         setFinished(true)
-        setLastResult({ correct: false, feedback: 'Skipped — no evidence recorded.' })
+        setLastResult({ correct: false, feedback: 'Skipped, no evidence recorded.' })
         setTimeout(() => {
           void fetchPlan()
         }, 800)

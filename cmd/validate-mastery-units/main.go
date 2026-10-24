@@ -2,10 +2,10 @@
 //
 // Failure modes are split by severity, because they are not the same kind of problem:
 //
-//   - error   — the file is wrong: a concept uncovered or in two units, a dangling reference, a
+//   - error , the file is wrong: a concept uncovered or in two units, a dangling reference, a
 //     duplicate unit id, membership that has drifted from the rule the file itself declares.
 //     These fail the build.
-//   - anomaly — the file is internally consistent but the corpus or the rule produces something
+//   - anomaly, the file is internally consistent but the corpus or the rule produces something
 //     a human should see: a unit too small to assess, or a derived unit order contradicted by the
 //     concept DAG. These are reported and do not fail, because for a draft whose whole purpose
 //     is to surface findings, a red build that blocks review is a worse instrument than a

@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 6.1 Understand Percent
 
@@ -302,7 +302,7 @@ The U.S. Census estimated that in $2013,\text{44\%}$ of the population of Boston
 
 ### Example 6.8
 
-There are four suits of cards in a deck of cards—hearts, diamonds, clubs, and spades. The probability of randomly choosing a heart from a shuffled deck of cards is $\text{25\%}.$ Convert the percent to:
+There are four suits of cards in a deck of cards, hearts, diamonds, clubs, and spades. The probability of randomly choosing a heart from a shuffled deck of cards is $\text{25\%}.$ Convert the percent to:
 
 1.  (a) a fraction
 2.  (b) a decimal
@@ -492,7 +492,7 @@ To change a fraction to a decimal, we divide the numerator by the denominator.
 |                                                         |                 |
 |---------------------------------------------------------|-----------------|
 |                                                         | $\frac{5}{7}$ |
-| Change to a decimal—rounding to the nearest thousandth. | 0.714       |
+| Change to a decimal, rounding to the nearest thousandth. | 0.714       |
 | Write as a percent.                                     | $71.4\%$      |
 
 ### Try It 6.23

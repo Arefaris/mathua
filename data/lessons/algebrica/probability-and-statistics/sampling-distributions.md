@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/sampling-distributions/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/sampling-distributions/), CC BY-NC 4.0
 
 ## From Populations to samples
 
@@ -56,7 +56,7 @@ Consider a sample \( X \) consisting of 7 observed values:
   
 The sample mode is the value that occurs most frequently within the sample. In this case, the value 6 appears three times, more than any other observation. Therefore, the sample mode is 6.
 
-It is important to note that the mode is sensitive to the frequency of individual observations and may not be unique — multiple modes can exist if two or more values occur with the same highest frequency. In such cases, the distribution is referred to as multimodal.
+It is important to note that the mode is sensitive to the frequency of individual observations and may not be unique, multiple modes can exist if two or more values occur with the same highest frequency. In such cases, the distribution is referred to as multimodal.
 
 
 The sample median, on the other hand, is defined as the middle value of the ordered sample.  

@@ -194,7 +194,7 @@ func buildCandidatesAdvanced(dag *concepts.DAG, snapshots map[string]*ConceptSna
 		out = append(out, Candidate{Concept: c, IsReview: cand.IsReview, Priority: priority})
 	}
 	if len(out) == 0 {
-		// Interleaving would starve the session — degrade to no-window candidates.
+		// Interleaving would starve the session, degrade to no-window candidates.
 		out = base
 	}
 	return out
@@ -377,7 +377,7 @@ func prereqsMet(dag *concepts.DAG, c *concepts.Concept, snapshots map[string]*Co
 		// Placement-seeded prerequisites count as satisfied. The diagnostic
 		// established the learner's frontier; refusing to let them start the
 		// concept just past it would make placement inert. This is reachability,
-		// not mastery — placement never appears in countsAsMastered, the quiz
+		// not mastery, placement never appears in countsAsMastered, the quiz
 		// gate or XP.
 		if snap.Placement {
 			continue

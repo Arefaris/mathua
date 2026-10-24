@@ -169,7 +169,7 @@ Migrations are embedded directly in the application binary  --  no external migr
 The `Repository` interface abstracts the storage layer (`store.go:127`):
 
 - **SQLiteStore**  --  Fully implemented (`sqlite.go:1`, `WAL` `migrate.go:23`), used for local dev and `DATABASE_URL=sqlite:mathua.db` / `:memory:` tests
-- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:21` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions) — used when `DATABASE_URL=postgres://` `main.go:69`
+- **PostgresStore**  --  Fully implemented via `pgx/v5/stdlib` (`postgres.go:21` `pgSchema`, `$1` placeholders, `GREATEST` for XP floor, `STRING_AGG` for activity, `RANDOM()` for questions), used when `DATABASE_URL=postgres://` `main.go:69`
 
 The codebase checks `DATABASE_URL` at startup and opens `pgx` for `postgres://` else `SQLite` (`mathua.db`).
 
@@ -185,7 +185,7 @@ The engine is the central orchestrator. It holds references to every subsystem a
 |--------|------|----------------|
 | **DAG Loader** | `internal/concepts/` (`loader.go:13`, `dag.go`) | Loads `data/concepts/*.json` + `enrichment.json` heuristics (`Encompasses`, `InterferenceGroup`, `Variants`), validates no cycles/orphans/dup IDs, no singletons, encompass cycles, produces topological sort via Kahn's algorithm |
 | **Scheduler** | `internal/scheduler/` (`computePriority`, `NextSmart` in `internal/scheduler/`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
-| **Generators** | 22 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74` — no static question bank |
+| **Generators** | 22 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74`, no static question bank |
 | **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:41`, `sm2.go:34`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `mastery/status.go:24`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
 | **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `xp.DefaultDailyGoal` (`xp/policy.go`) |
 | **Weakness Propagation** | `Engine.PropagateWeakness` in `internal/engine/engine.go` | If a concept's weakness > 0.3, propagates `w × 0.3` to dependents |
@@ -253,7 +253,7 @@ information, rather than dropped.
 
 **Status only moves forward.** A miss lowers the evidence score but does not un-learn a concept:
 `MASTERED` is an exit, and decay asks about retention, not attainment. The `required_streak` and
-`time_threshold` fields still exist — SM-2 reads the streak to grade a review — but they no
+`time_threshold` fields still exist, SM-2 reads the streak to grade a review, but they no
 longer gate the ladder.
 
 This replaced a streak-based ladder, and the cost of the old one is worth recording because it
@@ -407,14 +407,14 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | POST | `/api/reviews/answer` | write: writeLimiter, auth | Submit review answer |
 | GET | `/api/lessons` | no | All lessons with progress (`?student_id=`) |
 | GET | `/api/lessons/body` | no | Single lesson markdown body |
-| GET | `/api/lessons/{id}/practice` | no | Generated/curated practice questions (`?count=5`) — also writes the study anchor (expected answer + explanation) that `/api/study/answer` grades against, so a client cannot grade itself |
+| GET | `/api/lessons/{id}/practice` | no | Generated/curated practice questions (`?count=5`), also writes the study anchor (expected answer + explanation) that `/api/study/answer` grades against, so a client cannot grade itself |
 | GET | `/api/lessons/{id}/kp` | no | KP shards (3 per concept) with worked example |
-| POST | `/api/study/answer` | write: writeLimiter, optional | Study seam `LessonQuiz→SubmitAnswer` (`CONTEXT.md` Seam) — graded against the server-side anchor, never a client-supplied expected; 409 + re-serve when no anchor exists, `student_id` impersonation guard |
+| POST | `/api/study/answer` | write: writeLimiter, optional | Study seam `LessonQuiz→SubmitAnswer` (`CONTEXT.md` Seam), graded against the server-side anchor, never a client-supplied expected; 409 + re-serve when no anchor exists, `student_id` impersonation guard |
 | POST | `/api/quiz/session` | write: writeLimiter, optional | Quiz every 50 XP at 80% difficulty (`quiz.go:1`) |
 | POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer; a correct answer earns 20 XP through `QuizXP` (`internal/engine/engine.go`) |
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
-| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
+| PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}`, the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
 | GET | `/api/admin/audit` | **admin** | Audit trail, newest first. Read-only: no PUT/PATCH/DELETE route and no update or delete method on either store |
 | GET | `/api/activity` | auth | Daily activity heatmap (`?days=365`) |
 | GET | `/api/efficacy` | auth | First-pass/second-pass efficacy |
@@ -491,7 +491,7 @@ Here's the complete flow when a student submits an answer:
 
 1. **Client** sends `POST /api/study/answer` with `{concept_id, answer, question}`
 2. **Auth middleware** validates JWT, injects `studentID` into request context
-3. **Handler** looks the question up in the server-side anchor — written when the question was served — and calls `Engine.SubmitStudyAnswer(studentID, conceptID, answer, elapsed)`. There is no client-supplied expected answer to fall back on: no anchor means a 409 and a re-serve, not a guess.
+3. **Handler** looks the question up in the server-side anchor, written when the question was served and calls `Engine.SubmitStudyAnswer(studentID, conceptID, answer, elapsed)`. There is no client-supplied expected answer to fall back on: no anchor means a 409 and a re-serve, not a guess.
 4. **Grading**  --  route to the correct grader based on `grading_type`: numeric graders parse the answer, SymPy handles symbolic equivalence, etc.
 5. **Machine**  --  `mastery.Machine.Next()` determines if the student's performance qualifies for a state transition (UNSEEN → LEARNING → etc.)
 6. **SM-2**  --  `scheduler.ComputeSM2()` computes new repetition count, interval and easiness factor
@@ -526,7 +526,7 @@ Mathua implements a compressed-covering + info-gain CAT to locate a student's kn
 ### Key Properties
 
 - **Covering-set + info-gain efficiency**: `2 × |cover|` probes, `≤ 45` total, vs `666` exhaustive; `80%` difficulty targeting via `engine.computeDifficulty` `engine.go:157`
-- **Evidence propagation**: correct boosts prereqs, wrong penalizes postrequisites — finds frontier even with conflicting evidence
+- **Evidence propagation**: correct boosts prereqs, wrong penalizes postrequisites, finds frontier even with conflicting evidence
 - **Mastery + automaticity**: `fast` (`elapsed < timeThreshold`) distinguishes `PRACTICING` vs `LEARNING` placement
 - **Optimistic merge**: Retaking does not delete progress; `ApplyGoalResults` in `internal/engine/engine.go` merges with `Practicing/Learning` vs `Unseen`
 - **Time-bounded**: Per-concept `AvgTimeSeconds` threshold; slow answers are `!fast` for diagnostic purposes

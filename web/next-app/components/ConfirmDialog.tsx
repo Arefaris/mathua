@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
  * A confirmation step for a privileged action.
  *
  * Promotion and removal of an administrator access the database, take effect immediately, and
- * are recorded in an immutable audit log — none of which a mis-click can be undone by. Two
+ * are recorded in an immutable audit log, none of which a mis-click can be undone by. Two
  * details in here are deliberate rather than decorative:
  *
  *  - **Nothing happens on the first click.** The dialog is the action. A row of one-tap

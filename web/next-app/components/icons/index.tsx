@@ -13,7 +13,7 @@
  *
  * **The colour is guaranteed.** The animated icons take a literal `color`, and the default is
  * not `currentColor`. Left alone they would render in whatever the library's default is, which
- * does not follow light and dark mode and is not a theme token — the exact failure ADR-036 was
+ * does not follow light and dark mode and is not a theme token, the exact failure ADR-036 was
  * written about. Every wrapper passes `currentColor`, so `text-mathua-*` on the parent does what
  * it says.
  *
@@ -149,7 +149,7 @@ export const Close = wrap(XIcon as never)
 export const ArrowUp = wrap(ArrowUpIcon as never)
 
 // Settings' avatar randomiser. The app used lucide's `Dices` (two dice) and there is no animated
-// `Dices` in the set — `Dice5` is a single die. This is the one icon whose shape changes, and it
+// `Dices` in the set, `Dice5` is a single die. This is the one icon whose shape changes, and it
 // is called out here rather than left to be noticed.
 export const Dices = wrap(Dice5Icon as never)
 

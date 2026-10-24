@@ -1,4 +1,4 @@
-> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content sourced from [OpenStax Prealgebra](https://openstax.org/books/prealgebra/pages/1-introduction) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 ## 5.3 Decimals and Fractions
 
@@ -13,7 +13,7 @@ By the end of this section, you will be able to:
 
 ### Convert Fractions to Decimals
 
-In Decimals, we learned to convert decimals to fractions. Now we will do the reverse—convert fractions to decimals. Remember that the fraction bar indicates division. So $\frac{4}{5}$ can be written $4 \div 5$ or 54. This means that we can convert a fraction to a decimal by treating it as a division problem.
+In Decimals, we learned to convert decimals to fractions. Now we will do the reverse, convert fractions to decimals. Remember that the fraction bar indicates division. So $\frac{4}{5}$ can be written $4 \div 5$ or 54. This means that we can convert a fraction to a decimal by treating it as a division problem.
 
 ### Convert a Fraction to a Decimal
 
@@ -79,7 +79,7 @@ For other decimals, two or more digits might repeat. Table 5.5 shows some more e
 |----|----|
 | $\text{1.333…} = 1.\overset{-}{3}$ | 3 is the repeating digit |
 | $\text{4.1666…} = 4.1\overset{-}{6}$ | 6 is the repeating digit |
-| $\text{4.161616…} = 4.\overset{\text{—}}{16}$ | 16 is the repeating block |
+| $\text{4.161616…} = 4.\overset{\text{, }}{16}$ | 16 is the repeating block |
 | $\text{0.271271271…} = 0.\overset{\text{---}}{271}$ | 271 is the repeating block |
 
 Table 5.5
@@ -95,7 +95,7 @@ Divide 43 by 22.
 Notice that the differences of 120 and 100 repeat, so there is a repeat in the digits of the quotient; 54 will repeat endlessly. The first decimal place in the quotient, 9, is not part of the pattern. So,
 
 $$
-\frac{43}{22} = 1.9\overset{\text{—}}{54}
+\frac{43}{22} = 1.9\overset{\text{, }}{54}
 $$
 
 ### Try It 5.59

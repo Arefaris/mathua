@@ -22,4 +22,4 @@ So errors accumulate: each step inherits the last step's error and adds fresh ta
 
 ## Error shrinks linearly with h
 
-Each step's local error is $O(h^2)$, but a run of length 1 needs $1/h$ steps, leaving global error $O(h)$. Halving $h$ halves the error at double the cost — the price of a first-order method.
+Each step's local error is $O(h^2)$, but a run of length 1 needs $1/h$ steps, leaving global error $O(h)$. Halving $h$ halves the error at double the cost, the price of a first-order method.

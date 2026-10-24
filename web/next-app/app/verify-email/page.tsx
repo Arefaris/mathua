@@ -31,7 +31,7 @@ function VerifyEmailInner() {
       })
       .catch((e) => {
         setStatus('error')
-        setMessage(e instanceof Error ? e.message : 'Verification failed — the link may have expired.')
+        setMessage(e instanceof Error ? e.message : 'Verification failed, the link may have expired.')
       })
   }, [searchParams])
 

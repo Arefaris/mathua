@@ -21,7 +21,7 @@ import { MathAnswerInput } from './math/MathInput'
 import { concepts } from '../lib/conceptData'
 
 // Append-only learning feed: intro once, then each submit locks its card and
-// the next question opens below. Scrollback IS the performance history —
+// the next question opens below. Scrollback IS the performance history, 
 // there are no gating buttons between questions and no pre-answer hints.
 // Post-mistake explanations render inline in the locked card.
 interface QEntry {
@@ -103,7 +103,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   const [buffer, setBuffer] = useState<PracticeQuestion[]>([])
   // Counts for the header, per *concept*. Not per knowledge point: this used to reset on
   // every KP advance, so a learner three questions in with two correct saw "1/2 correct"
-  // sitting next to "+3 XP" — the XP sums every card in the feed while the count summed only
+  // sitting next to "+3 XP", the XP sums every card in the feed while the count summed only
   // the current section. Two scopes on one line, and the count was the one that looked wrong.
   // Two numbers rather than an array because nothing else needed the answers themselves.
   const [answeredCount, setAnsweredCount] = useState(0)
@@ -119,7 +119,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   const [loading, setLoading] = useState(true)
   // Next head for the done state: re-fetched on entering done (after the
   // scheduler ingests the last answer), so Continue names what will load.
-  // No navigation until the click — learner disposes via the alternatives.
+  // No navigation until the click, learner disposes via the alternatives.
   const [nextShelf, setNextShelf] = useState<Shelf | null>(null)
   const [nextLoading, setNextLoading] = useState(false)
   const [shelfProgress, setShelfProgress] = useState<Record<string, ConceptProgress>>({})
@@ -208,7 +208,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   }, [load])
 
   // Deliberate same-concept restart with fresh variants. Rendered as the
-  // secondary action on the done card — never a silent fallback.
+  // secondary action on the done card, never a silent fallback.
   const practiceAgain = useCallback(() => {
     setEntries([])
     setKpIndex(0)
@@ -254,7 +254,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
       setShelfProgress(progress)
       // The concept just finished is excluded server-side. It is unmastered by definition
       // here, so without that it would head itself and the Continue link would point at the
-      // current page — a scroll-to-top dead end. That argument moved to the engine with the
+      // current page, a scroll-to-top dead end. That argument moved to the engine with the
       // rest of the decision.
       setNextShelf(next)
     }).catch(() => {
@@ -296,7 +296,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
   async function startPracticing() {
     const q = await takeNext(difficulty)
     if (!q) {
-      setError('Could not load a question — check your connection and reload.')
+      setError('Could not load a question, check your connection and reload.')
       return
     }
     const entry: QEntry = { key: nextKey(), kind: 'q', kpIndex, q, answer: '', checking: false, servedAt: Date.now(), feedback: null }
@@ -361,7 +361,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
    * case.
    *
    * The practice endpoint now falls back to repeats rather than returning an empty 200, so
-   * this is the second line of defence rather than the only one — but a client that can be
+   * this is the second line of defence rather than the only one, but a client that can be
    * stranded by a 200 with an empty array has no business relying on the server not to.
    */
   async function continueInSection(from: QEntry, diff: number) {
@@ -459,14 +459,14 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
       }
     } catch (e) {
       // The server is the only grader. This never decides whether the answer
-      // was right — a network fault or an expired server-side record is not a
+      // was right, a network fault or an expired server-side record is not a
       // miss, and grading locally would have made it one.
       //
       // 409 means the server has no record of this question, so resubmitting
       // it could never succeed: re-serve instead, which writes a fresh record
       // and leaves the learner with a question they can actually answer. Any
       // other failure keeps the question and the learner's answer so a retry
-      // can succeed. Nothing was recorded either way — no attempt, streak,
+      // can succeed. Nothing was recorded either way, no attempt, streak,
       // weakness or XP moved.
       if (getErrorStatus(e) === 409) {
         const fresh = await refill(difficulty, seenRef.current)
@@ -474,7 +474,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
           seenRef.current = [...seenRef.current, fresh[0].question].slice(-20)
           setEntry(key, { checking: false, q: fresh[0], answer: '', servedAt: Date.now() })
           setBuffer(prev => [...prev, ...fresh.slice(1)].slice(0, 6))
-          setError('That question had expired on the server, so it could not be graded. Here is a fresh one — nothing was recorded.')
+          setError('That question had expired on the server, so it could not be graded. Here is a fresh one, nothing was recorded.')
           return
         }
         setError('That question had expired and no replacement could be loaded. Reload to continue.')
@@ -482,7 +482,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
         return
       }
       setEntry(key, { checking: false })
-      setError('Could not reach the server to grade that answer. Check your connection and submit again — nothing was recorded.')
+      setError('Could not reach the server to grade that answer. Check your connection and submit again, nothing was recorded.')
     }
   }
 
@@ -543,12 +543,12 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
     const names = (unmetPrereqs.length > 0 ? unmetPrereqs : dueReviewPrereqs)
       .slice(0, 3).map(p => p.title).join(', ')
     if (unmetPrereqs.length === 0 && dueReviewPrereqs.length > 0) {
-      return `You have already learned ${names} — a short check is due, or continue anyway.`
+      return `You have already learned ${names}, a short check is due or continue anyway.`
     }
     if (unmetPrereqs.length === 0) {
       return 'You have already learned what this builds on. You can revisit it any time.'
     }
-    return `This builds on ${names}. A quick study helps — or continue anyway.`
+    return `This builds on ${names}. A quick study helps or continue anyway.`
   })()
   const totalAnswered = answeredCount
   const totalCorrect = correctCount
@@ -561,7 +561,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
         {totalAnswered > 0 && <span>· {totalCorrect}/{totalAnswered} correct</span>}
         {totalXP > 0 && <span className="text-yellow-400">· +{totalXP} XP</span>}
         {band && (
-          <span title="How you're doing on this concept, from your recent answers. Progress only — mastery is decided separately.">
+          <span title="How you're doing on this concept, from your recent answers. Progress only, mastery is decided separately.">
             · {band}
           </span>
         )}
@@ -623,7 +623,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
 
       {/* The reference layer, in the flow.
           This replaces the "Reference" link the done card used to carry to `/study`: the same
-          material, reachable without leaving the questions, and impossible to wander off in —
+          material, reachable without leaving the questions, and impossible to wander off in, 
           there is nothing in it that navigates. Collapsed by default, so it never stands between
           a learner and the first question; the worked example above it is the intended first
           read. It renders no mastery state and awards nothing, which is the point: reading
@@ -637,7 +637,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
             return (
               <div key={e.key} className="border border-mathua-border bg-mathua-surface p-6">
                 <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted">{ikp?.label || 'Learn'}</p>
-                <KatexContent className="mt-3 text-sm text-mathua-primary whitespace-pre-wrap">{ikp?.worked_example || 'Worked example unavailable — start practicing instead.'}</KatexContent>
+                <KatexContent className="mt-3 text-sm text-mathua-primary whitespace-pre-wrap">{ikp?.worked_example || 'Worked example unavailable, start practicing instead.'}</KatexContent>
                 {/* Figures for this knowledge point, plus the concept's own diagram. The
                     worked example is text lifted out of the lesson body, so its figures do
                     not come with it; selecting them per knowledge point is what keeps the
@@ -662,7 +662,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
                   </details>
                 )}
                 {/* Progression, not a waiver: the feed is append-only, so the
-                    example stays on screen as scrollback — nothing is skipped.
+                    example stays on screen as scrollback, nothing is skipped.
                     Matches the kpdiv "Next: … (worked example)" label below, and
                     MA has no skip affordance at all: the worked example is the
                     scaffolding for the question that follows (example-problem
@@ -698,7 +698,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
           if (e.kind === 'halt') {
             return (
               <div key={e.key} className="border border-mathua-red-faint bg-mathua-surface p-5">
-                <p className="font-mono text-xs text-red-400">Stepping down a level — easier question below.</p>
+                <p className="font-mono text-xs text-red-400">Stepping down a level, easier question below.</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {/* A prerequisite is reference here too: study the material rather than being
                       sent to a tutorial under the name of a check. Practising it is a separate,
@@ -721,7 +721,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
             const upcoming: LockedSuccessor[] = upcomingLocked(catalogEntries(), shelfProgress, conceptId)
             return (
               <div key={e.key} className="border border-mathua-green-faint bg-mathua-surface p-6">
-                <p className="font-mono text-xs text-green-400">✓ Complete — {totalCorrect}/{totalAnswered} correct · +{totalXP} XP · {band}</p>
+                <p className="font-mono text-xs text-green-400">✓ Complete, {totalCorrect}/{totalAnswered} correct · +{totalXP} XP · {band}</p>
                 {e.note && <p role="status" className="mt-2 font-mono text-[11px] text-mathua-secondary">{e.note}</p>}
                 <p className="mt-2 font-mono text-[11px] text-mathua-secondary">Scroll up to review anything. Reviews are scheduled automatically.</p>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -757,7 +757,7 @@ export default function LearnStepper({ conceptId, returnStack = [] }: Props) {
                 {upcoming.length > 0 && (
                   <div className="mt-3 border border-mathua-border">
                     <p className="font-mono text-[11px] text-mathua-secondary px-4 py-2.5">
-                      Coming up — unlocks once this concept is mastered
+                      Coming up, unlocks once this concept is mastered
                     </p>
                     <div className="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {upcoming.map(u => (

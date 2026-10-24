@@ -3,7 +3,7 @@ import { render, screen, within, waitFor } from '@testing-library/react'
 import StudyPage from '../app/study/page'
 
 // `/study` is the reference and exploration surface restored by ADR-054: context-bound to one
-// concept, not a catalogue, and awarding nothing. These tests pin that behaviour — an unmastered
+// concept, not a catalogue, and awarding nothing. These tests pin that behaviour, an unmastered
 // prerequisite is readable, the practise control is separate and eligibility-gated, the DAG
 // neighbourhood is drawn from real relationships, and the original target survives a return.
 

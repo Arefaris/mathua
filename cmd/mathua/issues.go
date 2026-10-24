@@ -23,7 +23,7 @@ import (
 //
 // The one state change this tool does make is local: `issues resolve` records a
 // decision on the imported copy. That is how a workbench stays usable after the
-// twentieth report on the same concept — the alternative is re-reading all of
+// twentieth report on the same concept, the alternative is re-reading all of
 // them every session.
 const issuesUsage = `usage:
   mathua issues list   [--status open] [--limit 50] [--json]
@@ -253,7 +253,7 @@ func issuesExport(args []string) error {
 }
 
 // exportAll pages through the queue. ListReports caps a page at 200, so a
-// single call would silently export the first page of a larger queue — the
+// single call would silently export the first page of a larger queue, the
 // kind of truncation that only shows up when someone needs the missing rows.
 func exportAll(repo storage.Repository, status string) ([]storage.QuestionReport, error) {
 	const page = 200

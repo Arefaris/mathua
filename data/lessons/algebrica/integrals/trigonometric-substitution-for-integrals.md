@@ -1,4 +1,4 @@
-> Content sourced from [Algebrica](https://algebrica.org/trigonometric-substitution-for-integrals/) — CC BY-NC 4.0
+> Content sourced from [Algebrica](https://algebrica.org/trigonometric-substitution-for-integrals/), CC BY-NC 4.0
 
 ## How trigonometric substitution works
 

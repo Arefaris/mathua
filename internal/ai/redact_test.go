@@ -99,8 +99,8 @@ func TestAssistantContextClassIsPseudonymous(t *testing.T) {
 
 // TestAssistantPromptAsksForPlainProse pins the instruction that the endpoint's
 // rendering surface depends on. The app shows the reply as text with one
-// exception — mathematics between dollar signs, which the panel parses and
-// renders — so a model told nothing about format returns Markdown the reader
+// exception, mathematics between dollar signs, which the panel parses and
+// renders, so a model told nothing about format returns Markdown the reader
 // sees as asterisks, and a model told "no LaTeX" answers a method question
 // without the formula that is the method's name.
 func TestAssistantPromptAsksForPlainProse(t *testing.T) {

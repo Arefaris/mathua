@@ -87,7 +87,7 @@ export default function ReportButton(props: ReportButtonProps) {
   if (sent) {
     return (
       <span className="font-mono text-[10px] text-mathua-green uppercase tracking-wider">
-        ✓ Thanks — reported
+        ✓ Thanks, reported
       </span>
     )
   }

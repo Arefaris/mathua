@@ -11,7 +11,7 @@ import { listAdminContent, getErrorMessage, type AdminContentConcept } from '../
 
 // Content inspection.
 //
-// Read-only, deliberately. The corpus is code-adjacent data — concepts and generated questions —
+// Read-only, deliberately. The corpus is code-adjacent data, concepts and generated questions, 
 // with no safe write path in the data model, and inventing one would be the fragile editor the
 // brief warns against. What an operator actually needs from here is to answer "what is this
 // concept, what does it depend on, and has anyone complained about it", which is a read.

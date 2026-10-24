@@ -8,14 +8,14 @@ import { attemptsToCSV } from './DangerZone'
 
 const DELETE_PHRASE = 'delete my account'
 
-/** See the identical helper in DangerZone.tsx — same bug, same reason. */
+/** See the identical helper in DangerZone.tsx, same bug, same reason. */
 export function phraseConfirms(typed: string, expected: string): boolean {
   return typed.trim().toLowerCase() === expected
 }
 
 // DeleteAccount: destructive, explicit, and honest about scope. Deletion
 // wipes the account row and every owned row (progress, attempts, sessions,
-// quizzes, identities, settings, plans, avatars, filed reports) — nothing
+// quizzes, identities, settings, plans, avatars, filed reports), nothing
 // is kept. Password accounts additionally confirm the current password;
 // OAuth-only and guest rows need the phrase alone.
 export default function DeleteAccount() {
@@ -25,7 +25,7 @@ export default function DeleteAccount() {
   const [error, setError] = useState('')
   // Tri-state, not a boolean: `null` means "we could not find out" (getMe
   // failed or is still in flight). Hiding the field on `null` used to strand a
-  // password account — the delete went out with no password, the server
+  // password account, the delete went out with no password, the server
   // answered 401 "current password is required", and there was no field on
   // screen to fill. So when unknown we SHOW the field but do not require it:
   // the server is the real gate, and an OAuth-only learner can ignore it.
@@ -107,13 +107,13 @@ export default function DeleteAccount() {
             <li>Account, avatar, settings, daily goal</li>
             <li>Concept mastery, streaks, review schedule</li>
             <li>Attempts log, sessions and quizzes</li>
-            <li>Plans, filed reports and XP — profile and leaderboard</li>
+            <li>Plans, filed reports and XP, profile and leaderboard</li>
           </ul>
         </div>
         <div>
           <p className="font-mono text-[11px] uppercase tracking-wider text-mathua-muted mb-1">Kept</p>
           <ul className="font-mono text-[11px] text-mathua-secondary space-y-0.5">
-            <li>Nothing — deletion is total</li>
+            <li>Nothing, deletion is total</li>
           </ul>
         </div>
       </div>

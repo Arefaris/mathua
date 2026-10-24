@@ -1,4 +1,4 @@
-> Content adapted from [OpenStax Prealgebra §4.1](https://openstax.org/books/prealgebra/pages/4-1-visualize-fractions) by Marecek & Anthony-Smith — CC BY-NC-SA 4.0
+> Content adapted from [OpenStax Prealgebra §4.1](https://openstax.org/books/prealgebra/pages/4-1-visualize-fractions) by Marecek & Anthony-Smith, CC BY-NC-SA 4.0
 
 # Comparing Fractions in Word Problems
 
@@ -15,7 +15,7 @@ denominator turns the question into comparing numerators.
 
 A \(\frac{7}{10}\) liter bottle holds more than a \(\frac{2}{3}\) liter one?
 Benchmark against \(\frac{1}{2}\): \(\frac{7}{10} > \frac{1}{2}\) but
-\(\frac{2}{3} > \frac{1}{2}\) too, so compare directly —
+\(\frac{2}{3} > \frac{1}{2}\) too, so compare directly, 
 \(\frac{21}{30}\) against \(\frac{20}{30}\) means the first bottle holds more.
 Benchmarks settle easy cases; a common denominator settles every case.
 
@@ -23,7 +23,7 @@ Benchmarks settle easy cases; a common denominator settles every case.
 
 Read the problem twice: first for the story (who has what), second for the
 two fractions. If denominators match, compare numerators and you are done.
-Otherwise raise both to a common denominator — or benchmark each against
+Otherwise raise both to a common denominator or benchmark each against
 \(\frac{1}{2}\) when one is clearly above and the other below. Finish by
 asking whether the answer makes sense: the "more" quantity really must be the
 larger number, so re-read the story against the inequality.

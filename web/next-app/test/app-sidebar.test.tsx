@@ -113,7 +113,7 @@ describe('AppSidebar', () => {
 
   it('names the transcript History, and nothing in the rail claims to be Progress', () => {
     // The entry was called Progress and resolved to a paginated list of past
-    // questions, opening filtered to the ones you got wrong — the single most
+    // questions, opening filtered to the ones you got wrong, the single most
     // misleading thing the navigation did. The transcript is now named for what
     // it is, and the report lives on the learner's own page rather than behind
     // a rail entry.
@@ -139,7 +139,7 @@ describe('AppSidebar', () => {
 
   // The collapsed rail shows the brand mark as the expand toggle, so the identical glyph is a
   // destination when expanded (a link to the hub) and an action when collapsed. `aria-label` and
-  // `title` were the only signals, and both need a hover — so the control's role was communicated
+  // `title` were the only signals, and both need a hover, so the control's role was communicated
   // to nobody until they pressed it. The chevron is what makes it visible first.
   it('shows an expand affordance on the collapsed rail, not just a hover-only tooltip', () => {
     const { container } = renderSidebar()
@@ -173,7 +173,7 @@ describe('AppSidebar', () => {
     renderSidebar()
     expect(screen.getByText('Ada')).toBeInTheDocument()
     expect(screen.getByText('Sign out')).toBeInTheDocument()
-    // Collapsed rail shows avatar only — text wrapper carries the icon-mode hide class
+    // Collapsed rail shows avatar only, text wrapper carries the icon-mode hide class
     const ada = screen.getByText('Ada')
     const textWrapper = ada.closest('span[class*="flex-1"]')
     expect(textWrapper?.getAttribute('class') ?? '').toContain('group-data-[collapsible=icon]:hidden')
@@ -193,7 +193,7 @@ describe('AppSidebar', () => {
 
   it('keeps the theme control reachable when the rail is collapsed', () => {
     // The label span is display:none in the collapsed rail, and shadcn's `tooltip` prop renders a
-    // TooltipContent — a description, not a name. Without an explicit aria-label the button's only
+    // TooltipContent, a description, not a name. Without an explicit aria-label the button's only
     // child is an aria-hidden icon, so in the state most desktop users leave the sidebar in it has
     // no accessible name at all.
     renderSidebar()
@@ -215,7 +215,7 @@ describe('AppSidebar', () => {
 
   it('offers the Admin entry to an administrator and to nobody else', () => {
     // The component's half of the contract. The other half is that /profile passes `isAdmin` from
-    // the session role on *every* branch — the loading and error branches did, and the main one
+    // the session role on *every* branch, the loading and error branches did, and the main one
     // did not, so the entry appeared and then vanished once scores arrived. That wiring is what
     // `e2e/admin.spec.ts` guards; this guards the prop.
     const { unmount } = renderSidebar({ isAdmin: true })

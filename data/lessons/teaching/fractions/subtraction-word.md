@@ -2,7 +2,7 @@
 
 Subtraction word problems with fractions ask how much is left, how much more
 one quantity has, or what the difference is. The arithmetic is always the
-same — common denominator, subtract numerators — so the real work is reading:
+same, common denominator, subtract numerators, so the real work is reading:
 identify the whole, the part removed, and whether the fractions share a
 denominator already.
 
@@ -23,7 +23,7 @@ The common denominator 12 is the least common multiple of 6 and 4.
 Read the problem twice: first for the story (who loses what), second for the
 numbers and their denominators. If denominators match, subtract numerators
 and simplify. If not, raise both fractions to the least common denominator
-before subtracting — never subtract denominators. Finish by asking whether
+before subtracting, never subtract denominators. Finish by asking whether
 the answer makes sense: a remainder must be smaller than what you started
 with, and a difference must fit between the two quantities.
 

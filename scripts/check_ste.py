@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check_ste.py — enforce the structural writing rules of Simplified Technical English.
+check_ste.py, enforce the structural writing rules of Simplified Technical English.
 
 This is a derived subset, not ASD-STE100 conformance, and it must never be described as
 conformance. The upstream skill (github.com/0xpili/simplified-technical-english, MIT) says so
@@ -11,7 +11,7 @@ reimplementation rather than a vendored call:
     and explicitly not MIT (see that project's NOTICE.md). Copying `word-list.md` into this repo
     would put ASD's dictionary in our tree.
   - **The dictionary is the wrong tool here.** A maths and pedagogy codebase is mostly technical
-    names — concept, learner, mastery, scheduler, endpoint, prerequisite — which STE permits
+    names, concept, learner, mastery, scheduler, endpoint, prerequisite, which STE permits
     anyway. A vocabulary gate would either nag constantly or need an allowlist wide enough to be
     meaningless. The *structural* rules are what actually improve readability, and they are
     checkable with no dictionary at all.
@@ -19,9 +19,9 @@ reimplementation rather than a vendored call:
 What this enforces (all objective, all mechanical):
   1. No semicolons.
   2. No contractions.
-  3. No "should", "would", "may", "might", "shall", "ought" — STE allows only can/must/will.
-  4. No helping verb plus past participle ("has been", "have written") — use the simple past.
-  4a. No complex passive with a modal: "can be adjusted" names no actor — rule 3.4.
+  3. No "should", "would", "may", "might", "shall", "ought", STE allows only can/must/will.
+  4. No helping verb plus past participle ("has been", "have written"), use the simple past.
+  4a. No complex passive with a modal: "can be adjusted" names no actor, rule 3.4.
   5. No progressive "-ing" forms, except the eight STE permits.
   6. No passive "is/are/was/were ... by".
   7. Sentence length limits: 20 words procedural, 25 descriptive.
@@ -29,8 +29,8 @@ What this enforces (all objective, all mechanical):
   9. One instruction per sentence.
 
 Scope: the procedural and onboarding docs only. CONTEXT.md and the ADRs are deliberately
-excluded, because their value is the evidence in them — measured ratios, published retractions,
-and rejected alternatives — and these rules strip exactly that. Excluding them is a decision,
+excluded, because their value is the evidence in them, measured ratios, published retractions,
+and rejected alternatives and these rules strip exactly that. Excluding them is a decision,
 recorded in AGENTS.md, not an oversight.
 
 Usage:
@@ -94,7 +94,7 @@ PASSIVE_BY = re.compile(
 # examples are "the volume control can be adjusted" and "the temperature must be adjusted".
 #
 # The pattern requires the BE. Without it the rule does not apply and the pattern misfires on
-# ordinary modal verbs — "then" ends in -en, and "can happen" is not a participle at all — so a
+# ordinary modal verbs, "then" ends in -en, and "can happen" is not a participle at all, so a
 # bare modal-plus-participle shape flags correct prose. This form matches only the structures
 # the rule actually names.
 #
@@ -144,7 +144,7 @@ CAN_BE_ADJ = {
 # Rule 3.5: progressive.
 BE_ING = re.compile(r"\b(?:is|are|was|were|be|been|am)\s+(\w+ing)\b", re.IGNORECASE)
 
-WORDISH = re.compile(r"[A-Za-z0-9'’&/—-]+")
+WORDISH = re.compile(r"[A-Za-z0-9'’&/, -]+")
 SENT_SPLIT = re.compile(r"(?<=[.!?:])\s+")
 BULLET = re.compile(r"\s*(?:[-*+]|\d+\.)\s")
 
@@ -215,9 +215,9 @@ def check_sentence(sent: str, limit: int, where: str, errors: list[tuple[str, st
 
 
 # Rule 8.6: a title or a label is not controlled text. A bullet that reads
-# "**Scoring** — produces the evidence score" has a label and a description; rewriting "Scoring"
+# "**Scoring**, produces the evidence score" has a label and a description; rewriting "Scoring"
 # to satisfy rule 3.5 would make the heading worse, not the documentation clearer.
-LABEL = re.compile(r"^(?:[-*+]\s+|\d+\.\s+)?\**\s*([^\n]{0,60}?)\s*\**\s*[—–:-]\s")
+LABEL = re.compile(r"^(?:[-*+]\s+|\d+\.\s+)?\**\s*([^\n]{0,60}?)\s*\**\s*[, –:-]\s")
 
 
 def split_label(item: str) -> tuple[str, str]:
@@ -288,7 +288,7 @@ def readme_ste_sections(text: str) -> str:
     keep, on, in_fence = [], False, False
     for line in lines:
         # Track fenced code blocks. Without this, a shell comment such as "# SQLite (zero-config)"
-        # reads as a markdown heading, matches no keyword, and silently ends the section — which
+        # reads as a markdown heading, matches no keyword, and silently ends the section, which
         # dropped the Requirements and Env block from the check while it still reported OK.
         if line.lstrip().startswith("```"):
             in_fence = not in_fence

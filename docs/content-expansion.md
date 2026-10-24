@@ -179,8 +179,8 @@ opposite side; the same question for the cosine, tangent, secant, cosecant and c
 triangles are drawn from eight Pythagorean triples scaled by a factor of three to ten, so every
 answer is an exact integer rather than a rounded decimal, and each generator publishes the ratio,
 the side it gives and the side it wants. Unlike the two batches above, trigonometry is one of the
-six learner domains, so each of the six also needed an authored schema —
-`data/lessons/solutions/trig.func.sine.json` and its five siblings — and their table-driven
+six learner domains, so each of the six also needed an authored schema, 
+`data/lessons/solutions/trig.func.sine.json` and its five siblings and their table-driven
 exemptions are gone from `internal/generator/solutions_coverage_test.go`. Learner-domain schema
 coverage moves from 349 of 402 to 355, and trigonometry's `multiple_choice` count falls from 29 to
 23, which takes it below the four-in-ten criterion and off the table above.
@@ -191,8 +191,8 @@ perfect power, `a^b`, the horizontal-axis crossing of a generated line, which of
 survives an extraneous-root check, the value of `x` in a two-equation system, how many of three
 listed functions are injective, and the unknown coefficient in a cubic polynomial under the factor theorem. Each publishes its inputs as facts, and
 `internal/generator/algebra/conversions_test.go` recomputes the answer from them. The other ten
-— the Dirichlet function's continuity, a function's parity, the sigmoid's three fixed questions,
-and the seven multiple-choice concepts — have categorical or definitional answers with no
+,  the Dirichlet function's continuity, a function's parity, the sigmoid's three fixed questions,
+and the seven multiple-choice concepts, have categorical or definitional answers with no
 interpolated parameters, so their exemptions stay: a schema for them would be one fixed paragraph,
 which is what the allowlist exists to avoid. Learner-domain schema coverage moves from 355 of 402
 to 363.
@@ -200,14 +200,14 @@ to 363.
 ### 4.3 Lesson depth is no longer thin at the bottom
 
 Lessons come from three places. The `teaching/` tree holds 329 mappings, the Algebrica import
-holds 328, and 231 are authored. The median lesson is 5,128 bytes, and no lesson is under 1 KB: the
+holds 328 and 231 are authored. The median lesson is 5,128 bytes, and no lesson is under 1 KB: the
 last six were filled on 2026-10-17.
 
 Those six were `calc.series.ratio_test` (671 bytes), `abstract.group.order` (960), `linalg.decomp.lu`
 (1018), `discrete.combinatorics.surjections` (987), `precalc.func.inverse_value` (1,006) and
 `calc.vec.divergence` (1,011), and they are between 3.4 and 5.5 KB now. The first four of the
-`number_theory` batch — `nt.basics.crt`, `nt.adv.wilson`, `nt.basics.bezout` and
-`nt.basics.prime_inf` — went from 853-920 bytes to 3.7-4.7 KB the same day, inside the three
+`number_theory` batch, `nt.basics.crt`, `nt.adv.wilson`, `nt.basics.bezout` and
+`nt.basics.prime_inf`, went from 853-920 bytes to 3.7-4.7 KB the same day, inside the three
 headings their knowledge-point shards already named, so no shard needed regenerating and
 `scripts/audit_lessons.py` still resolves all three per concept.
 
@@ -220,14 +220,14 @@ and its shard rewritten with them.
 
 `scripts/check_docs.py` reads this paragraph from the corpus rather than a copy: it counts the
 lessons actually under 1 KB, compares that with the sentence here, and fails on any row that names a
-lesson which has outgrown the threshold — the drift this document has now recorded three times.
+lesson which has outgrown the threshold, the drift this document has now recorded three times.
 
 ### 4.4 Ingestion dropped figures and kept their captions
 
 `docs/lesson-media.md` is the owner of this measurement, and it reports 141 paragraphs across
 42 lessons that read as a caption whose image was dropped: 49 `certain`, 33 `strong` and 59 likely.
-The `certain` tier — captions that open with an auto-numbered `Figure 3.2` label, which the ingestion
-pipeline emits for a figure and which survives when the image does not — had been emptied by
+The `certain` tier, captions that open with an auto-numbered `Figure 3.2` label, which the ingestion
+pipeline emits for a figure and which survives when the image does not, had been emptied by
 reclaiming every case, and the Precalculus 2e trigonometry re-ingest of 2026-10-17 restored 49 of
 them along with their lessons' text, as `docs/figure-reclaim.md` records.
 `scripts/audit_lesson_media.py` regenerates the list, and the remaining work is per instance: each
@@ -255,7 +255,7 @@ closure. `prealg.eq.word` is the exception on both counts: something depends on 
 something is what pulls it into a course closure.
 
 The pattern is cheap because it writes no lesson prose. A sibling shares its parent's lesson file
-— `data/lessons/lessons.json` points both ids at one source — so its three KP sections come from
+,  `data/lessons/lessons.json` points both ids at one source, so its three KP sections come from
 headings that already exist, and the new files are the shard and the authored solution schema. The
 generator and its test extend package files that are already there, and the concept node joins an
 existing domain file.
@@ -320,8 +320,8 @@ uses:
 Three things follow, and together they decide the first two policies.
 
 - **A makes the catalog exhaustive.** The union of the 28 closures goes from 247 to **666**: every
-  concept in the corpus becomes reachable. That is the end of a sampled path — the catalog and the
-  corpus become the same set — and it leaves the diagnostic and a free-choice goal nothing to do.
+  concept in the corpus becomes reachable. That is the end of a sampled path, the catalog and the
+  corpus become the same set and it leaves the diagnostic and a free-choice goal nothing to do.
 - **Both policies collapse the staged pairs.** `calc1` and `calc2` are 67 and 70 concepts now and 342
   and 342 under A; `discrete`/`discrete2` become 293/293, and `abstract`/`abstract2` 296/296. Two
   stages that reach the same set are one stage.
@@ -336,7 +336,7 @@ Three things follow, and together they decide the first two policies.
 from 22 to 23, which the README quotes.
 
 **The narrowest closure rule does not help either.** Narrowing the band to the subdomains a course
-already touches — sinks that share a subdomain with something the course reaches — the union still
+already touches, sinks that share a subdomain with something the course reaches, the union still
 goes from 247 to 543, and the courses still inflate 1.9x to 3.4x: 4th Grade Math 17 to 32, `calc1`
 67 to 230, `calc2` 70 to 265, `diffeq` 77 to 263. `discrete` and `discrete2` still land on 145 each.
 No rule that closes over a set of sinks is compatible with staging at any radius, so the targets have
@@ -376,7 +376,7 @@ the only domain added since the corpus was built:
 | What | Topology | Where |
 |---|---:|---|
 | Concepts | 30, in 11 subdomains | `data/concepts/topology.json`, 12 KB |
-| Generator | 2 files, 52 KB | `internal/generator/topology/` — the package and its test — registered in `internal/generator/all/all.go` and exercised by the pool ratchet in `internal/generator/pools_test.go` |
+| Generator | 2 files, 52 KB | `internal/generator/topology/`, the package and its test, registered in `internal/generator/all/all.go` and exercised by the pool ratchet in `internal/generator/pools_test.go` |
 | KP shards | 30 | `data/lessons/kp/topo.*.json`, three per concept |
 | Solution schemas | 1 | `data/lessons/solutions/`, one, because 29 of the 30 are `multiple_choice` and their explanation is a fixed string |
 | Course | 1, three targets | `data/courses.json` |
@@ -387,8 +387,8 @@ That is six hand-edited things and six regenerated ones per domain, and the coun
 is the size of its concept file: the 30 above, or whatever the new domain's is.
 
 **Which of the three counts a domain moves is not the same question as which concepts move.**
-`domains` and `courses` are read from the data — `len(by_domain)` over the concepts' own `domain`
-field and `len(data/courses.json)` — so a domain added *inside* an existing domain's namespace leaves
+`domains` and `courses` are read from the data, `len(by_domain)` over the concepts' own `domain`
+field and `len(data/courses.json)`, so a domain added *inside* an existing domain's namespace leaves
 the domain count at 17 and only the concept count moves. A genuinely new domain takes it to 18, and a
 course for `complex_numbers` (section 5.1) takes the course count to 23 without touching the domain
 count, because that domain exists already.
@@ -432,7 +432,7 @@ section 6 used, largest deficit first.
 
 **The `Now` column had drifted, and this is the correction.** The table was drawn when the corpus held
 703 concepts, and the batches since have grown it to 819. `scripts/sweep_counts.py` keeps the sentence
-above the table current, because its size is a pattern rule, but it has no rule for the rows — so ten
+above the table current, because its size is a pattern rule, but it has no rule for the rows, so ten
 of the seventeen stayed at their 703-era values while the corpus moved, and the roadmap they publish
 named deficits that were larger than the work left: trigonometry read as 16 concepts behind where it
 was 8, and calculus as 24 where it is 10. Two domains, geometry and fractions, had in fact reached
@@ -442,27 +442,27 @@ deficit first" still names the largest deficit. `check_docs.py` now reads each `
 `data/concepts/`, each `Add` from `Target - Now`, and the sentence above the table from the two, so the
 next drift fails instead of being published.
 
-**Trigonometry reached its target on 2026-10-17.** Eight computed concepts — the sum and difference
+**Trigonometry reached its target on 2026-10-17.** Eight computed concepts, the sum and difference
 formulas, the half-angle formulas, a quadratic in a ratio, the ambiguous case of the law of sines, an
 area from two sides and an included angle, a vector's length and its dot product, and a sinusoid's
-phase shift — took the domain from 40 to 48, so its row reads +0 and now sits at the foot of the table
+phase shift, took the domain from 40 to 48, so its row reads +0 and now sits at the foot of the table
 with geometry and fractions. The remainder is 173, and the largest deficit left is discrete_math's
 sixteen.
 
-**Discrete mathematics reached its target on 2026-10-17.** Sixteen concepts — argument validity,
+**Discrete mathematics reached its target on 2026-10-17.** Sixteen concepts, argument validity,
 nested quantifiers, tautology and contradiction, the contrapositive, disproof by counterexample,
 structural induction, power sets, partial orders, countable sets, counting by complement, bipartite
 matchings, Euler's formula for planar graphs, Cayley's formula, degree sequences, linear recurrences
-and growth rates — took the domain from 39 to 55, so its row reads +0 and sits at the foot of the
+and growth rates, took the domain from 39 to 55, so its row reads +0 and sits at the foot of the
 table with geometry, fractions and trigonometry. Every one is a computed question: the
 counterexample concept scans for the first composite value rather than quoting one, the matching
 concept searches for a maximum matching, and the recurrence concept derives its closed form from the
 roots it chose. The remainder was 157 at that point.
 
-**Complex numbers reached their target on 2026-10-17.** Sixteen concepts — parts and equality,
+**Complex numbers reached their target on 2026-10-17.** Sixteen concepts, parts and equality,
 powers, reciprocals, plane distance, loci, argument arithmetic, complex linear equations, conjugate
 root pairs, trigonometric and hyperbolic identities from exponentials, complex geometric series,
-Möbius fixed points, residues at simple poles, the cross-ratio, open and closed sets, and domains —
+Möbius fixed points, residues at simple poles, the cross-ratio, open and closed sets, and domains, 
 took the domain from 26 to 42, so its row reads +0. A new college course, `cx` "Complex Numbers and
 Analysis", targets all 42: the domain had been reachable only through `pc`'s single polar-form
 target, which left twenty of the twenty-six behind it outside every course. The batch also brought
@@ -470,21 +470,21 @@ the `complex` grading path its first tests, which is how the polar rounding reco
 `docs/code-defects.md` came to be documented rather than guessed at. The remainder was 141 at that
 point.
 
-**Algebra reached its target on 2026-10-18.** Fifteen concepts — a line through two points,
+**Algebra reached its target on 2026-10-18.** Fifteen concepts, a line through two points,
 intercepts, factoring by grouping, sum and difference of cubes, vertex form, a quadratic area word
 problem, end behavior, simplifying, multiplying and dividing, adding and subtracting rational
 expressions, rational exponents, rationalizing a denominator, direct and inverse variation, change
-of base, and classifying a conic — took the domain from 89 to 104, so its row reads +0. Two
+of base, and classifying a conic, took the domain from 89 to 104, so its row reads +0. Two
 subdomains are new, `algebra.rational` and `algebra.radicals`, because the three rational-expression
 concepts and the two radical concepts had no existing home. The conic-recognition concept is also
 what pulls the four conic prerequisites into a course: targeting it brings `circle`, `ellipse`,
 `parabola` and `hyperbola` inside the closure for the first time, and it reaches `func.quad` as
 well. The remainder was 126, and the largest deficit left was arithmetic's fourteen.
 
-**Arithmetic reached its target on 2026-10-18.** Fourteen concepts — ordering whole numbers,
+**Arithmetic reached its target on 2026-10-18.** Fourteen concepts ordering whole numbers,
 expanded form, multiplying and dividing by powers of ten, estimating sums and products, a multi-step
 word problem, interpreting a remainder, division by zero, integer word problems, powers with
-negative bases, the power of a product and of a quotient, cube roots, and estimating square roots —
+negative bases, the power of a product and of a quotient, cube roots, and estimating square roots, 
 took the domain from 46 to 60, so its row reads +0. Two subdomains are new,
 `arithmetic.estimation` and `arithmetic.word_problems`, because the estimation and multi-step
 concepts had no existing home. The five grade courses 4 through 8 take the batch: the fourth-grade
@@ -497,10 +497,10 @@ older concepts still sit outside every course: `arith.round.thousands`, `arith.f
 and `arith.order_ops.nested`. The remainder was 112, and the largest deficit left was prealgebra's
 fourteen.
 
-**Prealgebra reached its target on 2026-10-18.** Fourteen concepts — percent change, percent error,
+**Prealgebra reached its target on 2026-10-18.** Fourteen concepts, percent change, percent error,
 commission, markup, simple interest, the percent proportion, unit-price comparison, translating words
 into expressions, evaluating formulas, inequality word problems, number-line inequality graphs,
-customary units, metric units, and Celsius-Fahrenheit conversion — took the domain from 46 to 60, so
+customary units, metric units, and Celsius-Fahrenheit conversion, took the domain from 46 to 60, so
 its row reads +0. One subdomain is new, `prealgebra.measurement`, because the three measurement
 concepts had no existing home. Each new concept has an authored lesson, three knowledge-point
 sections, and a solution schema. The grade courses 5 through 8 take the batch: the fifth-grade set
@@ -514,10 +514,10 @@ prealgebra course adds the capstone applications. All 60 prealgebra concepts are
 new targets pull every remaining decimal, percent, ratio, expression and inequality prerequisite into
 a course path. The remainder was 98, and the largest deficit left was abstract_algebra's thirteen.
 
-**Abstract algebra reached its target on 2026-10-18.** Thirteen concepts — the center of a group,
+**Abstract algebra reached its target on 2026-10-18.** Thirteen concepts, the center of a group,
 automorphisms, simple groups, p-groups, composition series, zero divisors, integral domains, prime
 and maximal ideals, Euclidean domains, the characteristic of a field, algebraic elements, submodules,
-and module homomorphisms — took the domain from 32 to 45, so its row reads +0. Three candidate
+and module homomorphisms, took the domain from 32 to 45, so its row reads +0. Three candidate
 concepts were dropped because an existing lesson already teaches them: conjugacy is covered by
 `abstract.group.normal`, so the batch teaches composition series; splitting fields are covered by
 `abstract.field.extension`, so it teaches algebraic and transcendental elements; and vector spaces
@@ -534,10 +534,10 @@ gaps plus the four older sinks `commutator`, `galois_group`, `noetherian` and `e
 batch adds no authored solution schema, consistent with the university-domain policy. The remainder
 was 85, and the largest deficit left was machine_learning's twelve, tied with topology's twelve.
 
-**Machine learning reached its target on 2026-10-18.** Twelve concepts — sigmoid activation,
+**Machine learning reached its target on 2026-10-18.** Twelve concepts, sigmoid activation,
 logistic regression, vanishing and exploding gradients, mean absolute error, the confusion matrix,
 F1, k-means clustering, feature scaling, one-hot encoding, class imbalance, Gini impurity, and
-bagging and random forests — took the domain from 33 to 45, so its row reads +0. Two subdomains are
+bagging and random forests, took the domain from 33 to 45, so its row reads +0. Two subdomains are
 new, `machine_learning.data` for the three preprocessing concepts and `machine_learning.trees` for
 the two tree concepts. The survey rejected the obvious additions before writing them: the CNN lesson
 already teaches output-size arithmetic, the validation lesson already teaches leakage, the
@@ -551,9 +551,9 @@ the sixteen that no course reached before, because the `ml` course now targets t
 (`bert`, `gan`, `actor_critic`, `adam`, `batchnorm`, `calibration`, `augmentation`) as well as the
 new ones. The remainder is 73, and the largest deficit left is topology's twelve.
 
-**Topology reached its target on 2026-10-18.** Twelve concepts — open balls, interior, closure and
+**Topology reached its target on 2026-10-18.** Twelve concepts, open balls, interior, closure and
 boundary, limit points, convergence, completeness, bases and subbases, the subspace topology, dense
-sets and separability, homeomorphisms, the Euler characteristic, genus, and Betti numbers — took the
+sets and separability, homeomorphisms, the Euler characteristic, genus, and Betti numbers, took the
 domain from 30 to 42, so its row reads +0. One subdomain is new, `topology.invariants`, for the four
 invariant concepts. The survey found that the domain jumped from three basics straight to named
 theorems (Urysohn, Tietze, Stone-Čech, Van Kampen, de Rham) with almost no computational middle, so
@@ -567,10 +567,10 @@ now targets the ten existing sinks as well as the nine new ones, and its descrip
 full sequence. The remainder was 61, and the largest deficit left was linear_algebra's eleven, tied
 with statistics' eleven.
 
-**Linear algebra reached its target on 2026-10-18.** Eleven concepts — vector-space axioms, kernel
+**Linear algebra reached its target on 2026-10-18.** Eleven concepts, vector-space axioms, kernel
 and image, injective, surjective and invertible maps, coordinates and change of basis, orthogonal
 complements, projection onto a subspace, the spectral theorem, quadratic forms and definiteness, the
-cross product, the condition number, and Cayley-Hamilton — took the domain from 34 to 45, so its row
+cross product, the condition number, and Cayley-Hamilton, took the domain from 34 to 45, so its row
 reads +0. The survey found the domain well supplied with computations but thin on the structural
 ideas that connect them, and it rejected the obvious additions that existing lessons already teach:
 determinant properties, transpose, linear combinations and coordinate representation, the
@@ -584,10 +584,10 @@ linear-algebra concepts are reachable, including the 22 that no course reached b
 now covers inner products and matrix decompositions. The remainder was 50, and the largest deficit
 left was statistics' eleven.
 
-**Statistics reached its target on 2026-10-18.** Eleven concepts — null and alternative hypotheses,
+**Statistics reached its target on 2026-10-18.** Eleven concepts, null and alternative hypotheses,
 the one-sample z statistic, the one-sample t statistic, p-values, Type I and II errors and power, the
 standard error of a proportion, the chi-square goodness-of-fit test, one-way ANOVA, the coefficient
-of determination, histograms, and nonparametric tests — took the domain from 44 to 55, so its row
+of determination, histograms, and nonparametric tests, took the domain from 44 to 55, so its row
 reads +0. The survey found the domain already strong on computation but with no testing framework:
 sampling, confidence intervals, standard error and margin of error existed, but nothing connected
 them to a hypothesis test. It rejected the obvious additions that existing lessons already teach:
@@ -602,10 +602,10 @@ reachable, including the 32 that no course reached before, because the `probstat
 the sixteen existing sinks and the eight new ones, and its description now covers hypothesis testing
 and the tests built on it. The remainder was 39, and the largest deficit left was calculus' ten.
 
-**Calculus reached its target on 2026-10-18.** Ten concepts — derivatives of hyperbolic functions, the
+**Calculus reached its target on 2026-10-18.** Ten concepts, derivatives of hyperbolic functions, the
 second derivative of a parametric curve, finite differences, arc length in polar coordinates, torsion,
 the Frenet frame, the second-order Taylor approximation, hydrostatic force, Pappus's centroid theorem,
-and moment of inertia — took the domain from 165 to 175, so its row reads +0. The survey found the
+and moment of inertia, took the domain from 165 to 175, so its row reads +0. The survey found the
 domain already dense and rejected the additions existing lessons already cover: Taylor's theorem with
 remainder and the Weierstrass M-test in the series lessons, numerical-integration error bounds, the
 Hessian in the partial-derivatives lesson, hyperbolic integrals in the integration tables, and surface
@@ -617,9 +617,9 @@ Calculus therefore reads 86 of 175 reachable, with the staged courses preserved;
 731 of 971. The remainder was 29, and the largest deficit left was number_theory's ten, tied with
 differential_equations' ten.
 
-**Number theory reached its target on 2026-10-18.** Ten concepts — the Jacobi symbol, discrete
+**Number theory reached its target on 2026-10-18.** Ten concepts, the Jacobi symbol, discrete
 logarithms, square roots modulo a prime, sums of two squares, Pell's equation, Pisano periods, the
-Carmichael function, the Miller-Rabin test, prime gaps, and Bertrand's postulate — took the domain
+Carmichael function, the Miller-Rabin test, prime gaps, and Bertrand's postulate, took the domain
 from 32 to 42, so its row reads +0. The survey rejected the additions existing lessons already teach:
 modular inverses in the Bézout lesson, Euler's criterion in the Legendre lesson, perfect numbers and
 Mersenne primes in the divisor-sum lesson, twin primes and Brun's sieve in the sieve lesson, and
@@ -633,10 +633,10 @@ graduate concepts (Möbius, PNT, zeta, Chebyshev, Dirichlet, elliptic curves, cl
 quadratic reciprocity and the sieve) left as enrichment; the corpus reaches 750 of 981. The remainder
 is 19, and the largest deficit left was differential_equations' ten.
 
-**Differential equations reached its target on 2026-10-18.** Ten concepts — Bernoulli equations,
+**Differential equations reached its target on 2026-10-18.** Ten concepts, Bernoulli equations,
 Cauchy-Euler equations, reduction of order, power-series solutions, the matrix exponential, Heaviside
 steps and impulses, the spring-mass system, mixing problems, predator-prey systems, and Heun's method
-— took the domain from 32 to 42, so its row reads +0. The survey rejected the additions existing
+,  took the domain from 32 to 42, so its row reads +0. The survey rejected the additions existing
 lessons already teach: integrating factors in the linear and exact lessons, the y = vx substitution in
 the homogeneous lesson, undetermined coefficients and the modification rule in the nonhomogeneous
 lesson, separation of variables and d'Alembert in the heat and wave lessons, linearization in the
@@ -650,10 +650,10 @@ variation of parameters and RK4 finally have a course path. Differential equatio
 reachable, with the transforms, PDE, Sturm-Liouville and nonlinear chain left as enrichment; the
 corpus reaches 764 of 991. The remainder was 9, and the largest deficit left was precalculus' nine.
 
-**Precalculus reached its target on 2026-10-18, and the corpus reached a thousand.** Nine concepts —
+**Precalculus reached its target on 2026-10-18, and the corpus reached a thousand.** Nine concepts, 
 continuous compounding, Newton's law of cooling, logarithmic scales, polynomial and rational
 inequalities, holes in rational graphs, the discriminant of a general conic, projectile motion,
-resultant vectors, and decomposition of a function — took the domain from 41 to 50, so its row reads
+resultant vectors, and decomposition of a function, took the domain from 41 to 50, so its row reads
 +0. The survey found the domain's twenty unreachable concepts were all standard precalculus (conics,
 sequences and series, vectors, the binomial theorem, induction, parametric and polar graphs), so the
 course was wired to cover them rather than leave the subject half-taught. It rejected the additions
@@ -663,12 +663,12 @@ distance lesson, even and odd functions in the functions lessons, and one-to-one
 inverse lesson. Six of the nine are numeric, one is an expression, and two are multiple choice; each
 numeric generator publishes the facts its answers follow from, and the tests recompute the answer from
 them. All 50 precalculus concepts are reachable, so the corpus reaches 794 of 1000, with 206 left
-outside the named course paths — the enrichment section 4.1 measures, not a gap in a target. Every
+outside the named course paths, the enrichment section 4.1 measures, not a gap in a target. Every
 domain on the table was at its target at that milestone.
 
 **The thousand-concept milestone is complete, and the next tranche is 1,250.** The target table is
-no longer the whole story: the corpus now exceeds a thousand, and the next phase adds four domains —
-real analysis, graph theory, numerical analysis and probability theory — and raises the targets of
+no longer the whole story: the corpus now exceeds a thousand, and the next phase adds four domains, 
+real analysis, graph theory, numerical analysis and probability theory and raises the targets of
 calculus, trigonometry and algebra by 70. Graph theory went first and is complete: its 40 concepts
 arrived in two batches. The first covered isomorphism, complements and subgraphs, homomorphisms and
 products, distance and cuts, Menger's theorem, matchings and covers, Tutte's theorem, and chromatic,
@@ -697,9 +697,9 @@ that belong to their stage, nine to `calc1`, ten to `calc2` and eleven to `calc3
 concepts are reachable and the remaining per-domain total falls to 40.
 
 **Algebra reached its target on 2026-10-19.** Twenty concepts took the domain from 104 to 124, so
-its row reads +0. The survey found the groups uneven — functions, exponentials and logarithms,
+its row reads +0. The survey found the groups uneven, functions, exponentials and logarithms,
 radicals, rational expressions, systems, sequences and polynomials were each thinner than the
-linear and quadratic material — so the batch fills those edges rather than deepening the core
+linear and quadratic material, so the batch fills those edges rather than deepening the core
 again. Functions gain piecewise evaluation, graph transformations and the domain and range of an
 inverse; exponentials and logarithms gain their graphs, compound interest and the solution of a
 logarithmic model; radicals gain simplifying, combining like radicals and rationalizing with
@@ -708,8 +708,8 @@ systems gain a three-variable elimination, the matrix method and a nonlinear pai
 sigma notation and induction; and polynomials gain the factor theorem and the rational root
 theorem. Twelve concepts are numeric and eight are conceptual multiple choice. Every numeric
 generator publishes the facts its answer follows from, and the tests recompute the answer from
-those facts. The three school courses each take the concepts of their stage — nine to `a1`, ten to
-`a2` and one to `pa` — and the corpus reaches 1064 of 1230, so the remaining per-domain total falls
+those facts. The three school courses each take the concepts of their stage, nine to `a1`, ten to
+`a2` and one to `pa` and the corpus reaches 1064 of 1230, so the remaining per-domain total falls
 to 20. Algebra is a school domain, so the twelve computed concepts carry authored solution schemas
 and the eight fixed-question concepts are named in the exemption list, which the schema gate checks
 in both directions.
