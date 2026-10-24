@@ -56,31 +56,10 @@ func LoadDir(dir string) (*DAG, error) {
 	if err := mergeKnowledgePoints(dir, raw); err != nil {
 		return nil, err
 	}
-	// When loading a curriculum with 500 or more concepts, enforce graph density invariants.
-	if len(raw) >= 500 {
-		totalPrereqs := 0
-		withKeyPrereqs := 0
-		withEncompasses := 0
-		for _, c := range raw {
-			totalPrereqs += len(c.Prerequisites)
-			if len(c.KeyPrerequisites) > 0 {
-				withKeyPrereqs++
-			}
-			if len(c.Encompasses) > 0 {
-				withEncompasses++
-			}
-		}
-		meanInDegree := float64(totalPrereqs) / float64(len(raw))
-		if meanInDegree < 2.2 {
-			return nil, fmt.Errorf("curriculum graph density invariant violated: mean in-degree %.2f < 2.20", meanInDegree)
-		}
-		if float64(withKeyPrereqs)/float64(len(raw)) < 0.80 {
-			return nil, fmt.Errorf("curriculum key_prerequisites coverage violated: %.1f%% < 80%%", float64(withKeyPrereqs)/float64(len(raw))*100)
-		}
-		if float64(withEncompasses)/float64(len(raw)) < 0.50 {
-			return nil, fmt.Errorf("curriculum encompasses coverage violated: %.1f%% < 50%%", float64(withEncompasses)/float64(len(raw))*100)
-		}
-	}
+	// Density is enforced in one place only, by validate(). A second copy here
+	// measured in-degree as len(Prerequisites) while validate() measures
+	// len(Prerequisites)+len(Encompasses), so two gates could disagree about the
+	// same corpus and report different floors for it.
 	return Build(raw)
 }
 

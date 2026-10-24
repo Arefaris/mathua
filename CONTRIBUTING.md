@@ -71,7 +71,7 @@ Concepts live in per-domain files under `data/concepts/`. Each file is a JSON ar
 ]
 ```
 
-Valid `grading_type` values: `numeric`, `polynomial`, `expression`, `multiple_choice`, `comparison`, `ordering`, `tuple`, `complex`, `symbolic` (9 total, `internal/concepts/loader.go:424`).
+Valid `grading_type` values: `numeric`, `polynomial`, `expression`, `multiple_choice`, `comparison`, `ordering`, `tuple`, `complex`, `symbolic` (9 total, checked by `validate` in `internal/concepts/loader.go`).
 
 > The prerequisites list is the most important field. What must a student absolutely know before attempting this? If in doubt, add the prerequisite, the graph validator will catch cycles.
 

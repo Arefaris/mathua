@@ -97,10 +97,10 @@ func Test2PL_ItemParametersCalibration(t *testing.T) {
 	s := eng.Start()
 
 	c := &concepts.Concept{
-		ID:            "calc.test.derivative",
-		Prerequisites: []string{"a", "b", "c"},
+		ID:               "calc.test.derivative",
+		Prerequisites:    []string{"a", "b", "c"},
 		KeyPrerequisites: []string{"a"},
-		Encompasses:   []string{"b"},
+		Encompasses:      []string{"b"},
 	}
 
 	a, _ := eng.ItemParameters(s, c)

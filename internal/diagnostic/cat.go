@@ -490,6 +490,14 @@ func (e *Engine) infoGain(s *Session, c *concepts.Concept, coverSet map[string]b
 		}
 	}
 	if s.focus[c.ID] {
+		// A concept the learner chose outranks a foundation of equal uncertainty.
+		// This is a preference between probes, not a filter: every covered concept
+		// is still asked, and a miss anywhere still pulls the frontier backwards.
+		// The weight was 0.5 before the 2PL change. At 2.5 a focused probe now
+		// outweighs a difference in uncertainty, so a learner who names what they
+		// want to be assessed on can pull the sequence towards it. That is
+		// deliberate, and it is the one place where this file's ordering is not
+		// driven by uncertainty alone.
 		influence += 2.5
 	}
 	return unc * influence * (1.0 + 0.2*info)
@@ -1089,7 +1097,7 @@ func (e *Engine) updateThetaLocked(s *Session) {
 		a, b := e.ItemParameters(s, c)
 		totalInfo += FisherInformation(theta, a, b)
 	}
-	s.se = 1.0 / math.Sqrt(totalInfo + 1.0)
+	s.se = 1.0 / math.Sqrt(totalInfo+1.0)
 }
 
 // AbilityEstimate returns the current estimated latent ability theta and its standard error SE.
