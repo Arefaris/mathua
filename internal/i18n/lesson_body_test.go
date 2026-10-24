@@ -423,7 +423,7 @@ var mathOperatorNames = map[string]bool{
 	"tg": true, "ctg": true, "arctg": true, "arcctg": true, "cosec": true,
 	"sh": true, "ch": true, "th": true, "cth": true,
 	"sinh": true, "cosh": true, "tanh": true, "coth": true, "sech": true, "csch": true,
-	"log": true, "ln": true, "lg": true, "exp": true, "lim": true, "max": true, "min": true,
+	"log": true, "ln": true, "lg": true, "colog": true, "exp": true, "lim": true, "max": true, "min": true,
 	"det": true, "rank": true, "tr": true, "dim": true, "ker": true, "span": true, "proj": true,
 	"Re": true, "Im": true, "arg": true, "deg": true, "diag": true, "var": true, "Var": true,
 	"Cov": true, "cov": true, "E": true, "P": true,
