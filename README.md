@@ -33,7 +33,7 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 - The fork follows upstream at least twice a week, and translations live in separate overlay files next to the English originals, so the original project can take any part of this work back.
 
 <!-- i18n-progress:start -->
-![Ukrainian](https://img.shields.io/badge/Ukrainian-25%25-yellow?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-39%25-yellow?style=flat-square)
+![Ukrainian](https://img.shields.io/badge/Ukrainian-25%25-yellow?style=flat-square) ![Russian](https://img.shields.io/badge/Russian-48%25-yellow?style=flat-square)
 
 | Area | English words | Ukrainian | Russian |
 |---|--:|---|---|
@@ -41,10 +41,10 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 | Topic names | 4,665 | `████████████████████` 100% | `████████████████████` 100% |
 | Courses | 439 | `████████████████████` 100% | `████████████████████` 100% |
 | Lesson steps | 90,483 | `████████████████████` 100% | `████████████████████` 100% |
-| Lesson texts | 728,462 | `███░░░░░░░░░░░░░░░░░` 16% | `██████░░░░░░░░░░░░░░` 33% |
+| Lesson texts | 728,462 | `███░░░░░░░░░░░░░░░░░` 16% | `████████░░░░░░░░░░░░` 44% |
 | Worked solutions | 25,907 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
 | Problem texts | 22,236 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **878,822** | **`█████░░░░░░░░░░░░░░░` 25%** | **`███████░░░░░░░░░░░░░` 39%** |
+| **Overall** | **878,822** | **`█████░░░░░░░░░░░░░░░` 25%** | **`█████████░░░░░░░░░░░` 48%** |
 
 _Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._
 <!-- i18n-progress:end -->
