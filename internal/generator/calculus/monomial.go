@@ -137,3 +137,12 @@ func randRange(difficulty float64, lo, hi int) int {
 	}
 	return floor + rand.Intn(hi-floor+1)
 }
+
+// scaledXPow renders c*x^k with a silent unit coefficient, so a chain-rule stem
+// reads 3x^2 rather than 1x^2.
+func scaledXPow(c, k int) string {
+	if c == 1 {
+		return varPow("x", k)
+	}
+	return strconv.Itoa(c) + varPow("x", k)
+}

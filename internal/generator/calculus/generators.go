@@ -528,7 +528,7 @@ func (g *integralPowerRuleGen) Generate(ctx generator.GeneratorContext) generato
 type integralSubstitutionGen struct{}
 
 // sinPow renders the power of sine used in a substitution stem. A first power
-// is the bare function, because \sin(x)^{1} reads as machine output.
+// is the bare function, because \\sin(x)^{1} reads as machine output.
 func sinPow(p int) string {
 	if p == 1 {
 		return "\\sin(x)"
@@ -672,8 +672,8 @@ func (g *integralAreaBetweenGen) Generate(ctx generator.GeneratorContext) genera
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the area enclosed between \\(y = %d x\\) and the x-axis \\(y = 0\\) from \\(x = 0\\) to \\(x = %d\\).", m, L),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for the area between curves: \\(A = \\int_{a}^{b} (f(x) - g(x))\\,dx\\).\n"+
-				"Subgoal 2: Substitute parameters \\(f(x) = %d x\\), \\(g(x) = 0\\), \\(a = 0\\) and \\(b = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for the area between curves: \\(A = \\int_{a}^{b} (f(x) - g(x))\\,dx\\).\\n"+
+				"Subgoal 2: Substitute parameters \\(f(x) = %d x\\), \\(g(x) = 0\\), \\(a = 0\\) and \\(b = %d\\).\\n"+
 				"Subgoal 3: Evaluate the definite integral: \\(\\int_{0}^{%d} %d x\\,dx = [%d x^2 / 2]_{0}^{%d} = %d\\).", m, L, L, m, m, L, ans),
 		}
 	case 1:
@@ -685,8 +685,8 @@ func (g *integralAreaBetweenGen) Generate(ctx generator.GeneratorContext) genera
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the area bounded by the parabola \\(y = %d - x^2\\) and the x-axis \\(y = 0\\).", H),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: find roots \\(\\pm %d\\) and integrate \\(A = \\int_{-%d}^{%d} (%d - x^2)\\,dx\\).\n"+
-				"Subgoal 2: Use symmetry: \\(A = 2 \\int_{0}^{%d} (%d - x^2)\\,dx\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: find roots \\(\\pm %d\\) and integrate \\(A = \\int_{-%d}^{%d} (%d - x^2)\\,dx\\).\\n"+
+				"Subgoal 2: Use symmetry: \\(A = 2 \\int_{0}^{%d} (%d - x^2)\\,dx\\).\\n"+
 				"Subgoal 3: Evaluate and simplify: \\(2 [%d x - x^3 / 3]_{0}^{%d} = 2 (%d - %d) = %d\\).", r, r, r, H, r, H, H, r, H*r, (r*r*r)/3, ans),
 		}
 	case 2:
@@ -697,8 +697,8 @@ func (g *integralAreaBetweenGen) Generate(ctx generator.GeneratorContext) genera
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the area of the region bounded by \\(y = %d x\\) and \\(y = x^2\\).", k),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: intersections occur at \\(x = 0\\) and \\(x = %d\\), so \\(A = \\int_{0}^{%d} (%d x - x^2)\\,dx\\).\n"+
-				"Subgoal 2: Find antiderivative: \\([%d x^2 / 2 - x^3 / 3]_{0}^{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: intersections occur at \\(x = 0\\) and \\(x = %d\\), so \\(A = \\int_{0}^{%d} (%d x - x^2)\\,dx\\).\\n"+
+				"Subgoal 2: Find antiderivative: \\([%d x^2 / 2 - x^3 / 3]_{0}^{%d}\\).\\n"+
 				"Subgoal 3: Evaluate and simplify: \\(\\frac{%d \\cdot %d}{2} - \\frac{%d}{3} = %d\\).", k, k, k, k, k, k, k*k, k*k*k, ans),
 		}
 	case 3:
@@ -710,8 +710,8 @@ func (g *integralAreaBetweenGen) Generate(ctx generator.GeneratorContext) genera
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the area under the curve \\(y = %d x^2\\) from \\(x = 0\\) to \\(x = %d\\).", coeff, L),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(A = \\int_{0}^{%d} %d x^2\\,dx\\).\n"+
-				"Subgoal 2: Find the antiderivative: \\([%d x^3]_{0}^{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(A = \\int_{0}^{%d} %d x^2\\,dx\\).\\n"+
+				"Subgoal 2: Find the antiderivative: \\([%d x^3]_{0}^{%d}\\).\\n"+
 				"Subgoal 3: Evaluate and simplify: \\(%d \\cdot %d^3 = %d\\).", L, coeff, k, L, k, L, ans),
 		}
 	default:
@@ -723,8 +723,8 @@ func (g *integralAreaBetweenGen) Generate(ctx generator.GeneratorContext) genera
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the area between the lines \\(y = %d x + %d\\) and \\(y = %d x\\) over the interval [%d, %d].", m, b, m, 0, L),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(A = \\int_{a}^{b} (f(x) - g(x))\\,dx\\).\n"+
-				"Subgoal 2: Substitute \\(f(x) - g(x) = (%d x + %d) - %d x = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(A = \\int_{a}^{b} (f(x) - g(x))\\,dx\\).\\n"+
+				"Subgoal 2: Substitute \\(f(x) - g(x) = (%d x + %d) - %d x = %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\(\\int_{0}^{%d} %d\\,dx = %d \\cdot %d = %d\\).", m, b, m, b, L, b, b, L, ans),
 		}
 	}
@@ -966,8 +966,8 @@ func (g *rolleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For the function \\(f(x) = x^2 - %d x + %d\\) on the interval \\([%d, %d]\\), find the value \\(c \\in (%d, %d)\\) guaranteed by Rolle's Theorem such that \\(f'(c) = 0\\).", b, cVal, r1, r2, r1, r2),
 			Answer:   fmt.Sprintf("%d", cMid),
-			Explanation: fmt.Sprintf("Subgoal 1: State Rolle's Theorem: if \\(f\\) is continuous on \\([a, b]\\), differentiable on \\((a, b)\\) and \\(f(a) = f(b)\\), there exists \\(c \\in (a, b)\\) with \\(f'(c) = 0\\).\n"+
-				"Subgoal 2: Compute the derivative \\(f'(x) = 2x - %d\\) and set it to zero.\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State Rolle's Theorem: if \\(f\\) is continuous on \\([a, b]\\), differentiable on \\((a, b)\\) and \\(f(a) = f(b)\\), there exists \\(c \\in (a, b)\\) with \\(f'(c) = 0\\).\\n"+
+				"Subgoal 2: Compute the derivative \\(f'(x) = 2x - %d\\) and set it to zero.\\n"+
 				"Subgoal 3: Solve for \\(c\\): \\(2c - %d = 0 \\implies c = %d\\).", b, b, cMid),
 		}
 	case 1:
@@ -977,8 +977,8 @@ func (g *rolleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = -x^2 + %d x\\) on \\([0, %d]\\), find the critical point \\(c\\) guaranteed by Rolle's Theorem.", b, b),
 			Answer:   fmt.Sprintf("%d", k),
-			Explanation: fmt.Sprintf("Subgoal 1: Confirm the boundary condition \\(f(0) = 0\\) and \\(f(%d) = -(%d)^2 + %d(%d) = 0\\).\n"+
-				"Subgoal 2: Compute \\(f'(x) = -2x + %d\\) and equate to zero.\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Confirm the boundary condition \\(f(0) = 0\\) and \\(f(%d) = -(%d)^2 + %d(%d) = 0\\).\\n"+
+				"Subgoal 2: Compute \\(f'(x) = -2x + %d\\) and equate to zero.\\n"+
 				"Subgoal 3: Solve \\(-2c + %d = 0 \\implies c = %d\\).", b, b, b, b, b, b, k),
 		}
 	case 2:
@@ -992,8 +992,8 @@ func (g *rolleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = -x^2 + %d x + (%d)\\) on \\([%d, %d]\\), find the point \\(c\\) guaranteed by Rolle's Theorem.", lin, constTerm, aEnd, bEnd),
 			Answer:   fmt.Sprintf("%d", c0),
-			Explanation: fmt.Sprintf("Subgoal 1: State Rolle's Theorem: since \\(f(%d) = f(%d) = 0\\), a point \\(c \\in (%d, %d)\\) satisfies \\(f'(c) = 0\\).\n"+
-				"Subgoal 2: Differentiate: \\(f'(x) = -2x + %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State Rolle's Theorem: since \\(f(%d) = f(%d) = 0\\), a point \\(c \\in (%d, %d)\\) satisfies \\(f'(c) = 0\\).\\n"+
+				"Subgoal 2: Differentiate: \\(f'(x) = -2x + %d\\).\\n"+
 				"Subgoal 3: Set \\(-2c + %d = 0\\) and solve for \\(c = %d\\).", aEnd, bEnd, aEnd, bEnd, lin, lin, c0),
 		}
 	case 3:
@@ -1003,8 +1003,8 @@ func (g *rolleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("If a differentiable function \\(f(x)\\) satisfies \\(f(%d) = f(%d)\\) on \\([%d, %d]\\), what is the value of \\(f'(c)\\) at the point \\(c\\) guaranteed by Rolle's Theorem?", x1, x2, x1, x2),
 			Answer:   "0",
-			Explanation: "Subgoal 1: State the conclusion of Rolle's Theorem: the derivative must vanish at some interior point \\(c \\in (a, b)\\).\n" +
-				"Subgoal 2: Identify the critical condition: \\(f'(c) = 0\\).\n" +
+			Explanation: "Subgoal 1: State the conclusion of Rolle's Theorem: the derivative must vanish at some interior point \\(c \\in (a, b)\\).\\n" +
+				"Subgoal 2: Identify the critical condition: \\(f'(c) = 0\\).\\n" +
 				"Subgoal 3: Conclude that the derivative value is 0.",
 		}
 	default:
@@ -1016,8 +1016,8 @@ func (g *rolleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = 2x^2 - %d x\\) on \\([%d, %d]\\), find the value \\(c\\) where \\(f'(c) = 0\\) as guaranteed by Rolle's Theorem.", 4*c, x1, x2),
 			Answer:   fmt.Sprintf("%d", c),
-			Explanation: fmt.Sprintf("Subgoal 1: State Rolle's Theorem: since \\(f(%d) = f(%d)\\), there exists \\(c \\in (%d, %d)\\) with \\(f'(c) = 0\\).\n"+
-				"Subgoal 2: Differentiate \\(f(x)\\): \\(f'(x) = 4x - %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State Rolle's Theorem: since \\(f(%d) = f(%d)\\), there exists \\(c \\in (%d, %d)\\) with \\(f'(c) = 0\\).\\n"+
+				"Subgoal 2: Differentiate \\(f(x)\\): \\(f'(x) = 4x - %d\\).\\n"+
 				"Subgoal 3: Solve \\(4c - %d = 0 \\implies c = %d\\).", x1, x2, x1, x2, 4*c, 4*c, c),
 		}
 	}
@@ -1037,8 +1037,8 @@ func (g *mvtGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = x^2\\) on the interval \\([%d, %d]\\), find the value \\(c \\in (%d, %d)\\) satisfying the Mean Value Theorem.", a, b, a, b),
 			Answer:   fmt.Sprintf("%d", cMid),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem formula: \\(f'(c) = \\frac{f(b) - f(a)}{b - a}\\).\n"+
-				"Subgoal 2: Compute the average rate of change: \\(\\frac{(%d)^2 - (%d)^2}{%d - %d} = \\frac{%d - %d}{%d} = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem formula: \\(f'(c) = \\frac{f(b) - f(a)}{b - a}\\).\\n"+
+				"Subgoal 2: Compute the average rate of change: \\(\\frac{(%d)^2 - (%d)^2}{%d - %d} = \\frac{%d - %d}{%d} = %d\\).\\n"+
 				"Subgoal 3: Equate to \\(f'(c) = 2c = %d\\) and solve for \\(c = %d\\).", b, a, b, a, b*b, a*a, b-a, a+b, a+b, cMid),
 		}
 	case 1:
@@ -1052,8 +1052,8 @@ func (g *mvtGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = %d x^2 + %d x\\) on \\([%d, %d]\\), find the point \\(c\\) guaranteed by the Mean Value Theorem.", k, m, a, b),
 			Answer:   fmt.Sprintf("%d", cMid),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem: \\(f'(c) = \\frac{f(b) - f(a)}{b - a}\\).\n"+
-				"Subgoal 2: For any quadratic function, the instantaneous rate of change equals the average rate of change at the midpoint \\(c = \\frac{a + b}{2}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem: \\(f'(c) = \\frac{f(b) - f(a)}{b - a}\\).\\n"+
+				"Subgoal 2: For any quadratic function, the instantaneous rate of change equals the average rate of change at the midpoint \\(c = \\frac{a + b}{2}\\).\\n"+
 				"Subgoal 3: Calculate the midpoint: \\(c = \\frac{%d + %d}{2} = %d\\).", a, b, cMid),
 		}
 	case 2:
@@ -1064,8 +1064,8 @@ func (g *mvtGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the average rate of change \\(\\frac{f(b) - f(a)}{b - a}\\) of \\(f(x) = x^2 + %d x\\) on \\([0, %d]\\).", k, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the average rate of change formula: \\(\\frac{f(b) - f(a)}{b - a}\\).\n"+
-				"Subgoal 2: Evaluate \\(f(%d) = (%d)^2 + %d(%d) = %d\\) and \\(f(0) = 0\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the average rate of change formula: \\(\\frac{f(b) - f(a)}{b - a}\\).\\n"+
+				"Subgoal 2: Evaluate \\(f(%d) = (%d)^2 + %d(%d) = %d\\) and \\(f(0) = 0\\).\\n"+
 				"Subgoal 3: Divide by interval width: \\(\\frac{%d - 0}{%d} = %d\\).", b, b, k, b, b*b+k*b, b*b+k*b, b, ans),
 		}
 	case 3:
@@ -1079,8 +1079,8 @@ func (g *mvtGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("A car travels %d miles in %d hours. By the Mean Value Theorem, at what instantaneous speed (in mph) was the car traveling at some moment during the journey?", miles, hours),
 			Answer:   fmt.Sprintf("%d", speed),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem in kinematics: \\(v_{\\text{avg}} = \\frac{s(t_2) - s(t_1)}{t_2 - t_1} = s'(c)\\).\n"+
-				"Subgoal 2: Substitute distance \\(\\Delta s = %d\\) and time \\(\\Delta t = %d\\): \\(\\frac{%d}{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem in kinematics: \\(v_{\\text{avg}} = \\frac{s(t_2) - s(t_1)}{t_2 - t_1} = s'(c)\\).\\n"+
+				"Subgoal 2: Substitute distance \\(\\Delta s = %d\\) and time \\(\\Delta t = %d\\): \\(\\frac{%d}{%d}\\).\\n"+
 				"Subgoal 3: Divide to obtain the instantaneous speed %d mph.", miles, hours, miles, hours, speed),
 		}
 	default:
@@ -1091,8 +1091,8 @@ func (g *mvtGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = x^3\\) on \\([0, %d]\\), what is the value of the derivative \\(f'(c)\\) guaranteed by the Mean Value Theorem?", b),
 			Answer:   fmt.Sprintf("%d", derivVal),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem: \\(f'(c) = \\frac{f(b) - f(a)}{b - a}\\).\n"+
-				"Subgoal 2: Evaluate \\(f(%d) = (%d)^3 = %d\\) and \\(f(0) = 0\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Mean Value Theorem: \\(f'(c) = \\frac{f(b) - f(a)}{b - a}\\).\\n"+
+				"Subgoal 2: Evaluate \\(f(%d) = (%d)^3 = %d\\) and \\(f(0) = 0\\).\\n"+
 				"Subgoal 3: Calculate \\(f'(c) = \\frac{%d}{%d} = %d\\).", b, b, b*b*b, b*b*b, b, derivVal),
 		}
 	}
@@ -1112,8 +1112,8 @@ func (g *cauchyMVTGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = x^2\\) and \\(g(x) = x\\) on \\([%d, %d]\\), find the value \\(c\\) satisfying Cauchy's Mean Value Theorem: \\(\\frac{f(b)-f(a)}{g(b)-g(a)} = \\frac{f'(c)}{g'(c)}\\).", a, b),
 			Answer:   fmt.Sprintf("%d", cMid),
-			Explanation: fmt.Sprintf("Subgoal 1: State Cauchy's Mean Value Theorem: \\(\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f'(c)}{g'(c)}\\).\n"+
-				"Subgoal 2: Differentiate \\(f'(x) = 2x\\) and \\(g'(x) = 1\\), giving quotient \\(\\frac{2c}{1} = \\frac{(%d)^2 - (%d)^2}{%d - %d} = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State Cauchy's Mean Value Theorem: \\(\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f'(c)}{g'(c)}\\).\\n"+
+				"Subgoal 2: Differentiate \\(f'(x) = 2x\\) and \\(g'(x) = 1\\), giving quotient \\(\\frac{2c}{1} = \\frac{(%d)^2 - (%d)^2}{%d - %d} = %d\\).\\n"+
 				"Subgoal 3: Solve for \\(c\\): \\(2c = %d \\implies c = %d\\).", a, b, a, b, a+b, a+b, cMid),
 		}
 	case 1:
@@ -1124,8 +1124,8 @@ func (g *cauchyMVTGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = x^3\\) and \\(g(x) = x^2\\) on \\([0, %d]\\), find \\(c\\) satisfying Cauchy's Mean Value Theorem.", b),
 			Answer:   fmt.Sprintf("%d", cVal),
-			Explanation: fmt.Sprintf("Subgoal 1: State Cauchy's Mean Value Theorem: \\(\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f'(c)}{g'(c)}\\).\n"+
-				"Subgoal 2: Substitute derivatives \\(f'(c) = 3c^2\\) and \\(g'(c) = 2c\\), so \\(\\frac{3c^2}{2c} = \\frac{3}{2}c\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State Cauchy's Mean Value Theorem: \\(\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f'(c)}{g'(c)}\\).\\n"+
+				"Subgoal 2: Substitute derivatives \\(f'(c) = 3c^2\\) and \\(g'(c) = 2c\\), so \\(\\frac{3c^2}{2c} = \\frac{3}{2}c\\).\\n"+
 				"Subgoal 3: Compute quotient \\(\\frac{(%d)^3 - 0}{(%d)^2 - 0} = %d\\) and solve \\(\\frac{3}{2}c = %d \\implies c = %d\\).", b, b, b, b, cVal),
 		}
 	case 2:
@@ -1136,8 +1136,8 @@ func (g *cauchyMVTGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		return generator.Problem{
 			Question: fmt.Sprintf("Compute the Cauchy quotient \\(\\frac{f(b)-f(a)}{g(b)-g(a)}\\) for \\(f(x) = %d x^2\\) and \\(g(x) = x\\) on \\([0, %d]\\).", k, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Cauchy difference quotient: \\(\\frac{f(b) - f(a)}{g(b) - g(a)}\\).\n"+
-				"Subgoal 2: Evaluate \\(f(%d) = %d(%d)^2 = %d\\) and \\(g(%d) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Cauchy difference quotient: \\(\\frac{f(b) - f(a)}{g(b) - g(a)}\\).\\n"+
+				"Subgoal 2: Evaluate \\(f(%d) = %d(%d)^2 = %d\\) and \\(g(%d) = %d\\).\\n"+
 				"Subgoal 3: Divide: \\(\\frac{%d - 0}{%d - 0} = %d\\).", b, k, b, k*b*b, b, b, k*b*b, b, ans),
 		}
 	case 3:
@@ -1148,8 +1148,8 @@ func (g *cauchyMVTGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		return generator.Problem{
 			Question: fmt.Sprintf("For linear functions \\(f(x) = %d x\\) and \\(g(x) = %d x\\) on any interval \\([a, b]\\), what is the value of \\(\\frac{f'(c)}{g'(c)}\\)?", m1, m2),
 			Answer:   fmt.Sprintf("%d", q),
-			Explanation: fmt.Sprintf("Subgoal 1: Differentiate the linear functions: \\(f'(x) = %d\\) and \\(g'(x) = %d\\).\n"+
-				"Subgoal 2: Form the derivative ratio: \\(\\frac{f'(c)}{g'(c)} = \\frac{%d}{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Differentiate the linear functions: \\(f'(x) = %d\\) and \\(g'(x) = %d\\).\\n"+
+				"Subgoal 2: Form the derivative ratio: \\(\\frac{f'(c)}{g'(c)} = \\frac{%d}{%d}\\).\\n"+
 				"Subgoal 3: Divide to obtain %d.", m1, m2, m1, m2, q),
 		}
 	default:
@@ -1160,8 +1160,8 @@ func (g *cauchyMVTGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		return generator.Problem{
 			Question: fmt.Sprintf("In Cauchy's Mean Value Theorem on \\([%d, %d]\\) with \\(g(x) = x\\), what is the denominator value \\(g(b) - g(a)\\)?", x1, x2),
 			Answer:   fmt.Sprintf("%d", width),
-			Explanation: fmt.Sprintf("Subgoal 1: Substitute \\(g(x) = x\\) into the denominator \\(g(b) - g(a)\\).\n"+
-				"Subgoal 2: Compute \\(b - a = %d - %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Substitute \\(g(x) = x\\) into the denominator \\(g(b) - g(a)\\).\\n"+
+				"Subgoal 2: Compute \\(b - a = %d - %d\\).\\n"+
 				"Subgoal 3: Evaluate the difference: %d.", x2, x1, width),
 		}
 	}
@@ -1182,8 +1182,8 @@ func (g *fermatGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the critical point \\(c\\) where \\(f(x) = %d x^2 - %d x + %d\\) attains its local extremum according to Fermat's Theorem.", a, b, cConst),
 			Answer:   fmt.Sprintf("%d", h),
-			Explanation: fmt.Sprintf("Subgoal 1: State Fermat's Theorem: differentiable local extrema satisfy \\(f'(c) = 0\\).\n"+
-				"Subgoal 2: Differentiate: \\(f'(x) = 2(%d)x - %d = %d x - %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State Fermat's Theorem: differentiable local extrema satisfy \\(f'(c) = 0\\).\\n"+
+				"Subgoal 2: Differentiate: \\(f'(x) = 2(%d)x - %d = %d x - %d\\).\\n"+
 				"Subgoal 3: Set \\(%d c - %d = 0\\) and solve for \\(c = %d\\).", a, b, 2*a, b, 2*a, b, h),
 		}
 	case 1:
@@ -1192,8 +1192,8 @@ func (g *fermatGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("If a differentiable function \\(f(x)\\) attains a local extremum at \\(x = %d\\), what is the value of \\(f'(%d)\\) by Fermat's Theorem?", x0, x0),
 			Answer:   "0",
-			Explanation: "Subgoal 1: State Fermat's Theorem on stationary points: if \\(f\\) has a local extremum at \\(c\\) and \\(f'(c)\\) exists, then \\(f'(c) = 0\\).\n" +
-				"Subgoal 2: Identify that \\(f\\) is differentiable at the local extremum.\n" +
+			Explanation: "Subgoal 1: State Fermat's Theorem on stationary points: if \\(f\\) has a local extremum at \\(c\\) and \\(f'(c)\\) exists, then \\(f'(c) = 0\\).\\n" +
+				"Subgoal 2: Identify that \\(f\\) is differentiable at the local extremum.\\n" +
 				"Subgoal 3: Conclude that \\(f'(c) = 0\\).",
 		}
 	case 2:
@@ -1205,8 +1205,8 @@ func (g *fermatGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the smaller critical point of \\(f(x) = 2x^3 - %d x^2 + %d x\\) where a local extremum may occur.", b, cVal),
 			Answer:   fmt.Sprintf("%d", h1),
-			Explanation: fmt.Sprintf("Subgoal 1: Differentiate \\(f(x)\\): \\(f'(x) = 6x^2 - %d x + %d = 6(x - %d)(x - %d)\\).\n"+
-				"Subgoal 2: Set \\(f'(x) = 0\\) to find stationary points \\(x = %d\\) and \\(x = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Differentiate \\(f(x)\\): \\(f'(x) = 6x^2 - %d x + %d = 6(x - %d)(x - %d)\\).\\n"+
+				"Subgoal 2: Set \\(f'(x) = 0\\) to find stationary points \\(x = %d\\) and \\(x = %d\\).\\n"+
 				"Subgoal 3: Select the smaller critical point: %d.", 2*b, cVal, h1, h2, h1, h2, h1),
 		}
 	case 3:
@@ -1216,8 +1216,8 @@ func (g *fermatGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: fmt.Sprintf("The function \\(f(x) = -(x - %d)^2 + %d\\) attains its local maximum at its stationary point. What is this maximum value?", h, k),
 			Answer:   fmt.Sprintf("%d", k),
-			Explanation: fmt.Sprintf("Subgoal 1: Apply Fermat's Theorem: the stationary point occurs where \\(f'(x) = -2(x - %d) = 0 \\implies x = %d\\).\n"+
-				"Subgoal 2: Substitute \\(x = %d\\) into \\(f(x)\\): \\(f(%d) = -(%d - %d)^2 + %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Apply Fermat's Theorem: the stationary point occurs where \\(f'(x) = -2(x - %d) = 0 \\implies x = %d\\).\\n"+
+				"Subgoal 2: Substitute \\(x = %d\\) into \\(f(x)\\): \\(f(%d) = -(%d - %d)^2 + %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\(0 + %d = %d\\).", h, h, h, h, h, h, k, k, k),
 		}
 	default:
@@ -1225,8 +1225,8 @@ func (g *fermatGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		return generator.Problem{
 			Question: "How many stationary points (where \\(f'(c) = 0\\)) does a non-degenerate quadratic polynomial \\(f(x) = ax^2 + bx + c\\) possess?",
 			Answer:   "1",
-			Explanation: "Subgoal 1: Compute the derivative of a quadratic: \\(f'(x) = 2ax + b\\).\n" +
-				"Subgoal 2: Set \\(2ax + b = 0\\).\n" +
+			Explanation: "Subgoal 1: Compute the derivative of a quadratic: \\(f'(x) = 2ax + b\\).\\n" +
+				"Subgoal 2: Set \\(2ax + b = 0\\).\\n" +
 				"Subgoal 3: Since \\(a \\ne 0\\), there is exactly one unique solution \\(x = -\\frac{b}{2a}\\), so the count is 1.",
 		}
 	}
@@ -1250,8 +1250,8 @@ func (g *differenceQuotientGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = %d x^2 + %d x\\), compute the difference quotient \\(\\frac{f(%d + %d) - f(%d)}{%d}\\).", a, b, x0, h, x0, h),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the difference quotient formula: \\(\\frac{f(x_0 + h) - f(x_0)}{h}\\).\n"+
-				"Subgoal 2: Evaluate \\(f(%d) = %d\\) and \\(f(%d) = %d\\), so \\(f(%d) - f(%d) = %d - %d = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the difference quotient formula: \\(\\frac{f(x_0 + h) - f(x_0)}{h}\\).\\n"+
+				"Subgoal 2: Evaluate \\(f(%d) = %d\\) and \\(f(%d) = %d\\), so \\(f(%d) - f(%d) = %d - %d = %d\\).\\n"+
 				"Subgoal 3: Divide by \\(h = %d\\): \\(\\frac{%d}{%d} = %d\\).", x1, fx1, x0, fx0, x1, x0, fx1, fx0, fx1-fx0, h, fx1-fx0, h, ans),
 		}
 	case 1:
@@ -1263,8 +1263,8 @@ func (g *differenceQuotientGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("For linear function \\(f(x) = %d x + %d\\), compute the difference quotient \\(\\frac{f(%d + %d) - f(%d)}{%d}\\).", m, b, x0, h, x0, h),
 			Answer:   fmt.Sprintf("%d", m),
-			Explanation: fmt.Sprintf("Subgoal 1: State the difference quotient for a linear function: \\(\\frac{f(x + h) - f(x)}{h}\\).\n"+
-				"Subgoal 2: Substitute \\(f(x + h) - f(x) = [%d(x + h) + %d] - [%d x + %d] = %d h\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the difference quotient for a linear function: \\(\\frac{f(x + h) - f(x)}{h}\\).\\n"+
+				"Subgoal 2: Substitute \\(f(x + h) - f(x) = [%d(x + h) + %d] - [%d x + %d] = %d h\\).\\n"+
 				"Subgoal 3: Divide by \\(h\\): \\(\\frac{%d h}{h} = %d\\).", m, b, m, b, m, m, m),
 		}
 	case 2:
@@ -1274,8 +1274,8 @@ func (g *differenceQuotientGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = x^3\\), compute the difference quotient \\(\\frac{f(1 + %d) - f(1)}{%d}\\).", h, h),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: Expand \\(f(1 + h) = (1 + h)^3 = 1 + 3h + 3h^2 + h^3\\).\n"+
-				"Subgoal 2: Subtract \\(f(1) = 1\\) to get \\(3h + 3h^2 + h^3\\), and divide by \\(h\\) to obtain \\(3 + 3h + h^2\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Expand \\(f(1 + h) = (1 + h)^3 = 1 + 3h + 3h^2 + h^3\\).\\n"+
+				"Subgoal 2: Subtract \\(f(1) = 1\\) to get \\(3h + 3h^2 + h^3\\), and divide by \\(h\\) to obtain \\(3 + 3h + h^2\\).\\n"+
 				"Subgoal 3: Substitute \\(h = %d\\): \\(3 + 3(%d) + (%d)^2 = 3 + %d + %d = %d\\).", h, h, h, 3*h, h*h, ans),
 		}
 	case 3:
@@ -1286,8 +1286,8 @@ func (g *differenceQuotientGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("What is the limit of the difference quotient \\(\\lim_{h \\to 0} \\frac{f(%d + h) - f(%d)}{h}\\) for \\(f(x) = %d x^2\\)?", x0, x0, a),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: Recognize that the limit of the difference quotient defines the derivative: \\(f'(x_0) = \\lim_{h \\to 0} \\frac{f(x_0 + h) - f(x_0)}{h}\\).\n"+
-				"Subgoal 2: Differentiate \\(f(x) = %d x^2\\): \\(f'(x) = 2(%d)x = %d x\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Recognize that the limit of the difference quotient defines the derivative: \\(f'(x_0) = \\lim_{h \\to 0} \\frac{f(x_0 + h) - f(x_0)}{h}\\).\\n"+
+				"Subgoal 2: Differentiate \\(f(x) = %d x^2\\): \\(f'(x) = 2(%d)x = %d x\\).\\n"+
 				"Subgoal 3: Evaluate at \\(x = %d\\): \\(f'(%d) = %d(%d) = %d\\).", a, a, 2*a, x0, x0, 2*a, x0, ans),
 		}
 	default:
@@ -1299,8 +1299,8 @@ func (g *differenceQuotientGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = %d x^2 + %d x\\), compute \\(\\frac{f(%d) - f(0)}{%d}\\).", a, b, h, h),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: Substitute \\(x = %d\\) into \\(f(x)\\): \\(f(%d) = %d(%d)^2 + %d(%d) = %d\\).\n"+
-				"Subgoal 2: Subtract \\(f(0) = 0\\), giving numerator %d.\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Substitute \\(x = %d\\) into \\(f(x)\\): \\(f(%d) = %d(%d)^2 + %d(%d) = %d\\).\\n"+
+				"Subgoal 2: Subtract \\(f(0) = 0\\), giving numerator %d.\\n"+
 				"Subgoal 3: Divide by %d: \\(\\frac{%d}{%d} = %d\\).", h, h, a, h, b, h, a*h*h+b*h, a*h*h+b*h, h, a*h*h+b*h, h, ans),
 		}
 	}
@@ -1320,8 +1320,8 @@ func (g *differentialGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("If \\(y = %d x^2\\) at \\(x = %d\\), compute the differential \\(dy\\) for \\(dx = %d\\).", a, x0, dx),
 			Answer:   fmt.Sprintf("%d", dy),
-			Explanation: fmt.Sprintf("Subgoal 1: State the differential definition: \\(dy = f'(x) dx\\).\n"+
-				"Subgoal 2: Compute derivative \\(f'(x) = 2(%d)x = %d x\\) and evaluate at \\(x = %d\\): \\(f'(%d) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the differential definition: \\(dy = f'(x) dx\\).\\n"+
+				"Subgoal 2: Compute derivative \\(f'(x) = 2(%d)x = %d x\\) and evaluate at \\(x = %d\\): \\(f'(%d) = %d\\).\\n"+
 				"Subgoal 3: Multiply by \\(dx = %d\\): \\(dy = (%d)(%d) = %d\\).", a, 2*a, x0, x0, 2*a*x0, dx, 2*a*x0, dx, dy),
 		}
 	case 1:
@@ -1333,8 +1333,8 @@ func (g *differentialGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("If \\(y = %d x^3\\) at \\(x = %d\\), compute the differential \\(dy\\) for \\(dx = %d\\).", a, x0, dx),
 			Answer:   fmt.Sprintf("%d", dy),
-			Explanation: fmt.Sprintf("Subgoal 1: State the differential formula: \\(dy = f'(x) dx\\).\n"+
-				"Subgoal 2: Differentiate \\(f'(x) = 3(%d)x^2 = %d x^2\\) and evaluate at \\(x = %d\\): \\(f'(%d) = %d(%d)^2 = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the differential formula: \\(dy = f'(x) dx\\).\\n"+
+				"Subgoal 2: Differentiate \\(f'(x) = 3(%d)x^2 = %d x^2\\) and evaluate at \\(x = %d\\): \\(f'(%d) = %d(%d)^2 = %d\\).\\n"+
 				"Subgoal 3: Multiply by \\(dx = %d\\): \\(dy = (%d)(%d) = %d\\).", a, 3*a, x0, x0, 3*a, x0, 3*a*x0*x0, dx, 3*a*x0*x0, dx, dy),
 		}
 	case 2:
@@ -1347,8 +1347,8 @@ func (g *differentialGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("For \\(f(x) = %d x^2 + %d x\\) at \\(x = %d\\), compute the differential approximation \\(dy\\) for \\(dx = %d\\).", a, b, x0, dx),
 			Answer:   fmt.Sprintf("%d", dy),
-			Explanation: fmt.Sprintf("Subgoal 1: State the linear approximation differential: \\(dy = f'(x) dx\\).\n"+
-				"Subgoal 2: Compute \\(f'(x) = 2(%d)x + %d = %d x + %d\\) and evaluate at \\(x = %d\\): \\(f'(%d) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the linear approximation differential: \\(dy = f'(x) dx\\).\\n"+
+				"Subgoal 2: Compute \\(f'(x) = 2(%d)x + %d = %d x + %d\\) and evaluate at \\(x = %d\\): \\(f'(%d) = %d\\).\\n"+
 				"Subgoal 3: Multiply by \\(dx = %d\\): \\(dy = (%d)(%d) = %d\\).", a, b, 2*a, b, x0, x0, 2*a*x0+b, dx, 2*a*x0+b, dx, dy),
 		}
 	case 3:
@@ -1360,8 +1360,8 @@ func (g *differentialGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("What is the ratio of differentials \\(\\frac{dy}{dx}\\) for \\(y = %d x^2 + %d x\\) evaluated at \\(x = %d\\)?", a, b, x0),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: Recall that the ratio of differentials equals the derivative: \\(\\frac{dy}{dx} = f'(x)\\).\n"+
-				"Subgoal 2: Differentiate \\(f'(x) = 2(%d)x + %d = %d x + %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Recall that the ratio of differentials equals the derivative: \\(\\frac{dy}{dx} = f'(x)\\).\\n"+
+				"Subgoal 2: Differentiate \\(f'(x) = 2(%d)x + %d = %d x + %d\\).\\n"+
 				"Subgoal 3: Evaluate at \\(x = %d\\): \\(f'(%d) = %d(%d) + %d = %d\\).", a, b, 2*a, b, x0, x0, 2*a, x0, b, ans),
 		}
 	default:
@@ -1372,8 +1372,8 @@ func (g *differentialGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("If \\(y = %d x + 7\\), compute \\(dy\\) for \\(dx = %d\\).", m, dx),
 			Answer:   fmt.Sprintf("%d", dy),
-			Explanation: fmt.Sprintf("Subgoal 1: State the differential rule: \\(dy = f'(x) dx\\).\n"+
-				"Subgoal 2: Since \\(f(x) = %d x + 7\\), its derivative is constant: \\(f'(x) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the differential rule: \\(dy = f'(x) dx\\).\\n"+
+				"Subgoal 2: Since \\(f(x) = %d x + 7\\), its derivative is constant: \\(f'(x) = %d\\).\\n"+
 				"Subgoal 3: Multiply by \\(dx = %d\\): \\(dy = %d \\times %d = %d\\).", m, m, dx, m, dx, dy),
 		}
 	}
@@ -1956,7 +1956,7 @@ func (g *seqConceptGen) Generate(ctx generator.GeneratorContext) generator.Probl
 type seqConvergenceGen struct{}
 
 func (g *seqConvergenceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	// The answers used to be prose ("no (diverges to \(\infty\))") on a concept
+	// The answers used to be prose ("no (diverges to \\(\\infty\\))") on a concept
 	// graded as a tuple, so a learner who answered "False" was compared against
 	// text and marked wrong, and nobody could type the parenthetical anyway
 	// (report 178). The question is now answerable by tapping yes or no, and the
@@ -2277,85 +2277,158 @@ func (g *derivTrigOtherGen) Generate(ctx generator.GeneratorContext) generator.P
 type derivInverseTrigGen struct{}
 
 func (g *derivInverseTrigGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	a := randRange(ctx.Difficulty, 2, 12)
+	a2 := a * a
+	ax := scaledXPow(a, 1)
+	a2x := scaledXPow(a2, 2)
+	switch rand.Intn(5) {
+	case 0:
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=\\arcsin(%s)\\).", ax),
+			Answer:      fmt.Sprintf("%d/sqrt(1-%s)", a, a2x),
+			Explanation: fmt.Sprintf("\\(\\frac{d}{dx}\\arcsin(%s) = \\frac{1}{\\sqrt{1-(%s)^{2}}}\\cdot %d = \\frac{%d}{\\sqrt{1-%s}}\\).", ax, ax, a, a, a2x),
+		}
+	case 1:
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=\\arccos(%s)\\).", ax),
+			Answer:      fmt.Sprintf("-%d/sqrt(1-%s)", a, a2x),
+			Explanation: fmt.Sprintf("\\(\\frac{d}{dx}\\arccos(%s) = -\\frac{1}{\\sqrt{1-(%s)^{2}}}\\cdot %d = -\\frac{%d}{\\sqrt{1-%s}}\\).", ax, ax, a, a, a2x),
+		}
+	case 2:
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=\\arctan(%s)\\).", ax),
+			Answer:      fmt.Sprintf("%d/(1+%s)", a, a2x),
+			Explanation: fmt.Sprintf("\\(\\frac{d}{dx}\\arctan(%s) = \\frac{1}{1+(%s)^{2}}\\cdot %d = \\frac{%d}{1+%s}\\).", ax, ax, a, a, a2x),
+		}
+	case 3:
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=\\text{arccot}(%s)\\).", ax),
+			Answer:      fmt.Sprintf("-%d/(1+%s)", a, a2x),
+			Explanation: fmt.Sprintf("\\(\\frac{d}{dx}\\text{arccot}(%s) = -\\frac{1}{1+(%s)^{2}}\\cdot %d = -\\frac{%d}{1+%s}\\).", ax, ax, a, a, a2x),
+		}
 	}
-	table := []entry{
-		{"Find \\(f'(x)\\) if \\(f(x)=\\arcsin(x)\\).", "1/sqrt(1-x^2)", "\\(\\frac{d}{dx} \\arcsin(x) = \\frac{1}{\\sqrt{1-x^{2}}}\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=\\arccos(x)\\).", "-1/sqrt(1-x^2)", "\\(\\frac{d}{dx} \\arccos(x) = -\\frac{1}{\\sqrt{1-x^{2}}}\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=\\arctan(x)\\).", "1/(1+x^2)", "\\(\\frac{d}{dx} \\arctan(x) = \\frac{1}{1+x^{2}}\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=\\arctan(2x)\\).", "2/(1+4x^2)", "Chain rule: \\(\\frac{d}{dx} \\arctan(2x) = \\frac{1}{1+(2x)^{2}} \\cdot 2\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=\\arcsin(3x)\\).", "3/sqrt(1-9x^2)", "Chain rule: \\(\\frac{d}{dx} \\arcsin(3x) = \\frac{1}{\\sqrt{1-(3x)^{2}}} \\cdot 3\\)."},
+	return generator.Problem{
+		Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=\\arcsin(x/%d)\\).", a),
+		Answer:      fmt.Sprintf("1/sqrt(%d-x^2)", a2),
+		Explanation: fmt.Sprintf("\\(\\frac{d}{dx}\\arcsin(x/%d) = \\frac{1}{\\sqrt{1-(x/%d)^{2}}}\\cdot\\frac{1}{%d} = \\frac{1}{\\sqrt{%d-x^{2}}}\\).", a, a, a, a2),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivGeneralExpGen struct{}
 
 func (g *derivGeneralExpGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	bases := []int{2, 3, 5, 6, 7, 10}
+	a := bases[rand.Intn(len(bases))]
+	b := randRange(ctx.Difficulty, 1, 8)
+	if b == 1 {
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=%d^{x}\\).", a),
+			Answer:      fmt.Sprintf("%d^x*ln(%d)", a, a),
+			Explanation: fmt.Sprintf("\\(\\frac{d}{dx}%d^{x} = %d^{x}\\ln %d\\).", a, a, a),
+		}
 	}
-	table := []entry{
-		{"Find \\(f'(x)\\) if \\(f(x)=2^{x}\\).", "2^x*ln(2)", "\\(\\frac{d}{dx} 2^{x} = 2^{x}\\ln 2\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=10^{x}\\).", "10^x*ln(10)", "\\(\\frac{d}{dx} 10^{x} = 10^{x}\\ln 10\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=3^{x}\\).", "3^x*ln(3)", "\\(\\frac{d}{dx} 3^{x} = 3^{x}\\ln 3\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=2^{3x}\\).", "3*2^(3x)*ln(2)", "Chain rule: \\(\\frac{d}{dx} 2^{3x} = 2^{3x}\\ln 2 \\cdot 3\\)."},
-		{"Find \\(f'(x)\\) if \\(f(x)=5^{2x}\\).", "2*5^(2x)*ln(5)", "Chain rule: \\(\\frac{d}{dx} 5^{2x} = 5^{2x}\\ln 5 \\cdot 2\\)."},
+	return generator.Problem{
+		Question:    fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=%d^{%dx}\\).", a, b),
+		Answer:      fmt.Sprintf("%d*%d^(%dx)*ln(%d)", b, a, b, a),
+		Explanation: fmt.Sprintf("Chain rule: \\(\\frac{d}{dx}%d^{%dx} = %d^{%dx}\\ln %d \\cdot %d\\).", a, b, a, b, a, b),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivLogDiffGen struct{}
 
 func (g *derivLogDiffGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	switch rand.Intn(3) {
+	case 0:
+		k := randRange(ctx.Difficulty, 2, 12)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Use logarithmic differentiation: find \\(f'(x)\\) if \\(f(x)=x^{%dx}\\).", k),
+			Answer:      fmt.Sprintf("x^(%dx)*(%dln(x)+%d)", k, k, k),
+			Explanation: fmt.Sprintf("Take logs: \\(\\ln f = %dx\\ln x\\), so \\(f'/f = %d\\ln x + %d\\) and \\(f' = x^{%dx}(%d\\ln x + %d)\\).", k, k, k, k, k, k),
+		}
+	case 1:
+		a := randRange(ctx.Difficulty, 2, 9)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Use logarithmic differentiation: find \\(f'(x)\\) if \\(f(x)=(%dx)^{x}\\).", a),
+			Answer:      fmt.Sprintf("(%dx)^x*(ln(%dx)+1)", a, a),
+			Explanation: fmt.Sprintf("Take logs: \\(\\ln f = x\\ln(%dx)\\), so \\(f'/f = \\ln(%dx) + 1\\) and \\(f' = (%dx)^{x}(\\ln(%dx) + 1)\\).", a, a, a, a),
+		}
 	}
-	table := []entry{
-		{"Use logarithmic differentiation: find \\(f'(x)\\) if \\(f(x)=x^{x}\\).", "x^x*(ln(x)+1)", "Take logs: \\(\\ln f = x\\ln x\\), so \\(f'/f = \\ln x + 1\\)."},
-		{"Use logarithmic differentiation: find \\(f'(x)\\) if \\(f(x)=x^{2x}\\).", "x^(2x)*(2ln(x)+2)", "Take logs: \\(\\ln f = 2x\\ln x\\), so \\(f'/f = 2\\ln x + 2\\)."},
-		{"What is the first step of logarithmic differentiation? (yes/no: take the natural log of both sides)", "yes", "Logarithmic differentiation starts by taking \\(\\ln\\) of both sides (take the natural log of both sides), then differentiating implicitly."},
-		{"Use logarithmic differentiation: find \\(f'(x)\\) if \\(f(x)=(2x)^{x}\\).", "(2x)^x*(ln(2x)+1)", "Take logs: \\(\\ln f = x\\ln(2x)\\), so \\(f'/f = \\ln(2x) + 1\\)."},
+	n := randRange(ctx.Difficulty, 2, 8)
+	return generator.Problem{
+		Question:    fmt.Sprintf("Use logarithmic differentiation: find \\(f'(x)\\) if \\(f(x)=x^{%d}e^{x}\\).", n),
+		Answer:      fmt.Sprintf("x^%d*e^x*(%d/x+1)", n, n),
+		Explanation: fmt.Sprintf("Take logs: \\(\\ln f = %d\\ln x + x\\), so \\(f'/f = %d/x + 1\\) and \\(f' = x^{%d}e^{x}(%d/x + 1)\\).", n, n, n, n),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivHigherOrderGen struct{}
 
 func (g *derivHigherOrderGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	switch rand.Intn(4) {
+	case 0:
+		n := randRange(ctx.Difficulty, 3, 12)
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f''(x)\\) if \\(f(x)=x^{%d}\\).", n),
+			Answer:      powTerm(n*(n-1), n-2),
+			Explanation: fmt.Sprintf("\\(f'(x) = %s\\), so \\(f''(x) = %s\\).", powTerm(n, n-1), powTerm(n*(n-1), n-2)),
+		}
+	case 1:
+		a := randRange(ctx.Difficulty, 1, 8)
+		if a == 1 {
+			return generator.Problem{
+				Question:    "Find \\(f''(x)\\) if \\(f(x)=\\sin(x)\\).",
+				Answer:      "-sin(x)",
+				Explanation: "\\(f'(x) = \\cos(x)\\), so \\(f''(x) = -\\sin(x)\\).",
+			}
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f''(x)\\) if \\(f(x)=\\sin(%dx)\\).", a),
+			Answer:      fmt.Sprintf("-%d*sin(%dx)", a*a, a),
+			Explanation: fmt.Sprintf("\\(f'(x) = %d\\cos(%dx)\\), so \\(f''(x) = -%d\\sin(%dx)\\).", a, a, a*a, a),
+		}
+	case 2:
+		a := randRange(ctx.Difficulty, 1, 8)
+		if a == 1 {
+			return generator.Problem{
+				Question:    "Find \\(f''(x)\\) if \\(f(x)=e^{x}\\).",
+				Answer:      "e^x",
+				Explanation: "\\(f'(x) = e^{x}\\), so \\(f''(x) = e^{x}\\).",
+			}
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("Find \\(f''(x)\\) if \\(f(x)=e^{%dx}\\).", a),
+			Answer:      fmt.Sprintf("%de^(%dx)", a*a, a),
+			Explanation: fmt.Sprintf("\\(f'(x) = %de^{%dx}\\), so \\(f''(x) = %de^{%dx}\\).", a, a, a*a, a),
+		}
 	}
-	table := []entry{
-		{"Find \\(f''(x)\\) if \\(f(x)=x^{4}\\).", "12x^2", "\\(f'(x) = 4x^{3}\\), so \\(f''(x) = 12x^{2}\\)."},
-		{"Find \\(f''(x)\\) if \\(f(x)=\\sin(x)\\).", "-sin(x)", "\\(f'(x) = \\cos(x)\\), so \\(f''(x) = -\\sin(x)\\)."},
-		{"Find \\(f''(x)\\) if \\(f(x)=e^{2x}\\).", "4e^(2x)", "\\(f'(x) = 2e^{2x}\\), so \\(f''(x) = 4e^{2x}\\)."},
-		{"Find the third derivative of \\(f(x)=x^{5}\\).", "60x^2", "\\(f' = 5x^{4}\\), \\(f'' = 20x^{3}\\), \\(f''' = 60x^{2}\\)."},
-		{"Find \\(f''(x)\\) if \\(f(x)=\\ln(x)\\).", "-1/x^2", "\\(f'(x) = 1/x\\), so \\(f''(x) = -1/x^{2}\\)."},
-		{"Find \\(f''(x)\\) if \\(f(x)=x^{3}+2x\\).", "6x", "\\(f'(x) = 3x^{2}+2\\), so \\(f''(x) = 6x\\)."},
+	n := randRange(ctx.Difficulty, 4, 13)
+	return generator.Problem{
+		Question:    fmt.Sprintf("Find the third derivative of \\(f(x)=x^{%d}\\).", n),
+		Answer:      powTerm(n*(n-1)*(n-2), n-3),
+		Explanation: fmt.Sprintf("\\(f' = %s\\), \\(f'' = %s\\), \\(f''' = %s\\).", powTerm(n, n-1), powTerm(n*(n-1), n-2), powTerm(n*(n-1)*(n-2), n-3)),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivInverseFuncGen struct{}
 
 func (g *derivInverseFuncGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	if rand.Intn(2) == 0 {
+		a := randRange(ctx.Difficulty, 1, 5)
+		b := randRange(ctx.Difficulty, 2, 9)
+		return generator.Problem{
+			Question:    fmt.Sprintf("If \\(f\\) is invertible and \\(f'(%d)=%d\\), what is \\((f^{-1})'(f(%d))\\)?", a, b, a),
+			Answer:      fmt.Sprintf("1/%d", b),
+			Explanation: fmt.Sprintf("The inverse function rule gives \\((f^{-1})'(f(%d)) = 1/f'(%d) = 1/%d\\): the slopes are reciprocals at matching points.", a, a, b),
+		}
 	}
-	table := []entry{
-		{"If \\(f\\) is invertible and \\(f'(2)=5\\), what is \\((f^{-1})'(f(2))\\)?", "1/5", "Inverse function rule: \\((f^{-1})'(y) = 1/f'(x)\\) where \\(y=f(x)\\)."},
-		{"If \\(f\\) is invertible and \\(f'(1)=4\\), what is \\((f^{-1})'(f(1))\\)?", "1/4", "By the inverse function rule, \\((f^{-1})'(f(1)) = 1/f'(1) = 1/4\\)."},
-		{"If f is differentiable with nonzero derivative, does (f⁻¹)'(f(x)) equal 1/f'(x)? (yes/no)", "yes", "If \\(f\\) is differentiable with \\(f'(x) \\neq 0\\), then \\((f^{-1})'(f(x)) = 1/f'(x)\\)."},
-		{"If \\(f(x)=x^{3}\\) and \\(g\\) is its inverse, what is \\(g'(8)\\)?", "1/12", "\\(f'(x) = 3x^{2}\\); at \\(x=2\\), \\(f(2)=8\\) and \\(f'(2)=12\\), so \\(g'(8)=1/12\\)."},
+	n := randRange(ctx.Difficulty, 2, 9)
+	a := randRange(ctx.Difficulty, 2, 6)
+	y := intPow(a, n)
+	return generator.Problem{
+		Question:    fmt.Sprintf("If \\(f(x)=x^{%d}\\) and \\(g\\) is its inverse, what is \\(g'(%d)\\)?", n, y),
+		Answer:      fmt.Sprintf("1/%d", n*intPow(a, n-1)),
+		Explanation: fmt.Sprintf("\\(f'(x) = %s\\); at \\(x=%d\\), \\(f(%d)=%d\\) and \\(f'(%d)=%d\\), so \\(g'(%d)=1/%d\\).", powTerm(n, n-1), a, a, y, a, n*intPow(a, n-1), y, n*intPow(a, n-1)),
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
 }
 
 type derivCriticalPointsGen struct{}
@@ -2411,17 +2484,37 @@ func (g *derivInflectionGen) Generate(ctx generator.GeneratorContext) generator.
 type derivGlobalExtremaGen struct{}
 
 func (g *derivGlobalExtremaGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		q, a, e string
+	b := 2 * randRange(ctx.Difficulty, 1, 10)
+	m := b + 2
+	vertex := b / 2
+	if rand.Intn(2) == 0 {
+		f := fmt.Sprintf("x^{2}-%dx", b)
+		if rand.Intn(2) == 0 {
+			return generator.Problem{
+				Question:    fmt.Sprintf("What is the global minimum VALUE of \\(f(x)=%s\\) on \\([0,%d]\\)? (enter a number)", f, m),
+				Answer:      strconv.Itoa(-(b * b) / 4),
+				Explanation: fmt.Sprintf("Critical point \\(x=%d\\): \\(f(%d)=%d\\). Endpoints: \\(f(0)=0\\), \\(f(%d)=%d\\). The global minimum value is %d at \\(x=%d\\).", vertex, vertex, -(b*b)/4, m, m*(m-b), -(b*b)/4, vertex),
+			}
+		}
+		return generator.Problem{
+			Question:    fmt.Sprintf("What is the global maximum VALUE of \\(f(x)=%s\\) on \\([0,%d]\\)? (enter a number)", f, m),
+			Answer:      strconv.Itoa(m * (m - b)),
+			Explanation: fmt.Sprintf("Critical point \\(x=%d\\): \\(f(%d)=%d\\). Endpoints: \\(f(0)=0\\), \\(f(%d)=%d\\). The global maximum value is %d at \\(x=%d\\).", vertex, vertex, -(b*b)/4, m, m*(m-b), m*(m-b), m),
+		}
 	}
-	table := []entry{
-		{"What is the global maximum VALUE of \\(f(x)=x^{2}-4x\\) on \\([0,3]\\)? (enter a number)", "0", "Critical point \\(x=2\\): \\(f(2)=-4\\). Endpoints: \\(f(0)=0\\), \\(f(3)=-3\\). Global max value is 0 at \\(x=3\\)."},
-		{"What is the global minimum VALUE of \\(f(x)=x^{2}-4x\\) on \\([0,3]\\)? (enter a number)", "-4", "Critical point \\(x=2\\): \\(f(2)=-4\\). Endpoints give 0 and -3. Global min value is -4 at \\(x=2\\)."},
-		{"Does the closed-interval method evaluate f at critical points and endpoints? (yes/no)", "yes", "On \\([a,b]\\): find critical points inside, evaluate \\(f\\) there and at \\(a,b\\); extremes are the largest/smallest values."},
-		{"What is the global maximum VALUE of \\(f(x)=-x^{2}+4x\\) on \\([0,3]\\)? (enter a number)", "4", "Critical point \\(x=2\\): \\(f(2)=4\\). Endpoints: \\(f(0)=0\\), \\(f(3)=3\\). Global max value is 4 at \\(x=2\\)."},
+	f := fmt.Sprintf("-x^{2}+%dx", b)
+	if rand.Intn(2) == 0 {
+		return generator.Problem{
+			Question:    fmt.Sprintf("What is the global maximum VALUE of \\(f(x)=%s\\) on \\([0,%d]\\)? (enter a number)", f, m),
+			Answer:      strconv.Itoa((b * b) / 4),
+			Explanation: fmt.Sprintf("Critical point \\(x=%d\\): \\(f(%d)=%d\\). Endpoints: \\(f(0)=0\\), \\(f(%d)=%d\\). The global maximum value is %d at \\(x=%d\\).", vertex, vertex, (b*b)/4, m, -m*(m-b), (b*b)/4, vertex),
+		}
 	}
-	e := table[rand.Intn(len(table))]
-	return generator.Problem{Question: e.q, Answer: e.a, Explanation: e.e}
+	return generator.Problem{
+		Question:    fmt.Sprintf("What is the global minimum VALUE of \\(f(x)=%s\\) on \\([0,%d]\\)? (enter a number)", f, m),
+		Answer:      strconv.Itoa(-m * (m - b)),
+		Explanation: fmt.Sprintf("Critical point \\(x=%d\\): \\(f(%d)=%d\\). Endpoints: \\(f(0)=0\\), \\(f(%d)=%d\\). The global minimum value is %d at \\(x=%d\\).", vertex, vertex, (b*b)/4, m, -m*(m-b), -m*(m-b), m),
+	}
 }
 
 type derivCurveSketchGen struct{}
@@ -2487,8 +2580,8 @@ func (g *derivTangentLineGen) Generate(ctx generator.GeneratorContext) generator
 		Question: fmt.Sprintf("Find the tangent line to \\(f(x)=x^{%d}\\) at \\(x=%d\\).", n, a),
 		Answer:   fmt.Sprintf("%d+%d(x-%d)", fv, slope, a),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: Differentiate: \\(f'(x)=%d%s\\).\n"+
-				"Subgoal 2: The slope at \\(x=%d\\) is \\(f'(%d)=%d\\) and the point of tangency is \\((%d,%d)\\).\n"+
+			"Subgoal 1: Differentiate: \\(f'(x)=%d%s\\).\\n"+
+				"Subgoal 2: The slope at \\(x=%d\\) is \\(f'(%d)=%d\\) and the point of tangency is \\((%d,%d)\\).\\n"+
 				"Subgoal 3: Point-slope form gives \\(y-%d=%d(x-%d)\\), that is \\(y=%d+%d(x-%d)\\).",
 			n, varPow("x", n-1), a, a, slope, a, fv, fv, slope, a, fv, slope, a),
 	}
@@ -2508,8 +2601,8 @@ func (g *derivLinearApproxGen) Generate(ctx generator.GeneratorContext) generato
 		Question: fmt.Sprintf("Use the linearization of \\(f(x)=x^{%d}\\) at \\(x=%d\\) to estimate \\((%.1f)^{%d}\\). (enter a decimal)", n, a, float64(a)+h, n),
 		Answer:   decimal(estimate, 4),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: \\(f(%d)=%d\\) and \\(f'(x)=%d%s\\), so \\(f'(%d)=%d\\).\n"+
-				"Subgoal 2: The linearization is \\(L(x)=%d+%d(x-%d)\\).\n"+
+			"Subgoal 1: \\(f(%d)=%d\\) and \\(f'(x)=%d%s\\), so \\(f'(%d)=%d\\).\\n"+
+				"Subgoal 2: The linearization is \\(L(x)=%d+%d(x-%d)\\).\\n"+
 				"Subgoal 3: Evaluate at \\(x=%.1f\\): \\(L(%.1f)=%d+%d(%.1f)=%s\\).",
 			a, fv, n, varPow("x", n-1), a, slope, fv, slope, a, float64(a)+h, float64(a)+h, fv, slope, h, decimal(estimate, 4)),
 	}
@@ -2530,8 +2623,8 @@ func (g *derivNewtonGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		Question: fmt.Sprintf("One Newton step for \\(f(x)=x^{2}-%d\\) from \\(x_{0}=%d\\). (enter a number)", c, x0),
 		Answer:   decimal(x1, 4),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: Newton's method uses \\(x_{1}=x_{0}-f(x_{0})/f'(x_{0})\\) with \\(f'(x)=2x\\).\n"+
-				"Subgoal 2: \\(f(%d)=%d-%d=%d\\) and \\(f'(%d)=%d\\).\n"+
+			"Subgoal 1: Newton's method uses \\(x_{1}=x_{0}-f(x_{0})/f'(x_{0})\\) with \\(f'(x)=2x\\).\\n"+
+				"Subgoal 2: \\(f(%d)=%d-%d=%d\\) and \\(f'(%d)=%d\\).\\n"+
 				"Subgoal 3: \\(x_{1}=%d-%d/%d=%s\\).",
 			x0, x0*x0, c, x0*x0-c, x0, 2*x0, x0, x0*x0-c, 2*x0, decimal(x1, 4)),
 	}
@@ -2549,8 +2642,8 @@ func (g *derivErrorPropGen) Generate(ctx generator.GeneratorContext) generator.P
 		Question: fmt.Sprintf("If \\(y=x^{%d}\\) and \\(x=%d\\pm %.1f\\), estimate \\(\\Delta y\\). (enter a decimal)", n, x0, dx),
 		Answer:   decimal(dy, 4),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: For small changes \\(\\Delta y \\approx dy = f'(x)\\,dx\\).\n"+
-				"Subgoal 2: \\(f'(x)=%d%s\\), so \\(f'(%d)=%d\\).\n"+
+			"Subgoal 1: For small changes \\(\\Delta y \\approx dy = f'(x)\\,dx\\).\\n"+
+				"Subgoal 2: \\(f'(x)=%d%s\\), so \\(f'(%d)=%d\\).\\n"+
 				"Subgoal 3: \\(\\Delta y \\approx %d \\cdot %.1f = %s\\).",
 			n, varPow("x", n-1), x0, n*intPow(x0, n-1), n*intPow(x0, n-1), dx, decimal(dy, 4)),
 	}
@@ -2566,8 +2659,8 @@ func (g *derivImplicitSecondGen) Generate(ctx generator.GeneratorContext) genera
 			Question: fmt.Sprintf("For \\(x^{2}+y^{2}=%d\\), what is \\(dy/dx\\)?", r*r),
 			Answer:   "-x/y",
 			Explanation: fmt.Sprintf(
-				"Subgoal 1: Differentiate both sides implicitly: \\(2x+2y\\,y'=0\\).\n"+
-					"Subgoal 2: Solve for \\(y'\\): \\(y'=-x/y\\).\n"+
+				"Subgoal 1: Differentiate both sides implicitly: \\(2x+2y\\,y'=0\\).\\n"+
+					"Subgoal 2: Solve for \\(y'\\): \\(y'=-x/y\\).\\n"+
 					"Subgoal 3: This holds on the circle \\(x^{2}+y^{2}=%d\\) wherever \\(y\\neq 0\\).", r*r),
 		}
 	}
@@ -2575,8 +2668,8 @@ func (g *derivImplicitSecondGen) Generate(ctx generator.GeneratorContext) genera
 		Question: fmt.Sprintf("For \\(x^{2}+y^{2}=%d\\), what is \\(d^{2}y/dx^{2}\\) in terms of \\(x,y\\)?", r*r),
 		Answer:   fmt.Sprintf("-%d/y^3", r*r),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: From \\(y'=-x/y\\), differentiate again: \\(y''=-(y-xy')/y^{2}\\).\n"+
-				"Subgoal 2: Substitute \\(y'=-x/y\\): \\(y''=-(y+x^{2}/y)/y^{2}=-(y^{2}+x^{2})/y^{3}\\).\n"+
+			"Subgoal 1: From \\(y'=-x/y\\), differentiate again: \\(y''=-(y-xy')/y^{2}\\).\\n"+
+				"Subgoal 2: Substitute \\(y'=-x/y\\): \\(y''=-(y+x^{2}/y)/y^{2}=-(y^{2}+x^{2})/y^{3}\\).\\n"+
 				"Subgoal 3: On the circle \\(x^{2}+y^{2}=%d\\), so \\(y''=-%d/y^{3}\\).", r*r, r*r),
 	}
 }
@@ -2595,8 +2688,8 @@ func (g *derivChainPowerGen) Generate(ctx generator.GeneratorContext) generator.
 		Question: fmt.Sprintf("Find \\(f'(x)\\) if \\(f(x)=(%s)^{%d}\\).", inner, n),
 		Answer:   answer,
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: The outer power rule gives \\(%d(%s)^{%d}\\).\n"+
-				"Subgoal 2: The inner derivative is %d.\n"+
+			"Subgoal 1: The outer power rule gives \\(%d(%s)^{%d}\\).\\n"+
+				"Subgoal 2: The inner derivative is %d.\\n"+
 				"Subgoal 3: Multiply: \\(f'(x)=%d(%s)^{%d}=%s\\).",
 			n, inner, n-1, a, coef, inner, n-1, answer),
 	}
@@ -2614,8 +2707,8 @@ func (g *derivChainMultiGen) Generate(ctx generator.GeneratorContext) generator.
 		Question: fmt.Sprintf("For \\(z=%s\\), \\(x=t\\), \\(y=t^{2}\\), find \\(dz/dt\\) at \\(t=%d\\). (enter a number)", linearIn(a, b), t0),
 		Answer:   fmt.Sprintf("%d", answer),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: The multivariable chain rule is \\(dz/dt = z_{x}\\,x'(t) + z_{y}\\,y'(t)\\).\n"+
-				"Subgoal 2: \\(z_{x}=%d\\), \\(z_{y}=%d\\), \\(x'(t)=1\\), \\(y'(t)=2t\\).\n"+
+			"Subgoal 1: The multivariable chain rule is \\(dz/dt = z_{x}\\,x'(t) + z_{y}\\,y'(t)\\).\\n"+
+				"Subgoal 2: \\(z_{x}=%d\\), \\(z_{y}=%d\\), \\(x'(t)=1\\), \\(y'(t)=2t\\).\\n"+
 				"Subgoal 3: \\(dz/dt = %d + %d t\\), so at \\(t=%d\\) it equals %d.",
 			a, b, a, 2*b, t0, answer),
 	}
@@ -2635,8 +2728,8 @@ func (g *derivGradientGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		Question: fmt.Sprintf("Find \\(\\nabla f\\) for \\(f(x,y)=%s\\).", f),
 		Answer:   fmt.Sprintf("(%s, %s)", fx, fy),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: \\(\\nabla f=(f_{x},f_{y})\\).\n"+
-				"Subgoal 2: Differentiate in \\(x\\) holding \\(y\\) fixed: \\(f_{x}=%s\\).\n"+
+			"Subgoal 1: \\(\\nabla f=(f_{x},f_{y})\\).\\n"+
+				"Subgoal 2: Differentiate in \\(x\\) holding \\(y\\) fixed: \\(f_{x}=%s\\).\\n"+
 				"Subgoal 3: Differentiate in \\(y\\) holding \\(x\\) fixed: \\(f_{y}=%s\\). So \\(\\nabla f=(%s, %s)\\).",
 			fx, fy, fx, fy),
 	}
@@ -2665,8 +2758,8 @@ func (g *derivDirectionalGen) Generate(ctx generator.GeneratorContext) generator
 		Question: fmt.Sprintf("For \\(f(x,y)=%s\\), find the directional derivative at \\((%d,%d)\\) in the direction \\(u=%s\\). (enter a number)", quadForm(a, b), p, q, d.label),
 		Answer:   fmt.Sprintf("%d", answer),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: \\(D_{u}f=\\nabla f\\cdot u\\) for a unit direction \\(u\\).\n"+
-				"Subgoal 2: \\(\\nabla f=(%s, %s)\\), so at \\((%d,%d)\\) it is \\((%d, %d)\\).\n"+
+			"Subgoal 1: \\(D_{u}f=\\nabla f\\cdot u\\) for a unit direction \\(u\\).\\n"+
+				"Subgoal 2: \\(\\nabla f=(%s, %s)\\), so at \\((%d,%d)\\) it is \\((%d, %d)\\).\\n"+
 				"Subgoal 3: Dot with \\(u=%s\\): %d.",
 			monoTerm(2*a, 1, 0), monoTerm(2*b, 0, 1), p, q, 2*a*p, 2*b*q, d.label, answer),
 	}
@@ -2695,8 +2788,8 @@ func (g *derivPartialHigherGen) Generate(ctx generator.GeneratorContext) generat
 		Question: fmt.Sprintf("For \\(f(x,y)=%s\\), find \\(%s\\).", f, which.label),
 		Answer:   answer,
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: Differentiate once in each variable the label names, holding the other fixed.\n"+
-				"Subgoal 2: Powers drop by one per derivative, so the surviving exponents are \\(x^{%d}y^{%d}\\).\n"+
+			"Subgoal 1: Differentiate once in each variable the label names, holding the other fixed.\\n"+
+				"Subgoal 2: Powers drop by one per derivative, so the surviving exponents are \\(x^{%d}y^{%d}\\).\\n"+
 				"Subgoal 3: The coefficients multiply to %d, giving \\(%s\\).",
 			which.px, which.py, which.coef, answer),
 	}
@@ -2715,8 +2808,8 @@ func (g *derivClairautGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		Question: fmt.Sprintf("For \\(f(x,y)=%s\\), compute \\(f_{xy}\\) (Clairaut's theorem says this equals \\(f_{yx}\\)).", f),
 		Answer:   answer,
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: Differentiate in \\(x\\) first: \\(f_{x}=%s\\).\n"+
-				"Subgoal 2: Then differentiate that in \\(y\\): \\(f_{xy}=%s\\).\n"+
+			"Subgoal 1: Differentiate in \\(x\\) first: \\(f_{x}=%s\\).\\n"+
+				"Subgoal 2: Then differentiate that in \\(y\\): \\(f_{xy}=%s\\).\\n"+
 				"Subgoal 3: The other order gives the same term because the mixed partials of a polynomial are continuous, which is exactly Clairaut's hypothesis.",
 			monoTerm(c*m, m-1, n), answer),
 	}
@@ -2739,8 +2832,8 @@ func (g *derivTotalDiffGen) Generate(ctx generator.GeneratorContext) generator.P
 		Question: fmt.Sprintf("For \\(z=%s\\), estimate \\(\\Delta z\\) when \\(x\\) grows from %d to %.1f and \\(y\\) grows from %d to %.1f. (enter a decimal)", monoTerm(c, p, q), x0, float64(x0)+dx, y0, float64(y0)+dy),
 		Answer:   decimal(dz, 4),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: The total differential is \\(dz=z_{x}\\,dx+z_{y}\\,dy\\).\n"+
-				"Subgoal 2: At \\((%d,%d)\\), \\(z_{x}=%d\\) and \\(z_{y}=%d\\).\n"+
+			"Subgoal 1: The total differential is \\(dz=z_{x}\\,dx+z_{y}\\,dy\\).\\n"+
+				"Subgoal 2: At \\((%d,%d)\\), \\(z_{x}=%d\\) and \\(z_{y}=%d\\).\\n"+
 				"Subgoal 3: \\(dz\\approx %d(%.1f)+%d(%.1f)=%s\\).",
 			x0, y0, fx, fy, fx, dx, fy, dy, decimal(dz, 4)),
 	}
@@ -2775,8 +2868,8 @@ func (g *derivJacobianGen) Generate(ctx generator.GeneratorContext) generator.Pr
 			Question: fmt.Sprintf("Write the Jacobian of \\(T(x,y)=(x^{%d},y^{%d})\\).", p, q),
 			Answer:   fmt.Sprintf("[[%s,0],[0,%s]]", fx, fy),
 			Explanation: fmt.Sprintf(
-				"Subgoal 1: Row 1 holds the partials of the first component \\(x^{%d}\\): \\(%s\\) in \\(x\\) and 0 in \\(y\\).\n"+
-					"Subgoal 2: Row 2 holds the partials of \\(y^{%d}\\): 0 in \\(x\\) and \\(%s\\) in \\(y\\).\n"+
+				"Subgoal 1: Row 1 holds the partials of the first component \\(x^{%d}\\): \\(%s\\) in \\(x\\) and 0 in \\(y\\).\\n"+
+					"Subgoal 2: Row 2 holds the partials of \\(y^{%d}\\): 0 in \\(x\\) and \\(%s\\) in \\(y\\).\\n"+
 					"Subgoal 3: Assemble the matrix \\(\\begin{pmatrix}%s&0\\\\0&%s\\end{pmatrix}\\).",
 				p, fx, q, fy, fx, fy),
 		}
@@ -2789,8 +2882,8 @@ func (g *derivJacobianGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		Question: fmt.Sprintf("Write the Jacobian of \\(T(x,y)=(%s,%s)\\).", linearIn(a, b), linearIn(c, d)),
 		Answer:   fmt.Sprintf("[[%d,%d],[%d,%d]]", a, b, c, d),
 		Explanation: fmt.Sprintf(
-			"Subgoal 1: The first row holds \\(\\partial T_{1}/\\partial x=%d\\) and \\(\\partial T_{1}/\\partial y=%d\\).\n"+
-				"Subgoal 2: The second row holds \\(\\partial T_{2}/\\partial x=%d\\) and \\(\\partial T_{2}/\\partial y=%d\\).\n"+
+			"Subgoal 1: The first row holds \\(\\partial T_{1}/\\partial x=%d\\) and \\(\\partial T_{1}/\\partial y=%d\\).\\n"+
+				"Subgoal 2: The second row holds \\(\\partial T_{2}/\\partial x=%d\\) and \\(\\partial T_{2}/\\partial y=%d\\).\\n"+
 				"Subgoal 3: A linear map has a constant Jacobian, so the matrix is the coefficient matrix itself.",
 			a, b, c, d),
 	}
@@ -2810,8 +2903,8 @@ func (g *integralNetChangeGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("A particle moves along a line with velocity \\(v(t) = %d t^2\\) m/s. Find the total displacement of the particle from \\(t = 0\\) to \\(t = %d\\) seconds.", coeff, T),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Net Change Theorem: displacement equals \\(\\int_{t_1}^{t_2} v(t)\\,dt\\).\n"+
-				"Subgoal 2: Substitute \\(v(t) = %d t^2\\), \\(t_1 = 0\\) and \\(t_2 = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Net Change Theorem: displacement equals \\(\\int_{t_1}^{t_2} v(t)\\,dt\\).\\n"+
+				"Subgoal 2: Substitute \\(v(t) = %d t^2\\), \\(t_1 = 0\\) and \\(t_2 = %d\\).\\n"+
 				"Subgoal 3: Evaluate the definite integral: \\(\\int_{0}^{%d} %d t^2\\,dt = [%d t^3]_{0}^{%d} = %d\\).", coeff, T, T, coeff, k, T, ans),
 		}
 	case 1:
@@ -2824,8 +2917,8 @@ func (g *integralNetChangeGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("Water flows into a tank at rate \\(r(t) = %d t + %d\\) L/min. How many liters of water enter the tank between \\(t = 0\\) and \\(t = %d\\) minutes?", coeff, b, T),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: net volume change is \\(\\int_{a}^{b} r(t)\\,dt\\).\n"+
-				"Subgoal 2: Substitute integrand \\(r(t) = %d t + %d\\) with limits from 0 to %d.\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: net volume change is \\(\\int_{a}^{b} r(t)\\,dt\\).\\n"+
+				"Subgoal 2: Substitute integrand \\(r(t) = %d t + %d\\) with limits from 0 to %d.\\n"+
 				"Subgoal 3: Evaluate antiderivative: \\([%d t^2 + %d t]_{0}^{%d} = %d \\cdot %d + %d \\cdot %d = %d\\).", coeff, b, T, k, b, T, k, T*T, b, T, ans),
 		}
 	case 2:
@@ -2838,8 +2931,8 @@ func (g *integralNetChangeGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("Given \\(f'(x) = %d x\\) and \\(f(0) = %d\\), determine the value of \\(f(%d)\\).", coeff, c, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: Apply the Net Change Theorem: \\(f(b) = f(a) + \\int_{a}^{b} f'(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute parameters \\(f(0) = %d\\) and \\(\\int_{0}^{%d} %d x\\,dx\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: Apply the Net Change Theorem: \\(f(b) = f(a) + \\int_{a}^{b} f'(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute parameters \\(f(0) = %d\\) and \\(\\int_{0}^{%d} %d x\\,dx\\).\\n"+
 				"Subgoal 3: Evaluate and sum: \\(%d + [%d x^2]_{0}^{%d} = %d + %d = %d\\).", c, b, coeff, c, k, b, c, k*b*b, ans),
 		}
 	case 3:
@@ -2851,8 +2944,8 @@ func (g *integralNetChangeGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("A chemical solution is added at rate \\(r(t) = %d t^2\\) mL/s. Compute the total amount added over the interval [0, %d].", coeff, T),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: net accumulation is \\(\\Delta V = \\int_{0}^{T} r(t)\\,dt\\).\n"+
-				"Subgoal 2: Integrate \\(\\int_{0}^{%d} %d t^2\\,dt = [%d t^3]_{0}^{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: net accumulation is \\(\\Delta V = \\int_{0}^{T} r(t)\\,dt\\).\\n"+
+				"Subgoal 2: Integrate \\(\\int_{0}^{%d} %d t^2\\,dt = [%d t^3]_{0}^{%d}\\).\\n"+
 				"Subgoal 3: Evaluate: \\(%d \\cdot %d = %d\\).", T, coeff, 2*k, T, 2*k, T*T*T, ans),
 		}
 	default:
@@ -2865,8 +2958,8 @@ func (g *integralNetChangeGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("An accelerating object has constant acceleration \\(a(t) = %d\\) m/s\\(^2\\) and initial velocity \\(v(0) = %d\\) m/s. Find \\(v(%d)\\).", coeff, v0, T),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Net Change Theorem for acceleration: \\(v(T) = v(0) + \\int_{0}^{T} a(t)\\,dt\\).\n"+
-				"Subgoal 2: Substitute \\(v(0) = %d\\) and \\(\\int_{0}^{%d} %d\\,dt\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Net Change Theorem for acceleration: \\(v(T) = v(0) + \\int_{0}^{T} a(t)\\,dt\\).\\n"+
+				"Subgoal 2: Substitute \\(v(0) = %d\\) and \\(\\int_{0}^{%d} %d\\,dt\\).\\n"+
 				"Subgoal 3: Evaluate and compute: \\(%d + (%d \\cdot %d) = %d\\).", v0, T, coeff, v0, coeff, T, ans),
 		}
 	}
@@ -2917,8 +3010,8 @@ func (g *integralMVTGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the average value of \\(f(x) = %d x\\) on the interval [0, %d].", coeff, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute parameters \\(a = 0\\), \\(b = %d\\) and \\(f(x) = %d x\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute parameters \\(a = 0\\), \\(b = %d\\) and \\(f(x) = %d x\\).\\n"+
 				"Subgoal 3: Evaluate: \\(\\frac{1}{%d}\\int_{0}^{%d} %d x\\,dx = \\frac{1}{%d} [%d x^2]_{0}^{%d} = \\frac{%d}{%d} = %d\\).", b, coeff, b, b, coeff, b, k, b, k*b*b, b, ans),
 		}
 	case 1:
@@ -2930,8 +3023,8 @@ func (g *integralMVTGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		return generator.Problem{
 			Question: fmt.Sprintf("Compute the average value of \\(f(x) = %d x^2\\) on [0, %d].", coeff, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the average value formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute limits from 0 to %d with integrand \\(%d x^2\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the average value formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute limits from 0 to %d with integrand \\(%d x^2\\).\\n"+
 				"Subgoal 3: Evaluate antiderivative: \\(\\frac{1}{%d} [%d x^3]_{0}^{%d} = \\frac{%d \\cdot %d}{%d} = %d\\).", b, coeff, b, k, b, k, b*b*b, b, ans),
 		}
 	case 2:
@@ -2942,8 +3035,8 @@ func (g *integralMVTGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the value \\(c\\) guaranteed by the Mean Value Theorem for Integrals for \\(f(x) = 2x\\) on [0, %d].", b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the theorem: there exists \\(c \\in [a, b]\\) such that \\(f(c) = f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\n"+
-				"Subgoal 2: Compute \\(f_{\\text{avg}} = \\frac{1}{%d} \\int_{0}^{%d} 2x\\,dx = \\frac{1}{%d} [x^2]_{0}^{%d} = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the theorem: there exists \\(c \\in [a, b]\\) such that \\(f(c) = f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\\n"+
+				"Subgoal 2: Compute \\(f_{\\text{avg}} = \\frac{1}{%d} \\int_{0}^{%d} 2x\\,dx = \\frac{1}{%d} [x^2]_{0}^{%d} = %d\\).\\n"+
 				"Subgoal 3: Set \\(f(c) = f_{\\text{avg}} \\implies 2c = %d \\implies c = %d\\).", b, b, b, b, b, b, ans),
 		}
 	case 3:
@@ -2956,8 +3049,8 @@ func (g *integralMVTGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the average value of \\(f(x) = %d x + %d\\) over [0, %d].", coeff, d, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\n"+
-				"Subgoal 2: Compute \\(\\int_{0}^{%d} (%d x + %d)\\,dx = [%d x^2 + %d x]_{0}^{%d} = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\\n"+
+				"Subgoal 2: Compute \\(\\int_{0}^{%d} (%d x + %d)\\,dx = [%d x^2 + %d x]_{0}^{%d} = %d\\).\\n"+
 				"Subgoal 3: Divide by interval length %d: \\(\\frac{%d}{%d} = %d\\).", b, coeff, d, k, d, b, k*b*b+d*b, b, k*b*b+d*b, b, ans),
 		}
 	default:
@@ -2969,8 +3062,8 @@ func (g *integralMVTGen) Generate(ctx generator.GeneratorContext) generator.Prob
 		return generator.Problem{
 			Question: fmt.Sprintf("Compute the average value of \\(f(x) = %d x^3\\) on [0, %d].", coeff, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute integrand \\(%d x^3\\) on interval [0, %d].\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(f_{\\text{avg}} = \\frac{1}{b-a}\\int_{a}^{b} f(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute integrand \\(%d x^3\\) on interval [0, %d].\\n"+
 				"Subgoal 3: Evaluate: \\(\\frac{1}{%d} [k x^4]_{0}^{%d} = \\frac{%d \\cdot %d}{%d} = %d\\).", coeff, b, b, b, k, b*b*b*b, b, ans),
 		}
 	}
@@ -2990,8 +3083,8 @@ func (g *integralWorkGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("A spring requires a force of \\(F(x) = %d x\\) N to stretch a distance of \\(x\\) meters. Calculate the work done in stretching the spring from \\(x = 0\\) to \\(x = %d\\) meters.", coeff, D),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for work: \\(W = \\int_{a}^{b} F(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute \\(F(x) = %d x\\) with limits \\(a = 0\\) and \\(b = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for work: \\(W = \\int_{a}^{b} F(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute \\(F(x) = %d x\\) with limits \\(a = 0\\) and \\(b = %d\\).\\n"+
 				"Subgoal 3: Evaluate the integral: \\(\\int_{0}^{%d} %d x\\,dx = [%d x^2]_{0}^{%d} = %d \\cdot %d = %d\\) J.", coeff, D, D, coeff, k, D, k, D*D, ans),
 		}
 	case 1:
@@ -3003,8 +3096,8 @@ func (g *integralWorkGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("A variable force \\(F(x) = %d x^2\\) N acts on an object moving along the x-axis. Find the work done in moving the object from \\(x = 0\\) to \\(x = %d\\) meters.", coeff, D),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = \\int_{0}^{D} F(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute force \\(F(x) = %d x^2\\) and distance \\(D = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = \\int_{0}^{D} F(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute force \\(F(x) = %d x^2\\) and distance \\(D = %d\\).\\n"+
 				"Subgoal 3: Evaluate antiderivative: \\([%d x^3]_{0}^{%d} = %d \\cdot %d = %d\\) J.", coeff, D, k, D, k, D*D*D, ans),
 		}
 	case 2:
@@ -3018,8 +3111,8 @@ func (g *integralWorkGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the work done (in Joules) by a force \\(F(x) = %d x\\) N in moving an object from \\(x = %d\\) to \\(x = %d\\) meters.", coeff, x1, x2),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = \\int_{x_1}^{x_2} F(x)\\,dx\\).\n"+
-				"Subgoal 2: Substitute \\(F(x) = %d x\\), \\(x_1 = %d\\) and \\(x_2 = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = \\int_{x_1}^{x_2} F(x)\\,dx\\).\\n"+
+				"Subgoal 2: Substitute \\(F(x) = %d x\\), \\(x_1 = %d\\) and \\(x_2 = %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\([%d x^2]_{%d}^{%d} = %d (%d - %d) = %d\\) J.", coeff, x1, x2, k, x1, x2, k, x2*x2, x1*x1, ans),
 		}
 	case 3:
@@ -3032,8 +3125,8 @@ func (g *integralWorkGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("Calculate the work done by a force \\(F(x) = %d x + %d\\) N in displacing a particle from \\(x = 0\\) to \\(x = %d\\) meters.", coeff, C, D),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = \\int_{0}^{D} (mx + C)\\,dx\\).\n"+
-				"Subgoal 2: Compute antiderivative \\([%d x^2 + %d x]_{0}^{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = \\int_{0}^{D} (mx + C)\\,dx\\).\\n"+
+				"Subgoal 2: Compute antiderivative \\([%d x^2 + %d x]_{0}^{%d}\\).\\n"+
 				"Subgoal 3: Evaluate: \\(%d \\cdot %d + %d \\cdot %d = %d\\) J.", k, C, D, k, D*D, C, D, ans),
 		}
 	default:
@@ -3044,8 +3137,8 @@ func (g *integralWorkGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		return generator.Problem{
 			Question: fmt.Sprintf("A constant force of %d N pushes a box across a frictionless floor for a distance of %d meters. Compute the total work done.", F0, D),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = F \\cdot d\\).\n"+
-				"Subgoal 2: Substitute constant force \\(F = %d\\) N and displacement \\(d = %d\\) m.\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(W = F \\cdot d\\).\\n"+
+				"Subgoal 2: Substitute constant force \\(F = %d\\) N and displacement \\(d = %d\\) m.\\n"+
 				"Subgoal 3: Multiply: \\(%d \\cdot %d = %d\\) J.", F0, D, F0, D, ans),
 		}
 	}
@@ -3064,8 +3157,8 @@ func (g *integralCenterMassGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("A thin rod of uniform density occupies the interval [0, %d] on the x-axis. Find the x-coordinate of its center of mass.", L),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for a uniform rod: \\(\\bar{x} = \\frac{a + b}{2}\\).\n"+
-				"Subgoal 2: Substitute endpoints \\(a = 0\\) and \\(b = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula for a uniform rod: \\(\\bar{x} = \\frac{a + b}{2}\\).\\n"+
+				"Subgoal 2: Substitute endpoints \\(a = 0\\) and \\(b = %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\(\\bar{x} = \\frac{0 + %d}{2} = %d\\).", L, L, ans),
 		}
 	case 1:
@@ -3076,8 +3169,8 @@ func (g *integralCenterMassGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("A rod of length %d on [0, %d] has linear density \\(\\rho(x) = x\\). Find its center of mass \\(\\bar{x}\\).", L, L),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\bar{x} = \\frac{M_y}{M} = \\frac{\\int_{0}^{L} x \\rho(x)\\,dx}{\\int_{0}^{L} \\rho(x)\\,dx}\\).\n"+
-				"Subgoal 2: Compute total mass \\(M = \\int_{0}^{%d} x\\,dx = \\frac{%d^2}{2}\\) and moment \\(M_y = \\int_{0}^{%d} x^2\\,dx = \\frac{%d^3}{3}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\bar{x} = \\frac{M_y}{M} = \\frac{\\int_{0}^{L} x \\rho(x)\\,dx}{\\int_{0}^{L} \\rho(x)\\,dx}\\).\\n"+
+				"Subgoal 2: Compute total mass \\(M = \\int_{0}^{%d} x\\,dx = \\frac{%d^2}{2}\\) and moment \\(M_y = \\int_{0}^{%d} x^2\\,dx = \\frac{%d^3}{3}\\).\\n"+
 				"Subgoal 3: Simplify the ratio: \\(\\bar{x} = \\frac{2}{3} L = \\frac{2}{3} (%d) = %d\\).", L, L, L, L, L, ans),
 		}
 	case 2:
@@ -3088,8 +3181,8 @@ func (g *integralCenterMassGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("A rod occupying [0, %d] has density \\(\\rho(x) = x^2\\). Determine the center of mass \\(\\bar{x}\\).", L),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\bar{x} = \\frac{\\int_{0}^{L} x^3\\,dx}{\\int_{0}^{L} x^2\\,dx}\\).\n"+
-				"Subgoal 2: Evaluate integrals: numerator is \\(L^4 / 4\\) and denominator is \\(L^3 / 3\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\bar{x} = \\frac{\\int_{0}^{L} x^3\\,dx}{\\int_{0}^{L} x^2\\,dx}\\).\\n"+
+				"Subgoal 2: Evaluate integrals: numerator is \\(L^4 / 4\\) and denominator is \\(L^3 / 3\\).\\n"+
 				"Subgoal 3: Compute \\(\\bar{x} = \\frac{3}{4} L = \\frac{3}{4} (%d) = %d\\).", L, ans),
 		}
 	case 3:
@@ -3101,8 +3194,8 @@ func (g *integralCenterMassGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("A uniform rod extends along the x-axis from \\(x = %d\\) to \\(x = %d\\). Find the center of mass \\(\\bar{x}\\).", a, b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: by symmetry, \\(\\bar{x} = \\frac{a + b}{2}\\).\n"+
-				"Subgoal 2: Substitute endpoints \\(a = %d\\) and \\(b = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: by symmetry, \\(\\bar{x} = \\frac{a + b}{2}\\).\\n"+
+				"Subgoal 2: Substitute endpoints \\(a = %d\\) and \\(b = %d\\).\\n"+
 				"Subgoal 3: Calculate: \\(\\bar{x} = \\frac{%d + %d}{2} = %d\\).", a, b, a, b, ans),
 		}
 	default:
@@ -3112,8 +3205,8 @@ func (g *integralCenterMassGen) Generate(ctx generator.GeneratorContext) generat
 		return generator.Problem{
 			Question: fmt.Sprintf("Two equal point masses \\(m\\) are placed at positions \\(x = 0\\) and \\(x = %d\\). Find the center of mass of the system.", 2*d),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\bar{x} = \\frac{\\sum m_i x_i}{\\sum m_i}\\).\n"+
-				"Subgoal 2: Substitute \\(m_1 = m_2 = m\\), \\(x_1 = 0\\) and \\(x_2 = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\bar{x} = \\frac{\\sum m_i x_i}{\\sum m_i}\\).\\n"+
+				"Subgoal 2: Substitute \\(m_1 = m_2 = m\\), \\(x_1 = 0\\) and \\(x_2 = %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\(\\bar{x} = \\frac{m(0) + m(%d)}{2m} = \\frac{%d}{2} = %d\\).", 2*d, 2*d, 2*d, ans),
 		}
 	}
@@ -3158,8 +3251,8 @@ func (g *integralTrapezoidGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("Approximate \\(\\int_{0}^{%d} x^2\\,dx\\) using the Trapezoidal Rule with \\(n = 1\\) subinterval.", b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Trapezoidal Rule for \\(n = 1\\): \\(T_1 = \\frac{b-a}{2} (f(a) + f(b))\\).\n"+
-				"Subgoal 2: Substitute \\(a = 0\\), \\(b = %d\\), \\(f(0) = 0\\) and \\(f(%d) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Trapezoidal Rule for \\(n = 1\\): \\(T_1 = \\frac{b-a}{2} (f(a) + f(b))\\).\\n"+
+				"Subgoal 2: Substitute \\(a = 0\\), \\(b = %d\\), \\(f(0) = 0\\) and \\(f(%d) = %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\(T_1 = \\frac{%d}{2} (0 + %d) = %d \\cdot %d = %d\\).", b, b, b*b, b, b*b, k, b*b, ans),
 		}
 	case 1:
@@ -3172,8 +3265,8 @@ func (g *integralTrapezoidGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("Approximate \\(\\int_{0}^{%d} (%d x + %d)\\,dx\\) using the Trapezoidal Rule with \\(n = 2\\).", L, coeff, b0),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Trapezoidal Rule: \\(T_n = \\frac{\\Delta x}{2} [f(x_0) + 2f(x_1) + f(x_2)]\\).\n"+
-				"Subgoal 2: Note that the Trapezoidal Rule is exact for linear polynomials, so \\(T_2 = \\int_{0}^{%d} (%d x + %d)\\,dx\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Trapezoidal Rule: \\(T_n = \\frac{\\Delta x}{2} [f(x_0) + 2f(x_1) + f(x_2)]\\).\\n"+
+				"Subgoal 2: Note that the Trapezoidal Rule is exact for linear polynomials, so \\(T_2 = \\int_{0}^{%d} (%d x + %d)\\,dx\\).\\n"+
 				"Subgoal 3: Evaluate the exact integral: \\([%d x^2 + %d x]_{0}^{%d} = %d\\).", L, coeff, b0, m, b0, L, ans),
 		}
 	case 2:
@@ -3184,8 +3277,8 @@ func (g *integralTrapezoidGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("Use the Trapezoidal Rule with \\(n = 2\\) subintervals to approximate \\(\\int_{0}^{%d} x^2\\,dx\\).", b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\Delta x = \\frac{b-a}{n} = %d\\), \\(T_2 = \\frac{%d}{2} [f(0) + 2f(%d) + f(%d)]\\).\n"+
-				"Subgoal 2: Substitute function values \\(f(0) = 0\\), \\(f(%d) = %d\\) and \\(f(%d) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\Delta x = \\frac{b-a}{n} = %d\\), \\(T_2 = \\frac{%d}{2} [f(0) + 2f(%d) + f(%d)]\\).\\n"+
+				"Subgoal 2: Substitute function values \\(f(0) = 0\\), \\(f(%d) = %d\\) and \\(f(%d) = %d\\).\\n"+
 				"Subgoal 3: Calculate: \\(\\frac{%d}{2} [0 + 2(%d) + %d] = \\frac{%d}{2} [%d] = %d\\).", k, k, k, b, k, k*k, b, b*b, k, k*k, b*b, k, 2*k*k+b*b, ans),
 		}
 	case 3:
@@ -3198,8 +3291,8 @@ func (g *integralTrapezoidGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("If the interval \\([%d, %d]\\) is divided into subintervals of uniform width \\(\\Delta x = %d\\), how many subintervals \\(n\\) are created?", a, b, h),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\Delta x = \\frac{b - a}{n} \\implies n = \\frac{b - a}{\\Delta x}\\).\n"+
-				"Subgoal 2: Substitute parameters \\(a = %d\\), \\(b = %d\\) and \\(\\Delta x = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: \\(\\Delta x = \\frac{b - a}{n} \\implies n = \\frac{b - a}{\\Delta x}\\).\\n"+
+				"Subgoal 2: Substitute parameters \\(a = %d\\), \\(b = %d\\) and \\(\\Delta x = %d\\).\\n"+
 				"Subgoal 3: Compute: \\(n = \\frac{%d - %d}{%d} = \\frac{%d}{%d} = %d\\).", a, b, h, b, a, h, b-a, h, ans),
 		}
 	default:
@@ -3210,8 +3303,8 @@ func (g *integralTrapezoidGen) Generate(ctx generator.GeneratorContext) generato
 		return generator.Problem{
 			Question: fmt.Sprintf("Approximate \\(\\int_{0}^{2} %d x^2\\,dx\\) using the Trapezoidal Rule with \\(n = 1\\).", coeff),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State the Trapezoidal Rule: \\(T_1 = \\frac{b-a}{2} (f(a) + f(b))\\).\n"+
-				"Subgoal 2: For \\([0, 2]\\), \\(\\frac{b-a}{2} = 1\\), \\(f(0) = 0\\) and \\(f(2) = %d(4) = %d\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State the Trapezoidal Rule: \\(T_1 = \\frac{b-a}{2} (f(a) + f(b))\\).\\n"+
+				"Subgoal 2: For \\([0, 2]\\), \\(\\frac{b-a}{2} = 1\\), \\(f(0) = 0\\) and \\(f(2) = %d(4) = %d\\).\\n"+
 				"Subgoal 3: Evaluate: \\(T_1 = 1 \\cdot (0 + %d) = %d\\).", coeff, 4*coeff, 4*coeff, ans),
 		}
 	}
@@ -3230,8 +3323,8 @@ func (g *integralSimpsonGen) Generate(ctx generator.GeneratorContext) generator.
 		return generator.Problem{
 			Question: fmt.Sprintf("Approximate \\(\\int_{0}^{%d} x^3\\,dx\\) using Simpson's Rule with \\(n = 2\\).", b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule is exact for polynomials of degree up to 3.\n"+
-				"Subgoal 2: Recognize that \\(S_2 = \\int_{0}^{%d} x^3\\,dx\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule is exact for polynomials of degree up to 3.\\n"+
+				"Subgoal 2: Recognize that \\(S_2 = \\int_{0}^{%d} x^3\\,dx\\).\\n"+
 				"Subgoal 3: Evaluate the exact integral: \\([\\frac{x^4}{4}]_{0}^{%d} = \\frac{%d^4}{4} = %d\\).", b, b, b, ans),
 		}
 	case 1:
@@ -3242,8 +3335,8 @@ func (g *integralSimpsonGen) Generate(ctx generator.GeneratorContext) generator.
 		return generator.Problem{
 			Question: fmt.Sprintf("Use Simpson's Rule with \\(n = 2\\) subintervals to approximate \\(\\int_{0}^{%d} 3x^2\\,dx\\).", b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule is exact for quadratic polynomials.\n"+
-				"Subgoal 2: Evaluate \\(S_2 = \\int_{0}^{%d} 3x^2\\,dx = [x^3]_{0}^{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule is exact for quadratic polynomials.\\n"+
+				"Subgoal 2: Evaluate \\(S_2 = \\int_{0}^{%d} 3x^2\\,dx = [x^3]_{0}^{%d}\\).\\n"+
 				"Subgoal 3: Compute: \\(%d^3 = %d\\).", b, b, b, ans),
 		}
 	case 2:
@@ -3251,8 +3344,8 @@ func (g *integralSimpsonGen) Generate(ctx generator.GeneratorContext) generator.
 		return generator.Problem{
 			Question: "What is the smallest number of subintervals \\(n\\) required to apply Simpson's Rule?",
 			Answer:   "2",
-			Explanation: "Subgoal 1: State the requirement for Simpson's Rule: parabolas are fit across pairs of adjacent subintervals.\n" +
-				"Subgoal 2: Deduce that \\(n\\) must be an even positive integer.\n" +
+			Explanation: "Subgoal 1: State the requirement for Simpson's Rule: parabolas are fit across pairs of adjacent subintervals.\\n" +
+				"Subgoal 2: Deduce that \\(n\\) must be an even positive integer.\\n" +
 				"Subgoal 3: Identify the smallest positive even integer: \\(n = 2\\).",
 		}
 	case 3:
@@ -3265,8 +3358,8 @@ func (g *integralSimpsonGen) Generate(ctx generator.GeneratorContext) generator.
 		return generator.Problem{
 			Question: fmt.Sprintf("Approximate \\(\\int_{0}^{%d} %d x\\,dx\\) using Simpson's Rule with \\(n = 2\\).", b, coeff),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule \\(S_2 = \\frac{\\Delta x}{3} [f(x_0) + 4f(x_1) + f(x_2)]\\).\n"+
-				"Subgoal 2: Because the integrand is linear, Simpson's Rule gives the exact integral value \\(\\int_{0}^{%d} %d x\\,dx\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule \\(S_2 = \\frac{\\Delta x}{3} [f(x_0) + 4f(x_1) + f(x_2)]\\).\\n"+
+				"Subgoal 2: Because the integrand is linear, Simpson's Rule gives the exact integral value \\(\\int_{0}^{%d} %d x\\,dx\\).\\n"+
 				"Subgoal 3: Evaluate: \\([%d x^2]_{0}^{%d} = %d \\cdot %d = %d\\).", b, coeff, m, b, m, b*b, ans),
 		}
 	default:
@@ -3277,8 +3370,8 @@ func (g *integralSimpsonGen) Generate(ctx generator.GeneratorContext) generator.
 		return generator.Problem{
 			Question: fmt.Sprintf("Apply Simpson's Rule with \\(n = 2\\) subintervals to approximate \\(\\int_{0}^{%d} x^2\\,dx\\).", b),
 			Answer:   fmt.Sprintf("%d", ans),
-			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule is exact for quadratic polynomials.\n"+
-				"Subgoal 2: Compute exact integral \\(\\int_{0}^{%d} x^2\\,dx = [\\frac{x^3}{3}]_{0}^{%d}\\).\n"+
+			Explanation: fmt.Sprintf("Subgoal 1: State governing formula: Simpson's Rule is exact for quadratic polynomials.\\n"+
+				"Subgoal 2: Compute exact integral \\(\\int_{0}^{%d} x^2\\,dx = [\\frac{x^3}{3}]_{0}^{%d}\\).\\n"+
 				"Subgoal 3: Calculate: \\(\\frac{%d^3}{3} = \\frac{%d}{3} = %d\\).", b, b, b, b*b*b, ans),
 		}
 	}
