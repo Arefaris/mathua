@@ -141,7 +141,7 @@
 
 ## Вибрані джерела
 
-  * **Університет Род-Айленда, Л. Барнс**. [Розв’язування многочленних і дробово-раціональних нерівностей](https://www.math.uri.edu/~lbarnes/classes/2019-2020/spring/Inequality%20Lecture%20Notes.pdf)
-  * **Університет штату Флорида, П. Кірбі**. [Розв’язування многочленних і дробово-раціональних нерівностей](https://www.math.fsu.edu/~pkirby/mac1140/5_4Inequalities.pdf)
-  * **Stitz-Zeager Open Mathematics, К. Стіц, Дж. Зейгер**. [Дробово-раціональні нерівності та їх застосування](https://stitz-zeager.com/szprecalc08262010.pdf)
-  * **Університет Ламар, П. Докінз**. [Дробово-раціональні нерівності](https://tutorial.math.lamar.edu/classes/alg/SolveRationalInequalities.aspx)
+  * **Університет Род-Айленда, Л. Барнс**. [Solving Polynomial and Rational Inequalities](https://www.math.uri.edu/~lbarnes/classes/2019-2020/spring/Inequality%20Lecture%20Notes.pdf) (Розв’язування нерівностей із многочленами та дробово-раціональних нерівностей)
+  * **Університет штату Флорида, П. Кірбі**. [Solving Polynomial and Rational Inequalities](https://www.math.fsu.edu/~pkirby/mac1140/5_4Inequalities.pdf) (Розв’язування нерівностей із многочленами та дробово-раціональних нерівностей)
+  * **Stitz-Zeager Open Mathematics, К. Стіц, Дж. Зейгер**. [Rational Inequalities and Applications](https://stitz-zeager.com/szprecalc08262010.pdf) (Дробово-раціональні нерівності та їх застосування)
+  * **Університет Ламар, П. Докінз**. [Rational Inequalities](https://tutorial.math.lamar.edu/classes/alg/SolveRationalInequalities.aspx) (Дробово-раціональні нерівності)

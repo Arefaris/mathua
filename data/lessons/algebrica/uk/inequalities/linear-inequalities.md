@@ -166,10 +166,10 @@
 
 ## Вибрані джерела
 
-  * **Університет Стоні-Брук**. [Лінійні нерівності](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-17-Handout.pdf)
+  * **Університет Стоні-Брук**. [Linear Inequalities](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-17-Handout.pdf) (Лінійні нерівності)
 
-  * **Університет Стоні-Брук**. [Нерівності з модулем](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-18-Handout.pdf)
+  * **Університет Стоні-Брук**. [Absolute Value Inequalities](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-18-Handout.pdf) (Нерівності з модулем)
 
-  * **Гарвардський університет**. [Додаток H: тлумачення нерівностей і робота з ними](https://abel.math.harvard.edu/archive/xb_spring_03/icearchive1/webAPPH.pdf)
+  * **Гарвардський університет**. [Appendix H: Interpreting and Working with Inequalities](https://abel.math.harvard.edu/archive/xb_spring_03/icearchive1/webAPPH.pdf) (Додаток H: тлумачення нерівностей і робота з ними)
 
-  * **Х’юстонський університет**. [Запис проміжків і лінійні нерівності](https://online.math.uh.edu/Math1300-unpaid/ch1/s17/1300_Ch1_Section7.pdf)
+  * **Х’юстонський університет**. [Interval Notation and Linear Inequalities](https://online.math.uh.edu/Math1300-unpaid/ch1/s17/1300_Ch1_Section7.pdf) (Запис проміжків і лінійні нерівності)

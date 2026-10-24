@@ -182,6 +182,6 @@
 
 ## Вибрані джерела
 
-  * **Університет Стоні-Брук**. [Квадратні нерівності](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-31-Handout.pdf)
-  * **Університет Іллінойсу в Чикаго, Дж. Болдвін**. [Розв’язування нерівностей і квадратних рівнянь](http://homepages.math.uic.edu/~jbaldwin/alginit/solquadsh.pdf)
-  * **Чиказький університет, М. Гідегкуті**. [Квадратні нерівності](https://teaching.martahidegkuti.com/shared/lnotes/4_collegealgebra/inequalities/inequality2.pdf)
+  * **Університет Стоні-Брук**. [Quadratic Inequalities](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-31-Handout.pdf) (Квадратні нерівності)
+  * **Університет Іллінойсу в Чикаго, Дж. Болдвін**. [Solving Inequalities and Quadratics](http://homepages.math.uic.edu/~jbaldwin/alginit/solquadsh.pdf) (Розв’язування нерівностей і квадратних рівнянь)
+  * **Чиказький університет, М. Гідегкуті**. [Quadratic Inequalities](https://teaching.martahidegkuti.com/shared/lnotes/4_collegealgebra/inequalities/inequality2.pdf) (Квадратні нерівності)
