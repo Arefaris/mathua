@@ -897,4 +897,12 @@
 | factoring a number (2.4: найти все делители) | разложение числа на множители | как в оригинале; название шага — «Нахождение всех делителей числа» |
 | factor pair | пара делителей | |
 | prime / composite number | простое / составное число | |
+| Identity Property of Addition / additive identity | свойство сложения с нулём / нейтральный элемент по сложению | |
+| Commutative Property of Addition | переместительное свойство сложения | |
+| equation (в 1.2: «a math sentence that shows two expressions are equal») | равенство | «уравнение» — только с неизвестным |
+| regroup / exchange (10 ones for 1 ten) | перегруппировать, заменить; «заменить 10 единиц на 1 десяток» | |
+| ones / tens blocks, tens rod | блоки единиц / стержень десятков | к base-10 blocks, §7 |
+| Add whole numbers in applications (заголовок) | «Сложение целых неотрицательных чисел в задачах» (так же для умножения и деления) | совпадает с `section` шага в `kp/ru` |
+| perimeter | периметр — длина границы геометрической фигуры, сумма длин её сторон | не «расстояние вокруг» |
+| grades (в школе: three grades) | параллели | |
 | Links to Literacy (названия книг) | «Связь с чтением»; русское название и в скобках английское: «Сто голодных муравьёв» (One Hundred Hungry Ants) | как в `dec.ops.*` |
