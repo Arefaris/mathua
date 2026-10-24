@@ -217,20 +217,18 @@ func (g *contrapositiveGen) Generate(ctx generator.GeneratorContext) generator.P
 type counterexampleGen struct{}
 
 func (g *counterexampleGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	cs := []int{11, 17, 41}
-	c := cs[rand.Intn(len(cs))]
-	// The answer is found by scanning, not assumed: Euler's polynomials are famous for long prime
-	// runs and it is the scan that establishes where the run ends.
-	// The run always ends at c-1, because f(c-1) = c^2 for f(n) = n^2 + n + c. The scan finds it
-	// and TestBatchCounterexampleIsMinimal re-derives the minimality from the published facts, so a
-	// constant that broke the pattern would fail a test rather than ship a wrong answer.
-	n := c - 1
-	for k := 1; k <= c-1; k++ {
-		if !isPrime(k*k + k + c) {
-			n = k
-			break
+	// The constants are found by scanning rather than chosen by hand: any c whose
+	// polynomial n^2 + n + c stays prime for at least two steps makes the question
+	// meaningful, and the run length is re-derived for the constant that was drawn, so a
+	// wrong constant cannot ship a wrong answer.
+	candidates := make([]int, 0, 16)
+	for c := 2; c <= 200; c++ {
+		if runLength(c) >= 2 {
+			candidates = append(candidates, c)
 		}
 	}
+	c := candidates[rand.Intn(len(candidates))]
+	n := runLength(c)
 	value := n*n + n + c
 	f1 := 0
 	for d := 2; d*d <= value; d++ {
@@ -239,19 +237,37 @@ func (g *counterexampleGen) Generate(ctx generator.GeneratorContext) generator.P
 			break
 		}
 	}
-	q := fmt.Sprintf("Let f(n) = n\u00b2 + n + %d. Find the smallest positive integer n for which f(n) is not prime.", c)
 	p := generator.Problem{
-		Question: q,
-		Answer:   strconv.Itoa(n),
 		Facts: map[string]string{
 			"c": strconv.Itoa(c), "n": strconv.Itoa(n), "value": strconv.Itoa(value),
 			"factor1": strconv.Itoa(f1), "factor2": strconv.Itoa(value / f1),
 			"last_prime": strconv.Itoa(n - 1),
 		},
 	}
+	switch rand.Intn(3) {
+	case 0:
+		p.Question = fmt.Sprintf("Let f(n) = n\u00b2 + n + %d. Find the smallest positive integer n for which f(n) is not prime.", c)
+		p.Answer = strconv.Itoa(n)
+	case 1:
+		p.Question = fmt.Sprintf("For how many consecutive values of n, starting at n = 0, is f(n) = n\u00b2 + n + %d prime?", c)
+		p.Answer = strconv.Itoa(n)
+	default:
+		p.Question = fmt.Sprintf("Let f(n) = n\u00b2 + n + %d. What is the value of f(n) at the smallest n for which f(n) is not prime?", c)
+		p.Answer = strconv.Itoa(value)
+	}
 	p.Explanation = fmt.Sprintf("f(%d) = %d = %d \u00b7 %d, which is composite, and f(n) is prime for every n from 0 to %d.",
 		n, value, f1, value/f1, n-1)
 	return p
+}
+
+// runLength is the number of consecutive primes produced by f(n) = n^2 + n + c
+// starting at n = 0. It is the smallest n at which f(n) is composite.
+func runLength(c int) int {
+	n := 0
+	for isPrime(n*n + n + c) {
+		n++
+	}
+	return n
 }
 
 // ----- 6. structural induction -----

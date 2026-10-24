@@ -334,21 +334,6 @@ func (g *adamDetailsGen) Generate(ctx generator.GeneratorContext) generator.Prob
 	return generator.Problem{Question: e.question, Answer: e.answer, Explanation: e.exp}
 }
 
-type calibrationGen struct{}
-
-func (g *calibrationGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	scale := int(1 + ctx.Difficulty*4)
-	type entry struct{ question, answer, exp string }
-	easy := []entry{{"A bin holds 100 of 200 samples with |acc-conf|=0.2. What is its ECE contribution?", "0.1", "Weight 100/200 = 0.5 times gap 0.2 gives 0.1."}, {"100 predictions at 80 percent confidence with 80 correct are miscalibrated by how much?", "0", "Accuracy 0.8 matches confidence 0.8: gap 0, calibrated."}, {"60 correct of 100 at 80 percent confidence means overconfidence by what fraction?", "0.2", "Confidence 0.8 minus accuracy 0.6 gives 0.2 overconfidence."}, {"Reliability diagrams bin predictions by what: confidence or loss?", "confidence", "Predictions group by confidence; accuracy plots per bin."}, {"Is a calibrated classifier's confidence approximately its accuracy? (yes/no)", "yes", "Calibration means confidence matches empirical accuracy."}, {"Does temperature scaling change the predicted class? (yes/no)", "no", "Scaling logits keeps argmax fixed; only confidence changes."}}
-	hard := []entry{{"Does overconfidence mean ECE high? (yes/no)", "yes", "Gap."}, {"Is temperature scaling a calibration method? (yes/no)", "yes", "Softmax temp."}, {"Does well-calibrated with 80% conf mean 80% correct? (yes/no)", "yes", "Definition."}}
-	pool := easy
-	if scale > 3 {
-		pool = append(easy, hard...)
-	}
-	e := pool[rand.Intn(len(pool))]
-	return generator.Problem{Question: e.question, Answer: e.answer, Explanation: e.exp}
-}
-
 type augmentationGen struct{}
 
 func (g *augmentationGen) Generate(ctx generator.GeneratorContext) generator.Problem {
