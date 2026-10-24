@@ -934,8 +934,78 @@ func TestEngine_NegativeXP_AfterSecondRush(t *testing.T) {
 	}
 	q2, _ := e.NextQuestion(sess.ID, st.ID)
 	res2, _ := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "wrong", 1.0)
-	if res2.XP != -1 {
-		t.Errorf("expected -1 XP second rush, got %d", res2.XP)
+	if res2.XP != -5 {
+		t.Errorf("expected -5 XP second rapid guess, got %d", res2.XP)
+	}
+}
+
+func TestEngine_AntiGuessing_ResetOnCorrectAnswer(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("guess_reset")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// First rapid incorrect attempt: latency < 2s.
+	q1, _ := e.NextQuestion(sess.ID, st.ID)
+	res1, _ := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 1.0)
+	if res1.XP != 0 {
+		t.Errorf("expected 0 XP first rapid miss, got %d", res1.XP)
+	}
+
+	// Intervening correct attempt resets the consecutive rush counter.
+	q2, _ := e.NextQuestion(sess.ID, st.ID)
+	res2, _ := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "42", 5.0)
+	if !res2.Correct || res2.XP <= 0 {
+		t.Fatalf("expected positive XP for correct answer, got %d", res2.XP)
+	}
+
+	// Another rapid incorrect attempt: not consecutive, so no penalty yet.
+	q3, _ := e.NextQuestion(sess.ID, st.ID)
+	res3, _ := e.SubmitAnswer(sess.ID, st.ID, q3.AttemptID, "wrong", 1.0)
+	if res3.XP != 0 {
+		t.Errorf("expected 0 XP after reset, got %d", res3.XP)
+	}
+}
+
+func TestEngine_Accommodation_TimeMultiplierScalesThreshold(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("accom_mult")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// Test settings with top level time_multiplier.
+	_ = e.repo.UpdateSettings(st.ID, `{"time_multiplier": 1.5}`)
+	q1, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || q1 == nil {
+		t.Fatalf("next question: %v", err)
+	}
+	e.mu.Lock()
+	as1 := e.sessions[sess.ID]
+	e.mu.Unlock()
+	if as1 == nil {
+		t.Fatal("expected active session")
+	}
+	// Concept "a" baseline is 60s. 60s * 1.5 = 90s.
+	if as1.timeThreshold != 90.0 {
+		t.Errorf("expected timeThreshold 90.0 with 1.5x multiplier, got %f", as1.timeThreshold)
+	}
+
+	// Test settings with accommodations.time_multiplier.
+	_ = e.repo.UpdateSettings(st.ID, `{"accommodations": {"time_multiplier": 2.0}}`)
+	// Answer q1 to advance active session.
+	_, _ = e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "42", 10.0)
+
+	q2, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil || q2 == nil {
+		t.Fatalf("next question: %v", err)
+	}
+	e.mu.Lock()
+	as2 := e.sessions[sess.ID]
+	e.mu.Unlock()
+	if as2 == nil {
+		t.Fatal("expected active session")
+	}
+	// 60s * 2.0 = 120s.
+	if as2.timeThreshold != 120.0 {
+		t.Errorf("expected timeThreshold 120.0 with 2.0x multiplier, got %f", as2.timeThreshold)
 	}
 }
 
@@ -985,8 +1055,8 @@ func TestEngine_StudyPath_NegativeXPOnRush(t *testing.T) {
 	if err != nil {
 		t.Fatalf("study submit 2: %v", err)
 	}
-	if r2.XP != -1 {
-		t.Errorf("expected -1 XP second study rush, got %d", r2.XP)
+	if r2.XP != xppolicy.RushPenalty {
+		t.Errorf("expected %d XP second study rush, got %d", xppolicy.RushPenalty, r2.XP)
 	}
 	if !r2.Halted {
 		t.Error("expected halted flag after 2 consecutive study misses")
@@ -1004,8 +1074,23 @@ func TestResolveChoiceAnswerMapsALetterToTheAuthoredOption(t *testing.T) {
 	if got := resolveChoiceAnswer(question, "D"); got != "down on the left" {
 		t.Errorf("D resolved to %q, want the authored text", got)
 	}
+	if got := resolveChoiceAnswer(question, "D)"); got != "down on the left" {
+		t.Errorf("D) resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "(d)"); got != "down on the left" {
+		t.Errorf("(d) resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "Option D"); got != "down on the left" {
+		t.Errorf("Option D resolved to %q, want the authored text", got)
+	}
 	if got := resolveChoiceAnswer(question, " c "); got != `\(x^{2}<0\)` {
 		t.Errorf("lowercase letter with spaces resolved to %q", got)
+	}
+	if got := resolveChoiceAnswer(question, "downontheleft"); got != "down on the left" {
+		t.Errorf("downontheleft without spaces resolved to %q, want the authored text", got)
+	}
+	if got := resolveChoiceAnswer(question, "down on the left."); got != "down on the left" {
+		t.Errorf("down on the left with trailing dot resolved to %q, want the authored text", got)
 	}
 	if got := resolveChoiceAnswer(question, "1 − P(A)"); got != "1 − P(A)" {
 		t.Errorf("a full option text was rewritten to %q", got)
@@ -2528,5 +2613,35 @@ func TestEngine_FSRS_LiveStateTransitions(t *testing.T) {
 	}
 	if dueCount < 1 {
 		t.Errorf("expected at least 1 review due when FSRS retrievability decays, got %d", dueCount)
+	}
+}
+
+func TestEngine_AntiGuessing_SlowMissBreaksTheRun(t *testing.T) {
+	e := testEngine(t)
+	st, _ := e.CreateStudent("guess_slow")
+	sess, _ := e.repo.CreateSession(st.ID)
+
+	// First rapid miss: the run starts but nothing is charged yet.
+	q1, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q1.AttemptID, "wrong", 1.0); res.XP != 0 {
+		t.Errorf("expected 0 XP first rapid miss, got %d", res.XP)
+	}
+
+	// A slow wrong answer is considered, so it ends the run rather than extending it.
+	q2, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q2.AttemptID, "wrong", 9.0); res.XP != 0 {
+		t.Errorf("expected 0 XP for a considered miss, got %d", res.XP)
+	}
+
+	// The next rapid miss is the first of a new run, so it is not penalised.
+	q3, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q3.AttemptID, "wrong", 1.0); res.XP != 0 {
+		t.Errorf("expected 0 XP after the run was broken, got %d", res.XP)
+	}
+
+	// A second consecutive rapid miss is what earns the penalty.
+	q4, _ := e.NextQuestion(sess.ID, st.ID)
+	if res, _ := e.SubmitAnswer(sess.ID, st.ID, q4.AttemptID, "wrong", 1.0); res.XP != xppolicy.RushPenalty {
+		t.Errorf("expected %d XP for two consecutive rapid misses, got %d", xppolicy.RushPenalty, res.XP)
 	}
 }

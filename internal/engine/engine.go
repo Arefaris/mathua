@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"hash/fnv"
 	"log"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -574,7 +575,7 @@ func difficultyFromWeakness(m map[string]float64, conceptID string) float64 {
 }
 
 // accommodatedThreshold applies the student's accommodations
-// (settings.accommodations.extra_time 0-2.0 → 1.0-2.5x) to a time threshold.
+// (settings.time_multiplier or settings.accommodations.extra_time/time_multiplier) to a time threshold.
 func (e *Engine) accommodatedThreshold(studentID string, base float64) float64 {
 	if base <= 0 {
 		return base
@@ -587,16 +588,36 @@ func (e *Engine) accommodatedThreshold(studentID string, base float64) float64 {
 		return base
 	}
 	var cfg struct {
-		Accommodations struct {
-			ExtraTime float64 `json:"extra_time"`
+		TimeMultiplier      float64 `json:"time_multiplier"`
+		TimeMultiplierCamel float64 `json:"timeMultiplier"`
+		Accommodations      struct {
+			ExtraTime           float64 `json:"extra_time"`
+			TimeMultiplier      float64 `json:"time_multiplier"`
+			TimeMultiplierCamel float64 `json:"timeMultiplier"`
 		} `json:"accommodations"`
 	}
-	if json.Unmarshal([]byte(raw), &cfg) != nil || cfg.Accommodations.ExtraTime <= 0 {
+	if json.Unmarshal([]byte(raw), &cfg) != nil {
 		return base
 	}
-	m := 1.0 + cfg.Accommodations.ExtraTime
-	if m > 2.5 {
-		m = 2.5
+	m := 1.0
+	if cfg.TimeMultiplier > 0 {
+		m = cfg.TimeMultiplier
+	} else if cfg.TimeMultiplierCamel > 0 {
+		m = cfg.TimeMultiplierCamel
+	} else if cfg.Accommodations.TimeMultiplier > 0 {
+		m = cfg.Accommodations.TimeMultiplier
+	} else if cfg.Accommodations.TimeMultiplierCamel > 0 {
+		m = cfg.Accommodations.TimeMultiplierCamel
+	} else if cfg.Accommodations.ExtraTime > 0 {
+		m = 1.0 + cfg.Accommodations.ExtraTime
+	} else {
+		return base
+	}
+	if m < 0.5 {
+		m = 0.5
+	}
+	if m > 3.0 {
+		m = 3.0
 	}
 	return base * m
 }
@@ -1409,12 +1430,17 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 		}
 	}
 
-	// PR 1.5: negative XP for rushing/guessing — elapsed <2s incorrect twice.
+	// PR 1.5: negative XP for rapid unreflective guessing — elapsed <2s incorrect twice consecutively.
 	if !gr.Correct && elapsedSeconds < xppolicy.RushSeconds {
 		as.rushCount++
 		if as.rushCount >= xppolicy.RushAfter {
 			xp = xppolicy.RushPenalty
 		}
+	} else {
+		// Any other outcome breaks the run. A slow wrong answer is a considered
+		// wrong answer, not a guess, so it must not leave the counter part-way to
+		// a penalty; before this, a slow miss between two fast ones still cost XP.
+		as.rushCount = 0
 	}
 	if xp != 0 {
 		if err := e.repo.AwardXP(studentID, xp, "study", fmt.Sprintf("attempt:%d", xpAttemptID)); err != nil {
@@ -3146,13 +3172,45 @@ func (e *Engine) BackfillWeeklyXP(now time.Time) (int, error) {
 // Multi-character answers, and stems without a parseable option list, pass
 // through untouched: this must never let a learner answer a numeric question by
 // typing a letter.
+var choicePrefixRe = regexp.MustCompile(`^(?i)(?:option|choice)?\s*\(?([A-E])(?:\)|\.|\:)?$`)
+
+func collapseAlphanumeric(s string) string {
+	var b strings.Builder
+	for _, r := range strings.ToLower(s) {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
 func resolveChoiceAnswer(question, answer string) string {
-	letter := strings.ToUpper(strings.TrimSpace(answer))
-	if len(letter) != 1 || letter[0] < 'A' || letter[0] > 'E' {
+	opts := generator.ChoiceOptions(question)
+	if len(opts) == 0 {
 		return answer
 	}
-	if text, ok := generator.ChoiceOptions(question)[letter]; ok {
-		return text
+	trimmed := strings.TrimSpace(answer)
+	if m := choicePrefixRe.FindStringSubmatch(trimmed); len(m) > 1 {
+		letter := strings.ToUpper(m[1])
+		if text, ok := opts[letter]; ok {
+			return text
+		}
+	}
+	for _, text := range opts {
+		if strings.EqualFold(trimmed, strings.TrimSpace(text)) {
+			return text
+		}
+		if strings.EqualFold(strings.TrimRight(trimmed, ".!?,;"), strings.TrimRight(strings.TrimSpace(text), ".!?,;")) {
+			return text
+		}
+	}
+	ca := collapseAlphanumeric(trimmed)
+	if ca != "" {
+		for _, text := range opts {
+			if ca == collapseAlphanumeric(text) {
+				return text
+			}
+		}
 	}
 	return answer
 }

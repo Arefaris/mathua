@@ -184,7 +184,7 @@ The engine is the central orchestrator. It holds references to every subsystem a
 | Module | File | Responsibility |
 |--------|------|----------------|
 | **DAG Loader** | `internal/concepts/` (`loader.go:13`, `dag.go`) | Loads `data/concepts/*.json` + `enrichment.json` heuristics (`Encompasses`, `InterferenceGroup`, `Variants`), validates no cycles/orphans/dup IDs, no singletons, encompass cycles, produces topological sort via Kahn's algorithm |
-| **Scheduler** | `internal/scheduler/` (`scheduler.go:243`, `computePriority` in `internal/scheduler/`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
+| **Scheduler** | `internal/scheduler/` (`computePriority`, `NextSmart` in `internal/scheduler/`) | Selects next concept using priority `0.5×days +0.2×(1-mastery)+0.3×weakness +5 if DECAYING +2 layering −3 interference`, interleaving window (no same subdomain in last 2), top-3 dissimilar + 70/30 new/review balance |
 | **Generators** | 22 domain registries (`internal/generator/*`) | Every problem is generated on demand by a parameterized Go function via `Registry.GenerateContext(ctx{Seed,Difficulty})` `generator/registry.go:74` — no static question bank |
 | **Mastery Machine** | `internal/mastery/` (`mastery/machine.go:41`, `sm2.go:34`) | State machine: UNSEEN → LEARNING → PRACTICING → MASTERED (with DECAYING at read time `14d` `mastery/status.go:24`), SM-2 scaled by per-topic `learningSpeed 0.5–2.0` `sm2.go:15` |
 | **Scoring** | `internal/scoring/` | Two scores: lifetime topic score (permanent) and weekly score (resets Monday) + `30` daily XP goal `xp.DefaultDailyGoal` (`xp/policy.go`) |
@@ -411,7 +411,7 @@ The web server exposes a REST API through Go's standard `net/http` package. No e
 | GET | `/api/lessons/{id}/kp` | no | KP shards (3 per concept) with worked example |
 | POST | `/api/study/answer` | write: writeLimiter, optional | Study seam `LessonQuiz→SubmitAnswer` (`CONTEXT.md` Seam) — graded against the server-side anchor, never a client-supplied expected; 409 + re-serve when no anchor exists, `student_id` impersonation guard |
 | POST | `/api/quiz/session` | write: writeLimiter, optional | Quiz every 50 XP at 80% difficulty (`quiz.go:1`) |
-| POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer (`TaskQuiz 20` `engine.go:1126`) |
+| POST | `/api/quiz/answer` | write: writeLimiter, optional | Submit quiz answer; a correct answer earns 20 XP through `QuizXP` (`internal/engine/engine.go`) |
 | GET | `/api/admin/overview` | **admin** | Counts for the admin landing page: accounts, administrators, corpus size, stored questions, recent audit events |
 | GET | `/api/admin/users` | **admin** | Search accounts by email / id / username / name (`?q=&limit=&offset=`). Projects `storage.AdminUser`, which has no field for a credential or for learning state |
 | PATCH | `/api/admin/users/{id}` | **admin** | `{"role":"owner"\|"admin"\|"moderator"\|"student"}` — the only mutation. The body contributes one field; every other key is ignored. Refuses 409 when it would leave zero administrators, and audits the change. See `docs/administration.md` for the permission matrix and `CanAssign` |
