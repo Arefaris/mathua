@@ -43,8 +43,8 @@ This is a fork of [chuma-beep/mathua](https://github.com/chuma-beep/mathua) that
 | Lesson steps | 90,483 | `████████████████████` 100% | `████████████████████` 100% |
 | Lesson texts | 728,462 | `███░░░░░░░░░░░░░░░░░` 16% | `██████░░░░░░░░░░░░░░` 33% |
 | Worked solutions | 25,907 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| Problem texts | 20,685 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
-| **Overall** | **877,271** | **`█████░░░░░░░░░░░░░░░` 25%** | **`███████░░░░░░░░░░░░░` 39%** |
+| Problem texts | 22,236 | `░░░░░░░░░░░░░░░░░░░░` 0% | `░░░░░░░░░░░░░░░░░░░░` 0% |
+| **Overall** | **878,822** | **`█████░░░░░░░░░░░░░░░` 25%** | **`███████░░░░░░░░░░░░░` 39%** |
 
 _Measured in English words, without formulas and code. Regenerate with `npm run i18n:progress` in `web/next-app`._
 <!-- i18n-progress:end -->
