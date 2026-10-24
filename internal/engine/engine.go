@@ -1270,7 +1270,7 @@ func (e *Engine) SubmitAnswer(sessionID, studentID, attemptID, answer string, el
 	as.answerDone = make(chan struct{})
 	e.mu.Unlock()
 
-	gr := e.gradeAnswer(sessionFields.conceptID, sessionFields.expectedAnswer, answer)
+	gr := e.gradeAnswer(sessionFields.conceptID, sessionFields.expectedAnswer, resolveChoiceAnswer(sessionFields.questionText, answer))
 	if gr.Unavailable {
 		// Grader infrastructure fault — never a student miss. Re-arm the
 		// pending question so the client can retry, and record nothing.
