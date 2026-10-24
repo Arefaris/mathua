@@ -1107,6 +1107,84 @@ func TestResolveChoiceAnswerMapsALetterToTheAuthoredOption(t *testing.T) {
 	}
 }
 
+type testChoiceGen struct {
+	question string
+	answer   string
+}
+
+func (g *testChoiceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
+	return generator.Problem{
+		Question:    g.question,
+		Answer:      g.answer,
+		Explanation: "Explanation here.",
+	}
+}
+
+func TestEngine_SubmitAnswer_MultipleChoiceLetterResolution(t *testing.T) {
+	d, err := concepts.Build([]concepts.Concept{
+		{
+			ID: "mc-concept", Label: "Ray Concept", Domain: "geometry",
+			GradingType: "multiple_choice", Prerequisites: []string{},
+			MasteryThreshold: concepts.MasteryThreshold{Streak: 3, AvgTimeSeconds: 60},
+		},
+	})
+	if err != nil {
+		t.Fatalf("build DAG: %v", err)
+	}
+	store, err := storage.NewSQLiteStore(":memory:")
+	if err != nil {
+		t.Fatalf("create store: %v", err)
+	}
+	t.Cleanup(func() { store.Close() })
+
+	reg := generator.NewRegistry()
+	reg.Register("mc-concept", &testChoiceGen{
+		question: "Which term describes a part of a line with one endpoint?\n\nA) ray\nB) segment\nC) line\nD) angle",
+		answer:   "ray",
+	})
+	e := New(store, d, reg, nil, nil)
+
+	st, err := e.CreateStudent("luminxyia")
+	if err != nil {
+		t.Fatalf("create student: %v", err)
+	}
+
+	for _, ans := range []string{"A", "a", "Option A", "A)", "(A)"} {
+		sess, err := e.repo.CreateSession(st.ID)
+		if err != nil {
+			t.Fatalf("create session: %v", err)
+		}
+		q, err := e.NextQuestion(sess.ID, st.ID)
+		if err != nil {
+			t.Fatalf("next question: %v", err)
+		}
+		res, err := e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, ans, 2.0)
+		if err != nil {
+			t.Fatalf("submit answer %q: %v", ans, err)
+		}
+		if !res.Correct {
+			t.Errorf("expected answer %q to be marked correct, got incorrect", ans)
+		}
+	}
+
+	// Verify wrong option letter grades false
+	sess, err := e.repo.CreateSession(st.ID)
+	if err != nil {
+		t.Fatalf("create session: %v", err)
+	}
+	q, err := e.NextQuestion(sess.ID, st.ID)
+	if err != nil {
+		t.Fatalf("next question: %v", err)
+	}
+	res, err := e.SubmitAnswer(sess.ID, st.ID, q.AttemptID, "B", 2.0)
+	if err != nil {
+		t.Fatalf("submit answer B: %v", err)
+	}
+	if res.Correct {
+		t.Errorf("expected answer B to be marked incorrect, got correct")
+	}
+}
+
 // The learner is owed the explanation for the question they actually saw, on
 // both verdicts. A miss used to render the grader's status token ("Incorrect")
 // and a correct answer got no explanation at all, because the return was gated
