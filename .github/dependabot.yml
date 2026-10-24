@@ -1,0 +1,48 @@
+# Dependabot exists here for one reason: an action pinned to a commit SHA never
+# receives an upstream fix until somebody bumps the pin, so pinning without
+# automation trades a supply-chain risk for a staleness risk. GitHub Actions is
+# therefore updated weekly, in a single grouped pull request rather than one per
+# action.
+#
+# Dependencies are security-only by default. `open-pull-requests-limit: 0`
+# disables routine version updates and keeps security updates: a Go toolchain
+# bump or a Next.js major is a decision this project makes deliberately, and
+# turning those into a weekly queue would trade one kind of noise for another.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "chore(ci)"
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore(deps)"
+
+  - package-ecosystem: npm
+    directory: /web/next-app
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore(deps)"
+
+  - package-ecosystem: pip
+    directory: /grading
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore(deps)"

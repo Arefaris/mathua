@@ -6,6 +6,14 @@ on:
   pull_request:
     branches: [main]
 
+# Least privilege for the workflow token. Every job here reads the repository and
+# nothing else: the Fly deploy authenticates with FLY_API_TOKEN rather than with
+# GITHUB_TOKEN, and no step comments, labels or pushes. Without this block the
+# token inherits the repository default, which is write for a push to main, so a
+# compromised action would carry a write scope it never needed.
+permissions:
+  contents: read
+
 # A superseded pull-request run is wasted work, so cancel it. Main is different:
 # every push must finish, because a green run is what deploys it. The deploy job
 # already has its own single-flight group so two mains still cannot race.
@@ -424,7 +432,11 @@ jobs:
           done <<< "$changed"
           echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
           echo "Documentation only: $docs_only"
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      # Pinned to the v1.4 commit rather than to a branch. A mutable ref executes
+      # whatever its owner publishes at that moment, in the one job that holds the
+      # deploy token, and a force-push upstream would swap the code without any
+      # change here. A tag can be moved too; only a full SHA cannot.
+      - uses: superfly/flyctl-actions/setup-flyctl@dfdfedc86b296f5e5384f755a18bf400409a15d0 # v1.4
         if: steps.scope.outputs.docs_only != 'true'
       - run: flyctl deploy --remote-only --wait-timeout 300
         if: steps.scope.outputs.docs_only != 'true'
