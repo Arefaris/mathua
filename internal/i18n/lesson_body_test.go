@@ -411,7 +411,28 @@ func compareLessonBodies(loc i18n.Locale, en, tr string) []string {
 	if english := englishMathText(t.math); len(english) > 0 {
 		add("%d \\text{} prose left in English inside formulas: %s", len(english), sample(english))
 	}
+	if lost, added := diffMultiset(mathSymbols(en), mathSymbols(tr)); len(lost)+len(added) > 0 {
+		add("math symbol(s) lost %s, added %s; a symbol that became ? was lost on the way, not translated", sample(lost), sample(added))
+	}
 	return problems
+}
+
+// mathSymbols lists the Greek letters and the non-ASCII mathematical signs of a lesson, prose and
+// formulas alike. maskMathText lets \text{} be rewritten, so a π or a − inside it that turned
+// into ? on the way passed every other check: the Ukrainian fractions round lost 19 π and two
+// minus signs that way. Arrows are left out, because a translation may say «от центра к
+// окружности» where the original wrote center → circle.
+func mathSymbols(s string) []string {
+	var out []string
+	for _, r := range s {
+		if r < 128 || (r >= 0x2190 && r <= 0x21FF) {
+			continue
+		}
+		if unicode.In(r, unicode.Greek, unicode.Sm) || r == '°' {
+			out = append(out, string(r))
+		}
+	}
+	return out
 }
 
 // mathOperatorNames are names of functions and operators that a formula may set with \text{}.
@@ -736,6 +757,21 @@ func TestLessonValidatorRejectsBrokenTranslations(t *testing.T) {
 				t.Errorf("the problems do not mention %q:\n%s", tc.want, strings.Join(got, "\n"))
 			}
 		})
+	}
+}
+
+// The two losses of the Ukrainian fractions round: π inside \text{} and a Unicode minus sign, both
+// turned into ?. The faithful translation keeps them and an arrow worded out is not a loss.
+func TestLostMathSymbolIsReported(t *testing.T) {
+	en := "The circle has $C = 2\\text{π}r$ and $\\text{−}20x$, center → edge.\n"
+	broken := "Длина окружности $C = 2\\text{?}r$ и $\\text{?}20x$, от центра к краю.\n"
+	faithful := "Длина окружности $C = 2\\text{π}r$ и $\\text{−}20x$, от центра к краю.\n"
+	has := func(problems []string) bool { return strings.Contains(strings.Join(problems, "\n"), "math symbol") }
+	if got := compareLessonBodies(i18n.RU, en, broken); !has(got) {
+		t.Errorf("lost π and − were not reported:\n%s", strings.Join(got, "\n"))
+	}
+	if got := compareLessonBodies(i18n.RU, en, faithful); has(got) {
+		t.Errorf("a translation that kept every symbol was reported:\n%s", strings.Join(got, "\n"))
 	}
 }
 
