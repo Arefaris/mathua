@@ -254,7 +254,10 @@ func (g *crtGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 type wilsonGen struct{}
 
 func (g *wilsonGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	primes := []int{5, 7, 11, 13}
+	// Any prime works: the factorial is computed modulo p rather than recalled,
+	// so the answer is derived for each draw. The list spans small primes where
+	// Wilson is checkable by hand up to 29 where it is not.
+	primes := []int{3, 5, 7, 11, 13, 17, 19, 23, 29}
 	p := primes[rand.Intn(len(primes))]
 	// (p-1)! mod p = p-1 by Wilson
 	fact := 1
