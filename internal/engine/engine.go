@@ -225,8 +225,8 @@ const QuizGateXP = xppolicy.QuizGateXP
 // maxQuizRemedial caps the per-student quiz remedial queue.
 const maxQuizRemedial = 10
 
-// maxRemedialQueue caps the per-student targeted remedial queue.
-const maxRemedialQueue = 10
+// The targeted remedial cap lives in storage as storage.MaxRemedialQueue: the queue is
+// persisted, and the cap is enforced inside the enqueue transaction that owns it.
 
 func New(repo storage.Repository, dag *concepts.DAG, reg *generator.Registry, ll *lessons.Loader, planner *planning.Planner) *Engine {
 	return &Engine{
