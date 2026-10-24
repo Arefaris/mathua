@@ -1290,11 +1290,15 @@ func (g *cellularHomologyGen) Generate(ctx generator.GeneratorContext) generator
 			d1 := mathutil.NewIntMatrix(c0, c1)
 			d2 := mathutil.NewIntMatrix(c1, c2)
 			// d1: C1 -> C0 has rank 1 (maps e1, e2, e3, e4 to v2 - v1)
-			d1.Data[0][0] = -1; d1.Data[1][0] = 1
-			d1.Data[0][1] = -1; d1.Data[1][1] = 1
+			d1.Data[0][0] = -1
+			d1.Data[1][0] = 1
+			d1.Data[0][1] = -1
+			d1.Data[1][1] = 1
 			// d2: C2 -> C1 maps 2-cells into ker(d1)
-			d2.Data[0][0] = 1; d2.Data[1][0] = -1
-			d2.Data[2][1] = 1; d2.Data[3][1] = -1
+			d2.Data[0][0] = 1
+			d2.Data[1][0] = -1
+			d2.Data[2][1] = 1
+			d2.Data[3][1] = -1
 			_, b1, _ := mathutil.CellularBettiNumbers(c0, c1, c2, d1, d2)
 			ansStr := strconv.Itoa(b1)
 			q := fmt.Sprintf("A CW complex has %d 0-cells, %d 1-cells and %d 2-cells. Smith normal form reduction on the boundary matrices yields \\(\\operatorname{rank}(d_1) = 1\\) and \\(\\operatorname{rank}(d_2) = 2\\). What is the first Betti number \\(b_1 = \\operatorname{rank} H_1(X; \\mathbb{Z})\\)?", c0, c1, c2)

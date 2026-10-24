@@ -1556,16 +1556,16 @@ func (g *commutatorGen) Generate(ctx generator.GeneratorContext) generator.Probl
 			return generator.Problem{
 				Question: "What is the order of the commutator subgroup \\([Q_8, Q_8]\\) of the quaternion group \\(Q_8\\)?",
 				Answer:   "2",
-				Explanation: "Subgoal 1: In the quaternion group \\(Q_8\\), the commutator of any two non-commuting elements is \\([i, j] = i j i^{-1} j^{-1} = -1\\).\n"+
-					"Subgoal 2: The commutator subgroup is the center \\(Z(Q_8) = \\{1, -1\\}\\).\n"+
+				Explanation: "Subgoal 1: In the quaternion group \\(Q_8\\), the commutator of any two non-commuting elements is \\([i, j] = i j i^{-1} j^{-1} = -1\\).\n" +
+					"Subgoal 2: The commutator subgroup is the center \\(Z(Q_8) = \\{1, -1\\}\\).\n" +
 					"Subgoal 3: Evaluate: the order is 2.",
 			}
 		} else {
 			return generator.Problem{
 				Question: "What is the order of the abelianization \\(Q_8 / [Q_8, Q_8]\\) of the quaternion group \\(Q_8\\)?",
 				Answer:   "4",
-				Explanation: "Subgoal 1: The abelianization is the quotient \\(Q_8 / [Q_8, Q_8]\\).\n"+
-					"Subgoal 2: The quaternion group has order 8 and its commutator subgroup has order 2.\n"+
+				Explanation: "Subgoal 1: The abelianization is the quotient \\(Q_8 / [Q_8, Q_8]\\).\n" +
+					"Subgoal 2: The quaternion group has order 8 and its commutator subgroup has order 2.\n" +
 					"Subgoal 3: Evaluate: \\(\\frac{8}{2} = 4\\) (isomorphic to the Klein four-group \\(V_4\\)).",
 			}
 		}
