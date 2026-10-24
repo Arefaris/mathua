@@ -141,7 +141,7 @@
 
 ## Избранные источники
 
-  * **Университет Род-Айленда, L. Barnes**. [Решение многочленных и рациональных неравенств](https://www.math.uri.edu/~lbarnes/classes/2019-2020/spring/Inequality%20Lecture%20Notes.pdf)
-  * **Университет штата Флорида, P. Kirby**. [Решение многочленных и рациональных неравенств](https://www.math.fsu.edu/~pkirby/mac1140/5_4Inequalities.pdf)
-  * **Stitz-Zeager Open Mathematics, C. Stitz, J. Zeager**. [Рациональные неравенства и их применения](https://stitz-zeager.com/szprecalc08262010.pdf)
-  * **Университет Ламара, P. Dawkins**. [Рациональные неравенства](https://tutorial.math.lamar.edu/classes/alg/SolveRationalInequalities.aspx)
+  * **Университет Род-Айленда, L. Barnes**. [Solving Polynomial and Rational Inequalities](https://www.math.uri.edu/~lbarnes/classes/2019-2020/spring/Inequality%20Lecture%20Notes.pdf) (Решение многочленных и рациональных неравенств)
+  * **Университет штата Флорида, P. Kirby**. [Solving Polynomial and Rational Inequalities](https://www.math.fsu.edu/~pkirby/mac1140/5_4Inequalities.pdf) (Решение многочленных и рациональных неравенств)
+  * **Stitz-Zeager Open Mathematics, C. Stitz, J. Zeager**. [Rational Inequalities and Applications](https://stitz-zeager.com/szprecalc08262010.pdf) (Рациональные неравенства и их применения)
+  * **Университет Ламара, P. Dawkins**. [Rational Inequalities](https://tutorial.math.lamar.edu/classes/alg/SolveRationalInequalities.aspx) (Рациональные неравенства)

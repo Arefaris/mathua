@@ -166,10 +166,10 @@
 
 ## Избранные источники
 
-  * **Университет Стони-Брук**. [Линейные неравенства](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-17-Handout.pdf)
+  * **Университет Стони-Брук**. [Linear Inequalities](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-17-Handout.pdf) (Линейные неравенства)
 
-  * **Университет Стони-Брук**. [Неравенства с модулем](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-18-Handout.pdf)
+  * **Университет Стони-Брук**. [Absolute Value Inequalities](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-18-Handout.pdf) (Неравенства с модулем)
 
-  * **Гарвардский университет**. [Приложение H: толкование неравенств и работа с ними](https://abel.math.harvard.edu/archive/xb_spring_03/icearchive1/webAPPH.pdf)
+  * **Гарвардский университет**. [Appendix H: Interpreting and Working with Inequalities](https://abel.math.harvard.edu/archive/xb_spring_03/icearchive1/webAPPH.pdf) (Приложение H: толкование неравенств и работа с ними)
 
-  * **Хьюстонский университет**. [Запись промежутков и линейные неравенства](https://online.math.uh.edu/Math1300-unpaid/ch1/s17/1300_Ch1_Section7.pdf)
+  * **Хьюстонский университет**. [Interval Notation and Linear Inequalities](https://online.math.uh.edu/Math1300-unpaid/ch1/s17/1300_Ch1_Section7.pdf) (Запись промежутков и линейные неравенства)

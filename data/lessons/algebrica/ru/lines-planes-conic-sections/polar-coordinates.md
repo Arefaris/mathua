@@ -191,10 +191,10 @@
   
 ## Избранные источники
 
-  * **MIT, S. Widnall, J. Peraire**. [Другие системы координат: полярная, цилиндрическая и сферическая](https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/57081b546fff23e6b88dbac0ab859c7d_MIT16_07F09_Lec05.pdf)
+  * **MIT, S. Widnall, J. Peraire**. [Other Coordinate Systems: Polar, Cylindrical and Spherical](https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/57081b546fff23e6b88dbac0ab859c7d_MIT16_07F09_Lec05.pdf) (Другие системы координат: полярная, цилиндрическая и сферическая)
 
-  * **Университет Мэриленда**. [Полярные координаты](https://math.umd.edu/~tjp/141%2010.1%20lecture%20notes.pdf)
+  * **Университет Мэриленда**. [Polar Coordinates](https://math.umd.edu/~tjp/141%2010.1%20lecture%20notes.pdf) (Полярные координаты)
 
-  * **Университет Южной Каролины**. [Полярные координаты](https://people.math.sc.edu/josephcf/Teaching/142/Files/Lecture%20Notes/Chapter11/11.3.pdf)
+  * **Университет Южной Каролины**. [Polar Coordinates](https://people.math.sc.edu/josephcf/Teaching/142/Files/Lecture%20Notes/Chapter11/11.3.pdf) (Полярные координаты)
 
-  * **Университет Пердью**. [Полярные координаты и интегрирование](https://www.math.purdue.edu/~neptamin/324Au17/Notes/15.4/15.4.pdf)
+  * **Университет Пердью**. [Polar Coordinates and Integration](https://www.math.purdue.edu/~neptamin/324Au17/Notes/15.4/15.4.pdf) (Полярные координаты и интегрирование)

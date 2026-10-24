@@ -86,12 +86,12 @@
 
 ## Избранные источники
 
-  * **Гарвардский университет, C. T. McMullen**. [Конспекты курса Math 55b](https://people.math.harvard.edu/~ctm/home/text/class/harvard/55b/10/html/home/course/course.pdf)
+  * **Гарвардский университет, C. T. McMullen**. [Math 55b Course Notes](https://people.math.harvard.edu/~ctm/home/text/class/harvard/55b/10/html/home/course/course.pdf) (Конспекты курса Math 55b)
 
-  * **Гарвардский университет, A. Varilly**. [Функция Томэ и интегрируемость по Риману](https://people.math.harvard.edu/~ctm/home/text/class/harvard/112/02/html/home/solns/sol11.pdf)
+  * **Гарвардский университет, A. Varilly**. [Thomae Function and Riemann Integrability](https://people.math.harvard.edu/~ctm/home/text/class/harvard/112/02/html/home/solns/sol11.pdf) (Функция Томэ и интегрируемость по Риману)
 
-  * **MIT, R. B. Melrose**. [Функция Дирихле и суммы Дарбу](https://math.mit.edu/~rbm/18.100B/HW8-solved.pdf)
+  * **MIT, R. B. Melrose**. [Dirichlet Function and Darboux Sums](https://math.mit.edu/~rbm/18.100B/HW8-solved.pdf) (Функция Дирихле и суммы Дарбу)
 
-  * **Принстонский университет, J. Shapiro**. [Теорема Лебега и функция Дирихле](https://web.math.princeton.edu/~js129/PDFs/teaching/MAT425_spring_2025/MAT425_Lecture_Notes.pdf)
+  * **Принстонский университет, J. Shapiro**. [Lebesgue’s Theorem and the Dirichlet Function](https://web.math.princeton.edu/~js129/PDFs/teaching/MAT425_spring_2025/MAT425_Lecture_Notes.pdf) (Теорема Лебега и функция Дирихле)
 
-  * **Калифорнийский университет в Дейвисе, J. K. Hunter**. [Интеграл Римана](https://www.math.ucdavis.edu/~hunter/m125b/ch1.pdf)
+  * **Калифорнийский университет в Дейвисе, J. K. Hunter**. [The Riemann Integral](https://www.math.ucdavis.edu/~hunter/m125b/ch1.pdf) (Интеграл Римана)
