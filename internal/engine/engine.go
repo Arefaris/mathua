@@ -14,6 +14,7 @@ import (
 
 	"github.com/chuma-beep/mathua/internal/concepts"
 	"github.com/chuma-beep/mathua/internal/diagnostic"
+	"github.com/chuma-beep/mathua/internal/fsrs"
 	"github.com/chuma-beep/mathua/internal/generator"
 	"github.com/chuma-beep/mathua/internal/grader"
 	"github.com/chuma-beep/mathua/internal/leaderboard"
@@ -2950,6 +2951,65 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 		log.Printf("warning: upsert topic speed %s/%s: %v", o.studentID, o.conceptID, err)
 	}
 
+	// FSRS-6 update: compute continuous stability and difficulty
+	fsrsParams := fsrs.DefaultParameters()
+	fsrsRating := fsrs.NativeRating(o.correct)
+	var prevStab, prevDiff float64
+	if progress.FSRSStability != nil && *progress.FSRSStability > 0 {
+		prevStab = *progress.FSRSStability
+	} else if progress.SM2Interval >= 1 {
+		due := nowUTC().AddDate(0, 0, progress.SM2Interval)
+		if progress.NextReviewDue != nil && !progress.NextReviewDue.IsZero() {
+			due = *progress.NextReviewDue
+		}
+		if s, err := fsrs.SeedFromInterval(progress.SM2Interval, due, nowUTC()); err == nil {
+			prevStab = s.Stability
+		} else {
+			prevStab = fsrsParams.InitialStability(fsrsRating)
+		}
+	} else {
+		prevStab = fsrsParams.InitialStability(fsrsRating)
+	}
+
+	if progress.FSRSDifficulty != nil && *progress.FSRSDifficulty > 0 {
+		prevDiff = *progress.FSRSDifficulty
+	} else {
+		prevDiff = fsrsParams.InitialDifficulty(fsrsRating)
+	}
+
+	var elapsedDays float64
+	if progress.FSRSLastReview != nil && !progress.FSRSLastReview.IsZero() {
+		elapsedDays = nowUTC().Sub(*progress.FSRSLastReview).Hours() / 24.0
+	} else if progress.LastReviewed != nil && !progress.LastReviewed.IsZero() {
+		elapsedDays = nowUTC().Sub(*progress.LastReviewed).Hours() / 24.0
+	}
+	if elapsedDays < 0 {
+		elapsedDays = 0
+	}
+
+	var nextStab, nextDiff float64
+	if progress.FSRSStability == nil && progress.SM2Interval < 1 {
+		nextStab = fsrsParams.InitialStability(fsrsRating)
+		nextDiff = fsrsParams.InitialDifficulty(fsrsRating)
+	} else {
+		retrievability := fsrsParams.Retrievability(elapsedDays, prevStab)
+		nextStab = fsrsParams.NextStability(prevStab, prevDiff, retrievability, fsrsRating)
+		nextDiff = fsrsParams.NextDifficulty(prevDiff, fsrsRating)
+	}
+	progress.FSRSStability = &nextStab
+	progress.FSRSDifficulty = &nextDiff
+	// The review clock moves on every graded answer, not only on an advance.
+	//
+	// Stability is computed from the elapsed time since the previous review, so the clock
+	// has to be the previous review — and it then has to move, or the next computation
+	// measures from the same stale instant again. Leaving it behind inflated stability on
+	// every repeat: the learner answered, the elapsed time did not grow, and the estimate
+	// grew anyway. A miss and a correct answer that does not yet advance a tier both move
+	// the clock here; only NextReviewDue is gated on the tier, below, because a review date
+	// that moved on every attempt would walk away from a learner who is still working.
+	reviewedAt := nowUTC()
+	progress.FSRSLastReview = &reviewedAt
+
 	if newStatus == mastery.StatusMastered && mastery.Status(oldStatus) != mastery.StatusMastered {
 		now := nowUTC()
 		progress.MasteredAt = &now
@@ -2984,8 +3044,37 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	if advanced || (progress.Streak >= o.requiredStreak && progress.AvgResponseTime <= o.timeThreshold) {
 		now := nowUTC()
 		progress.LastReviewed = &now
-		nextReview := now.AddDate(0, 0, nextSM2.Interval)
+		progress.FSRSLastReview = &now
+		fsrsInterval := fsrsParams.Interval(nextStab)
+		reviewInterval := nextSM2.Interval
+		if fsrsInterval > reviewInterval {
+			reviewInterval = fsrsInterval
+		}
+		if reviewInterval < 1 {
+			reviewInterval = 1
+		}
+		nextReview := now.AddDate(0, 0, reviewInterval)
 		progress.NextReviewDue = &nextReview
+	}
+
+	// A miss is a lapse, and a lapse has to be scheduled as one.
+	//
+	// Stability collapses above — from hundreds of days to about a week for a concept the
+	// learner had mastered — but the block just above moves FSRSLastReview and
+	// NextReviewDue only when a tier advanced. So a missed review reset the stability while
+	// both the review timestamp and the due date kept the values from the last successful
+	// review: retrievability then computed from a stale clock, which read zero forever and
+	// made the concept permanently due, while the shelf displayed a date months away. The
+	// queue and the record disagreed, and the record was the one the learner saw.
+	//
+	// The due date is now, not now plus the FSRS interval, because a concept the learner has
+	// just failed belongs in front of them rather than in a week. Remediation still routes
+	// through the existing rules — two consecutive misses enqueue the concept and its key
+	// prerequisites — so this changes when the review is offered, not what a miss is worth.
+	if !o.correct {
+		missedAt := nowUTC()
+		progress.FSRSLastReview = &missedAt
+		progress.NextReviewDue = &missedAt
 	}
 
 	if err := e.repo.UpsertProgress(progress); err != nil {
