@@ -590,7 +590,9 @@ func (g *ftcGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 type partsGen struct{}
 
 func (g *partsGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	claims := []int{1, 2, 3}
+	// Six upper limits instead of three. The value is computed from the closed
+	// form rather than looked up, so each limit is a different problem.
+	claims := []int{1, 2, 3, 4, 5, 6}
 	b := claims[rand.Intn(len(claims))]
 	value := float64(b-1)*math.Exp(float64(b)) + 1
 	answer := decimal6(value)
