@@ -45,6 +45,28 @@ func varPow(name string, k int) string {
 	return name + "^" + strconv.Itoa(k)
 }
 
+// texPow renders name^k for a LaTeX stem, where a first power is the bare name
+// rather than name^{1}. Stems that print x^{1} read as machine output.
+func texPow(name string, k int) string {
+	switch k {
+	case 0:
+		return ""
+	case 1:
+		return name
+	}
+	return name + "^{" + strconv.Itoa(k) + "}"
+}
+
+// powTerm renders coef*x^exp as implicit multiplication, keeping the constant
+// visible when the exponent is zero. varPow returns an empty string there, so
+// coefStr plus varPow alone would render a term as nothing.
+func powTerm(coef int, exp int) string {
+	if exp == 0 {
+		return strconv.Itoa(coef)
+	}
+	return coefStr(coef) + varPow("x", exp)
+}
+
 // monoTerm renders c*x^px*y^py as implicit-multiplication text. The grader
 // parses implicit multiplication, so "6xy^2" is a valid symbolic answer.
 func monoTerm(c, px, py int) string {
