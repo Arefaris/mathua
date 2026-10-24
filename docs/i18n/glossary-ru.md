@@ -920,6 +920,6 @@
 | listing multiples / prime factors method | метод перечисления кратных / метод простых множителей | |
 | bring down the primes in each column | «снести» простые числа из каждого столбца | |
 | scientific notation (OpenStax 10.x) | стандартный вид числа; «convert from decimal notation to scientific notation» — «Перевод из десятичной записи в стандартный вид числа» | как в §7 и в `kp/ru` |
-| decimal point (в `arith.exp.sci_notation`) | десятичная точка | как в §13: на экране `3.70000`. Парный урок `arith.sci_notation.ops` и шаги `kp/ru` этого понятия говорят «десятичная запятая»: решение для всей темы нужно принять отдельно |
+| decimal point (в `arith.exp.sci_notation` и `arith.sci_notation.ops`) | десятичная точка | как в §13: на экране `3.70000` и `8.9412`, а стандартный вид — это и есть перенос десятичного знака. Рецензия 2026-10-24: парный урок `arith.sci_notation.ops` приведён к «точке» (6 строк); шаги `kp/ru` этого понятия по-прежнему говорят «запятая» (§7) |
 | the power of 10 is positive / negative (знак показателя) | показатель степени числа 10 положителен / отрицателен | |
 | Links to Literacy (названия книг) | «Связь с чтением»; русское название и в скобках английское: «Сто голодных муравьёв» (One Hundred Hungry Ants) | как в `dec.ops.*` |
