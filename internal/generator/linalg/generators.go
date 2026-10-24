@@ -59,13 +59,18 @@ func containsWord(q, word string) bool {
 	return false
 }
 
+// retryable reports whether another redraw is allowed. A generator guard that
+// can never be satisfied must cost a weaker problem, never a request that never
+// returns.
+func retryable(attempt int) bool { return attempt < generator.MaxDrawAttempts }
+
 type vectorConceptGen struct{}
 
 func (g *vectorConceptGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
 	var x, y, mag int
 	var q, ex string
-	for {
+	for attempt := 0; ; attempt++ {
 		m := smallInt(2, 4+tier*2)
 		n := smallInt(1, m-1)
 		k := smallInt(1, 2+tier)
@@ -84,7 +89,9 @@ func (g *vectorConceptGen) Generate(ctx generator.GeneratorContext) generator.Pr
 		ansStr := strconv.Itoa(mag)
 		q = fmt.Sprintf("What is the magnitude of vector \\((%d,%d)\\)?", x, y)
 		if mag == x || mag == -x || mag == y || mag == -y || containsWord(q, ansStr) {
-			continue
+			if retryable(attempt) {
+				continue
+			}
 		}
 		ex = fmt.Sprintf("Subgoal 1: State the Euclidean vector magnitude definition \\(\\|(x,y)\\| = \\sqrt{x^2 + y^2}\\).\n"+
 			"Subgoal 2: Substitute components \\(x = %d\\) and \\(y = %d\\): \\(\\sqrt{(%d)^2 + (%d)^2}\\).\n"+
@@ -135,7 +142,7 @@ func (g *vectorDotGen) Generate(ctx generator.GeneratorContext) generator.Proble
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
 	var a, b, c, d, dot int
 	var q, ex string
-	for {
+	for attempt := 0; ; attempt++ {
 		bound := 4 + tier*3
 		a = smallInt(1, bound)
 		b = smallInt(1, bound)
@@ -157,7 +164,9 @@ func (g *vectorDotGen) Generate(ctx generator.GeneratorContext) generator.Proble
 		ansStr := strconv.Itoa(dot)
 		q = fmt.Sprintf("Compute the dot product \\((%d,%d) \\cdot (%d,%d)\\).", a, b, c, d)
 		if dot == a || dot == -a || dot == b || dot == -b || dot == c || dot == -c || dot == d || dot == -d || containsWord(q, ansStr) {
-			continue
+			if retryable(attempt) {
+				continue
+			}
 		}
 		ex = fmt.Sprintf("Subgoal 1: State the definition of the dot product in \\(\\mathbb{R}^2\\): \\((u_1, u_2) \\cdot (v_1, v_2) = u_1 v_1 + u_2 v_2\\).\n"+
 			"Subgoal 2: Substitute vectors \\((%d,%d)\\) and \\((%d,%d)\\): \\((%d)(%d) + (%d)(%d)\\).\n"+
@@ -420,7 +429,7 @@ type det3x3Gen struct{}
 
 func (g *det3x3Gen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	span := mathutil.ScaleInt(ctx.Difficulty, 2, 6)
-	for {
+	for attempt := 0; ; attempt++ {
 		m := make([][]int, 3)
 		for i := range m {
 			m[i] = make([]int, 3)
@@ -438,7 +447,9 @@ func (g *det3x3Gen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		ansStr := fmt.Sprintf("%d", det)
 		matStr := formatMatrix(m)
 		if det == 0 || containsWord(matStr, ansStr) {
-			continue
+			if retryable(attempt) {
+				continue
+			}
 		}
 		return generator.Problem{
 			Question: fmt.Sprintf("Find the determinant of the matrix \\(%s\\).", matStr),
@@ -631,7 +642,7 @@ func (g *eigenComputeGen) Generate(ctx generator.GeneratorContext) generator.Pro
 		{2, 5, 1, 3},
 	}
 
-	for {
+	for attempt := 0; ; attempt++ {
 		// Pick distinct integer eigenvalues
 		l1 := rand.Intn(7) - 3 // -3 to 3
 		if l1 == 0 {
@@ -659,16 +670,22 @@ func (g *eigenComputeGen) Generate(ctx generator.GeneratorContext) generator.Pro
 
 		// Reject triangular matrices or matrices where eigenvalues match any entry
 		if a12 == 0 || a21 == 0 {
-			continue
+			if retryable(attempt) {
+				continue
+			}
 		}
 		if a11 == l1 || a11 == l2 || a22 == l1 || a22 == l2 || a12 == l1 || a12 == l2 || a21 == l1 || a21 == l2 {
-			continue
+			if retryable(attempt) {
+				continue
+			}
 		}
 
 		ansStr := fmt.Sprintf("%d,%d", l1, l2)
 		matStr := formatMatrix2([][]int{{a11, a12}, {a21, a22}})
 		if strings.Contains(matStr, ansStr) {
-			continue
+			if retryable(attempt) {
+				continue
+			}
 		}
 
 		tr := a11 + a22
@@ -704,7 +721,7 @@ type spanGen struct{}
 
 func (g *spanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		mode := rand.Intn(5)
 		switch mode {
 		case 0:
@@ -761,7 +778,9 @@ func (g *spanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(c)
 			q := fmt.Sprintf("Find the scalar \\(c\\) such that \\((%d,%d) = c(%d,%d)\\), showing that \\((%d,%d)\\) lies in \\(\\operatorname{span}\\{(%d,%d)\\}\\).", cx, cy, x, y, cx, cy, x, y)
 			if c == x || c == y || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the coordinate-wise scalar multiplication requirement \\((%d,%d) = c(%d,%d)\\), requiring \\(%d = c(%d)\\) and \\(%d = c(%d)\\).\n"+
 				"Subgoal 2: Solve the first coordinate equation for the scalar: \\(c = \\frac{%d}{%d}\\).\n"+
@@ -789,7 +808,9 @@ func (g *spanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(k)
 			q := fmt.Sprintf("For what integer value of \\(k\\) do the vectors \\(v = (%d,%d)\\) and \\(w = (%d,k)\\) fail to span \\(\\mathbb{R}^2\\)?", a, b, cVal)
 			if k == a || k == b || k == cVal || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the spanning condition: two vectors in \\(\\mathbb{R}^2\\) fail to span if and only if their determinant vanishes: \\((%d)(k) - (%d)(%d) = 0\\).\n"+
 				"Subgoal 2: Substitute parameters into the linear equation: \\(%d k - %d = 0\\), so \\(%d k = %d\\).\n"+
@@ -833,7 +854,9 @@ func (g *spanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("Let \\(S\\) be a subset of %d distinct standard unit basis vectors in \\(\\mathbb{R}^{%d}\\). What is the dimension of the orthogonal complement \\((\\operatorname{span}(S))^\\perp\\)?", k, n)
 			if ans == k || ans == n || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the orthogonal complement dimension theorem: \\(\\dim(W^\\perp) = n - \\dim(W)\\) in \\(\\mathbb{R}^n\\).\n"+
 				"Subgoal 2: Substitute ambient dimension \\(n = %d\\) and span dimension \\(\\dim(\\operatorname{span}(S)) = %d\\): %d - %d.\n"+
@@ -857,7 +880,7 @@ type basisGen struct{}
 
 func (g *basisGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		mode := rand.Intn(5)
 		switch mode {
 		case 0:
@@ -867,7 +890,9 @@ func (g *basisGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("What is the dimension of the vector space \\(\\mathcal{P}_{%d}\\) of real polynomials of degree at most %d?", n, n)
 			if ans == n || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the standard monomial basis for \\(\\mathcal{P}_{%d}\\): \\(\\{1, x, x^2, \\dots, x^{%d}\\}\\).\n"+
 				"Subgoal 2: Count the basis elements: %d degree terms plus 1 constant term: %d + 1.\n"+
@@ -890,7 +915,9 @@ func (g *basisGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("What is the dimension of the vector space \\(\\mathcal{M}_{%d \\times %d}(\\mathbb{R})\\) of all %d-by-%d real matrices?", m, n, m, n)
 			if ans == m || ans == n || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the standard matrix unit basis \\(E_{ij}\\) for \\(\\mathcal{M}_{%d \\times %d}(\\mathbb{R})\\).\n"+
 				"Subgoal 2: Multiply the row and column dimensions: \\((%d) \\times (%d)\\).\n"+
@@ -913,7 +940,9 @@ func (g *basisGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("What is the dimension of the subspace of all %d-by-%d diagonal matrices with trace zero in \\(\\mathcal{M}_{%d \\times %d}(\\mathbb{R})\\)?", n, n, n, n)
 			if ans == n || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the trace constraint on diagonal matrices: an \\(n \\times n\\) diagonal matrix has \\(n\\) free diagonal entries and the trace condition \\(d_{11} + \\dots + d_{nn} = 0\\) imposes 1 linear restriction.\n"+
 				"Subgoal 2: Subtract the linear restriction from total diagonal dimension: %d - 1.\n"+
@@ -938,7 +967,9 @@ func (g *basisGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(c1)
 			q := fmt.Sprintf("Given the ordered basis \\(\\mathcal{B} = \\{(1,0), (%d,1)\\}\\), find the first coordinate \\(c_1\\) of the vector \\((%d,%d)\\) with respect to \\(\\mathcal{B}\\).", a, w1, w2)
 			if c1 == a || c1 == w1 || c1 == w2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: Set up the vector equation \\(c_1(1,0) + c_2(%d,1) = (%d,%d)\\).\n"+
 				"Subgoal 2: Solve the second component for \\(c_2 = %d\\) and substitute into the first equation: \\(c_1 + (%d)(%d) = %d\\).\n"+
@@ -962,7 +993,9 @@ func (g *basisGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("What is the dimension of the subspace of all %d-by-%d real symmetric matrices in \\(\\mathcal{M}_{%d \\times %d}(\\mathbb{R})\\)?", n, n, n, n)
 			if ans == n || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the symmetric matrix dimension theorem: \\(\\dim(\\operatorname{Sym}_n) = \\frac{n(n+1)}{2}\\).\n"+
 				"Subgoal 2: Substitute the matrix dimension \\(n = %d\\): \\(\\frac{(%d)(%d + 1)}{2} = \\frac{(%d)(%d)}{2}\\).\n"+
@@ -1531,7 +1564,7 @@ func (g *parametricGen) Generate(ctx generator.GeneratorContext) generator.Probl
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
 	var x0, y0, dx, dy int
 	var q, ans, ex string
-	for {
+	for attempt := 0; ; attempt++ {
 		x0 = smallInt(1, 4+tier*3)
 		y0 = smallInt(1, 4+tier*3)
 		dx = smallInt(1, 3+tier*2)
@@ -1574,7 +1607,7 @@ type innerProductGen struct{}
 
 func (g *innerProductGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		mode := rand.Intn(5)
 		switch mode {
 		case 0:
@@ -1589,7 +1622,9 @@ func (g *innerProductGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("Compute the weighted inner product \\(\\langle u, v \\rangle = %d u_1 v_1 + %d u_2 v_2\\) for \\(u = (%d,%d)\\) and \\(v = (%d,%d)\\).", w1, w2, u1, u2, v1, v2)
 			if ans == w1 || ans == w2 || ans == u1 || ans == u2 || ans == v1 || ans == v2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the weighted inner product definition: \\(\\langle u, v \\rangle = %d u_1 v_1 + %d u_2 v_2\\).\n"+
 				"Subgoal 2: Substitute components: \\((%d)(%d)(%d) + (%d)(%d)(%d)\\).\n"+
@@ -1619,7 +1654,9 @@ func (g *innerProductGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			ansStr := strconv.Itoa(k)
 			q := fmt.Sprintf("For what integer value of \\(k\\) are the vectors \\(u = (%d,%d)\\) and \\(v = (%d,k)\\) orthogonal under the standard dot product?", a, b, c)
 			if k == a || k == -a || k == b || k == -b || k == c || k == -c || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the orthogonality condition under dot product: \\(u \\cdot v = (%d)(%d) + (%d)(k) = 0\\).\n"+
 				"Subgoal 2: Set up linear equation: %d + %d k = 0, so %d k = -%d.\n"+
@@ -1648,7 +1685,9 @@ func (g *innerProductGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("For the diagonal matrix \\(A = \\begin{pmatrix} %d & 0 \\\\ 0 & %d \\end{pmatrix}\\), compute the induced inner product \\(\\langle u, v \\rangle_A = u^T A v\\) for \\(u = (%d,%d)\\) and \\(v = (%d,%d)\\).", d1, d2, u1, u2, v1, v2)
 			if ans == d1 || ans == d2 || ans == u1 || ans == u2 || ans == v1 || ans == v2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the matrix-induced inner product definition: \\(\\langle u, v \\rangle_A = u^T A v\\).\n"+
 				"Subgoal 2: Expand quadratic form for diagonal \\(A\\): \\((%d)(%d)(%d) + (%d)(%d)(%d)\\).\n"+
@@ -1677,7 +1716,9 @@ func (g *innerProductGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("On the vector space of polynomials with inner product \\(\\langle f, g \\rangle = \\int_0^1 f(x) g(x) \\, dx\\), compute \\(\\langle %d x, %d \\rangle\\).", a, b)
 			if ans == a || ans == b || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the polynomial inner product integral: \\(\\langle f, g \\rangle = \\int_0^1 (%d x)(%d) \\, dx = %d \\int_0^1 x \\, dx\\).\n"+
 				"Subgoal 2: Evaluate the antiderivative at unit limits: \\(%d \\left[\\frac{x^2}{2}\\right]_0^1 = %d \\left(\\frac{1}{2}\\right)\\).\n"+
@@ -1705,7 +1746,9 @@ func (g *innerProductGen) Generate(ctx generator.GeneratorContext) generator.Pro
 			ansStr := strconv.Itoa(m)
 			q := fmt.Sprintf("Find the scalar projection coefficient \\(c = \\frac{\\langle u, v \\rangle}{\\langle v, v \\rangle}\\) of \\(u = (%d,%d)\\) onto \\(v = (%d,%d)\\) under the standard dot product.", u1, u2, v1, v2)
 			if m == u1 || m == u2 || m == v1 || m == v2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the projection coefficient definition: \\(c = \\frac{\\langle u, v \\rangle}{\\|v\\|^2}\\).\n"+
 				"Subgoal 2: Compute inner products: \\(\\langle u, v \\rangle = (%d)(%d) + (%d)(%d) = %d\\) and \\(\\|v\\|^2 = (%d)^2 + (%d)^2 = %d\\).\n"+
@@ -1731,7 +1774,7 @@ type luGen struct{}
 
 func (g *luGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		mode := rand.Intn(5)
 		switch mode {
 		case 0:
@@ -1743,7 +1786,9 @@ func (g *luGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("An \\(n \\times n\\) matrix \\(A\\) has LU factorization \\(A = LU\\) where \\(L\\) is unit lower triangular and \\(U\\) has diagonal entries %d, %d and %d. Compute \\(\\det(A)\\).", u11, u22, u33)
 			if ans == u11 || ans == u22 || ans == u33 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the determinant factorization property: \\(\\det(A) = \\det(L)\\det(U)\\), with \\(\\det(L) = 1\\) for unit triangular \\(L\\).\n"+
 				"Subgoal 2: Substitute upper triangular diagonal entries into the product formula: \\((%d)(%d)(%d)\\).\n"+
@@ -1769,7 +1814,9 @@ func (g *luGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(y2)
 			q := fmt.Sprintf("In solving \\(Ax = b\\) via \\(A = LU\\), solve \\(Ly = b\\) for \\(y_2\\) where \\(L = \\begin{pmatrix} 1 & 0 \\\\ %d & 1 \\end{pmatrix}\\) and \\(b = \\begin{pmatrix} %d \\\\ %d \\end{pmatrix}\\).", l21, b1, b2)
 			if y2 == l21 || y2 == b1 || y2 == b2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the forward substitution equations: \\(y_1 = b_1 = %d\\) and \\(%d y_1 + y_2 = b_2 = %d\\).\n"+
 				"Subgoal 2: Substitute \\(y_1 = %d\\) into the second row equation: \\((%d)(%d) + y_2 = %d\\), so \\(%d + y_2 = %d\\).\n"+
@@ -1798,7 +1845,9 @@ func (g *luGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(x2)
 			q := fmt.Sprintf("In the back substitution stage of solving \\(Ax = b\\), solve \\(Ux = y\\) for \\(x_2\\) where \\(U = \\begin{pmatrix} %d & %d \\\\ 0 & %d \\end{pmatrix}\\) and \\(y = \\begin{pmatrix} %d \\\\ %d \\end{pmatrix}\\).", u11, u12, u22, y1, y2)
 			if x2 == u11 || x2 == u12 || x2 == u22 || x2 == y1 || x2 == y2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the second row equation in upper-triangular system: \\(%d x_2 = y_2 = %d\\).\n"+
 				"Subgoal 2: Set up the division by pivot entry: \\(x_2 = \\frac{%d}{%d}\\).\n"+
@@ -1827,7 +1876,9 @@ func (g *luGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(m)
 			q := fmt.Sprintf("In computing the LU factorization \\(A = LU\\) of \\(A = \\begin{pmatrix} %d & %d \\\\ %d & %d \\end{pmatrix}\\) without pivoting, what is the entry \\(l_{21}\\) of the unit lower triangular factor \\(L\\)?", a11, a12, a21, a22)
 			if m == a11 || m == a12 || m == a21 || m == a22 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the elimination row multiplier formula: \\(l_{21} = \\frac{a_{21}}{a_{11}}\\).\n"+
 				"Subgoal 2: Substitute first column entries \\(a_{21} = %d\\) and pivot \\(a_{11} = %d\\): \\(\\frac{%d}{%d}\\).\n"+
@@ -1858,7 +1909,9 @@ func (g *luGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(u22)
 			q := fmt.Sprintf("In computing the LU factorization \\(A = LU\\) of \\(A = \\begin{pmatrix} %d & %d \\\\ %d & %d \\end{pmatrix}\\) where \\(L = \\begin{pmatrix} 1 & 0 \\\\ %d & 1 \\end{pmatrix}\\), what is the diagonal entry \\(u_{22}\\)?", a11, a12, a21, a22, l21)
 			if u22 == a11 || u22 == a12 || u22 == a21 || u22 == a22 || u22 == l21 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the matrix product identity for entry \\((2,2)\\): \\(a_{22} = l_{21} u_{12} + u_{22}\\).\n"+
 				"Subgoal 2: Substitute known matrix values: \\(%d = (%d)(%d) + u_{22} = %d + u_{22}\\).\n"+
@@ -1885,7 +1938,7 @@ type qrGen struct{}
 
 func (g *qrGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		m := smallInt(2, 4+tier*2)
 		n := smallInt(1, m-1)
 		k := smallInt(1, 2+tier)
@@ -1906,7 +1959,9 @@ func (g *qrGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(r)
 			q := fmt.Sprintf("The first column of real matrix \\(A\\) is \\(a_1 = \\begin{pmatrix} %d \\\\ %d \\end{pmatrix}\\). In the QR decomposition \\(A = QR\\), find the diagonal entry \\(r_{11} = \\|a_1\\|\\).", a, b)
 			if r == a || r == -a || r == b || r == -b || strings.Contains(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the first column norm property in QR factorization: \\(r_{11} = \\|a_1\\| = \\sqrt{a_{11}^2 + a_{21}^2}\\).\n"+
 				"Subgoal 2: Substitute column entries: \\(\\sqrt{(%d)^2 + (%d)^2} = \\sqrt{%d + %d}\\).\n"+
@@ -1927,7 +1982,9 @@ func (g *qrGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(r12)
 			q := fmt.Sprintf("Consider matrix \\(A = \\begin{pmatrix} %d & %d \\\\ %d & %d \\end{pmatrix}\\) with columns \\(a_1\\) and \\(a_2\\). In the QR factorization \\(A = QR\\), compute the upper entry \\(r_{12} = q_1^T a_2\\).", a, c, b, d)
 			if r12 == a || r12 == -a || r12 == b || r12 == -b || r12 == c || r12 == -c || r12 == d || r12 == -d || strings.Contains(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the Gram-Schmidt projection formula for \\(r_{12}\\): \\(r_{12} = q_1 \\cdot a_2 = \\frac{1}{r_{11}} (a_1 \\cdot a_2)\\).\n"+
 				"Subgoal 2: Compute inner product with first column norm \\(r_{11} = %d\\): \\(\\frac{1}{%d} ((%d)(%d) + (%d)(%d)) = \\frac{%d}{%d}\\).\n"+
@@ -1950,7 +2007,9 @@ func (g *qrGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(r22)
 			q := fmt.Sprintf("Consider matrix \\(A = \\begin{pmatrix} %d & %d \\\\ %d & %d \\end{pmatrix}\\). In the QR decomposition \\(A = QR\\) with positive diagonal entries, find \\(r_{22}\\).", a, c, b, d)
 			if r22 == a || r22 == -a || r22 == b || r22 == -b || r22 == c || r22 == -c || r22 == d || r22 == -d || strings.Contains(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the second diagonal entry definition: \\(r_{22} = \\|a_2 - r_{12} q_1\\|\\).\n"+
 				"Subgoal 2: Compute orthogonal component \\(v_2 = \\begin{pmatrix} %d \\\\ %d \\end{pmatrix}\\) and take its Euclidean length: \\(\\sqrt{(%d)^2 + (%d)^2}\\).\n"+
@@ -1976,7 +2035,9 @@ func (g *qrGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(detR)
 			q := fmt.Sprintf("A \\(3 \\times 3\\) matrix \\(A\\) has QR decomposition \\(A = QR\\), where \\(Q\\) is an orthogonal matrix with \\(\\det(Q) = 1\\) and \\(R\\) has diagonal entries %d, %d and %d. Find \\(\\det(A)\\).", d1, d2, d3)
 			if detR == d1 || detR == d2 || detR == d3 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the determinant product formula: \\(\\det(A) = \\det(Q) \\det(R)\\).\n"+
 				"Subgoal 2: Compute triangular determinant \\(\\det(R) = (%d)(%d)(%d)\\) and substitute \\(\\det(Q) = 1\\).\n"+
@@ -2004,7 +2065,9 @@ func (g *qrGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(x1)
 			q := fmt.Sprintf("To solve the least-squares problem \\(Ax = b\\) via QR decomposition \\(Rx = Q^T b\\), let \\(R = \\begin{pmatrix} %d & %d \\\\ 0 & %d \\end{pmatrix}\\) and \\(Q^T b = \\begin{pmatrix} %d \\\\ %d \\end{pmatrix}\\). Find \\(x_1\\).", r11, r12, r22, c1, c2)
 			if x1 == r11 || x1 == r12 || x1 == r22 || x1 == c1 || x1 == c2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the back substitution equations: \\(%d x_2 = %d\\) and \\(%d x_1 + %d x_2 = %d\\).\n"+
 				"Subgoal 2: Solve the second row for \\(x_2 = \\frac{%d}{%d} = %d\\) and substitute into row 1: \\(%d x_1 + (%d)(%d) = %d\\).\n"+
@@ -2031,7 +2094,7 @@ type svdGen struct{}
 
 func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		mode := rand.Intn(5)
 		switch mode {
 		case 0:
@@ -2044,7 +2107,9 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix2([][]int{{a, b}, {b, a}})
 			q := fmt.Sprintf("Find the largest singular value \\(\\sigma_1\\) of the matrix \\(A = %s\\).", matStr)
 			if containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: Form the Gramian matrix \\(A^T A = %s\\).\n"+
 				"Subgoal 2: Compute its eigenvalues \\(\\lambda_1 = (%d + %d)^2 = %d\\) and \\(\\lambda_2 = (%d - %d)^2 = %d\\).\n"+
@@ -2071,7 +2136,9 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix2([][]int{{a, b}, {b, a}})
 			q := fmt.Sprintf("Find the spectral norm \\(\\|A\\|_2\\) of the matrix \\(A = %s\\).", matStr)
 			if containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: Recall that the matrix 2-norm equals its maximum singular value: \\(\\|A\\|_2 = \\sigma_{\\max}(A)\\).\n"+
 				"Subgoal 2: For symmetric \\(A = %s\\), the eigenvalues of \\(A^T A\\) are \\((%d + %d)^2 = %d\\) and \\((%d - %d)^2 = %d\\).\n"+
@@ -2098,7 +2165,9 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix2([][]int{{a, b}, {c, d}})
 			q := fmt.Sprintf("Compute the squared Frobenius norm \\(\\|A\\|_F^2\\) of the matrix \\(A = %s\\).", matStr)
 			if containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the Frobenius norm entrywise formula: \\(\\|A\\|_F^2 = \\sum_{i,j} a_{ij}^2\\).\n"+
 				"Subgoal 2: Sum the squares of all matrix entries: \\((%d)^2 + (%d)^2 + (%d)^2 + (%d)^2 = %d + %d + %d + %d\\).\n"+
@@ -2134,7 +2203,9 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix2([][]int{{p.a, p.b}, {p.b, p.a}})
 			q := fmt.Sprintf("Find the 2-norm condition number \\(\\kappa_2(A) = \\frac{\\sigma_{\\max}}{\\sigma_{\\min}}\\) of the matrix \\(A = %s\\).", matStr)
 			if containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			sigMax := p.a + p.b
 			sigMin := p.a - p.b
@@ -2177,7 +2248,9 @@ func (g *svdGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix2([][]int{{a, b}, {c, d}})
 			q := fmt.Sprintf("How many non-zero singular values does the matrix \\(A = %s\\) have?", matStr)
 			if containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the SVD rank theorem: the number of non-zero singular values equals the matrix rank \\(\\operatorname{rank}(A)\\).\n"+
 				"Subgoal 2: Determine matrix determinant: \\(\\det(A) = (%d)(%d) - (%d)(%d) = %d\\).\n"+
@@ -2201,7 +2274,7 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
 	rng := rand.New(rand.NewSource(rand.Int63()))
 
-	for {
+	for attempt := 0; ; attempt++ {
 		if ctx.Difficulty >= 0.3 {
 			lambda := smallInt(2, 4+tier)
 			mu := lambda + 1 + rand.Intn(3)
@@ -2219,7 +2292,9 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 					ansStr := strconv.Itoa(det)
 					q := fmt.Sprintf("Compute the determinant \\(\\det(A)\\) of the matrix \\(A = %s\\).", mat3.LaTeX())
 					if strings.Contains(q, ansStr) || strings.Contains(q, strings.TrimPrefix(ansStr, "-")) {
-						continue
+						if retryable(attempt) {
+							continue
+						}
 					}
 					ex := fmt.Sprintf("Subgoal 1: State that the determinant is similarity-invariant: \\(\\det(A) = \\det(J)\\), the product of the diagonal eigenvalues.\n"+
 						"Subgoal 2: Multiply the diagonal entries of the Jordan canonical form: \\((%d)(%d)(%d)\\).\n"+
@@ -2245,7 +2320,9 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 						q = fmt.Sprintf("For the matrix \\(A = %s\\) with eigenvalue \\(\\lambda = %d\\) of algebraic multiplicity 3, compute \\(\\operatorname{tr}(A^2)\\).", mat3.LaTeX(), lambda)
 					}
 					if strings.Contains(q, ansStr) || strings.Contains(q, strings.TrimPrefix(ansStr, "-")) {
-						continue
+						if retryable(attempt) {
+							continue
+						}
 					}
 					ex := fmt.Sprintf("Subgoal 1: State that the trace of \\(A^2\\) equals the sum of squares of its eigenvalues: \\(\\operatorname{tr}(A^2) = \\sum \\lambda_i^2\\).\n"+
 						"Subgoal 2: Substitute the eigenvalues into the sum of squares.\n"+
@@ -2264,7 +2341,9 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 					ansStr := strconv.Itoa(tr)
 					q := fmt.Sprintf("Compute the trace \\(\\operatorname{tr}(A)\\) of the matrix \\(A = %s\\).", mat3.LaTeX())
 					if strings.Contains(q, ansStr) || strings.Contains(q, strings.TrimPrefix(ansStr, "-")) {
-						continue
+						if retryable(attempt) {
+							continue
+						}
 					}
 					ex := fmt.Sprintf("Subgoal 1: State the trace property: \\(\\operatorname{tr}(A)\\) is the sum of the main diagonal entries.\n"+
 						"Subgoal 2: Sum the diagonal entries: %d + %d + %d.\n"+
@@ -2299,7 +2378,9 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix3(mat)
 			q := fmt.Sprintf("Compute the trace \\(\\operatorname{tr}(J)\\) of the upper-triangular Jordan form matrix \\(J = %s\\).", matStr)
 			if strings.Contains(q, ansStr) || strings.Contains(q, strings.TrimPrefix(ansStr, "-")) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the trace property: \\(\\operatorname{tr}(J)\\) is the sum of all diagonal entries.\n"+
 				"Subgoal 2: Sum the diagonal entries: %d + %d + %d.\n"+
@@ -2331,7 +2412,9 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			matStr := formatMatrix3(mat)
 			q := fmt.Sprintf("Find the determinant \\(\\det(J)\\) of the upper-triangular matrix in Jordan canonical form \\(J = %s\\).", matStr)
 			if strings.Contains(q, ansStr) || strings.Contains(q, strings.TrimPrefix(ansStr, "-")) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the triangular determinant property: \\(\\det(J)\\) is the product of all diagonal entries.\n"+
 				"Subgoal 2: Multiply diagonal entries: (%d)(%d)(%d).\n"+
@@ -2357,7 +2440,9 @@ func (g *jordanGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 			ansStr := strconv.Itoa(defect)
 			q := fmt.Sprintf("An eigenspace for eigenvalue \\(\\lambda = %d\\) has algebraic multiplicity %d and geometric multiplicity %d. How many generalized eigenvectors that are not ordinary eigenvectors are needed to complete a Jordan chain basis for this eigenspace?", eig, alg, geom)
 			if defect == eig || defect == alg || defect == geom || strings.Contains(q, ansStr) || strings.Contains(q, strings.TrimPrefix(ansStr, "-")) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the defect formula for generalized eigenvectors: \\(\\text{defect} = \\text{algebraic multiplicity} - \\text{geometric multiplicity}\\).\n"+
 				"Subgoal 2: Substitute multiplicities: %d - %d.\n"+
@@ -2384,7 +2469,7 @@ type subspaceGen struct{}
 
 func (g *subspaceGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	tier := mathutil.DifficultyTier(ctx.Difficulty)
-	for {
+	for attempt := 0; ; attempt++ {
 		mode := rand.Intn(5)
 		switch mode {
 		case 0:
@@ -2396,7 +2481,9 @@ func (g *subspaceGen) Generate(ctx generator.GeneratorContext) generator.Problem
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("Two subspaces \\(U\\) and \\(W\\) of a vector space satisfy \\(\\dim(U) = %d\\), \\(\\dim(W) = %d\\) and \\(\\dim(U \\cap W) = %d\\). What is \\(\\dim(U + W)\\)?", d1, d2, d12)
 			if ans == d1 || ans == d2 || ans == d12 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State Grassmann's dimension formula: \\(\\dim(U + W) = \\dim(U) + \\dim(W) - \\dim(U \\cap W)\\).\n"+
 				"Subgoal 2: Substitute dimensions: \\((%d) + (%d) - (%d)\\).\n"+
@@ -2421,7 +2508,9 @@ func (g *subspaceGen) Generate(ctx generator.GeneratorContext) generator.Problem
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("If \\(V = U \\oplus W\\) is the direct sum of subspaces \\(U\\) and \\(W\\) with \\(\\dim(U) = %d\\) and \\(\\dim(W) = %d\\), what is \\(\\dim(V)\\)?", d1, d2)
 			if ans == d1 || ans == d2 || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the direct sum dimension theorem: \\(\\dim(U \\oplus W) = \\dim(U) + \\dim(W)\\).\n"+
 				"Subgoal 2: Substitute subspace dimensions: \\((%d) + (%d)\\).\n"+
@@ -2445,7 +2534,9 @@ func (g *subspaceGen) Generate(ctx generator.GeneratorContext) generator.Problem
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("In \\(\\mathbb{R}^{%d}\\), let \\(W\\) be a subspace of dimension %d. What is the dimension of the orthogonal complement \\(W^\\perp\\)?", n, dimW)
 			if ans == n || ans == dimW || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the orthogonal complement dimension theorem: \\(\\dim(W) + \\dim(W^\\perp) = n\\).\n"+
 				"Subgoal 2: Substitute ambient dimension \\(n = %d\\) and subspace dimension \\(\\dim(W) = %d\\): \\((%d) - (%d)\\).\n"+
@@ -2468,7 +2559,9 @@ func (g *subspaceGen) Generate(ctx generator.GeneratorContext) generator.Problem
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("What is the dimension of the subspace in \\(\\mathbb{R}^{%d}\\) defined by the single equation \\(x_1 + x_2 + \\dots + x_{%d} = 0\\)?", n, n)
 			if ans == n || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the hyperplane codimension theorem: a single non-trivial homogeneous linear equation defines a subspace of codimension 1.\n"+
 				"Subgoal 2: Subtract 1 constraint from ambient dimension \\(n = %d\\): %d - 1.\n"+
@@ -2491,7 +2584,9 @@ func (g *subspaceGen) Generate(ctx generator.GeneratorContext) generator.Problem
 			ansStr := strconv.Itoa(ans)
 			q := fmt.Sprintf("What is the dimension of the subspace in \\(\\mathbb{R}^{%d}\\) defined by %d linearly independent homogeneous linear equations?", n, k)
 			if ans == n || ans == k || containsWord(q, ansStr) {
-				continue
+				if retryable(attempt) {
+					continue
+				}
 			}
 			ex := fmt.Sprintf("Subgoal 1: State the constraint codimension theorem: \\(k\\) linearly independent constraints reduce dimension by \\(k\\): \\(\\dim = n - k\\).\n"+
 				"Subgoal 2: Substitute ambient dimension \\(n = %d\\) and constraint count \\(k = %d\\): %d - %d.\n"+
