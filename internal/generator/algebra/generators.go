@@ -1518,20 +1518,36 @@ func (g *funcRationalGen) Generate(ctx generator.GeneratorContext) generator.Pro
 type funcSigmoidGen struct{}
 
 func (g *funcSigmoidGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	type entry struct {
-		question string
-		answer   string
-		exp      string
-	}
-	entries := []entry{
-		{"How many integers lie in the range of the sigmoid function \\(\\sigma(x) = 1/(1+e^{-x})\\)? (enter a number)", "0", "The sigmoid maps all real numbers to the open interval \\((0,1)\\), which contains no integers."},
-		{"What is \\(\\sigma(0)\\) for the sigmoid function?", "0.5", "\\(\\sigma(0) = 1/(1+e^{0}) = 1/2 = 0.5\\)."},
-		{"The sigmoid function is commonly used as an ____ function in neural networks.", "activation", "The sigmoid is a popular activation function that introduces non-linearity."},
-		{"As \\(x \\to \\infty\\), \\(\\sigma(x)\\) approaches ____.", "1", "As \\(x \\to \\infty\\), \\(e^{-x} \\to 0\\), so \\(\\sigma(x) \\to 1\\)."},
-	}
-	e := entries[rand.Intn(len(entries))]
-	return generator.Problem{
-		Question: e.question, Answer: e.answer, Explanation: e.exp,
+	// Every question is evaluated at a point where the sigmoid is exactly rational, so
+	// the answer is an exact fraction rather than a rounded decimal and symbolic grading
+	// compares it without a tolerance.
+	ks := []int{2, 3, 4, 5, 6, 9, 11}
+	k := ks[rand.Intn(len(ks))]
+	switch rand.Intn(3) {
+	case 0:
+		return generator.Problem{
+			Question: fmt.Sprintf("Evaluate \\(\\sigma(x)\\) at \\(x = \\ln %d\\), where \\(\\sigma(x) = 1/(1+e^{-x})\\).", k),
+			Answer:   fmt.Sprintf("%d/%d", k, k+1),
+			Explanation: fmt.Sprintf("\\(e^{-\\ln %d} = 1/%d\\), so \\(\\sigma(\\ln %d) = 1/(1+1/%d) = %d/%d\\).",
+				k, k, k, k, k, k+1),
+			Facts: map[string]string{"k": strconv.Itoa(k), "x": "ln " + strconv.Itoa(k)},
+		}
+	case 1:
+		return generator.Problem{
+			Question: fmt.Sprintf("Evaluate \\(\\sigma(x)\\) at \\(x = -\\ln %d\\), where \\(\\sigma(x) = 1/(1+e^{-x})\\).", k),
+			Answer:   fmt.Sprintf("1/%d", k+1),
+			Explanation: fmt.Sprintf("\\(e^{\\ln %d} = %d\\), so \\(\\sigma(-\\ln %d) = 1/(1+%d) = 1/%d\\).",
+				k, k, k, k, k+1),
+			Facts: map[string]string{"k": strconv.Itoa(k), "x": "-ln " + strconv.Itoa(k)},
+		}
+	default:
+		return generator.Problem{
+			Question: fmt.Sprintf("What is the slope of \\(\\sigma(kx)\\) at \\(x = 0\\), where \\(\\sigma(u) = 1/(1+e^{-u})\\) and \\(k = %d\\)?", k),
+			Answer:   fmt.Sprintf("%d/4", k),
+			Explanation: fmt.Sprintf("\\(\\sigma'(u) = \\sigma(u)(1-\\sigma(u))\\) and \\(\\sigma(0) = 1/2\\), so the chain rule gives \\(k \\cdot (1/2)(1/2) = %d/4\\).",
+				k),
+			Facts: map[string]string{"k": strconv.Itoa(k), "x": "0"},
+		}
 	}
 }
 
