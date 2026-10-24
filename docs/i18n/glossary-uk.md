@@ -1036,3 +1036,13 @@
 | bisection method / Brent’s method | метод бісекції / метод Брента | |
 | trial (підбір кореня) | підбір; спроба | inspection — «підбір» |
 | (not) solvable by radicals | (не) розв’язний у радикалах | |
+| sign analysis / sign chart / sign table (в нерівностях) | метод інтервалів / таблиця знаків | §7: метод інтервалів і в кроках; «таблиця знаків» — сама таблиця |
+| half-line | промінь (числовий) | не «півпряма»; bounded / unbounded interval — обмежений / необмежений проміжок; open / closed / half-open — відкритий / замкнений / напіввідкритий |
+| strict / non-strict inequality | строга / нестрога нерівність | |
+| inconsistent system | несумісна система | |
+| natural domain (раціонального виразу) / canonical form | природна область визначення / канонічний вигляд | |
+| open circle (на числовій прямій) | порожній кружок | |
+| Pythagorean identity | основна тригонометрична тотожність | |
+| branch (of the tangent) | гілка (тангенса) | |
+| case / sub-case | випадок / підвипадок | |
+| Technique / Intermediate / The Graph (шапка статті) | Прийом / Середній / Графік | поруч із «Тема / Легко» |
