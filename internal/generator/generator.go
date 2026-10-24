@@ -2,6 +2,17 @@ package generator
 
 import "github.com/chuma-beep/mathua/internal/grader"
 
+// MaxDrawAttempts bounds a generator that redraws until its problem is
+// acceptable, for example until the stem no longer contains the answer.
+//
+// Every such loop needs a ceiling. A condition that no draw can satisfy
+// turns an unbounded loop into a request that never returns, and the
+// generator is the wrong place to discover that: the caller has a timeout,
+// the learner has a spinner. After this many draws the generator returns
+// what it has and the leak, if any, is a quality defect rather than an
+// outage.
+const MaxDrawAttempts = 200
+
 type GeneratorContext struct {
 	Difficulty float64
 	Seed       int64
