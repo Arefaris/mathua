@@ -48,7 +48,7 @@ func LoadDir(dir string) (*DAG, error) {
 		}
 		raw = append(raw, batch...)
 	}
-	// Merge enrichment heuristics (Variants, Encompasses, InterferenceGroup, KeyPrerequisites)
+	// Merge enrichment heuristics (Variants, Encompasses, InterferenceGroup, KeyPrerequisites, Prerequisites)
 	if err := mergeEnrichment(dir, raw); err != nil {
 		return nil, err
 	}
@@ -56,6 +56,10 @@ func LoadDir(dir string) (*DAG, error) {
 	if err := mergeKnowledgePoints(dir, raw); err != nil {
 		return nil, err
 	}
+	// Density is enforced in one place only, by validate(). A second copy here
+	// measured in-degree as len(Prerequisites) while validate() measures
+	// len(Prerequisites)+len(Encompasses), so two gates could disagree about the
+	// same corpus and report different floors for it.
 	return Build(raw)
 }
 
@@ -64,6 +68,7 @@ type enrichmentEntry struct {
 	ID                string           `json:"id"`
 	Heuristic         string           `json:"heuristic"`
 	Note              string           `json:"note"`
+	Prerequisites     []string         `json:"prerequisites"`
 	Encompasses       []string         `json:"encompasses"`
 	KeyPrerequisites  []string         `json:"key_prerequisites"`
 	InterferenceGroup string           `json:"interference_group"`
@@ -95,6 +100,9 @@ func mergeEnrichment(dir string, raw []Concept) error {
 			c, ok := idx[e.ID]
 			if !ok {
 				return fmt.Errorf("enrichment id %q not found in DAG", e.ID)
+			}
+			if len(e.Prerequisites) > 0 {
+				c.Prerequisites = appendUnique(c.Prerequisites, e.Prerequisites)
 			}
 			if len(e.Encompasses) > 0 {
 				c.Encompasses = appendUnique(c.Encompasses, e.Encompasses)
