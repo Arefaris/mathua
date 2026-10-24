@@ -317,7 +317,10 @@ func (g *powersetGen) Generate(ctx generator.GeneratorContext) generator.Problem
 type partialOrderGen struct{}
 
 func (g *partialOrderGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	ns := []int{12, 18, 20, 30}
+	// The pair count is computed from the divisors of N, so any N is a valid
+	// draw. Twelve values replace the original four, and they differ in the
+	// number of divisors rather than only in the numeral.
+	ns := []int{12, 18, 20, 24, 28, 30, 36, 40, 42, 45, 48, 60}
 	N := ns[rand.Intn(len(ns))]
 	ds := divisors(N)
 	count := 0
