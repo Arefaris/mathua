@@ -17,15 +17,15 @@ jobs:
   test:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.27'
           cache: true
           cache-dependency-path: go.sum
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
           cache: 'pip'
@@ -91,13 +91,13 @@ jobs:
           "
 
   web:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: web/next-app
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '24.22.1'
           cache: npm
@@ -142,7 +142,7 @@ jobs:
       # The trace has the DOM snapshot, the network log and the screenshots.
       - name: Upload the Playwright report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: |
@@ -159,13 +159,13 @@ jobs:
   # shards need this job.
   build:
     name: Build the web export
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: web/next-app
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '24.22.1'
           cache: npm
@@ -174,7 +174,7 @@ jobs:
       - run: npm run build
         env:
           NEXT_PUBLIC_API_URL: http://192.0.2.1:9099
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: web-build-e2e
           path: web/next-app/out
@@ -182,7 +182,7 @@ jobs:
 
   web-e2e:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -191,14 +191,14 @@ jobs:
       run:
         working-directory: web/next-app
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '24.22.1'
           cache: npm
           cache-dependency-path: web/next-app/package-lock.json
       - run: npm ci
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: web-build-e2e
           path: web/next-app/out
@@ -209,7 +209,7 @@ jobs:
       # libraries Chromium needs, so install only the browser. If a library is ever
       # missing, Chromium refuses to launch on the first test rather than quietly
       # skipping it; put `--with-deps` back for that one run.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('web/next-app/package-lock.json') }}
@@ -222,7 +222,7 @@ jobs:
           PW_WORKERS: 1
       - name: Upload the Playwright report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ matrix.shard }}
           path: |
@@ -246,14 +246,14 @@ jobs:
   # so this job is green but every failure is visible as an annotation.
   docs:
     name: Documentation (advisory)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '24.22.1'
           cache: npm
@@ -276,16 +276,16 @@ jobs:
 
   docker:
     name: Build production image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # The Dockerfile's grading self-test fails the build if SymPy cannot
       # grade, so this gates deploy on a working production grading runtime.
       - run: docker build -t mathua:ci .
 
   postgres:
     name: Postgres parity
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:16-alpine
@@ -301,8 +301,8 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.27'
           cache: true
@@ -329,7 +329,7 @@ jobs:
   # REAL column that turned 1.4 into 1.39999997).
   storage-postgres:
     name: Storage suite on Postgres
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Set once, at job level, so the guard below and the test step read the same
     # value. A step-level env would let the guard pass on its own copy while the
     # test step ran with none.
@@ -350,8 +350,8 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.27'
           cache: true
@@ -379,9 +379,9 @@ jobs:
     concurrency:
       group: fly-deploy
       cancel-in-progress: false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # The scope step diffs against the previous head of main, which a
           # depth-1 clone does not contain.
