@@ -432,12 +432,29 @@ jobs:
           done <<< "$changed"
           echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
           echo "Documentation only: $docs_only"
-      # Pinned to the v1.4 commit rather than to a branch. A mutable ref executes
-      # whatever its owner publishes at that moment, in the one job that holds the
-      # deploy token, and a force-push upstream would swap the code without any
-      # change here. A tag can be moved too; only a full SHA cannot.
-      - uses: superfly/flyctl-actions/setup-flyctl@dfdfedc86b296f5e5384f755a18bf400409a15d0 # v1.4
+      # Installed from Fly's own installer rather than through a third-party
+      # action. That action declares a Node runtime GitHub is retiring and it
+      # ran in the one job that holds the deploy token, so removing it drops a
+      # dependency from the most privileged place in the pipeline.
+      #
+      # The version is pinned for the same reason the runner image is: an
+      # unpinned installer makes deploy behaviour depend on the day rather than
+      # on the commit. The check afterwards fails the job if the installer
+      # silently falls back to latest, because a mismatched version discovered
+      # during a deploy is worse than a failed install.
+      - name: Install flyctl
         if: steps.scope.outputs.docs_only != 'true'
+        env:
+          FLYCTL_VERSION: v0.4.122
+        run: |
+          set -eu
+          curl -fsSL https://fly.io/install.sh | sh -s -- "$FLYCTL_VERSION"
+          echo "$HOME/.fly/bin" >> "$GITHUB_PATH"
+          "$HOME/.fly/bin/flyctl" version
+          if ! "$HOME/.fly/bin/flyctl" version | grep -qF "$FLYCTL_VERSION"; then
+            echo "installed flyctl is not $FLYCTL_VERSION" >&2
+            exit 1
+          fi
       - run: flyctl deploy --remote-only --wait-timeout 300
         if: steps.scope.outputs.docs_only != 'true'
         env:
