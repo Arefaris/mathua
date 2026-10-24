@@ -135,7 +135,10 @@ func (g *sequenceGen) Generate(ctx generator.GeneratorContext) generator.Problem
 	cDenoms := []int{2, 4, 5, 8, 10}
 	var a, b, c, d int
 	var answer, question string
-	for {
+	// Bounded rather than open ended: see generator.MaxDrawAttempts. If no draw
+	// avoids printing its own answer the last one is returned, which is a
+	// readoff leak, not a hung request.
+	for attempt := 0; attempt < generator.MaxDrawAttempts; attempt++ {
 		c = cDenoms[rand.Intn(len(cDenoms))]
 		a = rand.Intn(40) + 1
 		b = rand.Intn(15) + 1

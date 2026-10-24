@@ -35,12 +35,20 @@ func isTokenInStem(stem, ans string) bool {
 	return re.MatchString(stem)
 }
 
-// TestUniversalAntiSlopAndMutationBattery executes a 500-draw mutation battery
-// on representative collegiate and procedural domains, verifying:
-// 1. Zero stem answer leaks.
-// 2. High answer entropy (>= 25 distinct answers across 500 draws for parametric numeric concepts).
-// 3. Mobile keypad feasibility (no special Unicode math symbols in numeric fields).
-func TestUniversalAntiSlopAndMutationBattery(t *testing.T) {
+// TestPriorityConceptAntiSlopAndMutationBattery executes a 500-draw battery on
+// 26 priority concepts across the collegiate and procedural domains, verifying:
+//  1. Zero stem answer leaks.
+//  2. Answer entropy of at least 8 distinct answers across 500 draws for numeric
+//     concepts, which is a floor rather than a target: the concepts here are
+//     parametrised narrowly and the tightest of them produces fewer than ten,
+//     so a higher number would be aspirational and would fail for reasons that
+//     are about the parameter range rather than about a defect.
+//  3. Mobile keypad feasibility (no special Unicode math symbols in numeric fields).
+//
+// The name says priority concepts rather than universal because the set covers
+// 26 of the 1,250 concepts in the corpus. The rest are covered by each
+// package's own batch tests, not by this sweep.
+func TestPriorityConceptAntiSlopAndMutationBattery(t *testing.T) {
 	reg := Registry()
 
 	// Load concept grading types from data/concepts/*.json
@@ -147,7 +155,8 @@ func TestUniversalAntiSlopAndMutationBattery(t *testing.T) {
 				t.Errorf("%s produced only %d distinct questions across 500 draws (want >= 10)", id, len(seenQuestions))
 			}
 
-			// If concept is numeric, assert entropy floor >= 25 distinct answers (or >= 10 for smaller ranges)
+			// Numeric concepts need at least 8 distinct answers in 500 draws. The
+			// floor is deliberately modest, and the comment above says why.
 			if info.GradingType == "numeric" || info.GradingType == "integer" {
 				if len(seenAnswers) < 8 {
 					t.Errorf("%s produced only %d distinct answers across 500 draws (want >= 8)", id, len(seenAnswers))

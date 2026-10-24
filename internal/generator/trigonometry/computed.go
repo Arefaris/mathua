@@ -295,7 +295,10 @@ var computedTriples = [][3]int{{3, 4, 5}, {5, 12, 13}, {8, 15, 17}, {7, 24, 25},
 type sumDiffGen struct{}
 
 func (g *sumDiffGen) Generate(ctx generator.GeneratorContext) generator.Problem {
-	for {
+	// Bounded rather than open ended: see generator.MaxDrawAttempts. A draw that
+	// still prints its answer is retried, and after the ceiling the problem is
+	// returned as generated so that a leak stays a leak instead of a hang.
+	for attempt := 0; ; attempt++ {
 		t1 := computedTriples[rand.Intn(len(computedTriples))]
 		t2 := computedTriples[rand.Intn(len(computedTriples))]
 		sinA, cosA := t1[0], t1[1]
@@ -311,7 +314,7 @@ func (g *sumDiffGen) Generate(ctx generator.GeneratorContext) generator.Problem 
 		num, den := sum/d, rawDen/d
 		ans := fmt.Sprintf("%d/%d", num, den)
 		q := fmt.Sprintf("If \\(\\sin\\alpha = %d/%d\\) and \\(\\cos\\beta = %d/%d\\), with both angles acute, what is \\(%s(%s)\\), as a fraction?", sinA, t1[2], cosB, t2[2], fn, expr)
-		if strings.Contains(q, ans) {
+		if strings.Contains(q, ans) && attempt < generator.MaxDrawAttempts {
 			continue
 		}
 		return generator.Problem{

@@ -112,7 +112,10 @@ func (g *zTestGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 	var xbar, mu, sigma float64
 	var n int
 
-	for {
+	// Bounded rather than open ended: see generator.MaxDrawAttempts. The
+	// explanation is built on every draw so that the last iteration still
+	// returns a complete problem if no draw avoids printing its answer.
+	for attempt := 0; attempt < generator.MaxDrawAttempts; attempt++ {
 		n = nVals[rand.Intn(len(nVals))]
 		sqrtN := int(math.Round(math.Sqrt(float64(n))))
 
@@ -143,17 +146,18 @@ func (g *zTestGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		sigmaStr := strconv.FormatFloat(sigma, 'f', -1, 64)
 		nStr := strconv.Itoa(n)
 
+		reason = fmt.Sprintf("The standard error is %s/sqrt(%d) = %d, so z = (%s - %s)/%d = %s.",
+			sigmaStr,
+			n,
+			se,
+			xbarStr,
+			muStr,
+			se,
+			answer,
+		)
+
 		if answer != xbarStr && answer != muStr && answer != sigmaStr && answer != nStr &&
 			answer != "-"+xbarStr && answer != "-"+muStr && !strings.Contains(question, answer) {
-			reason = fmt.Sprintf("The standard error is %s/sqrt(%d) = %d, so z = (%s - %s)/%d = %s.",
-				sigmaStr,
-				n,
-				se,
-				xbarStr,
-				muStr,
-				se,
-				answer,
-			)
 			break
 		}
 	}
@@ -163,10 +167,10 @@ func (g *zTestGen) Generate(ctx generator.GeneratorContext) generator.Problem {
 		Answer:      answer,
 		Explanation: reason,
 		Facts: map[string]string{
-			"xbar":  strconv.FormatFloat(xbar, 'g', -1, 64),
-			"mu":    strconv.FormatFloat(mu, 'g', -1, 64),
-			"sigma": strconv.FormatFloat(sigma, 'g', -1, 64),
-			"n":     strconv.Itoa(n),
+			"xbar":   strconv.FormatFloat(xbar, 'g', -1, 64),
+			"mu":     strconv.FormatFloat(mu, 'g', -1, 64),
+			"sigma":  strconv.FormatFloat(sigma, 'g', -1, 64),
+			"n":      strconv.Itoa(n),
 			"answer": answer,
 		},
 	}
