@@ -2998,6 +2998,17 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 	}
 	progress.FSRSStability = &nextStab
 	progress.FSRSDifficulty = &nextDiff
+	// The review clock moves on every graded answer, not only on an advance.
+	//
+	// Stability is computed from the elapsed time since the previous review, so the clock
+	// has to be the previous review — and it then has to move, or the next computation
+	// measures from the same stale instant again. Leaving it behind inflated stability on
+	// every repeat: the learner answered, the elapsed time did not grow, and the estimate
+	// grew anyway. A miss and a correct answer that does not yet advance a tier both move
+	// the clock here; only NextReviewDue is gated on the tier, below, because a review date
+	// that moved on every attempt would walk away from a learner who is still working.
+	reviewedAt := nowUTC()
+	progress.FSRSLastReview = &reviewedAt
 
 	if newStatus == mastery.StatusMastered && mastery.Status(oldStatus) != mastery.StatusMastered {
 		now := nowUTC()
@@ -3044,6 +3055,26 @@ func (e *Engine) applyGradedAttempt(progress *storage.ConceptProgress, o gradedA
 		}
 		nextReview := now.AddDate(0, 0, reviewInterval)
 		progress.NextReviewDue = &nextReview
+	}
+
+	// A miss is a lapse, and a lapse has to be scheduled as one.
+	//
+	// Stability collapses above — from hundreds of days to about a week for a concept the
+	// learner had mastered — but the block just above moves FSRSLastReview and
+	// NextReviewDue only when a tier advanced. So a missed review reset the stability while
+	// both the review timestamp and the due date kept the values from the last successful
+	// review: retrievability then computed from a stale clock, which read zero forever and
+	// made the concept permanently due, while the shelf displayed a date months away. The
+	// queue and the record disagreed, and the record was the one the learner saw.
+	//
+	// The due date is now, not now plus the FSRS interval, because a concept the learner has
+	// just failed belongs in front of them rather than in a week. Remediation still routes
+	// through the existing rules — two consecutive misses enqueue the concept and its key
+	// prerequisites — so this changes when the review is offered, not what a miss is worth.
+	if !o.correct {
+		missedAt := nowUTC()
+		progress.FSRSLastReview = &missedAt
+		progress.NextReviewDue = &missedAt
 	}
 
 	if err := e.repo.UpsertProgress(progress); err != nil {
