@@ -122,8 +122,8 @@
 
 ## Избранные источники
 
-  * **MIT, F. Gotti**. [Математическая индукция](https://math.mit.edu/~fgotti/docs/Courses/C.%20Combinatorial%20Analysis/2.%20Mathematical%20Induction/Mathematical%20Induction.pdf)
+  * **MIT, F. Gotti**. [Mathematical Induction](https://math.mit.edu/~fgotti/docs/Courses/C.%20Combinatorial%20Analysis/2.%20Mathematical%20Induction/Mathematical%20Induction.pdf) (Математическая индукция)
 
-  * **Калифорнийский университет в Беркли, P. Vojta**. [Три вида индукции](https://math.berkeley.edu/~vojta/115/ho2.pdf)
+  * **Калифорнийский университет в Беркли, P. Vojta**. [Three Types of Induction](https://math.berkeley.edu/~vojta/115/ho2.pdf) (Три вида индукции)
 
-  * **Университет Макгилла, J. Labute**. [Аксиомы теории множеств](https://www.math.mcgill.ca/labute/courses/240f05/Sets.pdf)
+  * **Университет Макгилла, J. Labute**. [Axioms for Set Theory](https://www.math.mcgill.ca/labute/courses/240f05/Sets.pdf) (Аксиомы теории множеств)

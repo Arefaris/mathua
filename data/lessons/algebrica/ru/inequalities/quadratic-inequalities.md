@@ -182,6 +182,6 @@
 
 ## Избранные источники
 
-  * **Университет Стони-Брук**. [Квадратные неравенства](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-31-Handout.pdf)
-  * **Иллинойсский университет в Чикаго, J. Baldwin**. [Решение неравенств и квадратных уравнений](http://homepages.math.uic.edu/~jbaldwin/alginit/solquadsh.pdf)
-  * **Чикагский университет, M. Hidegkuti**. [Квадратные неравенства](https://teaching.martahidegkuti.com/shared/lnotes/4_collegealgebra/inequalities/inequality2.pdf)
+  * **Университет Стони-Брук**. [Quadratic Inequalities](https://www.math.stonybrook.edu/Videos/MAP103Online/Handouts/Lecture-31-Handout.pdf) (Квадратные неравенства)
+  * **Иллинойсский университет в Чикаго, J. Baldwin**. [Solving Inequalities and Quadratics](http://homepages.math.uic.edu/~jbaldwin/alginit/solquadsh.pdf) (Решение неравенств и квадратных уравнений)
+  * **Чикагский университет, M. Hidegkuti**. [Quadratic Inequalities](https://teaching.martahidegkuti.com/shared/lnotes/4_collegealgebra/inequalities/inequality2.pdf) (Квадратные неравенства)

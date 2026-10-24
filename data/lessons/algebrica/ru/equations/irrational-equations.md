@@ -274,8 +274,8 @@
 
 ## Избранные источники
 
-  * **OpenStax**. [Радикальные уравнения](https://assets.openstax.org/oscms-prodcms/media/documents/Algebra-and-Trigonometry-2e-WEB.pdf)
+  * **OpenStax**. [Radical Equations](https://assets.openstax.org/oscms-prodcms/media/documents/Algebra-and-Trigonometry-2e-WEB.pdf) (Радикальные уравнения)
 
-  * **Городской университет Нью-Йорка**. [Алгебра и тригонометрия для колледжа](https://openlab.citytech.cuny.edu/shavermat1275cofall2019/files/2019/08/1566849743-AlgebraTrigBook.pdf)
+  * **Городской университет Нью-Йорка**. [College Algebra and Trigonometry](https://openlab.citytech.cuny.edu/shavermat1275cofall2019/files/2019/08/1566849743-AlgebraTrigBook.pdf) (Алгебра и тригонометрия для колледжа)
 
-  * **Университет Британской Колумбии**. [Раздел «Дифференцирование и радикальные уравнения»](https://www.math.ubc.ca/~feldman/m101/clp/clp_notes_100.pdf)
+  * **Университет Британской Колумбии**. [Differentiation and Radical Equations Section](https://www.math.ubc.ca/~feldman/m101/clp/clp_notes_100.pdf) (Раздел «Дифференцирование и радикальные уравнения»)
